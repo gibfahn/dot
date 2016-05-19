@@ -1,0 +1,109 @@
+#!/bin/sh
+echo "Using gibrc..."
+
+HOSTNAME=$(hostname)
+UNAME=$(uname)
+UNAMEN=$(uname -n)
+
+[ ! "$UNAME" = "AIX" ] && alias ls='ls --color=auto'
+[ "$UNAME" = "Darwin" ] && alias ls='ls -G'
+alias la='ls -a'
+alias ll='ls -l'
+alias lal='ls -al'
+# cs => cd and ls
+cs() {
+    cd "$@"
+    ls
+}
+alias ..='cs ..'
+alias ...='cs ../..'
+alias ....='cs ../../..'
+alias .....='cs ../../../..'
+
+alias vim='vim -p'          # vim opens multi-tab by default
+export VISUAL=vim
+alias path='echo $PATH'
+alias gl="git log --graph --decorate --oneline"
+alias gla="git log --graph --decorate --oneline --all"
+alias gs="git status"
+alias x="exit"
+alias h=history
+alias cn="cargo new --bin"
+alias cb="cargo build"
+alias cr="cargo run"
+alias ct="cargo test"
+alias ctag='ctags -R . /home/gib/src/rust'
+alias f='fuck'
+
+alias nu="who|wc -l"                # nu - number of users
+alias np="ps -ef|wc -l"             # np - number of processes running
+ulimit -c unlimited
+
+# Set prompt for different shells
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+    [ "$UNAME" = "AIX" ] && myshell="ksh"
+    [ "$UNAME" = "Darwin" ] && myshell=bash
+    myshell=${myshell:-"$(ls -l /proc/$$/exe | sed 's%.*/%%')"}
+    case $0 in
+	-ksh) myshell=ksh;;
+	bash) myshell=bash;;
+	-sh) myshell=dash;;
+    esac
+    if [ "$myshell" = "bash" ]; then
+        PS1='\[\e[35;1m\]\h \n \w $ \[\e[0m\]'
+    elif [ "$myshell" = "ksh93" ]; then
+        PS1=$'\E[35;1m $HOSTNAME \n $PWD \E[0m $ '
+    else
+        PS1="$UNAMEN $PWD $ "
+    fi
+else
+    PS1=' \[\e[32;1m\]\w $ \[\e[0m\]'
+fi
+alias bashme="PS1='\[\e[35;1m\]\h \n \w $ \[\e[0m\]'"
+# Specific bits for different arch/shell
+if [ "$myshell" = "ksh93" -o "$myshell" = "ksh" ]; then
+    set -o emacs
+    alias __A=`echo "\020"`     # up arrow = ^p = back a command
+    alias __B=`echo "\016"`     # down arrow = ^n = down a command
+    alias __C=`echo "\006"`     # right arrow = ^f = forward a character
+    alias __D=`echo "\002"`     # left arrow = ^b = back a character
+    alias __H=`echo "\001"`     # home = ^a = start of line
+    alias __Y=`echo "\6"`     # end = ^e = end of line
+fi
+
+pathadd() {
+    if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
+        PATH="$1${PATH+":$PATH"}"
+    fi
+}
+
+### Add things to path ###
+pathadd /home/gib/build/depot_tools
+
+# VirtualBox Linux specific, mounts shared folder ForVM to ~/shared/ (create ~/shared first)
+[ "$HOSTNAME" = "glub" ] && alias mnt='sudo mount -t vboxsf ForVM ~/shared/'
+# Command to mount /node on the mac
+[ "$HOSTNAME" = "jtcjs15.hursley.ibm.com" ] && alias mnt="sudo mount -t nfs -o nfsvers=3,proto=tcp,resvport javasvt.hursley.ibm.com:/export/node /node"
+
+v() {
+    for i in $@; do
+        $i --version
+    done
+}
+alias vs="v git python gcc"
+alias s="ssh -oStrictHostKeyChecking=No"
+alias sx="ssh -oStrictHostKeyChecking=No -X"
+
+r() {
+  for i in $@; do
+    rustc ${i%.rs}.rs
+    ./${i%.rs}
+  done
+}
+
+# Node stuff
+alias bn='./configure && tools/gyp_node.py -f ninja && ninja -C out/Release && ln -fs out/Release/node node'
+tn() {
+  n=${2:-1}
+  for i in `seq 1 $n`; do printf "$i "; tools/test.py -p tap $1; done
+}
