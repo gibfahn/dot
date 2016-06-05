@@ -23,17 +23,26 @@ alias .....='cs ../../../..'
 alias vim='vim -p'          # vim opens multi-tab by default
 export VISUAL=vim
 alias path='echo $PATH'
-alias gl="git log --graph --decorate --oneline"
-alias gla="git log --graph --decorate --oneline --all"
-alias gs="git status"
 alias x="exit"
 alias h=history
+bind Space:magic-space
+bind 'set completion-ignore-case on'
 alias cn="cargo new --bin"
 alias cb="cargo build"
 alias cr="cargo run"
 alias ct="cargo test"
 alias ctag='ctags -R . /home/gib/src/rust'
 alias f='fuck'
+alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"'
+
+# Git commands
+alias gs="git status"
+alias gl="git log --graph --decorate --oneline"
+alias gla="git log --graph --decorate --oneline --all"
+alias gf="git fetch"
+alias gfa="git fetch --all"
+alias gc="git checkout"
+
 
 alias nu="who|wc -l"                # nu - number of users
 alias np="ps -ef|wc -l"             # np - number of processes running
