@@ -4,6 +4,9 @@ SendMode, Input ;Makes Send -> Sendinput
 ;#=winkey,^=ctrl,+=shift, & ties two keys together
 #IfWinNotActive ahk_class ConsoleWindowClass
 
+; Win H reloads script
+#h::Reload
+
 ; MOD 3: Alt scroll wheel to change tabs
 Alt & WheelDown:: Send {Ctrl down} {Tab} {Ctrl up}
 Return
@@ -20,14 +23,14 @@ Return
 
 
 ; MOD 4: Unicode on Ctrl+Alt+letter or Ctrl+Alt+Shift+Letter
-    ; N.B. Alt Gr = Alt+Ctrl
-!^4::   Send {U+20AC}
+	; N.B. Alt Gr = Alt+Ctrl
+!^4::	Send {U+20AC}
 Return
-!^8::   Send {U+2605} ;?
+!^8::	Send {U+2605} ;?
 Return
 !^+8:: Send {U+2606} ;?
 Return
-!^o::   Send {U+03C9} ;?
+!^o::	Send {U+03C9} ;?
 Return
 !^+o:: Send {U+03A9} ;O
 Return
@@ -52,7 +55,7 @@ Return
 
 
 ; MOD 5: Hotstrings v1.0
-    ;EMAIL/USERNAME
+	;EMAIL/USERNAME
 :*:tbb::tbbhoiorg
 :*:tbg::tbbhoiorg@gmail.com
 :*:gbf::gibfahn
@@ -67,7 +70,7 @@ Return
 :*:kag::kangeven@163.com
 :*:gbi::gib@uk.ibm.com
 
-    ;ADDRESS
+	;ADDRESS
 :*:ad1::4 Comley Court
 :*:ad2::Bell Street
 :*:ad3::Romsey
@@ -77,7 +80,7 @@ Return
 :*:adrc::4 Comley Court, Bell Street, Romsey, SO51 8AL
 
 
-    ;NUMBERS/WEBSITES
+	;NUMBERS/WEBSITES
 :*:mbg::07753376431
 :*:mbe::07725792449
 :*:mbm::07786587797
@@ -93,19 +96,40 @@ Return
 :*:gfa::Gibson Fahnestock
 Return
 
-    ;Shifts together toggle capslock
+	;Shifts together toggle capslock
 Rshift & Lshift::
   SetCapsLockState, % GetKeyState("CapsLock", "T")? "Off":"On"
 Return
 
-; ======================
-; Paste on middle click
-; ======================
+; ====================================
+; Paste on middle click if cursor is I
+; ====================================
 
 ~MButton::
   WinGetClass wndw, A
-  if (wndw <> "mintty") && (wndw <> "QWidget")
+  if (wndw <> "mintty") && (wndw <> "QWidget") && (%A_cursor% = IBeam) {
     Send ^v
+  }
 Return
 
-:*:r3r::random3r
+
+
+
+
+CoordMode, Mouse
+Gui, +LastFound +AlwaysOnTop +Toolwindow -Caption
+Gui, Color, Red
+Gui, Show, Hide w100 h100
+WinSet, Region, 30-30 W40 H40 E
+WinSet, Transparent, 150
+return
+
+~Ctrl::
+MouseGetPos,x,y
+Gui,Show,% "NA x " x-50 "y" y-50
+Return
+
+~Ctrl Up::Gui,Hide
+Esc::
+GuiClose:
+ExitApp
