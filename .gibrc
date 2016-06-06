@@ -94,6 +94,9 @@ pathadd /home/gib/build/depot_tools
 # Command to mount /node on the mac
 [ "$HOSTNAME" = "jtcjs15.hursley.ibm.com" ] && alias mnt="sudo mount -t nfs -o nfsvers=3,proto=tcp,resvport javasvt.hursley.ibm.com:/export/node /node"
 
+fnd() {
+    find . -iname "*$**"
+}
 v() {
     for i in $@; do
         $i --version
