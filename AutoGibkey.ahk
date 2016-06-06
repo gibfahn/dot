@@ -21,7 +21,7 @@ Return
 
 ; MOD 4: Unicode on Ctrl+Alt+letter or Ctrl+Alt+Shift+Letter
     ; N.B. Alt Gr = Alt+Ctrl
-!^4::   Send {U+20AC} 
+!^4::   Send {U+20AC}
 Return
 !^8::   Send {U+2605} ;?
 Return
@@ -98,22 +98,9 @@ Rshift & Lshift::
   SetCapsLockState, % GetKeyState("CapsLock", "T")? "Off":"On"
 Return
 
-; ==========================================
-; Copy on select text, paste on middle click
-; ==========================================
-
-~lButton::
-  cos_mousedrag_threshold := 20 ; pixels
-  MouseGetPos, cos_mousedrag_x, cos_mousedrag_y
-  keywait LButton
-  MouseGetPos, cos_mousedrag_x2, cos_mousedrag_y2
-  if (abs(cos_mousedrag_x2 - cos_mousedrag_x) > cos_mousedrag_threshold
-    or abs(cos_mousedrag_y2 - cos_mousedrag_y) > cos_mousedrag_threshold) {
-    WinGetClass wndw, A
-    if (wndw <> "mintty") && (wndw <> "QWidget") ; Git Bash and VirtualBox handle copy themselves
-      Send ^c
-  }
-Return
+; ======================
+; Paste on middle click
+; ======================
 
 ~MButton::
   WinGetClass wndw, A
