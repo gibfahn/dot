@@ -1,1 +1,2 @@
-cp -v `dirname $(readlink -f $0)`/.gibrc /home/gib/
+[ ! `uname` = "AIX" ] && flag=-v
+cp $flag `dirname $0`/.gibrc /home/gib/
