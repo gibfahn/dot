@@ -5,7 +5,7 @@ HOSTNAME=$(hostname)
 UNAME=$(uname)
 UNAMEN=$(uname -n)
 
-[ ! "$UNAME" = "AIX" ] && alias ls='ls --color=auto'
+ls --color=auto >/dev/null 2>&1 && alias ls='ls --color=auto'
 [ "$UNAME" = "Darwin" ] && alias ls='ls -G'
 alias la='ls -a'
 alias ll='ls -l'
@@ -25,8 +25,8 @@ export VISUAL=vim
 alias path='echo $PATH'
 alias x="exit"
 alias h=history
-bind Space:magic-space
-bind 'set completion-ignore-case on'
+bind Space:magic-space 2>/dev/null
+bind 'set completion-ignore-case on' 2>/dev/null
 alias cn="cargo new --bin"
 alias cb="cargo build"
 alias cr="cargo run"
@@ -86,13 +86,8 @@ pathadd() {
     fi
 }
 
-### Add things to path ###
-pathadd /home/gib/build/depot_tools
-
 # VirtualBox Linux specific, mounts shared folder ForVM to ~/shared/ (create ~/shared first)
 [ "$HOSTNAME" = "glub" ] && alias mnt='sudo mount -t vboxsf ForVM ~/shared/'
-# Command to mount /node on the mac
-[ "$HOSTNAME" = "jtcjs15.hursley.ibm.com" ] && alias mnt="sudo mount -t nfs -o nfsvers=3,proto=tcp,resvport javasvt.hursley.ibm.com:/export/node /node"
 
 fnd() {
     find . -iname "*$**"
@@ -106,7 +101,8 @@ alias vs="v git python gcc"
 alias s="ssh -oStrictHostKeyChecking=No"
 alias sx="ssh -oStrictHostKeyChecking=No -X"
 
-r() {
+# r is defined with ksh
+rs() {
   for i in $@; do
     rustc ${i%.rs}.rs
     ./${i%.rs}
