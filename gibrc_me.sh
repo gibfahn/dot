@@ -1,2 +1,2 @@
 [ ! `uname` = "AIX" ] && flag=-v
-cp $flag `dirname $0`/.gibrc /home/gib/
+cp $flag `dirname $0`/.gibrc ~gib/
