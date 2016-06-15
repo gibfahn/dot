@@ -24,6 +24,7 @@ alias vim='vim -p'          # vim opens multi-tab by default
 export VISUAL=vim
 alias path='echo $PATH'
 alias x="exit"
+alias c="clear"
 alias h=history
 bind Space:magic-space 2>/dev/null
 bind 'set completion-ignore-case on' 2>/dev/null
@@ -111,7 +112,17 @@ rs() {
 
 # Node stuff
 alias bn='./configure && tools/gyp_node.py -f ninja && ninja -C out/Release && ln -fs out/Release/node node'
-tn() {
-  n=${2:-1}
-  for i in `seq 1 $n`; do printf "$i "; tools/test.py -p tap $1; done
+
+pth() {
+    # $1: relative filename, return: absolute path
+    if [ -d "$1" ]; then    # dir
+        (cd "$1"; pwd)
+    elif [ -f "$1" ]; then  # file
+        if [[ $1 == */* ]]; then
+            echo "$(cd "${1%/*}"; pwd)/${1##*/}"
+        else
+            echo "$(pwd)/$1"
+        fi
+    fi
 }
+
