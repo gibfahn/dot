@@ -115,14 +115,16 @@ alias bn='./configure && tools/gyp_node.py -f ninja && ninja -C out/Release && l
 
 pth() {
     # $1: relative filename, return: absolute path
-    if [ -d "$1" ]; then    # dir
-        (cd "$1"; pwd)
-    elif [ -f "$1" ]; then  # file
-        if [[ $1 == */* ]]; then
-            echo "$(cd "${1%/*}"; pwd)/${1##*/}"
-        else
-            echo "$(pwd)/$1"
-        fi
-    fi
+    for i in "$@"; do
+      if [ -d "$i" ]; then    # dir
+          (cd "$i"; pwd)
+      elif [ -f "$i" ]; then  # file
+          if [[ $i == */* ]]; then
+              echo "$(cd "${i%/*}"; pwd)/${i##*/}"
+          else
+              echo "$(pwd)/$i"
+          fi
+      fi
+    done
 }
 
