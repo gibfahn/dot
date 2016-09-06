@@ -9,9 +9,10 @@ UNAMEN=$(uname -n)
 ## Shell basics
 ls --color=auto >/dev/null 2>&1 && alias ls='ls --color=auto' # ls uses colour where possible
 [ "$UNAME" = "Darwin" ] && alias ls='ls -G' # coloured prompt on macOS
-alias la='ls -a' # List hidden files as well
+alias la='ls -A' # List hidden files as well
 alias ll='ls -l' # Gives more detail about files
 alias lal='ls -al' # More detail and hidden files
+alias l='ls -CF' # List column sorted with indicators
 cs() { cd "$@"; ls; } # cs => cd and ls
 alias ..='cs ..' # .. goes up a directory
 alias ...='cs ../..' # ... goes up two directories
@@ -40,6 +41,12 @@ alias gla="git log --graph --decorate --oneline --all" # Graph of commits for al
 alias gf="git fetch"
 alias gfa="git fetch --all"
 alias gc="git checkout"
+# Set up local branch from Github PR, e.g. gfp origin 7654
+gfp() { git fetch $1 pull/$2/head:pr-$2; } # $1: remote name, $2: PR number 
+gpp() { # Update branch created with gfp, $1: remote name
+  pr=`git symbolic-ref --short HEAD | cut -d "-" -f 2` # Assumes pr-7654 style branch
+  git pull $1 pull/$pr/head 
+}
 
 
 ## Useful functions (use the same way as aliases)
