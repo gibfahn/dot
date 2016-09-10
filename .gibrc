@@ -81,7 +81,8 @@ alias cn="cargo new --bin" # Create new cargo module
 alias cb="cargo build"
 alias cr="cargo run"
 alias ct="cargo test"
-alias ctag='ctags -R . ~/src/rust' # Populate ctags from rust src
+alias ctag='ctags -R . $HOME/bin/src/rust' # Populate ctags from rust src
+alias ru=rustup
 # Compile and execute all args (e.g. "rs a.rs b")
 rs() {
   for i in $@; do
