@@ -38,6 +38,7 @@ ulimit -c unlimited # Allow saving of coredumps
 alias gs="git status"
 alias gl="git log --graph --decorate --oneline" # Graph of commits
 alias gla="git log --graph --decorate --oneline --all" # Graph of commits for all branches
+alias gll="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias gf="git fetch"
 alias gfa="git fetch --all"
 alias gc="git checkout"
