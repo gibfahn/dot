@@ -1,4 +1,5 @@
 #!/bin/sh
+[ -z "$PS1" ] && return
 echo "Using gibrc..."
 
 ## Define variables to use later
@@ -21,7 +22,6 @@ alias .....='cs ../../../..'
 alias ......='cs ../../../../..'
 
 ## Other shell bits
-alias vim='vim -p' # vim opens multi-tab by default
 export VISUAL=vim # Set vim as the default editor
 alias path='echo $PATH'
 alias x="exit" # x exits the terminal
@@ -30,7 +30,6 @@ alias h=history # shows a history of commands
 bind Space:magic-space 2>/dev/null # !31 (execute command from history) autoexpands on space
 bind 'set completion-ignore-case on' 2>/dev/null # case-insensitive tab completion
 alias s="ssh -oStrictHostKeyChecking=No" # Won't prompt with "add new RSA key"
-alias nu="who|wc -l"                # nu - number of users
 alias np="ps -ef|wc -l"             # np - number of processes running
 ulimit -c unlimited # Allow saving of coredumps
 
@@ -38,7 +37,8 @@ ulimit -c unlimited # Allow saving of coredumps
 alias gs="git status"
 alias gl="git log --graph --decorate --oneline" # Graph of commits
 alias gla="git log --graph --decorate --oneline --all" # Graph of commits for all branches
-alias gll="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+alias gll="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creseti \
+  %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit" # prettier graph
 alias gf="git fetch"
 alias gfa="git fetch --all"
 alias gc="git checkout"
