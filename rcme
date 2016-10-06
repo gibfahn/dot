@@ -1,2 +1,4 @@
+#! /bin/bash
 [ ! `uname` = "AIX" ] && flag=-v
+RCFILE=${1:-gibrc}
 cp $flag `dirname $0`/.gibrc $HOME/
