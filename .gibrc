@@ -63,9 +63,7 @@ gpp() { # Update branch created with gfp, $1: remote name
 
 ## Useful functions (use the same way as aliases)
 pathadd() { # Add something to the path
-    if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
-        PATH="$1${PATH+":$PATH"}"
-    fi
+    [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]] && PATH="$1${PATH+":$PATH"}"
 }
 
 fnd() { # Recursive case-insensitive filename search (use grep -r for contents)
@@ -83,10 +81,6 @@ pth() { # Returns absolute path to file including file name
     fi
   done
 }
-
-# v git = git --version
-v() { for i in $@; do $i --version; done; }
-alias vs="v git python gcc"
 
 ## Rust commands
 alias cn="cargo new --bin" # Create new cargo module
@@ -151,3 +145,6 @@ if [ -d "$HOME/.nvm" ]; then # Setup nvm
     . "$NVM_DIR/nvm.sh"
   fi
 fi
+
+## Add things to the path
+pathadd "$HOME/.cargo/bin"
