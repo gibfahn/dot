@@ -52,7 +52,7 @@ nnoremap <leader>x :x<CR>
 nnoremap <leader>q :q<CR>
 nnoremap <leader>w :up<CR>
 nnoremap <leader>d :bd<CR>
-
+nnoremap <C-d> :w !diff % - <CR>
 
 " Use normal regex
 nnoremap / /\v
