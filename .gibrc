@@ -1,5 +1,5 @@
 #!/bin/sh
-[ -z "$PS1" ] && return
+[ -z "$PS1" ] && return # Exit if not running interactively
 echo "Using gibrc..."
 
 ## Define variables to use later
@@ -7,19 +7,31 @@ HOSTNAME=$(hostname)
 UNAME=$(uname)
 UNAMEN=$(uname -n)
 
-## Shell basics
-ls --color=auto >/dev/null 2>&1 && alias ls='ls --color=auto' # ls uses colour where possible
-[ "$UNAME" = "Darwin" ] && alias ls='ls -G' # coloured prompt on macOS
-alias la='ls -A' # List hidden files as well
-alias ll='ls -l' # Gives more detail about files
-alias lal='ls -al' # More detail and hidden files
-alias l='ls -CF' # List column sorted with indicators
-cs() { cd "$@"; ls; } # cs => cd and ls
-alias ..='cs ..' # .. goes up a directory
-alias ...='cs ../..' # ... goes up two directories
-alias ....='cs ../../..'
-alias .....='cs ../../../..'
-alias ......='cs ../../../../..'
+if [ -n "$ZSH_VERSION" ]; then # assume zsh
+  CASE_SENSITIVE="true"
+  HYPHEN_INSENSITIVE="true"
+  chpwd() { ls; } # Add ls after changing directory
+  DISABLE_AUTO_TITLE="true"
+  zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+  #  fpath+=~/.zfunc # Put autocomplete scripts in here
+elif [ -n "$BASH_VERSION" ]; then # assume Bash ## Shell basics
+  shopt -s autocd # type directory name to cd
+  ls --color=auto >/dev/null 2>&1 && alias ls='ls --color=auto' # ls uses colour where possible
+  [ "$UNAME" = "Darwin" ] && alias ls='ls -G' # coloured prompt on macOS
+  alias la='ls -A' # List hidden files as well
+  alias ll='ls -l' # Gives more detail about files
+  alias lal='ls -al' # More detail and hidden files
+  alias l='ls -CF' # List column sorted with indicators
+  cs() { cd "$@" && ls; } # cs => cd and ls
+  alias ..='cs ..' # .. goes up a directory
+  alias ...='cs ../..' # ... goes up two directories
+  alias ....='cs ../../..'
+  alias .....='cs ../../../..'
+  alias ......='cs ../../../../..'
+  bind Space:magic-space 2>/dev/null # !31 (execute command from history) autoexpands on space
+  bind 'set completion-ignore-case on' 2>/dev/null # case-insensitive tab completion
+  PS1=' \[\e[32;1m\]\w $ \[\e[0m\]'
+fi
 
 ## Other shell bits
 export VISUAL=vim # Set vim as the default editor
@@ -27,9 +39,7 @@ alias path='echo $PATH'
 alias x="exit" # x exits the terminal
 alias c="clear" # c clears the terminal screen
 alias h=history # shows a history of commands
-bind Space:magic-space 2>/dev/null # !31 (execute command from history) autoexpands on space
-bind 'set completion-ignore-case on' 2>/dev/null # case-insensitive tab completion
-alias s="ssh -oStrictHostKeyChecking=No" # Won't prompt with "add new RSA key"
+alias s="ssh" # Won't prompt with "add new RSA key" if you use -oStrictHostKeyChecking=No
 alias np="ps -ef|wc -l"             # np - number of processes running
 ulimit -c unlimited # Allow saving of coredumps
 
@@ -41,7 +51,8 @@ alias gll="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creseti
   %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit" # prettier graph
 alias gf="git fetch"
 alias gfa="git fetch --all"
-alias gc="git checkout"
+alias gco="git checkout"
+alias gcp="git cherry-pick"
 # Set up local branch from Github PR, e.g. gfp origin 7654
 gfp() { git fetch $1 pull/$2/head:pr-$2; } # $1: remote name, $2: PR number 
 gpp() { # Update branch created with gfp, $1: remote name
@@ -62,15 +73,15 @@ fnd() { # Recursive case-insensitive filename search (use grep -r for contents)
 }
 
 pth() { # Returns absolute path to file including file name
-    # $1: relative filename, return: absolute path
-    for i in "$@"; do
-      if [ -d "$i" ]; then (cd "$i"; pwd) # dir
-      elif [ -f "$i" ]; then  # file
-          if [[ $i == */* ]]; then echo "$(cd "${i%/*}"; pwd)/${i##*/}"
-          else echo "$(pwd)/$i"
-          fi
+  # $1: relative filename, return: absolute path
+  for i in "$@"; do
+    if [ -d "$i" ]; then (cd "$i"; pwd) # dir
+    elif [ -f "$i" ]; then  # file
+      if [[ $i == */* ]]; then echo "$(cd "${i%/*}"; pwd)/${i##*/}"
+      else echo "$(pwd)/$i"
       fi
-    done
+    fi
+  done
 }
 
 # v git = git --version
@@ -92,44 +103,51 @@ rs() {
   done
 }
 
-## Other bits
-alias f='fuck' # alias for github.com/nvbn/thefuck
 alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"' # Makes it look like you're busy
 
-
-## Set prompt for different shells
-if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-    [ "$UNAME" = "Darwin" ] && myshell=bash
-    myshell=${myshell:-"$(ls -l /proc/$$/exe | sed 's%.*/%%')"}
-    case $0 in
-	-ksh) myshell=ksh;;
-	bash) myshell=bash;;
-	-sh) myshell=dash;;
-    esac
-    if [ "$myshell" = "bash" ]; then
-        PS1='\[\e[35;1m\]\h \n \w $ \[\e[0m\]'
-    elif [ "$myshell" = "ksh93" ]; then
-        PS1=$'\E[35;1m $HOSTNAME \n $PWD \E[0m $ '
-    else
-        PS1="$UNAMEN $PWD $ "
-    fi
-else
-    PS1=' \[\e[32;1m\]\w $ \[\e[0m\]'
-fi
-alias bashme="PS1='\[\e[35;1m\]\h \n \w $ \[\e[0m\]'" # In case prompt wasn't set automatically
-# Enable basic keys on ancient shells
-if [ "$myshell" = "ksh93" -o "$myshell" = "ksh" ]; then
-    set -o emacs
-    alias __A=`echo "\020"`     # up arrow = ^p = back a command
-    alias __B=`echo "\016"`     # down arrow = ^n = down a command
-    alias __C=`echo "\006"`     # right arrow = ^f = forward a character
-    alias __D=`echo "\002"`     # left arrow = ^b = back a character
-    alias __H=`echo "\001"`     # home = ^a = start of line
-    alias __Y=`echo "\6"`     # end = ^e = end of line
-fi
-
-# VirtualBox Linux specific, mounts shared folder ForVM to ~/shared/ (create ~/shared first)
 [ "$HOSTNAME" = "glub" ] && alias mnt='sudo mount -t vboxsf ForVM ~/shared/'
 
 # Build node with ninja
 alias bn='./configure && tools/gyp_node.py -f ninja && ninja -C out/Release && ln -fs out/Release/node node'
+
+alias bashme="PS1='\[\e[35;1m\]\h \n \w $ \[\e[0m\]'" # In case prompt wasn't set automatically
+## Set prompt for different shells
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+  if [ -n "$BASH_VERSION" ]; then # assume Bash ## Shell basics
+    PS1='\[\e[35;1m\]\h \n \w $ \[\e[0m\]'
+  else
+    myshell=dash
+    myshell=${myshell:-"$(ls -l /proc/$$/exe | sed 's%.*/%%')"}
+    case $0 in
+    -ksh) myshell=ksh;;
+    -sh) myshell=dash;;
+    esac
+    if [ "$myshell" = "ksh93" ]; then
+      PS1='\E[35;1m $HOSTNAME \n $PWD \E[0m $ '
+    else
+      PS1="$UNAMEN $PWD $ "
+    fi
+  fi
+fi
+# Enable basic keys on ancient shells
+if [ "$myshell" = "ksh93" -o "$myshell" = "ksh" ]; then
+  set -o emacs
+  alias __A=`echo "\020"`     # up arrow = ^p = back a command
+  alias __B=`echo "\016"`     # down arrow = ^n = down a command
+  alias __C=`echo "\006"`     # right arrow = ^f = forward a character
+  alias __D=`echo "\002"`     # left arrow = ^b = back a character
+  alias __H=`echo "\001"`     # home = ^a = start of line
+  alias __Y=`echo "\6"`     # end = ^e = end of line
+fi
+
+## Optional extras
+exists() { type "$1" >/dev/null 2>&1; }
+exists thefuck && eval $(thefuck --alias) && alias f='fuck' # github.com/nvbn/thefuck
+if [ -d "$HOME/.nvm" ]; then # Setup nvm
+  export NVM_DIR="$HOME/.nvm"
+  if exists brew; then
+    . "$(brew --prefix nvm)/nvm.sh"
+  elif [ -s "$NVM_DIR/nvm.sh" ]; then
+    . "$NVM_DIR/nvm.sh"
+  fi
+fi
