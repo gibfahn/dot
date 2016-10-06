@@ -1,0 +1,1 @@
+apm install merge-conflicts

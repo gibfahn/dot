@@ -5,3 +5,4 @@ git config --global user.email "gib@uk.ibm.com"
 git config --global --add core.whitespace fix
 git config --global credential.helper cache
 git config credential.helper 'cache --timeout=86400'
+git config --global core.excludesfile ~/.gitignore
