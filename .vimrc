@@ -4,8 +4,7 @@ let mapleader = "\<Space>" " Set leader (default shortcut) key to Space
 
 syntax on
 filetype plugin indent on
-set shiftwidth=2         " 
-set softtabstop=2        " 
+set sw=2 ts=2 sts=2      " Set tab width to 2
 set expandtab            " 
 set backspace=2          " Backspace deletes like most programs in insert mode
 set ignorecase           " Ignore case for lowercase searches
@@ -26,6 +25,7 @@ set mouse=a              " Use the mouse in all modes (Fn+select to copy in macO
 set number               " Turn on line numbers
 set relativenumber       " Show line nos relative to curr line (except curr line)
 set numberwidth=5        " Width of line number buffer
+set hlsearch             " Highlight search matches (turn off with <Space>/)
 colo desert              " Use the desert colorscheme
 
 set wildchar=<Tab> wildmenu wildmode=full " More info with : and Tab
@@ -38,7 +38,7 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 " Tab and Shift-Tab for changing buffers
 nnoremap <Tab> :bn<CR>
-nnoremap <S-Tab> :bp<CR>  
+nnoremap <S-Tab> :bp<CR>
 " kj = Esc in insert mode
 inoremap kj <ESC>
 
@@ -49,10 +49,26 @@ nnoremap <leader>k <C-w>q
 nnoremap <leader>h <C-w>q
 nnoremap <leader>o :on<CR>
 nnoremap <leader>x :x<CR>
-nnoremap <leader>q :q<CR>
 nnoremap <leader>w :up<CR>
+nnoremap <leader>q :q<CR>
 nnoremap <leader>d :bd<CR>
-nnoremap <C-d> :w !diff % - <CR>
+nnoremap <leader>/ :noh<CR>
+" Run commands that require an interactive shell
+nnoremap <Leader>r :RunInInteractiveShell<space>
+
+" <Space>gd shows diff between saved file and current
+nnoremap <Leader>gd :w !diff % - <CR>
+
+" " Copy to clipboard
+vnoremap  <leader>y  "+y
+nnoremap  <leader>Y  "+yg_
+nnoremap  <leader>y  "+y
+
+" " Paste from clipboard
+nnoremap <leader>p "+p
+nnoremap <leader>P "+P
+vnoremap <leader>p "+p
+vnoremap <leader>P "+P
 
 " Use normal regex
 nnoremap / /\v
@@ -130,12 +146,12 @@ endfunction
 inoremap <Tab> <c-r>=InsertTabWrapper()<cr>
 inoremap <S-Tab> <c-n>
 
-" Run commands that require an interactive shell
-nnoremap <Leader>r :RunInInteractiveShell<space>
-
 " Open new split panes to right and bottom, which feels more natural
 set splitbelow
 set splitright
 
 " Always use vertical diffs
 set diffopt+=vertical
+
+" Suppress Netrw and use vim-readdir instead
+" let g:loaded_netrwPlugin = 1
