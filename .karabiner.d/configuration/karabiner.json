@@ -1,0 +1,27 @@
+{
+  "profiles" : [
+    {
+      "selected" : true,
+      "simple_modifications" : {
+        "left_shift" : "left_control",
+        "caps_lock" : "left_shift",
+        "non_us_backslash" : "grave_accent_and_tilde"
+      },
+      "name" : "Default profile",
+      "fn_function_keys" : {
+        "f12" : "volume_up",
+        "f9" : "vk_consumer_next",
+        "f5" : "vk_consumer_illumination_down",
+        "f10" : "mute",
+        "f1" : "vk_consumer_brightness_down",
+        "f6" : "vk_consumer_illumination_up",
+        "f2" : "vk_consumer_brightness_up",
+        "f7" : "vk_consumer_previous",
+        "f11" : "volume_down",
+        "f3" : "vk_mission_control",
+        "f8" : "vk_consumer_play",
+        "f4" : "vk_launchpad"
+      }
+    }
+  ]
+}
