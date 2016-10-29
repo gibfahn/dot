@@ -16,5 +16,5 @@ HYPHEN_INSENSITIVE="true"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=()
 
-. ~/.gibrc
 source $ZSH/oh-my-zsh.sh
+. ~/.gibrc

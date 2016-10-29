@@ -9,7 +9,7 @@ vim -u NONE -c "helptags vim-fugitive/doc" -c q
 # Show buffers in the tab bar
 git clone https://github.com/ap/vim-buftabline.git 
 # Keep cursor in middle of screen when scrolling
-git clone https://github.com/vim-scripts/scrollfix.git
+#git clone https://github.com/vim-scripts/scrollfix.git
 # Get rust language
 git clone --depth=1 https://github.com/rust-lang/rust.vim.git ~/.vim/bundle/rust.vim
 # Get vim-sleuth (autodetect tab/space for file)
@@ -21,3 +21,5 @@ mkdir -p ~/.vim/syntax
 curl https://raw.githubusercontent.com/crusoexia/vim-monokai/master/colors/monokai.vim > ~/.vim/syntax/monokai.vim
 # Vim sensible (sensible defaults - needs review)
 git clone git://github.com/tpope/vim-sensible.git ~/.vim/bundle/vim-sensible
+# Readdir - a simpler netrw directory browser
+https://github.com/ap/vim-readdir.git

@@ -1,4 +1,3 @@
-#!/bin/sh
 [ -z "$PS1" ] && return # Exit if not running interactively
 echo "Using gibrc..."
 
@@ -7,8 +6,11 @@ HOSTNAME=$(hostname)
 UNAME=$(uname)
 UNAMEN=$(uname -n)
 
+# Coloured prompt with ls
+  ls --color=auto >/dev/null 2>&1 && alias ls='ls --color=auto' # ls uses colour where possible
+  [ "$UNAME" = "Darwin" ] && alias ls='ls -G' # coloured prompt on macOS
+
 if [ -n "$ZSH_VERSION" ]; then # assume zsh
-  CASE_SENSITIVE="true"
   HYPHEN_INSENSITIVE="true"
   chpwd() { ls; } # Add ls after changing directory
   DISABLE_AUTO_TITLE="true"
@@ -16,8 +18,6 @@ if [ -n "$ZSH_VERSION" ]; then # assume zsh
   #  fpath+=~/.zfunc # Put autocomplete scripts in here
 elif [ -n "$BASH_VERSION" ]; then # assume Bash ## Shell basics
   shopt -s autocd # type directory name to cd
-  ls --color=auto >/dev/null 2>&1 && alias ls='ls --color=auto' # ls uses colour where possible
-  [ "$UNAME" = "Darwin" ] && alias ls='ls -G' # coloured prompt on macOS
   alias la='ls -A' # List hidden files as well
   alias ll='ls -l' # Gives more detail about files
   alias lal='ls -al' # More detail and hidden files
@@ -42,6 +42,7 @@ alias h=history # shows a history of commands
 alias s="ssh" # Won't prompt with "add new RSA key" if you use -oStrictHostKeyChecking=No
 alias np="ps -ef|wc -l"             # np - number of processes running
 ulimit -c unlimited # Allow saving of coredumps
+alias v=nvim # Use neovim
 
 ## Git commands
 alias gs="git status"
@@ -53,6 +54,7 @@ alias gf="git fetch"
 alias gfa="git fetch --all"
 alias gco="git checkout"
 alias gcp="git cherry-pick"
+alias gpf="git push --force-with-lease"
 # Set up local branch from Github PR, e.g. gfp origin 7654
 gfp() { git fetch $1 pull/$2/head:pr-$2; } # $1: remote name, $2: PR number 
 gpp() { # Update branch created with gfp, $1: remote name
@@ -148,3 +150,4 @@ fi
 
 ## Add things to the path
 pathadd "$HOME/.cargo/bin"
+pathadd /usr/local/opt/ccache/libexec
