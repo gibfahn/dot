@@ -1,0 +1,70 @@
+[push]
+  default = simple
+[core]
+  whitespace = fix
+  excludesfile = /Users/gib/.gitignore_global
+[alias]
+  assume   = update-index --assume-unchanged
+  unassume = update-index --no-assume-unchanged
+  assumed  = "!git ls-files -v | grep ^h | cut -c 3-"
+  authors = !git log --all --format='%aN <%aE>' | sort -u
+
+  l = log --graph --decorate --oneline
+  la = log --graph --decorate --oneline --all
+  lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%C(bold blue)<%an>%Creset' --abbrev-commit
+  head = "!git rev-parse HEAD | cut -b -10"
+
+  cl = clone
+  clm = "clone --recursive -j8" # Clone including submodules
+  cp = cherry-pick
+  co = checkout
+  ci = commit
+  cim = commit --amend
+  plus = commit -a --amend --no-edit
+  fix = "commit --fixup" # g fix SHA means rebasing will attach to that SHA
+
+  f = fetch
+  fa = fetch --all
+  # Set up local branch from Github PR, `g fp origin 7654`, `g pp origin`
+  fp = "!git fetch $1 pull/$2/head:pr-$2 && git checkout pr-$2 #"
+  pp = "!git pull $1 pull/$(git symbolic-ref --short HEAD | cut -d "-" -f 2)/head #"
+
+  p = push
+  pf="git push --force-with-lease"
+  pa = "!curl -L $1.patch | git am --whitespace=fix #" # Patch Github PR
+  pap = "!curl -L $1.patch | git am -3 --whitespace=fix #" # Please patch it
+  pl = pull
+
+  rb = rebase
+  rh = reset --hard
+  ri = "rebase -i --autosquash" # Works with git fix above
+  rs = reset
+
+  s = status
+  sh = "show --ws-error-highlight=all" # Highlight whitespace changes in show
+  df = "diff --ws-error-highlight=all" # Highlight whitespace changes in diff
+  # Sort files by commits on each
+  churn = !git log --all -M -C --name-only --format='format:' "$@" | sort | grep -v '^$' | uniq -c | sort | awk 'BEGIN {print "count,file"} {print $1 "," $2}'
+[credential]
+  helper = osxkeychain
+[help]
+  autocorrect = 1
+[rebase]
+  autosquash = true
+[credential]
+  helper = cache
+
+# Try `g cl gh:nodejs/node`
+[url "https://bitbucket.org/"]
+    insteadOf = bb:
+[url "git@github.com:"]
+    insteadOf = gs:
+[url "https://github.com/"]
+    insteadOf = gh:
+[url "https://gist.github.com/"]
+    insteadOf = gist:
+[user]
+  name = Gibson Fahnestock
+  email = gib@uk.ibm.com
+  # email = gib@fahn.co
+  username = gibfahn

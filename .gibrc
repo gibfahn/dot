@@ -43,24 +43,8 @@ alias s="ssh" # Won't prompt with "add new RSA key" if you use -oStrictHostKeyCh
 alias np="ps -ef|wc -l"             # np - number of processes running
 ulimit -c unlimited # Allow saving of coredumps
 alias v=nvim # Use neovim
+alias g=git # Use with commands in ~/.gitconfig for best results
 
-## Git commands
-alias gs="git status"
-alias gl="git log --graph --decorate --oneline" # Graph of commits
-alias gla="git log --graph --decorate --oneline --all" # Graph of commits for all branches
-alias gll="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creseti \
-  %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit" # prettier graph
-alias gf="git fetch"
-alias gfa="git fetch --all"
-alias gco="git checkout"
-alias gcp="git cherry-pick"
-alias gpf="git push --force-with-lease"
-# Set up local branch from Github PR, e.g. gfp origin 7654
-gfp() { git fetch $1 pull/$2/head:pr-$2; } # $1: remote name, $2: PR number 
-gpp() { # Update branch created with gfp, $1: remote name
-  pr=`git symbolic-ref --short HEAD | cut -d "-" -f 2` # Assumes pr-7654 style branch
-  git pull $1 pull/$pr/head 
-}
 
 
 ## Useful functions (use the same way as aliases)
