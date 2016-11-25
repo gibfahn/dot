@@ -1,0 +1,26 @@
+"*":
+  "activate-power-mode":
+    autoToggle: false
+  "bracket-matcher": {}
+  "build-cargo":
+    extCommands:
+      cargoClippy: true
+  core:
+    telemetryConsent: "limited"
+  editor:
+    fontSize: 12
+    showInvisibles: true
+  "exception-reporting":
+    userId: "0f12016b-b0f6-7f4b-448c-5e109d458d4f"
+  linter:
+    errorPanelHeight: 22
+  "linter-rust":
+    cargoCommand: "clippy"
+  racer:
+    racerBinPath: "/Users/gib/.cargo/bin/racer"
+    rustSrcPath: "/Users/gib/.multirust/toolchains/nightly-x86_64-apple-darwin/lib/rustlib/src/rust/src"
+  "split-diff": {}
+  "vim-mode-plus":
+    wrapLeftRightMotion: true
+  welcome:
+    showOnStartup: false
