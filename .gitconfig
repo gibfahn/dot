@@ -19,8 +19,11 @@
   clm = "clone --recursive -j8" # Clone including submodules
   cp = cherry-pick
   co = checkout
-  ci = commit
-  cim = commit --amend
+  c = commit
+  ca = commit -a
+  cam = commit --amend -a
+  cm = commit --amend
+  cn = clean -fdx
   plus = commit -a --amend --no-edit
   fix = "commit --fixup" # g fix SHA means rebasing will attach to that SHA
 
@@ -31,7 +34,7 @@
   pp = "!git pull $1 pull/$(git symbolic-ref --short HEAD | cut -d "-" -f 2)/head #"
 
   p = push
-  pf="git push --force-with-lease"
+  pf = push --force-with-lease
   pa = "!curl -L $1.patch | git am --whitespace=fix #" # Patch Github PR
   pap = "!curl -L $1.patch | git am -3 --whitespace=fix #" # Please patch it
   pl = pull
@@ -40,6 +43,7 @@
   rh = reset --hard
   ri = "rebase -i --autosquash" # Works with git fix above
   rs = reset
+  rv = remote -v
 
   s = status
   sh = "show --ws-error-highlight=all" # Highlight whitespace changes in show
@@ -69,3 +73,5 @@
   email = gib@uk.ibm.com
   # email = gib@fahn.co
   username = gibfahn
+[log]
+  follow = true
