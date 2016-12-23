@@ -1,4 +1,9 @@
-#! /bin/bash
+#!/bin/bash
 [ ! `uname` = "AIX" ] && flag=-v
-RCFILE=${1:-gibrc}
-cp $flag `dirname $0`/.$RCFILE $HOME/
+
+[ $# = 0 ] && cp $flag `dirname $0`/.gibrc $HOME/
+
+for RCFILE in $*; do
+  [[ ${RCFILE:0:1} != "." ]] && RCFILE=.$RCFILE
+  cp $flag `dirname $0`/.$RCFILE $HOME/
+done
