@@ -27,6 +27,7 @@ set relativenumber       " Show line nos relative to curr line (except curr line
 set numberwidth=5        " Width of line number buffer
 set hlsearch             " Highlight search matches (turn off with <Space>/)
 colo desert              " Use the desert colorscheme
+set ffs=unix             " Only use the Unix fileformat
 
 set wildchar=<Tab> wildmenu wildmode=full " More info with : and Tab
 " :W saves file as sudo
@@ -43,8 +44,8 @@ nnoremap <S-Tab> :bp<CR>
 inoremap kj <ESC>
 
 " Space and Leader-Space for opening/closing splits
-nnoremap <leader>l :vsp<CR><Tab>
-nnoremap <leader>j :sp<CR><Tab>
+nnoremap <leader>l :vsp<CR><C-w>h:bp<CR>
+nnoremap <leader>j :sp<CR><C-w>k:bp<CR>
 nnoremap <leader>k <C-w>q
 nnoremap <leader>h <C-w>q
 nnoremap <leader>o :on<CR>
@@ -69,10 +70,6 @@ nnoremap <leader>p "+p
 nnoremap <leader>P "+P
 vnoremap <leader>p "+p
 vnoremap <leader>P "+P
-
-" Use normal regex
-nnoremap / /\v
-vnoremap / /\v
 
 " Display extra whitespace
 set list listchars=tab:»·,trail:·,nbsp:·
@@ -117,23 +114,22 @@ set t_Co=256 " Use 256 color terminal (useful for monokai)
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 " Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
-if executable('ag')
+if executable('rg')
   " Use Ag over Grep
-  set grepprg=ag\ --nogroup\ --nocolor
+  set grepprg=rg\ --nogroup\ --nocolor
   " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'ag -Q -l --nocolor --hidden -g "" %s'
+  let g:ctrlp_user_command = 'rg -Q -l --nocolor --hidden -g "" %s'
   " ag is fast enough that CtrlP doesn't need to cache
   let g:ctrlp_use_caching = 0
-  if !exists(":Ag")
-    command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
-    nnoremap \ :Ag<SPACE>
+  if !exists(":Rg")
+    command -nargs=+ -complete=file -bar Rg silent! grep! <args>|cwindow|redraw!
+    nnoremap \ :Rg<SPACE>
   endif
 endif
 
 
 " Tab completion
-" will insert tab at beginning of line,
-" will use completion if not at beginning
+" insert tab at beginning of line, else use completion
 set wildmode=list:longest,list:full
 function! InsertTabWrapper()
     let col = col('.') - 1

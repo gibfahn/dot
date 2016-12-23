@@ -88,7 +88,7 @@ alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"' # Makes it look like y
 [ "$HOSTNAME" = "glub" ] && alias mnt='sudo mount -t vboxsf ForVM ~/shared/'
 
 # Build node with ninja
-alias bn='./configure && tools/gyp_node.py -f ninja && ninja -C out/Release && ln -fs out/Release/node node'
+alias bn='export CPPFLAGS=-fdiagnostics-color && ./configure && tools/gyp_node.py -f ninja && ninja -C out/Release && ln -fs out/Release/node node'
 
 alias bashme="PS1='\[\e[35;1m\]\h \n \w $ \[\e[0m\]'" # In case prompt wasn't set automatically
 ## Set prompt for different shells
