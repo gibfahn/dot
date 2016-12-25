@@ -1,85 +1,71 @@
-execute pathogen#infect()
-set nocompatible         " Remove vi compatibility hacks
-let mapleader = "\<Space>" " Set leader (default shortcut) key to Space
+execute pathogen#infect()|                          " Load plugins from ~/.vim/bundle
+set nocompatible                                    " Remove vi compatibility hacks
+let mapleader = "\<Space>"                          " Set leader (default shortcut) to Space
 
-syntax on
-filetype plugin indent on
-set sw=2 ts=2 sts=2      " Set tab width to 2
-set expandtab            " 
-set backspace=2          " Backspace deletes like most programs in insert mode
-set ignorecase           " Ignore case for lowercase searches
-set smartcase            " Don't ignore case for mixed-case searches
-set gdefault             " Replace /g on by default (/g turns it off)
-set history=1000         " remember more commands and search history
-set undolevels=1000      " use many muchos levels of undo
-"set title                " change the terminal's title
-set ruler                " show the cursor position all the time
-set showcmd              " display incomplete commands
-set incsearch            " do incremental searching
-set laststatus=2         " Always display the status line
-set hidden               " Don't force me to save buffers before switching
-set textwidth=79         " Wrap at 79 chars
-set autoread             " Auto read when file is changed from the outside
-set nojoinspaces         " Use one space, not two, after punctuation.
-set mouse=a              " Use the mouse in all modes (Fn+select to copy in macOS)
-set number               " Turn on line numbers
-set relativenumber       " Show line nos relative to curr line (except curr line)
-set numberwidth=5        " Width of line number buffer
-set hlsearch             " Highlight search matches (turn off with <Space>/)
-colo desert              " Use the desert colorscheme
-set ffs=unix             " Only use the Unix fileformat
+syntax on                                           " Turn on syntax highlighting
+filetype plugin indent on                           " Use file-specific plugins
+set sw=2 ts=2 sts=2                                 " Set tab width to 2
+set expandtab                                       " Insert spaces tab key pressed
+set backspace=2                                     " Backspace works across lines
+set ignorecase                                      " Ignore case for lowercase searches
+set smartcase                                       "  ↳ don't for mixed-case
+set gdefault                                        " Global replace default (off: /g)
+set history=1000                                    " More command/search history
+set undolevels=1000                                 " More undo history
+set ruler                                           " Always show cursor position
+set showcmd                                         " Display incomplete commands
+set incsearch                                       " Incremental searching
+set laststatus=2                                    " Always display the status line
+set hidden                                          " Don't force saving buffers on switching
+set textwidth=79                                    " Wrap at 79 chars
+set autoread                                        " Auto read when file is changed elsewhere
+set nojoinspaces                                    " One space (not two) after punctuation.
+set mouse=a                                         " Mouse in all modes (mac: Fn+drag to copy)
+set number                                          " Turn on line numbers
+set relativenumber                                  " Line nos relative to curr line
+set numberwidth=5                                   " Width of line number buffer
+set hlsearch                                        " Highlight search matches (off: <Space>/)
+colo desert                                         " Use the desert colorscheme
+set ffs=unix                                        " Only use the Unix fileformat
+set t_Co=256                                        " Use 256 color terminal
+set splitbelow                                      " Open new split panes to right and
+set splitright                                      "  ↳ bottom, which feels more natural
+set diffopt+=vertical                               " Always use vertical diffs
+set wildchar=<Tab> wildmenu wildmode=full           " More info with : and Tab
+set list listchars=tab:»·,trail:·,nbsp:·            " Display extra whitespace
 
-set wildchar=<Tab> wildmenu wildmode=full " More info with : and Tab
-" :W saves file as sudo
-command W w !sudo tee % > /dev/null
-" Quicker window movement Ctrl + direction
-nnoremap <C-j> <C-w>j
+nnoremap <C-j> <C-w>j|                              " Move window focus
 nnoremap <C-k> <C-w>k
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
-" Tab and Shift-Tab for changing buffers
-nnoremap <Tab> :bn<CR>
-nnoremap <S-Tab> :bp<CR>
-" kj = Esc in insert mode
-inoremap kj <ESC>
-
-" Space and Leader-Space for opening/closing splits
-nnoremap <leader>l :vsp<CR><C-w>h:bp<CR>
+nnoremap <Tab> :bn<CR>|                             " Tab and Shift-Tab
+nnoremap <S-Tab> :bp<CR>|                           "  ↳ for changing buffers
+inoremap kj <ESC>|                                  " kj = Esc in insert mode
+nnoremap <leader>l :vsp<CR><C-w>h:bp<CR>|           " Open/close splits
 nnoremap <leader>j :sp<CR><C-w>k:bp<CR>
 nnoremap <leader>k <C-w>q
 nnoremap <leader>h <C-w>q
-nnoremap <leader>o :on<CR>
-nnoremap <leader>x :x<CR>
-nnoremap <leader>w :up<CR>
-nnoremap <leader>q :q<CR>
-nnoremap <leader>d :bd<CR>
-nnoremap <leader>/ :noh<CR>
-" Run commands that require an interactive shell
-nnoremap <Leader>r :RunInInteractiveShell<space>
-
-" <Space>gd shows diff between saved file and current
-nnoremap <Leader>gd :w !diff % - <CR>
-
-" " Copy to clipboard
-vnoremap  <leader>y  "+y
-nnoremap  <leader>Y  "+yg_
-nnoremap  <leader>y  "+y
-
-" " Paste from clipboard
-nnoremap <leader>p "+p
+nnoremap <leader>o :on<CR>|                         " Close all other tabs
+nnoremap <leader>x :x<CR>|                          " Save+quit
+nnoremap <leader>w :up<CR>|                         " Write if there were changes
+nnoremap <leader>q :q<CR>|                          " Quit
+nnoremap <leader>d :bd<CR>|                         " Close buffer
+nnoremap <leader>/ :noh<CR>|                        " Turn off find highlighting
+nnoremap <Leader>r :RunInInteractiveShell<space>|   " Open shell
+nnoremap <Leader>gd :w !diff % - <CR>|              " Diff between saved file and current
+vnoremap <leader>y  "+y|                            " Copy to clipboard
+nnoremap <leader>Y  "+yg_
+nnoremap <leader>y  "+y
+nnoremap <leader>p "+p|                             " Paste from clipboard
 nnoremap <leader>P "+P
 vnoremap <leader>p "+p
 vnoremap <leader>P "+P
 
-" Display extra whitespace
-set list listchars=tab:»·,trail:·,nbsp:·
+command W w !sudo tee % > /dev/null|                " :W saves file as sudo
+let g:is_posix = 1                                  " Assume shell for syntax highlighting
 
 " Nicer line wrapping for long lines
-if has('linebreak')
-  set breakindent
-  let &showbreak = '↳ '
-  set cpo+=n
-end
+if has('linebreak')| set breakindent| let &showbreak = '↳ '| set cpo+=n| end
 
 " Automatically set paste when pasting
 let &t_SI .= "\<Esc>[?2004h"
@@ -92,9 +78,7 @@ function! XTermPasteBegin()
 endfunction
 augroup vimrcEx
   autocmd!
-  " When editing a file, always jump to the last known cursor position.
-  " Don't do it for commit messages, when the position is invalid, or when
-  " inside an event handler (happens when dropping a file on gvim).
+  " On open jump to last cursor position if known/valid
   autocmd BufReadPost *
     \ if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal g`\"" |
@@ -104,50 +88,10 @@ augroup vimrcEx
   autocmd BufRead,BufNewFile .{jscs,jshint,eslint}rc set filetype=json
 augroup END
 
-" When the type of shell script is /bin/sh, assume a POSIX-compatible
-" shell for syntax highlighting purposes.
-let g:is_posix = 1
-
-set t_Co=256 " Use 256 color terminal (useful for monokai)
-
-" Ctrl P for CtrlP
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
-" Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
-if executable('rg')
-  " Use Ag over Grep
-  set grepprg=rg\ --nogroup\ --nocolor
-  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'rg -Q -l --nocolor --hidden -g "" %s'
-  " ag is fast enough that CtrlP doesn't need to cache
-  let g:ctrlp_use_caching = 0
-  if !exists(":Rg")
-    command -nargs=+ -complete=file -bar Rg silent! grep! <args>|cwindow|redraw!
-    nnoremap \ :Rg<SPACE>
-  endif
-endif
-
-
-" Tab completion
-" insert tab at beginning of line, else use completion
-set wildmode=list:longest,list:full
-function! InsertTabWrapper()
+set wildmode=list:longest,list:full                 " Insert tab at beginning of line,
+function! InsertTabWrapper()                       "  ↳ else use completion
     let col = col('.') - 1
-    if !col || getline('.')[col - 1] !~ '\k'
-        return "\<tab>"
-    else
-        return "\<c-p>"
-    endif
+    if !col || getline('.')[col - 1] !~ '\k'| return "\<tab>"| else| return "\<c-p>"| endif
 endfunction
 inoremap <Tab> <c-r>=InsertTabWrapper()<cr>
 inoremap <S-Tab> <c-n>
-
-" Open new split panes to right and bottom, which feels more natural
-set splitbelow
-set splitright
-
-" Always use vertical diffs
-set diffopt+=vertical
-
-" Suppress Netrw and use vim-readdir instead
-" let g:loaded_netrwPlugin = 1
