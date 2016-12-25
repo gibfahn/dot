@@ -5,5 +5,7 @@ rustup install nightly && rustup install stable
 # Download zsh completion
 mkdir ~/.zfunc
 curl https://raw.githubusercontent.com/rust-lang-nursery/rustup.rs/master/src/rustup-cli/zsh/_rustup >~/.zfunc/_rustup
-
+# Download docs and src
+rustup component add rust-src
+rustup component add rust-docs
 

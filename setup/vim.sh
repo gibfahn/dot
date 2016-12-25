@@ -23,3 +23,6 @@ curl https://raw.githubusercontent.com/crusoexia/vim-monokai/master/colors/monok
 git clone git://github.com/tpope/vim-sensible.git ~/.vim/bundle/vim-sensible
 # Readdir - a simpler netrw directory browser
 https://github.com/ap/vim-readdir.git
+# vim-racer (rust completion for vim)
+git clone --depth=1 https://github.com/racer-rust/vim-racer.git ~/.vim/bundle/vim-racer
+
