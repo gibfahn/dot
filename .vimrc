@@ -33,42 +33,40 @@ set splitright                                      "  ↳ bottom, which feels m
 set diffopt+=vertical                               " Always use vertical diffs
 set wildchar=<Tab> wildmenu wildmode=full           " More info with : and Tab
 set list listchars=tab:»·,trail:·,nbsp:·            " Display extra whitespace
+set cursorline                                      " Highlight the line under the cursor
 
 nnoremap <C-j> <C-w>j|                              " Move window focus
 nnoremap <C-k> <C-w>k
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
-nnoremap <Tab> :bn<CR>|                             " Tab and Shift-Tab
-nnoremap <S-Tab> :bp<CR>|                           "  ↳ for changing buffers
+nnoremap <Tab> :bn<CR>|                             " Tab and Shift-Tab to change buffer
+nnoremap <S-Tab> :bp<CR>|                           "  ↳ vim buffers = other tabs
 inoremap kj <ESC>|                                  " kj = Esc in insert mode
-nnoremap <leader>l :vsp<CR><C-w>h:bp<CR>|           " Open/close splits
-nnoremap <leader>j :sp<CR><C-w>k:bp<CR>
-nnoremap <leader>k <C-w>q
-nnoremap <leader>h <C-w>q
-nnoremap <leader>o :on<CR>|                         " Close all other tabs
-nnoremap <leader>x :x<CR>|                          " Save+quit
-nnoremap <leader>w :up<CR>|                         " Write if there were changes
-nnoremap <leader>q :q<CR>|                          " Quit
+nnoremap <leader>b :up<CR>:Make<CR>:copen<CR>|      " Save and build command for filetype
 nnoremap <leader>d :bd<CR>|                         " Close buffer
+nnoremap <Leader>gd :w !diff % - <CR>|              " Diff between saved file and current
+nnoremap <leader>j :sp<CR><C-w>k:bp<CR>|            " Open horizontal split
+nnoremap <leader>k <C-w>q|                          " Close current split (keeps buffer)
+nnoremap <leader>l :vsp<CR><C-w>h:bp<CR>|           " Open vertical split
+nnoremap <leader>o :on<CR>|                         " Close all other buffers
+nnoremap <leader>q :q<CR>|                          " Quit
+nnoremap <leader>Q :q!<CR>|                         " Quit losing unsaved changes
+nnoremap <leader>w :up<CR>|                         " Write if there were changes
+nnoremap <leader>x :x<CR>|                          " Save+quit
 nnoremap <leader>/ :noh<CR>|                        " Turn off find highlighting
 nnoremap <Leader>r :RunInInteractiveShell<space>|   " Open shell
-nnoremap <Leader>gd :w !diff % - <CR>|              " Diff between saved file and current
 vnoremap <leader>y  "+y|                            " Copy to clipboard
 nnoremap <leader>Y  "+yg_
-nnoremap <leader>y  "+y
 nnoremap <leader>p "+p|                             " Paste from clipboard
-nnoremap <leader>P "+P
-vnoremap <leader>p "+p
 vnoremap <leader>P "+P
 
-command W w !sudo tee % > /dev/null|                " :W saves file as sudo
+command! W w !sudo tee % > /dev/null|               " :W saves file as sudo
 let g:is_posix = 1                                  " Assume shell for syntax highlighting
 
 " Nicer line wrapping for long lines
 if has('linebreak')| set breakindent| let &showbreak = '↳ '| set cpo+=n| end
 
-" Automatically set paste when pasting
-let &t_SI .= "\<Esc>[?2004h"
+let &t_SI .= "\<Esc>[?2004h"|                       " Automatically set paste when pasting
 let &t_EI .= "\<Esc>[?2004l"
 inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
 function! XTermPasteBegin()
@@ -76,20 +74,22 @@ function! XTermPasteBegin()
   set paste
   return ""
 endfunction
-augroup vimrcEx
+augroup gibAutoGroup|                                    " Group of automatic functions
   autocmd!
-  " On open jump to last cursor position if known/valid
-  autocmd BufReadPost *
+  autocmd BufReadPost *|                            " On open jump to last cursor position if known/valid
     \ if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal g`\"" |
     \ endif
-  " Set syntax highlighting for specific file types
-  autocmd BufRead,BufNewFile *.md set filetype=markdown
-  autocmd BufRead,BufNewFile .{jscs,jshint,eslint}rc set filetype=json
+  au BufRead,BufNewFile *.md set filetype=markdown  " Use markdown for md files
+  autocmd FileType help wincmd L                    " Open new help windows on the right
+  autocmd FileType qf wincmd L                      " Open new build windows on the right
+  au BufWritePost .vimrc so $MYVIMRC|               " Reload .vimrc on save
 augroup END
+autocmd BufRead,BufNewFile Cargo.toml,Cargo.lock,*.rs compiler cargo
+let g:cargo_makeprg_params = "test"
 
 set wildmode=list:longest,list:full                 " Insert tab at beginning of line,
-function! InsertTabWrapper()                       "  ↳ else use completion
+function! InsertTabWrapper()                        "  ↳ else use completion
     let col = col('.') - 1
     if !col || getline('.')[col - 1] !~ '\k'| return "\<tab>"| else| return "\<c-p>"| endif
 endfunction
