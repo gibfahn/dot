@@ -3,7 +3,7 @@ echo "Using gibrc..."
 
 # Coloured prompt with ls
   ls --color=auto >/dev/null 2>&1 && alias ls='ls --color=auto' # ls use colour if poss
-  [ "$(uname)" = "Darwin" ] && alias ls='ls -G'                   # ls use colour on mac
+  [ "$(uname)" = "Darwin" ] && alias ls='ls -G' && alias dl=rmtrash # ls use colour on mac
 
 if [ -n "$ZSH_VERSION" ]; then # zsh specific options
   HYPHEN_INSENSITIVE="true" # Ignore hyphens when autocompleting
