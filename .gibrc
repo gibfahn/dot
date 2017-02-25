@@ -1,14 +1,9 @@
 [ -z "$PS1" ] && return # Exit if not running interactively
 echo "Using gibrc..."
 
-## Define variables to use later
-HOSTNAME=$(hostname)
-UNAME=$(uname)
-UNAMEN=$(uname -n)
-
 # Coloured prompt with ls
   ls --color=auto >/dev/null 2>&1 && alias ls='ls --color=auto' # ls use colour if poss
-  [ "$UNAME" = "Darwin" ] && alias ls='ls -G'                   # ls use colour on mac
+  [ "$(uname)" = "Darwin" ] && alias ls='ls -G'                   # ls use colour on mac
 
 if [ -n "$ZSH_VERSION" ]; then # zsh specific options
   HYPHEN_INSENSITIVE="true" # Ignore hyphens when autocompleting
@@ -17,6 +12,8 @@ if [ -n "$ZSH_VERSION" ]; then # zsh specific options
   zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
   RPROMPT='%~' # Put full path on right of prompt
   fpath+=~/.zfunc # Put autocomplete scripts in here
+  last_if_empty() { [ -z "$BUFFER" ] && zle up-history; zle accept-line; } # See next line
+  zle -N last_if_empty; bindkey '^M' last_if_empty # Empty input repeats last command
 elif [ -n "$BASH_VERSION" ]; then # Bash specific options
   shopt -s autocd # type directory name to cd
   alias la='ls -A' # List hidden files as well
@@ -51,6 +48,9 @@ ulimit -c unlimited # Allow saving of coredumps
 alias g=git # Use with commands in ~/.gitconfig for best results
 alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"' # Makes it look like you're busy
 
+# 2 = !! or !-1, 3 = !-2 etc
+alias 2="fc -e : -2"; alias 3="fc -e : -3"; alias 4="fc -e : -4"; alias 5="fc -e : -5";
+
 export NVM_DIR="$HOME/.nvm"
 alias nvmup=". $NVM_DIR/nvm.sh"  # Start nvm with alias, o/w too much startup cost
 
@@ -70,11 +70,14 @@ pth() { # Returns absolute path to file including file name
 }
 
 ## Rust commands
-alias cn="cargo new --bin" # Create new cargo module
+alias cn="cargo new --bin"; alias cl="cargo clippy" 
 alias cb="cargo build"; alias cr="cargo run"; alias ct="cargo test"
 alias ctag='ctags -R . $HOME/bin/src/rust' # Populate ctags from rust src
 alias ru=rustup; pathadd "$HOME/.cargo/bin"
+alias e=exercism
 rs() { for i in $@; do rustc ${i%.rs}.rs; ./${i%.rs}; done; } # Compile/run (rs a.rs b)
+# Hack to get cargo-clippy to work
+export LD_LIBRARY_PATH=$HOME/.rustup/toolchains/nightly-x86_64-apple-darwin/lib:$LD_LIBRARY_PATH
 
 # Build node with ninja
 alias bn='export CPPFLAGS=-fdiagnostics-color && ./configure && tools/gyp_node.py -f ninja && ninja -C out/Release && ln -fs out/Release/node node'
@@ -92,9 +95,9 @@ if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
       -sh) myshell=dash;;
     esac
     if [ "$myshell" = "ksh93" ]; then
-      PS1='\E[35;1m $HOSTNAME \n $PWD \E[0m $ '
+      PS1='\E[35;1m '"$(hostname)"' \n $PWD \E[0m $ '
     else
-      PS1="$UNAMEN $PWD $ "
+      PS1="$(uname -n)"' $PWD $ '
     fi
   fi
 fi
@@ -108,19 +111,3 @@ if [ "$myshell" = "ksh93" -o "$myshell" = "ksh" ]; then # Basic keys on old shel
   alias __H=`echo "\001"`     # home = ^a = start of line
   alias __Y=`echo "\6"`       # end = ^e = end of line
 fi
-
-## Optional extras
-exists() { type "$1" >/dev/null 2>&1; }
-exists thefuck && eval $(thefuck --alias) && alias f='fuck' # github.com/nvbn/thefuck
-if [ -d "$HOME/.nvm" ]; then # Setup nvm
-  export NVM_DIR="$HOME/.nvm"
-  if exists brew; then
-    . "$(brew --prefix nvm)/nvm.sh"
-  elif [ -s "$NVM_DIR/nvm.sh" ]; then
-    . "$NVM_DIR/nvm.sh"
-  fi
-fi
-
-## Add things to the path
-pathadd "$HOME/.cargo/bin"
-pathadd /usr/local/opt/ccache/libexec
