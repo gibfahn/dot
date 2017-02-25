@@ -1,9 +1,35 @@
 #!/bin/bash
-[ ! `uname` = "AIX" ] && flag=-v
 
-[ $# = 0 ] && cp $flag `dirname $0`/.gibrc $HOME/
+RCFILES=".vimrc .bashrc .zshrc .gibrc .gitconfig .gitignore_global \
+  .config/karabiner/karabiner.json"
+[ $# != 0 ] && RCFILES="$*" # Overwrite the defaults with args
 
-for RCFILE in $*; do
-  [[ ${RCFILE:0:1} != "." ]] && RCFILE=.$RCFILE
-  cp $flag `dirname $0`/.$RCFILE $HOME/
+BASEPATH="$HOME" # Where you keep your dotfiles, overwrite if necessary
+BACKUP="$BASEPATH/backup"
+
+pushd $(dirname $0) >/dev/null
+CFG="$PWD" # Path to gcfg directory
+popd >/dev/null
+echo "Config path: $CFG"
+
+mkdir -p "$BACKUP"
+
+for RCFILE in $RCFILES; do
+  RCPATH="$BASEPATH/$RCFILE"
+  echo "Working on file: $RCFILE, path: $RCPATH"
+
+  if [ -L $RCPATH ]; then
+    echo "$RCPATH is already a symlink, ignoring"
+    continue
+  elif [ -e $RCPATH ]; then
+    echo "Moving $HOME/RCPATH to $HOME/.backup"
+    mv "$RCPATH" "$BACKUP"
+  elif [ ! -d "$(dirname $RCPATH)" ]; then
+    mkdir "$(dirname $RCPATH)"
+  fi
+
+  echo "Creating symlink $CFG/$RCFILE -> $RCPATH"
+  ln -s "$CFG/$RCFILE" "$RCPATH"
 done
+
+[ "$(ls -A $BACKUP)" ] && rm -r "$BACKUP" # Clean up backup folder if empty
