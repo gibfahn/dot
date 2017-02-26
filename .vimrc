@@ -51,6 +51,8 @@ nnoremap <leader>l :vsp<CR><C-w>h:bp<CR>|           " Open vertical split
 nnoremap <leader>o :on<CR>|                         " Close all other buffers
 nnoremap <leader>q :q<CR>|                          " Quit
 nnoremap <leader>Q :q!<CR>|                         " ↳ Quit losing unsaved changes
+nnoremap <leader>r :%s|                             " Replace (add delimiters yourself)
+nnoremap <leader>R :%sc<Left>|                      " ↳ Replace prompt on each match
 nnoremap <leader>w :up<CR>|                         " Write if there were changes
 nnoremap <leader>x :x<CR>|                          " Save+quit
 nnoremap <leader>/ :noh<CR>|                        " Turn off find highlighting
@@ -60,6 +62,7 @@ nnoremap <leader>p "+p|                             " Paste from clipboard
 vnoremap <leader>P "+P|                             " ↳ Paste line from clipboard
 
 if has("nvim")
+  let g:terminal_scrollback_buffer_size = 100000
   nnoremap <Leader>t :vsplit term://$SHELL<CR>i|    " Open terminal in new split
   nnoremap <Leader>T :term<CR>|                     " Open terminal in current split
   tnoremap <C-h> <C-\><C-n><C-w>h|                  " Switch   left  a window in terminal
