@@ -56,7 +56,7 @@
   rh = reset --hard
   ri = "rebase -i --autosquash"
   rr = remote rename
-  rr = remote set-url
+  rs = remote set-url
   rv = remote -v
 
   s = status
