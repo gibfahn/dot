@@ -47,6 +47,8 @@ alias np="ps -ef|wc -l"             # np - number of processes running
 ulimit -c unlimited # Allow saving of coredumps
 alias g=git # Use with commands in ~/.gitconfig for best results
 alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"' # Makes it look like you're busy
+[ $(uname) = "Darwin" ] && alias cpy="pbcopy" && alias pst="pbpaste"
+[ $(uname) = "Linux" ] && alias cpy="xclip -selection clipboard" && alias pst="xclip -selection clipboard -o"
 
 # 2 = !! or !-1, 3 = !-2 etc
 alias 2="fc -e : -2"; alias 3="fc -e : -3"; alias 4="fc -e : -4"; alias 5="fc -e : -5";
