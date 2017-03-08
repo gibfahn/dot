@@ -8,9 +8,13 @@
 
   a = add
   aa = add -A
+  ama = am --abort
+  amc = am --continue
+  ams = am --skip
 
   b = branch
   ba = branch -a
+  bd = branch -D
   br = branch -r
   bup = "!git branch -u $1/$(git headBranch) #" # g bup origin sets upstream to origin
 
@@ -61,7 +65,15 @@
 
   s = status
   sh = show
+  st = stash
+  stp = stash pop
   df = diff HEAD
+
+  sma = submodule add                         # Add a new submodule: g sma url path
+  smi = submodule update --init --recursive   # Initialise submodules
+  smf = submodule update --init               # Fetch specified submodule versions
+  smu = submodule update --recursive --remote # Update submodules to latest versions
+
 [apply]
   whitespace = fix # Fix whitespace when applying patches
 [commit]
@@ -73,8 +85,11 @@
 [diff]
   wsErrorHighlight = all # diff and show show whitespace errors
   renames = copies # Copies count as renames
+  submodule = log
 [fetch]
   prune = true # Delete local tracking branches if remote is gone
+[format]
+  pretty = fuller
 [help]
   autocorrect = 1
 [log]
