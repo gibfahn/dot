@@ -1,93 +1,94 @@
-[ -z "$PS1" ] && return # Exit if not running interactively
+[ -z "$PS1" ] && return # Exit if not running interactively.
 echo "Using gibrc..."
 
-# Coloured prompt with ls
-  ls --color=auto >/dev/null 2>&1 && alias ls='ls --color=auto' # ls use colour if poss
-  [ "$(uname)" = "Darwin" ] && alias ls='ls -G' && alias dl=rmtrash # ls use colour on mac
+# Coloured prompt with ls.
+  ls --color=auto >/dev/null 2>&1 && alias ls='ls --color=auto' # ls use colour if poss.
+  [ "$(uname)" = "Darwin" ] && alias ls='ls -G' && alias dl=rmtrash # ls use colour on mac.
 
-if [ -n "$ZSH_VERSION" ]; then # zsh specific options
-  HYPHEN_INSENSITIVE="true" # Ignore hyphens when autocompleting
-  chpwd() { ls; } # Auto ls after changing directory
+if [ -n "$ZSH_VERSION" ]; then # zsh specific options.
+  HYPHEN_INSENSITIVE="true" # Ignore hyphens when autocompleting.
+  chpwd() { ls; } # Auto ls after changing directory.
   DISABLE_AUTO_TITLE="true"
   zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
-  RPROMPT='%~' # Put full path on right of prompt
-  fpath+=~/.zfunc # Put autocomplete scripts in here
-  last_if_empty() { [ -z "$BUFFER" ] && zle up-history; zle accept-line; } # See next line
-  zle -N last_if_empty; bindkey '^M' last_if_empty # Empty input repeats last command
-elif [ -n "$BASH_VERSION" ]; then # Bash specific options
-  shopt -s autocd # type directory name to cd
-  alias la='ls -A' # List hidden files as well
-  alias ll='ls -l' # Gives more detail about files
-  alias lal='ls -al' # More detail and hidden files
-  alias l='ls -CF' # List column sorted with indicators
-  cs() { cd "$@" && ls; } # cs => cd and ls
-  alias ..='cs ..' # .. goes up a directory
-  alias ...='cs ../..' # ... goes up two directories
+  RPROMPT='%~' # Put full path on right of prompt.
+  fpath+=~/.zfunc # Put autocomplete scripts in here.
+  fpath+=/usr/local/share/zsh-completions # Homebrew zsh-completions.
+  source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh || true # Homebrew zsh-syntax-highlighting.
+  last_if_empty() { [ -z "$BUFFER" ] && zle up-history; zle accept-line; } # See next line.
+  zle -N last_if_empty; bindkey '^M' last_if_empty # Empty input repeats last command.
+elif [ -n "$BASH_VERSION" ]; then # Bash specific options.
+  shopt -s autocd # type directory name to cd.
+  alias la='ls -A' # List hidden files as well.
+  alias ll='ls -l' # Gives more detail about files.
+  alias lal='ls -al' # More detail and hidden files.
+  alias l='ls -CF' # List column sorted with indicators.
+  cs() { cd "$@" && ls; } # cs => cd and ls.
+  alias ..='cs ..' # .. goes up a directory.
+  alias ...='cs ../..' # ... goes up two directories.
   alias ....='cs ../../..'
   alias .....='cs ../../../..'
   alias ......='cs ../../../../..'
-  bind Space:magic-space 2>/dev/null # !31 autoexpands on space
-  bind 'set completion-ignore-case on' 2>/dev/null # case-insensitive tab completion
+  bind Space:magic-space 2>/dev/null # !31 autoexpands on space.
+  bind 'set completion-ignore-case on' 2>/dev/null # case-insensitive tab completion.
   PS1=' \[\e[32;1m\]\w $ \[\e[0m\]'
 fi
 
-## Useful functions (use the same way as aliases)
+## Useful functions (use the same way as aliases).
 pathadd() { [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]] && PATH="$1${PATH+":$PATH"}"; }
-fnd() { find . -iname "*$**"; } # Find by filename
-exists() { type "$1" >/dev/null 2>&1; } # Check if command exists (is in path)
-exists nvim && export VISUAL=nvim || export VISUAL=vim # Set vim/nvim as the default editor
-v() { exists nvim && nvim "$*" || ! exists nvim && echo Using vim... && vim "$*"; } # Check if command exists (is in path)
-alias v=nvim # Use neovim
+fnd() { find . -iname "*$**"; } # Find by filename.
+exists() { type "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
+exists nvim && export VISUAL=nvim || export VISUAL=vim # Set vim/nvim as the default editor.
+v() { exists nvim && nvim "$*" || ! exists nvim && echo Using vim... && vim "$*"; } # Check if command exists (is in path).
+alias v=nvim; alias vr=vimr # Use neovim and vimr.
 alias path='echo $PATH'
-alias x="exit" # x exits the terminal
-alias c="clear" # c clears the terminal screen
-alias h=history # shows a history of commands
-alias s="ssh" # Won't prompt with "add new RSA key" if you use -oStrictHostKeyChecking=No
-alias np="ps -ef|wc -l"             # np - number of processes running
-ulimit -c unlimited # Allow saving of coredumps
-alias g=git # Use with commands in ~/.gitconfig for best results
-alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"' # Makes it look like you're busy
+alias x="exit" # x exits the terminal.
+alias c="clear" # c clears the terminal screen.
+alias h=history # shows a history of commands.
+alias s="ssh" # Won't prompt with "add new RSA key" if you use -oStrictHostKeyChecking=No.
+ulimit -c unlimited # Allow saving of coredumps.
+alias g=git # Use with commands in ~/.gitconfig for best results.
+alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"' # Makes it look like you're busy.
 [ $(uname) = "Darwin" ] && alias cpy="pbcopy" && alias pst="pbpaste"
 [ $(uname) = "Linux" ] && alias cpy="xclip -selection clipboard" && alias pst="xclip -selection clipboard -o"
 
-# 2 = !! or !-1, 3 = !-2 etc
+# 2 = !! or !-1, 3 = !-2 etc.
 alias 2="fc -e : -2"; alias 3="fc -e : -3"; alias 4="fc -e : -4"; alias 5="fc -e : -5";
 
 export NVM_DIR="$HOME/.nvm"
-alias nvmup=". $NVM_DIR/nvm.sh"  # Start nvm with alias, o/w too much startup cost
+alias nv=". $NVM_DIR/nvm.sh"  # Start nvm with alias, o/w too much startup cost.
 
-pathadd /usr/local/opt/ccache/libexec # Add ccache to the path if installed
+pathadd /usr/local/opt/ccache/libexec # Add ccache to the path if installed.
 pathadd $HOME/bin
 
-pth() { # Returns absolute path to file including file name
-  # $1: relative filename, return: absolute path
+pth() { # Returns absolute path to file including file name.
+  # $1: relative filename, return: absolute path.
   for i in "$@"; do
-    if [ -d "$i" ]; then (cd "$i"; pwd) # dir
-    elif [ -f "$i" ]; then  # file
-      if [[ $i == */* ]]; then echo "$(cd "${i%/*}"; pwd)/${i##*/}"
+    if [ -d "$i" ]; then (cd "$i"; pwd) # dir.
+    elif [ -f "$i" ]; then  # file.
+      if [[ $i == */* ]]; then echo "$(cd "${i%/*}"; pwd)/${i##*/}".
       else echo "$(pwd)/$i"
       fi
     fi
   done
 }
 
-## Rust commands
+## Rust commands.
 alias cn="cargo new --bin"; alias cl="cargo clippy" 
 alias cb="cargo build"; alias cr="cargo run"; alias ct="cargo test"
-alias ctag='ctags -R . $HOME/bin/src/rust' # Populate ctags from rust src
+alias ctag='ctags -R . $HOME/bin/src/rust' # Populate ctags from rust src.
 alias ru=rustup; pathadd "$HOME/.cargo/bin"
 alias e=exercism
-rs() { for i in $@; do rustc ${i%.rs}.rs; ./${i%.rs}; done; } # Compile/run (rs a.rs b)
-# Hack to get cargo-clippy to work
+rs() { for i in $@; do rustc ${i%.rs}.rs; ./${i%.rs}; done; } # Compile/run (rs a.rs b).
+# Hack to get cargo-clippy to work.
 export LD_LIBRARY_PATH=$HOME/.rustup/toolchains/nightly-x86_64-apple-darwin/lib:$LD_LIBRARY_PATH
 
-# Build node with ninja
+# Build node with ninja.
 alias bn='export CPPFLAGS=-fdiagnostics-color && ./configure && tools/gyp_node.py -f ninja && ninja -C out/Release && ln -fs out/Release/node node'
 
-alias bashme="PS1='\[\e[35;1m\]\h \n \w $ \[\e[0m\]'" # Manually set bash prompt
-## Set prompt for SSH windows
+alias bashme="PS1='\[\e[35;1m\]\h \n \w $ \[\e[0m\]'" # Manually set bash prompt.
+## Set prompt for SSH windows.
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-  if [ -n "$BASH_VERSION" ]; then # assume Bash ## Shell basics
+  if [ -n "$BASH_VERSION" ]; then # assume Bash ## Shell basics.
     PS1='\[\e[35;1m\]\h \n \w $ \[\e[0m\]'
   else
     myshell=dash
@@ -104,12 +105,12 @@ if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
   fi
 fi
 
-if [ "$myshell" = "ksh93" -o "$myshell" = "ksh" ]; then # Basic keys on old shells
+if [ "$myshell" = "ksh93" -o "$myshell" = "ksh" ]; then # Basic keys on old shells.
   set -o emacs
-  alias __A=`echo "\020"`     # up arrow = ^p = back a command
-  alias __B=`echo "\016"`     # down arrow = ^n = down a command
-  alias __C=`echo "\006"`     # right arrow = ^f = forward a character
-  alias __D=`echo "\002"`     # left arrow = ^b = back a character
-  alias __H=`echo "\001"`     # home = ^a = start of line
-  alias __Y=`echo "\6"`       # end = ^e = end of line
+  alias __A=`echo "\020"`     # up arrow = ^p = back a command.
+  alias __B=`echo "\016"`     # down arrow = ^n = down a command.
+  alias __C=`echo "\006"`     # right arrow = ^f = forward a character.
+  alias __D=`echo "\002"`     # left arrow = ^b = back a character.
+  alias __H=`echo "\001"`     # home = ^a = start of line.
+  alias __Y=`echo "\6"`       # end = ^e = end of line.
 fi
