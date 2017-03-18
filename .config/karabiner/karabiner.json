@@ -1,4 +1,9 @@
 {
+    "global": {
+        "check_for_updates_on_startup": true,
+        "show_in_menu_bar": true,
+        "show_profile_name_in_menu_bar": true
+    },
     "profiles": [
         {
             "devices": [
@@ -27,14 +32,55 @@
                 "f8": "vk_consumer_play",
                 "f9": "vk_consumer_next"
             },
-            "name": "Default profile",
+            "name": "Internal",
             "selected": true,
             "simple_modifications": {
                 "caps_lock": "left_shift",
                 "escape": "fn",
                 "fn": "escape",
+                "left_control": "escape",
                 "left_shift": "left_control",
                 "non_us_backslash": "grave_accent_and_tilde",
+                "right_command": "f17"
+            },
+            "virtual_hid_keyboard": {
+                "caps_lock_delay_milliseconds": 0,
+                "keyboard_type": "ansi"
+            }
+        },
+        {
+            "devices": [
+                {
+                    "disable_built_in_keyboard_if_exists": false,
+                    "identifiers": {
+                        "is_keyboard": true,
+                        "is_pointing_device": false,
+                        "product_id": 628,
+                        "vendor_id": 1452
+                    },
+                    "ignore": false
+                }
+            ],
+            "fn_function_keys": {
+                "f1": "display_brightness_decrement",
+                "f10": "mute",
+                "f11": "volume_decrement",
+                "f12": "volume_increment",
+                "f2": "display_brightness_increment",
+                "f3": "mission_control",
+                "f4": "launchpad",
+                "f5": "illumination_decrement",
+                "f6": "illumination_increment",
+                "f7": "rewind",
+                "f8": "play_or_pause",
+                "f9": "fastforward"
+            },
+            "name": "Cherry Blues",
+            "selected": false,
+            "simple_modifications": {
+                "caps_lock": "left_shift",
+                "left_control": "escape",
+                "left_shift": "right_control",
                 "right_command": "f17"
             },
             "virtual_hid_keyboard": {
