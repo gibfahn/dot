@@ -11,7 +11,7 @@ if [ -n "$ZSH_VERSION" ]; then # zsh specific options.
   DISABLE_AUTO_TITLE="true"
   zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
   RPROMPT='%~' # Put full path on right of prompt.
-  fpath+=~/.zfunc # Put autocomplete scripts in here.
+  fpath+=~/.zfunc # Put (or symlink) autocomplete scripts in here.
   fpath+=/usr/local/share/zsh-completions # Homebrew zsh-completions.
   source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh || true # Homebrew zsh-syntax-highlighting.
   last_if_empty() { [ -z "$BUFFER" ] && zle up-history; zle accept-line; } # See next line.
