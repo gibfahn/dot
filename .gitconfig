@@ -1,7 +1,7 @@
 [alias]
-  # Commits: @=HEAD, -=last commit
-  # N.B. # at end of func allows parsing $1 args
-  # Helper functions
+  # Commits: @=HEAD, -=last commit.
+  # N.B. # at end of func allows parsing $1 args.
+  # Helper functions.
   headBranch = symbolic-ref --short HEAD
   headUpstream = rev-parse --abbrev-ref --symbolic-full-name @{u}
   headRemote = "!git headUpstream | cut -d '/' -f 1"
@@ -16,7 +16,7 @@
   ba = branch -a
   bd = branch -D
   br = branch -r
-  bup = "!git branch -u $1/$(git headBranch) #" # g bup origin sets upstream to origin
+  bup = "!git branch -u $1/$(git headBranch) #" # g bup origin sets upstream to origin.
 
   c   = commit
   ca  = commit -a
@@ -25,38 +25,38 @@
   cm  = commit --amend
   cmn = commit --amend --no-edit
   cn  = clean -fdx
-  cl  = "clone --recursive -j8" # Always include submodules
+  cl  = "clone --recursive -j8" # Always include submodules.
   cp  = cherry-pick
   cpa = cherry-pick --abort
   cpc = cherry-pick --continue
   co  = checkout
-  fix = "commit --fixup" # g fix SHA means rebasing will attach to that SHA
+  fix = "commit --fixup" # g fix SHA means rebasing will attach to that SHA.
 
   f = fetch
   fa = fetch --all
-  # Set up local branch from Github PR, `g fp 7654`, `g pp`
+  # Set up local branch from Github PR, `g fp 7654`, `g pp`.
   fp = "!git fetch $(git headRemote) pull/$1/head:pr-$1 && git checkout pr-$1 #"
   pp = "!git pull $(git headRemote) pull/$( | cut -d '-' -f 2)/head"
 
-  l = log --graph --decorate --oneline # Graph log
-  la = log --graph --decorate --oneline --all # Graph log of all branches
+  l = log --graph --decorate --oneline # Graph log.
+  la = log --graph --decorate --oneline --all # Graph log of all branches.
   lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%C(bold blue)<%an>%Creset' --abbrev-commit
 
-  mc = "!$VISUAL $(git diff --name-only --diff-filter=U) #" # Open merge conflicts in editor
+  mc = "!$VISUAL $(git diff --name-only --diff-filter=U) #" # Open merge conflicts in editor.
   mf = merge --ff-only
 
   p = push
-  pf = push --force-with-lease # Better version of push -f
-  pa = "!curl -L $1.patch | git am --whitespace=fix #" # Patch Github PR
-  pap = "!curl -L $1.patch | git am -3 --whitespace=fix #" # Please patch it
+  pf = push --force-with-lease # Better version of push -f.
+  pa = "!curl -L $1.patch | git am --whitespace=fix #" # Patch Github PR.
+  pap = "!curl -L $1.patch | git am -3 --whitespace=fix #" # Please patch it.
   pl = pull
-  pup = "!git push -u $1 $(git headBranch) #" # g pup origin sets upstream to origin + pushes
+  pup = "!git push -u $1 $(git headBranch) #" # g pup origin sets upstream to origin + pushes.
 
   ra = remote add
   rb = rebase
   rba = rebase --abort
   rbc = rebase --continue
-  rhh = "!git reset --hard $(git headUpstream)" # Reset to upstream branch
+  rhh = "!git reset --hard $(git headUpstream)" # Reset to upstream branch.
   rh = reset --hard
   ri = "rebase -i --autosquash"
   rr = remote rename
@@ -67,70 +67,73 @@
   sh = show
   st = stash
   stp = stash pop
-  df = diff HEAD
+  df = diff HEAD # diff of staged and unstaged files..
+  ds = diff --staged # Diff of staged files (`git diff` for unstaged)..
 
-  sma = submodule add                         # Add a new submodule: g sma url path
-  smi = submodule update --init --recursive   # Initialise submodules
-  smf = submodule update --init               # Fetch specified submodule versions
-  smu = submodule update --recursive --remote # Update submodules to latest versions
+  sma = submodule add                         # Add a new submodule: g sma url path.
+  smi = submodule update --init --recursive   # Initialise submodules.
+  smf = submodule update --init               # Fetch specified submodule versions.
+  smu = submodule update --recursive --remote # Update submodules to latest versions.
 
 [apply]
-  whitespace = fix # Fix whitespace when applying patches
+  whitespace = fix # Fix whitespace when applying patches.
 [commit]
-  gpgsign = true # Always sign commits
+  gpgsign = true # Always sign commits.
 [core]
   excludesfile = /Users/gib/.gitignore_global
 [credential]
   helper = osxkeychain
 [diff]
-  wsErrorHighlight = all # diff and show show whitespace errors
-  renames = copies # Copies count as renames
+  wsErrorHighlight = all # diff and show show whitespace errors.
+  renames = copies # Copies count as renames.
   submodule = log
 [fetch]
-  prune = true # Delete local tracking branches if remote is gone
+  prune = true # Delete local tracking branches if remote is gone.
 [format]
   pretty = fuller
+[gpg]
+  program = gpg2
 [help]
   autocorrect = 1
 [log]
-  follow = true # Log follows file move/rename
+  follow = true # Log follows file move/rename.
 [pull]
-  rebase = true # pull = fetch + rebase not fetch + merge
+  rebase = true # pull = fetch + rebase not fetch + merge.
 [push]
-  default = simple # Only push the branch I'm on
+  default = simple # Only push the branch I'm on.
 [rebase]
-  autosquash = true # Squash commits with autosquash!
+  autosquash = true # Squash commits with autosquash!.
 [rerere]
-  enabled = true # Remember how I resolved merge conflicts
+  enabled = true # Remember how I resolved merge conflicts.
 
-# Try `g cl hh:nodejs/node`
+# Try `g cl hh:nodejs/node`.
 [url "https://bitbucket.org/"]
     insteadOf = bb:
 
 [url "https://github.com/"]
-    insteadOf = hh: # Hub https
+    insteadOf = hh: # Hub https.
 [url "git@github.com:"]
-    insteadOf = hs: # Hub ssh
+    insteadOf = hs: # Hub ssh.
 [url "https://gist.github.com/"]
     insteadOf = gist:
 
 [url "https://github.com/gibfahn/"]
-    insteadOf = gh: # Gib https
+    insteadOf = gh: # Gib https.
 [url "git@github.com:gibfahn/"]
-    insteadOf = gs: # Gib ssh
+    insteadOf = gs: # Gib ssh.
 
 [url "https://gitlab.com/gib/"]
-    insteadOf = lh: # Lab https
+    insteadOf = lh: # Lab https.
 [url "git@gitlab.com:gib/"]
-    insteadOf = ls: # Lab ssh
+    insteadOf = ls: # Lab ssh.
 
 [url "https://github.ibm.com/"]
-    insteadOf = ih: # IBM https
+    insteadOf = ih: # IBM https.
 [url "git@github.ibm.com:"]
-    insteadOf = is: # IBM ssh
+    insteadOf = is: # IBM ssh.
 
 [user]
   name = Gibson Fahnestock
-  email = gibfahn@gmail.com # Needs to match gpg signing email
+  email = gibfahn@gmail.com # Needs to match gpg signing email.
   # email = gib@fahn.co
   username = gibfahn
