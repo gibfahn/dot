@@ -15,14 +15,14 @@ git clone --depth=1 https://github.com/rust-lang/rust.vim.git ~/.vim/bundle/rust
 # Get vim-sleuth (autodetect tab/space for file)
 git clone git://github.com/tpope/vim-sleuth.git ~/.vim/bundle/vim-sleuth
 # Ctrl-P (fuzzy finder)
-git clone https://github.com/kien/ctrlp.vim.git ~/.vim/bundle/ctrlp
+#git clone https://github.com/kien/ctrlp.vim.git ~/.vim/bundle/ctrlp
 # Monokai (color scheme)
 mkdir -p ~/.vim/syntax
 curl https://raw.githubusercontent.com/crusoexia/vim-monokai/master/colors/monokai.vim > ~/.vim/syntax/monokai.vim
 # Vim sensible (sensible defaults - needs review)
-git clone git://github.com/tpope/vim-sensible.git ~/.vim/bundle/vim-sensible
+#git clone git://github.com/tpope/vim-sensible.git ~/.vim/bundle/vim-sensible
 # Readdir - a simpler netrw directory browser
-https://github.com/ap/vim-readdir.git
+#https://github.com/ap/vim-readdir.git
 # vim-racer (rust completion for vim)
 git clone --depth=1 https://github.com/racer-rust/vim-racer.git ~/.vim/bundle/vim-racer
 

@@ -35,20 +35,14 @@ set diffopt+=vertical                               " Always use vertical diffs.
 set wildchar=<Tab> wildmenu wildmode=full           " More info with : and Tab.
 set list listchars=tab:»·,trail:·,nbsp:·            " Display extra whitespace.
 
-nnoremap <C-h> <C-w>h|                              " Switch left  a window,
-nnoremap <C-j> <C-w>j|                              "  ↳     down  a window,
-nnoremap <C-k> <C-w>k|                              "  ↳     up    a window,
-nnoremap <C-l> <C-w>l|                              "  ↳     right a window.
-nnoremap <Tab> :bn<CR>|                             " Tab to switch to next buffer,
-nnoremap <S-Tab> :bp<CR>|                           "  ↳ Shift-Tab to switch to previous buffer.
-inoremap kj <ESC>|                                  " kj = Esc in insert mode.
-nnoremap <leader>d :bd<CR>|                         " Close buffer,
-nnoremap <leader>D :bd!<CR>|                        "  ↳ Force close buffer.
+nnoremap <leader>a @a<CR>|                          " Apply macro a.
+nnoremap <leader>c :YcmCompleter GoTo<CR>|          " GoTo definition for YouCompleteMe.
+nnoremap <leader>C :YcmCompleter GetDoc<CR>|        " GoTo docs for YouCompleteMe.
+nnoremap <leader>d :bp\|bd  #<CR>|                  " Close buffer without closing split,
+nnoremap <leader>D :bp\|bd! #<CR>|                  "  ↳ Force close buffer.
 nnoremap <leader>f :find |                          " Search file names    for file
 nnoremap <leader>F :grep |                          "  ↳          contents for file
 nnoremap <Leader>gd :w !diff % - <CR>|              " Diff between saved file and current.
-nnoremap <leader>c :YcmCompleter GoTo<CR>|          " GoTo definition for YouCompleteMe.
-nnoremap <leader>C :YcmCompleter GetDoc<CR>|        " GoTo docs for YouCompleteMe.
 nnoremap <leader>j :sp<CR><C-w>k:bp<CR>|            " Open horizontal split.
 nnoremap <leader>k <C-w>q|                          " Close current split (keeps buffer).
 nnoremap <leader>l :vsp<CR><C-w>h:bp<CR>|           " Open vertical split.
@@ -58,12 +52,23 @@ nnoremap <leader>Q :q!<CR>|                         "  ↳ Quit losing unsaved c
 nnoremap <leader>r :%s|                             " Replace (add delimiters yourself),
 nnoremap <leader>R :%sc<Left>|                      "  ↳ Replace prompt on each match.
 nnoremap <leader>w :up<CR>|                         " Write if there were changes.
+nnoremap <leader>W :w<CR>|                          " Write if there were changes.
 nnoremap <leader>x :x<CR>|                          " Save+quit.
-nnoremap <leader>/ :noh<CR>|                        " Turn off find highlighting.
+nnoremap <leader>y  "+y|                            " Copy to clipboard,
 vnoremap <leader>y  "+y|                            " Copy to clipboard,
 nnoremap <leader>Y  "+yg_|                          "  ↳ Copy line to clipboard.
+vnoremap <leader>p "+p|                             " Paste from clipboard.
 nnoremap <leader>p "+p|                             " Paste from clipboard.
-vnoremap <leader>P "+P|                             "  ↳ Paste line from clipboard.
+nnoremap <leader>P "+P|                             "  ↳ Paste line from clipboard.
+nnoremap <leader>/ :noh<CR>|                        " Turn off find highlighting.
+
+nnoremap <C-h> <C-w>h|                              " Switch left  a window,
+nnoremap <C-j> <C-w>j|                              "  ↳     down  a window,
+nnoremap <C-k> <C-w>k|                              "  ↳     up    a window,
+nnoremap <C-l> <C-w>l|                              "  ↳     right a window.
+nnoremap <Tab> :bn<CR>|                             " Tab to switch to next buffer,
+nnoremap <S-Tab> :bp<CR>|                           "  ↳ Shift-Tab to switch to previous buffer.
+inoremap kj <ESC>|                                  " kj = Esc in insert mode.
 map q: <Nop>|                                       " Disable Ex modes (avoids,
 nnoremap Q <nop>|                                   "  ↳ accidental triggering..
 
@@ -82,7 +87,7 @@ endif
 command! W w !sudo tee % > /dev/null|               " :W saves file as sudo.
 let g:is_posix = 1                                  " Assume shell for syntax highlighting.
 let g:ycm_rust_src_path = expand('~/.rustup/toolchains/nightly-*/lib/rustlib/src/rust/src')
-let g:rustfmt_autosave = 1                          " Run rustfmt on save (from rust.vim).
+"let g:rustfmt_autosave = 1                          " Run rustfmt on save (from rust.vim).
 set path=.,/usr/include,,**                         " Add ** to the search path so :find x works recursively.
 
 " Nicer line wrapping for long lines.

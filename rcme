@@ -1,15 +1,16 @@
 #!/bin/bash
 
 RCFILES=".vimrc .bashrc .zshrc .gibrc .gitconfig .gitignore_global"
-[ `uname` = "Darwin" ] && RCFILES="$RCFILES \
-  .config/karabiner/karabiner.json .hammerspoon/init.lua .hammerspoon/hyper.lua"
+if [ `uname` = "Darwin" ]; then
+  RCFILES="$RCFILES .config/karabiner/karabiner.json .hammerspoon/init.lua \
+    .hammerspoon/hyper.lua"
 [ $# != 0 ] && RCFILES="$*" # Overwrite the defaults with args
 
 BASEPATH="$HOME" # Where you keep your dotfiles, overwrite if necessary
 BACKUP="$BASEPATH/backup"
 
 pushd $(dirname $0) >/dev/null
-CFG="$PWD" # Path to gcfg directory
+CFG="$PWD/dotfiles" # Path to gcfg dotfiles directory
 popd >/dev/null
 echo "Config path: $CFG"
 
@@ -20,10 +21,10 @@ for RCFILE in $RCFILES; do
   echo "Working on file: $RCFILE, path: $RCPATH"
 
   if [ -L $RCPATH ]; then
-    echo "$RCPATH is already a symlink, ignoring"
-    continue
+    echo "$RCPATH is a symlink, relinking"
+    mv "$RCPATH" "$BACKUP"
   elif [ -e $RCPATH ]; then
-    echo "Moving $HOME/RCPATH to $HOME/.backup"
+    echo "Moving $HOME/$RCPATH to $HOME/.backup"
     mv "$RCPATH" "$BACKUP"
   elif [ ! -d "$(dirname $RCPATH)" ]; then
     mkdir "$(dirname $RCPATH)"
@@ -33,4 +34,4 @@ for RCFILE in $RCFILES; do
   ln -s "$CFG/$RCFILE" "$RCPATH"
 done
 
-[ "$(ls -A $BACKUP)" ] && rm -r "$BACKUP" # Clean up backup folder if empty
+[ "$(ls -A $BACKUP)" ] || rm -r "$BACKUP" # Clean up backup folder if empty

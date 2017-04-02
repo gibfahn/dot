@@ -5,7 +5,7 @@ xcode-select --install
 # Install cask (brew for GUI utils)
 brew tap caskroom/cask
 
-# Set up fasteest key repeat rate (needs reboot)
+# Set up fasteest key repeat rate (needs relogin)
 defaults write NSGlobalDomain KeyRepeat -int 1
 defaults write NSGlobalDomain InitialKeyRepeat -int 8
 
@@ -23,8 +23,8 @@ brew install ninja python python3 ccache gdb # Build utilities
 
 # Brew cask stuff
 brew cask install google-chrome firefox meld
-brew cask install gpgtools exa
-brew caask install docker vagrant virtualbox
+brew cask install gpgtools
+brew cask install docker vagrant virtualbox
 # brew cask install hammerspoon # Did I even do lua scripting?
 
 # zsh stuff, see ~/.gibrc for loading

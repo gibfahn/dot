@@ -1,3 +1,7 @@
-### Gibson's configuration files
+# How to run these setup scripts
 
-Contains my configuration data for Linux and Windows
+Run the up script to setup a new machine:
+
+```sh
+./up
+```

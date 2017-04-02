@@ -18,3 +18,6 @@ plugins=()
 
 source $ZSH/oh-my-zsh.sh
 . ~/.gibrc
+
+### Added by the Bluemix CLI
+source /usr/local/Bluemix/bx/zsh_autocomplete

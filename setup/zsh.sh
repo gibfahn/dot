@@ -1,4 +1,5 @@
 # Set default shell to zsh
+chsh -s /bin/zsh
 
 # Install oh-my-zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
@@ -7,9 +8,7 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/mas
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.32.0/install.sh | bash
 nvm install stable
 
-mkdir ~/.zfunc
-# Autocompletion for Git (probably not needed)
-#
+mkdir -p ~/.zfunc
 
 # Autocompletion for npm (probably needed)
 npm completion > ~/.zfunc/_npm

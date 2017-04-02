@@ -2,14 +2,18 @@
 echo "Using gibrc..."
 
 # Coloured prompt with ls.
-  ls --color=auto >/dev/null 2>&1 && alias ls='ls --color=auto' # ls use colour if poss.
-  [ "$(uname)" = "Darwin" ] && alias ls='ls -G' && alias dl=rmtrash # ls use colour on mac.
+ls --color=auto >/dev/null 2>&1 && alias ls='ls --color=auto' # ls use colour if poss.
+[ "$(uname)" = "Darwin" ] && alias ls='ls -G' && alias dl=rmtrash # ls use colour on mac.
 
-if [ -n "$ZSH_VERSION" ]; then # zsh specific options.
+if [ "$ZSH_VERSION" ]; then # zsh specific options.
+  bindkey -v # Enable vim mode.
+  KEYTIMEOUT=10 # Key delay of 0.1s (Esc in vim mode is quicker).
+  bindkey -M viins 'kj' vi-cmd-mode # Map kj -> Esc in vim mode.
   HYPHEN_INSENSITIVE="true" # Ignore hyphens when autocompleting.
   chpwd() { ls; } # Auto ls after changing directory.
-  DISABLE_AUTO_TITLE="true"
-  zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+  DISABLE_AUTO_TITLE="true" # Don't mess with shell title.
+  zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' # Case-insensitive match.
+  PROMPT+="%{$fg[magenta]%}❯%{$reset_color%} " # Add a ❯ to the end of the prompt.
   RPROMPT='%~' # Put full path on right of prompt.
   fpath+=~/.zfunc # Put (or symlink) autocomplete scripts in here.
   fpath+=/usr/local/share/zsh-completions # Homebrew zsh-completions.
@@ -17,6 +21,7 @@ if [ -n "$ZSH_VERSION" ]; then # zsh specific options.
   last_if_empty() { [ -z "$BUFFER" ] && zle up-history; zle accept-line; } # See next line.
   zle -N last_if_empty; bindkey '^M' last_if_empty # Empty input repeats last command.
 elif [ -n "$BASH_VERSION" ]; then # Bash specific options.
+  set -o vi # Vim mode in bash.
   shopt -s autocd # type directory name to cd.
   alias la='ls -A' # List hidden files as well.
   alias ll='ls -l' # Gives more detail about files.
@@ -34,13 +39,13 @@ elif [ -n "$BASH_VERSION" ]; then # Bash specific options.
 fi
 
 ## Useful functions (use the same way as aliases).
+exists() { type "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
 pathadd() { [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]] && PATH="$1${PATH+":$PATH"}"; }
 fnd() { find . -iname "*$**"; } # Find by filename.
-exists() { type "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
-exists nvim && export VISUAL=nvim || export VISUAL=vim # Set vim/nvim as the default editor.
-v() { exists nvim && nvim "$*" || ! exists nvim && echo Using vim... && vim "$*"; } # Check if command exists (is in path).
-alias v=nvim; alias vr=vimr # Use neovim and vimr.
+{exists nvim && VIM=nvim } || {exists vim && VIM=vim } || VIM=vi # Take what vim you can get.
+alias v=$VIM; export VISUAL=$VIM # Set vim/nvim as the default editor.
 alias path='echo $PATH'
+alias e=exa # Use exa instead of ls.
 alias x="exit" # x exits the terminal.
 alias c="clear" # c clears the terminal screen.
 alias h=history # shows a history of commands.
@@ -73,14 +78,12 @@ pth() { # Returns absolute path to file including file name.
 }
 
 ## Rust commands.
-alias cn="cargo new --bin"; alias cl="cargo clippy" 
+alias cn="cargo new --bin"; alias cl="cargo clippy"
 alias cb="cargo build"; alias cr="cargo run"; alias ct="cargo test"
 alias ctag='ctags -R . $HOME/bin/src/rust' # Populate ctags from rust src.
 alias ru=rustup; pathadd "$HOME/.cargo/bin"
 alias e=exercism
 rs() { for i in $@; do rustc ${i%.rs}.rs; ./${i%.rs}; done; } # Compile/run (rs a.rs b).
-# Hack to get cargo-clippy to work.
-export LD_LIBRARY_PATH=$HOME/.rustup/toolchains/nightly-x86_64-apple-darwin/lib:$LD_LIBRARY_PATH
 
 # Build node with ninja.
 alias bn='export CPPFLAGS=-fdiagnostics-color && ./configure && tools/gyp_node.py -f ninja && ninja -C out/Release && ln -fs out/Release/node node'
