@@ -5,9 +5,12 @@ xcode-select --install
 # Install cask (brew for GUI utils)
 brew tap caskroom/cask
 
-# Set up fasteest key repeat rate (needs relogin)
+# Set up fasteest key repeat rate (needs relogin).
 defaults write NSGlobalDomain KeyRepeat -int 1
+# Sets a low time before key starts repeating.
 defaults write NSGlobalDomain InitialKeyRepeat -int 8
+# Increases trackpad sensitivity (SysPref max 3.0).
+defaults write -g com.apple.trackpad.scaling -float 5.0
 
 
 # Brew stuff
