@@ -4,6 +4,7 @@ RCFILES=".vimrc .bashrc .zshrc .gibrc .gitconfig .gitignore_global"
 if [ `uname` = "Darwin" ]; then
   RCFILES="$RCFILES .config/karabiner/karabiner.json .hammerspoon/init.lua \
     .hammerspoon/hyper.lua"
+fi
 [ $# != 0 ] && RCFILES="$*" # Overwrite the defaults with args
 
 BASEPATH="$HOME" # Where you keep your dotfiles, overwrite if necessary
