@@ -6,7 +6,7 @@ ls --color=auto >/dev/null 2>&1 && alias ls='ls --color=auto' # ls use colour if
 [ "$(uname)" = "Darwin" ] && alias ls='ls -G' && alias dl=rmtrash # ls use colour on mac.
 
 if [ "$ZSH_VERSION" ]; then # zsh specific options.
-  bindkey -v # Enable vim mode.
+#  bindkey -v # Enable vim mode (breaks history search with <Up>).
   KEYTIMEOUT=10 # Key delay of 0.1s (Esc in vim mode is quicker).
   bindkey -M viins 'kj' vi-cmd-mode # Map kj -> Esc in vim mode.
   HYPHEN_INSENSITIVE="true" # Ignore hyphens when autocompleting.
@@ -42,7 +42,7 @@ fi
 exists() { type "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
 pathadd() { [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]] && PATH="$1${PATH+":$PATH"}"; }
 fnd() { find . -iname "*$**"; } # Find by filename.
-{exists nvim && VIM=nvim } || {exists vim && VIM=vim } || VIM=vi # Take what vim you can get.
+{ exists nvim && VIM=nvim; } || { exists vim && VIM=vim; } || VIM=vi # Take what vim you can get.
 alias v=$VIM; export VISUAL=$VIM # Set vim/nvim as the default editor.
 alias path='echo $PATH'
 alias e=exa # Use exa instead of ls.
