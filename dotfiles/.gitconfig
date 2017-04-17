@@ -15,6 +15,8 @@
   b = branch
   ba = branch -a
   bd = branch -D
+  bp = "!git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -d" # Delete orphaned local branches.
+  bP = "!git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D" # Delete orphaned local branches!
   br = branch -r
   bup = "!git branch -u $1/$(git headBranch) #" # g bup origin sets upstream to origin.
 
