@@ -1,7 +1,0 @@
-# Put this in your home directory ($HOME) and then run:
-# git config --global core.excludesfile ~/.gitignore
-.vscode/
-.DS_Store
-tags
-npm-debug.log
-*.swp

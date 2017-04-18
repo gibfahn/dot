@@ -81,8 +81,6 @@
   whitespace = fix # Fix whitespace when applying patches.
 [commit]
   gpgsign = true # Always sign commits.
-[core]
-  excludesfile = /Users/gib/.gitignore_global
 [credential]
   helper = osxkeychain
 [diff]
