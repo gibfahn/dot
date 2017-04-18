@@ -1,38 +1,31 @@
 #!/bin/bash
 
-RCFILES=".vimrc .bashrc .zshrc .gibrc .gitconfig .gitignore_global"
-if [ `uname` = "Darwin" ]; then
-  RCFILES="$RCFILES .config/karabiner/karabiner.json .hammerspoon/init.lua \
-    .hammerspoon/hyper.lua"
-fi
-[ $# != 0 ] && RCFILES="$*" # Overwrite the defaults with args
-
-BASEPATH="$HOME" # Where you keep your dotfiles, overwrite if necessary
-BACKUP="$BASEPATH/backup"
-
-pushd $(dirname $0) >/dev/null
-CFG="$PWD/dotfiles" # Path to gcfg dotfiles directory
-popd >/dev/null
-echo "Config path: $CFG"
-
+: ${TOPATH:="$HOME"} # Where you keep your dotfiles, overwrite if necessary.
+: ${BACKUP:="$TOPATH/backup"} # Place to back up old files.
 mkdir -p "$BACKUP"
 
-for RCFILE in $RCFILES; do
-  RCPATH="$BASEPATH/$RCFILE"
-  echo "Working on file: $RCFILE, path: $RCPATH"
+if [ -z "$FROMPATH" ]; then
+  cd $(dirname $0)/dotfiles/
+else
+  cd "$FROMPATH"
+fi
+: ${FROMPATH:="$PWD"}
+printf "Linking from path: $FROMPATH\n\n"
 
-  if [ -L $RCPATH ]; then
-    echo "$RCPATH is a symlink, relinking"
-    mv "$RCPATH" "$BACKUP"
-  elif [ -e $RCPATH ]; then
-    echo "Moving $HOME/$RCPATH to $HOME/.backup"
-    mv "$RCPATH" "$BACKUP"
-  elif [ ! -d "$(dirname $RCPATH)" ]; then
-    mkdir "$(dirname $RCPATH)"
+for FILE in $(find -type f -o -type l | sed 's|./||'); do
+  echo "FILE: $FILE"
+  mkdir -p "$TOPATH/$(dirname $FILE)"
+  if [ -d "$TOPATH/$FILE" ]; then
+    echo "$TOPATH/$FILE is a directory! Aborting"
+    exit 1
+  elif [ -e "$TOPATH/$FILE" ]; then
+    echo "$TOPATH/$FILE exists, moving to $BACKUP/$FILE"
+    mkdir -p "$BACKUP/$(dirname $FILE)"
+    mv "$TOPATH/$FILE" "$BACKUP/$FILE"
   fi
-
-  echo "Creating symlink $CFG/$RCFILE -> $RCPATH"
-  ln -s "$CFG/$RCFILE" "$RCPATH"
+    printf "Symlinking $TOPATH/$FILE -> $FROMPATH/$FILE\n"
+    ln -s "$FROMPATH/$FILE" "$TOPATH/$FILE"
+    echo ""
 done
 
 [ "$(ls -A $BACKUP)" ] || rm -r "$BACKUP" # Clean up backup folder if empty
