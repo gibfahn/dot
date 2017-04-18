@@ -32,7 +32,7 @@ if [ "$ZSH_VERSION" ]; then # zsh specific options.
   zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' # Case-insensitive match.
   PROMPT+='%{$fg[magenta]%}❯%{$reset_color%} ' # Add a ❯ to the end of the prompt.
   RPROMPT='%~' # Put full path on right of prompt.
-  source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh || true # Homebrew zsh-syntax-highlighting.
+  source "$XDG_DATA_HOME/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" || true
   source /usr/local/Bluemix/bx/zsh_autocomplete # Run Bluemix autocomplete.
   last_if_empty() { [ -z "$BUFFER" ] && zle up-history; zle accept-line; } # See next line.
   zle -N last_if_empty; bindkey '^M' last_if_empty # Empty input repeats last command.

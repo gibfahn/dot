@@ -33,7 +33,4 @@ brew install ninja python python3 ccache gdb # Build utilities
 brew cask install google-chrome firefox meld
 brew cask install gpgtools
 brew cask install docker vagrant virtualbox
-# brew cask install hammerspoon # Did I even do lua scripting?
-
-# zsh stuff, see ~/.gibrc for loading
-brew install zsh-completions zsh-syntax-highlighting
+brew cask install hammerspoon # Did I even do lua scripting?

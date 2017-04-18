@@ -35,8 +35,8 @@ if no zsh; then
   mkdir -p "$XDG_DATA_HOME/zsh"
 fi
 
-if no zsh/zsh-syntax-highlighting.zsh; then
-  # TODO(gib): Fix this
+if no zsh/zsh-syntax-highlighting; then
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$XDG_DATA_HOME/zsh/zsh-syntax-highlighting"
 fi
 
 
