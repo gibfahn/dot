@@ -1,93 +1,116 @@
 [ -z "$PS1" ] && return # Exit if not running interactively.
 echo "Using gibrc..."
 
-# Coloured prompt with ls.
+# ENV VAR DEFAULTS:
+: ${XDG_CONFIG_HOME:="$HOME/.config"}; export XDG_CONFIG_HOME # Config stuff should go here.
+c="$XDG_CONFIG_HOME" # Shortcut to the config directory (`v $c/gibrc` to edit this file).
+: ${XDG_CACHE_HOME:="$HOME/.cache"}; export XDG_CACHE_HOME # Cache stuff should go here.
+: ${XDG_DATA_HOME:="$HOME/.local/share"}; export XDG_DATA_HOME # Data should go here.
+: ${LESSHISTFILE:="$XDG_DATA_HOME/less/history"}; export LESSHISTFILE # Get less to put its history here.
+#: ${INPUTRC:="$XDG_CONFIG_HOME/inputrc"}; export INPUTRC # inputrc file goes here (unused currently).
+: ${CARGO_HOME:="$XDG_DATA_HOME/cargo"}; export CARGO_HOME # Cargo goes here.
+: ${RUSTUP_HOME:="$XDG_DATA_HOME/rustup"}; export RUSTUP_HOME # Rustup goes here.
+: ${ATOM_HOME:="$XDG_CONFIG_HOME/atom"}; export ATOM_HOME # Atom goes here.
+: ${HISTFILE:="$XDG_CONFIG_HOME/history"}; export HISTFILE # Set history file location.
+: ${npm_config_devdir:="$XDG_CACHE_HOME/node-gyp"}; export npm_config_devdir # Set node-gyp download location.
+
+# SHELL SPECIFIC:
 ls --color=auto >/dev/null 2>&1 && alias ls='ls --color=auto' # ls use colour if poss.
 [ "$(uname)" = "Darwin" ] && alias ls='ls -G' && alias dl=rmtrash # ls use colour on mac.
 
 if [ "$ZSH_VERSION" ]; then # zsh specific options.
-#  bindkey -v # Enable vim mode (breaks history search with <Up>).
-  KEYTIMEOUT=10 # Key delay of 0.1s (Esc in vim mode is quicker).
-  bindkey -M viins 'kj' vi-cmd-mode # Map kj -> Esc in vim mode.
-  HYPHEN_INSENSITIVE="true" # Ignore hyphens when autocompleting.
-  chpwd() { ls; } # Auto ls after changing directory.
+  export ZDOTDIR="${XDG_CONFIG_HOME}/zsh" # Path to zsh config files.
+  export ZSH="$XDG_DATA_HOME/oh-my-zsh" # Path to your oh-my-zsh installation.
+  ZSH_THEME="robbyrussell" # Set name of the theme to load.
+  HYPHEN_INSENSITIVE="true" # Use hyphen-insensitive completion.
   DISABLE_AUTO_TITLE="true" # Don't mess with shell title.
-  zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' # Case-insensitive match.
-  PROMPT+="%{$fg[magenta]%}❯%{$reset_color%} " # Add a ❯ to the end of the prompt.
-  RPROMPT='%~' # Put full path on right of prompt.
-  fpath+=~/.zfunc # Put (or symlink) autocomplete scripts in here.
+  plugins=() # Choose plugins to load.
+  fpath+="$XDG_DATA_HOME/zfunc" # Put (or symlink) autocomplete scripts in here.
   fpath+=/usr/local/share/zsh-completions # Homebrew zsh-completions.
+  source $ZSH/oh-my-zsh.sh # Load Oh-My-Zsh.
+  chpwd() { ls; } # Auto ls after changing directory.
+  zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' # Case-insensitive match.
+  PROMPT+='%{$fg[magenta]%}❯%{$reset_color%} ' # Add a ❯ to the end of the prompt.
+  RPROMPT='%~' # Put full path on right of prompt.
   source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh || true # Homebrew zsh-syntax-highlighting.
+  source /usr/local/Bluemix/bx/zsh_autocomplete # Run Bluemix autocomplete.
   last_if_empty() { [ -z "$BUFFER" ] && zle up-history; zle accept-line; } # See next line.
   zle -N last_if_empty; bindkey '^M' last_if_empty # Empty input repeats last command.
+  # bindkey -v # Enable vim mode (breaks history search with <Up> so disabled).
+  # KEYTIMEOUT=10 # ↳ Key delay of 0.1s (Esc in vim mode is quicker).
+  # bindkey -M viins 'kj' vi-cmd-mode # ↳ Map kj -> Esc in vim mode.
 elif [ -n "$BASH_VERSION" ]; then # Bash specific options.
   set -o vi # Vim mode in bash.
   shopt -s autocd # type directory name to cd.
-  alias la='ls -A' # List hidden files as well.
-  alias ll='ls -l' # Gives more detail about files.
-  alias lal='ls -al' # More detail and hidden files.
-  alias l='ls -CF' # List column sorted with indicators.
   cs() { cd "$@" && ls; } # cs => cd and ls.
-  alias ..='cs ..' # .. goes up a directory.
-  alias ...='cs ../..' # ... goes up two directories.
-  alias ....='cs ../../..'
-  alias .....='cs ../../../..'
-  alias ......='cs ../../../../..'
+  cd=cs # Used in .. commands below (so .. does `cs ..`).
   bind Space:magic-space 2>/dev/null # !31 autoexpands on space.
   bind 'set completion-ignore-case on' 2>/dev/null # case-insensitive tab completion.
   PS1=' \[\e[32;1m\]\w $ \[\e[0m\]'
 fi
 
-## Useful functions (use the same way as aliases).
+## FUNCTIONS:
 exists() { type "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
 pathadd() { [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]] && PATH="$1${PATH+":$PATH"}"; }
 fnd() { find . -iname "*$**"; } # Find by filename.
-{ exists nvim && VIM=nvim; } || { exists vim && VIM=vim; } || VIM=vi # Take what vim you can get.
-alias v=$VIM; export VISUAL=$VIM # Set vim/nvim as the default editor.
-alias path='echo $PATH'
-alias e=exa # Use exa instead of ls.
-alias x="exit" # x exits the terminal.
-alias c="clear" # c clears the terminal screen.
-alias h=history # shows a history of commands.
-alias s="ssh" # Won't prompt with "add new RSA key" if you use -oStrictHostKeyChecking=No.
-ulimit -c unlimited # Allow saving of coredumps.
-alias g=git # Use with commands in ~/.gitconfig for best results.
-alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"' # Makes it look like you're busy.
-[ $(uname) = "Darwin" ] && alias cpy="pbcopy" && alias pst="pbpaste"
-[ $(uname) = "Linux" ] && alias cpy="xclip -selection clipboard" && alias pst="xclip -selection clipboard -o"
-
-# 2 = !! or !-1, 3 = !-2 etc.
-alias 2="fc -e : -2"; alias 3="fc -e : -3"; alias 4="fc -e : -4"; alias 5="fc -e : -5";
-
-export NVM_DIR="$HOME/.nvm"
-alias nv=". $NVM_DIR/nvm.sh"  # Start nvm with alias, o/w too much startup cost.
-
-pathadd /usr/local/opt/ccache/libexec # Add ccache to the path if installed.
-pathadd $HOME/bin
-
-pth() { # Returns absolute path to file including file name.
-  # $1: relative filename, return: absolute path.
-  for i in "$@"; do
+pth() { # Returns absolute path to file(s) including file name.
+  for i in "$@"; do # Args = relative filenames.
     if [ -d "$i" ]; then (cd "$i"; pwd) # dir.
     elif [ -f "$i" ]; then  # file.
       if [[ $i == */* ]]; then echo "$(cd "${i%/*}"; pwd)/${i##*/}".
       else echo "$(pwd)/$i"
-      fi
-    fi
-  done
+      fi; fi; done
 }
+
+# ALIASES:
+alias x="exit" # x exits the terminal.
+alias c="clear" # c clears the terminal screen.
+alias g=git # Use with commands in ~/.gitconfig for best results.
+alias path='echo $PATH'
+alias h=history # shows a history of commands.
+alias s="ssh" # Won't prompt with "add new RSA key" if you use -oStrictHostKeyChecking=No.
+
+alias la='ls -A'  # List hidden files as well.
+alias ll='ls -l'  # Gives more detail about files.
+alias l='ls -lAh' # Hidden, detail, human readable numbers.
+[ -z "$cd" ] && cd=cd # We only want cd=cs in bash.
+alias ..="$cd .."             # .. -> go up a directory.
+alias ...="$cd ../.."             # ↳ go up two directories.
+alias ....="$cd ../../.."         # ↳ go up two directories.
+alias .....="$cd ../../../.."     # ↳ go up two directories.
+alias ......="$cd ../../../../.." # ↳ go up two directories.
+alias -- -="$cd -" # - cd's to the last directory.
+# Execute previous commands (2 = !! or !-1, 3 = !-2 etc.)
+alias 2="fc -e : -2"; alias 3="fc -e : -3"; alias 4="fc -e : -4"; alias 5="fc -e : -5";
+
+{ exists nvim && VIM=nvim; } || { exists vim && VIM=vim; } || VIM=vi # Take what vim you can get.
+alias v=$VIM; export VISUAL=$VIM # Set vim/nvim as the default editor.
+ulimit -c unlimited # Allow saving of coredumps.
+alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"' # Makes it look like you're busy.
+[ $(uname) = "Darwin" ] && alias cpy="pbcopy" && alias pst="pbpaste"
+[ $(uname) = "Linux" ] && alias cpy="xclip -selection clipboard" && alias pst="xclip -selection clipboard -o"
+
+# APP SPECIFIC:
+pathadd $HOME/bin # Put random binaries you want to run in here.
+
+export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/config"
+export NVM_DIR="$XDG_DATA_HOME/nvm" # Use nvm.
+alias nv=". $NVM_DIR/nvm.sh"  # Start nvm with alias, o/w too much startup cost.
+
+pathadd /usr/local/opt/ccache/libexec # Add ccache to the path if installed.
 
 ## Rust commands.
 alias cn="cargo new --bin"; alias cl="cargo clippy"
 alias cb="cargo build"; alias cr="cargo run"; alias ct="cargo test"
 alias ctag='ctags -R . $HOME/bin/src/rust' # Populate ctags from rust src.
-alias ru=rustup; pathadd "$HOME/.cargo/bin"
+alias ru=rustup; pathadd "$CARGO_HOME/bin"
 alias e=exercism
 rs() { for i in $@; do rustc ${i%.rs}.rs; ./${i%.rs}; done; } # Compile/run (rs a.rs b).
 
 # Build node with ninja.
 alias bn='export CPPFLAGS=-fdiagnostics-color && ./configure && tools/gyp_node.py -f ninja && ninja -C out/Release && ln -fs out/Release/node node'
 
+# SSH PROMPT:
 alias bashme="PS1='\[\e[35;1m\]\h \n \w $ \[\e[0m\]'" # Manually set bash prompt.
 ## Set prompt for SSH windows.
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
