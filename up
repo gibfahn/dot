@@ -1,13 +1,12 @@
 #!/bin/sh
 
-# Setup zsh.
-. ./setup/zsh.sh
+[ -z "$XDG_CONFIG_HOME" ] && export XDG_CONFIG_HOME="$HOME/.config" # Good default.
 
-# Setup vim.
-. ./setup/vim.sh
+# Cross-platform setup:
+. ./setup/unix.sh
 
-# Setup rust.
-. ./setup/rust.sh
+# Setup vim:
+#. ./setup/vim.sh
 
 if [ "$(uname)" = Darwin ]; then # macOS specific stuff.
   # Mac brew/shell/
