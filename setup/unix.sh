@@ -51,18 +51,24 @@ if no nvm; then
 fi
 
 if no rustup || no cargo; then
-  # Install rustup
-  curl https://sh.rustup.rs -sSf | sh
-  # Install stable and nightly
-  rustup install nightly
-  rustup install stable
-  # Download zsh completion
-  mkdir ~/.zfunc
-  curl https://raw.githubusercontent.com/rust-lang-nursery/rustup.rs/master/src/rustup-cli/zsh/_rustup >~/.zfunc/_rustup
+  if [ ! -d "$HOME/.rustup" ]; then
+    # Install rustup
+    curl https://sh.rustup.rs -sSf | sh
+    # Install stable and nightly
+    rustup install nightly
+    rustup install stable
+    # Download zsh completion
+    mkdir ~/.zfunc
+    curl https://raw.githubusercontent.com/rust-lang-nursery/rustup.rs/master/src/rustup-cli/zsh/_rustup >~/.zfunc/_rustup
 
-  # Download docs and src
-  rustup component add rust-src
-  rustup component add rust-docs
+    # Download docs and src
+    rustup component add rust-src
+    rustup component add rust-docs
+  fi
+
+  # Move to proper directories
+  mv "$HOME/.rustup" "$XDG_DATA_HOME/rustup"
+  mv "$HOME/.cargo" "$XDG_DATA_HOME/cargo"
 fi
 
 # Install vim-plug:

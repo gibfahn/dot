@@ -1,6 +1,9 @@
 #!/bin/sh
 
-[ -z "$XDG_CONFIG_HOME" ] && export XDG_CONFIG_HOME="$HOME/.config" # Good default.
+# Good defaults:
+[ -z "$XDG_CONFIG_HOME" ] && export XDG_CONFIG_HOME="$HOME/.config"
+[ -z "$XDG_CACHE_HOME" ] && export XDG_CACHE_HOME="$HOME/.cache"
+[ -z "$XDG_DATA_HOME" ] && export XDG_DATA_HOME="$HOME/.local/share"
 
 # Cross-platform setup:
 . ./setup/unix.sh
@@ -9,6 +12,7 @@
 #. ./setup/vim.sh
 
 if [ "$(uname)" = Darwin ]; then # macOS specific stuff.
+  :
   # Mac brew/shell/
 elif [ "$(uname)" = Linux ]; then # Linux specific stuff.
   case "$(uname -v)" in
@@ -27,7 +31,7 @@ elif [ "$(uname)" = Linux ]; then # Linux specific stuff.
 fi
 
 # Setup atom.
-. ./setup/atom.sh
+#. ./setup/atom.sh
 
 # Setup dotfile symlinks.
 ./rcme

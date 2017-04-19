@@ -18,7 +18,7 @@ for FILE in $(find -type f -o -type l | sed 's|./||'); do
   if [ -d "$TOPATH/$FILE" ]; then
     echo "$TOPATH/$FILE is a directory! Aborting"
     exit 1
-  elif [ -e "$TOPATH/$FILE" ]; then
+  elif [ -e "$TOPATH/$FILE" -o -L "$TOPATH/$FILE" ]; then
     echo "$TOPATH/$FILE exists, moving to $BACKUP/$FILE"
     mkdir -p "$BACKUP/$(dirname $FILE)"
     mv "$TOPATH/$FILE" "$BACKUP/$FILE"
