@@ -8,9 +8,6 @@
 # Cross-platform setup:
 . ./setup/unix.sh
 
-# Setup vim:
-#. ./setup/vim.sh
-
 if [ "$(uname)" = Darwin ]; then # macOS specific stuff.
   :
   # Mac brew/shell/
@@ -19,19 +16,10 @@ elif [ "$(uname)" = Linux ]; then # Linux specific stuff.
     *Ubuntu* | *ubuntu*) # Ubuntu specific setup.
       # Ubuntu app setup.
       . ./setup/ubu.sh
-
-      # pulseaudio setup.
-      . ./setup/pulseaudio.sh
-
-      # Dmenu (Super-key search equivalent).
-      . ./setup/dmenu.sh
       ;;
-      # Other setup would go here.
+      # Other Linux setup would go here.
   esac
 fi
-
-# Setup atom.
-#. ./setup/atom.sh
 
 # Setup dotfile symlinks.
 ./rcme

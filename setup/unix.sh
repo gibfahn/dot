@@ -20,20 +20,11 @@ if no oh-my-zsh; then
   ZSH="$XDG_DATA_HOME/oh-my-zsh" sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 fi
 
-## Install zplug: Disabled as slowed down zsh.
-#if no zplug; then
-#  git clone https://github.com/zplug/zplug "$XDG_DATA_HOME/zplug"
-#fi
-
 # Set up autocompletions:
-if no zfunc; then
-  mkdir -p "$XDG_DATA_HOME/zfunc"
-fi
+if no zfunc; then mkdir -p "$XDG_DATA_HOME/zfunc"; fi
 
 # Set up zsh scripts:
-if no zsh; then
-  mkdir -p "$XDG_DATA_HOME/zsh"
-fi
+if no zsh; then mkdir -p "$XDG_DATA_HOME/zsh"; fi
 
 if no zsh/zsh-syntax-highlighting; then
   git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$XDG_DATA_HOME/zsh/zsh-syntax-highlighting"
@@ -63,7 +54,7 @@ if no rustup || no cargo; then
 
     # Download docs and src
     rustup component add rust-src
-    rustup component add rust-docs
+    rustup component add rust-docs || true
   fi
 
   # Move to proper directories
@@ -75,4 +66,9 @@ fi
 if no nvim/site/autoload/plug.vim; then
   curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  exists() { type "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
+  unset VIM
+  { exists nvim && VIM=nvim; } || { exists vim && VIM=vim; } # Take what you can get.
+  [ "$VIM" = vim ] && mkdir -p ~/.vim && ln -s ~/.local/share/nvim/site/autoload ~/.vim/autoload
+  exists $VIM && $VIM +PlugInstall +qall # Install/update vim plugins.
 fi
