@@ -91,8 +91,6 @@
   prune = true # Delete local tracking branches if remote is gone.
 [format]
   pretty = fuller
-[gpg]
-  program = gpg2
 [help]
   autocorrect = 1
 [log]
