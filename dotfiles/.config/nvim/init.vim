@@ -97,13 +97,16 @@ endif
 
 command! W w !sudo tee % > /dev/null|               " :W saves file as sudo.
 command! PU PlugUpdate | PlugUpgrade|               " :PU updates plugins and vim-plug.
+command! PI !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim &&
+    \ ln -s ~/.local/share/nvim/site/autoload ~/.vim/autoload
 let g:is_posix = 1                                  " Assume shell for syntax highlighting.
 let g:ycm_rust_src_path = expand('~/.rustup/toolchains/nightly-*/lib/rustlib/src/rust/src')
 "let g:rustfmt_autosave = 1                          " Run rustfmt on save (from rust.vim).
 set path=.,/usr/include,,**                         " Add ** to the search path so :find x works recursively.
 
 " Nicer line wrapping for long lines.
-if has('linebreak')| set breakindent| let &showbreak = '↳ '| set cpo+=n| end
+if exists('+breakindent')| set breakindent| let &showbreak = '↳ '| set cpo+=n| end
 
 set path=.,/usr/include,,**                         " Add ** to search path
 if executable("rg")
