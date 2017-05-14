@@ -27,7 +27,7 @@
   cm  = commit --amend
   cmn = commit --amend --no-edit
   cn  = clean -fdx
-  cl  = "clone --recursive -j8" # Always include submodules.
+  cl  = "clone --recursive -j8 --origin up" # Always include submodules, set default remote to "up".
   cp  = cherry-pick
   cpa = cherry-pick --abort
   cpc = cherry-pick --continue
