@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# Calls all the scripts in ./setup/, assuming the OS matches.
+
 # Good defaults:
 [ -z "$XDG_CONFIG_HOME" ] && export XDG_CONFIG_HOME="$HOME/.config"
 [ -z "$XDG_CACHE_HOME" ] && export XDG_CACHE_HOME="$HOME/.cache"
@@ -9,15 +11,13 @@
 . ./setup/unix.sh
 
 if [ "$(uname)" = Darwin ]; then # macOS specific stuff.
-  :
-  # Mac brew/shell/
+  : # Placeholder.
 elif [ "$(uname)" = Linux ]; then # Linux specific stuff.
   case "$(uname -v)" in
     *Ubuntu* | *ubuntu*) # Ubuntu specific setup.
-      # Ubuntu app setup.
-      . ./setup/ubu.sh
+      . ./setup/ubu.sh # Ubuntu app setup.
       ;;
-      # Other Linux setup would go here.
+      # Other Linux setup goes here.
   esac
 fi
 
