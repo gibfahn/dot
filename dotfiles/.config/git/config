@@ -20,12 +20,12 @@
   br = branch -r
   bup = "!git branch -u $1/$(git headBranch) #" # g bup origin sets upstream to origin.
 
-  c   = commit
-  ca  = commit -a
-  cam = commit --amend -a
-  can = commit --amend -a --no-edit
-  cm  = commit --amend
-  cmn = commit --amend --no-edit
+  # I manually specify -S because gpgsign only works with Git 2.x. Also it
+  # means that test suites using git commit don't break.
+  c   = commit -S
+  ca  = commit -S -a
+  cm  = commit -S --amend
+  can = commit -S --amend -a --no-edit
   cn  = clean -fdx
   cl  = "clone --recursive -j8 --origin up" # Always include submodules, set default remote to "up".
   cp  = cherry-pick
@@ -82,7 +82,7 @@
 [color]
   ui = true # Default since git 1.8.4
 [commit]
-  gpgsign = true # Always sign commits.
+  # gpgsign = true # Always sign commits, available since Git 2.0.
 [credential]
   helper = osxkeychain
 [diff]
