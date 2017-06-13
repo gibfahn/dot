@@ -15,6 +15,7 @@
   b = branch
   ba = branch -a
   bd = branch -D
+  bdd = "!lastBranch=$(git headBranch); git checkout -; git branch -D $lastBranch" # Delete current branch.
   bp = "!git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -d" # Delete orphaned local branches.
   bP = "!git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D" # Delete orphaned local branches!
   br = branch -r
@@ -25,7 +26,8 @@
   c   = commit -S
   ca  = commit -S -a
   cm  = commit -S --amend
-  can = commit -S --amend -a --no-edit
+  cmn = commit -S --amend --no-edit
+  can = commit -S --amend --no-edit -a
   cn  = clean -fdx
   cl  = "clone --recursive -j8 --origin up" # Always include submodules, set default remote to "up".
   cp  = cherry-pick
@@ -42,7 +44,7 @@
 
   l = log --graph --decorate --oneline # Graph log.
   la = log --graph --decorate --oneline --all # Graph log of all branches.
-  lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%C(bold blue)<%an>%Creset' --abbrev-commit
+  ll = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%C(bold blue)<%an>%Creset' --abbrev-commit
 
   mc = "!$VISUAL $(git diff --name-only --diff-filter=U) #" # Open merge conflicts in editor.
   mf = merge --ff-only
@@ -70,7 +72,7 @@
   st = stash
   stp = stash pop
   df = diff HEAD # diff of staged and unstaged files..
-  ds = diff --staged # Diff of staged files (`git diff` for unstaged)..
+  dfs = diff --staged # Diff of staged files (`git diff` for unstaged)..
 
   sma = submodule add                         # Add a new submodule: g sma url path.
   smi = submodule update --init --recursive   # Initialise submodules.
