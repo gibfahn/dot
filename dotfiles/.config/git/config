@@ -79,6 +79,8 @@
 
 [apply]
   whitespace = fix # Fix whitespace when applying patches.
+[color]
+  ui = true # Default since git 1.8.4
 [commit]
   gpgsign = true # Always sign commits.
 [credential]
@@ -95,6 +97,8 @@
   autocorrect = 1
 [log]
   follow = true # Log follows file move/rename.
+[merge]
+  defaultToUpstream = true # Not set by default before Git 2.0
 [pull]
   rebase = true # pull = fetch + rebase not fetch + merge.
 [push]
