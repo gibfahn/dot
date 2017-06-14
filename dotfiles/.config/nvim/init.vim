@@ -1,15 +1,20 @@
-call plug#begin('~/.local/share/nvim/plugged')|     " Load plugins with vim-plug.
-Plug 'ap/vim-buftabline'|                           " Show buffers in the tab bar.
-Plug 'tpope/vim-fugitive'|                          " Git commands in vim.
-Plug 'rust-lang/rust.vim'|                          " Rust language bindings.
-Plug 'tpope/vim-sleuth'|                            " Autodetect tab/space for file.
-Plug 'tpope/vim-surround'|                          " Add/mod/remove surrounding chars.
-Plug 'tpope/vim-repeat'|                            " Allows you to use . with above.
-Plug 'tpope/vim-commentary'|                        " Autodetect comment type for lang.
-Plug 'tpope/vim-vinegar'|                           " Nicer file browser plugin.
-Plug '~/.local/share/nvim/plugged/YouCompleteMe'|   " Autocompletion for some langs.
+try
+  call plug#begin('~/.local/share/nvim/plugged')|   " Load plugins with vim-plug.
+  Plug 'ap/vim-buftabline'|                         " Show buffers in the tab bar.
+  Plug 'tpope/vim-fugitive'|                        " Git commands in vim.
+  Plug 'rust-lang/rust.vim'|                        " Rust language bindings.
+  Plug 'pangloss/vim-javascript'|                   " JS   language bindings.
+  Plug 'tpope/vim-sleuth'|                          " Autodetect tab/space for file.
+  Plug 'tpope/vim-surround'|                        " Add/mod/remove surrounding chars.
+  Plug 'tpope/vim-repeat'|                          " Allows you to use . with above.
+  Plug 'tpope/vim-commentary'|                      " Autodetect comment type for lang.
+  Plug 'tpope/vim-vinegar'|                         " Nicer file browser plugin.
+  Plug '~/.local/share/nvim/plugged/YouCompleteMe'| " Autocompletion for some langs.
 " - = .. | I = help | ~ = ~ | <C-i/o> = Quit | cg = cd $cwd | R = rename | D = delete
-call plug#end()|                                    " Initialize plugin system
+  call plug#end()|                                  " Initialize plugin system
+catch| echo 'vim-plug not installed, use :PI to install'
+endtry
+
 set nocompatible                                    " Remove vi compatibility hacks.
 let mapleader = "\<Space>"                          " Set <Leader> (default shortcut) to Space.
 
@@ -60,8 +65,8 @@ nnoremap <leader>l :vsp<CR><C-w>h:bp<CR>|           " Open vertical split.
 nnoremap <leader>o :on<CR>|                         " Close all other buffers.
 nnoremap <leader>q :q<CR>|                          " Quit,
 nnoremap <leader>Q :q!<CR>|                         "  ↳ Quit losing unsaved changes.
-nnoremap <leader>r :%s|                             " Replace (add delimiters yourself),
-nnoremap <leader>R :%sc<Left>|                      "  ↳ Replace prompt on each match.
+nnoremap <leader>r :%s//<Left>|                     " Replace (add middle delimiter yourself, e.g. <Space>rold/new),
+nnoremap <leader>R :%s//c<Left><Left>|              "  ↳ Replace with prompt on each match.
 nnoremap <leader>w :up<CR>|                         " Write if there were changes.
 nnoremap <leader>W :w<CR>|                          " Write if there were changes.
 nnoremap <leader>x :x<CR>|                          " Save+quit.
@@ -93,6 +98,10 @@ if has("nvim")
   tnoremap <C-l> <C-\><C-n><C-w>l|                  "  ↳     right a window in terminal.
   tnoremap <Esc> <C-\><C-n>|                        " Make Escape work in terminal,
   tnoremap kj <C-\><C-n>|                           "  ↳    kj     work in terminal.
+
+  augroup gibNvimGroup                              " Autocommands for nvim only
+  au TermOpen * setlocal nonumber norelativenumber| " No line numbers in terminal
+  augroup end
 endif
 
 command! W w !sudo tee % > /dev/null|               " :W saves file as sudo.
@@ -124,6 +133,7 @@ augroup gibAutoGroup                                " Group of automatic functio
   au FileType help wincmd L                         " Open new help windows on the right,
 "  au FileType qf wincmd L                           "  ↳       build windows on the right.
   au BufWritePost .vimrc so $MYVIMRC|               " Reload .vimrc on save.
+  au BufWritePost init.vim so $MYVIMRC|             " Reload init.vim (nvim) on save.
 augroup END
 
 set wildmode=list:longest,list:full                 " Insert tab at beginning of line,
