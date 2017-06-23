@@ -15,6 +15,16 @@ for i, mapping in ipairs(hyperModeAppMappings) do
   end)
 end
 
+-- Print running apps in console:
+-- for k, v in pairs(hs.application.runningApplications()) do print(k, v) end
+hyperMode:bind({}, 'e', function()
+  if (hs.application.get('Karabiner-Menu') ~= nil) then
+    hs.application.get('Karabiner-Menu'):kill()
+  end
+  hs.application.launchOrFocus('Karabiner-Menu')
+  end
+)
+
 -- Enter Hyper Mode when F17 (right option key) is pressed
 pressedF17 = function() hyperMode:enter() end
 
@@ -23,7 +33,6 @@ releasedF17 = function() hyperMode:exit() end
 
 -- Bind the Hyper key
 f17 = hs.hotkey.bind({}, 'F17', pressedF17, releasedF17)
-
 
 local fastKeyStroke = function(modifiers, character)
   local event = require("hs.eventtap").event
