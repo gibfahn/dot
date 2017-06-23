@@ -1,5 +1,7 @@
-[ -z "$PS1" ] && return # Exit if not running interactively.
-echo "Using gibrc...                             (old PS1=$PS1)"
+case $- in
+  *i*) echo "Using gibrc..." ;;
+  *) return ;; # Exit if not running interactively.
+esac
 
 # ENV VAR DEFAULTS:
 export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-"$HOME/.config"} # Config stuff should go here.
