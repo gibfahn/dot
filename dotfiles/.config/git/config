@@ -23,6 +23,7 @@
 
   # I manually specify -S because gpgsign only works with Git 2.x. Also it
   # means that test suites using git commit don't break.
+  ce  = config --global --edit # Open this file with $VISUAL.
   c   = commit -S
   ca  = commit -S -a
   cm  = commit -S --amend
@@ -100,13 +101,15 @@
 [help]
   autocorrect = 1
 [log]
-  follow = true # Log follows file move/rename.
+  follow = true # Log tracks file move/rename.
 [merge]
   defaultToUpstream = true # Not set by default before Git 2.0
 [pull]
   rebase = true # pull = fetch + rebase not fetch + merge.
 [push]
   default = simple # Only push the branch I'm on.
+  #followTags = true # Push tags that are annotated and reachable. Off because
+  #I don't currently want to push tags by default.
 [rebase]
   autosquash = true # Squash commits with autosquash!.
 [rerere]
