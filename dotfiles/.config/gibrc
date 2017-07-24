@@ -68,17 +68,17 @@ pth() { # Returns absolute path to file(s) including file name.
 }
 
 # ALIASES:
-alias x="exit" # x exits the terminal.
-alias c="clear" # c clears the terminal screen.
+alias x=exit # x exits the terminal.
+alias c=clear # c clears the terminal screen (can also use Ctrl-L).
 alias g=git # Use with commands in ~/.gitconfig for best results.
 alias path='echo $PATH'
 alias h=history # shows a history of commands.
-alias s="ssh" # Use -oStrictHostKeyChecking=no to avoid "add new RSA key".
+alias s="TERM=xterm-256color ssh -oStrictHostKeyChecking=no" # ssh avoiding checking RSA keys.
 scpkey() { ssh $1 'mkdir -p ~/.ssh'; scp ~/.ssh/authorized_keys_scp $1:~/.ssh/authorized_keys; } # scp key to host.
 
+alias l='ls -lAh' # Hidden, detail, human readable numbers.
 alias la='ls -A'  # List hidden files as well.
 alias ll='ls -l'  # Gives more detail about files.
-alias l='ls -lAh' # Hidden, detail, human readable numbers.
 [ -z "$cd" ] && cd=cd # We only want cd=cs in bash.
 alias ..="$cd .."             # .. -> go up a directory.
 alias ...="$cd ../.."             # ↳ go up two directories.
@@ -114,6 +114,7 @@ alias cb="cargo build"; alias cr="cargo run"; alias ct="cargo test"
 alias ctag='ctags -R . $HOME/bin/src/rust' # Populate ctags from rust src.
 alias ru=rustup; pathadd "$CARGO_HOME/bin"
 alias e=exercism
+alias k=kubectl
 rs() { for i in $@; do rustc ${i%.rs}.rs; ./${i%.rs}; done; } # Compile/run (rs a.rs b).
 
 # Build node with ninja.
