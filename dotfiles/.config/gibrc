@@ -57,12 +57,12 @@ fi
 ## FUNCTIONS:
 exists() { type "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
 pathadd() { [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]] && PATH="$1${PATH+":$PATH"}"; }
-fnd() { find . -iname "*$**"; } # Find by filename.
+fnd() { find . -iname "*$**"; } # Find by filename (case insensitive).
 pth() { # Returns absolute path to file(s) including file name.
   for i in "$@"; do # Args = relative filenames.
-    if [ -d "$i" ]; then (cd "$i"; pwd) # dir.
+    if [ -d "$i" ]; then (pushd -q "$i"; pwd) # dir.
     elif [ -f "$i" ]; then  # file.
-      if [[ $i == */* ]]; then echo "$(cd ${i%/*}; pwd)/${i##*/}".
+      if [[ $i == */* ]]; then echo "$(pushd -q ${i%/*}; pwd)/${i##*/}"
       else echo "$(pwd)/$i"; fi; fi
   done
 }
@@ -70,10 +70,11 @@ pth() { # Returns absolute path to file(s) including file name.
 # ALIASES:
 alias x=exit # x exits the terminal.
 alias c=clear # c clears the terminal screen (can also use Ctrl-L).
-alias g=git # Use with commands in ~/.gitconfig for best results.
-alias path='echo $PATH'
-alias h=history # shows a history of commands.
+alias g=git # Use with commands in $c/git/config for best results.
+alias path='echo $PATH' # Single quotes so we echo path at runtime, not alias time.
+alias h=history # Shows command history.
 alias s="TERM=xterm-256color ssh -oStrictHostKeyChecking=no" # ssh avoiding checking RSA keys.
+alias l=less # Runs less (F for `tail -f` mode, Ctrl-c to cancel).
 scpkey() { ssh $1 'mkdir -p ~/.ssh'; scp ~/.ssh/authorized_keys_scp $1:~/.ssh/authorized_keys; } # scp key to host.
 
 alias l='ls -lAh' # Hidden, detail, human readable numbers.
@@ -86,7 +87,7 @@ alias ....="$cd ../../.."         # ↳ go up two directories.
 alias .....="$cd ../../../.."     # ↳ go up two directories.
 alias ......="$cd ../../../../.." # ↳ go up two directories.
 alias -- -="$cd -" # - cd's to the last directory.
-# Execute previous commands (2 = !! or !-1, 3 = !-2 etc.)
+# Execute previous commands (1 = !-2, 2 = !-3 etc., remember that Enter is !!)
 alias 1="fc -e : -2"; alias 2="fc -e : -3"
 
 [ "$TERM_PROGRAM" = Apple_Terminal ] && export TERM=nsterm-256color # Terminal.app terminfo (updated myself).
@@ -94,19 +95,18 @@ alias 1="fc -e : -2"; alias 2="fc -e : -3"
 { exists nvim && VIM=nvim; } || { exists vim && VIM=vim; } || VIM=vi # Take what you can get.
 alias v=$VIM; export VISUAL=$VIM # Set vim/nvim as the default editor.
 ulimit -c unlimited # Allow saving of coredumps.
-alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"' # Makes it look like you're busy.
-[ $(uname) = "Darwin" ] && alias cpy="pbcopy" && alias pst="pbpaste"
+alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"' # Makes it look like you're busy with important hacker stuff.
+[ $(uname) = "Darwin" ] && alias cpy="pbcopy" && alias pst="pbpaste" # Cross-platform copy/paste terminal commands.
 [ $(uname) = "Linux" ] && alias cpy="xclip -selection clipboard" && alias pst="xclip -selection clipboard -o"
 
 # APP SPECIFIC:
-pathadd $HOME/bin # Put random binaries you want to run in here.
-pathadd /usr/local/opt/ncurses/bin # Used on macOS where we want to use the brew ncurses not the system version.
+pathadd "$HOME/bin" # Put random binaries you want to run in here.
+pathadd /usr/local/opt/ncurses/bin # Used on macOS with nsterm terminfo (see above).
+pathadd /usr/local/opt/ccache/libexec # Add ccache to the path if installed.
 
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/config"
 export NVM_DIR="$XDG_DATA_HOME/nvm" # Use nvm.
-alias nv=". $NVM_DIR/nvm.sh"  # Start nvm with alias, o/w too much startup cost.
-
-pathadd /usr/local/opt/ccache/libexec # Add ccache to the path if installed.
+alias nv='. $NVM_DIR/nvm.sh'  # Start nvm with alias, o/w too much startup cost.
 
 ## Rust commands.
 alias cn="cargo new --bin"; alias cl="cargo clippy"
@@ -123,8 +123,8 @@ alias bn='export CPPFLAGS=-fdiagnostics-color && ./configure && tools/gyp_node.p
 # SSH PROMPT:
 alias bashme="PS1='\[\e[35;1m\]\h \n \w $ \[\e[0m\]'" # Manually set bash prompt.
 ## Set prompt for SSH windows.
-if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-  if [ -n "$BASH_VERSION" ]; then # assume Bash ## Shell basics.
+if [ "$SSH_CLIENT" -o "$SSH_TTY" ]; then
+  if [ "$BASH_VERSION" ]; then # assume Bash ## Shell basics.
     PS1='\[\e[35;1m\]\h \n \w $ \[\e[0m\]'
   else
     myshell=dash
