@@ -15,14 +15,14 @@
   b = branch
   ba = branch -a
   bd = branch -D
+  br = branch -r
   bdd = "!lastBranch=$(git headBranch); git checkout -; git branch -D $lastBranch" # Delete current branch.
   bp = "!git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -d" # Delete orphaned local branches.
   bP = "!git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D" # Delete orphaned local branches!
-  br = branch -r
   bup = "!git branch -u $1/$(git headBranch) #" # g bup origin sets upstream to origin.
 
   # I manually specify -S because gpgsign only works with Git 2.x. Also it
-  # means that test suites using git commit don't break.
+  # means that test suites using `git commit` don't break.
   ce  = config --global --edit # Open this file with $VISUAL.
   c   = commit -S
   ca  = commit -S -a
@@ -35,19 +35,19 @@
   cpa = cherry-pick --abort
   cpc = cherry-pick --continue
   co  = checkout
-  fix = "commit --fixup" # g fix SHA means rebasing will attach to that SHA.
+  fix = commit --fixup # g fix SHA means rebasing will attach to that SHA.
 
   f = fetch
   fa = fetch --all
-  # Set up local branch from Github PR, `g fp 7654`, `g pp`.
-  fp = "!git fetch $(git headRemote) pull/$1/head:pr-$1 && git checkout pr-$1 #"
-  pp = "!git pull $(git headRemote) pull/$( | cut -d '-' -f 2)/head"
+  # Set up local branch from Github PR, `g fp 7654`, `g pp` (current branch's upstream must be same as PR branch).
+  fp = "!git fetch $(git headRemote) pull/$1/head:$1; git checkout -b $1 --track $(git headRemote)/$1 #"
+  pp = "!git fetch -f $(git headRemote) pull/$(git headBranch)/head:$(git headBranch)"
 
   l = log --graph --decorate --oneline # Graph log.
   la = log --graph --decorate --oneline --all # Graph log of all branches.
   ll = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%C(bold blue)<%an>%Creset' --abbrev-commit
 
-  mc = "!$VISUAL $(git diff --name-only --diff-filter=U) #" # Open merge conflicts in editor.
+  mc = "!$VISUAL $(git diff --name-only --diff-filter=U)" # Open merge conflicts in editor.
   mf = merge --ff-only
 
   p = push
@@ -74,6 +74,7 @@
   sh = show
   st = stash
   stp = stash pop
+  std = stash drop
   df = diff HEAD # diff of staged and unstaged files..
   dfs = diff --staged # Diff of staged files (`git diff` for unstaged)..
 
@@ -85,7 +86,7 @@
 [apply]
   whitespace = fix # Fix whitespace when applying patches.
 [color]
-  ui = true # Default since git 1.8.4
+  ui = true # Default since git 1.8.4, remove when possible.
 [commit]
   # gpgsign = true # Always sign commits, available since Git 2.0.
 [credential]
@@ -99,17 +100,16 @@
 [format]
   pretty = fuller
 [help]
-  autocorrect = 1
+  autocorrect = 1 # Autocorrect nonexistant commands after 0.1s.
 [log]
   follow = true # Log tracks file move/rename.
 [merge]
-  defaultToUpstream = true # Not set by default before Git 2.0
+  defaultToUpstream = true # Not set by default before Git 2.0, remove when possible.
 [pull]
-  rebase = true # pull = fetch + rebase not fetch + merge.
+  rebase = true # pull = fetch + rebase, not fetch + merge.
 [push]
   default = simple # Only push the branch I'm on.
-  #followTags = true # Push tags that are annotated and reachable. Off because
-  #I don't currently want to push tags by default.
+  #followTags = true # Push tags that are annotated and reachable. Off because I don't currently want to push tags by default.
 [rebase]
   autosquash = true # Squash commits with autosquash!.
 [rerere]

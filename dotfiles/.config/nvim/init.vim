@@ -74,6 +74,7 @@ nnoremap <leader>R :%s//c<Left><Left>|              "  ↳ Replace with prompt o
 nnoremap <leader>w :up<CR>|                         " Write if there were changes.
 nnoremap <leader>W :w<CR>|                          " Write whether or not there were changes.
 nnoremap <leader>x :x<CR>|                          " Save (if changes) and quit.
+nnoremap <leader>X :qa<CR>|                         " Quit all windows.
 nnoremap <leader>y  "+y|                            " Copy to clipboard (normal mode).
 vnoremap <leader>y  "+y|                            " Copy to clipboard (visual mode).
 nnoremap <leader>Y  "+yg_|                          " Copy line to clipboard (normal mode).
