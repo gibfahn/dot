@@ -1,1 +1,1 @@
-/Users/gib/code/gcfg/dotfiles/.zshrc
+../../.zshrc
