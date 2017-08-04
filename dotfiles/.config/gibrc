@@ -24,8 +24,10 @@ ls --color=auto >/dev/null 2>&1 && alias ls='ls --color=auto' # ls use colour if
 
 if [ "$ZSH_VERSION" ]; then # zsh specific options.
   export ZDOTDIR="${XDG_CONFIG_HOME}/zsh" # Path to zsh config files.
+  export ZSH_CUSTOM="${XDG_CONFIG_HOME}/oh-my-zsh" # Path to custom oh-my-zsh config files.
   export ZSH="$XDG_DATA_HOME/oh-my-zsh" # Path to your oh-my-zsh installation.
-  ZSH_THEME="robbyrussell" # Set name of the theme to load.
+  ZSH_THEME="gib" # Use my custom theme (in $ZSH_CUSTOM).
+
   HYPHEN_INSENSITIVE="true" # Use hyphen-insensitive completion.
   DISABLE_AUTO_TITLE="true" # Don't mess with shell title.
   plugins=() # Choose plugins to load.
@@ -34,13 +36,11 @@ if [ "$ZSH_VERSION" ]; then # zsh specific options.
   source $ZSH/oh-my-zsh.sh # Load Oh-My-Zsh.
   chpwd() { ls; } # Auto ls after changing directory.
   zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' # Case-insensitive match.
-  PROMPT+='%{$fg[magenta]%}❯%{$reset_color%} ' # Add a ❯ to the end of the prompt.
-  RPROMPT='%~' # Put full path on right of prompt.
   source "$XDG_DATA_HOME/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" || true
-  source /usr/local/Bluemix/bx/zsh_autocomplete # Run Bluemix autocomplete.
   last_if_empty() { [ -z "$BUFFER" ] && zle up-history; zle accept-line; } # See next line.
   zle -N last_if_empty; bindkey '^M' last_if_empty # Empty input repeats last command.
-  unalias please po pu rd run-help d afind _ # Remove unused oh-my-zsh aliases.
+  unalias please po pu rd d afind _ # Remove unused oh-my-zsh aliases.
+  alias | grep run-help >/dev/null 2>&1 && unalias run-help # Doesn't seem to always be defined.
   # bindkey -v # Enable vim mode (breaks history search with <Up> so disabled).
   # KEYTIMEOUT=10 # ↳ Key delay of 0.1s (Esc in vim mode is quicker).
   # bindkey -M viins 'kj' vi-cmd-mode # ↳ Map kj -> Esc in vim mode.
@@ -75,7 +75,7 @@ alias path='echo $PATH' # Single quotes so we echo path at runtime, not alias ti
 alias h=history # Shows command history.
 alias s="TERM=xterm-256color ssh -oStrictHostKeyChecking=no" # ssh avoiding checking RSA keys.
 alias l=less # Runs less (F for `tail -f` mode, Ctrl-c to cancel).
-scpkey() { ssh $1 'mkdir -p ~/.ssh'; scp ~/.ssh/authorized_keys_scp $1:~/.ssh/authorized_keys; } # scp key to host.
+scpkey() { ssh $1 'mkdir -p ~/.ssh'; scp ~/.ssh/${2:-authorized_keys_scp} $1:~/.ssh/authorized_keys; } # scp key to host.
 
 alias l='ls -lAh' # Hidden, detail, human readable numbers.
 alias la='ls -A'  # List hidden files as well.
@@ -124,7 +124,9 @@ alias bn='export CPPFLAGS=-fdiagnostics-color && ./configure && tools/gyp_node.p
 alias bashme="PS1='\[\e[35;1m\]\h \n \w $ \[\e[0m\]'" # Manually set bash prompt.
 ## Set prompt for SSH windows.
 if [ "$SSH_CLIENT" -o "$SSH_TTY" ]; then
-  if [ "$BASH_VERSION" ]; then # assume Bash ## Shell basics.
+  if [ "$ZSH_VERSION" ]; then
+    : # Do nothing, this is covered in the gib theme in $ZSH_CUSTOM.
+  elif [ "$BASH_VERSION" ]; then # assume Bash ## Shell basics.
     PS1='\[\e[35;1m\]\h \n \w $ \[\e[0m\]'
   else
     myshell=dash
