@@ -14,10 +14,18 @@ no() { # Do we need to install $1?
   fi
 }
 
+gitClone() {
+  REPO=$1
+  shift
+  git clone https://github.com/$REPO.git $@ ||
+    git clone git@github.com:$REPO.git $@
+}
+
 
 # Install oh-my-zsh:
 if no oh-my-zsh; then
-  ZSH="$XDG_DATA_HOME/oh-my-zsh" sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+  ZSH="$XDG_DATA_HOME/oh-my-zsh" sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" ||
+    gitClone robbyrussell/oh-my-zsh "$XDG_DATA_HOME/oh-my-zsh"
 fi
 
 # Set up autocompletions:
@@ -27,7 +35,7 @@ if no zfunc; then mkdir -p "$XDG_DATA_HOME/zfunc"; fi
 if no zsh; then mkdir -p "$XDG_DATA_HOME/zsh"; fi
 
 if no zsh/zsh-syntax-highlighting; then
-  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$XDG_DATA_HOME/zsh/zsh-syntax-highlighting"
+  gitClone zsh-users/zsh-syntax-highlighting "$XDG_DATA_HOME/zsh/zsh-syntax-highlighting"
 fi
 
 
@@ -38,28 +46,7 @@ if no nvm; then
   nvm install stable
 
   # Autocompletion for npm (probably needed)
-  npm completion > ~/.zfunc/_npm
-fi
-
-if no rustup || no cargo; then
-  if [ ! -d "$HOME/.rustup" ]; then
-    # Install rustup
-    curl https://sh.rustup.rs -sSf | sh
-    # Install stable and nightly
-    rustup install nightly
-    rustup install stable
-    # Download zsh completion
-    mkdir ~/.zfunc
-    curl https://raw.githubusercontent.com/rust-lang-nursery/rustup.rs/master/src/rustup-cli/zsh/_rustup >~/.zfunc/_rustup
-
-    # Download docs and src
-    rustup component add rust-src
-    rustup component add rust-docs || true
-  fi
-
-  # Move to proper directories
-  mv "$HOME/.rustup" "$XDG_DATA_HOME/rustup"
-  mv "$HOME/.cargo" "$XDG_DATA_HOME/cargo"
+  npm completion > "$XDG_DATA_HOME/.zfunc/_npm"
 fi
 
 # Install vim-plug:
@@ -71,4 +58,24 @@ if no nvim/site/autoload/plug.vim; then
   { exists nvim && VIM=nvim; } || { exists vim && VIM=vim; } # Take what you can get.
   [ "$VIM" = vim ] && mkdir -p ~/.vim && ln -s ~/.local/share/nvim/site/autoload ~/.vim/autoload
   exists $VIM && $VIM +PlugInstall +qall # Install/update vim plugins.
+fi
+
+if no rustup || no cargo; then
+  if [ ! -d "$HOME/.rustup" ]; then
+    # Install rustup
+    curl https://sh.rustup.rs -sSf | sh
+    # Install stable and nightly
+    rustup install nightly
+    rustup install stable
+    # Download zsh completion
+    curl https://raw.githubusercontent.com/rust-lang-nursery/rustup.rs/master/src/rustup-cli/zsh/_rustup >"$XDG_DAATA_HOME/zfunc/_rustup"
+
+    # Download docs and src
+    rustup component add rust-src
+    rustup component add rust-docs || true
+  fi
+
+  # Move to proper directories
+  mv "$HOME/.rustup" "$XDG_DATA_HOME/rustup"
+  mv "$HOME/.cargo" "$XDG_DATA_HOME/cargo"
 fi
