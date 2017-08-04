@@ -1,3 +1,4 @@
+echo "❯❯❯ Installing ubuntu packages with apt"
 sudo apt install -y git curl
 
 sudo add-apt-repository -y ppa:neovim-ppa/stable && sudo apt-get update

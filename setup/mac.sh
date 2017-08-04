@@ -1,6 +1,8 @@
 # Install xcode command line tools
+echo "❯❯❯ Installing xcode command line tools"
 xcode-select --install
 
+echo "❯❯❯ Set key preferences"
 # Set up fastest key repeat rate (needs relogin).
 defaults write NSGlobalDomain KeyRepeat -int 1
 # Sets a low time before key starts repeating.
@@ -12,6 +14,7 @@ defaults write -g com.apple.trackpad.scaling -float 5.0
 defaults write org.hammerspoon.Hammerspoon MJConfigFile "$XDG_CONFIG_HOME/hammerspoon/init.lua"
 
 # Install brew
+echo "❯❯❯ Installing brew and cask"
 if which brew; then
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
@@ -19,6 +22,7 @@ fi
 brew tap caskroom/cask
 
 # Brew stuff
+echo "❯❯❯ Use brew to install a bunch of stuff"
 brew install bash zsh git rmtrash # rmtrash = move to trash
 brew install entr # Run command on file change
 brew install gnu-sed gnu-tar gnu-which htop perl tree wget
