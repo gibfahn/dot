@@ -2,7 +2,7 @@
 
 # Things I like to have on a Mac.
 
-$(dirname $0)/helpers.sh # Load my helper functions from this script's directory.
+. $(dirname $0)/helpers.sh # Load my helper functions from this script's directory.
 
 if sudo -v; then
   echo "❯❯❯ Installing mac packages with brew"
@@ -39,6 +39,16 @@ fi
 # Brew stuff
 echo "❯❯❯ Use brew to install a bunch of stuff"
 brew install bash zsh git rmtrash # rmtrash = move to trash
+
+brew cask install spectacle # Good window manager.
+specConfig="$HOME/Library/Application Support/Spectacle/Shortcuts.json"
+if [ ! -L "$specConfig" ]; then
+  echo "❯❯❯ Overwriting Spectacle shortcuts with link to gcfg ones."
+  mkdir -p "$HOME/.backup"
+  [ -e "$specConfig" ] && mv "$specConfig" "$HOME/.backup/Shortcuts.json"
+  ln -s "$XDG_CONFIG_HOME/Spectacle/Shortcuts.json" "$specConfig"
+fi
+
 brew install entr # Run command on file change
 brew install gnu-sed gnu-tar gnu-which htop perl tree wget # GNU tools (no more weird sed).
 brew install binutils coreutils findutils neovim tig zsh ctags

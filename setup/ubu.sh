@@ -2,7 +2,7 @@
 
 # Things I like to have on Ubuntu.
 
-$(dirname $0)/helpers.sh # Load my helper functions from this script's directory.
+. $(dirname $0)/helpers.sh # Load my helper functions from this script's directory.
 
 if sudo -v; then
   echo "❯❯❯ Installing ubuntu packages with apt"

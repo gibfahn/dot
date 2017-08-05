@@ -1,10 +1,14 @@
 #!/bin/bash
 
-# Helper functions for use in the other setup scripts. Most of these are from
+# Helper functions and vars for use in the other setup scripts. Most of these are from
 # my gibrc, but that's not necessarily installed yet.
 
-# Include with: this line:
-# $(dirname $0)/helpers.sh # Load my helper functions from this script's directory.
+# Include (source) with this line:
+# . $(dirname $0)/helpers.sh # Load my helper functions from this script's directory.
+
+export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-"$HOME/.config"} # Config stuff should go here.
+export XDG_CACHE_HOME=${XDG_CACHE_HOME:-"$HOME/.cache"} # Cache stuff should go here.
+export XDG_DATA_HOME=${XDG_DATA_HOME:-"$HOME/.local/share"} # Data should go here.
 
 exists() { type "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
 
