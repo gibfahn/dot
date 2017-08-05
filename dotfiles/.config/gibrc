@@ -1,9 +1,17 @@
-#!/bin/bash # The script must be sourced, only used for syntax highlighting (script can be run with sh).
+#!/bin/bash
+
+# My rc file, I include this from .profile, .bashrc, and .zshrc like so:
+# . "$HOME/.config/gibrc"
+# The script must be sourced, only used for syntax highlighting (script can be run with sh).
+# It'll only run once, even if you source multiple times.
 
 case $- in
   *i*) echo "Using gibrc..." ;;
   *) return ;; # Exit if not running interactively.
 esac
+
+[ "$GIBRC" ] && return # No need to run twice.
+export GIBRC=1 # Set it so we can check it next time.
 
 # ENV VAR DEFAULTS:
 export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-"$HOME/.config"} # Config stuff should go here.
@@ -106,6 +114,9 @@ pathadd "$HOME/bin" # Put random binaries you want to run in here.
 pathadd /usr/local/opt/ncurses/bin # Used on macOS with nsterm terminfo (see above).
 pathadd /usr/local/opt/ccache/libexec # Add ccache to the path if installed.
 
+# I don't have nvm autorun on every shell, I us `nv` when I want to start it.
+# This also allows me to frequently `make -j4 install` node master, and have
+# that as the default (in /usr/local/bin/node).
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/config"
 export NVM_DIR="$XDG_DATA_HOME/nvm" # Use nvm.
 alias nv='. $NVM_DIR/nvm.sh'  # Start nvm with alias, o/w too much startup cost.
