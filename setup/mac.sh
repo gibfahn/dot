@@ -1,3 +1,16 @@
+#!/bin/bash
+
+# Things I like to have on a Mac.
+
+$(dirname $0)/helpers.sh # Load my helper functions from this script's directory.
+
+if sudo -v; then
+  echo "❯❯❯ Installing mac packages with brew"
+else
+  echo "❯❯❯ User doesn't have sudo, skipping brew installs"
+  exit
+fi
+
 # Install xcode command line tools
 echo "❯❯❯ Installing xcode command line tools"
 xcode-select --install
@@ -14,20 +27,22 @@ defaults write -g com.apple.trackpad.scaling -float 5.0
 defaults write org.hammerspoon.Hammerspoon MJConfigFile "$XDG_CONFIG_HOME/hammerspoon/init.lua"
 
 # Install brew
-echo "❯❯❯ Installing brew and cask"
-if which brew; then
+if exists brew; then
+  echo "❯❯❯ Already Installed: brew"
+else
+  echo "❯❯❯ Installing: brew and cask"
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  # Install cask (brew for GUI utils)
+  brew tap caskroom/cask
 fi
-# Install cask (brew for GUI utils)
-brew tap caskroom/cask
 
 # Brew stuff
 echo "❯❯❯ Use brew to install a bunch of stuff"
 brew install bash zsh git rmtrash # rmtrash = move to trash
 brew install entr # Run command on file change
-brew install gnu-sed gnu-tar gnu-which htop perl tree wget
+brew install gnu-sed gnu-tar gnu-which htop perl tree wget # GNU tools (no more weird sed).
 brew install binutils coreutils findutils neovim tig zsh ctags
-brew install dfu-util # Ergodox
+brew install dfu-util # Ergodox file uploader.
 brew install ninja python python3 ccache gdb # Build utilities
 # brew install fzf # Fuzzy finder used in vim
 # brew install exercism # Am I still doing this?

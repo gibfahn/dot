@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Calls all the scripts in ./setup/, assuming the OS matches.
+# Calls scripts from setup/ if the OS matches.
 
 # Good defaults:
 [ -z "$XDG_CONFIG_HOME" ] && export XDG_CONFIG_HOME="$HOME/.config"
@@ -8,14 +8,15 @@
 [ -z "$XDG_DATA_HOME" ] && export XDG_DATA_HOME="$HOME/.local/share"
 
 # Cross-platform setup:
-. ./setup/unix.sh
+./setup/unix.sh
 
-if [ "$(uname)" = Darwin ]; then # macOS specific stuff.
-  : # Placeholder.
+# Platform specific setup:
+if [ "$(uname)" = Darwin ]; then # macOS
+  : # Placeholder, should run setup/mac.sh but it's not ready yet.
 elif [ "$(uname)" = Linux ]; then # Linux specific stuff.
   case "$(uname -v)" in
     *Ubuntu* | *ubuntu*) # Ubuntu specific setup.
-      . ./setup/ubu.sh # Ubuntu app setup.
+      ./setup/ubu.sh # Ubuntu app setup.
       ;;
       # Other Linux setup goes here.
   esac
