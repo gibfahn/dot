@@ -1,6 +1,5 @@
 #!/bin/bash # The script must be sourced, only used for syntax highlighting (script can be run with sh).
 
-[ "$_" != "$0" ] && echo "gibrc must be sourced" && exit 1 # This script should be sourced (`e.g . ./gibrc`).
 case $- in
   *i*) echo "Using gibrc..." ;;
   *) return ;; # Exit if not running interactively.
