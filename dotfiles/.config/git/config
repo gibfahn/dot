@@ -39,9 +39,8 @@
 
   f = fetch
   fa = fetch --all
-  # Set up local branch from Github PR, `g fp 7654`, `g pp` (current branch's upstream must be same as PR branch).
-  fp = "!git fetch $(git headRemote) pull/$1/head:$1; git checkout -b $1 --track $(git headRemote)/$1 #"
-  pp = "!git fetch -f $(git headRemote) pull/$(git headBranch)/head:$(git headBranch)"
+  # Set up/update branch from Github PR, `g fp 7654`, or `g fp 657 remote` if remote != up.
+  fp = "!git fetch -fu ${2:-up} pull/$1/head:$1; git checkout $1; git branch -u ${2:-up} #"
 
   l = log --graph --decorate --oneline # Graph log.
   la = log --graph --decorate --oneline --all # Graph log of all branches.
