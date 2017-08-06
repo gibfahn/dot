@@ -9,6 +9,8 @@
 # example) you just edit ~/.bashrc, and as it's a symlink it'll actually edit
 # dotfiles/.bashrc. Then you can add and commit that change.
 
+. $(dirname $0)/helpers/colours.sh # Load helper script from gcfg/helpers.
+
 : ${FROMPATH:="$HOME"} # Where you keep your dotfiles, overwrite if necessary.
 : ${BACKUP:="$FROMPATH/backup"} # Place to back up old files.
 mkdir -p "$BACKUP"
@@ -24,11 +26,11 @@ printf "Linking from path: $TOPATH\n\n"
 for FILE in $(find . -type f -o -type l | sed 's|./||'); do
   mkdir -p "$FROMPATH/$(dirname $FILE)"
   if [ -d "$FROMPATH/$FILE" -a ! -L "$FROMPATH/$FILE" ]; then # Directory.
-    echo "DIRSKIP: $FROMPATH/$FILE is a directory!" # This shouldn't happen.
+    echo "${RED}DIRSKIP: $FROMPATH/$FILE is a directory!${NC}" # This shouldn't happen.
     continue
   elif [ -L "$FROMPATH/$FILE" ]; then # Symlink.
     if [ "$(ls -l $FROMPATH/$FILE | awk '{print $NF}')" = "$TOPATH/$FILE" ]; then
-      echo "SKIP: $FROMPATH/$FILE already points to $TOPATH/$FILE."
+      echo -e "${BBLACK}SKIP: $FROMPATH/$FILE already points to $TOPATH/$FILE.${NC}"
       continue
     fi
     echo "CHANGE: $FROMPATH/$FILE $(ls -l $FROMPATH/$FILE | awk '{print $NF}') \
