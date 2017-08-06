@@ -10,17 +10,23 @@ sudo apt install -y git curl zsh
 sudo apt install -y gnome-terminal # Used as default in config.
 sudo apt install -y gcc make
 
-sudo add-apt-repository -y ppa:neovim-ppa/stable && sudo apt-get update
+# Add all ppas at the same time. Just do the one apt update.
+sudo add-apt-repository -y ppa:neovim-ppa/stable
+sudo add-apt-repository -y ppa:hluk/copyq
+sudo apt update
+
 sudo apt install -y neovim # Nicer version of vim.
 sudo apt install -y entr # Run command on file change.
 
-sudo apt install i3
+sudo apt install i3 # I think I'll be using bspwm going forward, so this is legacy.
+sudo apt install -y copyq
 
-# Build bspwm:
 if not bspwm; then
   # Install bspwm dependencies.
   sudo apt install -y xcb libxcb-util0-dev libxcb-ewmh-dev libxcb-randr0-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-xinerama0-dev libasound2-dev libxcb-xtest0-dev
   mkdir -p "$HOME/code"
+
+  # Build bspwm:
   for i in bspwm sxhkd; do
     gitClone baskerville/$i "$HOME/code/$i"
     pushd "$HOME/code/$i" >/dev/null
