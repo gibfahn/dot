@@ -10,7 +10,7 @@ case $- in
   *) return ;; # Exit if not running interactively.
 esac
 
-# ENV VAR DEFAULTS:
+### ENV VAR DEFAULTS ###
 export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-"$HOME/.config"} # Config stuff should go here.
 c="$XDG_CONFIG_HOME" # Shortcut to the config directory (`v $c/gibrc` to edit this file).
 export XDG_CACHE_HOME=${XDG_CACHE_HOME:-"$HOME/.cache"} # Cache stuff should go here.
@@ -26,7 +26,7 @@ export npm_cache=${npm_cache:-"$XDG_CACHE_HOME/npm"} # Set npm cache location.
 export NODE_REPL_HISTORY=${NODE_REPL_HISTORY="$XDG_CACHE_HOME/node_repl_history"} # Set node-gyp download location.
 export BABEL_CACHE_PATH=${NODE_REPL_HISTORY="$XDG_CACHE_HOME/babel/cache.json"} # Set babel cache location.
 
-# SHELL SPECIFIC:
+### SHELL SPECIFIC ###
 ls --color=auto >/dev/null 2>&1 && alias ls='ls --color=auto' # ls use colour if poss.
 [ "$(uname)" = "Darwin" ] && alias ls='ls -G' && alias dl=rmtrash # ls use colour on mac.
 
@@ -62,7 +62,7 @@ elif [ "$BASH_VERSION" ]; then # Bash specific options.
   PS1=' \[\e[32;1m\]\w $ \[\e[0m\]'
 fi
 
-## FUNCTIONS:
+### FUNCTIONS ###
 exists() { type "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
 pathadd() { [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]] && PATH="$1${PATH+":$PATH"}"; }
 fnd() { find . -iname "*$**"; } # Find by filename (case insensitive).
@@ -75,7 +75,7 @@ pth() { # Returns absolute path to file(s) including file name.
   done
 }
 
-# ALIASES:
+### ALIASES ###
 alias x=exit # x exits the terminal.
 alias c=clear # c clears the terminal screen (can also use Ctrl-L).
 alias g=git # Use with commands in $c/git/config for best results.
@@ -107,7 +107,7 @@ alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"' # Makes it look like y
 [ $(uname) = "Darwin" ] && alias cpy="pbcopy" && alias pst="pbpaste" # Cross-platform copy/paste terminal commands.
 [ $(uname) = "Linux" ] && alias cpy="xclip -selection clipboard" && alias pst="xclip -selection clipboard -o"
 
-# APP SPECIFIC:
+### APP SPECIFIC ###
 pathadd "$HOME/bin" # Put random binaries you want to run in here.
 pathadd /usr/local/opt/ncurses/bin # Used on macOS with nsterm terminfo (see above).
 pathadd /usr/local/opt/ccache/libexec # Add ccache to the path if installed.
@@ -131,7 +131,7 @@ rs() { for i in $@; do rustc ${i%.rs}.rs; ./${i%.rs}; done; } # Compile/run (rs 
 # Build node with ninja.
 alias bn='export CPPFLAGS=-fdiagnostics-color && ./configure && tools/gyp_node.py -f ninja && ninja -C out/Release && ln -fs out/Release/node node'
 
-# SSH PROMPT:
+### SSH PROMPT ###
 alias bashme="PS1='\[\e[35;1m\]\h \n \w $ \[\e[0m\]'" # Manually set bash prompt.
 ## Set prompt for SSH windows.
 if [ "$SSH_CLIENT" -o "$SSH_TTY" ]; then
@@ -152,12 +152,15 @@ if [ "$SSH_CLIENT" -o "$SSH_TTY" ]; then
       PS1="$(uname -n)"' $PWD $ '
     fi
   fi
+else # Things to only do if we're not in SSH mode.
+  # Set key repeat rate if available (Linux only). You probably want something
+  # less insane here, like rate 250 30. If you remove the line below, you also
+  # need to remove the else above (or replace below line with a single : ).
+  exists xset && [ "$(uname)" = Linux ] && xset r rate 120 45
 fi
 
-# Set key repeat rate if available (Linux only).
-exists xset && [ -z "$SSH_CLIENT" -a -z "$SSH_TTY" ] && xset r rate 120 45
-
-if [ "$myshell" = "ksh93" -o "$myshell" = "ksh" ]; then # Basic keys on old shells.
+# Basic keys on old shells.
+if [ "$myshell" = "ksh93" -o "$myshell" = "ksh" ]; then
   set -o emacs
   alias __A=`echo "\020"`     # up arrow = ^p = back a command.
   alias __B=`echo "\016"`     # down arrow = ^n = down a command.
