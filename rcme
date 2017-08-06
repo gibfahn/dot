@@ -11,6 +11,7 @@
 
 . $(dirname $0)/helpers/colours.sh # Load helper script from gcfg/helpers.
 
+
 : ${FROMPATH:="$HOME"} # Where you keep your dotfiles, overwrite if necessary.
 : ${BACKUP:="$FROMPATH/backup"} # Place to back up old files.
 mkdir -p "$BACKUP"
@@ -21,7 +22,8 @@ else
   cd "$TOPATH"
 fi
 : ${TOPATH:="$PWD"}
-printf "Linking from path: $TOPATH\n\n"
+
+printf "❯❯❯ Updating dotfile symlinks (linking from path: $TOPATH)\n\n"
 
 for FILE in $(find . -type f -o -type l | sed 's|./||'); do
   mkdir -p "$FROMPATH/$(dirname $FILE)"
