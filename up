@@ -7,6 +7,9 @@
 [ -z "$XDG_CACHE_HOME" ] && export XDG_CACHE_HOME="$HOME/.cache"
 [ -z "$XDG_DATA_HOME" ] && export XDG_DATA_HOME="$HOME/.local/share"
 
+# Setup dotfile symlinks.
+./rcme
+
 # Cross-platform setup:
 ./setup/unix.sh
 
@@ -21,6 +24,3 @@ elif [ "$(uname)" = Linux ]; then # Linux specific stuff.
       # Other Linux setup goes here.
   esac
 fi
-
-# Setup dotfile symlinks.
-./rcme
