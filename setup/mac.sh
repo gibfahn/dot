@@ -40,14 +40,11 @@ fi
 echo "❯❯❯ Use brew to install a bunch of stuff"
 brew install bash zsh git rmtrash # rmtrash = move to trash
 
-brew cask install spectacle # Good window manager.
-specConfig="$HOME/Library/Application Support/Spectacle/Shortcuts.json"
-if [ ! -L "$specConfig" ]; then
-  echo "❯❯❯ Overwriting Spectacle shortcuts with link to gcfg ones."
-  mkdir -p "$HOME/.backup"
-  [ -e "$specConfig" ] && mv "$specConfig" "$HOME/.backup/Shortcuts.json"
-  ln -s "$XDG_CONFIG_HOME/Spectacle/Shortcuts.json" "$specConfig"
-fi
+brew tap crisidev/homebrew-chunkwm
+brew install chunkwm
+brew services start chunkwm
+brew install koekeishiya/formulae/khd
+brew services start khd
 
 brew install entr # Run command on file change
 brew install gnu-sed gnu-tar gnu-which htop perl tree wget # GNU tools (no more weird sed).
