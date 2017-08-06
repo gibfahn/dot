@@ -4,8 +4,6 @@
 
 # Use Alt as modifier key.
 set $mod Mod1
-# Set key repeat rate.
-exec --no-startup-id xset r rate 120 45
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
