@@ -10,9 +10,6 @@ case $- in
   *) return ;; # Exit if not running interactively.
 esac
 
-[ "$GIBRC" ] && return # No need to run twice.
-export GIBRC=1 # Set it so we can check it next time.
-
 # ENV VAR DEFAULTS:
 export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-"$HOME/.config"} # Config stuff should go here.
 c="$XDG_CONFIG_HOME" # Shortcut to the config directory (`v $c/gibrc` to edit this file).
@@ -25,6 +22,7 @@ export RUSTUP_HOME=${RUSTUP_HOME:-"$XDG_DATA_HOME/rustup"} # Rustup goes here.
 export ATOM_HOME=${ATOM_HOME:-"$XDG_CONFIG_HOME/atom"} # Atom goes here.
 export HISTFILE=${HISTFILE:-"$XDG_CONFIG_HOME/history"} # Set history file location.
 export npm_config_devdir=${npm_config_devdir:-"$XDG_CACHE_HOME/node-gyp"} # Set node-gyp download location.
+export npm_cache=${npm_cache:-"$XDG_CACHE_HOME/npm"} # Set npm cache location.
 export NODE_REPL_HISTORY=${NODE_REPL_HISTORY="$XDG_CACHE_HOME/node_repl_history"} # Set node-gyp download location.
 export BABEL_CACHE_PATH=${NODE_REPL_HISTORY="$XDG_CACHE_HOME/babel/cache.json"} # Set babel cache location.
 
@@ -70,9 +68,9 @@ pathadd() { [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]] && PATH="$1${PATH+":$PATH
 fnd() { find . -iname "*$**"; } # Find by filename (case insensitive).
 pth() { # Returns absolute path to file(s) including file name.
   for i in "$@"; do # Args = relative filenames.
-    if [ -d "$i" ]; then (pushd -q "$i"; pwd) # dir.
+    if [ -d "$i" ]; then (pushd "$i" >/dev/null; pwd) # dir.
     elif [ -f "$i" ]; then  # file.
-      if [[ $i == */* ]]; then echo "$(pushd -q ${i%/*}; pwd)/${i##*/}"
+      if [[ $i == */* ]]; then echo "$(pushd ${i%/*} >/dev/null; pwd)/${i##*/}"
       else echo "$(pwd)/$i"; fi; fi
   done
 }
@@ -117,7 +115,7 @@ pathadd /usr/local/opt/ccache/libexec # Add ccache to the path if installed.
 # I don't have nvm autorun on every shell, I us `nv` when I want to start it.
 # This also allows me to frequently `make -j4 install` node master, and have
 # that as the default (in /usr/local/bin/node).
-export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/config"
+export npm_config_userconfig="$XDG_CONFIG_HOME/npm/config"
 export NVM_DIR="$XDG_DATA_HOME/nvm" # Use nvm.
 alias nv='. $NVM_DIR/nvm.sh'  # Start nvm with alias, o/w too much startup cost.
 
@@ -155,6 +153,9 @@ if [ "$SSH_CLIENT" -o "$SSH_TTY" ]; then
     fi
   fi
 fi
+
+# Set key repeat rate if available (Linux only).
+exists xset && [ -z "$SSH_CLIENT" -a -z "$SSH_TTY" ] && xset r rate 120 45
 
 if [ "$myshell" = "ksh93" -o "$myshell" = "ksh" ]; then # Basic keys on old shells.
   set -o emacs
