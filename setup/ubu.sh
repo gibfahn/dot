@@ -2,22 +2,47 @@
 
 # Things I like to have on Ubuntu.
 
-. $(dirname $0)/helpers.sh # Load my helper functions from this script's directory.
+. $(dirname $0)/../helpers/setup.sh # Load helper script from gcfg/helpers.
 
-if sudo -v; then
-  echo "❯❯❯ Installing ubuntu packages with apt"
-else
-  echo "❯❯❯ User doesn't have sudo, skipping apt installs"
-  exit
-fi
+hasSudo || exit
 
-sudo add-apt-repository
 sudo apt install -y git curl zsh
-sudo apt install -y gnome-terminal i3 # I use gnome-terminal in $c/i3/config
+sudo apt install -y gnome-terminal # Used as default in config.
+sudo apt install -y gcc make
 
 sudo add-apt-repository -y ppa:neovim-ppa/stable && sudo apt-get update
 sudo apt install -y neovim # Nicer version of vim.
 sudo apt install -y entr # Run command on file change.
+
+sudo apt install i3
+
+# Build bspwm:
+if not bspwm; then
+  # Install bspwm dependencies.
+  sudo apt install -y xcb libxcb-util0-dev libxcb-ewmh-dev libxcb-randr0-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-xinerama0-dev libasound2-dev libxcb-xtest0-dev
+  mkdir -p "$HOME/code"
+  for i in bspwm sxhkd; do
+    gitClone baskerville/$i "$HOME/code/$i"
+    pushd "$HOME/code/$i" >/dev/null
+    make
+    sudo make install
+    popd >/dev/null
+  done
+  sudo cp "$HOME/code/bspwm/contrib/freedesktop/bspwm.desktop" /usr/share/xsessions/
+fi
+
+# Build j4-dmenu-desktop (used in bspwm).
+if not j4-dmenu-desktop; then
+  # This is an extension for dmenu, so make sure we have that.
+  sudo apt install -y dmenu
+  mkdir -p "$HOME/code"
+  gitClone enkore/j4-dmenu-desktop "$HOME/code/j4-dmenu-desktop"
+  pushd "$HOME/code/j4-dmenu-desktop" >/dev/null
+  cmake .
+  make
+  sudo make install
+  popd >/dev/null
+fi
 
 if exists google-chrome; then
   echo "❯❯❯ Already Installed: Google Chrome"

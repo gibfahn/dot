@@ -2,7 +2,7 @@
 
 # Installs things that I use on all Unix systems (e.g. macOS and Linux).
 
-. $(dirname $0)/helpers.sh # Load my helper functions from this script's directory.
+. $(dirname $0)/../helpers/setup.sh # Load helper script from gcfg/helpers.
 
 # Set default shell to zsh
 # $SHELL isn't updated until we logout, so check whether chsh was already run.

@@ -2,14 +2,9 @@
 
 # Things I like to have on a Mac.
 
-. $(dirname $0)/helpers.sh # Load my helper functions from this script's directory.
+. $(dirname $0)/../helpers/setup.sh # Load helper script from gcfg/helpers.
 
-if sudo -v; then
-  echo "❯❯❯ Installing mac packages with brew"
-else
-  echo "❯❯❯ User doesn't have sudo, skipping brew installs"
-  exit
-fi
+hasSudo || exit
 
 # Install xcode command line tools
 echo "❯❯❯ Installing xcode command line tools"
