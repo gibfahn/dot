@@ -24,26 +24,26 @@ sudo apt install -y copyq
 if not bspwm; then
   # Install bspwm dependencies.
   sudo apt install -y xcb libxcb-util0-dev libxcb-ewmh-dev libxcb-randr0-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-xinerama0-dev libasound2-dev libxcb-xtest0-dev
-  mkdir -p "$HOME/code"
+  mkdir -p "$HOME/code/build"
 
   # Build bspwm:
   for i in bspwm sxhkd; do
-    gitClone baskerville/$i "$HOME/code/$i"
-    pushd "$HOME/code/$i" >/dev/null
+    gitClone baskerville/$i "$HOME/code/build/$i"
+    pushd "$HOME/code/build/$i" >/dev/null
     make
     sudo make install
     popd >/dev/null
   done
-  sudo cp "$HOME/code/bspwm/contrib/freedesktop/bspwm.desktop" /usr/share/xsessions/
+  sudo cp "$HOME/code/build/bspwm/contrib/freedesktop/bspwm.desktop" /usr/share/xsessions/
 fi
 
 # Build j4-dmenu-desktop (used in bspwm).
 if not j4-dmenu-desktop; then
   # This is an extension for dmenu, so make sure we have that.
   sudo apt install -y dmenu
-  mkdir -p "$HOME/code"
-  gitClone enkore/j4-dmenu-desktop "$HOME/code/j4-dmenu-desktop"
-  pushd "$HOME/code/j4-dmenu-desktop" >/dev/null
+  mkdir -p "$HOME/code/build"
+  gitClone enkore/j4-dmenu-desktop "$HOME/code/build/j4-dmenu-desktop"
+  pushd "$HOME/code/build/j4-dmenu-desktop" >/dev/null
   cmake .
   make
   sudo make install
