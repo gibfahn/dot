@@ -2,14 +2,6 @@
 # wm independent hotkeys
 #
 
-# Set focus follows mouse to true.
-bspc config focus_follows_pointer true
-
-# Set mod key for mouse actions to alt (mod4 is super).
-# Alt+left_mouse_drag to move, Alt+right_mouse_drag to resize,
-# Alt+middle_mouse_drag to resize from corners.
-bspc config pointer_modifier mod1
-
 # terminal emulator
 alt + Return
 	gnome-terminal
