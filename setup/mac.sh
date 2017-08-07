@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 # Things I like to have on a Mac.
 

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 # Things I like to have on Ubuntu.
 
@@ -23,6 +23,7 @@ sudo apt install i3 # I think I'll be using bspwm going forward, so this is lega
 if not bspwm; then
   # Install bspwm dependencies.
   sudo apt install -y xcb libxcb-util0-dev libxcb-ewmh-dev libxcb-randr0-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-xinerama0-dev libasound2-dev libxcb-xtest0-dev
+  sudo apt install -y cmake
 
   # Build bspwm:
   for i in baskerville/{bspwm,sxhkd,xdo,sutils,xtitle} LemonBoy/bar; do

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 # Installs things that I use on all Unix systems (e.g. macOS and Linux).
 
