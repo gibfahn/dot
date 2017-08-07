@@ -10,6 +10,11 @@ export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-"$HOME/.config"} # Config stuff should
 export XDG_CACHE_HOME=${XDG_CACHE_HOME:-"$HOME/.cache"} # Cache stuff should go here.
 export XDG_DATA_HOME=${XDG_DATA_HOME:-"$HOME/.local/share"} # Data should go here.
 
+: ${BUILD_DIR:="$HOME/code/build"} # Directory to clone/build things in.
+mkdir -p "$BUILD_DIR"
+: ${BIN_DIR:="$HOME/bin"} # Directory to copy binaries to.
+mkdir -p "$BIN_DIR"
+
 exists() { type "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
 
 # `if no foo` then foo isn't in $XDG_DATA_HOME and we should install it.

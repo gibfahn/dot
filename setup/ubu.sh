@@ -11,39 +11,38 @@ sudo apt install -y gnome-terminal # Used as default in config.
 sudo apt install -y gcc make
 
 # Add all ppas at the same time. Just do the one apt update.
-sudo add-apt-repository -y ppa:neovim-ppa/stable
-sudo add-apt-repository -y ppa:hluk/copyq
-sudo apt update
+! exists nvim && sudo add-apt-repository -y ppa:neovim-ppa/stable && sudo apt update
+! exists copyq && sudo add-apt-repository -y ppa:hluk/copyq && sudo apt update
 
 sudo apt install -y neovim # Nicer version of vim.
+sudo apt install -y copyq # Cross-platform clipboard manager.
 sudo apt install -y entr # Run command on file change.
 
 sudo apt install i3 # I think I'll be using bspwm going forward, so this is legacy.
-sudo apt install -y copyq
 
 if not bspwm; then
   # Install bspwm dependencies.
   sudo apt install -y xcb libxcb-util0-dev libxcb-ewmh-dev libxcb-randr0-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-xinerama0-dev libasound2-dev libxcb-xtest0-dev
-  mkdir -p "$HOME/code/build"
 
   # Build bspwm:
-  for i in bspwm sxhkd; do
-    gitClone baskerville/$i "$HOME/code/build/$i"
-    pushd "$HOME/code/build/$i" >/dev/null
+  for i in baskerville/{bspwm,sxhkd,xdo,sutils,xtitle} LemonBoy/bar; do
+    gitClone $i "$BUILD_DIR/$i"
+    pushd "$BUILD_DIR/$i" >/dev/null
     make
     sudo make install
     popd >/dev/null
   done
-  sudo cp "$HOME/code/build/bspwm/contrib/freedesktop/bspwm.desktop" /usr/share/xsessions/
+  sudo cp "$BUILD_DIR/bspwm/contrib/freedesktop/bspwm.desktop" /usr/share/xsessions/
+  cp "$BUILD_DIR"/bspwm/examples/panel/panel{,_bar,_colors} "$BIN_DIR"
 fi
 
 # Build j4-dmenu-desktop (used in bspwm).
 if not j4-dmenu-desktop; then
   # This is an extension for dmenu, so make sure we have that.
   sudo apt install -y dmenu
-  mkdir -p "$HOME/code/build"
-  gitClone enkore/j4-dmenu-desktop "$HOME/code/build/j4-dmenu-desktop"
-  pushd "$HOME/code/build/j4-dmenu-desktop" >/dev/null
+  mkdir -p "$BUILD_DIR"
+  gitClone enkore/j4-dmenu-desktop "$BUILD_DIR/j4-dmenu-desktop"
+  pushd "$BUILD_DIR/j4-dmenu-desktop" >/dev/null
   cmake .
   make
   sudo make install
