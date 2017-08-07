@@ -32,8 +32,8 @@ if not bspwm; then
     sudo make install
     popd >/dev/null
   done
-  sudo cp "$BUILD_DIR/bspwm/contrib/freedesktop/bspwm.desktop" /usr/share/xsessions/
-  cp "$BUILD_DIR"/bspwm/examples/panel/panel{,_bar,_colors} "$BIN_DIR"
+  sudo cp "$BUILD_DIR/baskerville/bspwm/contrib/freedesktop/bspwm.desktop" /usr/share/xsessions/
+  cp "$BUILD_DIR"/baskerville/bspwm/examples/panel/panel{,_bar,_colors} "$BIN_DIR"
 fi
 
 # Build j4-dmenu-desktop (used in bspwm).
