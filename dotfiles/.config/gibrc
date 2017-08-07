@@ -155,7 +155,10 @@ else # Things to only do if we're not in SSH mode.
   # Set key repeat rate if available (Linux only). You probably want something
   # less insane here, like rate 250 30. If you remove the line below, you also
   # need to remove the else above (or replace below line with a single : ).
-  [ "$(uname)" = Linux ] && exists xset && xset r rate 120 45
+  if [ "$(uname)" = Linux ]; then
+    exists xset && xset r rate 120 45
+    export PANEL_FIFO="/tmp/panel-fifo" # Used by bspwm.
+  fi
 fi
 
 # Basic keys on old shells.
