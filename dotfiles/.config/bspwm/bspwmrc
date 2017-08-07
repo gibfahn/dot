@@ -2,18 +2,28 @@
 
 sxhkd &
 
-# Set focus follows mouse to true.
+# Use a panel.
+panel &
+bspc subscribe report > "$PANEL_FIFO" &
+bspc config top_padding $PANEL_HEIGHT
+
+# Enable focus follows mouse (focus on window you mouse over).
 bspc config focus_follows_pointer true
+# If you change focus with keyboard, move the mouse to that window.
+bspc config pointer_follows_focus true
 
 # Set mod key for mouse actions to alt (mod4 is super).
 # Alt+left_mouse_drag to move, Alt+right_mouse_drag to resize,
 # Alt+middle_mouse_drag to resize from corners.
 bspc config pointer_modifier mod1
 
+# Create windows on the right/bottom (not left/top).
+bspc config initial_polarity second_child
 
-bspc monitor -d I II III IV V VI VII VIII IX X
+# Too many desktops is too confusing.
+bspc monitor -d I II III IV V
 
-bspc config border_width         0
+bspc config border_width         2
 bspc config window_gap           0
 
 bspc config split_ratio          0.52
@@ -25,3 +35,4 @@ bspc rule -a Chromium desktop='^2'
 bspc rule -a mplayer2 state=floating
 bspc rule -a Kupfer.py focus=on
 bspc rule -a Screenkey manage=off
+bspc rule -a copyq state=floating

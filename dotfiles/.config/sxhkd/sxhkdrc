@@ -23,7 +23,7 @@ super + Escape
 
 # quit bspwm normally
 alt + super + Escape
-	bspc quit
+	pkill -x panel; bspc quit
 
 # close and kill
 alt + {_,shift + }w
@@ -56,6 +56,14 @@ alt + ctrl + {x,y,z}
 #
 # focus/swap
 #
+
+# Move program back or forwards.
+alt + {_,shift +}a
+	bspc node --layer {below,above}
+
+# Toggle copyq
+alt + {_,shift +}v
+	copyq toggle && bspc node --layer {above,below}
 
 # focus the node in the given direction
 alt + {_,shift + }{h,j,k,l}
