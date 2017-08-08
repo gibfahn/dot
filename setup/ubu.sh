@@ -6,7 +6,7 @@
 
 hasSudo || exit
 
-sudo apt install -y git curl zsh
+sudo apt install -y git curl zsh tree
 sudo apt install -y gnome-terminal # Used as default in config.
 sudo apt install -y gcc make
 
