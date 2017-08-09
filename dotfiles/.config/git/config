@@ -30,7 +30,7 @@
   cmn = commit -S --amend --no-edit
   can = commit -S --amend --no-edit -a
   cn  = clean -fdx
-  cl  = "clone --recursive -j8 --origin up" # Always include submodules, set default remote to "up".
+  cl  = "clone --recursive --origin up" # Always include submodules, set default remote to "up".
   cp  = cherry-pick
   cpa = cherry-pick --abort
   cpc = cherry-pick --continue
@@ -113,6 +113,8 @@
   autosquash = true # Squash commits with autosquash!.
 [rerere]
   enabled = true # Remember how I resolved merge conflicts.
+[submodule]
+  fetchJobs = 8 # Number of jobs to fetch when I submodule clone/update.
 
 # Try `g cl hh:nodejs/node`.
 [url "https://bitbucket.org/"]
