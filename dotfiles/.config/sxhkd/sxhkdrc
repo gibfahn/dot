@@ -15,7 +15,10 @@ super + shift + @space
 
 # make sxhkd reload its configuration files:
 super + Escape
-	pkill -USR1 -x sxhkd
+	pkill -USR1 -x sxhkd && for i in $(bspc query -M --names); do bspc monitor $i -d I II; done
+
+super + d
+	bspc node -f east && bspc node -f east
 
 #
 # bspwm hotkeys

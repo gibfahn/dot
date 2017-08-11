@@ -3,9 +3,6 @@
 sxhkd &
 
 # Use a panel.
-panel &
-bspc subscribe report > "$PANEL_FIFO" &
-bspc config top_padding $PANEL_HEIGHT
 
 # Enable focus follows mouse (focus on window you mouse over).
 bspc config focus_follows_pointer true
@@ -20,8 +17,10 @@ bspc config pointer_modifier mod1
 # Create windows on the right/bottom (not left/top).
 bspc config initial_polarity second_child
 
-# Too many desktops is too confusing.
-bspc monitor -d I II III IV V
+# Too many desktops is too confusing, let's have 2 per desktop.
+for i in $(bspc query -M --names); do
+  bspc monitor $i -d I II
+done
 
 bspc config border_width         2
 bspc config window_gap           0
