@@ -39,8 +39,8 @@
 
   f = fetch
   fa = fetch --all
-  # Set up/update branch from Github PR, `g fp 7654`, or `g fp 657 remote` if remote != up.
-  fp = "!git fetch -fu ${2:-up} pull/$1/head:$1; git checkout $1; git branch -u ${2:-up} #"
+  # Set up/update branch from Github PR, `g fp 657 origin` or `g fp` (Defaults: $1=HEAD, $2=up).
+  fp = "! a=${1:-$(git headBranch)}; b=${2:-up}; git fetch -fu $b pull/$a/head:$a; git checkout $a; git branch -u $b #"
 
   l = log --graph --decorate --oneline # Graph log.
   la = log --graph --decorate --oneline --all # Graph log of all branches.
