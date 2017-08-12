@@ -34,7 +34,8 @@ set lazyredraw                                      " Don't redraw if you don't 
 set incsearch                                       " Incremental searching.
 set laststatus=2                                    " Always display the status line.
 set hidden                                          " Don't force saving buffers on switching.
-set textwidth=79                                    " Wrap at 79 chars (change: set tw=72).
+set textwidth=80                                    " Wrap at 79 chars (change: set tw=72).
+set formatoptions-=t                                " Don't autowrap text at 80.
 set autoread                                        " Auto read when file is changed elsewhere.
 set nojoinspaces                                    " One space (not two) after punctuation..
 set mouse=a                                         " Mouse in all modes (mac: Fn+drag = copy).
@@ -50,9 +51,11 @@ set diffopt+=vertical                               " Always use vertical diffs.
 set wildchar=<Tab> wildmenu wildmode=full           " More info with : and Tab.
 set list listchars=tab:»·,trail:·,nbsp:·            " Display extra whitespace.
 
-nnoremap k gk|                                      " Move up   visually, don't skip wrapped lines.
-nnoremap j gj|                                      " Move down visually, don't skip wrapped lines.
-nnoremap Y y$|                                      " Make Y work like C and D (cursor to end of line, not whole line).
+nnoremap k gk|                                      " Move up   visually , don't skip wrapped lines,
+nnoremap j gj|                                      "  ↳   down visually , don't skip wrapped lines.
+nnoremap gk k|                                      " Move up   logically, do    skip wrapped lines,
+nnoremap gj j|                                      "  ↳   down logically, do    skip wrapped lines.
+nnoremap Y y$|                                      " Make Y work like C and D (yank to end of line, not whole line).
 nnoremap <leader>a @a<CR>|                          " Apply macro a (add with qa or yank to a reg with "ay).
 nnoremap <leader>c :YcmCompleter GoTo<CR>|          " GoTo definition for YouCompleteMe.
 nnoremap <leader>C :YcmCompleter GetDoc<CR>|        " GoTo docs for YouCompleteMe.
@@ -62,25 +65,27 @@ nnoremap <leader>f :find |                          " Search file names    for f
 nnoremap <leader>F :grep |                          "  ↳          contents for file.
 nnoremap <Leader>gd :w !diff % - <CR>|              " Diff between saved file and current.
 nnoremap <Leader>gr :reg<CR>|                       " Show register contents.
-nnoremap <Leader>gt :set expandtab!<CR>:set expandtab?<CR>| " Toggle tabs/spaces.
-nnoremap <leader>j :sp<CR><C-w>k:bp<CR>|            " Open horizontal split.
+nnoremap <Leader>gt :set et!<CR>:set et?<CR>|       " Toggle tabs/spaces.
+nnoremap <Leader>gw :set fo-=t<CR>:set fo?<CR>|     " Turn on  line wrapping,
+nnoremap <Leader>gW :set fo+=t<CR>:set fo?<CR>|     "  ↳   off line wrapping.
+nnoremap <leader>j :sp<CR><C-w>k:bp<CR>|            " Open horizontal split,
+nnoremap <leader>l :vsp<CR><C-w>h:bp<CR>|           "  ↳   vertical split.
 nnoremap <leader>k <C-w>q|                          " Close current split (keeps buffer).
-nnoremap <leader>l :vsp<CR><C-w>h:bp<CR>|           " Open vertical split.
 nnoremap <leader>o :on<CR>|                         " Close all other buffers.
 nnoremap <leader>q :q<CR>|                          " Quit,
 nnoremap <leader>Q :q!<CR>|                         "  ↳ Quit losing unsaved changes.
 nnoremap <leader>r :%s//<Left>|                     " Replace (add middle delimiter yourself, e.g. <Space>rold/new),
 nnoremap <leader>R :%s//c<Left><Left>|              "  ↳ Replace with prompt on each match.
 nnoremap <leader>w :up<CR>|                         " Write if there were changes.
-nnoremap <leader>W :w<CR>|                          " Write whether or not there were changes.
+nnoremap <leader>W :w<CR>|                          "  ↳    whether or not there were changes.
 nnoremap <leader>x :x<CR>|                          " Save (if changes) and quit.
 nnoremap <leader>X :qa<CR>|                         " Quit all windows.
 nnoremap <leader>y  "+y|                            " Copy to clipboard (normal mode).
-vnoremap <leader>y  "+y|                            " Copy to clipboard (visual mode).
-nnoremap <leader>Y  "+yg_|                          " Copy line to clipboard (normal mode).
+vnoremap <leader>y  "+y|                            "  ↳                (visual mode).
+nnoremap <leader>Y  "+yg_|                          "  ↳   line to clipboard (normal mode).
 vnoremap <leader>p "+p|                             " Paste from clipboard (visual mode).
-nnoremap <leader>p "+p|                             " Paste from clipboard (normal mode).
-nnoremap <leader>P "+P|                             " Paste line from clipboard (normal mode).
+nnoremap <leader>p "+p|                             "  ↳                   (normal mode).
+nnoremap <leader>P "+P|                             "  ↳    line from clipboard (normal mode).
 nnoremap <leader>z  zz|                             " Center screen on current line.
 nnoremap <leader>/ :noh<CR>|                        " Turn off find highlighting.
 nnoremap <leader>? /<Up><CR>|                       " Search for last searched thing.
@@ -92,6 +97,13 @@ nnoremap <C-l> <C-w>l|                              "  ↳     right a window.
 nnoremap <Tab> :bn<CR>|                             " Tab to switch to next buffer,
 nnoremap <S-Tab> :bp<CR>|                           "  ↳ Shift-Tab to switch to previous buffer.
 inoremap kj <ESC>|                                  " kj = Esc in insert mode.
+
+" Testing stuff, not sure I need any of it.
+inoremap <C-J> mpo<Esc>`p|                          " Create a line below in Insert mode.
+" inoremap <C-K> <Esc>mpO<Esc>`pa|                    " Create a line above in insert mode.
+inoremap <C-K> <Esc>mpO|                            " Above but don't change back, do I need this?
+inoremap <S-Enter> <Esc>mpO<Esc>`pa|                " Same as Ctrl+k, but only works on GUI vim or configured terminals.
+
 map q: <Nop>|                                       " Disable Ex modes (avoids,
 nnoremap Q <nop>|                                   "  ↳ accidental triggering..
 vnoremap <expr> // 'y/\V'.escape(@",'\').'<CR>'|    " Search for selected text with // (very no-magic mode, escaped backslashes).
@@ -105,7 +117,7 @@ if has("nvim")
   tnoremap <C-k> <C-\><C-n><C-w>k|                  "  ↳     up    a window in terminal,
   tnoremap <C-l> <C-\><C-n><C-w>l|                  "  ↳     right a window in terminal.
   tnoremap <Esc> <C-\><C-n>|                        " Make Escape work in terminal,
-  tnoremap kj <C-\><C-n>|                           "  ↳    kj     work in terminal.
+  tnoremap kj <C-\><C-n>|                           "  ↳    kj    work in terminal.
 
   augroup gibNvimGroup                              " Autocommands for nvim only
   au TermOpen * setlocal nonumber norelativenumber  " No line numbers in terminal
@@ -124,6 +136,10 @@ set path=.,/usr/include,,**                         " Add ** to the search path 
 
 " Nicer line wrapping for long lines.
 if exists('+breakindent')| set breakindent| let &showbreak = '↳ '| set cpo+=n| end
+
+" Highlight the 81st column of text (in dark grey so it doesn't distract).
+highlight ColorColumn ctermbg=234
+call matchadd('ColorColumn', '\%81v', 100)
 
 set path=.,/usr/include,,**                         " Add ** to search path
 if executable("rg")
