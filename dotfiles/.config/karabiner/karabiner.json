@@ -15,23 +15,48 @@
             "devices": [
                 {
                     "disable_built_in_keyboard_if_exists": false,
+                    "fn_function_keys": {},
                     "identifiers": {
                         "is_keyboard": true,
                         "is_pointing_device": false,
                         "product_id": 45133,
                         "vendor_id": 7185
                     },
-                    "ignore": true
+                    "ignore": true,
+                    "simple_modifications": {}
                 },
                 {
                     "disable_built_in_keyboard_if_exists": false,
+                    "fn_function_keys": {},
                     "identifiers": {
                         "is_keyboard": true,
                         "is_pointing_device": false,
                         "product_id": 628,
                         "vendor_id": 1452
                     },
-                    "ignore": false
+                    "ignore": false,
+                    "simple_modifications": {
+                        "escape": "fn",
+                        "fn": "escape",
+                        "grave_accent_and_tilde": "f17",
+                        "non_us_backslash": "grave_accent_and_tilde"
+                    }
+                },
+                {
+                    "disable_built_in_keyboard_if_exists": false,
+                    "fn_function_keys": {},
+                    "identifiers": {
+                        "is_keyboard": true,
+                        "is_pointing_device": false,
+                        "product_id": 17,
+                        "vendor_id": 9494
+                    },
+                    "ignore": false,
+                    "simple_modifications": {
+                        "left_command": "left_option",
+                        "left_option": "left_command",
+                        "non_us_backslash": "backslash"
+                    }
                 }
             ],
             "fn_function_keys": {
@@ -52,60 +77,7 @@
             "selected": true,
             "simple_modifications": {
                 "caps_lock": "left_shift",
-                "escape": "fn",
-                "fn": "escape",
-                "grave_accent_and_tilde": "f17",
-                "left_shift": "left_control",
-                "non_us_backslash": "grave_accent_and_tilde"
-            },
-            "virtual_hid_keyboard": {
-                "caps_lock_delay_milliseconds": 0,
-                "keyboard_type": "ansi"
-            }
-        },
-        {
-            "complex_modifications": {
-                "parameters": {
-                    "basic.to_if_alone_timeout_milliseconds": 1000
-                },
-                "rules": []
-            },
-            "devices": [
-                {
-                    "disable_built_in_keyboard_if_exists": false,
-                    "identifiers": {
-                        "is_keyboard": true,
-                        "is_pointing_device": false,
-                        "product_id": 628,
-                        "vendor_id": 1452
-                    },
-                    "ignore": false
-                }
-            ],
-            "fn_function_keys": {
-                "f1": "display_brightness_decrement",
-                "f10": "mute",
-                "f11": "volume_decrement",
-                "f12": "volume_increment",
-                "f2": "display_brightness_increment",
-                "f3": "mission_control",
-                "f4": "launchpad",
-                "f5": "illumination_decrement",
-                "f6": "illumination_increment",
-                "f7": "rewind",
-                "f8": "play_or_pause",
-                "f9": "fastforward"
-            },
-            "name": "Cherry Blues",
-            "selected": false,
-            "simple_modifications": {
-                "caps_lock": "left_shift",
-                "escape": "escape",
-                "left_command": "left_option",
-                "left_option": "left_command",
-                "left_shift": "right_control",
-                "non_us_backslash": "backslash",
-                "right_command": "f17"
+                "left_shift": "left_control"
             },
             "virtual_hid_keyboard": {
                 "caps_lock_delay_milliseconds": 0,
