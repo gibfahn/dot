@@ -4,7 +4,7 @@ cmd + alt + ctrl - r : khd -e "reload"
 # open terminal, blazingly fast compared to iTerm/Hyper
 # Couldn't get key repeat to work for Kitty, might try again later.
 # cmd - return : open -na /Applications/kitty.app
-cmd - return : open -na /Applications/Utilities/Terminal.app
+alt - return : open -a Terminal ~
 
 # focus window
 alt - h : chunkc tiling::window --focus west
@@ -75,9 +75,8 @@ shift + cmd - c : chunkc tiling::window -d next; khd -p "cmd + alt - c"
 shift + cmd - 1 : chunkc tiling::window -d 1; khd -p "cmd + alt - 1"
 shift + cmd - 2 : chunkc tiling::window -d 2; khd -p "cmd + alt - 2"
 shift + cmd - 3 : chunkc tiling::window -d 3; khd -p "cmd + alt - 3"
-shift + cmd - 4 : chunkc tiling::window -d 4; khd -p "cmd + alt - 4"
-shift + cmd - 5 : chunkc tiling::window -d 5; khd -p "cmd + alt - 5"
-shift + cmd - 6 : chunkc tiling::window -d 6; khd -p "cmd + alt - 6"
+# Conflicts with macOS screenshot shortcut, and when do I have more than 3 desktops?.
+#shift + cmd - 4 : chunkc tiling::window -d 4; khd -p "cmd + alt - 4"
 
 # switch to last active desktop
 cmd + alt - x   : `id=$(chunkc get _last_active_desktop); khd -p "cmd + alt - $id" &> /dev/null`
