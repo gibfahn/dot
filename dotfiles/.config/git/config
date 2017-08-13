@@ -39,8 +39,8 @@
 
   f = fetch
   fa = fetch --all
-  # Set up/update branch from Github PR, `g fp 657 origin` or `g fp` (Defaults: $1=HEAD, $2=upstreamRemote or up).
-  fp = "! [ \"$1\" = \"\" ] && a=$(git headBranch) && b=$(git headRemote); a=${a:-$1}; b=${b:-${2:-up}}; git fetch -fu $b pull/$a/head:$a; git checkout $a; git branch -u $b #"
+  # Create/update branch from Github PR, `g fp 657 origin` or `g fp` (Defaults: $1=HEAD, $2=upstreamRemote).
+  fp = "! b=${2:-$(git headRemote)}; b=${b:-up}; a=${1:-$(git headBranch)}; git fetch -fu $b pull/$a/head:$a; git checkout $a; git branch -u $b #"
 
   l = log --graph --decorate --oneline # Graph log.
   la = log --graph --decorate --oneline --all # Graph log of all branches.
