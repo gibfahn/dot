@@ -6,16 +6,37 @@
 
 hasSudo || exit
 
-sudo apt install -y git curl zsh tree gcc make
-sudo apt install -y gnome-terminal # Used as default in config.
-
 # Add all ppas at the same time. Just do the one apt update.
-! exists nvim && sudo add-apt-repository -y ppa:neovim-ppa/stable && sudo apt update
-! exists copyq && sudo add-apt-repository -y ppa:hluk/copyq && sudo apt update
+addAptRepo() {
+  for i in $@; do
+    if ! grep -q "^deb .*$i" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
+      sudo add-apt-repository -y "$i"
+    fi
+  done
+  sudo apt update
+}
 
-sudo apt install -y neovim copyq meld entr xclip tig
+addAptRepo ppa:neovim-ppa/stable ppa:hluk/copyq ppa:git-core/ppa
 
-sudo apt install i3 # I think I'll be using bspwm going forward, so this is legacy.
+# Apt install things. Added them individually so you can comment out lines to skip.
+list=""                               # List of things to install.
+list+=" git"                          # Get an up-to-date git from the git-core ppa.
+list+=" curl"                         # Amazingly some installaions don't come with curl.
+list+=" zsh"                          # I use zsh wherever possible.
+list+=" tree"                         # Recursive ls.
+list+=" gcc make"                     # Needed to build C/C++ apps from source (and run Makefiles).
+list+=" gnome-terminal"               # Good basic terminal, used in my bspwm config.
+list+=" neovim"                       # Better vim (works well with my vim config.
+list+=" copyq"                        # Clipboard manager with history (needs a bit of manual setup).
+list+=" meld"                         # Graphical diff between folders.
+list+=" entr"                         # Run command on file change (Unixy file/folder watcher).
+list+=" xclip"                        # Copy/paste shell commands, used in gcfg.
+list+=" tig"                          # Some nice additions to git (e.g. `tig log`).
+list+=" i3"                           # Window manager. Obsolete since I moved to bspwm.
+list+=" dfu-util"                     # Used for flashing my ergodox.
+list+=" ccache"                       # Makes recompilations faster.
+echo "❯❯❯ apt installing/updating: $list"
+sudo apt install -y $list
 
 if not bspwm; then
   # Install bspwm dependencies.
