@@ -60,21 +60,24 @@ fi
 
 # If you don't use rust just choose the cancel option.
 if no rustup || no cargo; then
-  if [ ! -d "$HOME/.rustup" ]; then
-    # Install rustup. Don't modify path as that's already in gibrc.
-    curl https://sh.rustup.rs -sSf | bash -s -- --no-modify-path
-    # Install stable and nightly
-    rustup install nightly
-    rustup install stable
-    # Download zsh completion
-    curl https://raw.githubusercontent.com/rust-lang-nursery/rustup.rs/master/src/rustup-cli/zsh/_rustup >"$XDG_DAATA_HOME/zfunc/_rustup"
+  # Install rustup. Don't modify path as that's already in gibrc.
+  curl https://sh.rustup.rs -sSf | bash -s -- --no-modify-path
+  # Download zsh completion
+  curl https://raw.githubusercontent.com/rust-lang-nursery/rustup.rs/master/src/rustup-cli/zsh/_rustup >"$XDG_DATA_HOME/zfunc/_rustup"
 
-    # Download docs and src
-    rustup component add rust-src
-    rustup component add rust-docs || true
+  if [ ! -d "$HOME/.rustup" ]; then
+    # Move to proper directories
+    mv "$HOME/.rustup" "$XDG_DATA_HOME/rustup"
+    mv "$HOME/.cargo" "$XDG_DATA_HOME/cargo"
   fi
 
-  # Move to proper directories
-  mv "$HOME/.rustup" "$XDG_DATA_HOME/rustup"
-  mv "$HOME/.cargo" "$XDG_DATA_HOME/cargo"
+  # Rustup seems to respect the RUSTUP_HOME and CARGO_HOME env vars, but IDK.
+  export PATH="$CARGO_HOME/bin:~/.cargo/bin:$PATH"
+
+  # Install stable and nightly
+  rustup install nightly
+  rustup install stable
+
+  # Download docs and src
+  rustup component add rust-src
 fi
