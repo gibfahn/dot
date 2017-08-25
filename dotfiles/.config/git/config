@@ -124,23 +124,31 @@
     insteadOf = hh: # Hub https.
 [url "git@github.com:"]
     insteadOf = hs: # Hub ssh.
+[url "https://github.com/gibfahn/"]
+    insteadOf = hhg: # Hub https gibfahn.
+[url "git@github.com:gibfahn/"]
+    insteadOf = hsg: # Hub ssh gibfahn.
+
 [url "https://gist.github.com/"]
     insteadOf = gist:
 
-[url "https://github.com/gibfahn/"]
-    insteadOf = gh: # Gib https.
-[url "git@github.com:gibfahn/"]
-    insteadOf = gs: # Gib ssh.
-
-[url "https://gitlab.com/gib/"]
+[url "https://gitlab.com/"]
     insteadOf = lh: # Lab https.
-[url "git@gitlab.com:gib/"]
+[url "git@gitlab.com:"]
     insteadOf = ls: # Lab ssh.
+[url "https://gitlab.com/gib/"]
+    insteadOf = lhg: # Lab https gib.
+[url "git@gitlab.com:gib/"]
+    insteadOf = lsg: # Lab ssh gib.
 
 [url "https://github.ibm.com/"]
     insteadOf = ih: # IBM https.
 [url "git@github.ibm.com:"]
     insteadOf = is: # IBM ssh.
+[url "https://github.ibm.com/gib/"]
+    insteadOf = ihg: # IBM https gib.
+[url "git@github.ibm.com:gib/"]
+    insteadOf = isg: # IBM ssh gib.
 
 [user]
   name = Gibson Fahnestock
