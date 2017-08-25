@@ -24,6 +24,7 @@ export npm_config_devdir=${npm_config_devdir:-"$XDG_CACHE_HOME/node-gyp"} # Set 
 export npm_cache=${npm_cache:-"$XDG_CACHE_HOME/npm"} # Set npm cache location.
 export NODE_REPL_HISTORY=${NODE_REPL_HISTORY="$XDG_CACHE_HOME/node_repl_history"} # Set node-gyp download location.
 export BABEL_CACHE_PATH=${NODE_REPL_HISTORY="$XDG_CACHE_HOME/babel/cache.json"} # Set babel cache location.
+export CCACHE_DIR="$XDG_DATA_HOME/ccache" # ccache cache dir.
 
 ### SHELL SPECIFIC ###
 ls --color=auto >/dev/null 2>&1 && alias ls='ls --color=auto' # ls use colour if poss.
@@ -97,8 +98,6 @@ alias -- -="$cd -" # - cd's to the last directory.
 # Execute previous commands (1 = !-2, 2 = !-3 etc., remember that Enter is !!)
 alias 1="fc -e : -2"; alias 2="fc -e : -3"
 
-[ "$TERM_PROGRAM" = Apple_Terminal ] && export TERM=nsterm-256color # Terminal.app terminfo (updated myself).
-[ "$TERM_PROGRAM" != Apple_Terminal -a "$TERM" = nsterm-256color ] && export TERM=xterm-256color # Don't use nsterm elsewhere.
 { exists nvim && VIM=nvim; } || { exists vim && VIM=vim; } || VIM=vi # Take what you can get.
 alias v=$VIM; export VISUAL=$VIM # Set vim/nvim as the default editor.
 ulimit -c unlimited # Allow saving of coredumps.
@@ -108,8 +107,8 @@ alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"' # Makes it look like y
 
 ### APP SPECIFIC ###
 pathadd "$HOME/bin" # Put random binaries you want to run in here.
-pathadd /usr/local/opt/ncurses/bin # Used on macOS with nsterm terminfo (see above).
-pathadd /usr/local/opt/ccache/libexec # Add ccache to the path if installed.
+pathadd /usr/lib/ccache # Add ccache to the path if installed (Linux).
+pathadd /usr/local/opt/ccache/libexec # Add ccache to the path if installed (macOS).
 
 # I don't have nvm autorun on every shell, I us `nv` when I want to start it.
 # This also allows me to frequently `make -j4 install` node master, and have
