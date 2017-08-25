@@ -6,17 +6,14 @@
 
 hasSudo || exit
 
-sudo apt install -y git curl zsh tree
+sudo apt install -y git curl zsh tree gcc make
 sudo apt install -y gnome-terminal # Used as default in config.
-sudo apt install -y gcc make
 
 # Add all ppas at the same time. Just do the one apt update.
 ! exists nvim && sudo add-apt-repository -y ppa:neovim-ppa/stable && sudo apt update
 ! exists copyq && sudo add-apt-repository -y ppa:hluk/copyq && sudo apt update
 
-sudo apt install -y neovim # Nicer version of vim.
-sudo apt install -y copyq # Cross-platform clipboard manager.
-sudo apt install -y entr # Run command on file change.
+sudo apt install -y neovim copyq meld entr xclip tig
 
 sudo apt install i3 # I think I'll be using bspwm going forward, so this is legacy.
 
