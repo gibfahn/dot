@@ -28,7 +28,7 @@ printf "❯❯❯ Updating dotfile symlinks (linking from path: $TOPATH)\n\n"
 for FILE in $(find . -type f -o -type l | sed 's|./||'); do
   mkdir -p "$FROMPATH/$(dirname $FILE)"
   if [ -d "$FROMPATH/$FILE" -a ! -L "$FROMPATH/$FILE" ]; then # Directory.
-    echo "${RED}DIRSKIP: $FROMPATH/$FILE is a directory!${NC}" # This shouldn't happen.
+    echo -e "${RED}DIRSKIP: $FROMPATH/$FILE is a directory!${NC}" # This shouldn't happen.
     continue
   elif [ -L "$FROMPATH/$FILE" ]; then # Symlink.
     if [ "$(ls -l $FROMPATH/$FILE | awk '{print $NF}')" = "$TOPATH/$FILE" ]; then
