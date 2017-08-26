@@ -7,8 +7,12 @@
 hasSudo || exit
 
 # Install xcode command line tools
-echo "❯❯❯ Installing xcode command line tools"
-xcode-select --install
+if ! xcode-select -p &>/dev/null; then
+  echo "❯❯❯ Installing: Xcode Command Line Tools"
+  xcode-select --install
+else
+  echo "❯❯❯ Already Installed: Xcode Command Line Tools"
+fi
 
 if [ "$HARDCORE" ]; then
   echo "❯❯❯ Setting keyboard/trackpad preferences"
@@ -32,7 +36,7 @@ else
 fi
 
 # Install brew
-if brew info brew-cask &>/dev/null; then
+if brew cask --version &>/dev/null; then
   echo "❯❯❯ Already Installed: brew cask"
 else
   echo "❯❯❯ Installing: brew cask"
@@ -65,7 +69,8 @@ echo "❯❯❯ brew installing/updating: $list"
 brew install $list
 
 if [ "$HARDCORE" ]; then
-  echo "❯❯❯ Setting up chunkwm and khd (window manager)."
+  echo "❯❯❯ Setting up chunkwm and khd (window manager) and karabiner (key remapping)."
+  brew cask install karabiner
   brew tap crisidev/homebrew-chunkwm
   brew install chunkwm
   brew services start chunkwm
