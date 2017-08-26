@@ -7,19 +7,19 @@
   headRemote = "!git headUpstream | cut -d '/' -f 1"
 
   a = add
-  aa = add -A
+  aa = add -A # Adds everything.
   ama = am --abort
   amc = am --continue
   ams = am --skip
 
   b = branch
-  ba = branch -a
-  bd = branch -D
-  br = branch -r
+  ba = branch -a # Show all local and remote branches.
+  bd = branch -D # Delete branch.
+  br = branch -r # Show remote branches only.
   bdd = "!lastBranch=$(git headBranch); git checkout -; git branch -D $lastBranch" # Delete current branch.
   bp = "!git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -d" # Delete orphaned local branches.
   bP = "!git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D" # Delete orphaned local branches!
-  bup = "!git branch -u $1/$(git headBranch) #" # g bup origin sets upstream to origin.
+  bt = "!git branch -u $1/$(git headBranch) #" # g bt origin sets upstream to origin.
 
   # I manually specify -S because gpgsign only works with Git 2.x. Also it
   # means that test suites using `git commit` don't break.
@@ -35,6 +35,7 @@
   cpa = cherry-pick --abort
   cpc = cherry-pick --continue
   co  = checkout
+  cot = checkout -t # g cot up/master means checkout master tracking the one in up.
   fix = commit --fixup # g fix SHA means rebasing will attach to that SHA.
 
   f = fetch
@@ -55,7 +56,7 @@
   pap = "!curl -L $1.patch | git am -3 -S --whitespace=fix #" # Please patch it.
   paw = "!curl -L $1.patch | git am -3 -S --whitespace=warn #" # Patch but don't fix whitespace.
   pl = pull
-  pup = "!git push -u $1 $(git headBranch) #" # g pup origin sets upstream to origin + pushes.
+  pt = "!git push -u $1 $(git headBranch) #" # g pt origin sets branch to track up + pushes.
 
   ra = remote add
   rb = rebase -S
@@ -65,9 +66,9 @@
   rh = reset --hard
   ri = "rebase -i -S --autosquash"
   rii = "!git rebase -i -S --autosquash $(git headUpstream)"
-  rr = remote rename
-  rs = remote set-url
-  rv = remote -v
+  rr = remote rename # Change name of remote `g rr origin up`.
+  rs = remote set-url # Change URL of remote `g rs up hsg:dot`.
+  rv = remote -v # Show remotes (with URLs).
 
   s = status
   sh = show
@@ -75,7 +76,7 @@
   stp = stash pop
   std = stash drop
   df = diff HEAD # diff of staged and unstaged files..
-  dfs = diff --staged # Diff of staged files (`git diff` for unstaged)..
+  dfs = diff --staged # Diff of staged files (`git diff` for unstaged).
 
   sma = submodule add                         # Add a new submodule: g sma url path.
   smi = submodule update --init --recursive   # Initialise submodules.
