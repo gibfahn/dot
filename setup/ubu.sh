@@ -79,3 +79,23 @@ else
   sudo dpkg -i google-chrome-stable_current_amd64.deb || sudo apt-get install -f && sudo dpkg -i google-chrome-stable_current_amd64.deb
   rm google-chrome-stable_current_amd64.deb
 fi
+
+XKB=/usr/share/X11/xkb/
+if [ "$HARDCORE" && ! -d "$XKB".git ]; then
+  echo "❯❯❯ Setting up personal xkb shortcuts at $XKB."
+  sudo chown -R $USER:`id -gn` "$XKB"
+  pushd /usr/share/X11/xkb
+  git init
+  git remote add up git@github.com/gibfahn/xkb.git
+  git fetch --all
+  git reset up/master
+  if [ "$(git status --porcelain)" ]; then
+    echo "ERROR: $XKB didn't match git version, resolve manually!"
+    echo "Fix conflicts then do: `git checkout gibLayout; sudo dpkg-reconfigure xkb-data`"
+    exit 1
+  fi
+  git checkout gibLayout
+  sudo dpkg-reconfigure xkb-data
+else
+  echo "❯❯❯ Not setting up personal xkb shortcuts."
+fi
