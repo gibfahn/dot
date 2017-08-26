@@ -66,8 +66,8 @@ nnoremap <leader>F :grep |                          "  ↳          contents for
 nnoremap <Leader>gd :w !diff % - <CR>|              " Diff between saved file and current.
 nnoremap <Leader>gr :reg<CR>|                       " Show register contents.
 nnoremap <Leader>gt :set et!<CR>:set et?<CR>|       " Toggle tabs/spaces.
-nnoremap <Leader>gw :set fo-=t<CR>:set fo?<CR>|     " Turn on  line wrapping,
-nnoremap <Leader>gW :set fo+=t<CR>:set fo?<CR>|     "  ↳   off line wrapping.
+nnoremap <Leader>gq :set fo+=t<CR>:set fo?<CR>|     " Turn on  line wrapping,
+nnoremap <Leader>gQ :set fo-=t<CR>:set fo?<CR>|     "  ↳   off line wrapping.
 nnoremap <leader>j :sp<CR><C-w>k:bp<CR>|            " Open horizontal split,
 nnoremap <leader>l :vsp<CR><C-w>h:bp<CR>|           "  ↳   vertical split.
 nnoremap <leader>k <C-w>q|                          " Close current split (keeps buffer).
