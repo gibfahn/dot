@@ -7,16 +7,18 @@
 hasSudo || exit
 
 # Add all ppas at the same time. Just do the one apt update.
-addAptRepo() {
+addPPA() {
+  local added
   for i in $@; do
-    if ! grep -q "^deb .*$i" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
+    if ! grep -q "^deb .*${i#ppa:}" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
       sudo add-apt-repository -y "$i"
+      added="true"
     fi
   done
-  sudo apt update
+  [ "$added" ] && sudo apt update || true
 }
 
-addAptRepo ppa:neovim-ppa/stable ppa:hluk/copyq ppa:git-core/ppa
+addPPA ppa:neovim-ppa/stable ppa:hluk/copyq ppa:git-core/ppa
 
 # Apt install things. Added them individually so you can comment out lines to skip.
 list=""                               # List of things to install.
