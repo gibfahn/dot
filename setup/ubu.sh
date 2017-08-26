@@ -80,6 +80,10 @@ else
   rm google-chrome-stable_current_amd64.deb
 fi
 
+# Make Ctrl-[Shift]-Tab switch tabs in Gnome-Terminal
+gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ next-tab '<Primary>Tab'
+gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ prev-tab '<Primary><Shift>Tab'
+
 XKB=/usr/share/X11/xkb/
 if [ "$HARDCORE" && ! -d "$XKB".git ]; then
   echo "❯❯❯ Setting up personal xkb shortcuts at $XKB."
