@@ -2,6 +2,13 @@
 
 # Calls scripts from setup/ if the OS matches.
 
+# Enable hardcore mode if you're sure.
+read -p "HARDCORE mode (leave blank not to enable)? " HARDCORE
+export HARDCORE
+
+echo "❯❯❯ HARDCORE mode $([ "$HARDCORE" ] && echo on || echo off)"
+sleep 1 # Give people a chance to see (or Control-C).
+
 # Good defaults:
 [ -z "$XDG_CONFIG_HOME" ] && export XDG_CONFIG_HOME="$HOME/.config"
 [ -z "$XDG_CACHE_HOME" ] && export XDG_CACHE_HOME="$HOME/.cache"

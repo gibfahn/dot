@@ -10,16 +10,18 @@ hasSudo || exit
 echo "❯❯❯ Installing xcode command line tools"
 xcode-select --install
 
-echo "❯❯❯ Set key preferences"
-# Set up fastest key repeat rate (needs relogin).
-defaults write NSGlobalDomain KeyRepeat -int 1
-# Sets a low time before key starts repeating.
-defaults write NSGlobalDomain InitialKeyRepeat -int 8
-# Increases trackpad sensitivity (SysPref max 3.0).
-defaults write -g com.apple.trackpad.scaling -float 5.0
-
-# Tell Hammerspoon to use $XDG_CONFIG_HOME.
-defaults write org.hammerspoon.Hammerspoon MJConfigFile "$XDG_CONFIG_HOME/hammerspoon/init.lua"
+if [ "$HARDCORE" ]; then
+  echo "❯❯❯ Setting keyboard/trackpad preferences"
+  # Set up fastest key repeat rate (needs relogin).
+  defaults write NSGlobalDomain KeyRepeat -int 1
+  # Sets a low time before key starts repeating.
+  defaults write NSGlobalDomain InitialKeyRepeat -int 8
+  # Increases trackpad sensitivity (SysPref max 3.0).
+  defaults write -g com.apple.trackpad.scaling -float 5.0
+else
+  echo "❯❯❯ Not setting keyboard/trackpad preferences."
+  # You can still change them in System Preferences/{Trackpad,Keyboard}.
+fi
 
 # Install brew
 if exists brew; then
@@ -62,11 +64,16 @@ list+=" kubernetes-helm"              # helm docker cluster package manager.
 echo "❯❯❯ brew installing/updating: $list"
 brew install $list
 
-brew tap crisidev/homebrew-chunkwm
-brew install chunkwm
-brew services start chunkwm
-brew install koekeishiya/formulae/khd
-brew services start khd
+if [ "$HARDCORE" ]; then
+  echo "❯❯❯ Setting up chunkwm and khd (window manager)."
+  brew tap crisidev/homebrew-chunkwm
+  brew install chunkwm
+  brew services start chunkwm
+  brew install koekeishiya/formulae/khd
+  brew services start khd
+else
+  echo "❯❯❯ Not setting up chunkwm and khd (window manager)."
+fi
 
 # brew cask install things. Added individually so you can comment out lines to skip.
 list=""                               # List of things to install.
@@ -75,7 +82,6 @@ list+=" firefox-nightly"              # Has some really cool new features (and s
 list+=" meld"                         # Graphical diff between folders.
 list+=" gpgtools"                     # Like `rm`, but moves to trash (aliased to `dl` in gcfg).
 list+=" docker vagrant virtualbox"    # Get docker and related tools.
-list+=" hammerspoon"                  # Lua scripting to automate anything.
 list+=" copyq"                        # Clipboard manager with history (needs a bit of manual setup).
 echo "❯❯❯ brew cask installing/updating: $list"
 brew cask install $list
