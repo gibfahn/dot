@@ -9,7 +9,7 @@ hasSudo || exit
 if ! cat ~/Library/Preferences/com.apple.Terminal.plist | grep -q gib; then
   echo "❯❯❯ Installing: gib Terminal profile"
   # Install my terminal profile.
-  open $(dirname $0)/../config/gib.terminal
+  open $(dirname $0)/config/gib.terminal
   # Change the default to my profile (swap it back in settings if you want).
   defaults write com.apple.Terminal "Default Window Settings" gib
 else

@@ -23,7 +23,7 @@ fi
 if [ ! -e ~/.ssh/config ]; then
   echo "❯❯❯ Copying default ssh config."
   [ ! -d ~/.ssh ] && mkdir ~/.ssh && chmod 700 ~/.ssh || true
-  cp $(dirname $0)/../config/ssh-config ~/.ssh/config
+  cp $(dirname $0)/config/ssh-config ~/.ssh/config
 else
   echo "❯❯❯ Not overwriting ~/.ssh/config, copy manually from ./config/ssh-config as necessary."
 fi
