@@ -64,7 +64,7 @@ Dotfiles are pretty personal, so feel free to adapt this repo as you wish. If
 you make a change feel free to send a Pull Request, you might fix something for
 me!
 
-### Post install setup
+## Post install setup
 
 Some things you have to do manually, here's a short list:
 
@@ -73,6 +73,12 @@ Some things you have to do manually, here's a short list:
     delete it, and run `g ce` again). Config is at `~/.config/git/config`.
   - Scroll to the bottom and change the name, email, and username (Github)
     fields.
+- Set up ssh keys (All)
+  - If you don't have them you probably want them. Instructions
+    [here](https://fahn.co/blog/setting-up-ssh-keys.html).
+- Set up gpg keys (All)
+  - Similar to ssh keys, instructions
+    [here](http://fahn.co/blog/gpg-and-github.html).
 - Run Spectacle on Login (macOS):
   - <kbd>⌘</kbd><kbd>Space</kbd>`Spectacle`<kbd>Enter</kbd>
   - Click on the spectacles in the Menu Bar, click Preferences
