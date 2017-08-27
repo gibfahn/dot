@@ -98,5 +98,16 @@ list+=" meld"                         # Graphical diff between folders.
 list+=" gpgtools"                     # Like `rm`, but moves to trash (aliased to `dl` in gcfg).
 list+=" docker vagrant virtualbox"    # Get docker and related tools.
 list+=" copyq"                        # Clipboard manager with history (needs a bit of manual setup).
+list+=" spectacle"                    # Nice window manager that's easy to get used to.
 echo "❯❯❯ brew cask installing/updating: $list"
 brew cask install $list
+
+
+# Setup spectacle config.
+specConfig="$HOME/Library/Application Support/Spectacle/Shortcuts.json"
+if [ ! -L "$specConfig" ]; then
+  echo "❯❯❯ Overwriting Spectacle shortcuts with link to gcfg ones."
+  mkdir -p "$HOME/.backup"
+  [ -e "$specConfig" ] && mv "$specConfig" "$HOME/.backup/Shortcuts.json"
+  ln -s "$XDG_CONFIG_HOME/Spectacle/Shortcuts.json" "$specConfig"
+fi
