@@ -19,6 +19,15 @@ else
     echo "❯❯❯ zsh is already the default shell"
 fi
 
+# Set up a default ssh config
+if [ ! -e ~/.ssh/config ]; then
+  echo "❯❯❯ Copying default ssh config."
+  [ ! -d ~/.ssh ] && mkdir ~/.ssh && chmod 700 ~/.ssh || true
+  cp $(dirname $0)/../config/ssh-config ~/.ssh/config
+else
+  echo "❯❯❯ Not overwriting ~/.ssh/config, copy manually from ./config/ssh-config as necessary."
+fi
+
 # Install oh-my-zsh:
 if no oh-my-zsh; then
   # Don't run the setup script, we don't need it and it checks $SHELL which

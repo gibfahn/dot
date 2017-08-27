@@ -1,0 +1,48 @@
+# ssh (or my alias `s`) accepts a bunch of cool options:
+# - Use a different ssh key: s -i ~/.ssh/alternative_id_rsa host
+# - Use a different username: s gib@host
+# - Don't use ssh key (force password): s gib:@host
+# However if you don't want to specify them every time, set them in here.
+
+
+# Defaults for all hosts
+Host *
+# Consider getting a shiny new modern key.
+   IdentityFile ~/.ssh/id_ed25519
+# You'll want an old-style key for older machines though (see README).
+   IdentityFile ~/.ssh/id_rsa
+# Stops the "do you accept this RSA key" rubbish.
+   StrictHostKeyChecking=no
+# Stops servers closing the connection because you didn't use it.
+   ServerAliveInterval 120
+# Uncomment this if your default user on remote machines != `uname` on this one.
+#   User gib
+
+###########################
+#  Sample Machine Config  #
+###########################
+
+# Modify as appropriate.
+# You can define multiple hosts on one line.
+# The Host is the shortcut (`s host1` or `s c` to ssh in).
+# The Hostname is something you can ping (DNSable hostname or IP address).
+#   %h is what you typed in `Host`.
+# Other fields are optional.
+# User is your account on that machine.
+# Port defaults to 22 (ssh port).
+# IdentityFile for a non-standard IdentityFile.
+
+#Host host1 host2 a b c 1 2 3
+#  Hostname prefix-%h-suffix.mydomain.org
+#  User git
+#  Port 518
+#  IdentityFile ~/.ssh/dragons_id
+
+###########################
+# Gib's Personal machines #
+###########################
+
+
+###########################
+#  Gib's Work  Machines   #
+###########################

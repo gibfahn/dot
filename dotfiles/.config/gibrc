@@ -81,7 +81,7 @@ alias c=clear # c clears the terminal screen (can also use Ctrl-L).
 alias g=git # Use with commands in $c/git/config for best results.
 alias path='echo $PATH' # Single quotes so we echo path at runtime, not alias time.
 alias h=history # Shows command history.
-alias s="TERM=xterm-256color ssh -oStrictHostKeyChecking=no" # ssh avoiding checking RSA keys.
+alias s="ssh" # ssh.
 alias l=less # Runs less (F for `tail -f` mode, Ctrl-c to cancel).
 scpkey() { ssh $1 'mkdir -p ~/.ssh'; scp ~/.ssh/${2:-authorized_keys_scp} $1:~/.ssh/authorized_keys; } # scp key to host.
 

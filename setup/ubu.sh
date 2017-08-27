@@ -11,6 +11,7 @@ addPPA() {
   local added
   for i in $@; do
     if ! grep -q "^deb .*${i#ppa:}" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
+      echo "❯❯❯ Adding ppa: $i"
       sudo add-apt-repository -y "$i"
       added="true"
     fi
