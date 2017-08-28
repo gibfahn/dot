@@ -69,7 +69,7 @@ me!
 Some things you have to do manually, here's a short list:
 
 - Change git username (All)
-  - `g ce` to edit my git config (if it opens and old one copy it's contents,
+  - `g ce` to edit my git config (if it opens an old one copy it's contents,
     delete it, and run `g ce` again). Config is at `~/.config/git/config`.
   - Scroll to the bottom and change the name, email, and username (Github)
     fields.
