@@ -5,18 +5,26 @@
 . $(dirname $0)/../helpers/setup.sh # Load helper script from gcfg/helpers.
 
 # Set default shell to zsh
+
 # $SHELL isn't updated until we logout, so check whether chsh was already run.
-shell=$(cat /etc/passwd | grep $USER | awk -F: '{print $NF}' | awk -F/ '{print $NF}')
-if [ "$shell" != zsh ]; then
-  if [ -e /bin/zsh ]; then
-    echo "❯❯❯ Current shell is $shell, changing to /bin/zsh"
-    chsh -s /bin/zsh
+if [ "$(uname)" = Darwin ]; then # macOS
+  shell=$(dscl . -read $HOME UserShell)
+elif [ "$(uname)" = Linux ]; then # Linux.
+  shell=$(cat /etc/passwd | grep $USER | awk -F : '{print $NF}')
+fi
+# Fall back to $SHELL if that doesn't work.
+shell=${shell:-$SHELL}
+if [ -z "$ZSH_VERSION" -a "${shell##*/}" != zsh ]; then
+  NEWSHELL=${NEWSHELL:-$(cat /etc/shells | grep zsh | tail -1)} # Set NEWSHELL for a different shell.
+  if [ -e "$NEWSHELL" ]; then
+    echo "❯❯❯ Current shell is $shell, changing to $NEWSHELL."
+    chsh -s "$NEWSHELL"
   else
-    echo "❯❯❯ Current shell is $shell ($SHELL) but /bin/zsh doesn't exist
-    Install zsh and then run chsh -s /bin/zsh"
+    echo "❯❯❯ Current shell is $shell (\$SHELL=$SHELL) but $NEWSHELL doesn't exist
+    Install zsh and then run chsh -s /path/to/zsh"
   fi
 else
-    echo "❯❯❯ zsh is already the default shell"
+    echo "❯❯❯ $shell is already the default shell"
 fi
 
 # Set up a default ssh config
@@ -68,7 +76,7 @@ if no nvim/site/autoload/plug.vim; then
 fi
 
 # If you don't use rust just choose the cancel option.
-if no rustup || no cargo; then
+if [ "$HARDCORE" ] && { no rustup || no cargo; }; then # Install/set up rust.
   # Install rustup. Don't modify path as that's already in gibrc.
   curl https://sh.rustup.rs -sSf | bash -s -- --no-modify-path
   # Download zsh completion
@@ -83,10 +91,10 @@ if no rustup || no cargo; then
   # Rustup seems to respect the RUSTUP_HOME and CARGO_HOME env vars, but IDK.
   export PATH="$CARGO_HOME/bin:~/.cargo/bin:$PATH"
 
-  # Install stable and nightly
+  # Install stable and nightly.
   rustup install nightly
   rustup install stable
 
-  # Download docs and src
+  # Download src (docs are included by default).
   rustup component add rust-src
 fi

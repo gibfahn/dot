@@ -22,22 +22,22 @@ addPPA() {
 addPPA ppa:neovim-ppa/stable ppa:hluk/copyq ppa:git-core/ppa
 
 # Apt install things. Added them individually so you can comment out lines to skip.
-list=""                               # List of things to install.
-list+=" git"                          # Get an up-to-date git from the git-core ppa.
-list+=" curl"                         # Amazingly some installaions don't come with curl.
-list+=" zsh"                          # I use zsh wherever possible.
-list+=" tree"                         # Recursive ls.
-list+=" gcc make"                     # Needed to build C/C++ apps from source (and run Makefiles).
-list+=" gnome-terminal"               # Good basic terminal, used in my bspwm config.
-list+=" neovim"                       # Better vim (works well with my vim config.
-list+=" copyq"                        # Clipboard manager with history (needs a bit of manual setup).
-list+=" meld"                         # Graphical diff between folders.
-list+=" entr"                         # Run command on file change (Unixy file/folder watcher).
-list+=" xclip"                        # Copy/paste shell commands, used in gcfg.
-list+=" tig"                          # Some nice additions to git (e.g. `tig log`).
-list+=" i3"                           # Window manager. Obsolete since I moved to bspwm.
-list+=" dfu-util"                     # Used for flashing my ergodox.
-list+=" ccache"                       # Makes recompilations faster.
+list=""                                  # List of things to install.
+list+=" git"                             # Get an up-to-date git from the git-core ppa.
+list+=" curl"                            # Amazingly some installaions don't come with curl.
+list+=" zsh"                             # I use zsh wherever possible.
+list+=" tree"                            # Recursive ls.
+list+=" gcc make"                        # Needed to build C/C++ apps from source (and run Makefiles).
+list+=" gnome-terminal"                  # Good basic terminal, used in my bspwm config.
+list+=" neovim"                          # Better vim (works well with my vim config.
+list+=" copyq"                           # Clipboard manager with history (needs a bit of manual setup).
+list+=" meld"                            # Graphical diff between folders.
+list+=" entr"                            # Run command on file change (Unixy file/folder watcher).
+list+=" xclip"                           # Copy/paste shell commands, used in gcfg.
+list+=" tig"                             # Some nice additions to git (e.g. `tig log`).
+list+=" i3"                              # Window manager. Obsolete since I moved to bspwm.
+list+=" dfu-util"                        # Used for flashing my ergodox.
+list+=" ccache"                          # Makes recompilations faster.
 echo "❯❯❯ apt installing/updating: $list"
 sudo apt install -y $list
 
@@ -81,12 +81,20 @@ else
   rm google-chrome-stable_current_amd64.deb
 fi
 
+if exists rg && exists cargo; then
+  echo "❯❯❯ Already Installed: ripgrep (or you don't have cargo to build it)"
+else
+  echo "❯❯❯ Installing: ripgrep"
+  cargo install ripgrep
+fi
+
+
 # Make Ctrl-[Shift]-Tab switch tabs in Gnome-Terminal
 gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ next-tab '<Primary>Tab'
 gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ prev-tab '<Primary><Shift>Tab'
 
 XKB=/usr/share/X11/xkb/
-if [ "$HARDCORE" && ! -d "$XKB".git ]; then
+if [ "$HARDCORE" && ! -d "$XKB".git ]; then # Set up xkb key remapping.
   echo "❯❯❯ Setting up personal xkb shortcuts at $XKB."
   sudo chown -R $USER:`id -gn` "$XKB"
   pushd /usr/share/X11/xkb

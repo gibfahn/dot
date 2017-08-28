@@ -1,0 +1,53 @@
+# Alternate version of ripgrep with optimisations on:
+tap "burntsushi/ripgrep", "https://github.com/BurntSushi/ripgrep.git"
+tap "caskroom/cask"                      # `brew cask` for GUI apps.
+tap "caskroom/versions"                  # Beta versions of apps.
+tap "homebrew/bundle"                    # Allows you to use Brewfiles.
+tap "homebrew/completions"               # Shell completions.
+
+# Versions of utils that are out-of-date on macOS:
+# Defaults are in /usr/bin, brew installs to /usr/local/bin
+brew "python"                            # Python2
+brew "git"
+brew "python3"
+brew "bash"
+brew "zsh"
+
+# GNU versions of utils that are out-of-date or FreeBSD on macOS:
+brew "binutils"
+brew "coreutils"
+brew "diffutils"
+brew "findutils", args: ["with-default-names"]
+brew "gnu-sed", args: ["with-default-names"]
+brew "gnu-indent", args: ["with-default-names"]
+brew "gnu-which", args: ["with-default-names"]
+brew "grep", args: ["with-default-names"]
+brew "gnu-tar", args: ["with-default-names"]
+brew "gnutls"
+brew "htop"                              # Terminal activity monitor.
+brew "tree"                              # Recursive ls.
+brew "make"
+brew "gawk"
+brew "wget"
+
+# Command-line helpers:
+brew "bash-completion"                   # Generally useful bash completions.
+brew "zsh-completions"                   # Generally useful  zsh completions.
+brew "zsh-syntax-highlighting"           # Syntax in the terminal.
+brew "ccache"                            # Speeds up C/C++ recompilation.
+brew "entr"                              # Command line file watching.
+
+brew "neovim"                            # New and improved vim.
+brew "burntsushi/ripgrep/ripgrep-bin"    # Super-fast recursive grep.
+brew "tmux"                              # Terminal multiplexer.
+brew "gnupg"                             # gpg command line.
+brew "gpg-agent"                         # gpg daemon.
+brew "rmtrash"                           # `rm` to Trash, aliased to `dl` in gcfg.
+brew "tig"                               # View git diffs in log.
+cask "docker"                            # Build and run docker images.
+
+cask "copyq"                             # Clipboard manager with history (needs manual setup).
+cask "google-chrome"                     # You probably want/have Chrome.
+cask "gpgtools"                          # GUI gpg key manager (manual setup required).
+cask "meld"
+cask "spectacle"                         # Window manager that's easy to get used to.

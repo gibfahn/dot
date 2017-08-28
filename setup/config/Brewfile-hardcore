@@ -1,0 +1,23 @@
+# vi: filetype=conf
+tap "crisidev/homebrew-chunkwm"
+
+brew "dfu-util"                          # Used for flashing my Ergodox Infinity.
+brew "exercism"                          # Learn coding languages.
+brew "cmake"                             # Commonly-used meta build system.
+brew "ninja"                             # Google meta build system (used in V8).
+brew "ctags"                             # Used for autocomplete in Vim (etc).
+brew "certbot"                           # LetsEncrypt.
+brew "groovy"                            # Helpful for testing Jenkins scripts.
+brew "kubernetes-cli"                    # Manage your docker clusters with kube.
+brew "kubernetes-helm"                   # Package manager for Docker.
+brew "postgresql"                        # Solid database.
+brew "redis"                             # In-memory key-object store.
+cask "gimp"                              # Heavyweight photo editor.
+cask "firefoxnightly"                    # For those sweet Rust-based improvements.
+cask "vagrant"                           # Quick command-line image spin-up.
+cask "virtualbox"                        # Manage VMs (Linux or Windows).
+cask "slack-beta"                        # Everyone uses Slack right?
+
+# Chunkwm Window Manager:
+brew "chunkwm", restart_service: :changed
+brew "koekeishiya/formulae/khd", restart_service: :changed

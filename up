@@ -22,12 +22,11 @@ sleep 1 # Give people a chance to see (or Control-C).
 
 # Platform specific setup:
 if [ "$(uname)" = Darwin ]; then # macOS
-  : # Placeholder, should run setup/mac.sh but it's not ready yet.
+  ./setup/mac.sh
 elif [ "$(uname)" = Linux ]; then # Linux specific stuff.
   case "$(uname -v)" in
     *Ubuntu* | *ubuntu*) # Ubuntu specific setup.
-      ./setup/ubu.sh # Ubuntu app setup.
-      ;;
-      # Other Linux setup goes here.
+      ./setup/ubu.sh ;;
+    *) echo "No specific setup files for $(uname -v) yet" ;;
   esac
 fi
