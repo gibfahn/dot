@@ -8,7 +8,7 @@
         {
             "complex_modifications": {
                 "parameters": {
-                    "basic.to_if_alone_timeout_milliseconds": 200
+                    "basic.to_if_alone_timeout_milliseconds": 250
                 },
                 "rules": [
                     {
@@ -31,32 +31,6 @@
                                 "to_if_alone": [
                                     {
                                         "key_code": "escape"
-                                    }
-                                ],
-                                "type": "basic"
-                            }
-                        ]
-                    },
-                    {
-                        "description": "caps_lock is return_or_enter if alone, left_shift otherwise",
-                        "manipulators": [
-                            {
-                                "from": {
-                                    "key_code": "caps_lock",
-                                    "modifiers": {
-                                        "optional": [
-                                            "any"
-                                        ]
-                                    }
-                                },
-                                "to": [
-                                    {
-                                        "key_code": "left_shift"
-                                    }
-                                ],
-                                "to_if_alone": [
-                                    {
-                                        "key_code": "return_or_enter"
                                     }
                                 ],
                                 "type": "basic"
@@ -88,34 +62,35 @@
                         ]
                     },
                     {
+                        "description": "Set hyper key to s",
                         "manipulators": [
-                            {
-                                "description": "tab is tab if alone,  command+control+option+shift (Hyper) otherwise",
-                                "from": {
-                                    "key_code": "tab",
-                                    "modifiers": {
-                                        "optional": [
-                                            "any"
-                                        ]
-                                    }
-                                },
-                                "to": [
-                                    {
-                                        "key_code": "left_shift",
-                                        "modifiers": [
-                                            "left_command",
-                                            "left_control",
-                                            "left_option"
-                                        ]
-                                    }
-                                ],
-                                "to_if_alone": [
-                                    {
-                                        "key_code": "tab"
-                                    }
-                                ],
-                                "type": "basic"
-                            }
+                          {
+                            "type": "basic",
+                            "from": {
+                              "key_code": "f17",
+                              "modifiers": {
+                                "optional": [
+                                  "any"
+                                ]
+                              }
+                            },
+                            "to": [
+                              {
+                                "set_variable": {
+                                  "name": "hyper",
+                                  "value": 1
+                                }
+                              }
+                            ],
+                            "to_after_key_up": [
+                              {
+                                "set_variable": {
+                                  "name": "hyper",
+                                  "value": 0
+                                }
+                              }
+                            ]
+                          }
                         ]
                     },
                     {
@@ -125,11 +100,8 @@
                                 "from": {
                                     "key_code": "h",
                                     "modifiers": {
-                                        "mandatory": [
-                                            "left_command",
-                                            "left_control",
-                                            "left_option",
-                                            "left_shift"
+                                        "optional": [
+                                          "any"
                                         ]
                                     }
                                 },
@@ -138,17 +110,21 @@
                                         "key_code": "left_arrow"
                                     }
                                 ],
+                                "conditions": [
+                                  {
+                                    "type": "variable_if",
+                                    "name": "hyper",
+                                    "value": 1
+                                  }
+                                ],
                                 "type": "basic"
                             },
                             {
                                 "from": {
                                     "key_code": "j",
                                     "modifiers": {
-                                        "mandatory": [
-                                            "left_command",
-                                            "left_control",
-                                            "left_option",
-                                            "left_shift"
+                                        "optional": [
+                                          "any"
                                         ]
                                     }
                                 },
@@ -157,17 +133,21 @@
                                         "key_code": "down_arrow"
                                     }
                                 ],
+                                "conditions": [
+                                  {
+                                    "type": "variable_if",
+                                    "name": "hyper",
+                                    "value": 1
+                                  }
+                                ],
                                 "type": "basic"
                             },
                             {
                                 "from": {
                                     "key_code": "k",
                                     "modifiers": {
-                                        "mandatory": [
-                                            "left_command",
-                                            "left_control",
-                                            "left_option",
-                                            "left_shift"
+                                        "optional": [
+                                          "any"
                                         ]
                                     }
                                 },
@@ -176,17 +156,21 @@
                                         "key_code": "up_arrow"
                                     }
                                 ],
+                                "conditions": [
+                                  {
+                                    "type": "variable_if",
+                                    "name": "hyper",
+                                    "value": 1
+                                  }
+                                ],
                                 "type": "basic"
                             },
                             {
                                 "from": {
                                     "key_code": "l",
                                     "modifiers": {
-                                        "mandatory": [
-                                            "left_command",
-                                            "left_control",
-                                            "left_option",
-                                            "left_shift"
+                                        "optional": [
+                                          "any"
                                         ]
                                     }
                                 },
@@ -194,6 +178,41 @@
                                     {
                                         "key_code": "right_arrow"
                                     }
+                                ],
+                                "conditions": [
+                                  {
+                                    "type": "variable_if",
+                                    "name": "hyper",
+                                    "value": 1
+                                  }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Change Hyper+p to print screen",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "p",
+                                    "modifiers": {
+                                        "optional": [
+                                          "any"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "left_arrow"
+                                    }
+                                ],
+                                "conditions": [
+                                  {
+                                    "type": "variable_if",
+                                    "name": "hyper",
+                                    "value": 1
+                                  }
                                 ],
                                 "type": "basic"
                             }
@@ -242,7 +261,9 @@
                     "simple_modifications": {
                         "left_command": "left_option",
                         "left_option": "left_command",
-                        "non_us_backslash": "backslash"
+                        "non_us_backslash": "f17",
+                        "right_command": "right_option",
+                        "right_option": "right_command"
                     }
                 }
             ],
@@ -262,7 +283,9 @@
             },
             "name": "GibProfile",
             "selected": true,
-            "simple_modifications": {},
+            "simple_modifications": {
+                "caps_lock": "right_shift"
+            },
             "virtual_hid_keyboard": {
                 "caps_lock_delay_milliseconds": 0,
                 "keyboard_type": "ansi"
