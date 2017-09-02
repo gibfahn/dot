@@ -64,44 +64,51 @@
                     {
                         "description": "Set hyper key to s",
                         "manipulators": [
-                          {
-                            "type": "basic",
-                            "from": {
-                              "key_code": "f17",
-                              "modifiers": {
-                                "optional": [
-                                  "any"
-                                ]
-                              }
-                            },
-                            "to": [
-                              {
-                                "set_variable": {
-                                  "name": "hyper",
-                                  "value": 1
-                                }
-                              }
-                            ],
-                            "to_after_key_up": [
-                              {
-                                "set_variable": {
-                                  "name": "hyper",
-                                  "value": 0
-                                }
-                              }
-                            ]
-                          }
+                            {
+                                "from": {
+                                    "key_code": "f17",
+                                    "modifiers": {
+                                        "optional": [
+                                            "any"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "hyper",
+                                            "value": 1
+                                        }
+                                    }
+                                ],
+                                "to_after_key_up": [
+                                    {
+                                        "set_variable": {
+                                            "name": "hyper",
+                                            "value": 0
+                                        }
+                                    }
+                                ],
+                                "type": "basic"
+                            }
                         ]
                     },
                     {
                         "description": "Change Hyper+h/j/k/l to Arrows",
                         "manipulators": [
                             {
+                                "conditions": [
+                                    {
+                                        "name": "hyper",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
                                 "from": {
                                     "key_code": "h",
                                     "modifiers": {
                                         "optional": [
-                                          "any"
+                                            "any"
                                         ]
                                     }
                                 },
@@ -110,21 +117,21 @@
                                         "key_code": "left_arrow"
                                     }
                                 ],
-                                "conditions": [
-                                  {
-                                    "type": "variable_if",
-                                    "name": "hyper",
-                                    "value": 1
-                                  }
-                                ],
                                 "type": "basic"
                             },
                             {
+                                "conditions": [
+                                    {
+                                        "name": "hyper",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
                                 "from": {
                                     "key_code": "j",
                                     "modifiers": {
                                         "optional": [
-                                          "any"
+                                            "any"
                                         ]
                                     }
                                 },
@@ -133,21 +140,21 @@
                                         "key_code": "down_arrow"
                                     }
                                 ],
-                                "conditions": [
-                                  {
-                                    "type": "variable_if",
-                                    "name": "hyper",
-                                    "value": 1
-                                  }
-                                ],
                                 "type": "basic"
                             },
                             {
+                                "conditions": [
+                                    {
+                                        "name": "hyper",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
                                 "from": {
                                     "key_code": "k",
                                     "modifiers": {
                                         "optional": [
-                                          "any"
+                                            "any"
                                         ]
                                     }
                                 },
@@ -156,21 +163,21 @@
                                         "key_code": "up_arrow"
                                     }
                                 ],
-                                "conditions": [
-                                  {
-                                    "type": "variable_if",
-                                    "name": "hyper",
-                                    "value": 1
-                                  }
-                                ],
                                 "type": "basic"
                             },
                             {
+                                "conditions": [
+                                    {
+                                        "name": "hyper",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
                                 "from": {
                                     "key_code": "l",
                                     "modifiers": {
                                         "optional": [
-                                          "any"
+                                            "any"
                                         ]
                                     }
                                 },
@@ -179,12 +186,199 @@
                                         "key_code": "right_arrow"
                                     }
                                 ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Open app: Hyper+[t->Term, g->Chrome, f->Firefox, w->WorkFlowy, e->Finder]",
+                        "manipulators": [
+                            {
                                 "conditions": [
-                                  {
-                                    "type": "variable_if",
-                                    "name": "hyper",
-                                    "value": 1
-                                  }
+                                    {
+                                        "name": "hyper",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "t",
+                                    "modifiers": {
+                                        "optional": [
+                                            "option",
+                                            "shift",
+                                            "command"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "open -a Terminal"
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "hyper",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "t",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "control"
+                                        ],
+                                        "optional": [
+                                            "any"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "open -a Terminal ~"
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "hyper",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "g",
+                                    "modifiers": {
+                                        "optional": [
+                                            "any"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "open -a 'Google Chrome'"
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "hyper",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "w",
+                                    "modifiers": {
+                                        "optional": [
+                                            "any"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "open -a WorkFlowy"
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "hyper",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "f",
+                                    "modifiers": {
+                                        "optional": [
+                                            "any"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "open -a '/Applications/FirefoxNightly.app/Contents/MacOS/firefox'"
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "hyper",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "z",
+                                    "modifiers": {
+                                        "optional": [
+                                            "any"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "open -a zoom.us"
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "hyper",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "e",
+                                    "modifiers": {
+                                        "optional": [
+                                            "any"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "open ~"
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "hyper",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "s",
+                                    "modifiers": {
+                                        "optional": [
+                                            "any"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "open -a Slack"
+                                    }
                                 ],
                                 "type": "basic"
                             }
@@ -194,11 +388,18 @@
                         "description": "Change Hyper+p to print screen",
                         "manipulators": [
                             {
+                                "conditions": [
+                                    {
+                                        "name": "hyper",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
                                 "from": {
                                     "key_code": "p",
                                     "modifiers": {
                                         "optional": [
-                                          "any"
+                                            "any"
                                         ]
                                     }
                                 },
@@ -206,13 +407,6 @@
                                     {
                                         "key_code": "left_arrow"
                                     }
-                                ],
-                                "conditions": [
-                                  {
-                                    "type": "variable_if",
-                                    "name": "hyper",
-                                    "value": 1
-                                  }
                                 ],
                                 "type": "basic"
                             }
