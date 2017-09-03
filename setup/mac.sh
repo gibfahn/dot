@@ -54,6 +54,7 @@ fi
 
 # brew install things. Edit config/Brewfile to adjust.
 echo "❯❯❯ brew installing/updating"
+brew tap Homebrew/bundle
 brew bundle --file=$(dirname $0)/config/Brewfile
 
 if [ "$HARDCORE" ]; then # Set up HARDCORE brew packages.
