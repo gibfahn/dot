@@ -8,6 +8,7 @@ try
   Plug 'tpope/vim-repeat'                           " Allows you to use . with above.
   Plug 'tpope/vim-commentary'                       " Autodetect comment type for lang.
   Plug 'tpope/vim-vinegar'                          " Nicer file browser plugin.
+  Plug 'fweep/vim-zsh-path-completion'              " Nicer file browser plugin.
   Plug '~/.local/share/nvim/plugged/YouCompleteMe'  " Autocompletion for some langs.
 " - = .. | I = help | ~ = ~ | <C-i/o> = Quit | cg = cd $cwd | R = rename | D = delete
   call plug#end()                                   " Initialize plugin system
@@ -48,7 +49,8 @@ set t_Co=256                                        " Use 256 color terminal.
 set splitbelow                                      " Open new split panes to right and,
 set splitright                                      "  ↳ bottom, which feels more natural.
 set diffopt+=vertical                               " Always use vertical diffs.
-set wildchar=<Tab> wildmenu wildmode=full           " More info with : and Tab.
+set wildchar=<Tab> wildmenu                         " Tab complete with files (e.g. `:e`)
+set wildmode=list:longest,list:full                 " 1st Tab completes to longest common string, 2nd+ cycles through options.
 set list listchars=tab:»·,trail:·,nbsp:·            " Display extra whitespace.
 
 nnoremap k gk|                                      " Move up   visually , don't skip wrapped lines,
