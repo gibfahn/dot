@@ -1,5 +1,4 @@
 # vi: filetype=conf
-tap "crisidev/homebrew-chunkwm"
 
 brew "dfu-util"                          # Used for flashing my Ergodox Infinity.
 brew "exercism"                          # Learn coding languages.
@@ -17,7 +16,10 @@ cask "firefoxnightly"                    # For those sweet Rust-based improvemen
 cask "vagrant"                           # Quick command-line image spin-up.
 cask "virtualbox"                        # Manage VMs (Linux or Windows).
 cask "slack-beta"                        # Everyone uses Slack right?
+cask "karabiner-elements"                # Key remapper (see $c/karabiner/karabiner.json for my settings).
+cask "keycastr"                          # Shows keystrokes in corner of screen (great for casting/demos).
 
-# Chunkwm Window Manager:
-brew "chunkwm", restart_service: :changed
-brew "koekeishiya/formulae/khd", restart_service: :changed
+# Chunkwm Window Manager (currently disabled):
+# tap "crisidev/homebrew-chunkwm"
+# brew "chunkwm", restart_service: :changed
+# brew "koekeishiya/formulae/khd", restart_service: :changed

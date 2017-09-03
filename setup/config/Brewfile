@@ -47,6 +47,7 @@ brew "rmtrash"                           # `rm` to Trash, aliased to `dl` in gcf
 brew "tig"                               # View git diffs in log.
 cask "docker"                            # Build and run docker images.
 
+# Casks (GUI Applications):
 cask "copyq"                             # Clipboard manager with history (needs manual setup).
 cask "google-chrome"                     # You probably want/have Chrome.
 cask "gpgtools"                          # GUI gpg key manager (manual setup required).
