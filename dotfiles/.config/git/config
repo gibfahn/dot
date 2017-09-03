@@ -152,7 +152,6 @@
     insteadOf = isg: # IBM ssh gib.
 
 [user]
-  name = Gibson Fahnestock
-  email = gibfahn@gmail.com # Needs to match gpg signing email.
-  # email = gib@fahn.co
-  username = gibfahn
+  # Needs to match gpg signing email.
+  name = Gibson Fahnestock # REPLACEME
+  email = gibfahn@gmail.com #REPLACEME
