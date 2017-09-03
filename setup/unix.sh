@@ -27,6 +27,37 @@ else
     echo "❯❯❯ $shell is already the default shell"
 fi
 
+# Change git user.name and user.email
+if [ "$(whoami)" != gib ] && {
+ grep -q 'name = Gibson Fahnestock # REPLACEME' "$XDG_CONFIG_HOME/git/config" ||
+ grep -q 'email = gibfahn@gmail.com # REPLACEME' "$XDG_CONFIG_HOME/git/config"
+}; then
+  if ! exists git; then
+    # TODO(gib): include this in FINAL_OUTPUT.
+    echo "❯❯❯ Rerun setup once git has been installed to set user.name and user.email"
+    sleep 5
+  fi
+
+  if [ -e "$HOME/.gitconfig" ]; then
+    GITNAME=$(git config --global user.name)
+    GITEMAIL=$(git config --global user.email)
+    echo "❯❯❯ Moving ~/.gitconfig to ~/backup/.gitconfig, preserving name as '$GITNAME' and email
+    as '$GITEMAIL'. Make sure to move any settings you want preserved across."
+    mv "$HOME/.gitconfig" "$HOME/backup/.gitconfig"
+    git config --global user.name "$GITNAME"
+    git config --global user.email "$GITEMAIL"
+  fi
+  if [ -z "$GITNAME" -o "$(git config --global user.name)" = "Gibson Fahnestock" ]; then
+    read -p "Git name not set, what's your full name? " GITNAME
+    git config --global user.name "$GITNAME"
+  fi
+  if [ -z "$GITEMAIL" -o "$(git config --global user.email)" ]; then
+    read -p "Git email not set, what's your email address? " GITEMAIL
+    git config --global user.email "$GITEMAIL"
+  fi
+  echo "❯❯❯ git name set to $(git config --global user.name) and email set to $(git config --global user.email)"
+fi
+
 # Set up a default ssh config
 if [ ! -e ~/.ssh/config ]; then
   echo "❯❯❯ Copying default ssh config."
