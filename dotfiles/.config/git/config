@@ -6,8 +6,9 @@
   headUpstream = rev-parse --abbrev-ref --symbolic-full-name @{u}
   headRemote = "!git headUpstream | cut -d '/' -f 1"
 
-  a = add
-  aa = add -A # Adds everything.
+  a   = add
+  ap  = add -p # Adds files in hunks (only add some of the changes you made).
+  aa  = add -A # Adds everything.
   ama = am --abort
   amc = am --continue
   ams = am --skip
@@ -35,6 +36,7 @@
   cpa = cherry-pick --abort
   cpc = cherry-pick --continue
   co  = checkout
+  cop = checkout -p # Selectively undo some of the changes you made.
   cot = checkout -t # g cot up/master means checkout master tracking the one in up.
   fix = commit --fixup # g fix SHA means rebasing will attach to that SHA.
 
