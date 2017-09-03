@@ -4,6 +4,7 @@ tap "caskroom/cask"                      # `brew cask` for GUI apps.
 tap "caskroom/versions"                  # Beta versions of apps.
 tap "homebrew/bundle"                    # Allows you to use Brewfiles.
 tap "homebrew/completions"               # Shell completions.
+tap "buo/cask-upgrade"                   # Upgrade all casks with `brew cu`.
 
 # Versions of utils that are out-of-date on macOS:
 # Defaults are in /usr/bin, brew installs to /usr/local/bin
@@ -51,3 +52,4 @@ cask "google-chrome"                     # You probably want/have Chrome.
 cask "gpgtools"                          # GUI gpg key manager (manual setup required).
 cask "meld"
 cask "spectacle"                         # Window manager that's easy to get used to.
+cask "vimr"                              # GUI neovim.
