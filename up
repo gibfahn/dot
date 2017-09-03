@@ -32,3 +32,5 @@ fi
 
 # Cross-platform setup:
 ./setup/unix.sh
+
+finalOutput

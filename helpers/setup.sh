@@ -56,3 +56,8 @@ hasSudo() {
     return 1
   fi
 }
+
+finalOutput() {
+  echo ">>> INSTALL STATUS: $?"
+  [ "$FINAL_OUTPUT" ] && echo ">>> $FINAL_OUTPUT"
+}
