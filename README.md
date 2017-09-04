@@ -75,10 +75,10 @@ Some things you have to do manually, here's a short list:
     fields.
 - Set up ssh keys (All)
   - If you don't have them you probably want them. Instructions
-    [here](https://fahn.co/blog/setting-up-ssh-keys.html).
+    [here](http://fahn.co/blog/setting-up-ssh-keys.html).
 - Set up gpg keys (All)
   - Similar to ssh keys, instructions
-    [here](http://fahn.co/blog/gpg-and-github.html).
+    [here](http://fahn.co/blog/setting-up-gpg-keys.html).
 - Run Spectacle on Login (macOS):
   - <kbd>⌘</kbd><kbd>Space</kbd>`Spectacle`<kbd>Enter</kbd>
   - Click on the spectacles in the Menu Bar, click Preferences
