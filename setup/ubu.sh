@@ -71,6 +71,19 @@ if not j4-dmenu-desktop; then
   popd >/dev/null
 fi
 
+# Change default version of gpg to gpg2 (which Ubuntu should be doing soon, it's
+# in Debian Stretch). Don't do anything unless we're sure.
+gpgVersion=$(gpg --version | head -1 | awk '{print $NF}')
+if [ ${gpgVersion%%.*} = 1 ] && exists gpg2 &&
+  [ "$(which gpg)" = /usr/bin/gpg -a "$(which gpg2)" = /usr/bin/gpg2 ]; then
+  echo "❯❯❯ Setting default gpg to gpg2 not gpg1"
+  sudo mv /usr/bin/gpg /usr/bin/gpg1
+  sudo update-alternatives --verbose --install /usr/bin/gpg gnupg /usr/bin/gpg2 50
+else
+  echo "❯❯❯ Not messing with default gpg"
+fi
+
+
 if exists google-chrome; then
   echo "❯❯❯ Already Installed: Google Chrome"
 else
@@ -89,7 +102,7 @@ else
 fi
 
 
-# Make Ctrl-[Shift]-Tab switch tabs in Gnome-Terminal
+# Make Ctrl-[Shift]-Tab switch tabs in Gnome-Terminal, rather than Ctrl-PgUp/PgDn.
 gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ next-tab '<Primary>Tab'
 gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ prev-tab '<Primary><Shift>Tab'
 
