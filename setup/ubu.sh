@@ -37,6 +37,7 @@ list+=" xclip"                           # Copy/paste shell commands, used in gc
 list+=" tig"                             # Some nice additions to git (e.g. `tig log`).
 list+=" i3"                              # Window manager. Obsolete since I moved to bspwm.
 list+=" dfu-util"                        # Used for flashing my ergodox.
+list+=" scrot"                           # Take screenshots (works from the command line).
 list+=" ccache"                          # Makes recompilations faster.
 echo "❯❯❯ apt installing/updating: $list"
 sudo apt install -y $list
