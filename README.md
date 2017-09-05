@@ -7,16 +7,14 @@ Contains everything I use to setup a new machine (except ssh and gpg keys).
 ### Download the repo
 
 ```bash
-# Make a directory to put it in
+# Make a directory to put it in (any path is fine):
 mkdir -p ~/code
-cd ~/code
 ```
 
 #### If you have git installed
 
 ```bash
-git clone https://github.com/gibfahn/dot ~/code/dot
-cd dot
+git clone https://github.com/gibfahn/dot ~/code/dot && cd ~/code/dot
 ```
 
 
@@ -24,10 +22,9 @@ cd dot
 
 ```bash
 # Download a zipped up version of this repo
-curl -kLO https://github.com/gibfahn/dot/archive/master.zip
+curl -kL https://github.com/gibfahn/dot/archive/master.zip > master.zip
 unzip master.zip
-mv dot-master dot
-cd dot
+mv dot-master ~/code/dot && cd ~/code/dot
 ```
 
 ### Run the setup scripts
