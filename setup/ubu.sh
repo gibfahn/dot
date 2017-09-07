@@ -102,6 +102,12 @@ else
   cargo install ripgrep
 fi
 
+if exists slack; then
+  echo "❯❯❯ Already Installed: Slack"
+else
+  echo "❯❯❯ Installing: Slack"
+  curl -s https://packagecloud.io/install/repositories/slacktechnologies/slack/script.deb.sh | sudo bash
+fi
 
 # Make Ctrl-[Shift]-Tab switch tabs in Gnome-Terminal, rather than Ctrl-PgUp/PgDn.
 gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ next-tab '<Primary>Tab'
