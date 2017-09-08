@@ -102,6 +102,8 @@ else
   cargo install ripgrep
 fi
 
+# Raised question with Slack, apparently this isn't the right way to automate
+# the Slack install.
 if exists slack; then
   echo "❯❯❯ Already Installed: Slack"
 else
