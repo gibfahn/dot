@@ -49,7 +49,7 @@
   la = log --graph --decorate --oneline --all # Graph log of all branches.
   ll = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%C(bold blue)<%an>%Creset' --abbrev-commit
 
-  mc = "!$VISUAL $(git diff --name-only --diff-filter=U)" # Open merge conflicts in editor.
+  mc = "! echo \"$VISUAL\" | grep -iq vi && c=\"-c /=======\" || c=\"\"; $VISUAL $c $(git diff --name-only --diff-filter=U)" # Open merge conflicts in editor.
   mf = merge --ff-only
 
   p = push
