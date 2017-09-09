@@ -300,7 +300,7 @@
                         ]
                     },
                     {
-                        "description": "Open/switch to app: Ж+t/T/g/w/f/z/e/s to Term/new Term/Chrome/WorkFlowy/FirefoxNightly/Zoom/Finder/Slack",
+                        "description": "Open/switch to app: Ж+t/Enter/g/w/f/z/e/s to Term/new Term/Chrome/WorkFlowy/FirefoxNightly/Zoom/Finder/Slack",
                         "manipulators": [
                             {
                                 "conditions": [
@@ -336,11 +336,8 @@
                                     }
                                 ],
                                 "from": {
-                                    "key_code": "t",
+                                    "key_code": "return_or_enter",
                                     "modifiers": {
-                                        "mandatory": [
-                                            "control"
-                                        ],
                                         "optional": [
                                             "any"
                                         ]
