@@ -4,6 +4,15 @@ Contains everything I use to setup a new machine (except ssh and gpg keys).
 
 ## How to run these setup scripts
 
+### Super-quick one line non-root (lite) setup
+
+Useful for remote machines you don't own (you still want some niceties, but you
+can't install a bunch of packages).
+
+```bash
+git clone https://github.com/gibfahn/dot -o up && cd dot && NO_SUDO=true HARDCORE="" ./up
+```
+
 ### Download the repo
 
 ```bash

@@ -20,7 +20,7 @@ if [ -z "$ZSH_VERSION" -a "${shell##*/}" != zsh ]; then
     get "Shell change (Current shell is $shell, changing to $NEWSHELL)."
     chsh -s "$NEWSHELL"
   else
-    skip "Shell change (current shell is $shell (\$SHELL=$SHELL) but ${NEWSHELL-zsh} shell doesn't exist)
+    skip "Shell change (current shell is $shell (\$SHELL=$SHELL) but shell $NEWSHELL (zsh) doesn't exist)
     Install zsh and then run chsh -s /path/to/zsh"
   fi
 else
