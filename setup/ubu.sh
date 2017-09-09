@@ -19,7 +19,7 @@ addPPA() {
   [ "$added" ] && sudo apt update || true
 }
 
-addPPA ppa:neovim-ppa/stable ppa:hluk/copyq ppa:git-core/ppa
+addPPA ppa:neovim-ppa/stable ppa:hluk/copyq ppa:git-core/ppa ppa:ubuntu-mozilla-daily/ppa
 
 # Apt install things. Added them individually so you can comment out lines to skip.
 list=""                                  # List of things to install.
@@ -38,6 +38,7 @@ list+=" tig"                             # Some nice additions to git (e.g. `tig
 list+=" i3"                              # Window manager. Obsolete since I moved to bspwm.
 list+=" dfu-util"                        # Used for flashing my ergodox.
 list+=" scrot"                           # Take screenshots (works from the command line).
+list+=" firefox-trunk"                   # Nightly (superfast) version of Firefox.
 list+=" ccache"                          # Makes recompilations faster.
 echo "❯❯❯ apt installing/updating: $list"
 sudo apt install -y $list
@@ -102,13 +103,12 @@ else
   cargo install ripgrep
 fi
 
-# Raised question with Slack, apparently this isn't the right way to automate
-# the Slack install.
 if exists slack; then
   echo "❯❯❯ Already Installed: Slack"
 else
   echo "❯❯❯ Installing: Slack"
-  curl -s https://packagecloud.io/install/repositories/slacktechnologies/slack/script.deb.sh | sudo bash
+  echo "deb https://packagecloud.io/slacktechnologies/slack/debian/ jessie main" | sudo tee /etc/apt/sources.list.d/slack.list >/dev/null
+  sudo apt install -y slack
 fi
 
 # Make Ctrl-[Shift]-Tab switch tabs in Gnome-Terminal, rather than Ctrl-PgUp/PgDn.
@@ -116,7 +116,7 @@ gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/k
 gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ prev-tab '<Primary><Shift>Tab'
 
 XKB=/usr/share/X11/xkb/
-if [ "$HARDCORE" && ! -d "$XKB".git ]; then # Set up xkb key remapping.
+if [ "$HARDCORE" -a ! -d "$XKB".git ]; then # Set up xkb key remapping.
   echo "❯❯❯ Setting up personal xkb shortcuts at $XKB."
   sudo chown -R $USER:`id -gn` "$XKB"
   pushd /usr/share/X11/xkb
