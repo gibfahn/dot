@@ -4,7 +4,7 @@
 
 . $(dirname $0)/../helpers/setup.sh # Load helper script from gcfg/helpers.
 
-# Set default shell to zsh
+# Set default shell to zsh (or $NEWSHELL if set).
 
 # $SHELL isn't updated until we logout, so check whether chsh was already run.
 if [ "$(uname)" = Darwin ]; then # macOS
@@ -15,12 +15,12 @@ fi
 # Fall back to $SHELL if that doesn't work.
 shell=${shell:-$SHELL}
 if [ -z "$ZSH_VERSION" -a "${shell##*/}" != zsh ]; then
-  NEWSHELL=${NEWSHELL:-$(cat /etc/shells | grep zsh | tail -1)} # Set NEWSHELL for a different shell.
+  NEWSHELL=${NEWSHELL-$(cat /etc/shells | grep zsh | tail -1)} # Set NEWSHELL for a different shell.
   if [ -e "$NEWSHELL" ]; then
     get "Shell change (Current shell is $shell, changing to $NEWSHELL)."
     chsh -s "$NEWSHELL"
   else
-    skip "Shell change (current shell is $shell (\$SHELL=$SHELL) but $NEWSHELL doesn't exist)
+    skip "Shell change (current shell is $shell (\$SHELL=$SHELL) but ${NEWSHELL-zsh} shell doesn't exist)
     Install zsh and then run chsh -s /path/to/zsh"
   fi
 else

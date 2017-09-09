@@ -49,6 +49,14 @@ If you don't have root (and don't want `sudo` prompts), just do:
 export NO_SUDO=true
 ```
 
+The scripts change your default shell to zsh, if you don't want this change
+`$NEWSHELL` to the path to the shell you'd like (or an empty string to not
+change shell). Make sure the shell you choose is in `/etc/shells`.
+
+```bash
+export NEWSHELL=/usr/local/bin/fish # Or NEWSHELL="" to keep current shell.
+```
+
 If you want to enable HARDCORE mode for a single script, just pass it as an env
 var, e.g.
 
@@ -57,7 +65,7 @@ export HARDCORE=true
 ./setup/unix.sh
 ```
 
-So if you just want to update your dotfile symlinks, you can just run:
+If you just want to update your dotfile symlinks, you can just run:
 
 ```sh
 ./rcme
