@@ -5,7 +5,8 @@
 . $(dirname $0)/helpers/setup.sh # Load helper script from dot/helpers.
 
 # Enable hardcore mode if you're sure.
-read -p "HARDCORE mode (leave blank not to enable)? " HARDCORE
+# Only prompt if HARDCORE is unset, not if it's set to empty string ("").
+[ -z ${HARDCORE+x} ] && read -p "HARDCORE mode (leave blank not to enable)? " HARDCORE
 export HARDCORE
 
 echo "❯❯❯ HARDCORE mode $([ "$HARDCORE" ] && echo on || echo off)"
