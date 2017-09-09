@@ -11,7 +11,7 @@ addPPA() {
   local added
   for i in $@; do
     if ! grep -q "^deb .*${i#ppa:}" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
-      echo "❯❯❯ Adding ppa: $i"
+      get "Adding ppa: $i"
       sudo add-apt-repository -y "$i"
       added="true"
     fi
@@ -40,7 +40,7 @@ list+=" dfu-util"                        # Used for flashing my ergodox.
 list+=" scrot"                           # Take screenshots (works from the command line).
 list+=" firefox-trunk"                   # Nightly (superfast) version of Firefox.
 list+=" ccache"                          # Makes recompilations faster.
-echo "❯❯❯ apt installing/updating: $list"
+get "apt installing/updating: $list"
 sudo apt install -y $list
 
 if not bspwm; then
@@ -78,35 +78,26 @@ fi
 gpgVersion=$(gpg --version | head -1 | awk '{print $NF}')
 if [ ${gpgVersion%%.*} = 1 ] && exists gpg2 &&
   [ "$(which gpg)" = /usr/bin/gpg -a "$(which gpg2)" = /usr/bin/gpg2 ]; then
-  echo "❯❯❯ Setting default gpg to gpg2 not gpg1"
+  get "Setting default gpg to gpg2 not gpg1"
   sudo mv /usr/bin/gpg /usr/bin/gpg1
   sudo update-alternatives --verbose --install /usr/bin/gpg gnupg /usr/bin/gpg2 50
 else
-  echo "❯❯❯ Not messing with default gpg"
+  skip "Setting gpg2 as default (not messing with default)"
 fi
 
 
-if exists google-chrome; then
-  echo "❯❯❯ Already Installed: Google Chrome"
-else
-  echo "❯❯❯ Installing: Google Chrome"
+if not google-chrome; then
   sudo apt install -y libxss1 libappindicator1 libindicator7
   wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
   sudo dpkg -i google-chrome-stable_current_amd64.deb || sudo apt-get install -f && sudo dpkg -i google-chrome-stable_current_amd64.deb
   rm google-chrome-stable_current_amd64.deb
 fi
 
-if exists rg && exists cargo; then
-  echo "❯❯❯ Already Installed: ripgrep (or you don't have cargo to build it)"
-else
-  echo "❯❯❯ Installing: ripgrep"
+if exists cargo && not rg "(ripgrep)"; then
   cargo install ripgrep
 fi
 
-if exists slack; then
-  echo "❯❯❯ Already Installed: Slack"
-else
-  echo "❯❯❯ Installing: Slack"
+if not slack; then
   echo "deb https://packagecloud.io/slacktechnologies/slack/debian/ jessie main" | sudo tee /etc/apt/sources.list.d/slack.list >/dev/null
   sudo apt install -y slack
 fi
@@ -117,7 +108,7 @@ gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/k
 
 XKB=/usr/share/X11/xkb/
 if [ "$HARDCORE" -a ! -d "$XKB".git ]; then # Set up xkb key remapping.
-  echo "❯❯❯ Setting up personal xkb shortcuts at $XKB."
+  get "Setting up personal xkb shortcuts at $XKB."
   sudo chown -R $USER:`id -gn` "$XKB"
   pushd /usr/share/X11/xkb
   git init
@@ -132,5 +123,5 @@ if [ "$HARDCORE" -a ! -d "$XKB".git ]; then # Set up xkb key remapping.
   git checkout gibLayout
   sudo dpkg-reconfigure xkb-data
 else
-  echo "❯❯❯ Not setting up personal xkb shortcuts."
+  skip "Not setting up personal xkb shortcuts (not HARDCORE or non-standard xkb dir)."
 fi

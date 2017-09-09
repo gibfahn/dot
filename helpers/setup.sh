@@ -6,6 +6,13 @@
 # Include (source) with this line (assuming you're in gcfg):
 # . $(dirname $0)/helpers/setup.sh # Load helper script from gcfg/helpers.
 
+# No POSIX way to get dir of sourced script.
+[ "$BASH_VERSION" ] && thisDir="$(dirname ${BASH_SOURCE[0]})"
+[ "$ZSH_VERSION" ] && thisDir="$(dirname $0)"
+
+# Get colour aliases.
+. "$thisDir"/colours.sh
+
 export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-"$HOME/.config"} # Config stuff should go here.
 export XDG_CACHE_HOME=${XDG_CACHE_HOME:-"$HOME/.cache"} # Cache stuff should go here.
 export XDG_DATA_HOME=${XDG_DATA_HOME:-"$HOME/.local/share"} # Data should go here.
@@ -17,13 +24,25 @@ mkdir -p "$BIN_DIR"
 
 exists() { type "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
 
+### Logging functions
+
+# Used when you're going to install something.
+get() {
+    echo -e "${CYAN}❯❯❯ Installing:${NC} $@"
+}
+
+# Used when you're not going to install something.
+skip() {
+    echo -e "${YELLOW}❯❯❯   Skipping:${NC} $@"
+}
+
 # `if no foo` then foo isn't in $XDG_DATA_HOME and we should install it.
 no() { # Do we need to install $1?
   if [ ! -e "$XDG_DATA_HOME/$1" ]; then
-    echo "❯❯❯ Installing: $1"
+    get "$1"
     return 0 # Directory is missing.
   else
-    echo "❯❯❯ Already Installed : $1"
+    skip "$1 (already exists)."
     return 1 # Directory not missing.
   fi
 }
@@ -31,10 +50,10 @@ no() { # Do we need to install $1?
 # `if not foo` then foo isn't in path and we should install it.
 not() { # Do we need to install $1?
   if ! exists "$1"; then
-    echo "❯❯❯ Installing: $1"
+    get "$@"
     return 0 # Binary not in path.
   else
-    echo "❯❯❯ Already Installed : $1"
+    get "$@"
     return 1 # Binary in path.
   fi
 }
@@ -49,15 +68,15 @@ gitClone() {
 # `hasSudo || exit` in individual install scripts to check for sudo.
 hasSudo() {
   if [ "$NO_SUDO" ] || ! sudo -v; then
-    echo "❯❯❯ User doesn't have sudo, skipping package installs"
+    skip "Packages (user doesn't have sudo)."
     return 1
   else
-    echo "❯❯❯ Installing packages."
+    get "Packages."
     return 0
   fi
 }
 
 finalOutput() {
-  echo ">>> INSTALL STATUS: $?"
-  [ "$FINAL_OUTPUT" ] && echo ">>> $FINAL_OUTPUT"
+  echo -e "${BCYAN}❯❯❯ INSTALL STATUS:${NC} $?"
+  [ "$FINAL_OUTPUT" ] && echo -e "${BGBRED}❯❯❯ FINAL OUTPUT:${NC} $FINAL_OUTPUT"
 }
