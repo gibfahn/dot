@@ -43,6 +43,12 @@ Everything should be pretty self-explanatory and commented, it's all basic bash
 scripting. From `./up` you can see what scripts get run. Each of them can be run
 individually (and run more than once).
 
+If you don't have root (and don't want `sudo` prompts), just do:
+
+```bash
+export NO_SUDO=true
+```
+
 If you want to enable HARDCORE mode for a single script, just pass it as an env
 var, e.g.
 

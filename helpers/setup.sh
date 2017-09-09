@@ -48,12 +48,12 @@ gitClone() {
 
 # `hasSudo || exit` in individual install scripts to check for sudo.
 hasSudo() {
-  if sudo -v; then
-    echo "❯❯❯ Installing packages."
-    return 0
-  else
+  if [ "$NO_SUDO" ] || ! sudo -v; then
     echo "❯❯❯ User doesn't have sudo, skipping package installs"
     return 1
+  else
+    echo "❯❯❯ Installing packages."
+    return 0
   fi
 }
 
