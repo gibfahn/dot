@@ -68,19 +68,19 @@ else
 fi
 
 # Install oh-my-zsh:
-if no oh-my-zsh; then
+if exists zsh && no oh-my-zsh; then
   # Don't run the setup script, we don't need it and it checks $SHELL which
   # we've only just changed. Just put it in the right place.
   gitClone robbyrussell/oh-my-zsh "$XDG_DATA_HOME/oh-my-zsh"
 fi
 
 # Set up autocompletions:
-if no zfunc; then mkdir -p "$XDG_DATA_HOME/zfunc"; fi
+if exists zsh && no zfunc; then mkdir -p "$XDG_DATA_HOME/zfunc"; fi
 
 # Set up zsh scripts:
-if no zsh; then mkdir -p "$XDG_DATA_HOME/zsh"; fi
+if exists zsh && no zsh; then mkdir -p "$XDG_DATA_HOME/zsh"; fi
 
-if no zsh/zsh-syntax-highlighting; then
+if exists zsh && no zsh/zsh-syntax-highlighting; then
   gitClone zsh-users/zsh-syntax-highlighting "$XDG_DATA_HOME/zsh/zsh-syntax-highlighting"
 fi
 
@@ -92,6 +92,7 @@ if no nvm; then
   nvm install stable # Install the latest LTS version of node.
 
   # Autocompletion for npm (probably needed)
+  mkdir -p "$XDG_DATA_HOME/.zfunc"
   npm completion > "$XDG_DATA_HOME/.zfunc/_npm"
 fi
 
@@ -111,7 +112,7 @@ if [ "$HARDCORE" ] && { no rustup || no cargo; }; then # Install/set up rust.
   # Install rustup. Don't modify path as that's already in gibrc.
   curl https://sh.rustup.rs -sSf | bash -s -- --no-modify-path
   # Download zsh completion
-  curl https://raw.githubusercontent.com/rust-lang-nursery/rustup.rs/master/src/rustup-cli/zsh/_rustup >"$XDG_DATA_HOME/zfunc/_rustup"
+  exists zsh && curl https://raw.githubusercontent.com/rust-lang-nursery/rustup.rs/master/src/rustup-cli/zsh/_rustup >"$XDG_DATA_HOME/zfunc/_rustup"
 
   if [ ! -d "$HOME/.rustup" ]; then
     # Move to proper directories
