@@ -107,6 +107,7 @@
   follow = true # Log tracks file move/rename.
 [merge]
   defaultToUpstream = true # Not set by default before Git 2.0, remove when possible.
+  conflictstyle = diff3 # Show common ancestor in diffs (initially confusing, but very helpful).
 [pull]
   rebase = true # pull = fetch + rebase, not fetch + merge.
 [push]
