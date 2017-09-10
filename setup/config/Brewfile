@@ -54,3 +54,4 @@ cask "gpgtools"                          # GUI gpg key manager (manual setup req
 cask "meld"
 cask "spectacle"                         # Window manager that's easy to get used to.
 cask "vimr"                              # GUI neovim.
+cask "hyperswitch"                       # Better Cmd-Tab (only windows on a screen).
