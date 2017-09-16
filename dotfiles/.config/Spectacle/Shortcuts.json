@@ -8,19 +8,19 @@
     "shortcut_name" : "MakeSmaller"
   },
   {
-    "shortcut_key_binding" : "ctrl+cmd+left",
-    "shortcut_name" : "MoveToUpperLeft"
+    "shortcut_key_binding" : "ctrl+shift+cmd+l",
+    "shortcut_name" : "MoveToLowerRight"
   },
   {
-    "shortcut_key_binding" : "ctrl+cmd+right",
+    "shortcut_key_binding" : "ctrl+cmd+l",
     "shortcut_name" : "MoveToUpperRight"
   },
   {
-    "shortcut_key_binding" : "alt+cmd+down",
+    "shortcut_key_binding" : "alt+cmd+j",
     "shortcut_name" : "MoveToBottomHalf"
   },
   {
-    "shortcut_key_binding" : "ctrl+alt+cmd+right",
+    "shortcut_key_binding" : "ctrl+alt+cmd+l",
     "shortcut_name" : "MoveToNextDisplay"
   },
   {
@@ -28,7 +28,7 @@
     "shortcut_name" : "MoveToTopHalf"
   },
   {
-    "shortcut_key_binding" : "ctrl+shift+cmd+left",
+    "shortcut_key_binding" : "ctrl+shift+cmd+h",
     "shortcut_name" : "MoveToLowerLeft"
   },
   {
@@ -40,19 +40,19 @@
     "shortcut_name" : "UndoLastMove"
   },
   {
-    "shortcut_key_binding" : "ctrl+alt+cmd+left",
+    "shortcut_key_binding" : "ctrl+alt+cmd+h",
     "shortcut_name" : "MoveToPreviousDisplay"
   },
   {
-    "shortcut_key_binding" : "alt+cmd+up",
+    "shortcut_key_binding" : "alt+cmd+k",
     "shortcut_name" : "MoveToFullscreen"
   },
   {
-    "shortcut_key_binding" : "ctrl+alt+right",
+    "shortcut_key_binding" : "ctrl+alt+l",
     "shortcut_name" : "MoveToNextThird"
   },
   {
-    "shortcut_key_binding" : "alt+cmd+left",
+    "shortcut_key_binding" : "alt+cmd+h",
     "shortcut_name" : "MoveToLeftHalf"
   },
   {
@@ -60,15 +60,15 @@
     "shortcut_name" : "MoveToCenter"
   },
   {
-    "shortcut_key_binding" : "alt+cmd+right",
+    "shortcut_key_binding" : "alt+cmd+l",
     "shortcut_name" : "MoveToRightHalf"
   },
   {
-    "shortcut_key_binding" : "ctrl+alt+left",
-    "shortcut_name" : "MoveToPreviousThird"
+    "shortcut_key_binding" : "ctrl+cmd+h",
+    "shortcut_name" : "MoveToUpperLeft"
   },
   {
-    "shortcut_key_binding" : "ctrl+shift+cmd+right",
-    "shortcut_name" : "MoveToLowerRight"
+    "shortcut_key_binding" : "ctrl+alt+h",
+    "shortcut_name" : "MoveToPreviousThird"
   }
 ]
