@@ -9,6 +9,7 @@ try
   Plug 'tpope/vim-commentary'                       " Autodetect comment type for lang.
   Plug 'tpope/vim-vinegar'                          " Nicer file browser plugin.
   Plug 'fweep/vim-zsh-path-completion'              " Nicer file browser plugin.
+  Plug 'AndrewRadev/splitjoin.vim'                  " gS to split, gJ to join lines.
   Plug '~/.local/share/nvim/plugged/YouCompleteMe'  " Autocompletion for some langs.
 " - = .. | I = help | ~ = ~ | <C-i/o> = Quit | cg = cd $cwd | R = rename | D = delete
   call plug#end()                                   " Initialize plugin system
