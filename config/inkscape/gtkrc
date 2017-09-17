@@ -1,0 +1,251 @@
+	include "/tmp/skl/Gimp.app/Contents/Resources/share/gimp/2.0/themes/Default/gtkrc"
+
+style "clearlooks-default"
+{
+  GtkMenuItem::selected_shadow_type = out
+  GtkWidget::interior_focus = 1
+  GtkButton::default_border = { 0, 0, 0, 0 }
+  GtkButton::default_outside_border = { 0, 0, 0, 0 }
+  GtkRange::trough_border = 0
+
+  GtkWidget::focus_padding = 0 
+ # GtkWidget::focus-padding         = 0
+
+  GtkPaned::handle_size = 5
+
+  GtkRange::slider_width = 12
+  GtkRange::stepper_size = 12 #toolbar arrows
+  GtkScrollbar::min_slider_length = 28
+  GtkCheckButton::indicator_size = 10
+  GtkMenuBar::internal-padding = 0
+
+  GtkTreeView::expander_size = 12
+  GtkTreeView::odd_row_color = "#38393b"
+  GtkExpander::expander_size = 14
+
+  xthickness = 1
+  ythickness = 1
+  
+    GtkOptionMenu::indicator-size    = { 5, 11 }
+  GtkOptionMenu::indicator-spacing = { 4, 3, 1, 1 }
+
+  GtkPaned::handle-size             = 4
+  GimpDock::default-height          = 200
+  GimpDock::font-scale              = 0.7500
+  GimpDockSeparator::height         = 4
+  GimpMenuDock::minimal-width       = 180
+  GimpMenuDock::menu-preview-size   = small-toolbar
+  GimpToolbox::tool-icon-size       = menu
+  GimpToolbox::button-relief        = none
+  GimpDockbook::tab-border          = 0
+  GimpDockbook::tab-icon-size       = menu
+  GimpColorNotebook::tab-border     = 0
+  GimpColorNotebook::tab-icon-size  = menu
+  GimpDockable::content-border      = 1
+  GimpEditor::content-spacing       = 1
+  GimpEditor::button-spacing        = 1
+  GimpEditor::button-icon-size      = menu
+  GimpDataEditor::minimal-height    = 60
+  GimpFrame::label-spacing          = 2
+  GtkDialog::content-area-border    = 0
+  GtkDialog::button-spacing         = 6
+  GtkDialog::action-area-border     = 10
+  GimpUnitComboBox::appears-as-list = 0
+  
+	font_name = "DejaVu Sans 8"
+
+  fg[NORMAL]        = "#c4c4c4" # normaler Text
+  fg[PRELIGHT]      = "#f3f3f3" # Text mouse-over
+  fg[ACTIVE]        = "#f3f3f3" # aktivirter Text Bsp: aktiver Checkboxtext
+  fg[SELECTED]      = "#f3f3f3" # selectierter Text Bsp: Einstellungen Überschrift
+  fg[INSENSITIVE]   = "#3e3e3e" # ausgegrauter Text Bsp: inaktive Filter, etc
+
+  bg[NORMAL]		= "#3e3e3e" # normaler Hintergrund
+  bg[PRELIGHT]		= "#545454" # Hintergrund mousover Bsp Buttons, Checkboxtext
+  bg[ACTIVE]		= "#545454" # gedrückter Button, aktiviertes Widget
+  bg[SELECTED]		= "#3369c0" # selektierter Hintergrund Bsp Einstellungen Überschrift
+  bg[INSENSITIVE]	= "#303030" # Bsp: inaktiver Button
+
+  base[NORMAL]		= "#606060" # Checkboxintergrund, Eingabehintergrund, Panelhintergrund
+  base[PRELIGHT]	= "#92b6f4" # Rahmen / Hintergrund Menuitems
+  base[ACTIVE]		= "#4c4c4c" # markierter Hintergrund ohne Focus, Bsp in Listen
+  base[SELECTED]	= "#3369c0" # Scrollbar Hintergrund, Tab-Reiter-Highlight, Menubar-Item-Hintergrund
+  base[INSENSITIVE]	= "#4c4c4c" # inaktiver Checkbox-Hintergrund, Panelhintergrund etc
+
+  text[NORMAL]		= "#f3f3f3" # normaler Text Reiter, Combo, Eingabe(s.u.), Checkmarker
+  text[PRELIGHT]	= "#f3f3f3" # mouseover Text Combo, Checkmarker
+  text[ACTIVE]		= "#c4c4c4" # markierter ohne Focus Text Bsp Listen
+  text[SELECTED]	= "#edf1f9" # markierter Text mit Focus
+  text[INSENSITIVE]	= "#3e3e3e" # ausgegrauter Text Comabo, Eingabe
+
+  engine "clearlooks" 
+  {
+    contrast = 1.0
+    sunkenmenubar = 1
+    menubarstyle      = 0       # 0 = flat, 1 = sunken, 2 = flat gradient
+    menuitemstyle     = 0       # 0 = flat, 1 = 3d-ish (gradient), 2 = 3d-ish (button)
+    listviewitemstyle = 0       # 0 = flat, 1 = 3d-ish (gradient)
+    progressbarstyle  = 2       # 0 = candy bar, 1 = supercandy, 2 = flat
+  }
+}
+
+
+style "clearlooks-progressbar" = "clearlooks-default"
+{
+  xthickness = 1
+  ythickness = 1
+}
+
+style "clearlooks-scrollbar" = "clearlooks-default"
+{
+  bg[NORMAL]		= "#484848" 
+  bg[PRELIGHT]		= "#545454" 
+#  bg[PRELIGHT]		= "#3369c0" 
+}
+
+
+style "clearlooks-wide" = "clearlooks-default"
+{
+  xthickness = 1
+  ythickness = 1
+  text[NORMAL]		= "#f3f3f3" # Bsp Eingabertext
+  base[NORMAL]		= "#606060" # Bsp Eingabehinterrund
+}
+
+style "clearlooks-button" = "clearlooks-default"
+{
+  xthickness = 2
+  ythickness = 2
+  bg[NORMAL]		= "#484848" # normaler Hintergrund
+}
+
+style "clearlooks-notebook" = "clearlooks-wide"
+{
+  bg[NORMAL] = "#303030" # aktiver Tabhintergrund
+  bg[ACTIVE] = "#282828" # inaktiver Tabhinergrund
+}
+
+style "clearlooks-tasklist" = "clearlooks-default"
+{
+  xthickness = 4
+  ythickness = 2
+}
+
+style "clearlooks-menu" = "clearlooks-default"
+{
+  xthickness = 4
+  ythickness = 4
+  bg[NORMAL]		= "#303030" # MenuHintergrund
+}
+
+style "clearlooks-menu-item" = "clearlooks-default"
+{
+  xthickness = 2
+  ythickness = 3
+# base[SELECTED] = "#0050a1"
+}
+
+style "clearlooks-menubar" = "clearlooks-default"
+{
+  xthickness = 3
+  ythickness = 3
+  bg[NORMAL]		= "#303030" # MenuHintergrund
+}
+
+style "clearlooks-menu-itembar" = "clearlooks-default"
+{
+  xthickness = 2
+  ythickness = 2
+  bg[NORMAL]		= "#ff0000" # MenuHintergrund ??
+}
+
+style "clearlooks-tree" = "clearlooks-default"
+{
+  xthickness = 2
+  ythickness = 2
+}
+
+style "clearlooks-frame-title" = "clearlooks-default"
+{
+  fg[NORMAL] = "#b8b9bb" # ? bei Gimp 
+}
+
+style "clearlooks-panel" = "clearlooks-default"
+{
+  xthickness = 2
+  ythickness = 2
+}
+
+style "clearlooks-tooltips" = "clearlooks-default"
+{
+  xthickness = 4
+  ythickness = 4
+}
+
+style "clearlooks-combo" = "clearlooks-default"
+{
+  xthickness = 1
+  ythickness = 1
+}
+
+style "metacity-frame"
+{
+  # Normal base color
+  #bg[NORMAL]  = "#bbbbbb"
+
+  # Unfocused title background color
+  #bg[INSENSITIVE]  = { 0.8, 0.8, 0.8 }
+
+  # Unfocused title text color
+  #fg[INSENSITIVE]  = { 1.55, 1.55, 1.55 }
+
+  # Focused icon color
+  fg[NORMAL]  = "#b8b9bb" # ?
+
+  # Focused title background color
+  bg[SELECTED]  = "#0050a1" # ?
+
+  # Focused title text color
+  fg[SELECTED]  = "#28292b" # ?
+}
+
+style "gimp-display-style" = "gimp-default-style"
+{
+  GimpRuler::font-scale          = 0.6000
+  GimpUnitComboBox::label-scale  = 0.8333
+  GimpScaleComboBox::label-scale = 0.8333
+  GtkComboBox::arrow-size        = 6
+  GtkButton::inner-border        = { 0, 0, 0, 0 }
+  GtkButton::focus-line-width    = 0
+  GtkButton::focus-padding       = 0
+}
+
+class "GtkWidget" style "clearlooks-default"
+class "GtkButton" style "clearlooks-button"
+class "GtkRange" style "clearlooks-wide"
+class "GtkFrame" style "clearlooks-wide"
+class "GtkStatusbar" style "clearlooks-wide"
+class "GtkMenu" style "clearlooks-menu"
+class "GtkMenuItem" style "clearlooks-menu-item"
+widget_class "*MenuItem.*" style "clearlooks-menu-item"
+widget_class "*.GtkAccelMenuItem.*" style "clearlooks-menu-item"
+widget_class "*.GtkRadioMenuItem.*" style "clearlooks-menu-item"
+widget_class "*.GtkCheckMenuItem.*" style "clearlooks-menu-item"
+widget_class "*.GtkImageMenuItem.*" style "clearlooks-menu-item"
+widget_class "*.GtkSeparatorMenuItem.*" style "clearlooks-menu-item"
+class "GtkMenuBar" style "clearlooks-menubar"
+class "GtkEntry" style "clearlooks-wide"
+widget_class "*.tooltips.*.GtkToggleButton" style "clearlooks-tasklist"
+widget_class "*.GtkTreeView.GtkButton" style "clearlooks-tree"
+widget_class "*.GtkCTree.GtkButton" style "clearlooks-tree"
+widget_class "*.GtkList.GtkButton" style "clearlooks-tree"
+widget_class "*.GtkCList.GtkButton" style "clearlooks-tree"
+widget_class "*.GtkFrame.GtkLabel" style "clearlooks-frame-title"
+widget_class "BasePWidget.GtkEventBox.GtkTable.GtkFrame" style "clearlooks-panel"
+widget "gtk-tooltips" style "clearlooks-tooltips"
+class "GtkNotebook" style "clearlooks-notebook"
+class "GtkProgressBar" style "clearlooks-progressbar"
+class "GtkScrollbar" style "clearlooks-scrollbar"
+widget_class "*.GtkComboBox.GtkButton" style "clearlooks-combo"
+widget_class "*.GtkCombo.GtkButton" style "clearlooks-combo"
+class "MetaFrames" style "metacity-frame"
