@@ -514,6 +514,41 @@
                         ]
                     },
                     {
+                      "description": "Ж+⌘ +d = lock screen (darken screen)",
+                      "manipulators": [
+                        {
+                          "conditions": [
+                            {
+                              "name": "hyper",
+                              "type": "variable_if",
+                              "value": 1
+                            }
+                          ],
+                          "from": {
+                            "key_code": "d",
+                            "modifiers": {
+                              "mandatory": [
+                                "command"
+                              ],
+                              "optional": [
+                                "any"
+                              ]
+                            }
+                          },
+                          "to": [
+                            {
+                              "key_code": "power",
+                              "modifiers": [
+                                "left_control",
+                                "left_shift"
+                              ]
+                            }
+                          ],
+                          "type": "basic"
+                        }
+                      ]
+                    },
+                    {
                         "description": "Ж+p = print screen (Screenshot to Clipboard)",
                         "manipulators": [
                             {
