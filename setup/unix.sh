@@ -94,7 +94,6 @@ fi
 if no nvim/site/autoload/plug.vim; then
   curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  exists() { type "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
   unset VIM
   { exists nvim && VIM=nvim; } || { exists vim && VIM=vim; } # Take what you can get.
   [ "$VIM" = vim ] && mkdir -p ~/.vim && ln -s ~/.local/share/nvim/site/autoload ~/.vim/autoload
