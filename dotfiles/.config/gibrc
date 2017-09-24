@@ -25,6 +25,8 @@ export npm_cache=${npm_cache:-"$XDG_CACHE_HOME/npm"} # Set npm cache location.
 export NODE_REPL_HISTORY=${NODE_REPL_HISTORY="$XDG_CACHE_HOME/node_repl_history"} # Set node-gyp download location.
 export BABEL_CACHE_PATH=${NODE_REPL_HISTORY="$XDG_CACHE_HOME/babel/cache.json"} # Set babel cache location.
 export CCACHE_DIR="$XDG_DATA_HOME/ccache" # ccache cache dir.
+export HELM_HOME="$XDG_DATA_HOME/helm" # Helm home directory.
+export BLUEMIX_HOME="$XDG_DATA_HOME" # Bluemix home directory (creates .bluemix inside)
 
 ### SHELL SPECIFIC ###
 ls --color=auto >/dev/null 2>&1 && alias ls='ls --color=auto' # ls use colour if poss.
