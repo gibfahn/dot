@@ -26,7 +26,7 @@ export NODE_REPL_HISTORY=${NODE_REPL_HISTORY="$XDG_CACHE_HOME/node_repl_history"
 export BABEL_CACHE_PATH=${NODE_REPL_HISTORY="$XDG_CACHE_HOME/babel/cache.json"} # Set babel cache location.
 export CCACHE_DIR="$XDG_DATA_HOME/ccache" # ccache cache dir.
 export HELM_HOME="$XDG_DATA_HOME/helm" # Helm home directory.
-export BLUEMIX_HOME="$XDG_DATA_HOME" # Bluemix home directory (creates .bluemix inside)
+export BLUEMIX_HOME="$XDG_DATA_HOME/bluemix" # Bluemix home directory (creates .bluemix inside)
 
 ### SHELL SPECIFIC ###
 ls --color=auto >/dev/null 2>&1 && alias ls='ls --color=auto' # ls use colour if poss.
@@ -47,9 +47,29 @@ if [ "$ZSH_VERSION" ]; then # zsh specific options.
   chpwd() { ls; } # Auto ls after changing directory.
   zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' # Case-insensitive match.
   source "$XDG_DATA_HOME/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" || true
-  last_if_empty() { [ -z "$BUFFER" ] && zle up-history; zle accept-line; } # See next line.
-  zle -N last_if_empty; bindkey '^M' last_if_empty # Empty input repeats last command.
-  unalias please po pu rd d afind _ # Remove unused oh-my-zsh aliases.
+
+  # Vim mode and keybindings in zsh:
+  accept-line() { [ -z "$BUFFER" ] && zle up-history; zle ".$WIDGET"; }
+  zle-keymap-select () { [ $KEYMAP = vicmd ] && printf "\033[2 q" || printf "\033[6 q"; }
+  zle-line-init () { zle -K viins; printf "\033[6 q"; }
+  zle -N accept-line # Redefine accept-line to insert last input if empty (Enter key).
+  zle -N zle-keymap-select # I-beam cursor in insert mode, block otherwise.
+  zle -N zle-line-init     # Part of above cursor hack ^.
+  KEYTIMEOUT=10 # Key delay of 0.1s (Esc in vim mode is quicker).
+
+  bindkey -v # Enable vim mode in zsh.
+
+  bindkey -M viins 'kj' vi-cmd-mode # Map kj -> Esc in vim mode.
+  bindkey -M viins "^?" backward-delete-char # Make backspace work properly.
+  bindkey -M viins "^H" backward-delete-char # <Ctrl>-H = Backspace (Emacs default).
+  bindkey -M viins "^W" backward-kill-word # <Ctrl>-W = Delete word (Emacs default).
+  bindkey -M viins "^U" backward-kill-line # <Ctrl>-U = Delete line (Emacs default).
+  bindkey -M viins "^R" history-incremental-search-backward # Restore <Ctrl>-R search.
+  bindkey -M viins "^S" history-incremental-search-forward # Restore <Ctrl>-S forward search.
+  bindkey -M main "^[[A" history-beginning-search-backward # Re-enable up for history search.
+  bindkey -M main "^[[B" history-beginning-search-forward # Re-enable down for history search.
+
+  unalias please po pu rd d afind _ md # Remove unused oh-my-zsh aliases.
   alias | grep run-help >/dev/null 2>&1 && unalias run-help # Doesn't seem to always be defined.
   # bindkey -v # Enable vim mode (breaks history search with <Up> so disabled).
   # KEYTIMEOUT=10 # ↳ Key delay of 0.1s (Esc in vim mode is quicker).
@@ -65,6 +85,7 @@ elif [ "$BASH_VERSION" ]; then # Bash specific options.
 fi
 
 ### FUNCTIONS ###
+md() { mkdir -p $*; [ $# = 1 ] && cd "$1" || true; } # md foo = mkdir foo && cd foo.
 exists() { type "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
 pathadd() { [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]] && PATH="$1${PATH+":$PATH"}"; }
 fnd() { find . -iname "*$**"; } # Find by filename (case insensitive).
