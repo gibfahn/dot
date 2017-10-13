@@ -84,6 +84,7 @@
   dfs = diff --staged # Diff of staged files (`git diff` for unstaged).
   df  = diff HEAD # diff of staged and unstaged files..
   dff = "!git diff-tree --no-commit-id --name-only -r $(git headUpstream) HEAD" # Files changed between upstream and HEAD.
+  dfu = "!git diff $(git headUpstream)" # diff between working tree and upstream branch.
 
   sma = submodule add                         # Add a new submodule: g sma url path.
   smi = submodule update --init --recursive   # Initialise submodules.
