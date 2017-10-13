@@ -1,10 +1,10 @@
 [alias]
   # Commits: @=HEAD, -=last commit.
   # N.B. # at end of func allows parsing $1 args.
-  # Helper functions.
-  headBranch = symbolic-ref --short HEAD
-  headUpstream = rev-parse --abbrev-ref --symbolic-full-name @{u}
-  headRemote = "!git headUpstream | cut -d '/' -f 1"
+  # Helper functions:
+  headUpstream = rev-parse --abbrev-ref --symbolic-full-name @{u} # Upstream of current branch, e.g. origin/master.
+  headRemote = "!git headUpstream | cut -d '/' -f 1" # e.g. origin.
+  headBranch = symbolic-ref --short HEAD # e.g. master.
 
   a   = add
   ap  = add -p # Adds files in hunks (only add some of the changes you made).
@@ -13,14 +13,14 @@
   amc = am --continue
   ams = am --skip
 
-  b = branch
-  ba = branch -a # Show all local and remote branches.
-  bd = branch -D # Delete branch.
-  br = branch -r # Show remote branches only.
+  b   = branch
+  ba  = branch -a # Show all local and remote branches.
+  bd  = branch -D # Delete branch.
+  br  = branch -r # Show remote branches only.
   bdd = "!lastBranch=$(git headBranch); git checkout -; git branch -D $lastBranch" # Delete current branch.
-  bp = "!git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -d" # Delete orphaned local branches.
-  bP = "!git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D" # Delete orphaned local branches!
-  bt = "!git branch -u $1/$(git headBranch) #" # g bt origin sets upstream to origin.
+  bp  = "!git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -d" # Delete orphaned local branches.
+  bP  = "!git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D" # Delete orphaned local branches!
+  bt  = "!git branch -u $1/$(git headBranch) #" # g bt origin sets upstream to origin.
 
   # I manually specify -S because gpgsign only works with Git 2.x. Also it
   # means that test suites using `git commit` don't break.
@@ -31,10 +31,11 @@
   cmn = commit -S --amend --no-edit
   can = commit -S --amend --no-edit -a
   cn  = clean -fdx
-  cl  = "clone --recursive --origin up" # Always include submodules, set default remote to "up".
+  cl  = clone --recursive --origin up # Always include submodules, set default remote to "up".
   cp  = cherry-pick
   cpa = cherry-pick --abort
   cpc = cherry-pick --continue
+  cps = cherry-pick --skip
   co  = checkout
   cop = checkout -p # Selectively undo some of the changes you made.
   cot = checkout -t # g cot up/master means checkout master tracking the one in up.
@@ -45,40 +46,44 @@
   # Create/update branch from Github PR, `g fp 657 origin` or `g fp` (Defaults: $1=HEAD, $2=upstreamRemote).
   fp = "! b=${2:-$(git headRemote)}; b=${b:-up}; a=${1:-$(git headBranch)}; git fetch -fu $b pull/$a/head:$a; git checkout $a; git branch -u $b #"
 
-  l = log --graph --decorate --oneline # Graph log.
-  la = log --graph --decorate --oneline --all # Graph log of all branches.
-  ll = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%C(bold blue)<%an>%Creset' --abbrev-commit
+  l   = log --graph --decorate --oneline # Graph log.
+  la  = log --graph --decorate --oneline --all # Graph log of all branches.
+  ll  = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%C(bold blue)<%an>%Creset' --abbrev-commit
 
-  mc = "! echo \"$VISUAL\" | grep -iq vi && c=\"-c /=======\" || c=\"\"; $VISUAL $c $(git diff --name-only --diff-filter=U)" # Open merge conflicts in editor.
-  mf = merge --ff-only
+  mc  = "!echo \"$VISUAL\" | grep -iq vi && c=\"-c /=======\" || c=\"\"; $VISUAL $c $(git diff --name-only --diff-filter=U)" # Open merge conflicts in editor.
+  mf  = merge --ff-only
 
-  p = push
-  pf = push --force-with-lease # Better version of push -f.
-  pa = "!curl -L $1.patch | git am -S --whitespace=fix #" # Patch Github PR.
+  p   = push
+  pf  = push --force-with-lease # Better version of push -f.
+  pa  = "!curl -L $1.patch | git am -S --whitespace=fix #" # Patch Github PR.
   pap = "!curl -L $1.patch | git am -3 -S --whitespace=fix #" # Please patch it.
   paw = "!curl -L $1.patch | git am -3 -S --whitespace=warn #" # Patch but don't fix whitespace.
-  pl = pull
-  pt = "!git push -u $1 $(git headBranch) #" # g pt origin sets branch to track up + pushes.
+  pl  = pull
+  pt  = "!git push -u $1 $(git headBranch) #" # g pt origin sets branch to track up + pushes.
 
-  ra = remote add
-  rb = rebase -S
+  ra  = remote add
+  rb  = rebase -S # Rebase and gpg sign.
   rba = rebase --abort
   rbc = rebase --continue
-  rhh = "!git reset --hard $(git headUpstream)" # Reset to upstream branch.
-  rh = reset --hard
-  ri = "rebase -i -S --autosquash"
-  rii = "!git rebase -i -S --autosquash $(git headUpstream)"
-  rr = remote rename # Change name of remote `g rr origin up`.
-  rs = remote set-url # Change URL of remote `g rs up hsg:dot`.
-  rv = remote -v # Show remotes (with URLs).
+  rbs = rebase --skip
+  rhh = "!git reset --hard $(git headUpstream)"
+  rh  = reset --hard
+  ri  = rebase -i -S --autosquash
+  rii = "!git rebase -i -S --autosquash $(git headUpstream)" # Reset to upstream branch, not needed with merge.defaultToUpstream.
+  rr  = remote rename # Change name of remote `g rr origin up`.
+  rs  = remote set-url # Change URL of remote `g rs up hsg:dot`.
+  rv  = remote -v # Show remotes (with URLs).
 
-  s = status
-  sh = show
-  st = stash
+  s   = status
+  sh  = show
+  shf = show --pretty="" --name-only # Show files changed only.
+  st  = stash
   stp = stash pop
   std = stash drop
-  df = diff HEAD # diff of staged and unstaged files..
+  df  = diff HEAD # diff of staged and unstaged files..
   dfs = diff --staged # Diff of staged files (`git diff` for unstaged).
+  df  = diff HEAD # diff of staged and unstaged files..
+  dff = "!git diff-tree --no-commit-id --name-only -r $(git headUpstream) HEAD" # Files changed between upstream and HEAD.
 
   sma = submodule add                         # Add a new submodule: g sma url path.
   smi = submodule update --init --recursive   # Initialise submodules.
@@ -90,17 +95,18 @@
 [color]
   ui = true # Default since git 1.8.4, remove when possible.
 [commit]
-  # gpgsign = true # Always sign commits, available since Git 2.0.
+  # gpgsign = true # Always sign commits, available since Git 2.0. Off because
+  # some people might not have gpg keys (and it breaks npm test suite).
 [credential]
   helper = osxkeychain
 [diff]
   wsErrorHighlight = all # diff and show show whitespace errors.
   renames = copies # Copies count as renames.
-  submodule = log
+  submodule = log # Show information about submodules in diffs and logs.
 [fetch]
   prune = true # Delete local tracking branches if remote is gone.
 [format]
-  pretty = fuller
+  pretty = fuller # Shows author and committer.
 [help]
   autocorrect = 1 # Autocorrect nonexistant commands after 0.1s.
 [log]
@@ -114,9 +120,9 @@
   default = simple # Only push the branch I'm on.
   #followTags = true # Push tags that are annotated and reachable. Off because I don't currently want to push tags by default.
 [rebase]
-  autosquash = true # Squash commits with autosquash!.
+  autosquash = true # Squash commits with autosquash! as commit message (see `git fix`).
 [rerere]
-  enabled = true # Remember how I resolved merge conflicts.
+  enabled = true # Remember how I resolved the same merge conflict last time.
 [submodule]
   fetchJobs = 8 # Number of jobs to fetch when I submodule clone/update.
 
