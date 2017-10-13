@@ -585,7 +585,7 @@
       "devices": [
         {
           "disable_built_in_keyboard_if_exists": false,
-          "fn_function_keys": {},
+          "fn_function_keys": [],
           "identifiers": {
             "is_keyboard": true,
             "is_pointing_device": false,
@@ -593,11 +593,11 @@
             "vendor_id": 7185
           },
           "ignore": true,
-          "simple_modifications": {}
+          "simple_modifications": []
         },
         {
           "disable_built_in_keyboard_if_exists": false,
-          "fn_function_keys": {},
+          "fn_function_keys": [],
           "identifiers": {
             "is_keyboard": true,
             "is_pointing_device": false,
@@ -605,14 +605,28 @@
             "vendor_id": 1452
           },
           "ignore": false,
-          "simple_modifications": {
-            "grave_accent_and_tilde": "f17",
-            "non_us_backslash": "grave_accent_and_tilde"
-          }
+          "simple_modifications": [
+            {
+              "from": {
+                "key_code": "grave_accent_and_tilde"
+              },
+              "to": {
+                "key_code": "f17"
+              }
+            },
+            {
+              "from": {
+                "key_code": "non_us_backslash"
+              },
+              "to": {
+                "key_code": "grave_accent_and_tilde"
+              }
+            }
+          ]
         },
         {
           "disable_built_in_keyboard_if_exists": false,
-          "fn_function_keys": {},
+          "fn_function_keys": [],
           "identifiers": {
             "is_keyboard": true,
             "is_pointing_device": false,
@@ -620,34 +634,160 @@
             "vendor_id": 9494
           },
           "ignore": false,
-          "simple_modifications": {
-            "left_command": "left_option",
-            "left_option": "left_command",
-            "non_us_backslash": "f17",
-            "right_command": "right_option",
-            "right_option": "right_command"
+          "simple_modifications": [
+            {
+              "from": {
+                "key_code": "left_command"
+              },
+              "to": {
+                "key_code": "left_option"
+              }
+            },
+            {
+              "from": {
+                "key_code": "left_option"
+              },
+              "to": {
+                "key_code": "left_command"
+              }
+            },
+            {
+              "from": {
+                "key_code": "non_us_backslash"
+              },
+              "to": {
+                "key_code": "f17"
+              }
+            },
+            {
+              "from": {
+                "key_code": "right_command"
+              },
+              "to": {
+                "key_code": "right_option"
+              }
+            },
+            {
+              "from": {
+                "key_code": "right_option"
+              },
+              "to": {
+                "key_code": "right_command"
+              }
+            }
+          ]
+        }
+      ],
+      "fn_function_keys": [
+        {
+          "from": {
+            "key_code": "f1"
+          },
+          "to": {
+            "key_code": "vk_consumer_brightness_down"
+          }
+        },
+        {
+          "from": {
+            "key_code": "f2"
+          },
+          "to": {
+            "key_code": "vk_consumer_brightness_up"
+          }
+        },
+        {
+          "from": {
+            "key_code": "f3"
+          },
+          "to": {
+            "key_code": "vk_mission_control"
+          }
+        },
+        {
+          "from": {
+            "key_code": "f4"
+          },
+          "to": {
+            "key_code": "vk_launchpad"
+          }
+        },
+        {
+          "from": {
+            "key_code": "f5"
+          },
+          "to": {
+            "key_code": "vk_consumer_illumination_down"
+          }
+        },
+        {
+          "from": {
+            "key_code": "f6"
+          },
+          "to": {
+            "key_code": "vk_consumer_illumination_up"
+          }
+        },
+        {
+          "from": {
+            "key_code": "f7"
+          },
+          "to": {
+            "key_code": "vk_consumer_previous"
+          }
+        },
+        {
+          "from": {
+            "key_code": "f8"
+          },
+          "to": {
+            "key_code": "vk_consumer_play"
+          }
+        },
+        {
+          "from": {
+            "key_code": "f9"
+          },
+          "to": {
+            "key_code": "vk_consumer_next"
+          }
+        },
+        {
+          "from": {
+            "key_code": "f10"
+          },
+          "to": {
+            "key_code": "mute"
+          }
+        },
+        {
+          "from": {
+            "key_code": "f11"
+          },
+          "to": {
+            "key_code": "volume_down"
+          }
+        },
+        {
+          "from": {
+            "key_code": "f12"
+          },
+          "to": {
+            "key_code": "volume_up"
           }
         }
       ],
-      "fn_function_keys": {
-        "f1": "vk_consumer_brightness_down",
-        "f10": "mute",
-        "f11": "volume_down",
-        "f12": "volume_up",
-        "f2": "vk_consumer_brightness_up",
-        "f3": "vk_mission_control",
-        "f4": "vk_launchpad",
-        "f5": "vk_consumer_illumination_down",
-        "f6": "vk_consumer_illumination_up",
-        "f7": "vk_consumer_previous",
-        "f8": "vk_consumer_play",
-        "f9": "vk_consumer_next"
-      },
       "name": "GibProfile",
       "selected": true,
-      "simple_modifications": {
-        "caps_lock": "right_shift"
-      },
+      "simple_modifications": [
+        {
+          "from": {
+            "key_code": "caps_lock"
+          },
+          "to": {
+            "key_code": "right_shift"
+          }
+        }
+      ],
       "virtual_hid_keyboard": {
         "caps_lock_delay_milliseconds": 0,
         "keyboard_type": "ansi"
@@ -661,23 +801,107 @@
         "rules": []
       },
       "devices": [],
-      "fn_function_keys": {
-        "f1": "display_brightness_decrement",
-        "f10": "mute",
-        "f11": "volume_decrement",
-        "f12": "volume_increment",
-        "f2": "display_brightness_increment",
-        "f3": "mission_control",
-        "f4": "launchpad",
-        "f5": "illumination_decrement",
-        "f6": "illumination_increment",
-        "f7": "rewind",
-        "f8": "play_or_pause",
-        "f9": "fastforward"
-      },
+      "fn_function_keys": [
+        {
+          "from": {
+            "key_code": "f1"
+          },
+          "to": {
+            "key_code": "display_brightness_decrement"
+          }
+        },
+        {
+          "from": {
+            "key_code": "f2"
+          },
+          "to": {
+            "key_code": "display_brightness_increment"
+          }
+        },
+        {
+          "from": {
+            "key_code": "f3"
+          },
+          "to": {
+            "key_code": "mission_control"
+          }
+        },
+        {
+          "from": {
+            "key_code": "f4"
+          },
+          "to": {
+            "key_code": "launchpad"
+          }
+        },
+        {
+          "from": {
+            "key_code": "f5"
+          },
+          "to": {
+            "key_code": "illumination_decrement"
+          }
+        },
+        {
+          "from": {
+            "key_code": "f6"
+          },
+          "to": {
+            "key_code": "illumination_increment"
+          }
+        },
+        {
+          "from": {
+            "key_code": "f7"
+          },
+          "to": {
+            "key_code": "rewind"
+          }
+        },
+        {
+          "from": {
+            "key_code": "f8"
+          },
+          "to": {
+            "key_code": "play_or_pause"
+          }
+        },
+        {
+          "from": {
+            "key_code": "f9"
+          },
+          "to": {
+            "key_code": "fastforward"
+          }
+        },
+        {
+          "from": {
+            "key_code": "f10"
+          },
+          "to": {
+            "key_code": "mute"
+          }
+        },
+        {
+          "from": {
+            "key_code": "f11"
+          },
+          "to": {
+            "key_code": "volume_decrement"
+          }
+        },
+        {
+          "from": {
+            "key_code": "f12"
+          },
+          "to": {
+            "key_code": "volume_increment"
+          }
+        }
+      ],
       "name": "Clean",
       "selected": false,
-      "simple_modifications": {},
+      "simple_modifications": [],
       "virtual_hid_keyboard": {
         "caps_lock_delay_milliseconds": 0,
         "keyboard_type": "ansi"
