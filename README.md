@@ -2,9 +2,18 @@
 
 Contains everything I use to setup a new machine (except ssh and gpg keys).
 
-## How to run these setup scripts
+## How to run
 
-### Super-quick one line non-root (lite) setup
+### Standard full setup
+
+```bash
+# Make a directory to put it in (any path is fine):
+mkdir -p ~/code
+git clone https://github.com/gibfahn/dot ~/code/dot && cd ~/code/dot
+HARDCORE="" ./up
+```
+
+### Super-quick one line lite (non-root) setup
 
 Useful for remote machines you don't own (you still want some niceties, but you
 can't install a bunch of packages).
@@ -13,40 +22,22 @@ can't install a bunch of packages).
 git clone https://github.com/gibfahn/dot -o up && cd dot && NO_SUDO=true HARDCORE="" ./up
 ```
 
-### Download the repo
+### No git setup
 
 ```bash
 # Make a directory to put it in (any path is fine):
 mkdir -p ~/code
-```
-
-#### If you have git installed
-
-```bash
-git clone https://github.com/gibfahn/dot ~/code/dot && cd ~/code/dot
-```
-
-
-#### If you don't have git installed
-
-```bash
-# Download a zipped up version of this repo
+# If you don't have git, use curl/unzip instead (you should probably just install git).
 curl -kL https://github.com/gibfahn/dot/archive/master.zip > master.zip
 unzip master.zip
-mv dot-master ~/code/dot && cd ~/code/dot
+mv dot-master ~/code/dot
+cd ~/code/dot
+HARDCORE="" ./up # Don't run in Hardcore mode.
 ```
 
-### Run the setup scripts
+But you should probably just install git.
 
-#### Easy mode: setup everything
-
-If you want hardcore modifications enter anything at the prompt.
-
-```sh
-./up
-```
-
-#### Complex mode: choose it yourself
+### Manual setup
 
 Everything should be pretty self-explanatory and commented, it's all basic bash
 scripting. From `./up` you can see what scripts get run. Each of them can be run
@@ -65,6 +56,8 @@ change shell). Make sure the shell you choose is in `/etc/shells`.
 ```bash
 export NEWSHELL=/usr/local/bin/fish # Or NEWSHELL="" to keep current shell.
 ```
+
+If you want hardcore modifications enter anything at the prompt.
 
 If you want to enable HARDCORE mode for a single script, just pass it as an env
 var, e.g.
@@ -88,11 +81,6 @@ me!
 
 Some things you have to do manually, here's a short list:
 
-- Change git username (All)
-  - `g ce` to edit my git config (if it opens an old one copy it's contents,
-    delete it, and run `g ce` again). Config is at `~/.config/git/config`.
-  - Scroll to the bottom and change the name, email, and username (Github)
-    fields.
 - Set up ssh keys (All)
   - If you don't have them you probably want them. Instructions
     [here](http://fahn.co/blog/setting-up-ssh-keys.html).
