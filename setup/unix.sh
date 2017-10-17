@@ -32,7 +32,10 @@ if exists git && [ "$(whoami)" != gib ] && {
  grep -q 'name = Gibson Fahnestock # REPLACEME' "$XDG_CONFIG_HOME/git/config" ||
  grep -q 'email = gibfahn@gmail.com # REPLACEME' "$XDG_CONFIG_HOME/git/config"
 }; then
-  if [ -e "$HOME/.gitconfig" ]; then
+  # Allow manual override with `GIT_NAME` and `GIT_EMAIL`.
+  [ "$GIT_NAME" ] && GITNAME="$GIT_NAME"
+  [ "$GIT_EMAIL" ] && GITEMAIL="$GIT_EMAIL"
+  if [ -z "$GIT_NAME" -o -z "$GIT_EMAIL" ] && [ -e "$HOME/.gitconfig" ]; then
     GITNAME=$(git config --global user.name)
     GITEMAIL=$(git config --global user.email)
     get "Git Config (moving ~/.gitconfig to ~/backup/.gitconfig, preserving name as '$GITNAME' and email
@@ -45,7 +48,7 @@ if exists git && [ "$(whoami)" != gib ] && {
     read -p "Git name not set, what's your full name? " GITNAME
     git config --global user.name "$GITNAME"
   fi
-  if [ -z "$GITEMAIL" -o "$(git config --global user.email)" ]; then
+  if [ -z "$GITEMAIL" -o "$(git config --global user.email)" = "gibfahn@gmail.com" ]; then
     read -p "Git email not set, what's your email address? " GITEMAIL
     git config --global user.email "$GITEMAIL"
   fi

@@ -16,10 +16,11 @@ HARDCORE="" ./up
 ### Super-quick one line lite (non-root) setup
 
 Useful for remote machines you don't own (you still want some niceties, but you
-can't install a bunch of packages).
+can't install a bunch of packages). Just copy and paste this one-line command:
 
 ```bash
-git clone https://github.com/gibfahn/dot -o up && cd dot && NO_SUDO=true HARDCORE="" ./up
+git clone https://github.com/gibfahn/dot -o up && cd dot &&
+  GIT_NAME=$(git config --global user.name) GIT_EMAIL=$(git config --global user.email) NO_SUDO=true HARDCORE="" ./up
 ```
 
 ### No git setup
