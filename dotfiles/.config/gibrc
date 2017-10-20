@@ -105,7 +105,6 @@ alias g=git # Use with commands in $c/git/config for best results.
 alias path='echo $PATH' # Single quotes so we echo path at runtime, not alias time.
 alias h=history # Shows command history.
 alias s="ssh" # ssh.
-alias l=less # Runs less (F for `tail -f` mode, Ctrl-c to cancel).
 alias dt="date +%Y-%m-%d" # Basic date format (unambiguous, easy to sort etc.)
 alias dT="date +%d-%b-%y" # More readable date format (ambiguous).
 alias cal='cal | grep --color -EC6 "\b$(date +%e | sed "s/ //g")"' # More readable date format (ambiguous).
