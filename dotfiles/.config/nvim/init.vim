@@ -53,6 +53,8 @@ set diffopt+=vertical                               " Always use vertical diffs.
 set wildchar=<Tab> wildmenu                         " Tab complete with files (e.g. `:e`)
 set wildmode=list:longest,list:full                 " 1st Tab completes to longest common string, 2nd+ cycles through options.
 set list listchars=tab:»·,trail:·,nbsp:·            " Display extra whitespace.
+if !isdirectory("/tmp/.vim-undo-dir")| call mkdir("/tmp/.vim-undo-dir", "", 0700)| endif
+set undofile undodir="/tmp/.vim-undo-dir"           " Persistent history, save files here.
 
 nnoremap k gk|                                      " Move up   visually , don't skip wrapped lines,
 nnoremap j gj|                                      "  ↳   down visually , don't skip wrapped lines.
