@@ -98,6 +98,8 @@
 [commit]
   # gpgsign = true # Always sign commits, available since Git 2.0. Off because
   # some people might not have gpg keys (and it breaks npm test suite).
+[core]
+  pager = less -x1,3 # Show tabs as 2 spaces, not 8, in anything piped through less, e.g. diff/show/log.
 [credential]
   helper = osxkeychain
 [diff]
