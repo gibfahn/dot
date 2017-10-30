@@ -49,8 +49,11 @@ if [ "$ZSH_VERSION" ]; then # zsh specific options.
   source "$XDG_DATA_HOME/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" || true
 
   # Vim mode and keybindings in zsh:
+  autoload -U history-search-end # Not included by default so load (usually /usr/share/zsh/unctions/Zle/).
+  zle -N history-beginning-search-backward-end history-search-end # Add it to existing widgets.
+  zle -N history-beginning-search-forward-end history-search-end  # Add it to existing widgets.
   accept-line() { [ -z "$BUFFER" ] && zle up-history; zle ".$WIDGET"; }
-  zle-keymap-select () { [ $KEYMAP = vicmd ] && printf "\033[2 q" || printf "\033[6 q"; }
+  zle-keymap-select () { [ $KEYMAP = vicmd ] && printf "\033[2 q" || printf "\033[6 q"; } # Other KEYMAPs are main and viins.
   zle-line-init () { zle -K viins; printf "\033[6 q"; }
   zle -N accept-line # Redefine accept-line to insert last input if empty (Enter key).
   zle -N zle-keymap-select # I-beam cursor in insert mode, block otherwise.
@@ -64,16 +67,15 @@ if [ "$ZSH_VERSION" ]; then # zsh specific options.
   bindkey -M viins "^H" backward-delete-char # <Ctrl>-H = Backspace (Emacs default).
   bindkey -M viins "^W" backward-kill-word # <Ctrl>-W = Delete word (Emacs default).
   bindkey -M viins "^U" backward-kill-line # <Ctrl>-U = Delete line (Emacs default).
+  bindkey -M viins "^A" beginning-of-line # <Ctrl>-A = Go to beginning of line (Emacs default).
+  bindkey -M viins "^E" end-of-line       # <Ctrl>-E = Go to end of line (Emacs default).
   bindkey -M viins "^R" history-incremental-search-backward # Restore <Ctrl>-R search.
-  bindkey -M viins "^S" history-incremental-search-forward # Restore <Ctrl>-S forward search.
-  bindkey -M main "^[[A" history-beginning-search-backward # Re-enable up for history search.
-  bindkey -M main "^[[B" history-beginning-search-forward # Re-enable down for history search.
+  bindkey -M viins "^S" history-incremental-search-forward  # Restore <Ctrl>-S forward search.
+  bindkey -M main "^[[A" history-beginning-search-backward-end # Re-enable up   for history search.
+  bindkey -M main "^[[B" history-beginning-search-forward-end  # Re-enable down for history search.
 
   unalias please po pu rd d afind _ md # Remove unused oh-my-zsh aliases.
   alias | grep run-help >/dev/null 2>&1 && unalias run-help # Doesn't seem to always be defined.
-  # bindkey -v # Enable vim mode (breaks history search with <Up> so disabled).
-  # KEYTIMEOUT=10 # ↳ Key delay of 0.1s (Esc in vim mode is quicker).
-  # bindkey -M viins 'kj' vi-cmd-mode # ↳ Map kj -> Esc in vim mode.
 elif [ "$BASH_VERSION" ]; then # Bash specific options.
   set -o vi # Vim mode in bash.
   shopt -s autocd # type directory name to cd.
@@ -104,7 +106,7 @@ alias c=clear # c clears the terminal screen (can also use Ctrl-L).
 alias g=git # Use with commands in $c/git/config for best results.
 alias path='echo $PATH' # Single quotes so we echo path at runtime, not alias time.
 alias h=history # Shows command history.
-alias s="ssh" # ssh.
+alias s='printf "\033[2 q" && ssh' # Reset cursor to block and ssh.
 alias dt="date +%Y-%m-%d" # Basic date format (unambiguous, easy to sort etc.)
 alias dT="date +%d-%b-%y" # More readable date format (ambiguous).
 alias cal='cal | grep --color -EC6 "\b$(date +%e | sed "s/ //g")"' # More readable date format (ambiguous).
