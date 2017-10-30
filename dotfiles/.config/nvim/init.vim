@@ -118,6 +118,7 @@ vnoremap <expr> // 'y/\V'.escape(@",'\').'<CR>'|    " Search for selected text w
 
 if has("nvim")
   let g:terminal_scrollback_buffer_size = 100000
+  let $VISUAL = 'nvr -l --remote-wait'              " Use existing nvim window to open new files (e.g. `g cm`).
   nnoremap <Leader>t :vsplit term://$SHELL<CR>i|    " Open terminal in new split.
   nnoremap <Leader>T :term<CR>|                     " Open terminal in current split.
   tnoremap <C-h> <C-\><C-n><C-w>h|                  " Switch left  a window in terminal,

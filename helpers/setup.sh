@@ -54,7 +54,7 @@ not() { # Do we need to install $1?
     get "$@"
     return 0 # Binary not in path.
   else
-    get "$@"
+    skip "$@"
     return 1 # Binary in path.
   fi
 }

@@ -81,6 +81,11 @@ if exists zsh && no zsh/zsh-syntax-highlighting; then
   gitClone zsh-users/zsh-syntax-highlighting "$XDG_DATA_HOME/zsh/zsh-syntax-highlighting"
 fi
 
+# Install neovim-remote, used to connect to existing nvim sessions (try `g cm` in a nvim terminal).
+if not nvr; then
+  pip3 install neovim-remote
+fi
+
 # Install nvm:
 if no nvm; then
   # No install scripts as path update isn't required, it's done in gibrc.

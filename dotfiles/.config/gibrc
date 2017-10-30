@@ -126,7 +126,7 @@ alias -- -="$cd -" # - cd's to the last directory.
 alias 1="fc -e : -2"; alias 2="fc -e : -3"
 
 { exists nvim && VIM=nvim; } || { exists vim && VIM=vim; } || VIM=vi # Take what you can get.
-alias v=$VIM; export VISUAL=$VIM EDITOR=$VIM # Set vim/nvim as the default editor.
+alias v=$VIM; export VISUAL=${VISUAL:-$VIM} EDITOR=${EDITOR:-$VIM} # Set vim/nvim as the default editor.
 exists vimr && alias vm=vimr # Use `vm` for GUI vim, need to add a Linux equivalent.
 ulimit -c unlimited # Allow saving of coredumps.
 alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"' # Makes it look like you're busy with important hacker stuff.
