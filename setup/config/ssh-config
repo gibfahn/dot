@@ -15,7 +15,7 @@ Host *
    StrictHostKeyChecking=no
 # Stops servers closing the connection because you didn't use it.
    ServerAliveInterval 120
-# Uncomment this if your default user on remote machines != `uname` on this one.
+# Uncomment this if your default user on remote machines != `whoami` on this one.
 #   User gib
 
 ###########################
