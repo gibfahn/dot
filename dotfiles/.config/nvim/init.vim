@@ -61,9 +61,10 @@ set wildchar=<Tab> wildmenu                         " Tab complete with files (e
 set wildmode=list:longest,list:full                 " 1st Tab completes to longest common string, 2nd+ cycles through options.
 set list listchars=tab:»·,trail:·,nbsp:·            " Display extra whitespace.
 if !isdirectory("/tmp/.vim-undo-dir")| call mkdir("/tmp/.vim-undo-dir", "", 0700)| endif
-set undofile undodir="/tmp/.vim-undo-dir"           " Persistent history, save files here.
+set undofile undodir="/tmp/.vim-undo-dir"           " Persistent history, save history files here.
 set path=.,/usr/include,,**                         " Add ** to the search path so :find x works recursively.
 if exists('+breakindent')| set breakindent| let &showbreak = '↳ '| set cpo+=n| end " Nicer line wrapping for long lines.
+if exists('&inccommand')| set inccommand=split| endif " Show search and replace as you type.
 
 "*** Key mappings (see http://vim.wikia.com/wiki/Unused_keys for unused keys) ***"
 " Available (normal): <C-Space>, K, +, _, <C-q/s/n/[/_>, <leader>b/c/e/h/m/n/s/u/v
