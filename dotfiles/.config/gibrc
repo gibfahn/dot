@@ -137,6 +137,7 @@ alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"' # Makes it look like y
 pathadd "$HOME/bin" # Put random binaries you want to run in here.
 pathadd /usr/lib/ccache # Add ccache to the path if installed (Linux).
 pathadd /usr/local/opt/ccache/libexec # Add ccache to the path if installed (macOS).
+pathadd "$HOME/.local/bin"
 
 # I don't have nvm autorun on every shell, I us `nv` when I want to start it.
 # This also allows me to frequently `make -j4 install` node master, and have
