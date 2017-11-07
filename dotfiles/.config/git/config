@@ -50,7 +50,7 @@
   la  = log --graph --decorate --oneline --all # Graph log of all branches.
   ll  = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%C(bold blue)<%an>%Creset' --abbrev-commit
 
-  mc  = "!echo \"$VISUAL\" | grep -iq vi && c=\"-c /=======\" || c=\"\"; $VISUAL $c $(git diff --name-only --diff-filter=U)" # Open merge conflicts in editor.
+  mc  = "!echo \"$VISUAL\" | grep -iq vi && c=\"-c /=======\" || c=\"\"; git diff --name-only --diff-filter=U | xargs $VISUAL $c" # Open merge conflicts in editor.
   mf  = merge --ff-only
 
   p   = push
@@ -76,15 +76,17 @@
 
   s   = status
   sh  = show
-  shf = show --pretty="" --name-only # Show files changed only.
+  she = "!git show --pretty="" --name-only | xargs $VISUAL" # Open files changed in last commit in editor.
+  shn = show --pretty="" --name-only # Show names of files changed only.
   st  = stash
   stp = stash pop
   std = stash drop
-  df  = diff HEAD # diff of staged and unstaged files..
-  dfs = diff --staged # Diff of staged files (`git diff` for unstaged).
-  df  = diff HEAD # diff of staged and unstaged files..
-  dff = "!git diff-tree --no-commit-id --name-only -r $(git headUpstream) HEAD" # Files changed between upstream and HEAD.
-  dfu = "!git diff $(git headUpstream)" # diff between working tree and upstream branch.
+  de  = "!git diff HEAD --name-only | xargs $VISUAL" # Open files changed since last commit in editor.
+  df  = diff HEAD             # diff of staged and unstaged..
+  dn  = diff HEAD --name-only # diff of staged and unstaged file names.
+  ds  = diff --staged # Diff of staged files (`git diff` for unstaged).
+  du  = "!git diff $(git headUpstream)"             # diff between working tree and upstream branch.
+  dun = "!git diff $(git headUpstream) --name-only" # diff between working tree and upstream branch file names.
 
   sma = submodule add                         # Add a new submodule: g sma url path.
   smi = submodule update --init --recursive   # Initialise submodules.

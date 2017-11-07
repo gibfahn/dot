@@ -27,6 +27,7 @@ export BABEL_CACHE_PATH=${NODE_REPL_HISTORY="$XDG_CACHE_HOME/babel/cache.json"} 
 export CCACHE_DIR="$XDG_DATA_HOME/ccache" # ccache cache dir.
 export HELM_HOME="$XDG_DATA_HOME/helm" # Helm home directory.
 export BLUEMIX_HOME="$XDG_DATA_HOME/bluemix" # Bluemix home directory (creates .bluemix inside)
+export LESS=-RFX # If < 1 screen, just cat output (with colours).
 
 ### SHELL SPECIFIC ###
 ls --color=auto >/dev/null 2>&1 && alias ls='ls --color=auto' # ls use colour if poss.
@@ -126,7 +127,7 @@ alias -- -="$cd -" # - cd's to the last directory.
 alias 1="fc -e : -2"; alias 2="fc -e : -3"
 
 { exists nvim && VIM=nvim; } || { exists vim && VIM=vim; } || VIM=vi # Take what you can get.
-alias v=$VIM; export VISUAL=${VISUAL:-$VIM} EDITOR=${EDITOR:-$VIM} # Set vim/nvim as the default editor.
+alias v=$VIM xv="xargs $VIM"; export VISUAL=${VISUAL:-$VIM} EDITOR=${EDITOR:-$VIM} # Set vim/nvim as the default editor.
 exists vimr && alias vm=vimr # Use `vm` for GUI vim, need to add a Linux equivalent.
 ulimit -c unlimited # Allow saving of coredumps.
 alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"' # Makes it look like you're busy with important hacker stuff.
