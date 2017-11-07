@@ -2,23 +2,32 @@
 
 exists() { type "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
 
-# Update rust if you have it installed.
-exists rustup && rustup update # Update Rust
-exists cargo-clippy && cargo install --force clippy # We have to recompile when Rust is updated.
-
 # Upgrade brew packages and casks.
 if [ "$(uname)" = Darwin ] && exists brew; then
   brew upgrade
-  brew cu
+  brew cu || { brew tap "buo/cask-upgrade" && brew cu; }
 elif [ "$(uname)" = Linux ]; then # Linux specific stuff.
-  case "$(uname -v)" in
-    *Ubuntu* | *ubuntu*) # Ubuntu specific setup.
-      sudo apt update && sudo apt upgrade
+  case "$(uname -v | tr '[A-Z]' '[a-z]')" in
+    *ubuntu*) # Ubuntu specific setup.
+      sudo apt -y update
+      sudo apt -y upgrade
+      sudo snap refresh
       ;;
     *) echo "Don't have anything for non-Ubuntu Linux yet." ;;
   esac
 fi
 
-# Keep a copy of the node source code here to get an up-to-date install.
-[ -d "$HOME/wrk/com/node" ] && (cd ~/wrk/com/node; ./configure; make -j4 install)
+# Update rust if you have it installed.
+exists rustup && rustup update # Update Rust
+exists cargo-clippy && cargo install --force clippy # We have to recompile when Rust is updated.
 
+[ "$(stat --format '%U' $(which node))" = root ] && SUDO=sudo || SUDO=""
+# Keep a copy of the node source code here to get an up-to-date install.
+if [ -d "$HOME/wrk/com/node" ]; then
+  pushd ~/wrk/com/node
+  if [ $(git headBranch) = master ]; then
+    ./configure
+    $SUDO make -j4 install
+  fi
+  popd
+fi
