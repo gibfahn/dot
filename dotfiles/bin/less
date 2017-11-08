@@ -1,0 +1,34 @@
+#!/bin/bash
+
+n=3  # Number of screen lines that should remain visible in addition to the content.
+# We don't get the $LINES variable as we're in a subshell.
+[ -z "$LINES" ] && LINES=$(tput lines) 2>/dev/null
+[ -z "$LINES" ] && LINES=20
+# Get the real less (after this fake one in the path).
+realless=$(type -a less | head -n 2 | tail -n 1 | sed 's/less is //')
+
+### If input is a file check length, and add FX to args if small.
+
+if [ $# = 1 ] && [ -f "$1" ]; then
+  [ $(head -n "$LINES" "$1" | wc -l) -le $((${LINES:-0} - $n)) ] && lessopts="-FX" || lessopts=
+  "$realless" $lessopts "$@"
+  exit $?
+fi
+
+### If not a file, read from stdin till we get to $LINES - $n.
+
+output= # Store the output as we cat it.
+nl='
+' # Newline character.
+
+# Read and display terminal height - $n lines.
+while [ $n -lt $LINES ] && IFS= read -r line; do
+  output="$output$nl$line"
+  printf '%s\n' "$line"
+  ((n++))
+done
+
+# If the input was longer than LINES, run the pager.
+if [ "$n" -eq "$LINES" ]; then
+{ printf %s "$output"; exec cat; } | exec "$realless" "$@"
+fi
