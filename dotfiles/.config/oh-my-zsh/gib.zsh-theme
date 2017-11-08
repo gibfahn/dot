@@ -3,8 +3,8 @@
 # If you want to edit this theme, just play with the variables. local variables
 # are just building blocks for prompts. Uses the colours defined in oh-my-zsh.
 
-# Choose a prompt character, I like something fat.
-local arrow='▶' # Good options: ▶ ❯ ➜ ⇉ ⇏ ⇛ ⇝ ⇨ ⇶ 🢂  ⭆  ➩ ➭ 🡆 🠞 ⇻
+# Choose a prompt character, you probably want something visible.
+local arrow='▶▶▶' # Good options: ▶ ❯ ➜ ⇉ ⇏ ⇛ ⇝ ⇨ ⇶ 🢂  ⭆  ➩ ➭ 🡆 🠞 ⇻
 
 # Green arrow if $? is 0, red otherwise:
 local colourArrow="%(?:%{$fg_bold[green]%}$arrow:%{$fg_bold[red]%}$arrow)%{$reset_color%}"
