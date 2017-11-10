@@ -2,7 +2,9 @@
 
 # Calls scripts from setup/ if the OS matches.
 
-. $(dirname $0)/helpers/setup.sh # Load helper script from dot/helpers.
+cd $(dirname $0)
+
+. ./helpers/setup.sh # Load helper script from dot/helpers.
 
 # Enable hardcore mode if you're sure.
 # Only prompt if HARDCORE is unset, not if it's set to empty string ("").
@@ -22,7 +24,7 @@ fi
 [ -z "$XDG_DATA_HOME" ] && export XDG_DATA_HOME="$HOME/.local/share"
 
 # Setup dotfile symlinks.
-./rcme
+./link
 
 # Platform specific setup:
 if [ "$(uname)" = Darwin ]; then # macOS
