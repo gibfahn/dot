@@ -30,5 +30,5 @@ done
 
 # If the input was longer than LINES, run the pager.
 if [ "$n" -eq "$LINES" ]; then
-{ printf %s "$output"; exec cat; } | exec "$realless" "$@"
+{ printf '%s\n' "$output"; exec cat; } | exec "$realless" "$@"
 fi
