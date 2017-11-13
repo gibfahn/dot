@@ -41,10 +41,20 @@
   cot = checkout -t # g cot up/master means checkout master tracking the one in up.
   fix = commit --fixup # g fix SHA means rebasing will attach to that SHA.
 
+  d   = diff HEAD             # diff of staged and unstaged..
+  de  = "!git diff HEAD --name-only | xargs $VISUAL" # Open files changed since last commit in editor.
+  dn  = diff HEAD --name-only # diff of staged and unstaged file names.
+  ds  = diff --staged # Diff of staged files (`git diff` for unstaged).
+  du  = "!git diff $(git headUpstream)"             # diff between working tree and upstream branch.
+  dus = "!git diff --staged $(git headUpstream)"             # diff between working tree and upstream branch.
+  dun = "!git diff $(git headUpstream) --name-only" # diff between working tree and upstream branch file names.
+
   f = fetch
   fa = fetch --all
   # Create/update branch from Github PR, `g fp 657 origin` or `g fp` (Defaults: $1=HEAD, $2=upstreamRemote).
   fp = "! b=${2:-$(git headRemote)}; b=${b:-up}; a=${1:-$(git headBranch)}; git fetch -fu $b pull/$a/head:$a; git checkout $a; git branch -u $b #"
+
+  h = help
 
   l   = log --graph --decorate --oneline # Graph log.
   la  = log --graph --decorate --oneline --all # Graph log of all branches.
@@ -81,12 +91,6 @@
   st  = stash
   stp = stash pop
   std = stash drop
-  de  = "!git diff HEAD --name-only | xargs $VISUAL" # Open files changed since last commit in editor.
-  df  = diff HEAD             # diff of staged and unstaged..
-  dn  = diff HEAD --name-only # diff of staged and unstaged file names.
-  ds  = diff --staged # Diff of staged files (`git diff` for unstaged).
-  du  = "!git diff $(git headUpstream)"             # diff between working tree and upstream branch.
-  dun = "!git diff $(git headUpstream) --name-only" # diff between working tree and upstream branch file names.
 
   sma = submodule add                         # Add a new submodule: g sma url path.
   smi = submodule update --init --recursive   # Initialise submodules.
