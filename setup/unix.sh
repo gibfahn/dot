@@ -98,6 +98,11 @@ if no nvm; then
   npm completion > "$XDG_DATA_HOME/.zfunc/_npm"
 fi
 
+# Symlink fzf
+if not fzf; then
+  ln -s "$XDG_DATA_HOME"/fzf/bin/* "$HOME"/bin/
+fi
+
 # Install vim-plug (vim plugin manager):
 if no nvim/site/autoload/plug.vim; then
   curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \

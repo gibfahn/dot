@@ -75,8 +75,9 @@ if [ "$ZSH_VERSION" ]; then # zsh specific options.
   bindkey -M main "^[[A" history-beginning-search-backward-end # Re-enable up   for history search.
   bindkey -M main "^[[B" history-beginning-search-forward-end  # Re-enable down for history search.
 
-  unalias please po pu rd d afind _ md # Remove unused oh-my-zsh aliases.
-  alias | grep run-help >/dev/null 2>&1 && unalias run-help # Doesn't seem to always be defined.
+  for i in unalias please po pu rd d afind _ md run-help; do alias | grep -q "$i" && unalias "$i"; done # Doesn't seem to always be defined.
+  source "$XDG_DATA_HOME"/fzf/shell/completion.zsh 2> /dev/null
+  source "$XDG_DATA_HOME"/fzf/shell/key-bindings.zsh
 elif [ "$BASH_VERSION" ]; then # Bash specific options.
   set -o vi # Vim mode in bash.
   shopt -s autocd # type directory name to cd.
@@ -85,13 +86,19 @@ elif [ "$BASH_VERSION" ]; then # Bash specific options.
   bind Space:magic-space 2>/dev/null # !31 autoexpands on space.
   bind 'set completion-ignore-case on' 2>/dev/null # case-insensitive tab completion.
   PS1=' \[\e[32;1m\]\w $ \[\e[0m\]'
+  source "$XDG_DATA_HOME"/fzf/shell/completion.bash 2> /dev/null
+  source "$XDG_DATA_HOME"/fzf/shell/key-bindings.bash
 fi
+
 
 ### FUNCTIONS ###
 md() { mkdir -p $*; [ $# = 1 ] && cd "$1" || true; } # md foo = mkdir foo && cd foo.
 exists() { type "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
+# Add to beginning of path.
 pathadd() { [ -d "$1" ] && export PATH="$1"$(echo ":$PATH:" | sed "s|:$1:|:|" | sed 's|:$||'); }
-fnd() { find . -iname "*$**"; } # Find by filename (case insensitive).
+# Add to end of path.
+pathapp() { [ -d "$1" ] && export PATH=$(echo ":$PATH:" | sed "s|:$1:|:|" | sed 's|^:||')"$1"; }
+exists fd || fd() { find . -iname "*$**"; } # Find by filename (case insensitive).
 pth() { # Returns absolute path to file(s) including file name.
   for i in "$@"; do # Args = relative filenames.
     if [ -d "$i" ]; then (pushd "$i" >/dev/null; pwd) # dir.
@@ -139,6 +146,7 @@ pathadd "$HOME/bin" # Put random binaries you want to run in here.
 pathadd /usr/lib/ccache # Add ccache to the path if installed (Linux).
 pathadd /usr/local/opt/ccache/libexec # Add ccache to the path if installed (macOS).
 pathadd "$HOME/.local/bin"
+pathapp /usr/local/opt/coreutils/libexec/gnubin # Coreutils from brew on macOS, don't replace mac ls.
 
 # I don't have nvm autorun on every shell, I us `nv` when I want to start it.
 # This also allows me to frequently `make -j4 install` node master, and have
@@ -155,6 +163,7 @@ alias ru=rustup; pathadd "$CARGO_HOME/bin"
 alias e=exercism
 alias k=kubectl
 rs() { for i in $@; do rustc ${i%.rs}.rs; ./${i%.rs}; done; } # Compile/run (rs a.rs b).
+exists fd && export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git' # Use fd for fuzzy finding if available.
 
 # Build node with ninja.
 alias bn='export CPPFLAGS=-fdiagnostics-color && ./configure && tools/gyp_node.py -f ninja && ninja -C out/Release && ln -fs out/Release/node node'

@@ -17,6 +17,8 @@ try
   Plug 'tpope/vim-fugitive'                         " Git commands in vim.
   Plug 'tpope/vim-repeat'                           " Allows you to use . with plugin mappings.
   Plug 'tpope/vim-surround'                         " Add/mod/remove surrounding chars.
+  Plug 'junegunn/fzf', { 'dir': '~/.local/share/fzf', 'do': './install --bin' }
+  Plug 'junegunn/fzf.vim'                           " Try :Files, :GFiles? :Buffers :Lines :History :Commits :BCommits
   Plug 'tpope/vim-vinegar'                          " Nicer file browser plugin.
   call plug#end()                                   " Initialize plugin system
 catch| echo 'vim-plug not installed, use :PI to install'
@@ -77,7 +79,7 @@ nnoremap Y y$|                                      " Make Y work like C and D (
 nnoremap <leader>a @a<CR>|                          " Apply macro a (add with qa or yank to a reg with "ay).
 nnoremap <leader>d :bp\|bd  #<CR>|                  " Close buffer without closing split,
 nnoremap <leader>D :bp\|bd! #<CR>|                  "  ↳ Force close buffer.
-nnoremap <leader>f :find |                          " Search file names    for file,
+nnoremap <leader>f :Files|                          " Search file names    for file,
 nnoremap <leader>F :grep |                          "  ↳          contents for file.
 nnoremap <Leader>gd :w !diff % - <CR>|              " Diff between saved file and current.
 nnoremap <Leader>gt :set et!<CR>:set et?<CR>|       " Toggle tabs/spaces.

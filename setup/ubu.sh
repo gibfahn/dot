@@ -16,7 +16,7 @@ addPPA() {
       added="true"
     fi
   done
-  [ "$added" ] && sudo apt update || true
+  [ "$added" ] && sudo apt -y update || true
 }
 
 addPPA ppa:neovim-ppa/stable ppa:hluk/copyq ppa:git-core/ppa ppa:ubuntu-mozilla-daily/ppa
@@ -96,6 +96,10 @@ fi
 
 if exists cargo && not rg "(ripgrep)"; then
   cargo install ripgrep
+fi
+
+if exists cargo && not fd; then
+  cargo install fd-find
 fi
 
 if not slack; then
