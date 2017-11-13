@@ -5,6 +5,8 @@
   headUpstream = rev-parse --abbrev-ref --symbolic-full-name @{u} # Upstream of current branch, e.g. origin/master.
   headRemote = "!git headUpstream | cut -d '/' -f 1" # e.g. origin.
   headBranch = symbolic-ref --short HEAD # e.g. master.
+  # Quote an alias you want to save here (handles all the nonsense quoting stuff).
+  quote-string = "!read -r l; printf \\\"!; printf %s \"$l\" | sed 's/\\([\\\"]\\)/\\\\\\1/g'; printf \" #\\\"\\n\" #"
 
   a   = add
   ap  = add -p # Adds files in hunks (only add some of the changes you made).
@@ -96,6 +98,10 @@
   smi = submodule update --init --recursive   # Initialise submodules.
   smf = submodule update --init               # Fetch specified submodule versions.
   smu = submodule update --recursive --remote # Update submodules to latest versions.
+
+  # z is fuzzy log (fuzzy search through `git log $*`, za is the same with la (try g sh `g z`).
+  z   = "!git l --color=always $* | grep -v '^\\.\\.\\.\\s\\+$' | fzf +s -m --ansi | sed 's/^\\W\\+\\(\\w\\+\\)\\s\\+.*/\\1/' #"
+  za  = "!git la --color=always $* | grep -v '^\\.\\.\\.\\s\\+$' | fzf +s -m --ansi | sed 's/^\\W\\+\\(\\w\\+\\)\\s\\+.*/\\1/' #"
 
 [apply]
   whitespace = fix # Fix whitespace when applying patches.
