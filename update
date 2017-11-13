@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Update this repo to the latest upstream version, preserving your changes.
+
+cd $(dirname $0)
+
+git fetch --all
+
+git add -A
+# Amend the previous commit if it's one you made.
+[ $(git show -s --pretty=%an) = $(git config user.name) ] && FLAGS=--amend || FLAGS="-m 'My changes as of $(date)'"
+git commit $FLAGS
+
+echo 'Fix any conflicts with `git mc` and `git rebase --continue`, if you changed sth, consider raising a PR!'
+git rebase

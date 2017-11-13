@@ -38,6 +38,12 @@ HARDCORE="" ./up # Don't run in Hardcore mode.
 
 But you should probably just install git.
 
+### How to update to the latest master
+
+```bash
+./update
+```
+
 ### Manual setup
 
 Everything should be pretty self-explanatory and commented, it's all basic bash
@@ -71,7 +77,7 @@ export HARDCORE=true
 If you just want to update your dotfile symlinks, you can just run:
 
 ```sh
-./rcme
+./link
 ```
 
 Dotfiles are pretty personal, so feel free to adapt this repo as you wish. If
@@ -119,4 +125,4 @@ git reset up/master
 
 As long as it goes in `$HOME`, just put it in the same relative directory inside
 `./dotfiles/` (so `~/.bashrc` becomes `dot/dotfiles/.bashrc`). If you rerun
-`rcme` it should get symlinked into the right place.
+`link` it should get symlinked into the right place.

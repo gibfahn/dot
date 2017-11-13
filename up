@@ -12,7 +12,7 @@ cd $(dirname $0)
 export HARDCORE
 
 if [ "$HARDCORE" ]; then
-  get "HARDCORE mode (you have 3 seconds to cancel!)"
+  get 'HARDCORE mode (you have 3 seconds to cancel!)'
   sleep 3 # Give people a chance to see (or Control-C).
 else
   skip "HARDCORE installation (you chose not to have it)"
