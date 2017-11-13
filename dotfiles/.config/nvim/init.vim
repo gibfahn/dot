@@ -1,5 +1,6 @@
 " BREAKING CHANGES: s is now sneak (use `cl` for `s`) function.
 "                   <C-i> is now :bn (<C-i>==Tab for vim), use <C-p> for <C-i> function.
+" Complete list of all vim commands: http://vimdoc.sourceforge.net/htmldoc/vimindex.html
 
 "*** Load Plugins (uses vim-plug). ***"
 try
@@ -9,7 +10,6 @@ try
   Plug 'easymotion/vim-easymotion'                  " Go to any word instantly.
   Plug 'fweep/vim-zsh-path-completion'              " Nicer file browser plugin.
   Plug 'godlygeek/tabular'                          " Make tables easier (:help Tabular).
-  Plug 'haya14busa/incsearch.vim'                   " Highlight search matches as you type.
   Plug 'justinmk/vim-sneak'                         " sab -> go to next ab in code.
   Plug 'pangloss/vim-javascript'                    " JS   language bindings.
   Plug 'rust-lang/rust.vim'                         " Rust language bindings.
@@ -95,7 +95,7 @@ nnoremap <leader>p "+p|                             "  ↳                   (no
 nnoremap <leader>P "+P|                             "  ↳  line from clipboard (normal mode).
 nnoremap <leader>q :q<CR>|                          " Quit,
 nnoremap <leader>Q :q!<CR>|                         "  ↳ Quit losing unsaved changes.
-nnoremap <leader>r :%s//<Left>|                     " Replace (add middle delimiter yourself, e.g. <Space>rold/new),
+nnoremap <leader>r :%s/|                            " Replace (e.g. <Space>rold/new),
 nnoremap <leader>R :%s//c<Left><Left>|              "  ↳ Replace with prompt on each match.
 map <Leader>s <Plug>(easymotion-bd-w)|              " EasyMotion: Move to word.
 nnoremap <leader>w :up<CR>|                         " Write if there were changes.
@@ -107,6 +107,11 @@ nnoremap <leader>Y :%y+<CR>|                        "  ↳  file to clipboard (n
 nnoremap <leader>z  zz|                             " Center screen on current line.
 nnoremap <leader>/ :noh<CR>|                        " Turn off find highlighting.
 nnoremap <leader>? /<Up><CR>|                       " Search for last searched thing.
+" Leader + window size keys increases/decreases height/width by 3/2.
+nnoremap <silent> <Leader>+ :exe "resize " . (winheight(0) * 3/2)<CR>
+nnoremap <silent> <Leader>- :exe "resize " . (winheight(0) * 2/3)<CR>
+nnoremap <silent> <Leader>> :exe "vertical resize " . (winwidth(0) * 3/2)<CR>
+nnoremap <silent> <Leader>< :exe "vertical resize " . (winwidth(0) * 2/3)<CR>
 
 vnoremap <leader>y "+y|                             "  ↳                (visual mode).
 vnoremap <leader>d "+d|                             " Cut from clipboard (visual mode).
@@ -116,6 +121,17 @@ nnoremap <C-h> <C-w>h|                              " Switch left  a window,
 nnoremap <C-j> <C-w>j|                              "  ↳     down  a window,
 nnoremap <C-k> <C-w>k|                              "  ↳     up    a window,
 nnoremap <C-l> <C-w>l|                              "  ↳     right a window.
+
+nmap          <C-W>>     <C-W>><SID>ws|             " Adds mappings to make Ctrl-W -/+/</>
+nmap          <C-W><     <C-W><<SID>ws|             " ↳ repeatable, so you can press Ctrl-W
+nn <script>   <SID>ws>   <C-W>><SID>ws|             " ↳ and then hold > to increase width,
+nn <script>   <SID>ws<   <C-W><<SID>ws|             " ↳ or hold - to decrease height.
+nmap          <C-W>+     <C-W>+<SID>ws|             " ↳ Note that +,<, and > need the shift key.
+nmap          <C-W>-     <C-W>-<SID>ws|             " ↳ Use <Leader> < or > for bigger
+nn <script>   <SID>ws+   <C-W>+<SID>ws|             " ↳ modifications, and this for smaller
+nn <script>   <SID>ws-   <C-W>-<SID>ws|             " ↳ tweaks.
+nmap          <SID>ws    <Nop>
+
 nnoremap <Tab> :bn<CR>|                             " Tab to switch to next buffer,
 nnoremap <S-Tab> :bp<CR>|                           "  ↳ Shift-Tab to switch to previous buffer.
 nnoremap <C-p> <C-i>|                               " <C-o> = go to previous jump, <C-p> is go to next (normally <C-i>, but that == Tab, used above).
@@ -128,13 +144,10 @@ nmap f <Plug>Sneak_f|                               " Use sneak for f (multiline
 nmap F <Plug>Sneak_F|                               " ↳             F
 nmap t <Plug>Sneak_t|                               " ↳             t
 nmap T <Plug>Sneak_T|                               " ↳             T
-map /  <Plug>(incsearch-forward)|                   " Incsearch: highlight matches as you search with / .
-map ?  <Plug>(incsearch-backward)|                  " ↳                                               ? .
-map g/ <Plug>(incsearch-stay)|                      " ↳                                               g/.
 
 if has("nvim")                                      " NeoVim specific settings.
   let g:terminal_scrollback_buffer_size = 100000    " Store lots of terminal history.
-  let $VISUAL = 'nvr -l --remote-wait'              " Use existing nvim window to open new files (e.g. `g cm`).
+  if executable("nvr")| let $VISUAL = 'nvr --remote-wait'| endif " Use existing nvim window to open new files (e.g. `g cm`).
   nnoremap <Leader>t :vsplit term://$SHELL<CR>i|    " Open terminal in new split.
   nnoremap <Leader>T :term<CR>|                     " Open terminal in current split.
   tnoremap <C-h> <C-\><C-n><C-w>h|                  " Switch left  a window in terminal,
