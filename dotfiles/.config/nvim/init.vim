@@ -19,7 +19,7 @@ try
   Plug 'tpope/vim-surround'                         " Add/mod/remove surrounding chars.
   Plug 'junegunn/fzf', { 'dir': '~/.local/share/fzf', 'do': './install --bin' }
   Plug 'junegunn/fzf.vim'                           " Try :Files, :GFiles? :Buffers :Lines :History :Commits :BCommits
-  Plug 'tpope/vim-vinegar'                          " Nicer file browser plugin.
+  Plug 'ap/vim-readdir'                             " Nicer file browser plugin that works with buftabline.
   call plug#end()                                   " Initialize plugin system
 catch| echo 'vim-plug not installed, use :PI to install'
 endtry
@@ -76,6 +76,7 @@ nnoremap j gj|                                      "  ↳   down visually , don
 nnoremap gk k|                                      " Move up   logically, do    skip wrapped lines,
 nnoremap gj j|                                      "  ↳   down logically, do    skip wrapped lines.
 nnoremap Y y$|                                      " Make Y work like C and D (yank to end of line, not whole line).
+nnoremap - :e .<CR>|                                " - opens the directory in file browser (repeat for `cd ..`).
 nnoremap <leader>a @a<CR>|                          " Apply macro a (add with qa or yank to a reg with "ay).
 nnoremap <leader>d :bp\|bd  #<CR>|                  " Close buffer without closing split,
 nnoremap <leader>D :bp\|bd! #<CR>|                  "  ↳ Force close buffer.
@@ -167,7 +168,7 @@ endif
 "*** Custom Commands ***"
 command! W w !sudo tee % > /dev/null|               " :W saves file as sudo.
 command! Trim call TrimWhitespace()|                " :Trim runs :call Trim() (defined below).
-command! PU PlugUpdate | PlugUpgrade|               " :PI installs vim-plug, :PU updates plugins and vim-plug.
+command! PU PlugClean | PlugUpdate | PlugUpgrade|   " :PI installs vim-plug, :PU updates/cleans plugins and vim-plug.
 command! PI !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim &&
     \ ln -s ~/.local/share/nvim/site/autoload ~/.vim/autoload
@@ -175,6 +176,7 @@ command! PI !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
 let g:is_posix = 1                                  " Assume shell for syntax highlighting.
 "let g:rustfmt_autosave = 1                         " Run rustfmt on save (from rust.vim).
 let g:sneak#use_ic_scs = 1                          " Sneak: respect smartcase setting.
+let g:loaded_netrwPlugin = 1                        " Don't use the built-in file browser (use vim-readdir instead).
 
 " Highlight the 81st column of text (in dark grey so it doesn't distract).
 highlight ColorColumn ctermbg=234
