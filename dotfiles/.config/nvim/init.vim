@@ -80,7 +80,7 @@ nnoremap - :e .<CR>|                                " - opens the directory in f
 nnoremap <leader>a @a<CR>|                          " Apply macro a (add with qa or yank to a reg with "ay).
 nnoremap <leader>d :bp\|bd  #<CR>|                  " Close buffer without closing split,
 nnoremap <leader>D :bp\|bd! #<CR>|                  "  ↳ Force close buffer.
-nnoremap <leader>f :Files|                          " Search file names    for file,
+nnoremap <leader>f :Files<CR>|                      " Search file names    for file,
 nnoremap <leader>F :grep |                          "  ↳          contents for file.
 nnoremap <Leader>gd :w !diff % - <CR>|              " Diff between saved file and current.
 nnoremap <Leader>gt :set et!<CR>:set et?<CR>|       " Toggle tabs/spaces.
@@ -209,6 +209,7 @@ endf
 inoremap <Tab> <c-r>=InsertTabWrapper()<cr>|        " Tab is autocomplete unless at beginning of line.
 inoremap <S-Tab> <c-n>|                             " Shift-Tab is always autocomplete.
 
+highlight Comment cterm=italic
 " Blink when you highlight a search match.
 nnoremap <silent> n n:call HLNext(0.1)<cr>
 nnoremap <silent> N N:call HLNext(0.1)<cr>
