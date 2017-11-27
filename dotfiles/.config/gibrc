@@ -139,6 +139,7 @@ alias v=$VIM xv="xargs $VIM"; export VISUAL=${VISUAL:-$VIM} EDITOR=${EDITOR:-$VI
 exists vimr && alias vm=vimr # Use `vm` for GUI vim, need to add a Linux equivalent.
 ulimit -c unlimited # Allow saving of coredumps.
 alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"' # Makes it look like you're busy with important hacker stuff.
+[ $(uname) = "Darwin" ] && alias ldd="otool -L" # macOS equivalent to ldd.
 [ $(uname) = "Darwin" ] && { alias cpy="pbcopy"; alias pst="pbpaste"; alias o=open; } # Cross-platform copy/paste/open terminal commands.
 [ $(uname) = "Linux" ] && { alias cpy="xclip -selection clipboard"; alias pst="xclip -selection clipboard -o"; alias o=xdg-open; }
 

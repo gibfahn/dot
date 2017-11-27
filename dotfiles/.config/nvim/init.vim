@@ -20,6 +20,7 @@ try
   Plug 'junegunn/fzf', { 'dir': '~/.local/share/fzf', 'do': './install --bin' }
   Plug 'junegunn/fzf.vim'                           " Try :Files, :GFiles? :Buffers :Lines :History :Commits :BCommits
   Plug 'ap/vim-readdir'                             " Nicer file browser plugin that works with buftabline.
+  Plug 'junegunn/vim-peekaboo'                      " Pop up register list when pasting/macroing.
   call plug#end()                                   " Initialize plugin system
 catch| echo 'vim-plug not installed, use :PI to install'
 endtry
@@ -67,6 +68,7 @@ set undofile undodir="/tmp/.vim-undo-dir"           " Persistent history, save h
 set path=.,/usr/include,,**                         " Add ** to the search path so :find x works recursively.
 if exists('+breakindent')| set breakindent| let &showbreak = '↳ '| set cpo+=n| end " Nicer line wrapping for long lines.
 if exists('&inccommand')| set inccommand=split| endif " Show search and replace as you type.
+if exists("&wildignorecase")| set wildignorecase| endif " Case insensitive file tab completion with :e.
 
 "*** Key mappings (see http://vim.wikia.com/wiki/Unused_keys for unused keys) ***"
 " Available (normal): <C-Space>, K, +, _, <C-q/s/n/[/_>, <leader>b/c/e/h/m/n/s/u/v
@@ -139,7 +141,6 @@ nnoremap <Tab> :bn<CR>|                             " Tab to switch to next buff
 nnoremap <S-Tab> :bp<CR>|                           "  ↳ Shift-Tab to switch to previous buffer.
 nnoremap <C-p> <C-i>|                               " <C-o> = go to previous jump, <C-p> is go to next (normally <C-i>, but that == Tab, used above).
 inoremap kj <ESC>|                                  " kj = Esc in insert mode.
-map q: <Nop>|                                       " Disable Ex modes (avoids,
 nnoremap Q <nop>|                                   "  ↳ accidental triggering).
 vnoremap <expr> // 'y/\V'.escape(@",'\').'<CR>'|    " Search for selected text with // (very no-magic mode, escaped backslashes).
 
@@ -177,6 +178,7 @@ let g:is_posix = 1                                  " Assume shell for syntax hi
 "let g:rustfmt_autosave = 1                         " Run rustfmt on save (from rust.vim).
 let g:sneak#use_ic_scs = 1                          " Sneak: respect smartcase setting.
 let g:loaded_netrwPlugin = 1                        " Don't use the built-in file browser (use vim-readdir instead).
+let g:peekaboo_window = "vert bo 50new"            " 
 
 " Highlight the 81st column of text (in dark grey so it doesn't distract).
 highlight ColorColumn ctermbg=234
