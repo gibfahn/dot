@@ -21,6 +21,7 @@ try
   Plug 'junegunn/fzf.vim'                           " Try :Files, :GFiles? :Buffers :Lines :History :Commits :BCommits
   Plug 'ap/vim-readdir'                             " Nicer file browser plugin that works with buftabline.
   Plug 'junegunn/vim-peekaboo'                      " Pop up register list when pasting/macroing.
+  Plug 'sjl/gundo.vim'                              " Interactive undo tree (<space>u to toggle on/off, q to quit).
   call plug#end()                                   " Initialize plugin system
 catch| echo 'vim-plug not installed, use :PI to install'
 endtry
@@ -63,8 +64,7 @@ set diffopt+=vertical                               " Always use vertical diffs.
 set wildchar=<Tab> wildmenu                         " Tab complete with files (e.g. `:e`)
 set wildmode=list:longest,list:full                 " 1st Tab completes to longest common string, 2nd+ cycles through options.
 set list listchars=tab:»·,trail:·,nbsp:·            " Display extra whitespace.
-if !isdirectory("/tmp/.vim-undo-dir")| call mkdir("/tmp/.vim-undo-dir", "", 0700)| endif
-set undofile undodir="/tmp/.vim-undo-dir"           " Persistent history, save history files here.
+set undofile                                        " Persist undo history on file close (`:set undodir?` for location).
 set path=.,/usr/include,,**                         " Add ** to the search path so :find x works recursively.
 if exists('+breakindent')| set breakindent| let &showbreak = '↳ '| set cpo+=n| end " Nicer line wrapping for long lines.
 if exists('&inccommand')| set inccommand=split| endif " Show search and replace as you type.
@@ -103,6 +103,7 @@ nnoremap <leader>Q :q!<CR>|                         "  ↳ Quit losing unsaved c
 nnoremap <leader>r :%s/|                            " Replace (e.g. <Space>rold/new),
 nnoremap <leader>R :%s//c<Left><Left>|              "  ↳ Replace with prompt on each match.
 map <Leader>s <Plug>(easymotion-bd-w)|              " EasyMotion: Move to word.
+nnoremap <leader>u :GundoToggle<CR>|                " Toggle Undo tree visualisation.
 nnoremap <leader>w :up<CR>|                         " Write if there were changes.
 nnoremap <leader>W :w<CR>|                          "  ↳    whether or not there were changes.
 nnoremap <leader>x :x<CR>|                          " Save (if changes) and quit.
@@ -178,7 +179,9 @@ let g:is_posix = 1                                  " Assume shell for syntax hi
 "let g:rustfmt_autosave = 1                         " Run rustfmt on save (from rust.vim).
 let g:sneak#use_ic_scs = 1                          " Sneak: respect smartcase setting.
 let g:loaded_netrwPlugin = 1                        " Don't use the built-in file browser (use vim-readdir instead).
-let g:peekaboo_window = "vert bo 50new"            " 
+let g:peekaboo_window = "vert bo 50new"             " Increase peekaboo window width to 50.
+let g:gundo_right = 1                               " Undo window on right.
+let g:gundo_preview_bottom = 1                      " Undo diff preview on bottom.
 
 " Highlight the 81st column of text (in dark grey so it doesn't distract).
 highlight ColorColumn ctermbg=234
