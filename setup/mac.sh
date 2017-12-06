@@ -30,6 +30,10 @@ if [ "$HARDCORE" ]; then # Set key repeat preferences.
   defaults write NSGlobalDomain InitialKeyRepeat -int 8
   # Increases trackpad sensitivity (SysPref max 3.0).
   defaults write -g com.apple.trackpad.scaling -float 5.0
+  # Allow Finder to be quit (hides Desktop files).
+  defaults write com.apple.finder QuitMenuItem -bool YES
+  killall Finder
+  open .
 else
   skip "Not setting keyboard/trackpad preferences (HARDCORE not set)."
   # You can still change them in System Preferences/{Trackpad,Keyboard}.
