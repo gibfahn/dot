@@ -44,7 +44,7 @@
   fix = commit --fixup # g fix SHA means rebasing will attach to that SHA.
 
   d   = diff HEAD             # diff of staged and unstaged..
-  de  = "!git diff HEAD --name-only | xargs $VISUAL" # Open files changed since last commit in editor.
+  de  = "!git diff HEAD --name-only $@ | xargs $VISUAL #" # Open files changed since last commit in editor.
   dn  = diff HEAD --name-only # diff of staged and unstaged file names.
   ds  = diff --staged # Diff of staged files (`git diff` for unstaged).
   du  = "!git diff $(git headUpstream)"             # diff between working tree and upstream branch.
@@ -88,7 +88,7 @@
 
   s   = status
   sh  = show
-  she = "!git show --pretty="" --name-only | xargs $VISUAL" # Open files changed in last commit in editor.
+  she = "!git show --pretty="" --name-only $@ | xargs $VISUAL #" # Open files changed in last commit in editor.
   shn = show --pretty="" --name-only # Show names of files changed only.
   st  = stash
   stp = stash pop
