@@ -1,4 +1,5 @@
 {
+  "title": "Gib's rules.",
   "global": {
     "check_for_updates_on_startup": true,
     "show_in_menu_bar": true,
@@ -18,22 +19,10 @@
               {
                 "from": {
                   "key_code": "left_shift",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
+                  "modifiers": { "optional": [ "any" ] }
                 },
-                "to": [
-                  {
-                    "key_code": "left_control"
-                  }
-                ],
-                "to_if_alone": [
-                  {
-                    "key_code": "escape"
-                  }
-                ],
+                "to": [ { "key_code": "left_control" } ],
+                "to_if_alone": [ { "key_code": "escape" } ],
                 "type": "basic"
               }
             ]
@@ -42,22 +31,8 @@
             "description": "Change shift + delete to forward delete",
             "manipulators": [
               {
-                "from": {
-                  "key_code": "delete_or_backspace",
-                  "modifiers": {
-                    "mandatory": [
-                      "shift"
-                    ],
-                    "optional": [
-                      "caps_lock"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "key_code": "delete_forward"
-                  }
-                ],
+                "from": { "key_code": "delete_or_backspace", "modifiers": { "mandatory": [ "shift" ], "optional": [ "caps_lock" ] } },
+                "to": [ { "key_code": "delete_forward" } ],
                 "type": "basic"
               }
             ]
@@ -68,28 +43,10 @@
               {
                 "from": {
                   "key_code": "f17",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
+                  "modifiers": { "optional": [ "any" ] }
                 },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "hyper",
-                      "value": 1
-                    }
-                  }
-                ],
-                "to_after_key_up": [
-                  {
-                    "set_variable": {
-                      "name": "hyper",
-                      "value": 0
-                    }
-                  }
-                ],
+                "to": [ { "set_variable": { "name": "hyper", "value": 1 } } ],
+                "to_after_key_up": [ { "set_variable": { "name": "hyper", "value": 0 } } ],
                 "type": "basic"
               }
             ]
@@ -97,455 +54,93 @@
           {
             "description": "Ж+h/j/k/l to Arrows (vim style).",
             "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "name": "hyper",
-                    "type": "variable_if",
-                    "value": 1
-                  }
-                ],
-                "from": {
-                  "key_code": "h",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "key_code": "left_arrow"
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "name": "hyper",
-                    "type": "variable_if",
-                    "value": 1
-                  }
-                ],
-                "from": {
-                  "key_code": "j",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "key_code": "down_arrow"
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "name": "hyper",
-                    "type": "variable_if",
-                    "value": 1
-                  }
-                ],
-                "from": {
-                  "key_code": "k",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "key_code": "up_arrow"
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "name": "hyper",
-                    "type": "variable_if",
-                    "value": 1
-                  }
-                ],
-                "from": {
-                  "key_code": "l",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "key_code": "right_arrow"
-                  }
-                ],
-                "type": "basic"
-              }
+              { "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "from": { "key_code": "h", "modifiers": { "optional": [ "any" ] } },
+                "to": [ { "key_code": "left_arrow" } ],
+                "type": "basic" },
+              { "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "from": { "key_code": "j", "modifiers": { "optional": [ "any" ] } },
+                "to": [ { "key_code": "down_arrow" } ],
+                "type": "basic" },
+              { "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "from": { "key_code": "k", "modifiers": { "optional": [ "any" ] } },
+                "to": [ { "key_code": "up_arrow" } ],
+                "type": "basic" },
+              { "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "from": { "key_code": "l", "modifiers": { "optional": [ "any" ] } },
+                "to": [ { "key_code": "right_arrow" } ],
+                "type": "basic" }
             ]
           },
           {
             "description": "Ж+y/u/i/o to ⌘ + Arrows",
             "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "name": "hyper",
-                    "type": "variable_if",
-                    "value": 1
-                  }
-                ],
-                "from": {
-                  "key_code": "y",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "key_code": "left_arrow",
-                    "modifiers": [
-                      "left_command"
-                    ]
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "name": "hyper",
-                    "type": "variable_if",
-                    "value": 1
-                  }
-                ],
-                "from": {
-                  "key_code": "u",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "key_code": "down_arrow",
-                    "modifiers": [
-                      "left_command"
-                    ]
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "name": "hyper",
-                    "type": "variable_if",
-                    "value": 1
-                  }
-                ],
-                "from": {
-                  "key_code": "i",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "key_code": "up_arrow",
-                    "modifiers": [
-                      "left_command"
-                    ]
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "name": "hyper",
-                    "type": "variable_if",
-                    "value": 1
-                  }
-                ],
-                "from": {
-                  "key_code": "o",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "key_code": "right_arrow",
-                    "modifiers": [
-                      "left_command"
-                    ]
-                  }
-                ],
-                "type": "basic"
-              }
+              { "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "from": { "key_code": "y", "modifiers": { "optional": [ "any" ] } },
+                "to": [ { "key_code": "left_arrow", "modifiers": [ "left_command" ] } ],
+                "type": "basic" },
+              { "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "from": { "key_code": "u", "modifiers": { "optional": [ "any" ] } },
+                "to": [ { "key_code": "down_arrow", "modifiers": [ "left_command" ] } ],
+                "type": "basic" },
+              { "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "from": { "key_code": "i", "modifiers": { "optional": [ "any" ] } },
+                "to": [ { "key_code": "up_arrow", "modifiers": [ "left_command" ] } ],
+                "type": "basic" },
+              { "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "from": { "key_code": "o", "modifiers": { "optional": [ "any" ] } },
+                "to": [ { "key_code": "right_arrow", "modifiers": [ "left_command" ] } ],
+                "type": "basic" }
             ]
           },
           {
             "description": "Open/switch to app: Ж+t/Enter/a/g/w/f/e/s to Term/new Term/Alacritty/Chrome/WorkFlowy/FirefoxNightly/Finder/Slack",
             "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "name": "hyper",
-                    "type": "variable_if",
-                    "value": 1
-                  }
-                ],
-                "from": {
-                  "key_code": "t",
-                  "modifiers": {
-                    "optional": [
-                      "option",
-                      "shift",
-                      "command"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "shell_command": "open -a Terminal"
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "name": "hyper",
-                    "type": "variable_if",
-                    "value": 1
-                  }
-                ],
-                "from": {
-                  "key_code": "return_or_enter",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "shell_command": "open -a Terminal ~"
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "name": "hyper",
-                    "type": "variable_if",
-                    "value": 1
-                  }
-                ],
-                "from": {
-                  "key_code": "a",
-                  "modifiers": {
-                    "optional": [
-                      "option",
-                      "command"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "shell_command": "open -a Alacritty"
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "name": "hyper",
-                    "type": "variable_if",
-                    "value": 1
-                  }
-                ],
-                "from": {
-                  "key_code": "g",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "shell_command": "open -a 'Google Chrome'"
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "name": "hyper",
-                    "type": "variable_if",
-                    "value": 1
-                  }
-                ],
-                "from": {
-                  "key_code": "w",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "shell_command": "open -a WorkFlowy"
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "name": "hyper",
-                    "type": "variable_if",
-                    "value": 1
-                  }
-                ],
-                "from": {
-                  "key_code": "f",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "shell_command": "open -a '/Applications/FirefoxNightly.app/Contents/MacOS/firefox'"
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "name": "hyper",
-                    "type": "variable_if",
-                    "value": 1
-                  }
-                ],
-                "from": {
-                  "key_code": "v",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "shell_command": "open -a VimR"
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "name": "hyper",
-                    "type": "variable_if",
-                    "value": 1
-                  }
-                ],
-                "from": {
-                  "key_code": "e",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "shell_command": "open ~"
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "name": "hyper",
-                    "type": "variable_if",
-                    "value": 1
-                  }
-                ],
-                "from": {
-                  "key_code": "s",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "shell_command": "open -a Slack"
-                  }
-                ],
-                "type": "basic"
-              }
+              { "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "from": { "key_code": "t", "modifiers": { "optional": [ "option", "shift", "command" ] } },
+                "to": [ { "shell_command": "open -a Terminal" } ],
+                "type": "basic" },
+              { "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "from": { "key_code": "return_or_enter", "modifiers": { "optional": [ "any" ] } },
+                "to": [ { "shell_command": "open -a Terminal ~" } ],
+                "type": "basic" },
+              { "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "from": { "key_code": "a", "modifiers": { "optional": [ "option", "command" ] } },
+                "to": [ { "shell_command": "open -a Alacritty" } ],
+                "type": "basic" },
+              { "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "from": { "key_code": "g", "modifiers": { "optional": [ "any" ] } },
+                "to": [ { "shell_command": "open -a 'Google Chrome'" } ],
+                "type": "basic" },
+              { "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "from": { "key_code": "w", "modifiers": { "optional": [ "any" ] } },
+                "to": [ { "shell_command": "open -a WorkFlowy" } ],
+                "type": "basic" },
+              { "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "from": { "key_code": "f", "modifiers": { "optional": [ "any" ] } },
+                "to": [ { "shell_command": "open -a '/Applications/FirefoxNightly.app/Contents/MacOS/firefox'" } ],
+                "type": "basic" },
+              { "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "from": { "key_code": "v", "modifiers": { "optional": [ "any" ] } },
+                "to": [ { "shell_command": "open -a VimR" } ],
+                "type": "basic" },
+              { "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "from": { "key_code": "e", "modifiers": { "optional": [ "any" ] } },
+                "to": [ { "shell_command": "open ~" } ],
+                "type": "basic" },
+              { "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "from": { "key_code": "s", "modifiers": { "optional": [ "any" ] } },
+                "to": [ { "shell_command": "open -a Slack" } ],
+                "type": "basic" }
             ]
           },
           {
             "description": "Ж+⌘ +d = lock screen (darken screen)",
             "manipulators": [
               {
-                "conditions": [
-                  {
-                    "name": "hyper",
-                    "type": "variable_if",
-                    "value": 1
-                  }
-                ],
-                "from": {
-                  "key_code": "d",
-                  "modifiers": {
-                    "mandatory": [
-                      "command"
-                    ],
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "key_code": "power",
-                    "modifiers": [
-                      "left_control",
-                      "left_shift"
-                    ]
-                  }
-                ],
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "from": { "key_code": "d", "modifiers": { "mandatory": [ "command" ], "optional": [ "any" ] } },
+                "to": [ { "key_code": "power", "modifiers": [ "left_control", "left_shift" ] } ],
                 "type": "basic"
               }
             ]
@@ -554,30 +149,9 @@
             "description": "Ж+p = print screen (Screenshot to Clipboard)",
             "manipulators": [
               {
-                "conditions": [
-                  {
-                    "name": "hyper",
-                    "type": "variable_if",
-                    "value": 1
-                  }
-                ],
-                "from": {
-                  "key_code": "p",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "key_code": "4",
-                    "modifiers": [
-                      "right_shift",
-                      "left_command"
-                    ]
-                  }
-                ],
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "from": { "key_code": "p", "modifiers": { "optional": [ "any" ] } },
+                "to": [ { "key_code": "4", "modifiers": [ "right_shift", "left_command" ] } ],
                 "type": "basic"
               }
             ]
@@ -610,22 +184,8 @@
           "ignore": false,
           "manipulate_caps_lock_led": true,
           "simple_modifications": [
-            {
-              "from": {
-                "key_code": "grave_accent_and_tilde"
-              },
-              "to": {
-                "key_code": "f17"
-              }
-            },
-            {
-              "from": {
-                "key_code": "non_us_backslash"
-              },
-              "to": {
-                "key_code": "grave_accent_and_tilde"
-              }
-            }
+            { "from": { "key_code": "grave_accent_and_tilde" }, "to": { "key_code": "f17" } },
+            { "from": { "key_code": "non_us_backslash" }, "to": { "key_code": "grave_accent_and_tilde" } }
           ]
         },
         {
@@ -640,158 +200,32 @@
           "ignore": false,
           "manipulate_caps_lock_led": false,
           "simple_modifications": [
-            {
-              "from": {
-                "key_code": "left_command"
-              },
-              "to": {
-                "key_code": "left_option"
-              }
-            },
-            {
-              "from": {
-                "key_code": "left_option"
-              },
-              "to": {
-                "key_code": "left_command"
-              }
-            },
-            {
-              "from": {
-                "key_code": "non_us_backslash"
-              },
-              "to": {
-                "key_code": "f17"
-              }
-            },
-            {
-              "from": {
-                "key_code": "right_command"
-              },
-              "to": {
-                "key_code": "right_option"
-              }
-            },
-            {
-              "from": {
-                "key_code": "right_option"
-              },
-              "to": {
-                "key_code": "right_command"
-              }
-            }
+            { "from": { "key_code": "left_command" }, "to": { "key_code": "left_option" } },
+            { "from": { "key_code": "left_option" }, "to": { "key_code": "left_command" } },
+            { "from": { "key_code": "non_us_backslash" }, "to": { "key_code": "f17" } },
+            { "from": { "key_code": "right_command" }, "to": { "key_code": "right_option" } },
+            { "from": { "key_code": "right_option" }, "to": { "key_code": "right_command" } }
           ]
         }
       ],
       "fn_function_keys": [
-        {
-          "from": {
-            "key_code": "f1"
-          },
-          "to": {
-            "key_code": "vk_consumer_brightness_down"
-          }
-        },
-        {
-          "from": {
-            "key_code": "f2"
-          },
-          "to": {
-            "key_code": "vk_consumer_brightness_up"
-          }
-        },
-        {
-          "from": {
-            "key_code": "f3"
-          },
-          "to": {
-            "key_code": "vk_mission_control"
-          }
-        },
-        {
-          "from": {
-            "key_code": "f4"
-          },
-          "to": {
-            "key_code": "vk_launchpad"
-          }
-        },
-        {
-          "from": {
-            "key_code": "f5"
-          },
-          "to": {
-            "key_code": "vk_consumer_illumination_down"
-          }
-        },
-        {
-          "from": {
-            "key_code": "f6"
-          },
-          "to": {
-            "key_code": "vk_consumer_illumination_up"
-          }
-        },
-        {
-          "from": {
-            "key_code": "f7"
-          },
-          "to": {
-            "key_code": "vk_consumer_previous"
-          }
-        },
-        {
-          "from": {
-            "key_code": "f8"
-          },
-          "to": {
-            "key_code": "vk_consumer_play"
-          }
-        },
-        {
-          "from": {
-            "key_code": "f9"
-          },
-          "to": {
-            "key_code": "vk_consumer_next"
-          }
-        },
-        {
-          "from": {
-            "key_code": "f10"
-          },
-          "to": {
-            "key_code": "mute"
-          }
-        },
-        {
-          "from": {
-            "key_code": "f11"
-          },
-          "to": {
-            "key_code": "volume_down"
-          }
-        },
-        {
-          "from": {
-            "key_code": "f12"
-          },
-          "to": {
-            "key_code": "volume_up"
-          }
-        }
+        { "from": { "key_code": "f1" }, "to": { "key_code": "vk_consumer_brightness_down" } },
+        { "from": { "key_code": "f2" }, "to": { "key_code": "vk_consumer_brightness_up" } },
+        { "from": { "key_code": "f3" }, "to": { "key_code": "vk_mission_control" } },
+        { "from": { "key_code": "f4" }, "to": { "key_code": "vk_launchpad" } },
+        { "from": { "key_code": "f5" }, "to": { "key_code": "vk_consumer_illumination_down" } },
+        { "from": { "key_code": "f6" }, "to": { "key_code": "vk_consumer_illumination_up" } },
+        { "from": { "key_code": "f7" }, "to": { "key_code": "vk_consumer_previous" } },
+        { "from": { "key_code": "f8" }, "to": { "key_code": "vk_consumer_play" } },
+        { "from": { "key_code": "f9" }, "to": { "key_code": "vk_consumer_next" } },
+        { "from": { "key_code": "f10" }, "to": { "key_code": "mute" } },
+        { "from": { "key_code": "f11" }, "to": { "key_code": "volume_down" } },
+        { "from": { "key_code": "f12" }, "to": { "key_code": "volume_up" } }
       ],
       "name": "GibProfile",
       "selected": true,
       "simple_modifications": [
-        {
-          "from": {
-            "key_code": "caps_lock"
-          },
-          "to": {
-            "key_code": "right_shift"
-          }
-        }
+        { "from": { "key_code": "caps_lock" }, "to": { "key_code": "right_shift" } }
       ],
       "virtual_hid_keyboard": {
         "caps_lock_delay_milliseconds": 0,
@@ -808,102 +242,18 @@
       },
       "devices": [],
       "fn_function_keys": [
-        {
-          "from": {
-            "key_code": "f1"
-          },
-          "to": {
-            "key_code": "display_brightness_decrement"
-          }
-        },
-        {
-          "from": {
-            "key_code": "f2"
-          },
-          "to": {
-            "key_code": "display_brightness_increment"
-          }
-        },
-        {
-          "from": {
-            "key_code": "f3"
-          },
-          "to": {
-            "key_code": "mission_control"
-          }
-        },
-        {
-          "from": {
-            "key_code": "f4"
-          },
-          "to": {
-            "key_code": "launchpad"
-          }
-        },
-        {
-          "from": {
-            "key_code": "f5"
-          },
-          "to": {
-            "key_code": "illumination_decrement"
-          }
-        },
-        {
-          "from": {
-            "key_code": "f6"
-          },
-          "to": {
-            "key_code": "illumination_increment"
-          }
-        },
-        {
-          "from": {
-            "key_code": "f7"
-          },
-          "to": {
-            "key_code": "rewind"
-          }
-        },
-        {
-          "from": {
-            "key_code": "f8"
-          },
-          "to": {
-            "key_code": "play_or_pause"
-          }
-        },
-        {
-          "from": {
-            "key_code": "f9"
-          },
-          "to": {
-            "key_code": "fastforward"
-          }
-        },
-        {
-          "from": {
-            "key_code": "f10"
-          },
-          "to": {
-            "key_code": "mute"
-          }
-        },
-        {
-          "from": {
-            "key_code": "f11"
-          },
-          "to": {
-            "key_code": "volume_decrement"
-          }
-        },
-        {
-          "from": {
-            "key_code": "f12"
-          },
-          "to": {
-            "key_code": "volume_increment"
-          }
-        }
+        { "from": { "key_code": "f1" }, "to": { "key_code": "display_brightness_decrement" } },
+        { "from": { "key_code": "f2" }, "to": { "key_code": "display_brightness_increment" } },
+        { "from": { "key_code": "f3" }, "to": { "key_code": "mission_control" } },
+        { "from": { "key_code": "f4" }, "to": { "key_code": "launchpad" } },
+        { "from": { "key_code": "f5" }, "to": { "key_code": "illumination_decrement" } },
+        { "from": { "key_code": "f6" }, "to": { "key_code": "illumination_increment" } },
+        { "from": { "key_code": "f7" }, "to": { "key_code": "rewind" } },
+        { "from": { "key_code": "f8" }, "to": { "key_code": "play_or_pause" } },
+        { "from": { "key_code": "f9" }, "to": { "key_code": "fastforward" } },
+        { "from": { "key_code": "f10" }, "to": { "key_code": "mute" } },
+        { "from": { "key_code": "f11" }, "to": { "key_code": "volume_decrement" } },
+        { "from": { "key_code": "f12" }, "to": { "key_code": "volume_increment" } }
       ],
       "name": "Clean",
       "selected": false,
