@@ -73,23 +73,23 @@
             ]
           },
           {
-            "description": "Ж+y/u/i/o to ⌘ + Arrows",
+            "description": "Ж+y/u/i/o to Home/PgDn/PgUp/End",
             "manipulators": [
               { "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "from": { "key_code": "y", "modifiers": { "optional": [ "any" ] } },
-                "to": [ { "key_code": "left_arrow", "modifiers": [ "left_command" ] } ],
+                "to": [ { "key_code": "home"  } ],
                 "type": "basic" },
               { "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "from": { "key_code": "u", "modifiers": { "optional": [ "any" ] } },
-                "to": [ { "key_code": "down_arrow", "modifiers": [ "left_command" ] } ],
+                "to": [ { "key_code": "page_down"  } ],
                 "type": "basic" },
               { "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "from": { "key_code": "i", "modifiers": { "optional": [ "any" ] } },
-                "to": [ { "key_code": "up_arrow", "modifiers": [ "left_command" ] } ],
+                "to": [ { "key_code": "page_up"  } ],
                 "type": "basic" },
               { "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "from": { "key_code": "o", "modifiers": { "optional": [ "any" ] } },
-                "to": [ { "key_code": "right_arrow", "modifiers": [ "left_command" ] } ],
+                "to": [ { "key_code": "end"  } ],
                 "type": "basic" }
             ]
           },
