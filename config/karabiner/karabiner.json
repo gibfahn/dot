@@ -8,6 +8,7 @@
     {
       "complex_modifications": {
         "parameters": {
+          "basic.to_delayed_action_delay_milliseconds": 0,
           "basic.to_if_alone_timeout_milliseconds": 250
         },
         "rules": [
@@ -300,7 +301,7 @@
             ]
           },
           {
-            "description": "Open/switch to app: Ж+t/Enter/g/w/f/z/e/s to Term/new Term/Chrome/WorkFlowy/FirefoxNightly/Zoom/Finder/Slack",
+            "description": "Open/switch to app: Ж+t/Enter/a/g/w/f/e/s to Term/new Term/Alacritty/Chrome/WorkFlowy/FirefoxNightly/Finder/Slack",
             "manipulators": [
               {
                 "conditions": [
@@ -346,6 +347,30 @@
                 "to": [
                   {
                     "shell_command": "open -a Terminal ~"
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "name": "hyper",
+                    "type": "variable_if",
+                    "value": 1
+                  }
+                ],
+                "from": {
+                  "key_code": "a",
+                  "modifiers": {
+                    "optional": [
+                      "option",
+                      "command"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "shell_command": "open -a Alacritty"
                   }
                 ],
                 "type": "basic"
@@ -438,29 +463,6 @@
                 "to": [
                   {
                     "shell_command": "open -a VimR"
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "name": "hyper",
-                    "type": "variable_if",
-                    "value": 1
-                  }
-                ],
-                "from": {
-                  "key_code": "z",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "shell_command": "open -a zoom.us"
                   }
                 ],
                 "type": "basic"
@@ -593,6 +595,7 @@
             "vendor_id": 7185
           },
           "ignore": true,
+          "manipulate_caps_lock_led": false,
           "simple_modifications": []
         },
         {
@@ -605,6 +608,7 @@
             "vendor_id": 1452
           },
           "ignore": false,
+          "manipulate_caps_lock_led": true,
           "simple_modifications": [
             {
               "from": {
@@ -634,6 +638,7 @@
             "vendor_id": 9494
           },
           "ignore": false,
+          "manipulate_caps_lock_led": false,
           "simple_modifications": [
             {
               "from": {
@@ -796,6 +801,7 @@
     {
       "complex_modifications": {
         "parameters": {
+          "basic.to_delayed_action_delay_milliseconds": 500,
           "basic.to_if_alone_timeout_milliseconds": 1000
         },
         "rules": []
