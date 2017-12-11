@@ -269,6 +269,17 @@
           ]
         },
         {
+          "description": "Microsoft Sculpt Ergonomic Split Keyboard.",
+          "ignore": false,
+          "disable_built_in_keyboard_if_exists": false,
+          "fn_function_keys": [],
+          "identifiers": { "is_keyboard": true, "is_pointing_device": false, "product_id": 1957, "vendor_id": 1118 },
+          "manipulate_caps_lock_led": false,
+          "simple_modifications": [
+            { "from": { "key_code": "non_us_backslash" }, "to": { "key_code": "f17" } }
+          ]
+        },
+        {
           "description": "Cherry Blues (CM Storm Quickfire TKL)",
           "ignore": false,
           "disable_built_in_keyboard_if_exists": false,
