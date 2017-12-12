@@ -12,7 +12,7 @@
           "basic.to_if_alone_timeout_milliseconds": 250
         },
         "rules": [ {
-            "description": "Caps Lock is Left Shift if held, caps lock if tapped.",
+            "description": "Caps Lock is Left Shift.",
             "manipulators": [ {
                 "from": { "key_code": "caps_lock", "modifiers": { "optional": [ "any" ] } },
                 "to": [{ "key_code": "left_shift" }],
