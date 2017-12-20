@@ -62,6 +62,7 @@
   la  = log --graph --decorate --oneline --all # Graph log of all branches.
   ll  = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%C(bold blue)<%an>%Creset' --abbrev-commit
 
+  mb  = "!git merge-base ${1:-master} ${2:-HEAD} ${@:2} #" # Get commit this branch forked from.
   mc  = "!echo \"$VISUAL\" | grep -iq vi && c=\"-c /=======\" || c=\"\"; git diff --name-only --diff-filter=U | xargs $VISUAL $c" # Open merge conflicts in editor.
   mf  = merge --ff-only
 
@@ -81,6 +82,7 @@
   rhh = "!git reset --hard $(git headUpstream)"
   rh  = reset --hard
   ri  = rebase -i -S --autosquash
+  rim = "!git rebase -i -S --autosquash $(git merge-base ${1:-master} ${2:-HEAD} ${@:2}) #" # Rebase all commits since you forked the branch.
   rii = "!git rebase -i -S --autosquash $(git headUpstream)" # Reset to upstream branch, not needed with merge.defaultToUpstream.
   rr  = remote rename # Change name of remote `g rr origin up`.
   rs  = remote set-url # Change URL of remote `g rs up hsg:dot`.
