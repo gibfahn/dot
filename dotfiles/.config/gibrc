@@ -92,13 +92,12 @@ if [ "$ZSH_VERSION" ]; then # zsh specific options.
   bindkey -M main "^[[A" history-beginning-search-backward-end # Re-enable up   for history search.
   bindkey -M main "^[[B" history-beginning-search-forward-end  # Re-enable down for history search.
 
-  for i in unalias please po pu rd d afind _ md run-help; do alias | grep -q "$i" && unalias "$i"; done # Doesn't seem to always be defined.
   source "$XDG_DATA_HOME"/fzf/shell/completion.zsh 2> /dev/null
   source "$XDG_DATA_HOME"/fzf/shell/key-bindings.zsh 2> /dev/null
 elif [ "$BASH_VERSION" ]; then # Bash specific options.
   export HISTFILE="$XDG_CACHE_HOME/bash/history" # Set history file location.
   set -o vi # Vim mode in bash.
-  shopt -s autocd # type directory name to cd.
+  shopt -s autocd 2>/dev/null # type directory name to cd.
   cs() { cd "$@" && ls; } # cs => cd and ls.
   cd=cs # Used in .. commands below (so .. does `cs ..`).
   bind Space:magic-space 2>/dev/null # !31 autoexpands on space.
@@ -108,7 +107,8 @@ elif [ "$BASH_VERSION" ]; then # Bash specific options.
   source "$XDG_DATA_HOME"/fzf/shell/key-bindings.bash 2> /dev/null
 fi
 
-[ ! -d "$(dirname "$HISTFILE")" ] && mkdir -p "$(dirname "$HISTFILE")"
+[ ! -d "$(dirname "$HISTFILE")" ] && mkdir -p "$(dirname "$HISTFILE")" # Create HISTFILE dir if necessary.
+for i in please po pu rd d afind _ md run-help; do alias | sed 's/^alias //' | grep -q "^$i=" && unalias "$i"; done # Remove unwanted aliases if defined.
 
 ### FUNCTIONS ###
 md() { mkdir -p $*; [ $# = 1 ] && cd "$1" || true; } # md foo = mkdir foo && cd foo.
