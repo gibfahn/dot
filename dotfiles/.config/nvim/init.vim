@@ -214,7 +214,6 @@ endf
 inoremap <Tab> <c-r>=InsertTabWrapper()<cr>|        " Tab is autocomplete unless at beginning of line.
 inoremap <S-Tab> <c-n>|                             " Shift-Tab is always autocomplete.
 
-highlight Comment cterm=italic
 " Blink when you highlight a search match.
 nnoremap <silent> n n:call HLNext(0.1)<cr>
 nnoremap <silent> N N:call HLNext(0.1)<cr>
