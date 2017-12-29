@@ -91,6 +91,7 @@
   rv  = remote -v # Show remotes (with URLs).
 
   s   = status
+  ss  = status --short --branch
   sh  = show
   she = "!git show --pretty="" --name-only $@ | xargs $VISUAL #" # Open files changed in last commit in editor.
   shn = show --pretty="" --name-only # Show names of files changed only.
@@ -142,6 +143,8 @@
   enabled = true # Remember how I resolved the same merge conflict last time.
 [submodule]
   fetchJobs = 8 # Number of jobs to fetch when I submodule clone/update.
+[status]
+  showStash = true
 
 # Try `g cl hh:nodejs/node`.
 [url "https://bitbucket.org/"]
