@@ -65,6 +65,9 @@ if [ "$ZSH_VERSION" ]; then # zsh specific options.
   chpwd() { ls; } # Auto ls after changing directory.
   zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' # Case-insensitive match.
   source "$XDG_DATA_HOME/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" || true
+  setopt no_list_ambiguous # Show menu on first tab if multiple matches (don't wait for second tab).
+  setopt no_list_beep # Don't beep if tab-complete has multiple choices, only if no such file.
+  zstyle ':bracketed-paste-magic' active-widgets '.self-*' # https://github.com/zsh-users/zsh-autosuggestions/issues/141
 
   # Vim mode and keybindings in zsh:
   autoload -U history-search-end # Not included by default so load (usually /usr/share/zsh/unctions/Zle/).
