@@ -94,7 +94,7 @@ if [ "$ZSH_VERSION" ]; then # zsh specific options.
 
   for i in unalias please po pu rd d afind _ md run-help; do alias | grep -q "$i" && unalias "$i"; done # Doesn't seem to always be defined.
   source "$XDG_DATA_HOME"/fzf/shell/completion.zsh 2> /dev/null
-  source "$XDG_DATA_HOME"/fzf/shell/key-bindings.zsh
+  source "$XDG_DATA_HOME"/fzf/shell/key-bindings.zsh 2> /dev/null
 elif [ "$BASH_VERSION" ]; then # Bash specific options.
   export HISTFILE="$XDG_CACHE_HOME/bash/history" # Set history file location.
   set -o vi # Vim mode in bash.
@@ -105,7 +105,7 @@ elif [ "$BASH_VERSION" ]; then # Bash specific options.
   bind 'set completion-ignore-case on' 2>/dev/null # case-insensitive tab completion.
   PS1=' \[\e[32;1m\]\w $ \[\e[0m\]'
   source "$XDG_DATA_HOME"/fzf/shell/completion.bash 2> /dev/null
-  source "$XDG_DATA_HOME"/fzf/shell/key-bindings.bash
+  source "$XDG_DATA_HOME"/fzf/shell/key-bindings.bash 2> /dev/null
 fi
 
 [ ! -d "$(dirname "$HISTFILE")" ] && mkdir -p "$(dirname "$HISTFILE")"
