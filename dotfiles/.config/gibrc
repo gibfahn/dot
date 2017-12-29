@@ -8,6 +8,22 @@ case $- in
   *i*) [ "$GIBRC" ] && echo "Reusing gibrc..." || echo "Using gibrc..." ;;
   *) return ;; # Exit if not running interactively.
 esac
+[ -z "$GIBRC" ] && GIBRC=0 # First time through this is 0, next time 1 (etc).
+
+exists() { which "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
+
+# If we're sshed into a machine, and didn't manually run a different, try a better shell.
+if [ "$SSH_CLIENT" -o "$SSH_TTY" ] && [ "$GIBRC" = 0 -a -z "$ZSH_VERSION" ]; then
+  if exists zsh; then
+    echo "Upgrading to zsh"
+    export GIBRC=1
+    exec zsh
+  elif [ -z "$BASH_VERSION" ] && exists bash; then
+    echo "Upgrading to bash"
+    export GIBRC=1
+    exec bash
+  fi
+fi
 
 ### ENV VAR DEFAULTS ###
 export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-"$HOME/.config"} # Config stuff should go here.
@@ -94,7 +110,6 @@ fi
 
 ### FUNCTIONS ###
 md() { mkdir -p $*; [ $# = 1 ] && cd "$1" || true; } # md foo = mkdir foo && cd foo.
-exists() { type "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
 # Add to beginning of path.
 pathadd() { [ -d "$1" ] && export PATH="$1"$(echo ":$PATH:" | sed "s|:$1:|:|" | sed 's|:$||'); }
 # Add to end of path.
@@ -217,4 +232,4 @@ if [ "$myshell" = "ksh93" -o "$myshell" = "ksh" ]; then
   alias __Y=`echo "\6"`       # end = ^e = end of line.
 fi
 
-export GIBRC=true # Use this to check for things that should only run once.
+export GIBRC="$(expr $GIBRC + 1)" # Increment GIBRC.
