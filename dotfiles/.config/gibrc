@@ -35,7 +35,6 @@ export LESSHISTFILE=${LESSHISTFILE:-"$XDG_CACHE_HOME/less/history"} # Get less t
 export CARGO_HOME=${CARGO_HOME:-"$XDG_DATA_HOME/cargo"} # Cargo goes here.
 export RUSTUP_HOME=${RUSTUP_HOME:-"$XDG_DATA_HOME/rustup"} # Rustup goes here.
 export ATOM_HOME=${ATOM_HOME:-"$XDG_CONFIG_HOME/atom"} # Atom goes here.
-export HISTFILE=${HISTFILE:-"$XDG_CONFIG_HOME/history"} # Set history file location.
 export npm_config_devdir=${npm_config_devdir:-"$XDG_CACHE_HOME/node-gyp"} # Set node-gyp download location.
 export npm_cache=${npm_cache:-"$XDG_CACHE_HOME/npm"} # Set npm cache location.
 export NODE_REPL_HISTORY=${NODE_REPL_HISTORY="$XDG_CACHE_HOME/node_repl_history"} # Set node-gyp download location.
@@ -55,6 +54,7 @@ if [ "$ZSH_VERSION" ]; then # zsh specific options.
   export ZSH_CUSTOM="${XDG_CONFIG_HOME}/oh-my-zsh" # Path to custom oh-my-zsh config files.
   export ZSH="$XDG_DATA_HOME/oh-my-zsh" # Path to your oh-my-zsh installation.
   ZSH_THEME="gib" # Use my custom theme (in $ZSH_CUSTOM).
+  export HISTFILE="$XDG_CACHE_HOME/zsh/history" # Set history file location.
 
   HYPHEN_INSENSITIVE="true" # Use hyphen-insensitive completion.
   DISABLE_AUTO_TITLE="true" # Don't mess with shell title.
@@ -96,6 +96,7 @@ if [ "$ZSH_VERSION" ]; then # zsh specific options.
   source "$XDG_DATA_HOME"/fzf/shell/completion.zsh 2> /dev/null
   source "$XDG_DATA_HOME"/fzf/shell/key-bindings.zsh
 elif [ "$BASH_VERSION" ]; then # Bash specific options.
+  export HISTFILE="$XDG_CACHE_HOME/bash/history" # Set history file location.
   set -o vi # Vim mode in bash.
   shopt -s autocd # type directory name to cd.
   cs() { cd "$@" && ls; } # cs => cd and ls.
@@ -107,6 +108,7 @@ elif [ "$BASH_VERSION" ]; then # Bash specific options.
   source "$XDG_DATA_HOME"/fzf/shell/key-bindings.bash
 fi
 
+[ ! -d "$(dirname "$HISTFILE")" ] && mkdir -p "$(dirname "$HISTFILE")"
 
 ### FUNCTIONS ###
 md() { mkdir -p $*; [ $# = 1 ] && cd "$1" || true; } # md foo = mkdir foo && cd foo.
