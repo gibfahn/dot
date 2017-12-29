@@ -32,9 +32,9 @@ let mapleader = "\<Space>"                          " Set <Leader> (default shor
 
 syntax on                                           " Turn on syntax highlighting.
 filetype plugin indent on                           " Use file-specific plugins.
-set sw=2 ts=2 sts=2                                 " Set tab width to 2.
+set shiftwidth=2 tabstop=2 softtabstop=2            " Set tab width to 2.
 set expandtab                                       " Insert spaces when tab key pressed.
-set backspace=2                                     " Backspace works across lines.
+set backspace=indent,eol,start                      " Backspace works across lines.
 set ignorecase                                      " Ignore case for lowercase searches,
 set smartcase                                       "  ↳ don't for mixed-case.
 set autoindent smartindent                          " Be more clever about indenting.
@@ -56,7 +56,7 @@ set number                                          " Turn on line numbers.
 set numberwidth=5                                   " Width of line number buffer.
 set hlsearch                                        " Highlight search matches (off: <Space>/).
 colo desert                                         " Use the desert colorscheme.
-set ffs=unix                                        " Only use the Unix fileformat.
+set ffs=unix                                        " Force Unix line endings (\n) (always show \r (^M), never autoinsert them).
 set t_Co=256                                        " Use 256 color terminal.
 set splitbelow                                      " Open new split panes to right and,
 set splitright                                      "  ↳ bottom, which feels more natural.
