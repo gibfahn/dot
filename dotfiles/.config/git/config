@@ -112,15 +112,68 @@
   whitespace = fix # Fix whitespace when applying patches.
 [color]
   ui = true # Default since git 1.8.4, remove when possible.
+
+# Color options: normal, black, red, green, yellow, blue, magenta, cyan, or white (or 0-255).
+# Highlight options: bold, dim, ul (underline), blink, and reverse (swap fg and bg).
+
+[color "branch"]
+  current = 33 # The branch you're currently on.
+  local = normal # Other normal branches.
+  remote = 180 # Local-tracking branches for your remotes.
+  upstream = 214 ul # No idea what this is (make it orange to find out).
+  plain = normal ul # No idea what this is (underline it to find out).
+
+[color "diff"]
+  meta = 8 # Header (diff --git a/file b/file).
+  frag = 8 # Line numbers (@@ -7,20 +7,20 @@).
+  func = 251 # The part of the changed file after frag.
+  context = 251 # Lines in the diff that haven't changed.
+  old = red bold # Removed lines (overwritten by diff-highlight).
+  new = green bold # Added lines (overwritten by diff-highlight).
+  commit = 178 # Commit hash in git show.
+  whitespace = red reverse # Whitespace errors (trailing whitespace in the diff).
+  old = 160 # Deleted lines (defaults to red bold).
+  new = 40 # Added lines (defaults to green bold).
+  oldMoved = 161 # Line moved from here.
+  oldMovedAlternative = 161 ul # Alternative color to show difference between moved blocks.
+  newMoved = 42 # Line moved to here.
+  newMovedAlternative = 42 ul # Alternative color to show difference between moved blocks.
+
+[color "diff-highlight"] # See https://github.com/git/git/tree/master/contrib/diff-highlight
+  oldHighlight = reverse # Apply this to highlight word diff deletion.
+  oldReset = noreverse # Apply this to undo word diff deletion highlighting.
+  newHighlight = reverse # Apply this to highlight word diffs addition.
+  newReset = noreverse # Apply this to undo word diff addition highlighting.
+
+[color "status"]
+  localBranch = 27 # Only used in status --short.
+  remoteBranch = 27 # Only used in status --short.
+  nobranch = red # IDK when this is used.
+  header = 8 # Standard git waffle.
+  branch = 27 # Current branch.
+  added = 35 # Files added to index (ready to commit).
+  changed = 172 # Files not added, but tracked by git.
+  untracked = 197 # Files git knows nothing about.
+  unmerged = magenta ul # Not sure when this is used.
+
 [commit]
   # gpgsign = true # Always sign commits, available since Git 2.0. Off because
   # some people might not have gpg keys (and it breaks npm test suite).
+
+[core]
+  # Use diff-highlight script if it exists, or just use less. It's pretty
+  # awesome that you can do this.
+  pager = "$(dh=/usr/local/share/git-core/contrib/diff-highlight/diff-highlight; [ -x "$dh" ] && echo "$dh" || echo cat) | less"
+
 [credential]
   helper = osxkeychain
+
 [diff]
   wsErrorHighlight = all # diff and show show whitespace errors.
   renames = copies # Copies count as renames.
   submodule = log # Show information about submodules in diffs and logs.
+  colorMoved = zebra # Highlight moved lines as oldMoved -> newMoved.
+
 [fetch]
   prune = true # Delete local tracking branches if remote is gone.
 [format]
