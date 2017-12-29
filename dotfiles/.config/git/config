@@ -154,7 +154,7 @@
   added = 35 # Files added to index (ready to commit).
   changed = 172 # Files not added, but tracked by git.
   untracked = 197 # Files git knows nothing about.
-  unmerged = magenta ul # Not sure when this is used.
+  unmerged = 196 # Files that have conflicts in git rebase.
 
 [commit]
   # gpgsign = true # Always sign commits, available since Git 2.0. Off because
