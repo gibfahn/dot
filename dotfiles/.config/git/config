@@ -157,12 +157,11 @@
   unmerged = 196 # Files that have conflicts in git rebase.
 
 [commit]
-  # gpgsign = true # Always sign commits, available since Git 2.0. Off because
-  # some people might not have gpg keys (and it breaks npm test suite).
+  # gpgsign = true # Always sign commits, available since Git 2.0.
+  # ^ is  off because some people might not have gpg keys (and it breaks the npm test suite).
 
 [core]
-  # Use diff-highlight script if it exists, or just use less. It's pretty
-  # awesome that you can do this.
+  # Use diff-highlight script if it exists, or just use less. It's pretty awesome that you can do this.
   pager = "$(dh=/usr/local/share/git-core/contrib/diff-highlight/diff-highlight; [ -x "$dh" ] && echo "$dh" || echo cat) | less"
 
 [credential]

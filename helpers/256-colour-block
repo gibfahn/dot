@@ -6,3 +6,8 @@ for i in {0..255} ; do
         printf "\n";
     fi
 done
+
+# To print out a colour in zsh you can do:
+# print -P '%F{214}%K{123}%m%k%f'
+# Where F/f set/unset the foreground colour (here to 214) and K/k the
+# background.
