@@ -1,4 +1,4 @@
-#!/bin/bash
+# vim: filetype=sh
 
 # My rc file, I include this from .profile, .bashrc, and .zshrc like so:
 # . "$HOME/.config/gibrc"
@@ -43,62 +43,54 @@ export CCACHE_DIR="$XDG_DATA_HOME/ccache" # ccache cache dir.
 export HELM_HOME="$XDG_DATA_HOME/helm" # Helm home directory.
 export BLUEMIX_HOME="$XDG_DATA_HOME/bluemix" # Bluemix home directory (creates .bluemix inside)
 export LESS="--tabs=1,3 --ignore-case --RAW-CONTROL-CHARS" # Tab is 2 spaces, search ignores case, enable colours.
+export PAGER=less
+HISTSIZE=10000 SAVEHIST=10000 HISTFILE="$XDG_CACHE_HOME/$shell/history" # Set history file location and size.
+CDPATH=~ # Check ~ for directories after checking . (`c/d/` matches `c*/d*/`, then tries `~/c*/d*/`).
 [ -d "$XDG_CONFIG_HOME/terminfo" ] && export TERMINFO="$XDG_CONFIG_HOME/terminfo" # Put terminal info in here.
 
 ### SHELL SPECIFIC ###
+
+export LSCOLORS="Gxfxcxdxbxegedabagacad"
 ls --color=auto >/dev/null 2>&1 && alias ls='ls --color=auto' # ls use colour if poss.
 [ "$(uname)" = "Darwin" ] && alias ls='ls -G' && alias dl=rmtrash # ls use colour on mac.
 
-if [ "$ZSH_VERSION" ]; then # zsh specific options.
-  export ZDOTDIR="${XDG_CONFIG_HOME}/zsh" # Path to zsh config files.
-  export ZSH_CUSTOM="${XDG_CONFIG_HOME}/oh-my-zsh" # Path to custom oh-my-zsh config files.
-  export ZSH="$XDG_DATA_HOME/oh-my-zsh" # Path to your oh-my-zsh installation.
-  ZSH_THEME="gib" # Use my custom theme (in $ZSH_CUSTOM).
-  export HISTFILE="$XDG_CACHE_HOME/zsh/history" # Set history file location.
+[ "$ZSH_VERSION" ] && shell=zsh
+[ "$BASH_VERSION" ] && shell=bash
+case $0 in
+  -ksh) shell=ksh ;;
+  -sh) shell=sh ;;
+esac
+shell=${shell:-"$(ls -l /proc/$$/exe | sed 's%.*/%%')"}
 
-  HYPHEN_INSENSITIVE="true" # Use hyphen-insensitive completion.
-  DISABLE_AUTO_TITLE="true" # Don't mess with shell title.
-  plugins=() # Choose plugins to load.
-  fpath+="$XDG_DATA_HOME/zfunc" # Put (or symlink) autocomplete scripts in here.
-  fpath+=/usr/local/share/zsh-completions # Homebrew zsh-completions.
-  source $ZSH/oh-my-zsh.sh # Load Oh-My-Zsh.
-  chpwd() { ls; } # Auto ls after changing directory.
-  zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' # Case-insensitive match.
-  source "$XDG_DATA_HOME/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" || true
+if [ "$shell" = zsh ]; then # zsh specific options.
+  export ZDOTDIR="${XDG_CONFIG_HOME}/zsh" # Path to zsh config files.
+  export ZSH_CACHE_DIR="${XDG_CACHE_HOME}/zsh" # Path to cached zsh stuff (e.g. completions).
+
+  setopt autocd # If you type a file name/path by itself, cd to it.
+  setopt prompt_subst # Allow variables and functions to be used in the prompt.
   setopt no_list_ambiguous # Show menu on first tab if multiple matches (don't wait for second tab).
   setopt no_list_beep # Don't beep if tab-complete has multiple choices, only if no such file.
-  zstyle ':bracketed-paste-magic' active-widgets '.self-*' # https://github.com/zsh-users/zsh-autosuggestions/issues/141
+  setopt incappendhistory # Add to history file immediately (don't wait till shell exits).
+  setopt autopushd pushdignoredups pushdminus # cd pushes onto pushd stack (Try `cd -<Tab>`)
+  setopt hist_ignore_all_dups hist_ignore_space share_history extended_history hist_expire_dups_first
+  setopt always_to_end complete_in_word long_list_jobs # Completion related options.
+  setopt interactive_comments # Allow comments in the terminal.
+  chpwd() { ls; } # Auto ls after changing directory.
 
-  # Vim mode and keybindings in zsh:
-  autoload -U history-search-end # Not included by default so load (usually /usr/share/zsh/unctions/Zle/).
-  zle -N history-beginning-search-backward-end history-search-end # Add it to existing widgets.
-  zle -N history-beginning-search-forward-end history-search-end  # Add it to existing widgets.
-  accept-line() { [ -z "$BUFFER" ] && zle up-history; zle ".$WIDGET"; }
-  zle-keymap-select () { [ $KEYMAP = vicmd ] && printf "\033[2 q" || printf "\033[6 q"; } # Other KEYMAPs are main and viins.
-  zle-line-init () { zle -K viins; printf "\033[6 q"; }
-  zle -N accept-line # Redefine accept-line to insert last input if empty (Enter key).
-  zle -N zle-keymap-select # I-beam cursor in insert mode, block otherwise.
-  zle -N zle-line-init     # Part of above cursor hack ^.
-  KEYTIMEOUT=10 # Key delay of 0.1s (Esc in vim mode is quicker).
+  # Put (or symlink) autocomplete scripts in here.
+  fpath+=("$XDG_DATA_HOME/zfunc")
 
-  bindkey -v # Enable vim mode in zsh.
+  # Seems to be a bug in earlier zsh versions.
+  zsh_v=(${(@s/./)ZSH_VERSION}) # Convert version string to an array.
+  [ "${zsh_v[0]}" -gt 4 -o "${zsh_v[0]}" -eq 4 -a "${zsh_v[1]}" -gt 3 ] && fpath+=/usr/local/share/zsh-completions # zsh-completions.
 
-  bindkey -M viins 'kj' vi-cmd-mode # Map kj -> Esc in vim mode.
-  bindkey -M viins "^?" backward-delete-char # Make backspace work properly.
-  bindkey -M viins "^H" backward-delete-char # <Ctrl>-H = Backspace (Emacs default).
-  bindkey -M viins "^W" backward-kill-word # <Ctrl>-W = Delete word (Emacs default).
-  bindkey -M viins "^U" backward-kill-line # <Ctrl>-U = Delete line (Emacs default).
-  bindkey -M viins "^A" beginning-of-line # <Ctrl>-A = Go to beginning of line (Emacs default).
-  bindkey -M viins "^E" end-of-line       # <Ctrl>-E = Go to end of line (Emacs default).
-  bindkey -M viins "^R" history-incremental-search-backward # Restore <Ctrl>-R search.
-  bindkey -M viins "^S" history-incremental-search-forward  # Restore <Ctrl>-S forward search.
-  bindkey -M main "^[[A" history-beginning-search-backward-end # Re-enable up   for history search.
-  bindkey -M main "^[[B" history-beginning-search-forward-end  # Re-enable down for history search.
+  for file in "$ZDOTDIR"/{completion-keybindings,gib-theme}.zsh; do
+    source "$file" || true
+  done
+  [ "$(uname -m)" != s390x ] && source "$XDG_DATA_HOME/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" || true
 
-  source "$XDG_DATA_HOME"/fzf/shell/completion.zsh 2> /dev/null
-  source "$XDG_DATA_HOME"/fzf/shell/key-bindings.zsh 2> /dev/null
-elif [ "$BASH_VERSION" ]; then # Bash specific options.
-  export HISTFILE="$XDG_CACHE_HOME/bash/history" # Set history file location.
+  [ "$TERM_PROGRAM" = "Apple_Terminal" ] && source "$ZDOTDIR"/macos-setdir.zsh
+elif [ "$shell" = bash ]; then # Bash specific options.
   set -o vi # Vim mode in bash.
   shopt -s autocd 2>/dev/null # type directory name to cd.
   cs() { cd "$@" && ls; } # cs => cd and ls.
@@ -106,12 +98,13 @@ elif [ "$BASH_VERSION" ]; then # Bash specific options.
   bind Space:magic-space 2>/dev/null # !31 autoexpands on space.
   bind 'set completion-ignore-case on' 2>/dev/null # case-insensitive tab completion.
   PS1=' \[\e[32;1m\]\w $ \[\e[0m\]'
-  source "$XDG_DATA_HOME"/fzf/shell/completion.bash 2> /dev/null
-  source "$XDG_DATA_HOME"/fzf/shell/key-bindings.bash 2> /dev/null
 fi
 
-[ ! -d "$(dirname "$HISTFILE")" ] && mkdir -p "$(dirname "$HISTFILE")" # Create HISTFILE dir if necessary.
-for i in please po pu rd d afind _ md run-help; do alias | sed 's/^alias //' | grep -q "^$i=" && unalias "$i"; done # Remove unwanted aliases if defined.
+for i in please po pu rd d afind _ md run-help +; do alias | sed 's/^alias //' | grep -q "^$i=" && unalias "$i"; done # Remove unwanted aliases if defined.
+for file in "$XDG_DATA_HOME"/fzf/shell/{completion,key-bindings}.$shell; do
+  source "$file" 2>/dev/null || true
+done
+mkdir -p "$XDG_CACHE_HOME/$shell"  # Create HISTFILE dir if necessary.
 
 ### FUNCTIONS ###
 md() { mkdir -p $*; [ $# = 1 ] && cd "$1" || true; } # md foo = mkdir foo && cd foo.
@@ -156,11 +149,7 @@ alias 1="fc -e : -2"; alias 2="fc -e : -3"
 
 { exists nvim && VIM=nvim; } || { exists vim && VIM=vim; } || VIM=vi # Take what you can get.
 export VISUAL=${VISUAL:-$VIM} EDITOR=${EDITOR:-$VIM} # Set vim/nvim as the default editor.
-if [ "$ZSH_VERSION" ]; then
-  alias xv='xargs $=VISUAL' v='$=VISUAL' # Work around zsh's "helpful" autoquoting.
-else
-  alias xv='xargs $VISUAL' v='$VISUAL'
-fi
+alias xv="xargs \$${ZSH_VERSION:+=}VISUAL" v="\$${ZSH_VERSION:+=}VISUAL" # Work around zsh's "helpful" autoquoting.
 exists vimr && alias vm=vimr # Use `vm` for GUI vim, need to add a Linux equivalent.
 ulimit -c unlimited # Allow saving of coredumps.
 alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"' # Makes it look like you're busy with important hacker stuff.
@@ -195,31 +184,16 @@ exists fd && export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude
 # Build node with ninja.
 alias bn='export CPPFLAGS=-fdiagnostics-color && ./configure && tools/gyp_node.py -f ninja && ninja -C out/Release && ln -fs out/Release/node node'
 
-### SSH PROMPT ###
-alias bashme="PS1='\[\e[35;1m\]\h \n \w $ \[\e[0m\]'" # Manually set bash prompt.
 ## Set prompt for SSH windows.
 if [ "$SSH_CLIENT" -o "$SSH_TTY" ]; then
-  if [ "$ZSH_VERSION" ]; then
-    : # Do nothing, this is covered in the gib theme in $ZSH_CUSTOM.
-  elif [ "$BASH_VERSION" ]; then # assume Bash ## Shell basics.
-    PS1='\[\e[35;1m\]\h \n \w $ \[\e[0m\]'
-  else
-    myshell=dash
-    myshell=${myshell:-"$(ls -l /proc/$$/exe | sed 's%.*/%%')"}
-    case $0 in
-      -ksh) myshell=ksh;;
-      -sh) myshell=dash;;
-    esac
-    if [ "$myshell" = "ksh93" ]; then
-      PS1='\E[35;1m '"$(hostname)"' \n $PWD \E[0m $ '
-    else
-      PS1="$(uname -n)"' $PWD $ '
-    fi
-  fi
+  case $shell in
+    zsh|fish) ;; # These should be set elsewhere.
+    bash) PS1='\[\e[35;1m\]\h \n \w $ \[\e[0m\]' ;;
+    ksh93) PS1='\E[35;1m '"$(hostname)"' \n $PWD \E[0m $ ' ;;
+    *) PS1="$(uname -n)"' $PWD $ ' ;;
+  esac
 else # Things to only do if we're not in SSH mode.
-  # Set key repeat rate if available (Linux only). You probably want something
-  # less insane here, like rate 250 30. If you remove the line below, you also
-  # need to remove the else above (or replace below line with a single : ).
+  # Set key repeat rate if available (Linux only). You probably want something less insane here, like rate 250 30.
   if [ "$(uname)" = Linux ]; then
     exists xset && xset r rate 120 45
     export PANEL_FIFO="/tmp/panel-fifo" # Used by bspwm.
@@ -227,7 +201,7 @@ else # Things to only do if we're not in SSH mode.
 fi
 
 # Basic keys on old shells.
-if [ "$myshell" = "ksh93" -o "$myshell" = "ksh" ]; then
+if [ "$shell" = "ksh93" -o "$shell" = "ksh" ]; then
   set -o emacs
   alias __A=`echo "\020"`     # up arrow = ^p = back a command.
   alias __B=`echo "\016"`     # down arrow = ^n = down a command.
