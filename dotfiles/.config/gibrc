@@ -12,8 +12,12 @@ esac
 
 exists() { which "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
 
+[ "$SSH_CLIENT" -o "$SSH_TTY" ] && ssh="true" || ssh=""
+
+# TODO(gib): Fix login to flora
+# for i in consus consus-new salus sors spes sancus somnus stata fama filius fauna flora fides fornax torlinxu; do s $i; don
 # If we're sshed into a machine, and didn't manually run a different, try a better shell.
-if [ "$SSH_CLIENT" -o "$SSH_TTY" ] && [ "$GIBRC" = 0 -a -z "$ZSH_VERSION" ]; then
+if [ "$ssh" ] && [ "$GIBRC" = 0 -a -z "$ZSH_VERSION" ]; then
   if exists zsh; then
     echo "Upgrading to zsh"
     export GIBRC=1
@@ -89,7 +93,7 @@ if [ "$shell" = zsh ]; then # zsh specific options.
   done
   [ "$(uname -m)" != s390x ] && source "$XDG_DATA_HOME/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" || true
 
-  [ "$TERM_PROGRAM" = "Apple_Terminal" ] && source "$ZDOTDIR"/macos-setdir.zsh
+  [ -z "$ssh" -a "$TERM_PROGRAM" = "Apple_Terminal" ] && source "$ZDOTDIR"/macos-setdir.zsh
 elif [ "$shell" = bash ]; then # Bash specific options.
   set -o vi # Vim mode in bash.
   shopt -s autocd 2>/dev/null # type directory name to cd.
