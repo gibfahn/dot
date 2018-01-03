@@ -52,7 +52,7 @@ export LESS="--tabs=1,3 --ignore-case --RAW-CONTROL-CHARS" # Tab is 2 spaces, se
 export PAGER=less
 HISTSIZE=10000 SAVEHIST=10000 HISTFILE="$XDG_CACHE_HOME/$shell/history" # Set history file location and size.
 c="$XDG_CONFIG_HOME" # Shortcut to the config directory (`v $c/gibrc` to edit this file).
-CDPATH=~ # Check ~ for directories after checking . (`c/d/` matches `c*/d*/`, then tries `~/c*/d*/`).
+CDPATH=:~ # Check ~ for directories after checking . (`c/d/` matches `c*/d*/`, then tries `~/c*/d*/`).
 [ -d "$XDG_CONFIG_HOME/terminfo" ] && export TERMINFO="$XDG_CONFIG_HOME/terminfo" # Put terminal info in here.
 uname="$(uname)"
 
