@@ -4,10 +4,11 @@ zstyle ':completion:*:*:*:*:*' menu "select" # Make the completion selection men
 
 # Use caching so that commands like apt and dpkg complete are useable
 zstyle ':completion::complete:*' use-cache 1
-zstyle ':completion::complete:*' cache-path "$ZSH_CACHE_DIR"
+zstyle ':completion::complete:*' cache-path "$XDG_CACHE_HOME"/zsh
 
 autoload -U compinit
-compinit
+# TODO(gib): Work out why this is slow on Darwin and fix it.
+[ "$ssh" -a "$uname" = Darwin ] || compinit -d "$XDG_CACHE_HOME"/zsh/.zcompdump$(hostname)
 zstyle ':bracketed-paste-magic' active-widgets '.self-*' # https://github.com/zsh-users/zsh-autosuggestions/issues/141
 
 # Vim mode and keybindings in zsh:

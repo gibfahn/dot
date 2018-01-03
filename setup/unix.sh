@@ -4,6 +4,9 @@
 
 . $(dirname $0)/../helpers/setup.sh # Load helper script from gcfg/helpers.
 
+# Initialise and update submodules (not yet mandatory).
+git submodule init && git submodule update || true
+
 # Set default shell to zsh (or $NEWSHELL if set).
 
 # $SHELL isn't updated until we logout, so check whether chsh was already run.

@@ -9,13 +9,16 @@ case $- in
   *) return ;; # Exit if not running interactively.
 esac
 [ -z "$GIBRC" ] && GIBRC=0 # First time through this is 0, next time 1 (etc).
+timer=$SECONDS # Show how long startup took from this point.
 
 exists() { which "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
 
 [ "$SSH_CLIENT" -o "$SSH_TTY" ] && ssh="true" || ssh=""
 
-# TODO(gib): Fix login to flora
-# for i in consus consus-new salus sors spes sancus somnus stata fama filius fauna flora fides fornax torlinxu; do s $i; don
+# TODO(gib): Fix logins and test svt machines:
+# for i in spes fama filius fauna flora fides fornax; do s $i; done
+# Include hostname in zcompdump.
+
 # If we're sshed into a machine, and didn't manually run a different, try a better shell.
 if [ "$ssh" ] && [ "$GIBRC" = 0 -a -z "$ZSH_VERSION" ]; then
   if exists zsh; then
@@ -31,7 +34,6 @@ fi
 
 ### ENV VAR DEFAULTS ###
 export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-"$HOME/.config"} # Config stuff should go here.
-c="$XDG_CONFIG_HOME" # Shortcut to the config directory (`v $c/gibrc` to edit this file).
 export XDG_CACHE_HOME=${XDG_CACHE_HOME:-"$HOME/.cache"} # Cache stuff should go here.
 export XDG_DATA_HOME=${XDG_DATA_HOME:-"$HOME/.local/share"} # Data should go here.
 export LESSHISTFILE=${LESSHISTFILE:-"$XDG_CACHE_HOME/less/history"} # Get less to put its history here.
@@ -42,21 +44,35 @@ export ATOM_HOME=${ATOM_HOME:-"$XDG_CONFIG_HOME/atom"} # Atom goes here.
 export npm_config_devdir=${npm_config_devdir:-"$XDG_CACHE_HOME/node-gyp"} # Set node-gyp download location.
 export npm_cache=${npm_cache:-"$XDG_CACHE_HOME/npm"} # Set npm cache location.
 export NODE_REPL_HISTORY=${NODE_REPL_HISTORY="$XDG_CACHE_HOME/node_repl_history"} # Set node-gyp download location.
-export BABEL_CACHE_PATH=${NODE_REPL_HISTORY="$XDG_CACHE_HOME/babel/cache.json"} # Set babel cache location.
+export BABEL_CACHE_PATH=${BABEL_CACHE_PATH="$XDG_CACHE_HOME/babel/cache.json"} # Set babel cache location.
 export CCACHE_DIR="$XDG_DATA_HOME/ccache" # ccache cache dir.
 export HELM_HOME="$XDG_DATA_HOME/helm" # Helm home directory.
 export BLUEMIX_HOME="$XDG_DATA_HOME/bluemix" # Bluemix home directory (creates .bluemix inside)
 export LESS="--tabs=1,3 --ignore-case --RAW-CONTROL-CHARS" # Tab is 2 spaces, search ignores case, enable colours.
 export PAGER=less
 HISTSIZE=10000 SAVEHIST=10000 HISTFILE="$XDG_CACHE_HOME/$shell/history" # Set history file location and size.
+c="$XDG_CONFIG_HOME" # Shortcut to the config directory (`v $c/gibrc` to edit this file).
 CDPATH=~ # Check ~ for directories after checking . (`c/d/` matches `c*/d*/`, then tries `~/c*/d*/`).
 [ -d "$XDG_CONFIG_HOME/terminfo" ] && export TERMINFO="$XDG_CONFIG_HOME/terminfo" # Put terminal info in here.
+uname="$(uname)"
 
 ### SHELL SPECIFIC ###
 
-export LSCOLORS="Gxfxcxdxbxegedabagacad"
-ls --color=auto >/dev/null 2>&1 && alias ls='ls --color=auto' # ls use colour if poss.
-[ "$(uname)" = "Darwin" ] && alias ls='ls -G' && alias dl=rmtrash # ls use colour on mac.
+# Add to end of path.
+pathapp() { [ -d "$1" ] && export PATH=$(echo ":$PATH:" | sed "s|:$1:|:|" | sed 's|^:||')"$1"; }
+pathapp /usr/local/opt/coreutils/libexec/gnubin # Coreutils from brew on macOS, don't replace mac ls.
+exists gls && alias ls=gls
+if ls --color=auto >/dev/null 2>&1; then
+  exists gls && alias ls='gls --color=auto' || alias ls='ls --color=auto'
+  [ -e "$XDG_DATA_HOME"/LS_COLORS/LS_COLORS ] &&
+    eval "$(dircolors -b "$XDG_DATA_HOME/LS_COLORS/LS_COLORS")" || # Load custom LS_COLORS from project.
+    source "$XDG_DATA_HOME/LS_COLORS.old" # Use old version if LS_COLORS not installed.
+elif [ "$uname" = Darwin ]; then
+  alias ls='ls -G' # Colour ls on macOS.
+  export LSCOLORS="Gxfxcxdxbxegedabagacad"
+fi
+
+[ "$uname" = Darwin ] && alias dl=rmtrash
 
 [ "$ZSH_VERSION" ] && shell=zsh
 [ "$BASH_VERSION" ] && shell=bash
@@ -68,7 +84,6 @@ shell=${shell:-"$(ls -l /proc/$$/exe | sed 's%.*/%%')"}
 
 if [ "$shell" = zsh ]; then # zsh specific options.
   export ZDOTDIR="${XDG_CONFIG_HOME}/zsh" # Path to zsh config files.
-  export ZSH_CACHE_DIR="${XDG_CACHE_HOME}/zsh" # Path to cached zsh stuff (e.g. completions).
 
   setopt autocd # If you type a file name/path by itself, cd to it.
   setopt prompt_subst # Allow variables and functions to be used in the prompt.
@@ -88,12 +103,11 @@ if [ "$shell" = zsh ]; then # zsh specific options.
   zsh_v=(${(@s/./)ZSH_VERSION}) # Convert version string to an array.
   [ "${zsh_v[0]}" -gt 4 -o "${zsh_v[0]}" -eq 4 -a "${zsh_v[1]}" -gt 3 ] && fpath+=/usr/local/share/zsh-completions # zsh-completions.
 
-  for file in "$ZDOTDIR"/{completion-keybindings,gib-theme}.zsh; do
+  for file in "$ZDOTDIR"/{completion-keybindings,gib-theme,macos-setdir}.zsh; do
     source "$file" || true
   done
   [ "$(uname -m)" != s390x ] && source "$XDG_DATA_HOME/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" || true
 
-  [ -z "$ssh" -a "$TERM_PROGRAM" = "Apple_Terminal" ] && source "$ZDOTDIR"/macos-setdir.zsh
 elif [ "$shell" = bash ]; then # Bash specific options.
   set -o vi # Vim mode in bash.
   shopt -s autocd 2>/dev/null # type directory name to cd.
@@ -114,8 +128,6 @@ mkdir -p "$XDG_CACHE_HOME/$shell"  # Create HISTFILE dir if necessary.
 md() { mkdir -p $*; [ $# = 1 ] && cd "$1" || true; } # md foo = mkdir foo && cd foo.
 # Add to beginning of path.
 pathadd() { [ -d "$1" ] && export PATH="$1"$(echo ":$PATH:" | sed "s|:$1:|:|" | sed 's|:$||'); }
-# Add to end of path.
-pathapp() { [ -d "$1" ] && export PATH=$(echo ":$PATH:" | sed "s|:$1:|:|" | sed 's|^:||')"$1"; }
 exists fd || fd() { find . -iname "*$**"; } # Find by filename (case insensitive).
 pth() { # Returns absolute path to file(s) including file name.
   for i in "$@"; do # Args = relative filenames.
@@ -166,7 +178,6 @@ pathadd "$HOME/bin" # Put random binaries you want to run in here.
 pathadd /usr/lib/ccache # Add ccache to the path if installed (Linux).
 pathadd /usr/local/opt/ccache/libexec # Add ccache to the path if installed (macOS).
 pathadd "$HOME/.local/bin"
-pathapp /usr/local/opt/coreutils/libexec/gnubin # Coreutils from brew on macOS, don't replace mac ls.
 
 # I don't have nvm autorun on every shell, I us `nv` when I want to start it.
 # This also allows me to frequently `make -j4 install` node master, and have

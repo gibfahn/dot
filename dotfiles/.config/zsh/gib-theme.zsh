@@ -11,7 +11,7 @@ PROMPT="$([ "$SSH_CLIENT" -o "$SSH_TTY" ] && echo "%F{161}%m%f ")%(?:%F{46}:%F{1
 RPROMPT='%(?:%F{28}:%F{88})%~%f%F{14}$timer_prompt%f$(git_prompt_info_gib)'
 
 # Record the time at which the command began before zsh executes the command.
-preexec() { unset timer_prompt; timer="$SECONDS"; }
+preexec() { unset timer_prompt; timer="${timer:-$SECONDS}"; }
 
 # Log the time the command took if at least 1s before zsh shows the result of the command.
 precmd() { [ "$timer" -a "$SECONDS" != "$timer" ] && timer_prompt=" $(($SECONDS - $timer))s" || unset timer_prompt; unset timer; }

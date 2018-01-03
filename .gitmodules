@@ -1,0 +1,4 @@
+[submodule "dotfiles/.local/share/LS_COLORS"]
+	path = dotfiles/.local/share/LS_COLORS
+	url = https://github.com/trapd00r/LS_COLORS.git
+	branch = master

@@ -2,6 +2,8 @@
 # title setting, and the preservation of pwd when you create a new tab, are lost.
 # See http://superuser.com/a/315029 and oh-my-zsh's termsupport.zsh.
 
+[ "$ssh" -o "$TERM_PROGRAM" != "Apple_Terminal" ] && return
+
 zmodload zsh/langinfo # Required for $langinfo
 
 function omz_urlencode() {
