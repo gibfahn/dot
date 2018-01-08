@@ -123,9 +123,11 @@ elif [ "$shell" = bash ]; then # Bash specific options.
 fi
 
 for i in please po pu rd d afind _ md run-help +; do alias | sed 's/^alias //' | grep -q "^$i=" && unalias "$i"; done # Remove unwanted aliases if defined.
-for file in "$XDG_DATA_HOME"/fzf/shell/{completion,key-bindings}.$shell; do
-  source "$file" 2>/dev/null || true
-done
+if exists fzf; then
+  for file in "$XDG_DATA_HOME"/fzf/shell/{completion,key-bindings}.$shell; do
+    source "$file" 2>/dev/null || true
+  done
+fi
 mkdir -p "$XDG_CACHE_HOME/$shell"  # Create HISTFILE dir if necessary.
 
 ### FUNCTIONS ###
