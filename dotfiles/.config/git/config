@@ -3,7 +3,7 @@
   # N.B. # at end of func allows parsing $1 args.
   # Helper functions:
   headUpstream = rev-parse --abbrev-ref --symbolic-full-name @{u} # Upstream of current branch, e.g. origin/master.
-  headRemote = "!git headUpstream | cut -d '/' -f 1" # e.g. origin.
+  headRemote = "!git rev-parse --abbrev-ref --symbolic-full-name @{u} | cut -d '/' -f 1" # e.g. origin.
   headBranch = symbolic-ref --short HEAD # e.g. master.
   # Quote an alias you want to save here (handles all the nonsense quoting stuff).
   quote-string = "!read -r l; printf \\\"!; printf %s \"$l\" | sed 's/\\([\\\"]\\)/\\\\\\1/g'; printf \" #\\\"\\n\" #"

@@ -52,7 +52,6 @@ export LESS="--tabs=1,3 --ignore-case --RAW-CONTROL-CHARS" # Tab is 2 spaces, se
 export PAGER=less
 HISTSIZE=10000 SAVEHIST=10000 HISTFILE="$XDG_CACHE_HOME/$shell/history" # Set history file location and size.
 c="$XDG_CONFIG_HOME" # Shortcut to the config directory (`v $c/gibrc` to edit this file).
-CDPATH=:~ # Check ~ for directories after checking . (`c/d/` matches `c*/d*/`, then tries `~/c*/d*/`).
 [ -d "$XDG_CONFIG_HOME/terminfo" ] && export TERMINFO="$XDG_CONFIG_HOME/terminfo" # Put terminal info in here.
 uname="$(uname)"
 
@@ -85,7 +84,7 @@ shell=${shell:-"$(ls -l /proc/$$/exe | sed 's%.*/%%')"}
 if [ "$shell" = zsh ]; then # zsh specific options.
   export ZDOTDIR="${XDG_CONFIG_HOME}/zsh" # Path to zsh config files.
 
-  setopt autocd # If you type a file name/path by itself, cd to it.
+  setopt autocd pushd_silent # If you type a file name/path by itself, cd to it, don't print dir on cd.
   setopt prompt_subst # Allow variables and functions to be used in the prompt.
   setopt no_list_ambiguous # Show menu on first tab if multiple matches (don't wait for second tab).
   setopt no_list_beep # Don't beep if tab-complete has multiple choices, only if no such file.
@@ -95,6 +94,7 @@ if [ "$shell" = zsh ]; then # zsh specific options.
   setopt always_to_end complete_in_word long_list_jobs # Completion related options.
   setopt interactive_comments # Allow comments in the terminal.
   chpwd() { ls; } # Auto ls after changing directory.
+  CDPATH=~ # Check ~ for directories after checking . (`c/d/` matches `./c*/d*/`, then tries `~/c*/d*/`).
 
   # Put (or symlink) autocomplete scripts in here.
   fpath+=("$XDG_DATA_HOME/zfunc")
@@ -113,6 +113,7 @@ elif [ "$shell" = bash ]; then # Bash specific options.
   shopt -s autocd 2>/dev/null # type directory name to cd.
   cs() { cd "$@" && ls; } # cs => cd and ls.
   cd=cs # Used in .. commands below (so .. does `cs ..`).
+  CDPATH=:~ # Check ~ for directories after checking . (`c/d/` matches `./c*/d*/`, then tries `~/c*/d*/`).
   bind Space:magic-space 2>/dev/null # !31 autoexpands on space.
   bind 'set completion-ignore-case on' 2>/dev/null # case-insensitive tab completion.
   PS1=' \[\e[32;1m\]\w $ \[\e[0m\]'
