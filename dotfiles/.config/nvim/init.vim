@@ -64,7 +64,10 @@ set diffopt+=vertical                               " Always use vertical diffs.
 set wildchar=<Tab> wildmenu                         " Tab complete with files (e.g. `:e`)
 set wildmode=list:longest,list:full                 " 1st Tab completes to longest common string, 2nd+ cycles through options.
 set list listchars=tab:»·,trail:·,nbsp:·            " Display extra whitespace.
-set undofile                                        " Persist undo history on file close (`:set undodir?` for location).
+let s:undodir = $XDG_CACHE_HOME . "/vim/backup"
+if !isdirectory(s:undodir)| call mkdir(s:undodir, "p", 0700)| endif
+set undofile                                        " Persist undo history on file close.
+let &undodir=s:undodir                              " Store undo files in cache dir.
 set path=.,/usr/include,,**                         " Add ** to the search path so :find x works recursively.
 if exists('+breakindent')| set breakindent| let &showbreak = '↳ '| set cpo+=n| end " Nicer line wrapping for long lines.
 if exists('&inccommand')| set inccommand=split| endif " Show search and replace as you type.
