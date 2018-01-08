@@ -64,7 +64,7 @@ exists gls && alias ls=gls
 if ls --color=auto >/dev/null 2>&1; then
   exists gls && alias ls='gls --color=auto' || alias ls='ls --color=auto'
   if [ -e "$XDG_DATA_HOME"/LS_COLORS/LS_COLORS ]; then
-    eval "$(dircolors -b "$XDG_DATA_HOME/LS_COLORS/LS_COLORS")" || # Load custom LS_COLORS from project.
+    eval "$(dircolors -b "$XDG_DATA_HOME/LS_COLORS/LS_COLORS")" # Load custom LS_COLORS from project.
   else
     source "$XDG_DATA_HOME/LS_COLORS.old" # Use old version if LS_COLORS not installed.
   fi
