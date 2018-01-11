@@ -2,37 +2,45 @@
 
 # My rc file, I include this from .profile, .bashrc, and .zshrc like so:
 # . "$HOME/.config/gibrc"
-# The script must be sourced, only used for syntax highlighting (script can be run with sh).
+# The script must be sourced.
+
+### INITIAL SETUP ###
 
 case $- in
   *i*) [ "$GIBRC" ] && echo "Reusing gibrc..." || echo "Using gibrc..." ;;
   *) return ;; # Exit if not running interactively.
 esac
-[ -z "$GIBRC" ] && GIBRC=0 # First time through this is 0, next time 1 (etc).
-timer=$SECONDS # Show how long startup took from this point.
+GIBRC="${GIBRC:-0}" # First time through this is 0, next time 1 (etc).
+timer=$SECONDS # Show how long startup took from this point at first prompt.
 
 exists() { which "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
 
+# Internal use variables (shell=current shell, ssh=whether we're sshed).
 [ "$SSH_CLIENT" -o "$SSH_TTY" ] && ssh="true" || ssh=""
-
-# TODO(gib): Fix logins and test svt machines:
-# for i in spes fama filius fauna flora fides fornax; do s $i; done
-# Include hostname in zcompdump.
+[ "$ZSH_VERSION" ] && shell=zsh
+[ "$BASH_VERSION" ] && shell=bash
+case $0 in
+  -ksh) shell=ksh ;;
+  -sh) shell=sh ;;
+esac
+shell=${shell:-"$(ls -l /proc/$$/exe | sed 's%.*/%%')"}
+uname="$(uname)"
 
 # If we're sshed into a machine, and didn't manually run a different, try a better shell.
-if [ "$ssh" ] && [ "$GIBRC" = 0 -a -z "$ZSH_VERSION" ]; then
+if [ "$ssh" -a "$GIBRC" = 0 -a "$shell" != zsh ]; then
   if exists zsh; then
     echo "Upgrading to zsh"
     export GIBRC=1
-    exec zsh
-  elif [ -z "$BASH_VERSION" ] && exists bash; then
+    exec zsh # Replace existing shell with zsh.
+  elif [ "$shell" != bash ] && exists bash; then
     echo "Upgrading to bash"
     export GIBRC=1
-    exec bash
+    exec bash # Replace existing shell with bash.
   fi
 fi
 
 ### ENV VAR DEFAULTS ###
+
 export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-"$HOME/.config"} # Config stuff should go here.
 export XDG_CACHE_HOME=${XDG_CACHE_HOME:-"$HOME/.cache"} # Cache stuff should go here.
 export XDG_DATA_HOME=${XDG_DATA_HOME:-"$HOME/.local/share"} # Data should go here.
@@ -53,12 +61,35 @@ export PAGER=less
 HISTSIZE=10000 SAVEHIST=10000 HISTFILE="$XDG_CACHE_HOME/$shell/history" # Set history file location and size.
 c="$XDG_CONFIG_HOME" # Shortcut to the config directory (`v $c/gibrc` to edit this file).
 [ -d "$XDG_CONFIG_HOME/terminfo" ] && export TERMINFO="$XDG_CONFIG_HOME/terminfo" # Put terminal info in here.
-uname="$(uname)"
+
+### FUNCTIONS ###
+
+md() { mkdir -p $*; [ $# = 1 ] && cd "$1" || true; } # md foo = mkdir foo && cd foo.
+# Add to beginning of path.
+pathadd() { [ -d "$1" ] && export PATH="$1"$(echo ":$PATH:" | sed "s|:$1:|:|" | sed 's|:$||'); }
+# Add to end of path.
+pathapp() { [ -d "$1" ] && export PATH=$(echo ":$PATH:" | sed "s|:$1:|:|" | sed 's|^:||')"$1"; }
+exists fd || fd() { find . -iname "*$**"; } # Find by filename (case insensitive).
+pth() { # Returns absolute path to file(s) including file name.
+  for i in "$@"; do # Args = relative filenames.
+    if [ -d "$i" ]; then (pushd "$i" >/dev/null; pwd) # dir.
+    elif [ -f "$i" ]; then  # file.
+      case $i in */*) echo "$(pushd ${i%/*} >/dev/null; pwd)/${i##*/}" ;; *) echo "$PWD/$i" ;; esac
+    fi
+  done
+}
+
+### PATH ADDITIONS ###
+
+pathadd "$HOME/bin" # Put random binaries you want to run in here.
+pathadd /usr/lib/ccache # Add ccache to the path if installed (Linux).
+pathadd /usr/local/opt/ccache/libexec # Add ccache to the path if installed (macOS).
+pathadd "$HOME/.local/bin"
+pathadd "$CARGO_HOME/bin" # Rust packages.
 
 ### SHELL SPECIFIC ###
 
 # Add to end of path.
-pathapp() { [ -d "$1" ] && export PATH=$(echo ":$PATH:" | sed "s|:$1:|:|" | sed 's|^:||')"$1"; }
 pathapp /usr/local/opt/coreutils/libexec/gnubin # Coreutils from brew on macOS, don't replace mac ls.
 exists gls && alias ls=gls
 if ls --color=auto >/dev/null 2>&1; then
@@ -75,14 +106,6 @@ elif [ "$uname" = Darwin ]; then
 fi
 
 [ "$uname" = Darwin ] && alias dl=rmtrash
-
-[ "$ZSH_VERSION" ] && shell=zsh
-[ "$BASH_VERSION" ] && shell=bash
-case $0 in
-  -ksh) shell=ksh ;;
-  -sh) shell=sh ;;
-esac
-shell=${shell:-"$(ls -l /proc/$$/exe | sed 's%.*/%%')"}
 
 if [ "$shell" = zsh ]; then # zsh specific options.
   export ZDOTDIR="${XDG_CONFIG_HOME}/zsh" # Path to zsh config files.
@@ -125,26 +148,13 @@ fi
 for i in please po pu rd d afind _ md run-help +; do alias | sed 's/^alias //' | grep -q "^$i=" && unalias "$i"; done # Remove unwanted aliases if defined.
 if exists fzf; then
   for file in "$XDG_DATA_HOME"/fzf/shell/{completion,key-bindings}.$shell; do
-    source "$file" 2>/dev/null || true
+    source "$file" # 2>/dev/null || true
   done
 fi
 mkdir -p "$XDG_CACHE_HOME/$shell"  # Create HISTFILE dir if necessary.
 
-### FUNCTIONS ###
-md() { mkdir -p $*; [ $# = 1 ] && cd "$1" || true; } # md foo = mkdir foo && cd foo.
-# Add to beginning of path.
-pathadd() { [ -d "$1" ] && export PATH="$1"$(echo ":$PATH:" | sed "s|:$1:|:|" | sed 's|:$||'); }
-exists fd || fd() { find . -iname "*$**"; } # Find by filename (case insensitive).
-pth() { # Returns absolute path to file(s) including file name.
-  for i in "$@"; do # Args = relative filenames.
-    if [ -d "$i" ]; then (pushd "$i" >/dev/null; pwd) # dir.
-    elif [ -f "$i" ]; then  # file.
-      if [[ $i == */* ]]; then echo "$(pushd ${i%/*} >/dev/null; pwd)/${i##*/}"
-      else echo "$(pwd)/$i"; fi; fi
-  done
-}
-
 ### ALIASES ###
+
 alias x=exit # x exits the terminal.
 alias c=clear # c clears the terminal screen (can also use Ctrl-L).
 alias g=git # Use with commands in $c/git/config for best results.
@@ -175,15 +185,9 @@ alias xv="xargs \$${ZSH_VERSION:+=}VISUAL" v="\$${ZSH_VERSION:+=}VISUAL" # Work 
 exists vimr && alias vm=vimr # Use `vm` for GUI vim, need to add a Linux equivalent.
 ulimit -c unlimited # Allow saving of coredumps.
 alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"' # Makes it look like you're busy with important hacker stuff.
-[ $(uname) = "Darwin" ] && alias ldd="otool -L" # macOS equivalent to ldd.
-[ $(uname) = "Darwin" ] && { alias cpy="pbcopy"; alias pst="pbpaste"; alias o=open; } # Cross-platform copy/paste/open terminal commands.
-[ $(uname) = "Linux" ] && { alias cpy="xclip -selection clipboard"; alias pst="xclip -selection clipboard -o"; alias o=xdg-open; }
-
-### APP SPECIFIC ###
-pathadd "$HOME/bin" # Put random binaries you want to run in here.
-pathadd /usr/lib/ccache # Add ccache to the path if installed (Linux).
-pathadd /usr/local/opt/ccache/libexec # Add ccache to the path if installed (macOS).
-pathadd "$HOME/.local/bin"
+[ "$uname" = "Darwin" ] && alias ldd="otool -L" # macOS equivalent to ldd.
+[ "$uname" = "Darwin" ] && { alias cpy="pbcopy"; alias pst="pbpaste"; alias o=open; } # Cross-platform copy/paste/open terminal commands.
+[ "$uname" = "Linux" ] && { alias cpy="xclip -selection clipboard"; alias pst="xclip -selection clipboard -o"; alias o=xdg-open; }
 
 # I don't have nvm autorun on every shell, I us `nv` when I want to start it.
 # This also allows me to frequently `make -j4 install` node master, and have
@@ -196,9 +200,7 @@ alias nv='. $NVM_DIR/nvm.sh'  # Start nvm with alias, o/w too much startup cost.
 alias cn="cargo new --bin"; alias cl="cargo clippy"
 alias cb="cargo build"; alias cr="cargo run"; alias ct="cargo test"
 alias ctag='ctags -R . $HOME/bin/src/rust' # Populate ctags from rust src.
-alias ru=rustup; pathadd "$CARGO_HOME/bin"
-alias e=exercism
-alias k=kubectl
+alias ru=rustup e=exercism k=kubectl
 rs() { for i in $@; do rustc ${i%.rs}.rs; ./${i%.rs}; done; } # Compile/run (rs a.rs b).
 exists fd && export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git' # Use fd for fuzzy finding if available.
 
@@ -206,7 +208,7 @@ exists fd && export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude
 alias bn='export CPPFLAGS=-fdiagnostics-color && ./configure && tools/gyp_node.py -f ninja && ninja -C out/Release && ln -fs out/Release/node node'
 
 ## Set prompt for SSH windows.
-if [ "$SSH_CLIENT" -o "$SSH_TTY" ]; then
+if [ "$ssh" ]; then
   case $shell in
     zsh|fish) ;; # These should be set elsewhere.
     bash) PS1='\[\e[35;1m\]\h \n \w $ \[\e[0m\]' ;;
@@ -222,7 +224,7 @@ else # Things to only do if we're not in SSH mode.
 fi
 
 # Basic keys on old shells.
-if [ "$shell" = "ksh93" -o "$shell" = "ksh" ]; then
+if [ "$shell" = ksh93 -o "$shell" = ksh ]; then
   set -o emacs
   alias __A=`echo "\020"`     # up arrow = ^p = back a command.
   alias __B=`echo "\016"`     # down arrow = ^n = down a command.
