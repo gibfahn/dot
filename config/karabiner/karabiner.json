@@ -238,7 +238,7 @@
             "product_id": 45133,
             "vendor_id": 7185
           },
-          "ignore": true,
+          "ignore": false,
           "manipulate_caps_lock_led": false,
           "simple_modifications": []
         }, {
