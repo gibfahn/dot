@@ -114,7 +114,8 @@ nnoremap <leader>x :x<CR>|                          " Save (if changes) and quit
 nnoremap <leader>X :qa<CR>|                         " Quit all windows.
 nnoremap <leader>y "+y|                             " Copy to clipboard (normal mode).
 nnoremap <leader>Y :%y+<CR>|                        "  ↳  file to clipboard (normal mode).
-nnoremap <leader>z  zz|                             " Center screen on current line.
+nnoremap <leader>z  za|                             " Toggle folding on current line.
+nnoremap <expr> <leader>Z &foldlevel ? 'zM' :'zR'
 nnoremap <leader>/ :noh<CR>|                        " Turn off find highlighting.
 nnoremap <leader>? /<Up><CR>|                       " Search for last searched thing.
 " Leader + window size keys increases/decreases height/width by 3/2.
@@ -153,6 +154,21 @@ nmap f <Plug>Sneak_f|                               " Use sneak for f (multiline
 nmap F <Plug>Sneak_F|                               " ↳             F
 nmap t <Plug>Sneak_t|                               " ↳             t
 nmap T <Plug>Sneak_T|                               " ↳             T
+
+nnoremap <leader>o :set operatorfunc=OpenUrl<CR>g@
+vnoremap <leader>o :<c-u>call OpenUrl(visualmode())<CR>
+
+function! OpenUrl(type)
+  if a:type ==# 'v'| execute "normal! `<v`>y"
+  elseif a:type ==# 'char'| execute "normal! `[v`]y"
+  else| return
+  endif
+
+  " This doesn't work with macOS /usr/bin/vim (doesn't identify as macOS).
+  if has('mac')| let openCmd = 'open'| else| let openCmd = 'xdg-open'| endif
+    silent execute "! " . openCmd . " " . shellescape(@@, 1)
+    echo openCmd . " " shellescape(@@, 1)
+endfunction
 
 if has("nvim")                                      " NeoVim specific settings.
   let g:terminal_scrollback_buffer_size = 100000    " Store lots of terminal history.
