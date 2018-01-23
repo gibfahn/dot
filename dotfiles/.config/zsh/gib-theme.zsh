@@ -8,7 +8,7 @@ PROMPT="$([ "$SSH_CLIENT" -o "$SSH_TTY" ] && echo "%F{161}%m%f ")%(?:%F{46}:%F{1
 
 # Put full path and git info on right of prompt.
 # RPROMPT='$fullPath$timer_prompt$(git_prompt_info)'
-RPROMPT='%(?:%F{28}:%F{88})%~%f%F{14}$timer_prompt%f$(git_prompt_info_gib)'
+RPROMPT='%(?:%F{28}:%F{88})%~%f%F{14}$timer_prompt%f$(_git_prompt_info_gib)'
 
 # Record the time at which the command began before zsh executes the command.
 preexec() { unset timer_prompt; timer="${timer:-$SECONDS}"; }
@@ -17,17 +17,17 @@ preexec() { unset timer_prompt; timer="${timer:-$SECONDS}"; }
 precmd() { [ "$timer" -a "$SECONDS" != "$timer" ] && timer_prompt=" $(($SECONDS - $timer))s" || unset timer_prompt; unset timer; }
 
 # Outputs current branch info in prompt format
-git_prompt_info_gib() {
+_git_prompt_info_gib() {
   [ -d .git -o "$(command git rev-parse --is-inside-work-tree 2>/dev/null)" ] &&
-    echo " %F{33}(%F{226}$(upstream_diff_gib)%F{33}$(command git describe --contains --all HEAD)$(parse_git_dirty_gib)%F{33})%f"
+    echo " %F{33}(%F{226}$(_git_upstream_diff_gib)%F{33}$(command git describe --contains --all --always HEAD)$(_parse_git_dirty_gib)%F{33})%f"
 }
 
 # Checks if working tree is dirty
-parse_git_dirty_gib() {
+_parse_git_dirty_gib() {
   [ "$(command git status --porcelain --ignore-submodules=none 2> /dev/null | tail -n1)" ] && echo "%F{226}✦"
 }
 
-upstream_diff_gib() {
+_git_upstream_diff_gib() {
   local -a diff; diff=($(command git rev-list --left-right --count HEAD...@{upstream} 2>/dev/null))
   if [ "$?" != 0 ]; then
     printf !
