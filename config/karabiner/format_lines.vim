@@ -1,5 +1,5 @@
 " Run this with:
-" nvim karabiner.json -S format-lines.vim
+" nvim karabiner.json -S format_lines.vim
 " to reformat the text (and minimize the diff). vim works too.
 g/"from"\|"to"\|"conditions"\|"to_if_alone"\|"to_after_key_up"/normal gJ
 :normal! gg=G
