@@ -64,7 +64,7 @@ set diffopt+=vertical                               " Always use vertical diffs.
 set wildchar=<Tab> wildmenu                         " Tab complete with files (e.g. `:e`)
 set wildmode=list:longest,list:full                 " 1st Tab completes to longest common string, 2nd+ cycles through options.
 set list listchars=tab:»·,trail:·,nbsp:·            " Display extra whitespace.
-let s:undodir = $XDG_CACHE_HOME . "/vim/backup"
+let s:undodir = $XDG_CACHE_HOME . "/vim/undo"
 if !isdirectory(s:undodir)| call mkdir(s:undodir, "p", 0700)| endif
 set undofile                                        " Persist undo history on file close.
 let &undodir=s:undodir                              " Store undo files in cache dir.
@@ -99,6 +99,7 @@ nnoremap <leader>j :sp<CR><C-w>k:bp<CR>|            " Open horizontal split,
 nnoremap <leader>k <C-w>q|                          " Close current split (keeps buffer).
 nnoremap <leader>l :vsp<CR><C-w>h:bp<CR>|           "  ↳   vertical split.
 nnoremap <leader>o :on<CR>|                         " Close all other buffers.
+
 nnoremap <leader>p "+p|                             "  ↳                   (normal mode).
 nnoremap <leader>P "+P|                             "  ↳  line from clipboard (normal mode).
 nnoremap <leader>q :q<CR>|                          " Quit,
@@ -181,6 +182,7 @@ command! PI !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
 let g:is_posix = 1                                  " Assume shell for syntax highlighting.
 "let g:rustfmt_autosave = 1                         " Run rustfmt on save (from rust.vim).
 let g:sneak#use_ic_scs = 1                          " Sneak: respect smartcase setting.
+let g:loaded_netrw = 1
 let g:loaded_netrwPlugin = 1                        " Don't use the built-in file browser (use vim-readdir instead).
 let g:peekaboo_window = "vert bo 50new"             " Increase peekaboo window width to 50.
 let g:gundo_right = 1                               " Undo window on right.
@@ -192,8 +194,8 @@ call matchadd('ColorColumn', '\%81v', 100)
 
 set path=.,/usr/include,,**                         " Add ** to search path
 if executable("rg")
-    set grepprg=rg\ --vimgrep\ --no-heading         " Use ripgrep for file searching.
-    set grepformat=%f:%l:%c:%m,%f:%l:%m
+  set grepprg=rg\ --vimgrep\ --no-heading         " Use ripgrep for file searching.
+  set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
 
 augroup gibAutoGroup                                " Group of automatic functions.
@@ -211,8 +213,8 @@ augroup END
 
 set wildmode=list:longest,list:full                 " Insert tab at beginning of line,
 fu! InsertTabWrapper()                              "  ↳ else use completion.
-    let col = col('.') - 1
-    if !col || getline('.')[col - 1] !~ '\k'| return "\<tab>"| else| return "\<c-p>"| endif
+  let col = col('.') - 1
+  if !col || getline('.')[col - 1] !~ '\k'| return "\<tab>"| else| return "\<c-p>"| endif
 endf
 inoremap <Tab> <c-r>=InsertTabWrapper()<cr>|        " Tab is autocomplete unless at beginning of line.
 inoremap <S-Tab> <c-n>|                             " Shift-Tab is always autocomplete.
@@ -231,7 +233,7 @@ endfunction
 
 " Function to trim trailing whitespace in a file.
 function! TrimWhitespace()
-    let l:save = winsaveview()
-    %s/\s\+$//e
-    call winrestview(l:save)
+  let l:save = winsaveview()
+  %s/\s\+$//e
+  call winrestview(l:save)
 endfun
