@@ -7,21 +7,23 @@ try
   call plug#begin('~/.local/share/nvim/plugged')    " Load plugins with vim-plug.
   Plug 'AndrewRadev/splitjoin.vim'                  " gS to split, gJ to join lines.
   Plug 'ap/vim-buftabline'                          " Show buffers in the tab bar.
+  Plug 'ap/vim-readdir'                             " Nicer file browser plugin that works with buftabline.
   Plug 'easymotion/vim-easymotion'                  " Go to any word instantly.
   Plug 'fweep/vim-zsh-path-completion'              " Nicer file browser plugin.
+  Plug 'gibfahn/vim-gib'                            " Use vim colorscheme.
   Plug 'godlygeek/tabular'                          " Make tables easier (:help Tabular).
+  Plug 'junegunn/fzf', { 'dir': '~/.local/share/fzf', 'do': './install --bin' }
+  Plug 'junegunn/fzf.vim'                           " Try :Files, :GFiles? :Buffers :Lines :History :Commits :BCommits
+  Plug 'junegunn/vim-peekaboo'                      " Pop up register list when pasting/macroing.
   Plug 'justinmk/vim-sneak'                         " sab -> go to next ab in code.
   Plug 'pangloss/vim-javascript'                    " JS   language bindings.
   Plug 'rust-lang/rust.vim'                         " Rust language bindings.
+  Plug 'sjl/gundo.vim'                              " Interactive undo tree (<space>u to toggle on/off, q to quit).
   Plug 'tpope/vim-commentary'                       " Autodetect comment type for lang.
   Plug 'tpope/vim-fugitive'                         " Git commands in vim.
   Plug 'tpope/vim-repeat'                           " Allows you to use . with plugin mappings.
   Plug 'tpope/vim-surround'                         " Add/mod/remove surrounding chars.
-  Plug 'junegunn/fzf', { 'dir': '~/.local/share/fzf', 'do': './install --bin' }
-  Plug 'junegunn/fzf.vim'                           " Try :Files, :GFiles? :Buffers :Lines :History :Commits :BCommits
-  Plug 'ap/vim-readdir'                             " Nicer file browser plugin that works with buftabline.
-  Plug 'junegunn/vim-peekaboo'                      " Pop up register list when pasting/macroing.
-  Plug 'sjl/gundo.vim'                              " Interactive undo tree (<space>u to toggle on/off, q to quit).
+  Plug 'tpope/vim-unimpaired'                       " [ and ] mappings (help unimpaired).
   call plug#end()                                   " Initialize plugin system
 catch| echo 'vim-plug not installed, use :PI to install'
 endtry
@@ -55,7 +57,7 @@ set mouse=a                                         " Mouse in all modes (mac: F
 set number                                          " Turn on line numbers.
 set numberwidth=5                                   " Width of line number buffer.
 set hlsearch                                        " Highlight search matches (off: <Space>/).
-colo desert                                         " Use the desert colorscheme.
+colo gib                                            " Use my colorscheme
 set ffs=unix                                        " Force Unix line endings (\n) (always show \r (^M), never autoinsert them).
 set t_Co=256                                        " Use 256 color terminal.
 set splitbelow                                      " Open new split panes to right and,
@@ -234,18 +236,6 @@ fu! InsertTabWrapper()                              "  ↳ else use completion.
 endf
 inoremap <Tab> <c-r>=InsertTabWrapper()<cr>|        " Tab is autocomplete unless at beginning of line.
 inoremap <S-Tab> <c-n>|                             " Shift-Tab is always autocomplete.
-
-" Blink when you highlight a search match.
-nnoremap <silent> n n:call HLNext(0.1)<cr>
-nnoremap <silent> N N:call HLNext(0.1)<cr>
-function! HLNext (blinktime)
-  let target_pat = '\c\%#'.@/
-  let ring = matchadd('ErrorMsg', target_pat, 101)
-  redraw
-  exec 'sleep ' . float2nr(a:blinktime * 1000) . 'm'
-  call matchdelete(ring)
-  redraw
-endfunction
 
 " Function to trim trailing whitespace in a file.
 function! TrimWhitespace()
