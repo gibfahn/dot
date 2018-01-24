@@ -1,0 +1,45 @@
+/* Show title of unread tabs with red and italic font */
+.tab.unread .label {
+  color: red !important;
+  font-style: italic !important;
+}
+
+/* Add private browsing indicator per tab */
+/*
+.tab.private-browsing .label:before {
+  content: "🕶";
+}
+*/
+
+#tabbar {
+  counter-reset: vtabs atabs tabs;
+  /* vtabs tracks visible tabs, atabs tracks active tabs, tabs tracks all tabs */
+}
+.tab:not(.collapsed):not(.discarded) {
+  counter-increment: vtabs atabs tabs;
+}
+.tab:not(.collapsed) {
+  counter-increment: vtabs tabs;
+}
+.tab:not(.discarded) {
+  counter-increment: atabs tabs;
+}
+.tab {
+  counter-increment: tabs;
+}
+
+.newtab-button {
+  --tab-count-text: counter(tabs) " tabs";
+}
+
+.newtab-button::after {
+  content: var(--tab-count-text);
+  pointer-events: none;
+
+  position: absolute;
+  right: 0.5em;
+
+  /* TST 2.4.0 - Fix for Issue #1664 */
+  background: transparent !important;
+  mask: none !important;
+}

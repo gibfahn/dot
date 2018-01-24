@@ -1,0 +1,20 @@
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* to hide the native tabs */
+#TabsToolbar {
+    visibility: collapse;
+}
+
+/* to hide the sidebar header */
+#sidebar-header {
+    visibility: collapse;
+}
+
+/* Don't render loading circle for hidden tab bar */
+.tab-throbber[busy] {
+  display: none;
+}
+
+.tab-throbber[progress] {
+  display: none;
+}
