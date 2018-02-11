@@ -81,6 +81,7 @@ pth() { # Returns absolute path to file(s) including file name.
 
 ### PATH ADDITIONS ###
 
+pathadd /usr/local/bin # Missed in some shells.
 pathadd "$HOME/bin" # Put random binaries you want to run in here.
 pathadd /usr/lib/ccache # Add ccache to the path if installed (Linux).
 pathadd /usr/local/opt/ccache/libexec # Add ccache to the path if installed (macOS).
@@ -119,7 +120,7 @@ if [ "$shell" = zsh ]; then # zsh specific options.
   setopt hist_ignore_all_dups hist_ignore_space share_history extended_history hist_expire_dups_first
   setopt always_to_end complete_in_word long_list_jobs # Completion related options.
   setopt interactive_comments # Allow comments in the terminal.
-  chpwd() { ls; } # Auto ls after changing directory.
+  chpwd() { ls -A; } # Auto ls after changing directory.
   CDPATH=~ # Check ~ for directories after checking . (`c/d/` matches `./c*/d*/`, then tries `~/c*/d*/`).
 
   # Put (or symlink) autocomplete scripts in here.
@@ -145,7 +146,7 @@ elif [ "$shell" = bash ]; then # Bash specific options.
   PS1=' \[\e[32;1m\]\w $ \[\e[0m\]'
 fi
 
-for i in please po pu rd d afind _ md run-help +; do alias | sed 's/^alias //' | grep -q "^$i=" && unalias "$i"; done # Remove unwanted aliases if defined.
+for i in please po pu rd d afind _ md run-help +; do alias | sed 's/^alias //' | grep -q "^$i=" && unalias "$i"; done; unset i # Remove unwanted aliases if defined.
 if exists fzf; then
   for file in "$XDG_DATA_HOME"/fzf/shell/{completion,key-bindings}.$shell; do
     source "$file" # 2>/dev/null || true
