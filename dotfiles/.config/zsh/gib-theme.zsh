@@ -19,7 +19,7 @@ precmd() { [ "$timer" -a "$SECONDS" != "$timer" ] && timer_prompt=" $(($SECONDS 
 # Outputs current branch info in prompt format
 _git_prompt_info_gib() {
   [ -d .git -o "$(command git rev-parse --is-inside-work-tree 2>/dev/null)" ] &&
-    echo " %F{33}(%F{226}$(_git_upstream_diff_gib)%F{33}$(command git describe --contains --all --always HEAD)$(_parse_git_dirty_gib)%F{33})%f"
+    echo " %F{33}(%F{226}$(_git_upstream_diff_gib)%F{33}$(command git describe --contains --all --always HEAD 2>/dev/null)$(_parse_git_dirty_gib)%F{33})%f"
 }
 
 # Checks if working tree is dirty
