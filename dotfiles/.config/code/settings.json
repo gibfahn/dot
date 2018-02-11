@@ -1,0 +1,137 @@
+// Place your settings in this file to overwrite the default settings
+{
+    "editor.tabSize": 2,
+    "vim.cursorStylePerMode": {},
+    "vim.easymotion": true,
+    "vim.incsearch": true,
+    "vim.ignorecase": true,
+    "vim.hlsearch": true,
+    "vim.easymotionKeys": "hklyuiopnm,qwertzxcvbasdgjf;",
+    "vim.enableNeovim": true,
+    "vim.leader": "<space>",
+    "vim.showmodename": true,
+    "vim.statusBarColorControl": true,
+    "vim.statusBarColors" : {
+        "normal": "#005f5f",
+        "insert": "#5f0000",
+        "visual": "#5f00af",
+        "visualline": "#005f87",
+        "visualblock": "#86592d",
+        "replace": "#000000"
+    },
+    "vim.substituteGlobalFlag": true,
+    "vim.surround": true,
+    "vim.insertModeKeyBindingsNonRecursive": [
+        {
+            "before": ["k","j"],
+            "after": ["<Esc>"]
+        }
+    ],
+    "vim.otherModesKeyBindingsNonRecursive": [
+        {
+            "before":["<leader>", "/"],
+            "after":[],
+            "commands": [
+                {
+                    "command": ":nohl"
+                }
+            ]
+        },
+        {
+            "before":["<leader>", "w"],
+            "after":[],
+            "commands": [
+                {
+                    "command": ":w"
+                }
+            ]
+        },
+        {
+            "before":["<leader>", "q"],
+            "after":[],
+            "commands": [
+                {
+                    "command": ":q"
+                }
+            ]
+        },
+        {
+            "before":["<leader>", "x"],
+            "after":[],
+            "commands": [
+                {
+                    "command": ":wq"
+                }
+            ]
+        },
+        {
+            "before":["<leader>", "Q"],
+            "after":[],
+            "commands": [
+                {
+                    "command": ":q!"
+                }
+            ]
+        },
+        { // Hide again with ^-`
+            "before":["<leader>", "t"],
+            "after":[],
+            "commands": [
+                {
+                    "command": "workbench.action.terminal.toggleTerminal"
+                }
+            ]
+        },
+        {
+            "before": ["j"],
+            "after": ["g", "j"]
+        },
+        {
+            "before": ["k"],
+            "after": ["g", "k"]
+        },
+        { // TODO(gib): Not working.
+            "before":["<c-l>"],
+            "after":[],
+            "commands": [
+                {
+                    "command": "workbench.action.focusNextGroup"
+                }
+            ]
+        },
+        { // TODO(gib): Not working.
+            "before":["<c-h>"],
+            "after":[],
+            "commands": [
+                {
+                    "command": "workbench.action.focusPreviousGroup"
+                }
+            ]
+        },
+        { // TODO(gib): Not working.
+            "before":["<S-Tab>"],
+            "after":[],
+            "commands": [
+                {
+                    "command": "workbench.action.previousEditor"
+                }
+            ]
+        },
+        {
+            "before":["Tab"],
+            "after":[],
+            "commands": [
+                {
+                    "command": "workbench.action.nextEditor"
+                }
+            ]
+        }
+    ],
+    "vim.textwidth": 80,
+    "vim.mouseSelectionGoesIntoVisualMode": true,
+    "workbench.colorCustomizations": {
+        "statusBar.background": "#005f5f",
+        "statusBar.noFolderBackground": "#005f5f",
+        "statusBar.debuggingBackground": "#005f5f"
+    }
+}
