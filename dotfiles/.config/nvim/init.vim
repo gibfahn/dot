@@ -232,10 +232,11 @@ augroup END
 set wildmode=list:longest,list:full                 " Insert tab at beginning of line,
 fu! InsertTabWrapper()                              "  ↳ else use completion.
   let col = col('.') - 1
-  if !col || getline('.')[col - 1] !~ '\k'| return "\<tab>"| else| return "\<c-p>"| endif
+  if !col || getline('.')[col - 1] !~ '\k'| return "\<tab>"| else| return "\<c-n>"| endif
 endf
 inoremap <Tab> <c-r>=InsertTabWrapper()<cr>|        " Tab is autocomplete unless at beginning of line.
-inoremap <S-Tab> <c-n>|                             " Shift-Tab is always autocomplete.
+inoremap <S-Tab> <c-p>|                             " Shift-Tab is always autocomplete.
+
 
 " Function to trim trailing whitespace in a file.
 function! TrimWhitespace()
