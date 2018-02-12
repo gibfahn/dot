@@ -5,18 +5,22 @@
 "*** Load Plugins (uses vim-plug). ***"
 try
   call plug#begin('~/.local/share/nvim/plugged')    " Load plugins with vim-plug.
+
   Plug 'AndrewRadev/splitjoin.vim'                  " gS to split, gJ to join lines.
   Plug 'ap/vim-buftabline'                          " Show buffers in the tab bar.
   Plug 'ap/vim-readdir'                             " Nicer file browser plugin that works with buftabline.
+  Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh', } " LSP Support (:h LanguageClient).
   Plug 'easymotion/vim-easymotion'                  " Go to any word instantly.
   Plug 'fweep/vim-zsh-path-completion'              " Nicer file browser plugin.
   Plug 'gibfahn/vim-gib'                            " Use vim colorscheme.
   Plug 'godlygeek/tabular'                          " Make tables easier (:help Tabular).
-  Plug 'junegunn/fzf', { 'dir': '~/.local/share/fzf', 'do': './install --bin' }
+  Plug 'junegunn/fzf', { 'dir': '~/.local/share/fzf', 'do': './install --bin' } " :h fzf
   Plug 'junegunn/fzf.vim'                           " Try :Files, :GFiles? :Buffers :Lines :History :Commits :BCommits
   Plug 'junegunn/vim-peekaboo'                      " Pop up register list when pasting/macroing.
   Plug 'justinmk/vim-sneak'                         " sab -> go to next ab in code.
+  Plug 'keith/swift.vim'                            " Swift syntax highlighting.
   Plug 'pangloss/vim-javascript'                    " JS   language bindings.
+  Plug 'roxma/nvim-completion-manager'              " Completion plugin (used in LSP).
   Plug 'rust-lang/rust.vim'                         " Rust language bindings.
   Plug 'sjl/gundo.vim'                              " Interactive undo tree (<space>u to toggle on/off, q to quit).
   Plug 'tpope/vim-commentary'                       " Autodetect comment type for lang.
@@ -24,6 +28,7 @@ try
   Plug 'tpope/vim-repeat'                           " Allows you to use . with plugin mappings.
   Plug 'tpope/vim-surround'                         " Add/mod/remove surrounding chars.
   Plug 'tpope/vim-unimpaired'                       " [ and ] mappings (help unimpaired).
+
   call plug#end()                                   " Initialize plugin system
 catch| echo 'vim-plug not installed, use :PI to install'
 endtry
@@ -77,11 +82,15 @@ if exists("&wildignorecase")| set wildignorecase| endif " Case insensitive file 
 
 "*** Key mappings (see http://vim.wikia.com/wiki/Unused_keys for unused keys) ***"
 " Available (normal): <C-Space>, K, +, _, <C-q/s/n/[/_>, <leader>b/c/e/h/m/n/s/u/v
-map K <Plug>(easymotion-bd-jk)|                     " EasyMotion: Move to line with K.
+
+
+nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>| " Show definition.
 nnoremap k gk|                                      " Move up   visually , don't skip wrapped lines,
 nnoremap j gj|                                      "  ↳   down visually , don't skip wrapped lines.
+nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>| " Go to definition.
 nnoremap gk k|                                      " Move up   logically, do    skip wrapped lines,
 nnoremap gj j|                                      "  ↳   down logically, do    skip wrapped lines.
+nnoremap <silent> gr :call LanguageClient_textDocument_rename()<CR>| " Rename var/func under cursor.
 nnoremap Y y$|                                      " Make Y work like C and D (yank to end of line, not whole line).
 nnoremap - :e .<CR>|                                " - opens the directory in file browser (repeat for `cd ..`).
 nnoremap <leader>a @a<CR>|                          " Apply macro a (add with qa or yank to a reg with "ay).
@@ -205,6 +214,12 @@ let g:loaded_netrwPlugin = 1                        " Don't use the built-in fil
 let g:peekaboo_window = "vert bo 50new"             " Increase peekaboo window width to 50.
 let g:gundo_right = 1                               " Undo window on right.
 let g:gundo_preview_bottom = 1                      " Undo diff preview on bottom.
+let g:LanguageClient_serverCommands = {
+    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+    \ 'swift': ['langserver-swift'],
+    \ 'javascript': ['javascript-typescript-stdio'],
+    \ 'javascript.jsx': ['javascript-typescript-stdio'],
+    \ } " npm i -g javascript-typescript-stdio
 
 " Highlight the 81st column of text (in dark grey so it doesn't distract).
 highlight ColorColumn ctermbg=234
