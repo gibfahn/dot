@@ -67,13 +67,6 @@ else
   skip "SSH Config (not overwriting ~/.ssh/config, copy manually from ./config/ssh-config as necessary)."
 fi
 
-# Install oh-my-zsh:
-if exists zsh && no oh-my-zsh; then
-  # Don't run the setup script, we don't need it and it checks $SHELL which
-  # we've only just changed. Just put it in the right place.
-  gitClone robbyrussell/oh-my-zsh "$XDG_DATA_HOME/oh-my-zsh"
-fi
-
 # Set up autocompletions:
 if exists zsh && no zfunc; then mkdir -p "$XDG_DATA_HOME/zfunc"; fi
 
@@ -116,6 +109,10 @@ if no nvim/site/autoload/plug.vim; then
   exists $VIM && $VIM +PlugInstall +qall # Install/update vim plugins.
 fi
 
+if not javascript-typescript-langserver && ! not node; then
+  npm install --global javascript-typescript-langserver
+fi
+
 # If you don't use rust just choose the cancel option.
 if [ "$HARDCORE" ] && { no rustup || no cargo; }; then # Install/set up rust.
   # Install rustup. Don't modify path as that's already in gibrc.
@@ -136,6 +133,6 @@ if [ "$HARDCORE" ] && { no rustup || no cargo; }; then # Install/set up rust.
   rustup install nightly
   rustup install stable
 
-  # Download src (docs are included by default).
-  rustup component add rust-src
+  # Download rls (https://github.com/rust-lang-nursery/rls):
+  rustup component add rls-preview rust-analysis rust-src
 fi

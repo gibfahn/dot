@@ -29,12 +29,12 @@ exists() { type "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
 
 # Used when you're going to install something.
 get() {
-    echo -e "${CYAN}❯❯❯ Installing:${NC} $@"
+    printf "${CYAN}❯❯❯ Installing:${NC} $@\n"
 }
 
 # Used when you're not going to install something.
 skip() {
-    echo -e "${YELLOW}❯❯❯   Skipping:${NC} $@"
+    printf "${YELLOW}❯❯❯   Skipping:${NC} $@\n"
 }
 
 # `if no foo` then foo isn't in $XDG_DATA_HOME and we should install it.
@@ -78,6 +78,6 @@ hasSudo() {
 }
 
 finalOutput() {
-  echo -e "${BCYAN}❯❯❯ INSTALL STATUS:${NC} $?"
-  [ "$FINAL_OUTPUT" ] && echo -e "${BGBRED}❯❯❯ FINAL OUTPUT:${NC} $FINAL_OUTPUT"
+  printf "${BCYAN}❯❯❯ INSTALL STATUS:${NC} $?\n"
+  [ "$FINAL_OUTPUT" ] && printf "${BGBRED}❯❯❯ FINAL OUTPUT:${NC} $FINAL_OUTPUT\n"
 }

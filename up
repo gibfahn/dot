@@ -8,7 +8,7 @@ cd $(dirname $0)
 
 # Enable hardcore mode if you're sure.
 # Only prompt if HARDCORE is unset, not if it's set to empty string ("").
-[ -z ${HARDCORE+x} ] && read -p "HARDCORE mode (leave blank not to enable)? " HARDCORE
+[ -z ${HARDCORE+x} ] && read -p "HARDCORE mode (leave blank to not enable)? " HARDCORE
 export HARDCORE
 
 if [ "$HARDCORE" ]; then

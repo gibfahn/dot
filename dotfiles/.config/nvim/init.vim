@@ -219,7 +219,7 @@ let g:LanguageClient_serverCommands = {
     \ 'swift': ['langserver-swift'],
     \ 'javascript': ['javascript-typescript-stdio'],
     \ 'javascript.jsx': ['javascript-typescript-stdio'],
-    \ } " npm i -g javascript-typescript-stdio
+    \ }
 
 " Highlight the 81st column of text (in dark grey so it doesn't distract).
 highlight ColorColumn ctermbg=234

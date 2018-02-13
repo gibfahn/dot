@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Helper vars for printing in colour. Use with:
-# echo -e "${RED}foo${NC}" # Echo foo in red, then reset colour.
-# printf "${BBLUE}foo${NC}" # Echo foo in bright blue, then reset colour.
+# printf "${RED}foo${NC}\n" # Echo foo in red, then reset colour.
+# printf "${BBLUE}foo${NC}\n" # Echo foo in bright blue, then reset colour.
 
 # Include (source) with this line:
 # . $(dirname $0)/helpers/colours.sh # Load helper script from gcfg/helpers.

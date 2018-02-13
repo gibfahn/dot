@@ -72,3 +72,10 @@ if [ "$HARDCORE" ]; then # Set up HARDCORE brew packages.
 else
   skip "brew HARDCORE packages (HARDCORE not specified)."
 fi
+
+if not langserver-swift && ! not swift; then
+  gitClone rlovelett/langserver-swift "$HOME"/bin/src
+  (cd "$HOME/bin/src/langserver-swift"; make release)
+  ln -s "$HOME/bin/src/langserver-swift/.build/$(uname -m)-*/release/langserver-swift" "$HOME/bin/langserver-swift"
+fi
+
