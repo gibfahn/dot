@@ -74,8 +74,8 @@ else
 fi
 
 if not langserver-swift && ! not swift; then
-  gitClone rlovelett/langserver-swift "$HOME"/bin/src
+  gitClone rlovelett/langserver-swift "$HOME"/bin/src/langserver-swift
   (cd "$HOME/bin/src/langserver-swift"; make release)
-  ln -s "$HOME/bin/src/langserver-swift/.build/$(uname -m)-*/release/langserver-swift" "$HOME/bin/langserver-swift"
+  ln -s "$HOME/bin/src/langserver-swift/.build/$(uname -m)"-*/release/langserver-swift "$HOME"/bin/langserver-swift
 fi
 
