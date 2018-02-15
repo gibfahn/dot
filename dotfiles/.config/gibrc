@@ -64,7 +64,8 @@ c="$XDG_CONFIG_HOME" # Shortcut to the config directory (`v $c/gibrc` to edit th
 
 ### FUNCTIONS ###
 
-md() { mkdir -p $*; [ $# = 1 ] && cd "$1" || true; } # md foo = mkdir foo && cd foo.
+for i in please po pu rd d afind _ md run-help +; do alias | sed 's/^alias //' | grep -q "^$i=" && unalias "$i"; done; unset i # Remove unwanted aliases if defined.
+md() { command mkdir -p $*; [ $# = 1 ] && cd "$1" || true; } # md foo = mkdir foo && cd foo.
 # Add to beginning of path.
 pathadd() { [ -d "$1" ] && export PATH="$1"$(echo ":$PATH:" | sed "s|:$1:|:|" | sed 's|:$||'); }
 # Add to end of path.
@@ -146,13 +147,12 @@ elif [ "$shell" = bash ]; then # Bash specific options.
   PS1=' \[\e[32;1m\]\w $ \[\e[0m\]'
 fi
 
-for i in please po pu rd d afind _ md run-help +; do alias | sed 's/^alias //' | grep -q "^$i=" && unalias "$i"; done; unset i # Remove unwanted aliases if defined.
 if exists fzf; then
   for file in "$XDG_DATA_HOME"/fzf/shell/{completion,key-bindings}.$shell; do
     source "$file" # 2>/dev/null || true
   done
 fi
-mkdir -p "$XDG_CACHE_HOME/$shell"  # Create HISTFILE dir if necessary.
+command mkdir -p "$XDG_CACHE_HOME/$shell"  # Create HISTFILE dir if necessary.
 
 ### ALIASES ###
 
