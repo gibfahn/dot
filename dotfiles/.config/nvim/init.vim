@@ -71,6 +71,7 @@ set diffopt+=vertical                               " Always use vertical diffs.
 set wildchar=<Tab> wildmenu                         " Tab complete with files (e.g. `:e`)
 set wildmode=list:longest,list:full                 " 1st Tab completes to longest common string, 2nd+ cycles through options.
 set list listchars=tab:»·,trail:·,nbsp:·            " Display extra whitespace.
+if empty($XDG_CACHE_HOME)| let $XDG_CACHE_HOME = $HOME . '/.cache'| endif
 let s:undodir = $XDG_CACHE_HOME . "/vim/undo"
 if !isdirectory(s:undodir)| call mkdir(s:undodir, "p", 0700)| endif
 set undofile                                        " Persist undo history on file close.
@@ -83,92 +84,96 @@ if exists("&wildignorecase")| set wildignorecase| endif " Case insensitive file 
 "*** Key mappings (see http://vim.wikia.com/wiki/Unused_keys for unused keys) ***"
 " Available (normal): <C-Space>, K, +, _, <C-q/s/n/[/_>, <leader>b/c/e/h/m/n/s/u/v
 
-
-nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>| " Show definition.
-nnoremap k gk|                                      " Move up   visually , don't skip wrapped lines,
-nnoremap j gj|                                      "  ↳   down visually , don't skip wrapped lines.
+inoremap          kj <ESC>|                         " kj = Esc in insert mode.
+nnoremap          k gk|                             " Move up   visually , don't skip wrapped lines,
+nnoremap          j gj|                             "  ↳   down visually , don't skip wrapped lines.
+nnoremap          Q <nop>|                          "  ↳ accidental triggering).
 nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>| " Go to definition.
-nnoremap gk k|                                      " Move up   logically, do    skip wrapped lines,
-nnoremap gj j|                                      "  ↳   down logically, do    skip wrapped lines.
+nnoremap          gk k|                             " Move up   logically, do    skip wrapped lines,
+nnoremap          gj j|                             "  ↳   down logically, do    skip wrapped lines.
 nnoremap <silent> gr :call LanguageClient_textDocument_rename()<CR>| " Rename var/func under cursor.
-nnoremap Y y$|                                      " Make Y work like C and D (yank to end of line, not whole line).
-nnoremap - :e .<CR>|                                " - opens the directory in file browser (repeat for `cd ..`).
-nnoremap <leader>a @a<CR>|                          " Apply macro a (add with qa or yank to a reg with "ay).
-nnoremap <leader>d :bp\|bd  #<CR>|                  " Close buffer without closing split,
-nnoremap <leader>D :bp\|bd! #<CR>|                  "  ↳ Force close buffer.
-nnoremap <leader>f :Files<CR>|                      " Search file names    for file,
-nnoremap <leader>F :grep |                          "  ↳          contents for file.
-nnoremap <Leader>gd :w !diff % - <CR>|              " Diff between saved file and current.
-nnoremap <Leader>gt :set et!<CR>:set et?<CR>|       " Toggle tabs/spaces.
-nnoremap <Leader>gq :set fo+=t<CR>:set fo?<CR>|     " Turn on  line wrapping,
-nnoremap <Leader>gQ :set fo-=t<CR>:set fo?<CR>|     "  ↳   off
-nnoremap <Leader>gw :call Trim()<CR>|               " <Space>gw trims trailing whitespace for file.
-nnoremap <Leader>id :r !date +\%Y-\%m-\%d<CR>|      "  Insert readable    date on new line.
-nnoremap <Leader>iD :r !date +\%d-\%b-\%y<CR>|      "         `:sort`able date
-nnoremap <Leader>it ITODO(gib): <ESC>:Commentary<CR>$| " Insert a TODO (change to your name). Write todo, then do <Space>it.
-nnoremap <leader>j :sp<CR><C-w>k:bp<CR>|            " Open horizontal split,
-nnoremap <leader>k <C-w>q|                          " Close current split (keeps buffer).
-nnoremap <leader>l :vsp<CR><C-w>h:bp<CR>|           "  ↳   vertical split.
-nnoremap <leader>o :on<CR>|                         " Close all other buffers.
+nnoremap          Y y$|                             " Make Y work like C and D (yank to end of line, not whole line).
+" To open vim's current directory, use `:e .`.
+nnoremap          - :e `dirname %`<CR>|             " - open current buffer directory in file browser (repeat for `cd ..`).
+nmap              f <Plug>Sneak_f|                  " Use sneak for f (multiline+highlight).
+nmap              F <Plug>Sneak_F|                  " ↳             F
+nmap              t <Plug>Sneak_t|                  " ↳             t
+nmap              T <Plug>Sneak_T|                  " ↳             T
 
-nnoremap <leader>p "+p|                             "  ↳                   (normal mode).
-nnoremap <leader>P "+P|                             "  ↳  line from clipboard (normal mode).
-nnoremap <leader>q :q<CR>|                          " Quit,
-nnoremap <leader>Q :q!<CR>|                         "  ↳ Quit losing unsaved changes.
-nnoremap <leader>r :%s/|                            " Replace (e.g. <Space>rold/new),
-nnoremap <leader>R :%s//c<Left><Left>|              "  ↳ Replace with prompt on each match.
-map <Leader>s <Plug>(easymotion-bd-w)|              " EasyMotion: Move to word.
-nnoremap <leader>u :GundoToggle<CR>|                " Toggle Undo tree visualisation.
-nnoremap <leader>w :up<CR>|                         " Write if there were changes.
-nnoremap <leader>W :w<CR>|                          "  ↳    whether or not there were changes.
-nnoremap <leader>x :x<CR>|                          " Save (if changes) and quit.
-nnoremap <leader>X :qa<CR>|                         " Quit all windows.
-nnoremap <leader>y "+y|                             " Copy to clipboard (normal mode).
-nnoremap <leader>Y :%y+<CR>|                        "  ↳  file to clipboard (normal mode).
-nnoremap <leader>z  za|                             " Toggle folding on current line.
-nnoremap <expr> <leader>Z &foldlevel ? 'zM' :'zR'
-nnoremap <leader>/ :noh<CR>|                        " Turn off find highlighting.
-nnoremap <leader>? /<Up><CR>|                       " Search for last searched thing.
+nnoremap          <Leader>a @a<CR>|                 " Apply macro a (add with qa or yank to a reg with "ay).
+nnoremap          <Leader>d :bp\|bd  #<CR>|         " Close buffer without closing split,
+nnoremap          <Leader>D :bp\|bd! #<CR>|         "  ↳ Force close buffer.
+nnoremap          <Leader>f :Files<CR>|             " Search file names    for file,
+nnoremap          <Leader>F :grep |                 "  ↳          contents for file.
+nnoremap          <Leader>gd :w !diff % - <CR>|     " Diff between saved file and current.
+nnoremap          <Leader>gt :set et!<CR>:set et?<CR>|       " Toggle tabs/spaces.
+nnoremap          <Leader>gq :set fo+=t<CR>:set fo?<CR>|     " Turn on  line wrapping,
+nnoremap          <Leader>gQ :set fo-=t<CR>:set fo?<CR>|     "  ↳   off
+nnoremap          <Leader>gv :e ~/.vimrc<CR>|       " <Space>gv opens this file in the editor (autoreloaded on save).
+nnoremap          <Leader>gw :call Trim()<CR>|      " <Space>gw trims trailing whitespace for file.
+nnoremap          <Leader>id :r !date +\%Y-\%m-\%d<CR>|      "  Insert readable    date on new line.
+nnoremap          <Leader>iD :r !date +\%d-\%b-\%y<CR>|      "         `:sort`able date
+nnoremap          <Leader>it ITODO(gib): <ESC>:Commentary<CR>$| " Insert a TODO, (Write todo, then `<Space>it`).
+nnoremap          <Leader>j :sp<CR><C-w>k:bp<CR>|   " Open horizontal split,
+nnoremap          <Leader>k <C-w>q|                 " Close current split (keeps buffer).
+nnoremap <silent> <Leader>K :call LanguageClient_textDocument_hover()<CR>| " Show definition.
+nnoremap          <Leader>l :vsp<CR><C-w>h:bp<CR>|  "  ↳   vertical split.
+nnoremap          <Leader>o :on<CR>|                " Close all other buffers.
+nnoremap          <Leader>p "+p|                    "  ↳                   (normal mode).
+nnoremap          <Leader>P "+P|                    "  ↳  line from clipboard (normal mode).
+nnoremap          <Leader>q :q<CR>|                 " Quit,
+nnoremap          <Leader>Q :q!<CR>|                "  ↳ Quit losing unsaved changes.
+nnoremap          <Leader>r :%s/|                   " Replace (e.g. <Space>rold/new),
+nnoremap          <Leader>R :%s//c<Left><Left>|     "  ↳ Replace with prompt on each match.
+map               <Leader>s <Plug>(easymotion-bd-w)|     " EasyMotion: Move to word.
+nnoremap          <Leader>u :GundoToggle<CR>|       " Toggle Undo tree visualisation.
+nnoremap          <Leader>w :up<CR>|                " Write if there were changes.
+nnoremap          <Leader>W :w<CR>|                 "  ↳    whether or not there were changes.
+nnoremap          <Leader>x :x<CR>|                 " Save (if changes) and quit.
+nnoremap          <Leader>X :qa<CR>|                " Quit all windows.
+nnoremap          <Leader>y "+y|                    " Copy to clipboard (normal mode).
+nnoremap          <Leader>Y :%y+<CR>|               "  ↳  file to clipboard (normal mode).
+nnoremap          <Leader>z  za|                    " Toggle folding on current line.
+nnoremap <expr>   <Leader>Z &foldlevel ? 'zM' :'zR'| " See also "zi.
+nnoremap          <Leader>/ :noh<CR>|               " Turn off find highlighting.
+nnoremap          <Leader>? /<Up><CR>|              " Search for last searched thing.
+nnoremap          <Leader><Tab> <C-^>|                    " Tab to switch to next buffer,
+
 " Leader + window size keys increases/decreases height/width by 3/2.
 nnoremap <silent> <Leader>+ :exe "resize " . (winheight(0) * 3/2)<CR>
 nnoremap <silent> <Leader>- :exe "resize " . (winheight(0) * 2/3)<CR>
 nnoremap <silent> <Leader>> :exe "vertical resize " . (winwidth(0) * 3/2)<CR>
 nnoremap <silent> <Leader>< :exe "vertical resize " . (winwidth(0) * 2/3)<CR>
 
-vnoremap <leader>y "+y|                             "  ↳                (visual mode).
-vnoremap <leader>d "+d|                             " Cut from clipboard (visual mode).
-vnoremap <leader>p "+p|                             " Paste from clipboard (visual mode).
+vnoremap          <Leader>y "+y|                    "  ↳                (visual mode).
+vnoremap          <Leader>d "+d|                    " Cut from clipboard (visual mode).
+vnoremap          <Leader>p "+p|                    " Paste from clipboard (visual mode).
 
-nnoremap <C-h> <C-w>h|                              " Switch left  a window,
-nnoremap <C-j> <C-w>j|                              "  ↳     down  a window,
-nnoremap <C-k> <C-w>k|                              "  ↳     up    a window,
-nnoremap <C-l> <C-w>l|                              "  ↳     right a window.
+nnoremap          <C-h> <C-w>h|                     " Switch left  a window,
+nnoremap          <C-j> <C-w>j|                     "  ↳     down  a window,
+nnoremap          <C-k> <C-w>k|                     "  ↳     up    a window,
+nnoremap          <C-l> <C-w>l|                     "  ↳     right a window.
 
-nmap          <C-W>>     <C-W>><SID>ws|             " Adds mappings to make Ctrl-W -/+/</>
-nmap          <C-W><     <C-W><<SID>ws|             " ↳ repeatable, so you can press Ctrl-W
-nn <script>   <SID>ws>   <C-W>><SID>ws|             " ↳ and then hold > to increase width,
-nn <script>   <SID>ws<   <C-W><<SID>ws|             " ↳ or hold - to decrease height.
-nmap          <C-W>+     <C-W>+<SID>ws|             " ↳ Note that +,<, and > need the shift key.
-nmap          <C-W>-     <C-W>-<SID>ws|             " ↳ Use <Leader> < or > for bigger
-nn <script>   <SID>ws+   <C-W>+<SID>ws|             " ↳ modifications, and this for smaller
-nn <script>   <SID>ws-   <C-W>-<SID>ws|             " ↳ tweaks.
-nmap          <SID>ws    <Nop>
+nmap              <C-W>>     <C-W>><SID>ws|         " Adds mappings to make Ctrl-W -/+/</>
+nmap              <C-W><     <C-W><<SID>ws|         " ↳ repeatable, so you can press Ctrl-W
+nnoremap <script> <SID>ws>   <C-W>><SID>ws|         " ↳ and then hold > to increase width,
+nnoremap <script> <SID>ws<   <C-W><<SID>ws|         " ↳ or hold - to decrease height.
+nmap              <C-W>+     <C-W>+<SID>ws|         " ↳ Note that +,<, and > need the shift key.
+nmap              <C-W>-     <C-W>-<SID>ws|         " ↳ Use <Leader> < or > for bigger
+nnoremap <script> <SID>ws+   <C-W>+<SID>ws|         " ↳ modifications, and this for smaller
+nnoremap <script> <SID>ws-   <C-W>-<SID>ws|         " ↳ tweaks.
+nmap              <SID>ws    <Nop>
 
-nnoremap <Tab> :bn<CR>|                             " Tab to switch to next buffer,
-nnoremap <S-Tab> :bp<CR>|                           "  ↳ Shift-Tab to switch to previous buffer.
-nnoremap <C-p> <C-i>|                               " <C-o> = go to previous jump, <C-p> is go to next (normally <C-i>, but that == Tab, used above).
-inoremap kj <ESC>|                                  " kj = Esc in insert mode.
-nnoremap Q <nop>|                                   "  ↳ accidental triggering).
-vnoremap <expr> // 'y/\V'.escape(@",'\').'<CR>'|    " Search for selected text with // (very no-magic mode, escaped backslashes).
+nnoremap          <Tab> :bn<CR>|                    " Tab to switch to next buffer,
+nnoremap          <S-Tab> :bp<CR>|                  "  ↳ Shift-Tab to switch to previous buffer.
+nnoremap          <C-p> <C-i>|                      " <C-o> = go to previous jump, <C-p> is go to next (normally <C-i>, but that == Tab, used above).
+vnoremap          <expr> // 'y/\V'.escape(@",'\').'<CR>'|    " Search for selected text with // (very no-magic mode, escaped backslashes).
 
-nmap f <Plug>Sneak_f|                               " Use sneak for f (multiline+highlight).
-nmap F <Plug>Sneak_F|                               " ↳             F
-nmap t <Plug>Sneak_t|                               " ↳             t
-nmap T <Plug>Sneak_T|                               " ↳             T
+" Open the selected text with the appropriate program (like netrw-gx).
+nnoremap          <Leader>o :set operatorfunc=OpenUrl<CR>g@
+vnoremap          <Leader>o :<c-u>call OpenUrl(visualmode())<CR>
 
-nnoremap <leader>o :set operatorfunc=OpenUrl<CR>g@
-vnoremap <leader>o :<c-u>call OpenUrl(visualmode())<CR>
-
+" Used with `<Leader>o` mappings.
 function! OpenUrl(type)
   if a:type ==# 'v'| execute "normal! `<v`>y"
   elseif a:type ==# 'char'| execute "normal! `[v`]y"
@@ -244,11 +249,11 @@ augroup gibAutoGroup                                " Group of automatic functio
   au BufWritePost init.vim so $MYVIMRC|             " Reload init.vim (nvim) on save.
 augroup END
 
-set wildmode=list:longest,list:full                 " Insert tab at beginning of line,
-fu! InsertTabWrapper()                              "  ↳ else use completion.
+set wildmode=list:longest,list:full                 " Insert tab at beginning of line or after whitespace,
+function! InsertTabWrapper()                        "  ↳ else use completion.
   let col = col('.') - 1
-  if !col || getline('.')[col - 1] !~ '\k'| return "\<tab>"| else| return "\<c-n>"| endif
-endf
+  if !col || getline('.')[col - 1] !~ '\S'| return "\<tab>"| else| return "\<c-n>"| endif
+endfunction
 inoremap <Tab> <c-r>=InsertTabWrapper()<cr>|        " Tab is autocomplete unless at beginning of line.
 inoremap <S-Tab> <c-p>|                             " Shift-Tab is always autocomplete.
 
