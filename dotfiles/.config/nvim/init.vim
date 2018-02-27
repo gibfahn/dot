@@ -85,6 +85,9 @@ if exists("&wildignorecase")| set wildignorecase| endif " Case insensitive file 
 " Available (normal): <C-Space>, K, +, _, <C-q/s/n/[/_>, <leader>b/c/e/h/m/n/s/u/v
 
 inoremap          kj <ESC>|                         " kj = Esc in insert mode.
+inoremap <expr>   <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")| " <Enter> hides completion menu and starts new line.
+inoremap <expr>   <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"| " Tab is next entry if completion menu open.
+inoremap <expr>   <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"| " Shift-Tab is previous entry if completion menu open.
 nnoremap          k gk|                             " Move up   visually , don't skip wrapped lines,
 nnoremap          j gj|                             "  ↳   down visually , don't skip wrapped lines.
 nnoremap          Q <nop>|                          "  ↳ accidental triggering).
@@ -248,15 +251,6 @@ augroup gibAutoGroup                                " Group of automatic functio
   au BufWritePost .vimrc so $MYVIMRC|               " Reload .vimrc on save.
   au BufWritePost init.vim so $MYVIMRC|             " Reload init.vim (nvim) on save.
 augroup END
-
-set wildmode=list:longest,list:full                 " Insert tab at beginning of line or after whitespace,
-function! InsertTabWrapper()                        "  ↳ else use completion.
-  let col = col('.') - 1
-  if !col || getline('.')[col - 1] !~ '\S'| return "\<tab>"| else| return "\<c-n>"| endif
-endfunction
-inoremap <Tab> <c-r>=InsertTabWrapper()<cr>|        " Tab is autocomplete unless at beginning of line.
-inoremap <S-Tab> <c-p>|                             " Shift-Tab is always autocomplete.
-
 
 " Function to trim trailing whitespace in a file.
 function! TrimWhitespace()
