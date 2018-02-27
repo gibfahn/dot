@@ -30,7 +30,8 @@ try
   Plug 'tpope/vim-unimpaired'                       " [ and ] mappings (help unimpaired).
 
   call plug#end()                                   " Initialize plugin system
-catch| echo 'vim-plug not installed, use :PI to install'
+  catch /E117: Unknown function: plug#begin/
+    echo "ERROR:\tvim-plug not installed, use :PI to install. Original error was:\n\t" . v:exception . "\n"
 endtry
 
 "*** Set vim options ***"
@@ -62,7 +63,6 @@ set mouse=a                                         " Mouse in all modes (mac: F
 set number                                          " Turn on line numbers.
 set numberwidth=5                                   " Width of line number buffer.
 set hlsearch                                        " Highlight search matches (off: <Space>/).
-colo gib                                            " Use my colorscheme
 set ffs=unix                                        " Force Unix line endings (\n) (always show \r (^M), never autoinsert them).
 set t_Co=256                                        " Use 256 color terminal.
 set splitbelow                                      " Open new split panes to right and,
@@ -80,6 +80,13 @@ set path=.,/usr/include,,**                         " Add ** to the search path 
 if exists('+breakindent')| set breakindent| let &showbreak = '↳ '| set cpo+=n| end " Nicer line wrapping for long lines.
 if exists('&inccommand')| set inccommand=split| endif " Show search and replace as you type.
 if exists("&wildignorecase")| set wildignorecase| endif " Case insensitive file tab completion with :e.
+try
+  colo gib                                          " Use my colorscheme
+catch /E185: Cannot find color scheme 'gib'/
+  echo "ERROR:\tGib colorscheme not installed, falling back to desert.\n\tRun :PU or check Plugin setup in vimrc file."
+  echo "\tOriginal error was:\n\t\t" . v:exception . "\n"
+  colo desert
+endtry
 
 "*** Key mappings (see http://vim.wikia.com/wiki/Unused_keys for unused keys) ***"
 " Available (normal): <C-Space>, K, +, _, <C-q/s/n/[/_>, <leader>b/c/e/h/m/n/s/u/v
@@ -176,7 +183,7 @@ vnoremap          <expr> // 'y/\V'.escape(@",'\').'<CR>'|    " Search for select
 nnoremap          <Leader>o :set operatorfunc=OpenUrl<CR>g@
 vnoremap          <Leader>o :<c-u>call OpenUrl(visualmode())<CR>
 
-" Used with `<Leader>o` mappings.
+" Open selected text with native open command, used with `<Leader>o` mappings.
 function! OpenUrl(type)
   if a:type ==# 'v'| execute "normal! `<v`>y"
   elseif a:type ==# 'char'| execute "normal! `[v`]y"
