@@ -112,12 +112,13 @@ fi
 if [ "$shell" = zsh ]; then # zsh specific options.
   export ZDOTDIR="${XDG_CONFIG_HOME}/zsh" # Path to zsh config files.
 
-  setopt autocd pushd_silent # If you type a file name/path by itself, cd to it, don't print dir on cd.
+  # cd pushes onto pushd stack (Try `cd -<Tab>`)
+  # If you type a file name/path by itself, cd to it, don't print dir on cd unless in $CDPATH.
+  setopt autopushd autocd pushd_silent pushdignoredups pushdminus
   setopt prompt_subst # Allow variables and functions to be used in the prompt.
   setopt no_list_ambiguous # Show menu on first tab if multiple matches (don't wait for second tab).
   setopt no_list_beep # Don't beep if tab-complete has multiple choices, only if no such file.
   setopt incappendhistory # Add to history file immediately (don't wait till shell exits).
-  setopt autopushd pushdignoredups pushdminus # cd pushes onto pushd stack (Try `cd -<Tab>`)
   setopt hist_ignore_all_dups hist_ignore_space share_history extended_history hist_expire_dups_first
   setopt always_to_end complete_in_word long_list_jobs # Completion related options.
   setopt interactive_comments # Allow comments in the terminal.
