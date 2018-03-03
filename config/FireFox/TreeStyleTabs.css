@@ -4,13 +4,6 @@
   font-style: italic !important;
 }
 
-/* Add private browsing indicator per tab */
-/*
-.tab.private-browsing .label:before {
-  content: "🕶";
-}
-*/
-
 #tabbar {
   counter-reset: vtabs atabs tabs;
   /* vtabs tracks visible tabs, atabs tracks active tabs, tabs tracks all tabs */
@@ -37,7 +30,7 @@
   pointer-events: none;
 
   position: absolute;
-  right: 0.5em;
+  right: 2em;
 
   /* TST 2.4.0 - Fix for Issue #1664 */
   background: transparent !important;
