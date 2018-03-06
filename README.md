@@ -4,6 +4,12 @@ Contains everything I use to setup a new machine (except ssh and gpg keys).
 
 ## How to run
 
+Run either the full or the manual setup, then go to the [Post Install Setup][].
+
+### Requirements
+
+- Git:
+
 ### Standard full setup
 
 ```bash
@@ -13,7 +19,7 @@ git clone https://github.com/gibfahn/dot ~/code/dot && cd ~/code/dot
 HARDCORE="" ./up
 ```
 
-### Super-quick one line lite (non-root) setup
+### Lite (non-root) setup
 
 Useful for remote machines you don't own (you still want some niceties, but you
 can't install a bunch of packages). Just copy and paste this one-line command:
@@ -22,21 +28,6 @@ can't install a bunch of packages). Just copy and paste this one-line command:
 git clone https://github.com/gibfahn/dot -o up && cd dot &&
   GIT_NAME=$(git config --global user.name) GIT_EMAIL=$(git config --global user.email) NO_SUDO=true HARDCORE="" ./up
 ```
-
-### No git setup
-
-```bash
-# Make a directory to put it in (any path is fine):
-mkdir -p ~/code
-# If you don't have git, use curl/unzip instead (you should probably just install git).
-curl -kL https://github.com/gibfahn/dot/archive/master.zip > master.zip
-unzip master.zip
-mv dot-master ~/code/dot
-cd ~/code/dot
-HARDCORE="" ./up # Don't run in Hardcore mode.
-```
-
-But you should probably just install git.
 
 ### How to update to the latest master
 
@@ -107,22 +98,10 @@ Some things you have to do manually, here's a short list:
   - Swap `Save picture of selected area as file` and `Copy picture of selected
     area to the clipboard`.
 
-#### Add git to zip
-
-If you downloaded this repo as a zip, now you have git you can set up the repo
-properly:
-
-```bash
-cd ~/code/dot
-git init
-git remote add up git@github.com/gibfahn/dot
-# Doesn't override any changes you've made
-git reset up/master
-```
-
-
-## Adding a new file to my dotfiles
+## Adding a new file to your dotfiles
 
 As long as it goes in `$HOME`, just put it in the same relative directory inside
 `./dotfiles/` (so `~/.bashrc` becomes `dot/dotfiles/.bashrc`). If you rerun
 `link` it should get symlinked into the right place.
+
+[Post Install Setup]: #post-install-setup
