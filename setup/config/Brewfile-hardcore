@@ -1,6 +1,7 @@
 # vi: filetype=conf
 
 brew "dfu-util"                          # Used for flashing my Ergodox Infinity.
+brew "asciinema"                         # Take screen recordings of your terminal (https://asciinema.org).
 brew "exercism"                          # Learn coding languages.
 brew "cmake"                             # Commonly-used meta build system.
 brew "ninja"                             # Google meta build system (used in V8).
