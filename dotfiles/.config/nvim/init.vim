@@ -123,17 +123,17 @@ nnoremap          <Leader>gQ :set fo-=t<CR>:set fo?<CR>|     "  ↳   off
 nnoremap          <Leader>gv :e ~/.vimrc<CR>|       " <Space>gv opens this file in the editor (autoreloaded on save).
 nnoremap          <Leader>gw :call Trim()<CR>|      " <Space>gw trims trailing whitespace for file.
 nnoremap          <Leader>id :r !date +\%Y-\%m-\%d<CR>|      "  Insert readable    date on new line.
-nnoremap          <Leader>iD :r !date +\%d-\%b-\%y<CR>|      "         `:sort`able date
+nnoremap          <Leader>iD :r !date +\%d-\%b-\%y<CR>|      "  ↳      `:sort`able date on new line.
 nnoremap          <Leader>it ITODO(gib): <ESC>:Commentary<CR>$| " Insert a TODO, (Write todo, then `<Space>it`).
 nnoremap          <Leader>j :sp<CR><C-w>k:bp<CR>|   " Open horizontal split,
 nnoremap          <Leader>k <C-w>q|                 " Close current split (keeps buffer).
 nnoremap <silent> <Leader>K :call LanguageClient_textDocument_hover()<CR>| " Show definition.
-nnoremap          <Leader>l :vsp<CR><C-w>h:bp<CR>|  "  ↳   vertical split.
-nnoremap          <Leader>o :on<CR>|                " Close all other buffers.
+nnoremap          <Leader>l :vsp<CR><C-w>h:bp<CR>|  " Open vertical split.
 nnoremap          <Leader>o :set operatorfunc=OpenUrl<CR>g@| " Open the selected text with the appropriate program (like netrw-gx).
-nnoremap          <Leader>P "+P|                    "  ↳  line from clipboard (normal mode).
-nnoremap          <Leader>q :q<CR>|                 " Quit,
-nnoremap          <Leader>Q :q!<CR>|                "  ↳ Quit losing unsaved changes.
+nnoremap          <Leader>p "+p|                    "  Paste from clipboard after cursor.
+nnoremap          <Leader>P "+P|                    "                    ↳  before cursor.
+nnoremap          <Leader>q :q<CR>|                 " Quit if no    unsaved changes.
+nnoremap          <Leader>Q :q!<CR>|                "      ↳ losing unsaved changes.
 nnoremap          <Leader>r :%s/|                   " Replace (e.g. <Space>rold/new),
 nnoremap          <Leader>R :%s//c<Left><Left>|     "  ↳ Replace with prompt on each match.
 map               <Leader>s <Plug>(easymotion-bd-w)|     " EasyMotion: Move to word.
@@ -145,10 +145,9 @@ nnoremap          <Leader>X :qa<CR>|                " Quit all windows.
 nnoremap          <Leader>y "+y|                    " Copy to clipboard (normal mode).
 nnoremap          <Leader>Y :%y+<CR>|               "  ↳  file to clipboard (normal mode).
 nnoremap          <Leader>z  za|                    " Toggle folding on current line.
-nnoremap <expr>   <Leader>Z &foldlevel ? 'zM' :'zR'| " See also "zi.
+nnoremap <expr>   <Leader>Z &foldlevel ? 'zM' :'zR'| " Toggle folding everywhere (see also "zi).
 nnoremap          <Leader>/ :noh<CR>|               " Turn off find highlighting.
 nnoremap          <Leader>? /<Up><CR>|              " Search for last searched thing.
-nnoremap          <Leader><Tab> <C-^>|                    " Tab to switch to next buffer,
 
 " Leader + window size keys increases/decreases height/width by 3/2.
 nnoremap <silent> <Leader>+ :exe "resize " . (winheight(0) * 3/2)<CR>
