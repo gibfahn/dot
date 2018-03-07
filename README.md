@@ -93,6 +93,19 @@ Some things you have to do manually, here's a short list:
   - <kbd>⌘</kbd><kbd>Space</kbd>`Spectacle`<kbd>Enter</kbd>
   - Click on the spectacles in the Menu Bar, click Preferences
   - Check the box at the bottom: `Launch Spectacle at login`
+- Run HyperSwitch on Login (macOS):
+  - Change settings:
+    - General:
+      - Check `Run HyperSwitch in the background.`
+      - Active the window switcher for `all windows` -> <kbd>⌘</kbd><kbd>Tab</kbd>
+      - Check `Include windows from other screens`
+    - `App Switcher`
+      - `App Switcher` -> `Delay activation for` -> `0` ms for both.
+    - `Appearance`
+      - `Hide animation:` -> `None`
+      - `Show HyperSwitch in` -> `the menu bar`
+    - `About:`
+      - `Download and install updates in the background`
 - Make default screenshot combination copy to clipboard:
   - `System Preferences` -> `Keyboard` -> `Shortcuts` -> `Screen Shots`
   - Swap `Save picture of selected area as file` and `Copy picture of selected
