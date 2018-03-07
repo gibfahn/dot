@@ -22,3 +22,10 @@ Not particularly maintained.
 ### FreeFileSync
 
 Really specific preferences you almost certainly don't want.
+
+### SurfingKeys.js
+
+[SurfingKeys](https://github.com/brookhong/Surfingkeys) is a really good vim
+shortcuts plugin for Firefox and Chrome, and a good alternative to Vimium.
+
+To use my config follow the instructions in the `./SurfingKeys.js` file.
