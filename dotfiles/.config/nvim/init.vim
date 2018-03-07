@@ -116,6 +116,7 @@ nnoremap          <Leader>D :bp\|bd! #<CR>|         "  ↳ Force close buffer.
 nnoremap          <Leader>f :Files<CR>|             " Search file names    for file,
 nnoremap          <Leader>F :grep |                 "  ↳          contents for file.
 nnoremap          <Leader>gd :w !diff % - <CR>|     " Diff between saved file and current.
+nnoremap          <Leader>gf :call DupBuffer()<CR>gF|        " Open file path:row:col under cursor in last window.
 nnoremap          <Leader>gt :set et!<CR>:set et?<CR>|       " Toggle tabs/spaces.
 nnoremap          <Leader>gq :set fo+=t<CR>:set fo?<CR>|     " Turn on  line wrapping,
 nnoremap          <Leader>gQ :set fo-=t<CR>:set fo?<CR>|     "  ↳   off
@@ -129,7 +130,7 @@ nnoremap          <Leader>k <C-w>q|                 " Close current split (keeps
 nnoremap <silent> <Leader>K :call LanguageClient_textDocument_hover()<CR>| " Show definition.
 nnoremap          <Leader>l :vsp<CR><C-w>h:bp<CR>|  "  ↳   vertical split.
 nnoremap          <Leader>o :on<CR>|                " Close all other buffers.
-nnoremap          <Leader>p "+p|                    "  ↳                   (normal mode).
+nnoremap          <Leader>o :set operatorfunc=OpenUrl<CR>g@| " Open the selected text with the appropriate program (like netrw-gx).
 nnoremap          <Leader>P "+P|                    "  ↳  line from clipboard (normal mode).
 nnoremap          <Leader>q :q<CR>|                 " Quit,
 nnoremap          <Leader>Q :q!<CR>|                "  ↳ Quit losing unsaved changes.
@@ -179,21 +180,29 @@ nnoremap          <S-Tab> :bp<CR>|                  "  ↳ Shift-Tab to switch t
 nnoremap          <C-p> <C-i>|                      " <C-o> = go to previous jump, <C-p> is go to next (normally <C-i>, but that == Tab, used above).
 vnoremap          <expr> // 'y/\V'.escape(@",'\').'<CR>'|    " Search for selected text with // (very no-magic mode, escaped backslashes).
 
-" Open the selected text with the appropriate program (like netrw-gx).
-nnoremap          <Leader>o :set operatorfunc=OpenUrl<CR>g@
-vnoremap          <Leader>o :<c-u>call OpenUrl(visualmode())<CR>
+vnoremap          <Leader>o :<c-u>call OpenUrl(visualmode())<CR>| " Open the selected text with the appropriate program (like netrw-gx).
+
+"*** Functions used in key mappings above. ***"
 
 " Open selected text with native open command, used with `<Leader>o` mappings.
 function! OpenUrl(type)
-  if a:type ==# 'v'| execute "normal! `<v`>y"
-  elseif a:type ==# 'char'| execute "normal! `[v`]y"
+  if a:type ==# 'v'| execute "normal! `<v`>y"| " If in charwise visual mode, copy selected URL.
+  elseif a:type ==# 'char'| execute "normal! `[v`]y"| " If given a text object URL, copy it.
   else| return
   endif
 
-  " This doesn't work with macOS /usr/bin/vim (doesn't identify as macOS).
+  " This doesn't work with /usr/bin/vim on macOS (doesn't identify as macOS).
   if has('mac')| let openCmd = 'open'| else| let openCmd = 'xdg-open'| endif
-    silent execute "! " . openCmd . " " . shellescape(@@, 1)
-    echo openCmd . " " shellescape(@@, 1)
+    silent execute "! " . openCmd . " " . shellescape(@@, 1)| " Escape URL and pass as arg to open command.
+    echo openCmd . " " shellescape(@@, 1)| " Echo what we ran so it's visible.
+endfunction
+
+" Opens current buffer in previous split (at the same position but centered).
+function! DupBuffer()
+  let pos = getpos(".") " Save cursor position.
+  let buff = bufnr('%') " Save buffer number of current buffer.
+  execute "normal! \<c-w>p:b " buff "\<CR>"| " Change to previous buffer and open saved buffer.
+  call setpos('.', pos) " Set cursor position to what is was before.
 endfunction
 
 if has("nvim")                                      " NeoVim specific settings.
