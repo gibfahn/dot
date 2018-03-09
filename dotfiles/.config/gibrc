@@ -25,6 +25,7 @@ case $0 in
 esac
 shell=${shell:-"$(ls -l /proc/$$/exe | sed 's%.*/%%')"}
 uname="$(uname)"
+unamem="$(uname -m)"
 
 # If we're sshed into a machine, and didn't manually run a different, try a better shell.
 if [ "$ssh" -a "$GIBRC" = 0 -a "$shell" != zsh ]; then
@@ -136,7 +137,7 @@ if [ "$shell" = zsh ]; then # zsh specific options.
   for file in "$ZDOTDIR"/{completion-keybindings,gib-theme,macos-setdir}.zsh; do
     source "$file" || true
   done
-  [ "$(uname -m)" != s390x ] && source "$XDG_DATA_HOME/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" || true
+  [ "$unamem" != s390x ] && source "$XDG_DATA_HOME/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" || true
 
 elif [ "$shell" = bash ]; then # Bash specific options.
   set -o vi # Vim mode in bash.
@@ -196,7 +197,7 @@ alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"' # Makes it look like y
 # This also allows me to frequently `make -j4 install` node master, and have
 # that as the default (in /usr/local/bin/node).
 export npm_config_userconfig="$XDG_CONFIG_HOME/npm/config"
-export NVM_DIR="$XDG_DATA_HOME/nvm" # Use nvm.
+export NVM_DIR="$XDG_DATA_HOME/$([ "$unamem" != x86_64 ] && echo "$unamem/")nvm"
 alias nv='. $NVM_DIR/nvm.sh'  # Start nvm with alias, o/w too much startup cost.
 
 ## Rust commands.

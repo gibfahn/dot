@@ -83,9 +83,9 @@ if not nvr; then
 fi
 
 # Install nvm:
-if no nvm; then
+if no $([ "$(uname -m)" != x86_64 ] && echo "$(uname -m)/")nvm; then
   # No install scripts as path update isn't required, it's done in gibrc.
-  gitClone creationix/nvm "$XDG_DATA_HOME/nvm"
+  gitClone creationix/nvm "$XDG_DATA_HOME/$([ "$(uname -m)" != x86_64 ] && echo "$(uname -m)/")nvm"
   . "$XDG_DATA_HOME"/nvm/nvm.sh # Load nvm so we can use it below.
   nvm install stable # Install the latest LTS version of node.
 
