@@ -77,7 +77,9 @@ hasSudo() {
   fi
 }
 
+# Summary of what has run, pass fail status plus optional error message. $1 is
+# what it's the status of (should be all-caps).
 finalOutput() {
-  printf "${BCYAN}❯❯❯ INSTALL STATUS:${NC} $?\n"
+  printf "${BCYAN}❯❯❯ $1 STATUS:${NC} $?\n"
   [ "$FINAL_OUTPUT" ] && printf "${BGBRED}❯❯❯ FINAL OUTPUT:${NC} $FINAL_OUTPUT\n"
 }
