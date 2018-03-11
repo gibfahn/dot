@@ -177,9 +177,8 @@ nmap              <SID>ws    <Nop>
 nnoremap          <Tab> :bn<CR>|                    " Tab to switch to next buffer,
 nnoremap          <S-Tab> :bp<CR>|                  "  ↳ Shift-Tab to switch to previous buffer.
 nnoremap          <C-p> <C-i>|                      " <C-o> = go to previous jump, <C-p> is go to next (normally <C-i>, but that == Tab, used above).
-vnoremap          <expr> // 'y/\V'.escape(@",'\').'<CR>'|    " Search for selected text with // (very no-magic mode, escaped backslashes).
-
 vnoremap          <Leader>o :<c-u>call OpenUrl(visualmode())<CR>| " Open the selected text with the appropriate program (like netrw-gx).
+vnoremap          // y/\V<C-R>"<CR>|                " Search for selected text with // (very no-magic mode, doesn't handle backslashes).
 
 "*** Functions used in key mappings above. ***"
 
