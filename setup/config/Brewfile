@@ -45,7 +45,7 @@ brew "exa"                               # Nicer ls replacement.
 brew "tmux"                              # Terminal multiplexer.
 brew "gnupg"                             # gpg command line.
 brew "gpg-agent"                         # gpg daemon.
-brew "rmtrash"                           # `rm` to Trash, aliased to `dl` in gcfg.
+brew "rmtrash"                           # `rm` to Trash, aliased to `dl` in gibrc.
 brew "tig"                               # View git diffs in log.
 cask "docker"                            # Build and run docker images.
 

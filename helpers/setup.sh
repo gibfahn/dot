@@ -3,8 +3,8 @@
 # Helper functions and vars for use in the other setup scripts. Most of these are from
 # my gibrc, but that's not necessarily installed yet.
 
-# Include (source) with this line (assuming you're in gcfg):
-# . $(dirname $0)/helpers/setup.sh # Load helper script from gcfg/helpers.
+# Include (source) with this line (assuming you're in dot):
+# . $(dirname $0)/helpers/setup.sh # Load helper script from dot/helpers.
 
 # No POSIX way to get dir of sourced script.
 [ "$BASH_VERSION" ] && thisDir="$(dirname ${BASH_SOURCE[0]})"

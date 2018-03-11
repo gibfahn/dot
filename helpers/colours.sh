@@ -5,7 +5,7 @@
 # printf "${BBLUE}foo${NC}\n" # Echo foo in bright blue, then reset colour.
 
 # Include (source) with this line:
-# . $(dirname $0)/helpers/colours.sh # Load helper script from gcfg/helpers.
+# . $(dirname $0)/helpers/colours.sh # Load helper script from dot/helpers.
 
 # Colour escape codes, use with . Don't change \033 to
 # \e, that doesn't work on macOS (\x1B instead).

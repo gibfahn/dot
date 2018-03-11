@@ -2,7 +2,7 @@
 
 # Installs things that I use on all Unix systems (e.g. macOS and Linux).
 
-. $(dirname $0)/../helpers/setup.sh # Load helper script from gcfg/helpers.
+. $(dirname $0)/../helpers/setup.sh # Load helper script from dot/helpers.
 
 # Initialise and update submodules (not yet mandatory).
 git submodule init && git submodule update || true

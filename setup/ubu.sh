@@ -2,7 +2,7 @@
 
 # Things I like to have on Ubuntu.
 
-. $(dirname $0)/../helpers/setup.sh # Load helper script from gcfg/helpers.
+. $(dirname $0)/../helpers/setup.sh # Load helper script from dot/helpers.
 
 hasSudo || exit
 
@@ -33,7 +33,7 @@ list+=" neovim"                          # Better vim (works well with my vim co
 list+=" copyq"                           # Clipboard manager with history (needs a bit of manual setup).
 list+=" meld"                            # Graphical diff between folders.
 list+=" entr"                            # Run command on file change (Unixy file/folder watcher).
-list+=" xclip"                           # Copy/paste shell commands, used in gcfg.
+list+=" xclip"                           # Copy/paste shell commands, used in gibrc.
 list+=" tig"                             # Some nice additions to git (e.g. `tig log`).
 list+=" i3"                              # Window manager. Obsolete since I moved to bspwm.
 list+=" dfu-util"                        # Used for flashing my ergodox.

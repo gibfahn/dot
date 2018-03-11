@@ -2,7 +2,7 @@
 
 # Things I like to have on a Mac.
 
-. $(dirname $0)/../helpers/setup.sh # Load helper script from gcfg/helpers.
+. $(dirname $0)/../helpers/setup.sh # Load helper script from dot/helpers.
 
 if ! cat ~/Library/Preferences/com.apple.Terminal.plist | grep -q gib; then
   get "gib Terminal profile."

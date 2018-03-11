@@ -9,7 +9,7 @@
 # example) you just edit ~/.bashrc, and as it's a symlink it'll actually edit
 # dotfiles/.bashrc. Then you can add and commit that change.
 
-. $(dirname $0)/helpers/colours.sh # Load helper script from gcfg/helpers.
+. $(dirname $0)/helpers/colours.sh # Load helper script from dot/helpers.
 
 
 : ${FROMPATH:="$HOME"} # Where you keep your dotfiles, overwrite if necessary.
