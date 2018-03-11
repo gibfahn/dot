@@ -29,3 +29,11 @@ Really specific preferences you almost certainly don't want.
 shortcuts plugin for Firefox and Chrome, and a good alternative to Vimium.
 
 To use my config follow the instructions in the `./SurfingKeys.js` file.
+
+### Inkscape
+
+Color theme, see `./inkscape/README.md`.
+
+### Gimp
+
+Color theme, see `./gimp/README.md`.
