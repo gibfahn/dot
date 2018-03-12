@@ -1,32 +1,32 @@
-# terminal emulator
+# Open a terminal:
 alt + Return
   gnome-terminal
 
-# Bin-in-path program launcher.
+# Bin-in-path program launcher:
 super + @space
   PATH="$HOME/bin:$PATH" dmenu_run
 
-# GUI program launcher (from start menu).
+# GUI program launcher (from start menu):
 super + shift + @space
   j4-dmenu-desktop
 
-# make sxhkd reload its configuration files:
+# Make sxhkd reload its configuration files:
 super + Escape
   pkill -USR1 -x sxhkd && for i in $(bspc query -M --names); do bspc monitor $i -d I II; done
 
-# quit bspwm normally
+# Quit bspwm normally:
 alt + super + Escape
   pkill -x panel; bspc quit
 
-# close and kill
+# Close and kill apps:
 alt + {_,shift + }w
   bspc node -{c,k}
 
-# alternate between the tiled and monocle layout
+# Alternate between tiled and monocle layout:
 alt + m
   bspc desktop -l next
 
-# set the window state
+# Set the window state
 alt + {t,shift + t,s,f}
   bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
 
@@ -35,22 +35,24 @@ alt + {_,shift +}v
   copyq toggle && bspc node --layer {above,below}
 
 # focus the node in the given direction
-alt + {_,shift + }{h,j,k,l}
-  bspc node -{f,s} {west,south,north,east}
+alt + {h,j,k,l}
+  bspc node -f {west,south,north,east}
 
-# focus the next/previous node in the current desktop
-alt + {_,shift + }c
-  bspc node -f {next,prev}.local
+# Move the node to the monitor in the given direction and focus it.
+alt + shift + {h,j,k,l}
+  DIR={west,south,north,east}; \
+  bspc node -m "$DIR"; \
+  bspc node -f "$DIR"
 
-# focus the next/previous desktop in the current monitor
+# Focus the next/previous desktop in the current monitor
 alt + bracket{left,right}
   bspc desktop -f {prev,next}.local
 
-# focus the last node/desktop
+# Focus the last node/desktop
 alt + {grave,Tab}
   bspc {node,desktop} -f last
 
-# focus the older or newer node in the focus history
+# Focus the older or newer node in the focus history
 alt + {o,i}
   bspc wm -h off; \
   bspc node {older,newer} -f; \
