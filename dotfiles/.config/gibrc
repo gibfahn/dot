@@ -110,6 +110,7 @@ elif [ "$uname" = Darwin ]; then
 fi
 
 [ "$uname" = Darwin ] && alias dl=rmtrash
+[ "$uname" = Linux ] && alias dl=gvfs-trash
 
 if [ "$shell" = zsh ]; then # zsh specific options.
   export ZDOTDIR="${XDG_CONFIG_HOME}/zsh" # Path to zsh config files.
