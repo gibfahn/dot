@@ -87,7 +87,7 @@ if no $([ "$(uname -m)" != x86_64 ] && echo "$(uname -m)/")nvm; then
   # No install scripts as path update isn't required, it's done in gibrc.
   gitClone creationix/nvm "$XDG_DATA_HOME/$([ "$(uname -m)" != x86_64 ] && echo "$(uname -m)/")nvm"
   . "$XDG_DATA_HOME"/nvm/nvm.sh # Load nvm so we can use it below.
-  nvm install stable # Install the latest LTS version of node.
+  nvm install --lts # Install the latest LTS version of node.
 
   # Autocompletion for npm (probably needed)
   mkdir -p "$XDG_DATA_HOME/.zfunc"
