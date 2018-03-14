@@ -68,12 +68,12 @@ else
 fi
 
 # Set up autocompletions:
-if exists zsh && no zfunc; then mkdir -p "$XDG_DATA_HOME/zfunc"; fi
+if no zfunc; then mkdir -p "$XDG_DATA_HOME/zfunc"; fi
 
 # Set up zsh scripts:
-if exists zsh && no zsh; then mkdir -p "$XDG_DATA_HOME/zsh"; fi
+if no zsh; then mkdir -p "$XDG_DATA_HOME/zsh"; fi
 
-if exists zsh && no zsh/zsh-syntax-highlighting; then
+if no zsh/zsh-syntax-highlighting; then
   gitClone zsh-users/zsh-syntax-highlighting "$XDG_DATA_HOME/zsh/zsh-syntax-highlighting"
 fi
 
