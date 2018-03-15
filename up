@@ -1,6 +1,7 @@
 #!/bin/sh
 
-# Calls scripts from setup/ if the OS matches.
+# Runs the setup to "install" my dotfiles on your machine. Runs scripts in
+# config/ and then runs ./link.
 
 cd $(dirname $0)
 

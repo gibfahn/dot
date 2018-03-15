@@ -68,19 +68,16 @@ else
 fi
 
 # Set up autocompletions:
-if no zfunc; then mkdir -p "$XDG_DATA_HOME/zfunc"; fi
+mkdir -p "$XDG_DATA_HOME/zfunc"
 
 # Set up zsh scripts:
-if no zsh; then mkdir -p "$XDG_DATA_HOME/zsh"; fi
+mkdir -p "$XDG_DATA_HOME/zsh"
 
-if no zsh/zsh-syntax-highlighting; then
-  gitClone zsh-users/zsh-syntax-highlighting "$XDG_DATA_HOME/zsh/zsh-syntax-highlighting"
-fi
+gitCloneOrUpdate zsh-users/zsh-syntax-highlighting "$XDG_DATA_HOME/zsh/zsh-syntax-highlighting"
 
 # Install neovim-remote, used to connect to existing nvim sessions (try `g cm` in a nvim terminal).
-if not nvr; then
-  pip3 install neovim-remote
-fi
+getOrUpdate "Installing/updating neovim-remote"
+pip3 install -U neovim-remote
 
 # Install nvm:
 if no $([ "$(uname -m)" != x86_64 ] && echo "$(uname -m)/")nvm; then
@@ -109,9 +106,8 @@ if no nvim/site/autoload/plug.vim; then
   exists $VIM && $VIM +PlugInstall +qall # Install/update vim plugins.
 fi
 
-if not javascript-typescript-langserver && ! not node; then
-  npm install --global javascript-typescript-langserver
-fi
+getOrUpdate "Installing/updating javascript-typescript-langserver"
+npm install --global javascript-typescript-langserver@latest
 
 # If you don't use rust just choose the cancel option.
 if [ "$HARDCORE" ] && { no rustup || no cargo; }; then # Install/set up rust.
@@ -135,4 +131,7 @@ if [ "$HARDCORE" ] && { no rustup || no cargo; }; then # Install/set up rust.
 
   # Download rls (https://github.com/rust-lang-nursery/rls):
   rustup component add rls-preview rust-analysis rust-src
+else
+  update "Rust compiler and Cargo"
+  rustup update
 fi

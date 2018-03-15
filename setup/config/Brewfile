@@ -52,7 +52,7 @@ cask "docker"                            # Build and run docker images.
 # Casks (GUI Applications):
 cask "copyq"                             # Clipboard manager with history (needs manual setup).
 cask "google-chrome"                     # You probably want/have Chrome.
-cask "gpgtools"                          # GUI gpg key manager (manual setup required).
+cask "gpg-suite"                         # GUI gpg key manager (manual setup required).
 cask "meld"
 cask "spectacle"                         # Window manager that's easy to get used to.
 cask "vimr"                              # GUI neovim.
