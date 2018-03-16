@@ -40,6 +40,7 @@ list+=" dfu-util"                        # Used for flashing my ergodox.
 list+=" scrot"                           # Take screenshots (works from the command line).
 list+=" firefox-trunk"                   # Nightly (superfast) version of Firefox.
 list+=" ccache"                          # Makes recompilations faster.
+list+=" vagrant"                         # Spin up VMs with the convenience of Docker.
 list+=" python3-pip"                     # pip3 (used for newer python installers). Remove once python3 is default.
 get "apt installing/updating: $list"
 sudo apt install -y $list
