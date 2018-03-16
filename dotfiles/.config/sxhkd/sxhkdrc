@@ -39,10 +39,9 @@ alt + {h,j,k,l}
   bspc node -f {west,south,north,east}
 
 # Move the node to the monitor in the given direction and focus it.
+# TODO(gib): This doesn't always work, work out why.
 alt + shift + {h,j,k,l}
-  DIR={west,south,north,east}; \
-  bspc node -m "$DIR"; \
-  bspc node -f "$DIR"
+  bspc node -n {west,south,north,east}
 
 # Focus the next/previous desktop in the current monitor
 alt + bracket{left,right}
