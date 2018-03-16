@@ -151,7 +151,7 @@ elif [ "$shell" = bash ]; then # Bash specific options.
   PS1=' \[\e[32;1m\]\w $ \[\e[0m\]'
 fi
 
-if exists fzf; then
+if exists fzf && fzf --version >/dev/null 2>&1; then
   for file in "$XDG_DATA_HOME"/fzf/shell/{completion,key-bindings}.$shell; do
     source "$file" # 2>/dev/null || true
   done
