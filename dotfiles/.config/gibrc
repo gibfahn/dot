@@ -207,12 +207,12 @@ alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"' # Makes it look like y
 # This also allows me to frequently `make -j4 install` node master, and have
 # that as the default (in /usr/local/bin/node).
 export npm_config_userconfig="$XDG_CONFIG_HOME/npm/config"
+[ ! -d "$(dirname "$npm_config_userconfig")" ] && command mkdir -p "$(dirname "$npm_config_userconfig")"
 export NVM_DIR="$XDG_DATA_HOME/$([ "$unamem" != x86_64 ] && echo "$unamem/")nvm"
 alias nv='. $NVM_DIR/nvm.sh'  # Start nvm with alias, o/w too much startup cost.
 
 ## Rust commands.
-alias cn="cargo new --bin"; alias cl="cargo clippy"
-alias cb="cargo build"; alias cr="cargo run"; alias ct="cargo test"
+alias cn="cargo new --bin" cb="cargo build" cr="cargo run" ct="cargo test"
 alias ctag='ctags -R . $HOME/bin/src/rust' # Populate ctags from rust src.
 alias ru=rustup e=exercism k=kubectl
 rs() { for i in $@; do rustc ${i%.rs}.rs; ./${i%.rs}; done; } # Compile/run (rs a.rs b).
