@@ -38,6 +38,7 @@
   cpa = cherry-pick --abort
   cpc = cherry-pick --continue
   cps = cherry-pick --skip
+  cpq = cherry-pick --quit # Only undo last commit (that failed) not all of them.
   co  = checkout
   cop = checkout -p # Selectively undo some of the changes you made.
   cot = checkout -t # g cot up/master means checkout master tracking the one in up.
