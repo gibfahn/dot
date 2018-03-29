@@ -6,10 +6,14 @@
 try
   call plug#begin('~/.local/share/nvim/plugged')    " Load plugins with vim-plug.
 
+if has("nvim")                                      " NeoVim specific settings.
+  Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh', } " LSP Support (:h LanguageClient).
+  Plug 'roxma/nvim-completion-manager'              " Completion plugin (used in LSP).
+endif
+
   Plug 'AndrewRadev/splitjoin.vim'                  " gS to split, gJ to join lines.
   Plug 'ap/vim-buftabline'                          " Show buffers in the tab bar.
   Plug 'ap/vim-readdir'                             " Nicer file browser plugin that works with buftabline.
-  Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh', } " LSP Support (:h LanguageClient).
   Plug 'easymotion/vim-easymotion'                  " Go to any word instantly.
   Plug 'fweep/vim-zsh-path-completion'              " Nicer file browser plugin.
   Plug 'gibfahn/vim-gib'                            " Use vim colorscheme.
@@ -20,7 +24,6 @@ try
   Plug 'justinmk/vim-sneak'                         " sab -> go to next ab in code.
   Plug 'keith/swift.vim'                            " Swift syntax highlighting.
   Plug 'pangloss/vim-javascript'                    " JS   language bindings.
-  Plug 'roxma/nvim-completion-manager'              " Completion plugin (used in LSP).
   Plug 'rust-lang/rust.vim'                         " Rust language bindings.
   Plug 'sjl/gundo.vim'                              " Interactive undo tree (<space>u to toggle on/off, q to quit).
   Plug 'tpope/vim-commentary'                       " Autodetect comment type for lang.
