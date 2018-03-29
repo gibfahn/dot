@@ -85,6 +85,7 @@ pth() { # Returns absolute path to file(s) including file name.
 ### PATH ADDITIONS ###
 
 pathadd /usr/local/bin # Missed in some shells.
+pathadd /usr/local/sbin # Missed in some shells.
 pathadd "$HOME/bin" # Put random binaries you want to run in here.
 pathadd /usr/lib/ccache # Add ccache to the path if installed (Linux).
 pathadd /usr/local/opt/ccache/libexec # Add ccache to the path if installed (macOS).
@@ -129,11 +130,11 @@ if [ "$shell" = zsh ]; then # zsh specific options.
   CDPATH=~ # Check ~ for directories after checking . (`c/d/` matches `./c*/d*/`, then tries `~/c*/d*/`).
 
   # Put (or symlink) autocomplete scripts in here.
-  fpath+=("$XDG_DATA_HOME/zfunc")
+  fpath=("$XDG_DATA_HOME/zfunc" $fpath)
 
   # Seems to be a bug in earlier zsh versions.
   zsh_v=(${(@s/./)ZSH_VERSION}) # Convert version string to an array.
-  [ "${zsh_v[0]}" -gt 4 -o "${zsh_v[0]}" -eq 4 -a "${zsh_v[1]}" -gt 3 ] && fpath+=/usr/local/share/zsh-completions # zsh-completions.
+  [ "${zsh_v[0]}" -gt 4 -o "${zsh_v[0]}" -eq 4 -a "${zsh_v[1]}" -gt 3 ] && fpath=(/usr/local/share/zsh-completions $fpath) # zsh-completions.
 
   for file in "$ZDOTDIR"/{completion-keybindings,gib-theme,macos-setdir}.zsh; do
     source "$file" || true

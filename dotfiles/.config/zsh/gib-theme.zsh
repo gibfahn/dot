@@ -2,6 +2,7 @@
 
 # %F{1} style variables are zsh variables, test them with:
 # print -P '%F{214}%K{123}%m%k%f' (see man zshmisc: EXPANSION OF PROMPT SEQUENCES).
+# Added in zsh 4.3.7.
 
 # Good options: ▶ ► ❯ ➜ ⇉ ⇏ ⇛ ⇝ ⇨ ⇶ 🢂  ⭆  ➩ ➭ 🡆 🠞 ⇻
 PROMPT="$([ "$SSH_CLIENT" -o "$SSH_TTY" ] && echo "%F{161}%m%f ")%(?:%F{46}:%F{196})▶▶▶%f "
