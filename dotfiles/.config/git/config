@@ -8,12 +8,12 @@
   # Quote an alias you want to save here (handles all the nonsense quoting stuff).
   quote-string = "!read -r l; printf \\\"!; printf %s \"$l\" | sed 's/\\([\\\"]\\)/\\\\\\1/g'; printf \" #\\\"\\n\" #"
 
-  a   = add
-  ap  = add -p # Adds files in hunks (only add some of the changes you made).
-  aa  = add -A # Adds everything.
-  ama = am --abort
-  amc = am --continue
-  ams = am --skip
+  a   = add           # Add files to index.
+  ap  = add -p        # Adds files in hunks (only add some of the changes you made).
+  aa  = add -A        # Adds everything.
+  ama = am --abort    # Bail out of an am (apply patch) session.
+  amc = am --continue # Include an empty commit as a patch.
+  ams = am --skip     # Skip the current commit you're patching.
 
   b   = branch
   ba  = branch -a # Show all local and remote branches.
@@ -26,33 +26,32 @@
 
   # I manually specify -S because gpgsign only works with Git 2.x. Also it
   # means that test suites using `git commit` don't break.
-  ce  = config --global --edit # Open this file with $VISUAL.
-  c   = commit -S
-  ca  = commit -S -a
-  cm  = commit -S --amend
-  cmn = commit -S --amend --no-edit
-  can = commit -S --amend --no-edit -a
-  cn  = clean -fdx
-  cl  = clone --recursive --origin up # Always include submodules, set default remote to "up".
-  cp  = cherry-pick
-  cpa = cherry-pick --abort
-  cpc = cherry-pick --continue
-  cps = cherry-pick --skip
-  cpq = cherry-pick --quit # Only undo last commit (that failed) not all of them.
-  co  = checkout
-  cop = checkout -p # Selectively undo some of the changes you made.
-  cot = checkout -t # g cot up/master means checkout master tracking the one in up.
+  ce  = config --global --edit         # Open this file with $VISUAL.
+  c   = commit -S                      # Commit with gpg signing.
+  ca  = commit -S -a                   # Commit all changed files with gpg.
+  cm  = commit -S --amend              # Amend the previous commit.
+  cmn = commit -S --amend --no-edit    # Amend the previous commit but don't change the message.
+  can = commit -S --amend --no-edit -a # Add changed files and commit with the same message.
+  cn  = clean -fdx                     # Remove anything that's .gitignored
+  cl  = clone --recursive --origin up  # Always include submodules, set default remote to "up".
+  cp  = cherry-pick                    # Apply commit hash(es) to current branch.
+  cpa = cherry-pick --abort            # Bail out of cherry-pick.
+  cpc = cherry-pick --continue         # Accept current changes and continue to next commit.
+  cpq = cherry-pick --quit             # Only undo last commit (that failed) not all of them.
+  co  = checkout                       # Change to a different commit or reset a file to a commit.
+  cop = checkout -p                    # Selectively undo some of the changes you made.
+  cot = checkout -t                    # g cot up/master means checkout master tracking the one in up.
 
-  d   = diff HEAD             # diff of staged and unstaged..
-  de  = "!git diff HEAD --name-only $@ | xargs $VISUAL #" # Open files changed since last commit in editor.
-  dn  = diff HEAD --name-only # diff of staged and unstaged file names.
-  ds  = diff --staged # Diff of staged files (`git diff` for unstaged).
-  du  = "!git diff $(git headUpstream)"             # diff between working tree and upstream branch.
-  dus = "!git diff --staged $(git headUpstream)"             # diff between working tree and upstream branch.
-  dun = "!git diff $(git headUpstream) --name-only" # diff between working tree and upstream branch file names.
+  d   = diff HEAD                                      # diff of staged and unstaged..
+  de  = "!git diff HEAD --name-only $@ | xargs $VISUAL # " # Open files changed since last commit in editor.
+  dn  = diff HEAD --name-only                          # diff of staged and unstaged file names.
+  ds  = diff --staged                                  # Diff of staged files (`git diff` for unstaged).
+  du  = "!git diff $(git headUpstream)"                # diff between working tree and upstream branch.
+  dus = "!git diff --staged $(git headUpstream)"       # diff between working tree and upstream branch.
+  dun = "!git diff $(git headUpstream) --name-only"    # diff between working tree and upstream branch file names.
 
-  f = fetch
-  fa = fetch --all
+  f = fetch            # Fetch one remote.
+  fa = fetch --all     # Fetch from all the remotes.
   fix = commit --fixup # g fix SHA means rebasing will attach to that SHA.
   # Like commit --amend but for an arbitrary commit (`g fixup @~3.`).
   fixup = "! hash=$(git rev-parse "$1"); git commit --fixup=$hash ${@:2} && EDITOR=true git rebase -i --autostash --autosquash $hash^ #"
@@ -61,35 +60,36 @@
 
   h = help
 
-  l   = log --graph --decorate --oneline # Graph log.
-  la  = log --graph --decorate --oneline --all # Graph log of all branches.
-  ll  = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%C(bold blue)<%an>%Creset' --abbrev-commit
+  # `l` gives you history of current branch, `la` is all commits in repo, `las` is a shortlist of the important commits, `ll` shows you who and when.
+  l   = log --graph --decorate --oneline                                # Graph log.
+  la  = log --graph --decorate --oneline --all                          # Graph log of all commits.
+  las = log --graph --decorate --oneline --all --simplify-by-decoration # Graph log of tag/branch/labelled commits.
+  ll  = log --color --graph --pretty=format:'%C(214)%h%C(reset)%C(196)%d%C(reset) %s %C(35)(%cr)%C(27) <%an>%C(reset)'
 
   mb  = "!git merge-base ${1:-master} ${2:-HEAD} ${@:2} #" # Get commit this branch forked from.
   mc  = "!echo \"$VISUAL\" | grep -iq vi && c=\"-c /=======\" || c=\"\"; git diff --name-only --diff-filter=U | xargs $VISUAL $c" # Open merge conflicts in editor.
-  mf  = merge --ff-only
+  mf  = merge --ff-only # Update branch from other commmit (default upstream) as long as other commit has HEAD as an ancestor.
 
-  p   = push
-  pf  = push --force-with-lease # Better version of push -f.
-  pa  = "!curl -L $1.patch | git am -S --whitespace=fix #" # Patch Github PR.
-  pap = "!curl -L $1.patch | git am -3 -S --whitespace=fix #" # Please patch it.
-  paw = "!curl -L $1.patch | git am -3 -S --whitespace=warn #" # Patch but don't fix whitespace.
-  pl  = pull
-  pt  = "!git push -u $1 $(git headBranch) #" # g pt origin sets branch to track up + pushes.
+  p   = push                                                    # Push commits to a remote.
+  pf  = push --force-with-lease                                 # Better version of push -f.
+  pa  = "!curl -L $1.patch | git am -S --whitespace=fix # "     # Patch Github PR.
+  pap = "!curl -L $1.patch | git am -3 -S --whitespace=fix  # " # Please patch it.
+  paw = "!curl -L $1.patch | git am -3 -S --whitespace=warn # " # Patch but don't fix whitespace.
+  pt  = "!git push -u $1 $(git headBranch) #"                   # g pt origin sets branch to track up + pushes.
 
-  ra  = remote add
-  rb  = rebase -S # Rebase and gpg sign.
-  rba = rebase --abort
-  rbc = rebase --continue
-  rbs = rebase --skip
-  rhh = "!git reset --hard $(git headUpstream)"
-  rh  = reset --hard
-  ri  = rebase -i -S --autosquash
-  rim = "!git rebase -i -S --autosquash $(git merge-base ${1:-master} ${2:-HEAD} ${@:2}) #" # Rebase all commits since you forked the branch.
+  ra  = remote add                                           # Add new remote by url.
+  rb  = rebase -S                                            # Rebase and gpg sign.
+  rba = rebase --abort                                       # Bail on the rebase session.
+  rbc = rebase --continue                                    # Accept the current commit.
+  rbs = rebase --skip                                        # Skip current commit you're rebasing on.
+  rhh = "!git reset --hard $(git headUpstream)"              # Reset hard to the upstream commit.
+  rh  = reset --hard                                         # Reset hard (to HEAD by default).
+  ri  = rebase -i -S --autosquash                            # Interactive rebase.
+  rim = "!git rebase -i -S --autosquash $(git merge-base ${1:-master} ${2:-HEAD} ${@:2}) # " # Rebase all commits since you forked the branch.
   rii = "!git rebase -i -S --autosquash $(git headUpstream)" # Reset to upstream branch, not needed with merge.defaultToUpstream.
-  rr  = remote rename # Change name of remote `g rr origin up`.
-  rs  = remote set-url # Change URL of remote `g rs up hsg:dot`.
-  rv  = remote -v # Show remotes (with URLs).
+  rr  = remote rename                                        # Change name of remote `g rr origin up`.
+  rs  = remote set-url                                       # Change URL of remote `g rs up hsg:dot`.
+  rv  = remote -v                                            # Show remotes (with URLs).
 
   s   = status
   ss  = status --short --branch
@@ -112,50 +112,50 @@
 [apply]
   whitespace = fix # Fix whitespace when applying patches.
 [color]
-  ui = true # Default since git 1.8.4, remove when possible.
+  ui = true        # Default since git 1.8.4, remove when possible.
 
 # Color options: normal, black, red, green, yellow, blue, magenta, cyan, or white (or 0-255).
 # Highlight options: bold, dim, ul (underline), blink, and reverse (swap fg and bg).
 
 [color "branch"]
-  current = 33 # The branch you're currently on.
-  local = normal # Other normal branches.
-  remote = 180 # Local-tracking branches for your remotes.
+  current = 33      # The branch you're currently on.
+  local = normal    # Other normal branches.
+  remote = 180      # Local-tracking branches for your remotes.
   upstream = 214 ul # No idea what this is (make it orange to find out).
   plain = normal ul # No idea what this is (underline it to find out).
 
 [color "diff"]
-  meta = 8 # Header (diff --git a/file b/file).
-  frag = 8 # Line numbers (@@ -7,20 +7,20 @@).
-  func = 251 # The part of the changed file after frag.
-  context = 251 # Lines in the diff that haven't changed.
-  old = red bold # Removed lines (overwritten by diff-highlight).
-  new = green bold # Added lines (overwritten by diff-highlight).
-  commit = 178 # Commit hash in git show.
-  whitespace = red reverse # Whitespace errors (trailing whitespace in the diff).
-  old = 160 # Deleted lines (defaults to red bold).
-  new = 40 # Added lines (defaults to green bold).
-  oldMoved = 161 # Line moved from here.
+  meta = 8                     # Header (diff --git a/file b/file).
+  frag = 8                     # Line numbers (@@ -7,20 +7,20 @@).
+  func = 251                   # The part of the changed file after frag.
+  context = 251                # Lines in the diff that haven't changed.
+  old = red bold               # Removed lines (overwritten by diff-highlight).
+  new = green bold             # Added lines (overwritten by diff-highlight).
+  commit = 178                 # Commit hash in git show.
+  whitespace = red reverse     # Whitespace errors (trailing whitespace in the diff).
+  old = 160                    # Deleted lines (defaults to red bold).
+  new = 40                     # Added lines (defaults to green bold).
+  oldMoved = 161               # Line moved from here.
   oldMovedAlternative = 161 ul # Alternative color to show difference between moved blocks.
-  newMoved = 42 # Line moved to here.
-  newMovedAlternative = 42 ul # Alternative color to show difference between moved blocks.
+  newMoved = 42                # Line moved to here.
+  newMovedAlternative = 42 ul  # Alternative color to show difference between moved blocks.
 
 [color "diff-highlight"] # See https://github.com/git/git/tree/master/contrib/diff-highlight
   oldHighlight = reverse # Apply this to highlight word diff deletion.
-  oldReset = noreverse # Apply this to undo word diff deletion highlighting.
+  oldReset = noreverse   # Apply this to undo word diff deletion highlighting.
   newHighlight = reverse # Apply this to highlight word diffs addition.
-  newReset = noreverse # Apply this to undo word diff addition highlighting.
+  newReset = noreverse   # Apply this to undo word diff addition highlighting.
 
 [color "status"]
-  localBranch = 27 # Only used in status --short.
+  localBranch = 27  # Only used in status --short.
   remoteBranch = 27 # Only used in status --short.
-  nobranch = red # IDK when this is used.
-  header = 8 # Standard git waffle.
-  branch = 27 # Current branch.
-  added = 35 # Files added to index (ready to commit).
-  changed = 172 # Files not added, but tracked by git.
-  untracked = 197 # Files git knows nothing about.
-  unmerged = 196 # Files that have conflicts in git rebase.
+  nobranch = red    # IDK when this is used.
+  header = 8        # Standard git waffle.
+  branch = 27       # Current branch.
+  added = 35        # Files added to index (ready to commit).
+  changed = 172     # Files not added, but tracked by git.
+  untracked = 197   # Files git knows nothing about.
+  unmerged = 196    # Files that have conflicts in git rebase.
 
 [commit]
   # gpgsign = true # Always sign commits, available since Git 2.0.
@@ -166,74 +166,73 @@
   pager = "$(dh=/usr/local/share/git-core/contrib/diff-highlight/diff-highlight; [ -x "$dh" ] && echo "$dh" || echo cat) | less"
 
 [credential]
-  helper = osxkeychain
+  helper = osxkeychain   # Store Git credentials in the macOS keychain.
 
 [diff]
   wsErrorHighlight = all # diff and show show whitespace errors.
-  renames = copies # Copies count as renames.
-  submodule = log # Show information about submodules in diffs and logs.
-  colorMoved = zebra # Highlight moved lines as oldMoved -> newMoved.
+  renames = copies       # Copies count as renames.
+  submodule = log        # Show information about submodules in diffs and logs.
+  colorMoved = zebra     # Highlight moved lines as oldMoved -> newMoved.
 
 [fetch]
-  prune = true # Delete local tracking branches if remote is gone.
+  prune = true             # Delete local tracking branches if remote is gone.
 [format]
-  pretty = fuller # Shows author and committer.
+  pretty = fuller          # Shows author and committer.
 [help]
-  autocorrect = 1 # Autocorrect nonexistant commands after 0.1s.
+  autocorrect = 1          # Autocorrect nonexistant commands after 0.1s.
 [log]
-  follow = true # Log tracks file move/rename.
+  follow = true            # Log tracks file move/rename.
 [merge]
   defaultToUpstream = true # Not set by default before Git 2.0, remove when possible.
-  conflictstyle = diff3 # Show common ancestor in diffs (initially confusing, but very helpful).
+  conflictstyle = diff3    # Show common ancestor in diffs (initially confusing, but very helpful).
 [pull]
-  rebase = true # pull = fetch + rebase, not fetch + merge.
+  rebase = true            # pull = fetch + rebase, not fetch + merge.
 [push]
-  default = simple # Only push the branch I'm on.
-  #followTags = true # Push tags that are annotated and reachable. Off because I don't currently want to push tags by default.
+  default = simple         # Only push the branch I'm on.
 [rebase]
-  autosquash = true # Squash commits with autosquash! as commit message (see `git fix`).
+  autosquash = true        # Squash commits with autosquash! as commit message (see `git fix`).
 [rerere]
-  enabled = true # Remember how I resolved the same merge conflict last time.
+  enabled = true           # Remember how I resolved the same merge conflict last time.
 [submodule]
-  fetchJobs = 8 # Number of jobs to fetch when I submodule clone/update.
+  fetchJobs = 8            # Number of jobs to fetch when I submodule clone/update.
 [status]
-  showStash = true
+  showStash = true         # Show the number of commits in the stash in `git status` output.
 
 # Try `g cl hh:nodejs/node`.
 [url "https://bitbucket.org/"]
     insteadOf = bb:
 
 [url "https://github.com/"]
-    insteadOf = hh: # Hub https.
+    insteadOf = hh:                 # Hub https.
 [url "git@github.com:"]
-    insteadOf = hs: # Hub ssh.
+    insteadOf = hs:                 # Hub ssh.
 [url "https://github.com/gibfahn/"]
-    insteadOf = hhg: # Hub https gibfahn.
+    insteadOf = hhg:                # Hub https gibfahn.
 [url "git@github.com:gibfahn/"]
-    insteadOf = hsg: # Hub ssh gibfahn.
+    insteadOf = hsg:                # Hub ssh gibfahn.
 
 [url "https://gist.github.com/"]
     insteadOf = gist:
 
 [url "https://gitlab.com/"]
-    insteadOf = lh: # Lab https.
+    insteadOf = lh:                 # Lab https.
 [url "git@gitlab.com:"]
-    insteadOf = ls: # Lab ssh.
+    insteadOf = ls:                 # Lab ssh.
 [url "https://gitlab.com/gib/"]
-    insteadOf = lhg: # Lab https gib.
+    insteadOf = lhg:                # Lab https gib.
 [url "git@gitlab.com:gib/"]
-    insteadOf = lsg: # Lab ssh gib.
+    insteadOf = lsg:                # Lab ssh gib.
 
 [url "https://github.ibm.com/"]
-    insteadOf = ih: # IBM https.
+    insteadOf = ih:                 # IBM https.
 [url "git@github.ibm.com:"]
-    insteadOf = is: # IBM ssh.
+    insteadOf = is:                 # IBM ssh.
 [url "https://github.ibm.com/gib/"]
-    insteadOf = ihg: # IBM https gib.
+    insteadOf = ihg:                # IBM https gib.
 [url "git@github.ibm.com:gib/"]
-    insteadOf = isg: # IBM ssh gib.
+    insteadOf = isg:                # IBM ssh gib.
 
 [user]
   # Needs to match gpg signing email.
-  name = Gibson Fahnestock # REPLACEME
-  email = gibfahn@gmail.com #REPLACEME
+  name = Gibson Fahnestock  # REPLACEME
+  email = gibfahn@gmail.com # REPLACEME
