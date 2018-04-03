@@ -252,7 +252,7 @@ call matchadd('ColorColumn', '\%81v', 100)
 
 set path=.,/usr/include,,**                         " Add ** to search path
 if executable("rg")
-  set grepprg=rg\ --vimgrep\ --no-heading         " Use ripgrep for file searching.
+  set grepprg=rg\ -S\ --vimgrep\ --no-heading         " Use ripgrep for file searching.
   set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
 
