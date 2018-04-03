@@ -32,11 +32,11 @@ if [ "$ssh" -a "$GIBRC" = 0 -a "$shell" != zsh ]; then
   if exists zsh; then
     echo "Upgrading to zsh"
     export GIBRC=1
-    exec zsh # Replace existing shell with zsh.
+    zsh && exit || printf "\nERROR(gibrc): Zsh crashed with exit code: $?\n" # Replace existing shell with zsh.
   elif [ "$shell" != bash ] && exists bash; then
     echo "Upgrading to bash"
     export GIBRC=1
-    exec bash # Replace existing shell with bash.
+    bash && exit || printf "\nERROR(gibrc): Bash crashed with exit code: $?\n" # Replace existing shell with bash.
   fi
 fi
 
