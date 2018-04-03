@@ -153,6 +153,7 @@ elif [ "$shell" = bash ]; then # Bash specific options.
 fi
 
 if exists fzf && fzf --version >/dev/null 2>&1; then
+  exists fd && export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git' # Use fd for fuzzy finding if available.
   for file in "$XDG_DATA_HOME"/fzf/shell/{completion,key-bindings}.$shell; do
     source "$file" # 2>/dev/null || true
   done
@@ -217,7 +218,6 @@ alias cn="cargo new --bin" cb="cargo build" cr="cargo run" ct="cargo test"
 alias ctag='ctags -R . $HOME/bin/src/rust' # Populate ctags from rust src.
 alias ru=rustup e=exercism k=kubectl
 rs() { for i in $@; do rustc ${i%.rs}.rs; ./${i%.rs}; done; } # Compile/run (rs a.rs b).
-exists fd && export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git' # Use fd for fuzzy finding if available.
 
 # Build node with ninja.
 alias bn='export CPPFLAGS=-fdiagnostics-color && ./configure && tools/gyp_node.py -f ninja && ninja -C out/Release && ln -fs out/Release/node node'
