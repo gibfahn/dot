@@ -24,7 +24,7 @@ addPPA ppa:neovim-ppa/stable ppa:hluk/copyq ppa:git-core/ppa ppa:ubuntu-mozilla-
 # Apt install things. Added them individually so you can comment out lines to skip.
 list=""                                  # List of things to install.
 list+=" git"                             # Get an up-to-date git from the git-core ppa.
-list+=" curl"                            # Amazingly some installaions don't come with curl.
+list+=" curl"                            # Amazingly some installations don't come with curl.
 list+=" zsh"                             # I use zsh wherever possible.
 list+=" tree"                            # Recursive ls.
 list+=" gcc make"                        # Needed to build C/C++ apps from source (and run Makefiles).
@@ -111,6 +111,8 @@ if not slack; then
   echo "deb https://packagecloud.io/slacktechnologies/slack/debian/ jessie main" | sudo tee /etc/apt/sources.list.d/slack.list >/dev/null
   sudo apt install -y slack
 fi
+
+sudo apt update && sudo apt upgrade
 
 # Make Ctrl-[Shift]-Tab switch tabs in Gnome-Terminal, rather than Ctrl-PgUp/PgDn.
 gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ next-tab '<Primary>Tab'

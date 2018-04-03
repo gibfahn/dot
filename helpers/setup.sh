@@ -27,6 +27,8 @@ exists() { type "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
 
 ### Logging functions
 
+# TODO(gib): Add log prefix to these.
+
 # Used when you're not sure if you'll install or update something.
 getOrUpdate() {
     printf "${CYAN}❯❯❯ Installing/Updating:${NC} $@\n"
@@ -77,24 +79,29 @@ gitClone() {
     git clone https://github.com/$REPO.git $@
 }
 
+# TODO(gib): Should this update from the up remote?
 gitUpdate() {
-  DIR="$1" # First arg is repo.
+  DIR="$1" # First arg is directory.
 
   pushd "$DIR"
 
   git fetch --all
 
-  if [ "$(git status --porcelain)" ]; then
-    git add -A
-    # Amend the previous commit if it's one you made.
-    [ $(git show -s --pretty=%an) = $(git config user.name) ] && FLAGS=--amend
-    git commit $FLAGS -m "My changes as of $(date)"
-  fi
-
   local skip=true
   # If upstream is a different commit as HEAD, rebase:
   if [ "$(git rev-parse $(git headUpstream))" != "$(git rev-parse HEAD)" ]; then
     unset skip
+
+    # If you have uncommitted changes, commit them.
+    if [ "$(git status --porcelain)" ]; then
+      git add -A
+      # Amend the previous commit if it's one you made.
+      [ $(git show -s --pretty=%an) = $(git config user.name) ] &&
+        FLAGS=--amend ||
+        FLAGS="-m 'My changes as of $(date)'"
+      git commit $FLAGS
+    fi
+
     git rebase
 
     if [ -d "$(git rev-parse --git-path rebase-merge)" -o -d "$(git rev-parse --git-path rebase-apply)" ]; then
@@ -137,8 +144,10 @@ hasSudo() {
 # Summary of what has run, pass fail status plus optional error message. $1 is
 # what it's the status of (should be all-caps).
 finalOutput() {
-  printf "${BCYAN}❯❯❯ $1 STATUS:${NC} $?\n"
+  local status="$?"
+  printf "${BCYAN}❯❯❯ $1 STATUS:${NC} $status\n"
   [ "$FINAL_OUTPUT" ] && printf "${BGBRED}❯❯❯ FINAL OUTPUT:${NC} $FINAL_OUTPUT\n"
+  exit "$status"
 }
 
 # Summary of what has run, pass fail status plus optional error message. $1 is

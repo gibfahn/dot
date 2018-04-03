@@ -4,12 +4,12 @@
 # you add your own things that need updating, add to this script.
 
 # Get path to dotfiles.
-dotDir="$(cd "$(dirname "$(readlink $0)")"/..; pwd)"
+dotDir="$(cd "$(dirname "$(readlink $0)")"/../..; pwd)"
 
 . "$dotDir"/helpers/setup.sh # Load helper script from dot/helpers.
 
 # Update dotfiles repo to the latest upstream version, preserving your changes.
-./"$dotDir"/update/updaterepo.sh
+gitUpdate "$dotDir"
 
 # Apply latest dotfile changes to your system.
 ./up

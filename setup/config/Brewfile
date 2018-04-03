@@ -8,9 +8,9 @@ tap "buo/cask-upgrade"                   # Upgrade all casks with `brew cu`.
 
 # Versions of utils that are out-of-date on macOS:
 # Defaults are in /usr/bin, brew installs to /usr/local/bin
-brew "python"                            # Python2
+brew "python"                            # Python3
 brew "git"
-brew "python3"
+brew "python2"
 brew "bash"
 brew "zsh"
 

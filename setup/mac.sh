@@ -73,6 +73,9 @@ else
   skip "brew HARDCORE packages (HARDCORE not specified)."
 fi
 
+# Upgrade everything, even things that weren't in your Brewfile.
+brew upgrade
+
 if not langserver-swift && ! not swift; then
   gitClone rlovelett/langserver-swift "$HOME"/bin/src/langserver-swift
   (cd "$HOME/bin/src/langserver-swift"; make release)
