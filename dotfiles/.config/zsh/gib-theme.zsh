@@ -20,19 +20,27 @@ preexec() { unset timer_prompt; timer="${timer:-$SECONDS}"; }
 # Log the time the command took if at least 1s before zsh shows the result of the command.
 precmd() { [ "$timer" -a "$SECONDS" != "$timer" ] && timer_prompt=" $(($SECONDS - $timer))s" || unset timer_prompt; unset timer; }
 
+# Timeout a command after $1 microseconds (returns 142 exit code if it times out).
+_timeout() {
+  perl -e 'use Time::HiRes "ualarm"; ualarm shift; exec @ARGV' "$@"
+}
+
 # Outputs current branch info in prompt format
 _git_prompt_info_gib() {
-  [ -d .git -o "$(command git rev-parse --is-inside-work-tree 2>/dev/null)" ] &&
-    echo " %F{33}(%F{226}$(_git_upstream_diff_gib)%F{33}$(command git describe --contains --all --always HEAD 2>/dev/null)$(_parse_git_dirty_gib)%F{33})%f"
+  [[ -d .git || "$(_timeout 100000 git rev-parse --is-inside-work-tree 2>/dev/null; echo $?)" =~ '0|142' ]] &&
+    echo " %F{33}(%F{226}$(_git_upstream_diff_gib)%F{33}$(timeout 100000 git describe --contains --all --always HEAD 2>/dev/null || echo "?")$(_parse_git_dirty_gib)%F{33})%f"
 }
 
 # Checks if working tree is dirty
 _parse_git_dirty_gib() {
-  [ "$(command git status --porcelain --ignore-submodules=none 2> /dev/null | tail -n1)" ] && echo "%F{226}✦"
+  local git_status
+  git_status="$(_timeout 100000 git status --porcelain --ignore-submodules=none 2> /dev/null | tail -n1)"
+  [ "$?" = 142 ] && echo "%F{226}¿"
+  [ "$git_status" ] && echo "%F{226}✦"
 }
 
 _git_upstream_diff_gib() {
-  local -a diff; diff=($(command git rev-list --left-right --count HEAD...@{upstream} 2>/dev/null))
+  local -a diff; diff=($(_timeout 100000 git rev-list --left-right --count HEAD...@{upstream} 2>/dev/null))
   if [ "$?" != 0 ]; then
     printf !
   # zsh arrays start at 1 not 0.
