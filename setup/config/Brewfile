@@ -5,6 +5,7 @@ tap "caskroom/versions"                  # Beta versions of apps.
 tap "homebrew/bundle"                    # Allows you to use Brewfiles.
 tap "homebrew/completions"               # Shell completions.
 tap "buo/cask-upgrade"                   # Upgrade all casks with `brew cu`.
+tap "caskroom/fonts"                     # Let's you `brew cask install` fonts.
 
 # Versions of utils that are out-of-date on macOS:
 # Defaults are in /usr/bin, brew installs to /usr/local/bin
@@ -58,3 +59,4 @@ cask "spectacle"                         # Window manager that's easy to get use
 cask "vimr"                              # GUI neovim.
 cask "hyperswitch"                       # Better Cmd-Tab (only windows on a screen).
 cask "disk-inventory-x"                  # Graphical view of what's taking up disk space.
+cask "font-fira-code"                    # Nicer programming font (supports powerline).

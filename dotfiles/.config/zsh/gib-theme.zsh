@@ -4,11 +4,14 @@
 # print -P '%F{214}%K{123}%m%k%f' (see man zshmisc: EXPANSION OF PROMPT SEQUENCES).
 # Added in zsh 4.3.7.
 
-# Good options: ▶ ► ❯ ➜ ⇉ ⇏ ⇛ ⇝ ⇨ ⇶ 🢂  ⭆  ➩ ➭ 🡆 🠞 ⇻
-PROMPT="$([ "$SSH_CLIENT" -o "$SSH_TTY" ] && echo "%F{161}%m%f ")%(?:%F{46}:%F{196})▶▶▶%f "
+# Good prompt options:  ▶ ► ❯ ➜ ⇉ ⇏ ⇛ ⇝ ⇨ ⇶ 🢂  ⭆  ➩ ➭ 🡆 🠞 ⇻
+
+PROMPT="$([ "$SSH_CLIENT" -o "$SSH_TTY" ] && echo "%F{161}%m%f ")%(?:%K{46}:%K{196})%F{0}···%(?:%F{46}:%F{196})%k%f "
+
+# Uncomment this line if you want a less visible prompt or use a font that doesn't support the triangle glyph ().
+# PROMPT="$([ "$SSH_CLIENT" -o "$SSH_TTY" ] && echo "%F{161}%m%f ")%(?:%F{46}:%F{196})···❯%f "
 
 # Put full path and git info on right of prompt.
-# RPROMPT='$fullPath$timer_prompt$(git_prompt_info)'
 RPROMPT='%(?:%F{28}:%F{88})%~%f%F{14}$timer_prompt%f$(_git_prompt_info_gib)'
 
 # Record the time at which the command began before zsh executes the command.

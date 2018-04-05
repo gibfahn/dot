@@ -19,7 +19,7 @@ addPPA() {
   [ "$added" ] && sudo apt -y update || true
 }
 
-addPPA ppa:neovim-ppa/stable ppa:hluk/copyq ppa:git-core/ppa ppa:ubuntu-mozilla-daily/ppa
+addPPA ppa:neovim-ppa/stable ppa:hluk/copyq ppa:git-core/ppa ppa:ubuntu-mozilla-daily/ppa universe
 
 # Apt install things. Added them individually so you can comment out lines to skip.
 list=""                                  # List of things to install.
@@ -42,6 +42,7 @@ list+=" firefox-trunk"                   # Nightly (superfast) version of Firefo
 list+=" ccache"                          # Makes recompilations faster.
 list+=" vagrant"                         # Spin up VMs with the convenience of Docker.
 list+=" python3-pip"                     # pip3 (used for newer python installers). Remove once python3 is default.
+list+=" fonts-firacode"                  # Nicer font for your terminal.
 get "apt installing/updating: $list"
 sudo apt install -y $list
 
@@ -117,6 +118,7 @@ sudo apt update && sudo apt upgrade
 # Make Ctrl-[Shift]-Tab switch tabs in Gnome-Terminal, rather than Ctrl-PgUp/PgDn.
 gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ next-tab '<Primary>Tab'
 gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ prev-tab '<Primary><Shift>Tab'
+# TODO(gib): Add setting to make gnome-terminal use the FiraCode font (installed above).
 
 XKB=/usr/share/X11/xkb/
 if [ "$HARDCORE" -a ! -d "$XKB".git ]; then # Set up xkb key remapping.
