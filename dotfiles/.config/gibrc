@@ -114,12 +114,11 @@ fi
 [ "$uname" = Linux ] && alias dl=gvfs-trash
 
 if [ "$shell" = zsh ]; then # zsh specific options.
-  export ZDOTDIR="${XDG_CONFIG_HOME}/zsh" # Path to zsh config files.
-
+  export ZDOTDIR="${XDG_CONFIG_HOME}/zsh" # Path to zsh config files. 
   # cd pushes onto pushd stack (Try `cd -<Tab>`)
   # If you type a file name/path by itself, cd to it, don't print dir on cd unless in $CDPATH.
   setopt autopushd autocd pushd_silent pushdignoredups pushdminus
-  setopt prompt_subst # Allow variables and functions to be used in the prompt.
+  setopt prompt_subst prompt_percent # Allow variables and functions to be used in the prompt.
   setopt no_list_ambiguous # Show menu on first tab if multiple matches (don't wait for second tab).
   setopt no_list_beep # Don't beep if tab-complete has multiple choices, only if no such file.
   setopt incappendhistory # Add to history file immediately (don't wait till shell exits).
@@ -134,22 +133,35 @@ if [ "$shell" = zsh ]; then # zsh specific options.
 
   # Seems to be a bug in earlier zsh versions.
   zsh_v=(${(@s/./)ZSH_VERSION}) # Convert version string to an array.
-  [ "${zsh_v[0]}" -gt 4 -o "${zsh_v[0]}" -eq 4 -a "${zsh_v[1]}" -gt 3 ] && fpath=(/usr/local/share/zsh-completions $fpath) # zsh-completions.
+  [[ "${zsh_v[0]}" -gt 4 || ("${zsh_v[0]}" -eq 4 && "${zsh_v[1]}" -gt 3) ]] && fpath=(/usr/local/share/zsh-completions $fpath) # zsh-completions.
+  # [ "${zsh_v[0]}" -gt 4 -o "${zsh_v[0]}" -eq 4 -a "${zsh_v[1]}" -gt 3 ] && fpath=(/usr/local/share/zsh-completions $fpath) # zsh-completions.
 
   for file in "$ZDOTDIR"/{completion-keybindings,gib-theme,macos-setdir}.zsh; do
     source "$file" || true
   done
-  [ "$unamem" != s390x ] && source "$XDG_DATA_HOME/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" || true
+  [[ "$unamem" != s390x ]] && source "$XDG_DATA_HOME/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" || true
 
 elif [ "$shell" = bash ]; then # Bash specific options.
   set -o vi # Vim mode in bash.
   shopt -s autocd 2>/dev/null # type directory name to cd.
   cs() { cd "$@" && ls; } # cs => cd and ls.
   cd=cs # Used in .. commands below (so .. does `cs ..`).
-  CDPATH=:~ # Check ~ for directories after checking . (`c/d/` matches `./c*/d*/`, then tries `~/c*/d*/`).
+  CDPATH=:~ # Check ~ for directories after checking .
   bind Space:magic-space 2>/dev/null # !31 autoexpands on space.
   bind 'set completion-ignore-case on' 2>/dev/null # case-insensitive tab completion.
-  PS1=' \[\e[32;1m\]\w $ \[\e[0m\]'
+
+  _gib_bash_prompt_command() {
+    local ret_status="$?"
+    local no_col='\e[0m' ret_col='\e[38;5;46m'
+    [ "$ret_status" != 0 ] && ret_col='\e[38;5;196m'
+
+    PS1="\n"
+    [ "$ssh" ] && PS1+='\e[38;5;161m\h '"$no_col"
+    PS1+="${ret_col}·❯${no_col} "
+
+    printf "${ret_col}%*s${no_col}" "$COLUMNS" "$(pwd | sed "s|^$HOME|~|")" # Right prompt equivalent in bash.
+  }
+  PROMPT_COMMAND=_gib_bash_prompt_command # Use the above function to generate the prompt.
 fi
 
 if exists fzf && fzf --version >/dev/null 2>&1; then
@@ -162,7 +174,7 @@ command mkdir -p "$XDG_CACHE_HOME/$shell"  # Create HISTFILE dir if necessary.
 
 ### ALIASES ###
 
-alias x=exit # x exits the terminal.
+alias x="exit 0" # x exits the terminal.
 alias c=clear # c clears the terminal screen (can also use Ctrl-L).
 alias g=git # Use with commands in $c/git/config for best results.
 
@@ -176,11 +188,10 @@ gcl() {
 
 alias path='echo $PATH' # Single quotes so we echo path at runtime, not alias time.
 alias h=history # Shows command history.
-alias s='printf "\033[2 q" && ssh' # Reset cursor to block and ssh.
+alias s=ssh # Reset cursor to block and ssh.
 alias dt="date +%Y-%m-%d" # Basic date format (unambiguous, easy to sort etc.)
 alias dT="date +%d-%b-%y" # More readable date format (ambiguous).
 alias cal='cal | grep --color -EC6 "\b$(date +%e | sed "s/ //g")"' # More readable date format (ambiguous).
-scpkey() { ssh $1 'mkdir -p ~/.ssh'; scp ~/.ssh/${2:-authorized_keys_scp} $1:~/.ssh/authorized_keys; } # scp key to host.
 
 alias l='ls -lAh' # Hidden, detail, human readable numbers.
 alias la='ls -A'  # List hidden files as well.
@@ -225,10 +236,9 @@ alias bn='export CPPFLAGS=-fdiagnostics-color && ./configure && tools/gyp_node.p
 ## Set prompt for SSH windows.
 if [ "$ssh" ]; then
   case $shell in
-    zsh|fish) ;; # These should be set elsewhere.
-    bash) PS1='\[\e[35;1m\]\h \n \w $ \[\e[0m\]' ;;
+    zsh|fish|bash) ;; # These should be set elsewhere.
     ksh93) PS1='\E[35;1m '"$(hostname)"' \n $PWD \E[0m $ ' ;;
-    *) PS1="$(uname -n)"' $PWD $ ' ;;
+    *) PS1="$(hostname) ·❯ " ;;
   esac
 else # Things to only do if we're not in SSH mode.
   # Set key repeat rate if available (Linux only). You probably want something less insane here, like rate 250 30.

@@ -79,6 +79,8 @@ gitCloneOrUpdate zsh-users/zsh-syntax-highlighting "$XDG_DATA_HOME/zsh/zsh-synta
 getOrUpdate "Installing/updating neovim-remote"
 pip3 install -U neovim-remote
 
+gitCloneOrUpdate mafredri/zsh-async "$XDG_DATA_HOME/zsh/zsh-async"
+
 # Install nvm:
 if no $([ "$(uname -m)" != x86_64 ] && echo "$(uname -m)/")nvm; then
   # No install scripts as path update isn't required, it's done in gibrc.
