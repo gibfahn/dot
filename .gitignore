@@ -1,1 +1,2 @@
-dotfiles/.config/nvim/autoload
+/dotfiles/.config/nvim/autoload
+/.env

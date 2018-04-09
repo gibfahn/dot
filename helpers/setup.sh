@@ -80,6 +80,8 @@ gitClone() {
 }
 
 # TODO(gib): Should this update from the up remote?
+# TODO(gib): Return error code if rebase had conflicts (and print next steps).
+# TODO(gib): Maybe create a backup branch.
 gitUpdate() {
   DIR="$1" # First arg is directory.
 
@@ -87,7 +89,8 @@ gitUpdate() {
 
   git fetch --all
 
-  local skip=true
+  local skip=true   # Whether we did anything or just skipped this update.
+  local exit_code=0 # What the function should return (default 0 == success).
   # If upstream is a different commit as HEAD, rebase:
   if [ "$(git rev-parse $(git headUpstream))" != "$(git rev-parse HEAD)" ]; then
     unset skip
@@ -104,8 +107,10 @@ gitUpdate() {
 
     git rebase
 
-    if [ -d "$(git rev-parse --git-path rebase-merge)" -o -d "$(git rev-parse --git-path rebase-apply)" ]; then
+    if [ -d "$(git rev-parse --git-path rebase-merge &>/dev/null)" ] ||
+       [ -d "$(git rev-parse --git-path rebase-apply &>/dev/null)" ]; then
       addError "Git rebase failed for $1"
+      exit_code=1
       git rebase --abort
     fi
   fi
@@ -118,6 +123,7 @@ gitUpdate() {
 
   [ "$skip" ] && skip "$@" || update "$@"
   popd
+  return "$exit_code"
 }
 
 # If the repo isn't there, clone it, if it is, update it.

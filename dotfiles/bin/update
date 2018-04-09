@@ -9,7 +9,19 @@ dotDir="$(cd "$(dirname "$(readlink $0)")"/../..; pwd)"
 . "$dotDir"/helpers/setup.sh # Load helper script from dot/helpers.
 
 # Update dotfiles repo to the latest upstream version, preserving your changes.
-gitUpdate "$dotDir"
+# TODO(gib): # Should really prompt you to go update, not just bail, definitely shouldn't just continue.
+
+gitUpdate "$dotDir" || {
+  printf "${RED}ERROR:${NC} Update failed, go to your dot repo and manually run these commands to rebase and fix conflicts:
+    git rebase
+    git mc # Runs my alias to fix merge conflicts.
+    git rebase --continue # Till you're done.
+
+    If everything goes wrong, you can go back to where you where with:
+
+    git checkout $(cd "$dotDir"; git rev-parse --short HEAD)\n\n"
+  exit 1
+}
 
 # Apply latest dotfile changes to your system.
 ./up
