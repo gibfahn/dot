@@ -14,6 +14,7 @@ GIBRC="${GIBRC:-0}" # First time through this is 0, next time 1 (etc).
 timer=$SECONDS # Show how long startup took from this point at first prompt.
 
 exists() { which "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
+works() { "$1" --version >/dev/null 2>&1; } # Check if command actually works (can get its version).
 
 # Internal use variables (shell=current shell, ssh=whether we're sshed).
 [ "$SSH_CLIENT" -o "$SSH_TTY" ] && ssh="true" || ssh=""
@@ -206,7 +207,7 @@ alias -- -="$cd -" # - cd's to the last directory.
 # Execute previous commands (1 = !-2, 2 = !-3 etc., remember that Enter is !!)
 alias 1="fc -e : -2"; alias 2="fc -e : -3"
 
-{ exists nvim && VIM=nvim; } || { exists vim && VIM=vim; } || VIM=vi # Take what you can get.
+{ works nvim && VIM=nvim; } || { works vim && VIM=vim; } || VIM=vi # Take what you can get.
 export VISUAL=${VISUAL:-$VIM} EDITOR=${EDITOR:-$VIM} # Set vim/nvim as the default editor.
 alias xv="xargs \$${ZSH_VERSION:+=}VISUAL" v="\$${ZSH_VERSION:+=}VISUAL" # Work around zsh's "helpful" autoquoting.
 exists vimr && alias vm=vimr # Use `vm` for GUI vim, need to add a Linux equivalent.
