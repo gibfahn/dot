@@ -192,7 +192,6 @@ alias h=history # Shows command history.
 alias s=ssh # Reset cursor to block and ssh.
 alias dt="date +%Y-%m-%d" # Basic date format (unambiguous, easy to sort etc.)
 alias dT="date +%d-%b-%y" # More readable date format (ambiguous).
-alias cal='cal | grep --color -EC6 "\b$(date +%e | sed "s/ //g")"' # More readable date format (ambiguous).
 
 alias l='ls -lAh' # Hidden, detail, human readable numbers.
 alias la='ls -A'  # List hidden files as well.
