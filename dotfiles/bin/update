@@ -24,4 +24,6 @@ gitUpdate "$dotDir" || {
 }
 
 # Apply latest dotfile changes to your system.
+pushd "$dotDir" &>/dev/null
 ./up
+popd
