@@ -113,7 +113,9 @@ if not slack; then
   sudo apt install -y slack
 fi
 
-sudo apt update && sudo apt upgrade
+sudo apt -y update \
+  && sudo apt -y upgrade \
+  && sudo apt -y autoremove --purge
 
 # Make Ctrl-[Shift]-Tab switch tabs in Gnome-Terminal, rather than Ctrl-PgUp/PgDn.
 gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ next-tab '<Primary>Tab'

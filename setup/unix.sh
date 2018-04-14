@@ -76,8 +76,11 @@ mkdir -p "$XDG_DATA_HOME/zsh"
 gitCloneOrUpdate zsh-users/zsh-syntax-highlighting "$XDG_DATA_HOME/zsh/zsh-syntax-highlighting"
 
 # Install neovim-remote, used to connect to existing nvim sessions (try `g cm` in a nvim terminal).
+# Also install neovim (Python plugin framework for neovim).
 getOrUpdate "Installing/updating neovim-remote"
-pip3 install -U neovim-remote
+pip=pip
+exists pip3 && pip=pip3
+$pip install -U neovim-remote neovim
 
 gitCloneOrUpdate mafredri/zsh-async "$XDG_DATA_HOME/zsh/zsh-async"
 

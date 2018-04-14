@@ -112,10 +112,10 @@ elif [ "$uname" = Darwin ]; then
 fi
 
 [ "$uname" = Darwin ] && alias dl=rmtrash
-[ "$uname" = Linux ] && alias dl=gvfs-trash
+[ "$uname" = Linux ] && alias dl="gio trash"
 
 if [ "$shell" = zsh ]; then # zsh specific options.
-  export ZDOTDIR="${XDG_CONFIG_HOME}/zsh" # Path to zsh config files. 
+  export ZDOTDIR="${XDG_CONFIG_HOME}/zsh" # Path to zsh config files.
   # cd pushes onto pushd stack (Try `cd -<Tab>`)
   # If you type a file name/path by itself, cd to it, don't print dir on cd unless in $CDPATH.
   setopt autopushd autocd pushd_silent pushdignoredups pushdminus
