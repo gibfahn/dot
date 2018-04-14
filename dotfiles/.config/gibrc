@@ -151,6 +151,7 @@ elif [ "$shell" = bash ]; then # Bash specific options.
   bind Space:magic-space 2>/dev/null # !31 autoexpands on space.
   bind 'set completion-ignore-case on' 2>/dev/null # case-insensitive tab completion.
 
+  # TODO(gib): Fix bug where if you type a whole line, the second line wraps and overwrites the first one.
   _gib_bash_prompt_command() {
     local ret_status="$?"
     local no_col='\e[0m' ret_col='\e[38;5;46m'
