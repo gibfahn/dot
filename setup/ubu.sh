@@ -24,6 +24,7 @@ addPPA ppa:neovim-ppa/stable ppa:hluk/copyq ppa:git-core/ppa ppa:ubuntu-mozilla-
 # Apt install things. Added them individually so you can comment out lines to skip.
 list=""                                  # List of things to install.
 list+=" git"                             # Get an up-to-date git from the git-core ppa.
+list+=" gcc g++"                         # Should be there already, but make sure.
 list+=" curl"                            # Amazingly some installations don't come with curl.
 list+=" zsh"                             # I use zsh wherever possible.
 list+=" tree"                            # Recursive ls.
@@ -128,7 +129,7 @@ if [ "$HARDCORE" -a ! -d "$XKB".git ]; then # Set up xkb key remapping.
   sudo chown -R $USER:`id -gn` "$XKB"
   pushd /usr/share/X11/xkb
   git init
-  git remote add up git@github.com/gibfahn/xkb.git
+  git remote add up git@github.com:gibfahn/xkb.git
   git fetch --all
   git reset up/master
   if [ "$(git status --porcelain)" ]; then
