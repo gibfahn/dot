@@ -3,7 +3,6 @@ tap "burntsushi/ripgrep", "https://github.com/BurntSushi/ripgrep.git"
 tap "caskroom/cask"                      # `brew cask` for GUI apps.
 tap "caskroom/versions"                  # Beta versions of apps.
 tap "homebrew/bundle"                    # Allows you to use Brewfiles.
-tap "homebrew/completions"               # Shell completions.
 tap "buo/cask-upgrade"                   # Upgrade all casks with `brew cu`.
 tap "caskroom/fonts"                     # Let's you `brew cask install` fonts.
 

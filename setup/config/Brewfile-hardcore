@@ -13,7 +13,7 @@ brew "kubernetes-helm"                   # Package manager for Docker.
 brew "postgresql"                        # Solid database.
 brew "redis"                             # In-memory key-object store.
 cask "gimp"                              # Heavyweight photo editor.
-cask "firefoxnightly"                    # For those sweet Rust-based improvements.
+cask "firefox-nightly"                    # For those sweet Rust-based improvements.
 cask "vagrant"                           # Quick command-line image spin-up.
 cask "virtualbox"                        # Manage VMs (Linux or Windows).
 cask "slack-beta"                        # Everyone uses Slack right?
