@@ -99,7 +99,7 @@ gitUpdate() {
     if [ "$(git status --porcelain)" ]; then
       git add -A
       # Amend the previous commit if it's one you made.
-      [ $(git show -s --pretty=%an) = $(git config user.name) ] &&
+      [ "$(git show -s --pretty=%an)" = "$(git config user.name)" ] &&
         FLAGS=--amend ||
         FLAGS="-m 'My changes as of $(date)'"
       git commit $FLAGS
