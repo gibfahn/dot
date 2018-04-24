@@ -171,38 +171,13 @@
                 "type": "basic"
               }, {
                 "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "from": { "key_code": "t", "modifiers": { "optional": [ "option", "shift", "command" ] } },
-                "to": [{ "shell_command": "open -a Terminal" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
                 "from": { "key_code": "a", "modifiers": { "optional": [ "option", "command" ] } },
                 "to": [{ "shell_command": "open -a Alacritty" }],
                 "type": "basic"
               }, {
                 "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "from": { "key_code": "g", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "shell_command": "open -a 'Google Chrome'" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "from": { "key_code": "w", "modifiers": { "optional": [ "any" ], "mandatory": [ "shift" ] } },
-                "to": [{ "shell_command": "networksetup -setairportpower en0 off; networksetup -setairportpower en0 on" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "from": { "key_code": "w", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "shell_command": "open -a WorkFlowy" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "from": { "key_code": "f", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "shell_command": "open -a '/Applications/FirefoxNightly.app/Contents/MacOS/firefox'" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "from": { "key_code": "v", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "shell_command": "open -a VimR" }],
+                "from": { "key_code": "c", "modifiers": { "optional": [ "any" ] } },
+                "to": [{ "shell_command": "open -a HipChat" }],
                 "type": "basic"
               }, {
                 "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
@@ -211,8 +186,38 @@
                 "type": "basic"
               }, {
                 "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
+                "from": { "key_code": "f", "modifiers": { "optional": [ "any" ] } },
+                "to": [{ "shell_command": "open -a 'Firefox Nightly'" }],
+                "type": "basic"
+              }, {
+                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
+                "from": { "key_code": "g", "modifiers": { "optional": [ "any" ] } },
+                "to": [{ "shell_command": "open -a 'Google Chrome'" }],
+                "type": "basic"
+              }, {
+                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
                 "from": { "key_code": "s", "modifiers": { "optional": [ "any" ] } },
                 "to": [{ "shell_command": "open -a Slack" }],
+                "type": "basic"
+              }, {
+                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
+                "from": { "key_code": "t", "modifiers": { "optional": [ "option", "shift", "command" ] } },
+                "to": [{ "shell_command": "open -a Terminal" }],
+                "type": "basic"
+              }, {
+                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
+                "from": { "key_code": "w", "modifiers": { "optional": [ "any" ] } },
+                "to": [{ "shell_command": "open -a WorkFlowy" }],
+                "type": "basic"
+              }, {
+                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
+                "from": { "key_code": "w", "modifiers": { "mandatory": [ "shift" ], "optional": [ "any" ] } },
+                "to": [{ "shell_command": "networksetup -setairportpower en0 off; networksetup -setairportpower en0 on" }],
+                "type": "basic"
+              }, {
+                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
+                "from": { "key_code": "v", "modifiers": { "optional": [ "any" ] } },
+                "to": [{ "shell_command": "open -a VimR" }],
                 "type": "basic"
               } ]
           }, {
@@ -310,6 +315,36 @@
               "from": { "key_code": "right_option" },
               "to": { "key_code": "right_command" }
             } ]
+        }, {
+          "disable_built_in_keyboard_if_exists": false,
+          "fn_function_keys": [],
+          "identifiers": {
+            "is_keyboard": true,
+            "is_pointing_device": false,
+            "product_id": 632,
+            "vendor_id": 1452
+          },
+          "ignore": false,
+          "manipulate_caps_lock_led": true,
+          "simple_modifications": [ {
+              "from": { "key_code": "non_us_backslash" },
+              "to": { "key_code": "grave_accent_and_tilde" }
+            }, {
+              "from": { "key_code": "grave_accent_and_tilde" },
+              "to": { "key_code": "f17" }
+            } ]
+        }, {
+          "disable_built_in_keyboard_if_exists": false,
+          "fn_function_keys": [],
+          "identifiers": {
+            "is_keyboard": true,
+            "is_pointing_device": false,
+            "product_id": 25700,
+            "vendor_id": 65261
+          },
+          "ignore": false,
+          "manipulate_caps_lock_led": false,
+          "simple_modifications": []
         } ],
       "fn_function_keys": [ {
           "from": { "key_code": "f1" },
@@ -353,7 +388,8 @@
       "simple_modifications": [],
       "virtual_hid_keyboard": {
         "caps_lock_delay_milliseconds": 0,
-        "keyboard_type": "ansi"
+        "country_code": 0,
+        "keyboard_type": "iso"
       } }, {
       "complex_modifications": {
         "parameters": {
@@ -408,7 +444,8 @@
       "simple_modifications": [],
       "virtual_hid_keyboard": {
         "caps_lock_delay_milliseconds": 0,
-        "keyboard_type": "ansi"
+        "country_code": 0,
+        "keyboard_type": "iso"
       } }
   ],
   "title": "Gib's rules."
