@@ -223,16 +223,11 @@
 [url "git@gitlab.com:gib/"]
     insteadOf = lsg:                # Lab ssh gib.
 
-[url "https://github.ibm.com/"]
-    insteadOf = ih:                 # IBM https.
-[url "git@github.ibm.com:"]
-    insteadOf = is:                 # IBM ssh.
-[url "https://github.ibm.com/gib/"]
-    insteadOf = ihg:                # IBM https gib.
-[url "git@github.ibm.com:gib/"]
-    insteadOf = isg:                # IBM ssh gib.
-
 [user]
   # Needs to match gpg signing email.
   name = Gibson Fahnestock  # REPLACEME
   email = gibfahn@gmail.com # REPLACEME
+
+# Work config for work repos.
+[includeIf "gitdir:~/wrk/**"]
+  path = ~/.config/git/wrk-config
