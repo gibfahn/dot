@@ -15,6 +15,7 @@ endif
   Plug 'ap/vim-buftabline'                          " Show buffers in the tab bar.
   Plug 'ap/vim-readdir'                             " Nicer file browser plugin that works with buftabline.
   Plug 'easymotion/vim-easymotion'                  " Go to any word instantly.
+  Plug 'eclipse/eclipse.jdt.ls', { 'dir': '~/.local/share/eclipse.jdt.ls', 'do': './mvnw clean verify' } " Java Language Server.
   Plug 'fweep/vim-zsh-path-completion'              " Nicer file browser plugin.
   Plug 'gibfahn/vim-gib'                            " Use vim colorscheme.
   Plug 'godlygeek/tabular'                          " Make tables easier (:help Tabular).
@@ -120,6 +121,7 @@ nnoremap          <Leader>f :Files<CR>|             " Search file names    for f
 nnoremap          <Leader>F :grep |                 "  ↳          contents for file.
 nnoremap          <Leader>gd :w !diff % - <CR>|     " Diff between saved file and current.
 nnoremap          <Leader>gf :call DupBuffer()<CR>gF|        " Open file path:row:col under cursor in last window.
+nnoremap          <Leader>gg :call LanguageClient_textDocument_documentSymbol()<CR>| " Grep for symbols in the current file.
 nnoremap          <Leader>gt :set et!<CR>:set et?<CR>|       " Toggle tabs/spaces.
 nnoremap          <Leader>gq :set fo+=t<CR>:set fo?<CR>|     " Turn on  line wrapping,
 nnoremap          <Leader>gQ :set fo-=t<CR>:set fo?<CR>|     "  ↳   off
@@ -240,10 +242,12 @@ let g:peekaboo_window = "vert bo 50new"             " Increase peekaboo window w
 let g:gundo_right = 1                               " Undo window on right.
 let g:gundo_preview_bottom = 1                      " Undo diff preview on bottom.
 let g:LanguageClient_serverCommands = {
-    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+    \ 'rust': ['rls'],
     \ 'swift': ['langserver-swift'],
     \ 'javascript': ['javascript-typescript-stdio'],
     \ 'javascript.jsx': ['javascript-typescript-stdio'],
+    \ 'python': ['pyls'],
+    \ 'java': ['jdtls', '-Dlog.level=ALL'],
     \ }
 
 " Highlight the 81st column of text (in dark grey so it doesn't distract).
@@ -267,6 +271,8 @@ augroup gibAutoGroup                                " Group of automatic functio
 "  au FileType qf wincmd L                           "  ↳       build windows on the right.
   au BufWritePost .vimrc so $MYVIMRC|               " Reload .vimrc on save.
   au BufWritePost init.vim so $MYVIMRC|             " Reload init.vim (nvim) on save.
+  autocmd QuickFixCmdPost *grep* cwindow|           " Open the quickfix window on grep.
+  autocmd VimEnter * silent! tabonly|               " Don't allow starting Vim with multiple tabs.
 augroup END
 
 " Function to trim trailing whitespace in a file.
