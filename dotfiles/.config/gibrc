@@ -55,6 +55,7 @@ export npm_config_devdir=${npm_config_devdir:-"$XDG_CACHE_HOME/node-gyp"} # Set 
 export npm_cache=${npm_cache:-"$XDG_CACHE_HOME/npm"} # Set npm cache location.
 export NODE_REPL_HISTORY=${NODE_REPL_HISTORY="$XDG_CACHE_HOME/node_repl_history"} # Set node-gyp download location.
 export BABEL_CACHE_PATH=${BABEL_CACHE_PATH="$XDG_CACHE_HOME/babel/cache.json"} # Set babel cache location.
+export GRADLE_USER_HOME="$XDG_CACHE_HOME" # Also contains gradle.properties (symlink from XDG_CONFIG_HOME).
 export CCACHE_DIR="$XDG_DATA_HOME/ccache" # ccache cache dir.
 export HELM_HOME="$XDG_DATA_HOME/helm" # Helm home directory.
 export BLUEMIX_HOME="$XDG_DATA_HOME/bluemix" # Bluemix home directory (creates .bluemix inside)
@@ -182,10 +183,11 @@ alias g=git # Use with commands in $c/git/config for best results.
 
 # Clone repo and cd into path.
 gcl() {
-  gcl_output="$(set -o pipefail; git cl $@ 3>&1 1>&2 2>&3 3>&- | tee /dev/stderr | awk -F \' '/Cloning into/ {print $2}' | head -1)"
-  local ret="$?"; [ "$ret" != 0 ] && return "$ret"
-  echo cd "$gcl_output"; cd "$gcl_output"
-  unset gcl_output
+  local clone_dir
+  clone_dir="$(set -o pipefail; git cl $@ 3>&1 1>&2 2>&3 3>&- | tee /dev/stderr | awk -F \' '/Cloning into/ {print $2}' | head -1)"
+  local ret="$?"
+  [ "$clone_dir" -a -d "$clone_dir" ] && echo cd "$clone_dir" && cd "$clone_dir"
+  return $ret
 }
 
 alias path='echo $PATH' # Single quotes so we echo path at runtime, not alias time.
