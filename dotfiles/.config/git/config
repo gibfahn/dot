@@ -68,7 +68,7 @@
 
   mb  = "!git merge-base ${1:-master} ${2:-HEAD} ${@:2} #" # Get commit this branch forked from.
   mc  = "!echo \"$VISUAL\" | grep -iq vi && c=\"-c /=======\" || c=\"\"; git diff --name-only --diff-filter=U | xargs $VISUAL $c" # Open merge conflicts in editor.
-  mf  = merge --ff-only # Update branch from other commmit (default upstream) as long as other commit has HEAD as an ancestor.
+  mf  = "!git merge --ff-only $@ && git submodule update --init #" # Update branch from other commit (default upstream) as long as other commit has HEAD as an ancestor.
 
   p   = push                                                    # Push commits to a remote.
   pf  = push --force-with-lease                                 # Better version of push -f.
@@ -100,10 +100,9 @@
   stp = stash pop
   std = stash drop
 
-  sma = submodule add                         # Add a new submodule: g sma url path.
   smi = submodule update --init --recursive   # Initialise submodules.
-  smf = submodule update --init               # Fetch specified submodule versions.
-  smu = submodule update --recursive --remote # Update submodules to latest versions.
+  smf = submodule update --init               # Update to main repo upstream branch's submodule versions.
+  smu = submodule update --recursive --remote # Update submodules to submodule repos latest versions.
 
   # z is fuzzy log (fuzzy search through `git log $*`, za is the same with la (try g sh `g z`).
   z   = "!git l --color=always $* | grep -v '^\\.\\.\\.\\s\\+$' | fzf +s -m --ansi | sed 's/^\\W\\+\\(\\w\\+\\)\\s\\+.*/\\1/' #"
