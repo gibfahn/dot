@@ -87,10 +87,11 @@ $pip install -U 'python-language-server[all]'
 gitCloneOrUpdate mafredri/zsh-async "$XDG_DATA_HOME/zsh/zsh-async"
 
 # Install nvm:
-if no $([ "$(uname -m)" != x86_64 ] && echo "$(uname -m)/")nvm; then
+nvm_prefix="$([ "$(uname -m)" != x86_64 ] && echo "$(uname -m)/")"
+if no "$nvm_prefix"nvm; then
   # No install scripts as path update isn't required, it's done in gibrc.
-  gitClone creationix/nvm "$XDG_DATA_HOME/$([ "$(uname -m)" != x86_64 ] && echo "$(uname -m)/")nvm"
-  . "$XDG_DATA_HOME"/nvm/nvm.sh # Load nvm so we can use it below.
+  gitClone creationix/nvm "$XDG_DATA_HOME/${nvm_prefix}nvm"
+  . "$XDG_DATA_HOME/${nvm_prefix}"nvm/nvm.sh # Load nvm so we can use it below.
   nvm install --lts # Install the latest LTS version of node.
 
   # Autocompletion for npm (probably needed)
@@ -114,6 +115,7 @@ if no nvim/site/autoload/plug.vim; then
 fi
 
 getOrUpdate "Installing/updating javascript-typescript-langserver"
+not npm && . "$XDG_DATA_HOME/${nvm_prefix}"nvm/nvm.sh # Load nvm so we can use npm.
 npm install --global javascript-typescript-langserver@latest
 
 # If you don't use rust just choose the cancel option.
