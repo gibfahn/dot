@@ -73,8 +73,13 @@ _gib_prompt_preprompt_render() {
   [ "$git_prompt_parts" ] && git_prompt_parts="%F{33}($git_prompt_parts%F{33})%f"
   [ "$_gib_prompt_cmd_exec_time" ] && _gib_prompt_cmd_exec_time="%F{14}$_gib_prompt_cmd_exec_time%f"
 
+  # Add python virtualenv setting to RPROMPT if set.
+  local venv=''
+  [[ -n "$VIRTUAL_ENV" ]] && venv="%F{242}(${VIRTUAL_ENV##*/})%f"
+
   local -ah rprompt_parts
   rprompt_parts=(
+    $venv
     "%(?:%F{28}:%F{88})%~%f"    # Path to cwd (green or red depending on previous command $?).
     $_gib_prompt_cmd_exec_time  # Command execution time (if more than 1s).
     $git_prompt_parts           # Git info.
