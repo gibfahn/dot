@@ -102,7 +102,8 @@ inoremap <expr>   <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"| " Shift-Tab is p
 nnoremap          k gk|                             " Move up   visually , don't skip wrapped lines,
 nnoremap          j gj|                             "  ↳   down visually , don't skip wrapped lines.
 nnoremap          Q <nop>|                          "  ↳ accidental triggering).
-nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>| " Go to definition.
+nnoremap <silent> gd :call DupBuffer()<CR>:call LanguageClient_textDocument_definition()<CR>| " Go to definition in last window.
+nnoremap <silent> gD :call LanguageClient_textDocument_definition()<CR>| " Go to definition in the same window.
 nnoremap          gk k|                             " Move up   logically, do    skip wrapped lines,
 nnoremap          gj j|                             "  ↳   down logically, do    skip wrapped lines.
 nnoremap <silent> gr :call LanguageClient_textDocument_rename()<CR>| " Rename var/func under cursor.
