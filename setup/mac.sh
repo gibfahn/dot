@@ -8,8 +8,11 @@ if ! cat ~/Library/Preferences/com.apple.Terminal.plist | grep -q gib; then
   get "gib Terminal profile."
   # Install my terminal profile.
   open $(dirname $0)/config/gib.terminal
+
   # Change the default to my profile (swap it back in settings if you want).
-  defaults write com.apple.Terminal "Default Window Settings" gib
+  if [[ "$(defaults read com.apple.Terminal "Default Window Settings")" != gib ]]; then
+    defaults write com.apple.Terminal "Default Window Settings" gib
+  fi
 else
   skip "gib Terminal profile (already installed)."
 fi
@@ -29,16 +32,28 @@ fi
 
 if [ "$HARDCORE" ]; then # Set key repeat preferences.
   get "Setting keyboard/trackpad preferences."
+
   # Set up fastest key repeat rate (needs relogin).
-  defaults write NSGlobalDomain KeyRepeat -int 1
+  if [[ "$(defaults read NSGlobalDomain KeyRepeat)" != 1 ]]; then
+    defaults write NSGlobalDomain KeyRepeat -int 1
+  fi
+
   # Sets a low time before key starts repeating.
-  defaults write NSGlobalDomain InitialKeyRepeat -int 8
+  if [[ "$(defaults read NSGlobalDomain InitialKeyRepeat)" != 8 ]]; then
+    defaults write NSGlobalDomain InitialKeyRepeat -int 8
+  fi
+
   # Increases trackpad sensitivity (SysPref max 3.0).
-  defaults write -g com.apple.trackpad.scaling -float 5.0
+  if [[ "$(defaults read -g com.apple.trackpad.scaling)" != 5 ]]; then
+    defaults write -g com.apple.trackpad.scaling -float 5.0
+  fi
+
   # Allow Finder to be quit (hides Desktop files).
-  defaults write com.apple.finder QuitMenuItem -bool YES
-  killall Finder
-  open .
+  if [[ "$(defaults read com.apple.finder QuitMenuItem)" != 1 ]]; then
+    defaults write com.apple.finder QuitMenuItem -bool YES
+    killall Finder
+    open .
+  fi
 else
   skip "Not setting keyboard/trackpad preferences (HARDCORE not set)."
   # You can still change them in System Preferences/{Trackpad,Keyboard}.
