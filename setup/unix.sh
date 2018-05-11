@@ -117,6 +117,8 @@ fi
 getOrUpdate "Installing/updating javascript-typescript-langserver"
 not npm && . "$XDG_DATA_HOME/${nvm_prefix}"nvm/nvm.sh # Load nvm so we can use npm.
 npm install --global javascript-typescript-langserver@latest
+getOrUpdate "Installing/updating bash-language-server"
+npm install --global bash-language-server@latest
 
 # If you don't use rust just choose the cancel option.
 if [ "$HARDCORE" ] && { no rustup || no cargo; }; then # Install/set up rust.

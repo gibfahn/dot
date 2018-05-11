@@ -249,6 +249,7 @@ let g:LanguageClient_serverCommands = {
     \ 'javascript.jsx': ['javascript-typescript-stdio'],
     \ 'python': ['pyls'],
     \ 'java': ['jdtls', '-Dlog.level=ALL'],
+    \ 'sh': ['bash-language-server', 'start'],
     \ }
 
 " Highlight the 81st column of text (in dark grey so it doesn't distract).
