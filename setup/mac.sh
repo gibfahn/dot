@@ -18,9 +18,11 @@ else
 fi
 
 # Link VS Code preferences into the macOS specific folder.
-for file in "$HOME"/.config/code/*.json; do
-  ln -sf "$file" "$HOME/Library/Application Support/Code/User/$(basename "$file")"
-done
+if [[ -d "$HOME/Library/Application Support/Code/" ]]; then
+  for file in "$HOME"/.config/code/*.json; do
+    ln -sf "$file" "$HOME/Library/Application Support/Code/User/$(basename "$file")"
+  done
+fi
 
 # Install xcode command line tools
 if ! xcode-select -p &>/dev/null; then
