@@ -123,7 +123,7 @@ npm install --global bash-language-server@latest
 # If you don't use rust just choose the cancel option.
 if [ "$HARDCORE" ] && { no rustup || no cargo; }; then # Install/set up rust.
   # Install rustup. Don't modify path as that's already in gibrc.
-  curl https://sh.rustup.rs -sSf | bash -s -- -y --no-modify-path
+  RUSTUP_HOME="$XDG_DATA_HOME"/rustup CARGO_HOME="$XDG_DATA_HOME"/cargo curl https://sh.rustup.rs -sSf | bash -s -- -y --no-modify-path
   # Download zsh completion
   exists zsh && curl https://raw.githubusercontent.com/rust-lang-nursery/rustup.rs/master/src/rustup-cli/zsh/_rustup >"$XDG_DATA_HOME/zfunc/_rustup"
 
@@ -133,8 +133,7 @@ if [ "$HARDCORE" ] && { no rustup || no cargo; }; then # Install/set up rust.
     mv "$HOME/.cargo" "$XDG_DATA_HOME/cargo"
   fi
 
-  # Rustup seems to respect the RUSTUP_HOME and CARGO_HOME env vars, but IDK.
-  export PATH="$CARGO_HOME/bin:~/.cargo/bin:$PATH"
+  export PATH="$XDG_DATA_HOME/cargo/bin:$PATH"
 
   # Install stable and nightly (stable should be a no-op).
   rustup install nightly
