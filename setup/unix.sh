@@ -80,8 +80,8 @@ gitCloneOrUpdate zsh-users/zsh-syntax-highlighting "$XDG_DATA_HOME/zsh/zsh-synta
 getOrUpdate "Installing/updating neovim-remote"
 pip=pip
 exists pip3 && pip=pip3
-$pip install -U neovim-remote neovim
-$pip install -U 'python-language-server[all]'
+$pip install -Uq neovim-remote neovim
+$pip install -Uq 'python-language-server[all]'
 
 
 gitCloneOrUpdate mafredri/zsh-async "$XDG_DATA_HOME/zsh/zsh-async"
