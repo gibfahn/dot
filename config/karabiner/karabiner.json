@@ -163,7 +163,7 @@
                 "type": "basic"
               } ]
           }, {
-            "description": "Ж+Enter -> new Term, Ж+t/a/g/w/f/e/s -> open or switch to Term/Alacritty/Chrome/WorkFlowy/FirefoxNightly/Finder/Slack, .",
+            "description": "Ж+Enter -> new Term, Ж+t/a/g/w/f/e/s -> open or switch to Term/Alacritty/Chrome/WorkFlowy/FirefoxNightly/Finder/Spotify, .",
             "manipulators": [ {
                 "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
                 "from": { "key_code": "return_or_enter", "modifiers": { "optional": [ "any" ] } },
@@ -195,10 +195,10 @@
                 "to": [{ "shell_command": "open -a 'Google Chrome'" }],
                 "type": "basic"
               }, {
-                "description": "Ж+s = Open Slack",
+                "description": "Ж+s = Open Spotify",
                 "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
                 "from": { "key_code": "s", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "shell_command": "open -a Slack" }],
+                "to": [{ "shell_command": "open -a Spotify" }],
                 "type": "basic"
               }, {
                 "description": "Ж+t = Open the Terminal",
