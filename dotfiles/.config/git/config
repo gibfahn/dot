@@ -95,6 +95,7 @@
   ss  = status --short --branch
   sh  = show
   she = "!git show --pretty="" --name-only $@ | xargs $VISUAL #" # Open files changed in last commit in editor.
+  shde = "!{ git show --pretty="" --name-only; git diff HEAD --name-only; } | sort | uniq | xargs $VISUAL #" # Combines `g de` and `g she` files in editor.
   shn = show --pretty="" --name-only # Show names of files changed only.
   st  = stash
   stp = stash pop
