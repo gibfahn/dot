@@ -171,7 +171,8 @@ elif [ "$shell" = bash ]; then # Bash specific options.
 fi
 
 if exists fzf && fzf --version >/dev/null 2>&1; then
-  exists fd && export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git' # Use fd for fuzzy finding if available.
+  exists fd && { export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git' # Use fd for fuzzy finding if available.
+                 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"; }
   for file in "$XDG_DATA_HOME"/fzf/shell/{completion,key-bindings}.$shell; do
     source "$file" # 2>/dev/null || true
   done
