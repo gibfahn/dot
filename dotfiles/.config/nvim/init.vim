@@ -120,13 +120,14 @@ nnoremap          <Leader>d :bp\|bd  #<CR>|         " Close buffer without closi
 nnoremap          <Leader>D :bp\|bd! #<CR>|         "  ↳ Force close buffer.
 nnoremap          <Leader>f :Files<CR>|             " Search file names    for file,
 nnoremap          <Leader>F :grep |                 "  ↳          contents for file.
+nnoremap          <Leader>gc :cd %:p:h<CR>|         " Change vim directory (:pwd) to current file's dirname (e.g. for <space>f, <space>g, :e).
 nnoremap          <Leader>gd :w !diff % - <CR>|     " Diff between saved file and current.
 nnoremap          <Leader>gf :call DupBuffer()<CR>gF|        " Open file path:row:col under cursor in last window.
 nnoremap          <Leader>gg :call LanguageClient_textDocument_documentSymbol()<CR>| " Grep for symbols in the current file.
 nnoremap          <Leader>gt :set et!<CR>:set et?<CR>|       " Toggle tabs/spaces.
 nnoremap          <Leader>gq :set fo+=t<CR>:set fo?<CR>|     " Turn on  line wrapping,
 nnoremap          <Leader>gQ :set fo-=t<CR>:set fo?<CR>|     "  ↳   off
-nnoremap          <Leader>gv :e ~/.vimrc<CR>|       " <Space>gv opens this file in the editor (autoreloaded on save).
+nnoremap          <Leader>gv :e ~/.vimrc<CR>|       " <Space>gv opens ~/.vimrc in the editor (autoreloaded on save).
 nnoremap          <Leader>gw :call Trim()<CR>|      " <Space>gw trims trailing whitespace for file.
 nnoremap          <Leader>id :r !date +\%Y-\%m-\%d<CR>|      "  Insert readable    date on new line.
 nnoremap          <Leader>iD :r !date +\%d-\%b-\%y<CR>|      "  ↳      `:sort`able date on new line.
