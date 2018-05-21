@@ -89,11 +89,11 @@ fi
 # brew install things. Edit config/Brewfile to adjust.
 get "brew installing/updating."
 brew tap Homebrew/bundle
-brew bundle --file=$(dirname $0)/config/Brewfile
+brew bundle --file=$(dirname $0)/config/Brewfile | grep -Evx "Using [-_/0-9a-zA-Z]+"
 
 if [ "$HARDCORE" ]; then # Set up HARDCORE brew packages.
   get "brew HARDCORE packages."
-  brew bundle --file=$(dirname $0)/config/Brewfile-hardcore
+  brew bundle --file=$(dirname $0)/config/Brewfile-hardcore | grep -Evx "Using [-_/0-9a-zA-Z]+"
 else
   skip "brew HARDCORE packages (HARDCORE not specified)."
 fi
@@ -106,4 +106,3 @@ if not langserver-swift && ! not swift; then
   (cd "$HOME/bin/src/langserver-swift"; make release)
   ln -s "$HOME/bin/src/langserver-swift/.build/$(uname -m)"-*/release/langserver-swift "$HOME"/bin/langserver-swift
 fi
-

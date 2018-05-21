@@ -4,6 +4,17 @@
 
 . $(dirname $0)/../helpers/setup.sh # Load helper script from dot/helpers.
 
+npm_modules=(
+  javascript-typescript-langserver # Language server for JavaScript and Typescript files.
+  bash-language-server             # Language server for bash and other shell script files.
+)
+
+pip3_modules=(
+  neovim-remote                 # Connect to existing nvim sessions (try `g cm` in a nvim terminal).
+  neovim                        # Python plugin framework for neovim.
+  'python-language-server[all]' # Python language server (I use it in neovim).
+)
+
 # Initialise and update submodules (not yet mandatory).
 git submodule init && git submodule update || true
 
@@ -75,14 +86,21 @@ mkdir -p "$XDG_DATA_HOME/zsh"
 
 gitCloneOrUpdate zsh-users/zsh-syntax-highlighting "$XDG_DATA_HOME/zsh/zsh-syntax-highlighting"
 
-# Install neovim-remote, used to connect to existing nvim sessions (try `g cm` in a nvim terminal).
-# Also install neovim (Python plugin framework for neovim).
-getOrUpdate "Installing/updating neovim-remote"
+# Install or update pip modules.
 pip=pip
 exists pip3 && pip=pip3
-$pip install -Uq neovim-remote neovim
-$pip install -Uq 'python-language-server[all]'
+pip_installed="$($pip list | awk '{print $1}')"
+pip_outdated="$($pip list --outdated | awk '{print $1}')"
 
+for module in "${pip3_modules[@]}"; do
+  if ! echo "$pip_installed" | grep -qx "${module%[*}" \
+      || echo "$pip_outdated" | grep -qx "${module%[*}"; then
+    get "$pip: $module"
+    $pip install -Uq "$module"
+  else
+    skip "$pip: $module"
+  fi
+done
 
 gitCloneOrUpdate mafredri/zsh-async "$XDG_DATA_HOME/zsh/zsh-async"
 
@@ -114,11 +132,18 @@ if no nvim/site/autoload/plug.vim; then
   exists $VIM && $VIM +PlugInstall +qall # Install/update vim plugins.
 fi
 
-getOrUpdate "Installing/updating javascript-typescript-langserver"
+# Install npm modules.
 not npm && . "$XDG_DATA_HOME/${nvm_prefix}"nvm/nvm.sh # Load nvm so we can use npm.
-npm install --global javascript-typescript-langserver@latest
-getOrUpdate "Installing/updating bash-language-server"
-npm install --global bash-language-server@latest
+installed_npm_module_versions="$(npm ls -g --depth=0 | grep -Ex '.* [-_A-Za-z0-9]+@([0-9]+\.){2}[0-9]+' | sed -E 's/^\W+ //' | sed 's/@/ /')"
+for module in "${npm_modules[@]}"; do
+  if ! echo "$installed_npm_module_versions" | grep -qx "$module .*" \
+    || [[ "$(echo "$installed_npm_module_versions" | grep -x "$module .*" | awk '{print $NF}')" != "$(npm info "$module" version)" ]]; then
+    get "npm: $module"
+    npm install --global "$module"@latest
+  else
+    skip "npm: $module"
+  fi
+done
 
 # If you don't use rust just choose the cancel option.
 if [ "$HARDCORE" ] && { no rustup || no cargo; }; then # Install/set up rust.
