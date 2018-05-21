@@ -101,9 +101,15 @@
   stp = stash pop
   std = stash drop
 
-  smi = submodule update --init --recursive   # Initialise submodules.
-  smf = submodule update --init               # Update to main repo upstream branch's submodule versions.
-  smu = submodule update --recursive --remote # Update submodules to submodule repos latest versions.
+  smc  = submodule foreach git clean -fdx      # Clean submodules.
+  sme  = submodule foreach                     # Run a command in all submodules, e.g. `g sme git status`, can be used recursively.
+  smf  = submodule update --init               # Update to main repo upstream branch's submodule versions (make submodules match parent's HEADs).
+                                               # Like git rhh (above), but resets every submodule to upstream commit. Hopefully someone will upstream an easier way at some point.
+  smh  = "!while read s; do unset GIT_DIR; git -C \"${s##* }\" reset --hard \"$(awk '{print $8}' <<<\"$s\")\"; done <<<\"$(git status --porcelain=v2 | grep -E '^[12] ?? [^N]*')\" #"
+  smhh = submodule foreach git smh             # Recursive hard reset to parent's HEADS. Hopefully you never need smhhh.
+  smi  = submodule update --init --recursive   # Initialise submodules.
+  smu  = submodule update --remote             # Update submodules to submodule repos latest versions (make submodules match submodule upstream HEADs).
+  smr  = submodule foreach git reset --hard    # Hard reset all submodules to their HEAD.
 
   # z is fuzzy log (fuzzy search through `git log $*`, za is the same with la (try g sh `g z`).
   z   = "!git l --color=always $* | grep -v '^\\.\\.\\.\\s\\+$' | fzf +s -m --ansi | sed 's/^\\W\\+\\(\\w\\+\\)\\s\\+.*/\\1/' #"
