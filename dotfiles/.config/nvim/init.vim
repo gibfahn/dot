@@ -141,8 +141,8 @@ nnoremap          <Leader>l :vsp<CR><C-w>h:bp<CR>|  " Open vertical split.
 nnoremap          <Leader>o :set operatorfunc=OpenUrl<CR>g@| " Open the selected text with the appropriate program (like netrw-gx).
 nnoremap          <Leader>p "+p|                    "  Paste from clipboard after cursor.
 nnoremap          <Leader>P "+P|                    "                    ↳  before cursor.
-nnoremap          <Leader>q :q<CR>|                 " Quit if no    unsaved changes.
-nnoremap          <Leader>Q :q!<CR>|                "      ↳ losing unsaved changes.
+nnoremap          <Leader>q :qa<CR>|                " Quit if no    unsaved changes (for single file use <Space>d instead).
+nnoremap          <Leader>QQ :q!<CR>|               "      ↳ losing unsaved changes (DANGER).
 nnoremap          <Leader>r :%s/|                   " Replace (e.g. <Space>rold/new),
 nnoremap          <Leader>R :%s//c<Left><Left>|     "  ↳ Replace with prompt on each match.
 map               <Leader>s <Plug>(easymotion-bd-w)|     " EasyMotion: Move to word.
@@ -150,7 +150,7 @@ nnoremap          <Leader>u :GundoToggle<CR>|       " Toggle Undo tree visualisa
 nnoremap          <Leader>w :up<CR>|                " Write if there were changes.
 nnoremap          <Leader>W :w<CR>|                 "  ↳    whether or not there were changes.
 nnoremap          <Leader>x :x<CR>|                 " Save (if changes) and quit.
-nnoremap          <Leader>X :qa<CR>|                " Quit all windows.
+nnoremap          <Leader>X :xa<CR>|                " Quit all windows.
 nnoremap          <Leader>y "+y|                    " Copy to clipboard (normal mode).
 nnoremap          <Leader>Y :%y+<CR>|               "  ↳  file to clipboard (normal mode).
 nnoremap          <Leader>z  za|                    " Toggle folding on current line.
