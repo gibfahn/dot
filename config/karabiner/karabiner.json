@@ -167,7 +167,7 @@
             "manipulators": [ {
                 "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
                 "from": { "key_code": "return_or_enter", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "shell_command": "open -a Terminal ~" }],
+                "to": [{ "shell_command": "open -na kitty" }],
                 "type": "basic"
               }, {
                 "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
@@ -204,7 +204,7 @@
                 "description": "Ж+t = Open the Terminal",
                 "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
                 "from": { "key_code": "t", "modifiers": { "optional": [ "option", "shift", "command" ] } },
-                "to": [{ "shell_command": "open -a Terminal" }],
+                "to": [{ "shell_command": "open -a kitty" }],
                 "type": "basic"
               }, {
                 "description": "Ж+Shift+w = disable then enable wifi",

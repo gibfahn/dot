@@ -46,14 +46,14 @@ brew "tmux"                              # Terminal multiplexer.
 brew "gnupg"                             # gpg command line.
 brew "gpg-agent"                         # gpg daemon.
 brew "rmtrash"                           # `rm` to Trash, aliased to `dl` in gibrc.
-brew "tig"                               # View git diffs in log.
+brew "tig"                               # `tig log` lets you view log and diffs side-by-side.
 cask "docker"                            # Build and run docker images.
 
 # Casks (GUI Applications):
 cask "copyq"                             # Clipboard manager with history (needs manual setup).
 cask "google-chrome"                     # You probably want/have Chrome.
 cask "gpg-suite"                         # GUI gpg key manager (manual setup required).
-cask "meld"
+cask "meld"                              # Visual file diffing tool.
 cask "spectacle"                         # Window manager that's easy to get used to.
 cask "vimr"                              # GUI neovim.
 cask "hyperswitch"                       # Better Cmd-Tab (only windows on a screen).
