@@ -43,13 +43,13 @@ set nocompatible                                    " Remove vi compatibility ha
 let mapleader = "\<Space>"                          " Set <Leader> (default shortcut used in mappings below) to Spacebar.
 
 syntax on                                           " Turn on syntax highlighting.
-filetype plugin indent on                           " Use file-specific plugins.
+filetype plugin indent on                           " Use file-specific plugins and indentation rules.
 set shiftwidth=2 tabstop=2 softtabstop=2            " Set tab width to 2.
 set expandtab                                       " Insert spaces when tab key pressed.
 set backspace=indent,eol,start                      " Backspace works across lines.
 set ignorecase                                      " Ignore case for lowercase searches,
 set smartcase                                       "  ↳ don't for mixed-case.
-set autoindent smartindent                          " Be more clever about indenting.
+set autoindent                                      " Moving to a new line keeps the same indentation (overridden by filetype indent on).
 set gdefault                                        " Global replace default (off: /g).
 set history=1000                                    " More command/search history.
 set undolevels=1000                                 " More undo history.
@@ -72,6 +72,8 @@ set t_Co=256                                        " Use 256 color terminal.
 set splitbelow                                      " Open new split panes to right and,
 set splitright                                      "  ↳ bottom, which feels more natural.
 set diffopt+=vertical                               " Always use vertical diffs.
+set visualbell                                      " Flash the screen instead of beeping when doing something wrong.
+set confirm                                         " Ask if you want to save unsaved files instead of failing.
 set wildchar=<Tab> wildmenu                         " Tab complete with files (e.g. `:e`)
 set wildmode=list:longest,list:full                 " 1st Tab completes to longest common string, 2nd+ cycles through options.
 set list listchars=tab:»·,trail:·,nbsp:·            " Display extra whitespace.
