@@ -95,7 +95,7 @@ catch /E185: Cannot find color scheme 'gib'/
 endtry
 
 "*** Key mappings (see http://vim.wikia.com/wiki/Unused_keys for unused keys) ***"
-" Available (normal): <C-Space>, K, +, _, <C-q/s/n/[/_>, <leader>b/c/e/h/m/n/s/u/v
+" Available (normal): <C-Space>, +, _, <C-q/s/[/_>, <leader>b/c/e/h/m/n/u/v
 
 inoremap          kj <ESC>|                         " kj = Esc in insert mode.
 inoremap <expr>   <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")| " <Enter> hides completion menu and starts new line.
@@ -126,6 +126,8 @@ nnoremap          <Leader>gc :cd %:p:h<CR>|         " Change vim directory (:pwd
 nnoremap          <Leader>gd :w !diff % - <CR>|     " Diff between saved file and current.
 nnoremap          <Leader>gf :call DupBuffer()<CR>gF|        " Open file path:row:col under cursor in last window.
 nnoremap          <Leader>gg :call LanguageClient_textDocument_documentSymbol()<CR>| " Grep for symbols in the current file.
+nnoremap          <Leader>gl :call LoadSession()<CR>|        " Load saved session for vim cwd to cached dir.
+nnoremap          <Leader>gs :call SaveSession()<CR>|        " Save current session for vim cwd from cached dir.
 nnoremap          <Leader>gt :set et!<CR>:set et?<CR>|       " Toggle tabs/spaces.
 nnoremap          <Leader>gq :set fo+=t<CR>:set fo?<CR>|     " Turn on  line wrapping,
 nnoremap          <Leader>gQ :set fo-=t<CR>:set fo?<CR>|     "  ↳   off
@@ -172,6 +174,8 @@ nnoremap          <C-h> <C-w>h|                     " Switch left  a window,
 nnoremap          <C-j> <C-w>j|                     "  ↳     down  a window,
 nnoremap          <C-k> <C-w>k|                     "  ↳     up    a window,
 nnoremap          <C-l> <C-w>l|                     "  ↳     right a window.
+nnoremap          <C-n> <C-l>|                      " Redraw the screen.
+
 
 nmap              <C-W>>     <C-W>><SID>ws|         " Adds mappings to make Ctrl-W -/+/</>
 nmap              <C-W><     <C-W><<SID>ws|         " ↳ repeatable, so you can press Ctrl-W
@@ -212,6 +216,19 @@ function! DupBuffer()
   call setpos('.', pos) " Set cursor position to what is was before.
 endfunction
 
+if empty($XDG_CACHE_HOME)| let $XDG_CACHE_HOME = $HOME . '/.cache'| endif
+let s:sessionDir = $XDG_CACHE_HOME . "/vim/session/"
+if !isdirectory(s:sessionDir)| call mkdir(s:sessionDir, "p", 0700)| endif
+
+" Saves session to ${XDG_CACHE_HOME:-$HOME/.cache}/vim/session/%path%to%vim%cwd
+function! SaveSession()
+  execute 'mksession! ' . $XDG_CACHE_HOME . "/vim/session/" . substitute(getcwd(), '/', '\\%', 'g')
+endfunction
+" Loads session from ${XDG_CACHE_HOME:-$HOME/.cache}/vim/session/%path%to%vim%cwd
+function! LoadSession()
+  execute 'source ' . $XDG_CACHE_HOME . "/vim/session/" . substitute(getcwd(), '/', '\\%', 'g')
+endfunction
+
 if has("nvim")                                      " NeoVim specific settings.
   let g:terminal_scrollback_buffer_size = 100000    " Store lots of terminal history.
   if executable("nvr")| let $VISUAL = 'nvr --remote-wait'| endif " Use existing nvim window to open new files (e.g. `g cm`).
@@ -221,6 +238,7 @@ if has("nvim")                                      " NeoVim specific settings.
   tnoremap <C-j> <C-\><C-n><C-w>j|                  "  ↳     down  a window in terminal,
   tnoremap <C-k> <C-\><C-n><C-w>k|                  "  ↳     up    a window in terminal,
   tnoremap <C-l> <C-\><C-n><C-w>l|                  "  ↳     right a window in terminal.
+  tnoremap <C-n> <C-l>|                             " Ctrl-n is Ctrl-l in a terminal.
   tnoremap <Esc> <C-\><C-n>|                        " Make Escape work in terminal,
   tnoremap kj <C-\><C-n>|                           "  ↳    kj    work in terminal.
 
