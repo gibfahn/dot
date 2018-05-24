@@ -4,7 +4,7 @@
 # . "$HOME/.config/gibrc"
 # The script must be sourced.
 
-### INITIAL SETUP ###
+# *** INITIAL SETUP ***
 
 case $- in
   *i*) [ "$GIBRC" ] && echo "Reusing gibrc..." || echo "Using gibrc..." ;;
@@ -41,7 +41,7 @@ if [ "$ssh" -a "$GIBRC" = 0 -a "$shell" != zsh ]; then
   fi
 fi
 
-### ENV VAR DEFAULTS ###
+# *** ENV VAR DEFAULTS ***
 
 export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-"$HOME/.config"} # Config stuff should go here.
 export XDG_CACHE_HOME=${XDG_CACHE_HOME:-"$HOME/.cache"} # Cache stuff should go here.
@@ -57,8 +57,9 @@ export NODE_REPL_HISTORY=${NODE_REPL_HISTORY="$XDG_CACHE_HOME/node_repl_history"
 export BABEL_CACHE_PATH=${BABEL_CACHE_PATH="$XDG_CACHE_HOME/babel/cache.json"} # Set babel cache location.
 export GRADLE_USER_HOME="$XDG_CACHE_HOME/gradle" # Also contains gradle.properties (symlink from XDG_CONFIG_HOME).
 export CCACHE_DIR="$XDG_DATA_HOME/ccache" # ccache cache dir.
-export HELM_HOME="$XDG_DATA_HOME/helm" # Helm home directory.
-export BLUEMIX_HOME="$XDG_DATA_HOME/bluemix" # Bluemix home directory (creates .bluemix inside)
+export IPYTHONDIR="$XDG_CACHE_HOME/ipython" # Move iPython dir from ~.
+export HELM_HOME="$XDG_DATA_HOME/helm" # Move Helm data dir from ~.
+export BLUEMIX_HOME="$XDG_DATA_HOME/bluemix" # Move Bluemix home directory from ~ (creates .bluemix inside).
 export VIRTUAL_ENV_DISABLE_PROMPT=1 # Add the virtualenv prompt myself.
 export LESS="--tabs=1,3 --ignore-case --RAW-CONTROL-CHARS" # Tab is 2 spaces, search ignores case, enable colours.
 export PAGER=less
@@ -66,14 +67,14 @@ HISTSIZE=10000 SAVEHIST=10000 HISTFILE="$XDG_CACHE_HOME/$shell/history" # Set hi
 c="$XDG_CONFIG_HOME" # Shortcut to the config directory (`v $c/gibrc` to edit this file).
 [ -d "$XDG_CONFIG_HOME/terminfo" ] && export TERMINFO="$XDG_CONFIG_HOME/terminfo" # Put terminal info in here.
 
-### FUNCTIONS ###
+# *** FUNCTIONS ***
 
 for i in please po pu rd d afind _ md run-help +; do alias | sed 's/^alias //' | grep -q "^$i=" && unalias "$i"; done; unset i # Remove unwanted aliases if defined.
 alias md="mkdir -p" # md foo = mkdir foo.
 mdc() { command mkdir -p $*; [ $# = 1 ] && cd "$1" || true; } # mdc foo = mkdir foo && cd foo.
-# Add to beginning of path.
+# Add or move to beginning of path.
 pathadd() { [ -d "$1" ] && export PATH="$1"$(echo ":$PATH:" | sed "s|:$1:|:|" | sed 's|:$||'); }
-# Add to end of path.
+# Add or move to end of path.
 pathapp() { [ -d "$1" ] && export PATH=$(echo ":$PATH:" | sed "s|:$1:|:|" | sed 's|^:||')"$1"; }
 exists fd || fd() { find . -iname "*$**"; } # Find by filename (case insensitive).
 pth() { # Returns absolute path to file(s) including file name.
@@ -84,8 +85,16 @@ pth() { # Returns absolute path to file(s) including file name.
     fi
   done
 }
+# Clone repo and cd into path.
+gcl() {
+  local clone_dir
+  clone_dir="$(set -o pipefail; git cl $@ 3>&1 1>&2 2>&3 3>&- | tee /dev/stderr | awk -F \' '/Cloning into/ {print $2}' | head -1)"
+  local ret="$?"
+  [ "$clone_dir" -a -d "$clone_dir" ] && echo cd "$clone_dir" && cd "$clone_dir"
+  return $ret
+}
 
-### PATH ADDITIONS ###
+# *** PATH ADDITIONS ***
 
 pathadd /usr/local/bin # Missed in some shells.
 pathadd /usr/local/sbin # Missed in some shells.
@@ -94,8 +103,9 @@ pathadd /usr/lib/ccache # Add ccache to the path if installed (Linux).
 pathadd /usr/local/opt/ccache/libexec # Add ccache to the path if installed (macOS).
 pathadd "$HOME/.local/bin"
 pathadd "$CARGO_HOME/bin" # Rust packages.
+[[ -n "$VIRTUAL_ENV" ]] && pathadd "$VIRTUAL_ENV/bin" # Virtual env needs to be in front of /usr/local/bin.
 
-### SHELL SPECIFIC ###
+# *** SHELL SPECIFIC ***
 
 # Add to end of path.
 pathapp /usr/local/opt/coreutils/libexec/gnubin # Coreutils from brew on macOS, don't replace mac ls.
@@ -169,30 +179,13 @@ elif [ "$shell" = bash ]; then # Bash specific options.
   }
   PROMPT_COMMAND=_gib_bash_prompt_command # Use the above function to generate the prompt.
 fi
-
-if exists fzf && fzf --version >/dev/null 2>&1; then
-  exists fd && { export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git' # Use fd for fuzzy finding if available.
-                 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"; }
-  for file in "$XDG_DATA_HOME"/fzf/shell/{completion,key-bindings}.$shell; do
-    source "$file" # 2>/dev/null || true
-  done
-fi
 command mkdir -p "$XDG_CACHE_HOME/$shell"  # Create HISTFILE dir if necessary.
 
-### ALIASES ###
+# *** ALIASES ***
 
 alias x="exit 0" # x exits the terminal.
 alias c=clear # c clears the terminal screen (can also use Ctrl-L).
 alias g=git # Use with commands in $c/git/config for best results.
-
-# Clone repo and cd into path.
-gcl() {
-  local clone_dir
-  clone_dir="$(set -o pipefail; git cl $@ 3>&1 1>&2 2>&3 3>&- | tee /dev/stderr | awk -F \' '/Cloning into/ {print $2}' | head -1)"
-  local ret="$?"
-  [ "$clone_dir" -a -d "$clone_dir" ] && echo cd "$clone_dir" && cd "$clone_dir"
-  return $ret
-}
 
 alias path='echo $PATH' # Single quotes so we echo path at runtime, not alias time.
 alias h=history # Shows command history.
@@ -223,7 +216,19 @@ alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"' # Makes it look like y
 [ "$uname" = "Darwin" ] && { alias cpy="pbcopy"; alias pst="pbpaste"; alias o=open; } # Cross-platform copy/paste/open terminal commands.
 [ "$uname" = "Linux" ] && { alias cpy="xclip -selection clipboard"; alias pst="xclip -selection clipboard -o"; alias o=xdg-open; }
 
-# I don't have nvm autorun on every shell, I us `nv` when I want to start it.
+# *** TOOL SPECIFIC ***
+
+# Set up fzf.
+if exists fzf && fzf --version >/dev/null 2>&1; then
+  exists fd && { export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git' # Use fd for fuzzy finding if available.
+                 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"; }
+  for file in "$XDG_DATA_HOME"/fzf/shell/{completion,key-bindings}.$shell; do
+    source "$file" # 2>/dev/null || true
+  done
+fi
+
+# Set up nvm
+# I don't have nvm autorun on every shell, I use `nv` when I want to start it.
 # This also allows me to frequently `make -j4 install` node master, and have
 # that as the default (in /usr/local/bin/node).
 export npm_config_userconfig="$XDG_CONFIG_HOME/npm/config"
