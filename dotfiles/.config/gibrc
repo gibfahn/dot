@@ -52,7 +52,7 @@ export CARGO_HOME=${CARGO_HOME:-"$XDG_DATA_HOME/cargo"} # Cargo goes here.
 export RUSTUP_HOME=${RUSTUP_HOME:-"$XDG_DATA_HOME/rustup"} # Rustup goes here.
 export ATOM_HOME=${ATOM_HOME:-"$XDG_CONFIG_HOME/atom"} # Atom goes here.
 export npm_config_devdir=${npm_config_devdir:-"$XDG_CACHE_HOME/node-gyp"} # Set node-gyp download location.
-export npm_cache=${npm_cache:-"$XDG_CACHE_HOME/npm"} # Set npm cache location.
+export npm_config_cache=${npm_cache:-"$XDG_CACHE_HOME/npm"} # Set npm cache location.
 export NODE_REPL_HISTORY=${NODE_REPL_HISTORY="$XDG_CACHE_HOME/node_repl_history"} # Set node-gyp download location.
 export BABEL_CACHE_PATH=${BABEL_CACHE_PATH="$XDG_CACHE_HOME/babel/cache.json"} # Set babel cache location.
 export GRADLE_USER_HOME="$XDG_CACHE_HOME/gradle" # Also contains gradle.properties (symlink from XDG_CONFIG_HOME).
