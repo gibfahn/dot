@@ -139,7 +139,7 @@ for module in "${npm_modules[@]}"; do
   if ! echo "$installed_npm_module_versions" | grep -qx "$module .*" \
     || [[ "$(echo "$installed_npm_module_versions" | grep -x "$module .*" | awk '{print $NF}')" != "$(npm info "$module" version)" ]]; then
     get "npm: $module"
-    npm install --global "$module"@latest
+    npm install --global --loglevel=error "$module"@latest
   else
     skip "npm: $module"
   fi
@@ -169,4 +169,7 @@ if [ "$HARDCORE" ] && { no rustup || no cargo; }; then # Install/set up rust.
 else
   update "Rust compiler and Cargo"
   rustup update
+  update "Global Cargo packages"
+  not cargo-install-update && cargo install cargo-update
+  cargo install-update -a # Update everything installed with cargo install.
 fi
