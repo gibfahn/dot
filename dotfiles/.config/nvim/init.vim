@@ -101,6 +101,7 @@ inoremap          kj <ESC>|                         " kj = Esc in insert mode.
 inoremap <expr>   <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")| " <Enter> hides completion menu and starts new line.
 inoremap <expr>   <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"| " Tab is next entry if completion menu open.
 inoremap <expr>   <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"| " Shift-Tab is previous entry if completion menu open.
+imap <C-j> <Plug>(cm_force_refresh)|                " Use Ctrl-j to trigger completion menu manually.
 nnoremap          k gk|                             " Move up   visually , don't skip wrapped lines,
 nnoremap          j gj|                             "  ↳   down visually , don't skip wrapped lines.
 nnoremap          Q <nop>|                          "  ↳ accidental triggering).
@@ -241,6 +242,7 @@ if has("nvim")                                      " NeoVim specific settings.
   tnoremap <C-n> <C-l>|                             " Ctrl-n is Ctrl-l in a terminal.
   tnoremap <Esc> <C-\><C-n>|                        " Make Escape work in terminal,
   tnoremap kj <C-\><C-n>|                           "  ↳    kj    work in terminal.
+  tnoremap KJ kj|                                   "  Use KJ for a literal kj in the terminal.
 
   augroup gibNvimGroup                              " Autocommands for nvim only
   au TermOpen * setlocal nonumber norelativenumber  " No line numbers in terminal
