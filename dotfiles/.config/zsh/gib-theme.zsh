@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-[ "$ssh" ] || PROMPT="%m " # Set fallback PROMPT in case the below script fails.
+[[ -n "$ssh" ]] || PROMPT="%m " # Set fallback PROMPT in case the below script fails.
 PROMPT=$'\n%{\e[38;5;161m%}'"${PROMPT}"$'%{\e[38;5;242m···❯\e[0m%} '
 
 source "$XDG_DATA_HOME/zsh/zsh-async/async.zsh" || return # Async functions used here.
@@ -64,14 +64,14 @@ _gib_prompt_preprompt_render() {
   local git_prompt_parts
 
   # Git pull/push arrows.
-  [ "$_gib_prompt_git_arrows" ] && git_prompt_parts='%F{226}${_gib_prompt_git_arrows}%f'
+  [[ -n "$_gib_prompt_git_arrows" ]] && git_prompt_parts='%F{226}${_gib_prompt_git_arrows}%f'
 
   # Add git branch and dirty status info.
   typeset -gA _gib_prompt_git
   [[ -n $_gib_prompt_git[branch] ]] && git_prompt_parts+="%F{$git_color}"'${_gib_prompt_git[branch]}%F{226}${_gib_prompt_git_dirty}%f'
 
-  [ "$git_prompt_parts" ] && git_prompt_parts="%F{33}($git_prompt_parts%F{33})%f"
-  [ "$_gib_prompt_cmd_exec_time" ] && _gib_prompt_cmd_exec_time="%F{14}$_gib_prompt_cmd_exec_time%f"
+  [[ -n "$git_prompt_parts" ]] && git_prompt_parts="%F{33}($git_prompt_parts%F{33})%f"
+  [[ -n "$_gib_prompt_cmd_exec_time" ]] && _gib_prompt_cmd_exec_time="%F{14}$_gib_prompt_cmd_exec_time%f"
 
   # Add python virtualenv setting to RPROMPT if set.
   local venv=''
@@ -85,7 +85,7 @@ _gib_prompt_preprompt_render() {
     $git_prompt_parts           # Git info.
   )
 
-  RPROMPT="${(j. .)rprompt_parts}" # Join up parts (space separated).
+  [[ -z "$NORPROMPT" ]] && RPROMPT="${(j. .)rprompt_parts}" # Join up parts (space separated).
 
   # Expand the prompt for future comparision.
   local expanded_rprompt
@@ -316,7 +316,7 @@ _gib_prompt_async_callback() {
       local prev_dirty=$_gib_prompt_git_dirty
       (( code == 0 )) && unset _gib_prompt_git_dirty || typeset -g _gib_prompt_git_dirty="✦"
 
-      [ "$prev_dirty" != "$_gib_prompt_git_dirty" ] && do_render=1
+      [[ "$prev_dirty" != "$_gib_prompt_git_dirty" ]] && do_render=1
 
       # When _gib_prompt_git_last_dirty_check_timestamp is set, the git info is displayed in a different color.
       # To distinguish between a "fresh" and a "cached" result, the preprompt is rendered before setting this
@@ -376,7 +376,7 @@ _gib_prompt_setup() {
   PROMPT=$'\n'
 
   PROMPT+="%(#:%F{202}%n@%m :%F{161})"
-  [ "$ssh" ] && PROMPT+="%m%f "
+  [[ -n "$ssh" ]] && PROMPT+="%m%f "
   PROMPT+="%(?:%F{46}:%F{196})···❯%f "
 }
 

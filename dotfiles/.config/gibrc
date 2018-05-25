@@ -93,6 +93,26 @@ gcl() {
   [ "$clone_dir" -a -d "$clone_dir" ] && echo cd "$clone_dir" && cd "$clone_dir"
   return $ret
 }
+# Change to the most vanilla prompt for copy/pasting into GitHub etc.
+unprompt() {
+  if [[ -n "$ZSH_VERSION" ]]; then
+    _dot_old_prompt="$PROMPT"
+    PROMPT='$ ' NORPROMPT=true # Checked in gib-theme.zsh.
+    unset RPROMPT
+  elif [[ -n "$BASH_VERSION" ]]; then
+    unset PROMPT_COMMAND
+    PS1='$ '
+  fi
+}
+# Restore the normal prompt, undoes the effects of unprompt.
+reprompt() {
+  if [[ -n "$ZSH_VERSION" ]]; then
+    PROMPT="$_dot_old_prompt"
+    unset _dot_old_prompt NORPROMPT
+  elif [[ -n "$BASH_VERSION" ]]; then
+    PROMPT_COMMAND=_gib_bash_prompt_command
+  fi
+}
 
 # *** PATH ADDITIONS ***
 
@@ -103,7 +123,7 @@ pathadd /usr/lib/ccache # Add ccache to the path if installed (Linux).
 pathadd /usr/local/opt/ccache/libexec # Add ccache to the path if installed (macOS).
 pathadd "$HOME/.local/bin"
 pathadd "$CARGO_HOME/bin" # Rust packages.
-[[ -n "$VIRTUAL_ENV" ]] && pathadd "$VIRTUAL_ENV/bin" # Virtual env needs to be in front of /usr/local/bin.
+[ -n "$VIRTUAL_ENV" ] && pathadd "$VIRTUAL_ENV/bin" # Virtual env needs to be in front of /usr/local/bin.
 
 # *** SHELL SPECIFIC ***
 
@@ -147,7 +167,6 @@ if [ "$shell" = zsh ]; then # zsh specific options.
   # Seems to be a bug in earlier zsh versions.
   zsh_v=(${(@s/./)ZSH_VERSION}) # Convert version string to an array.
   [[ "${zsh_v[0]}" -gt 4 || ("${zsh_v[0]}" -eq 4 && "${zsh_v[1]}" -gt 3) ]] && fpath=(/usr/local/share/zsh-completions $fpath) # zsh-completions.
-  # [ "${zsh_v[0]}" -gt 4 -o "${zsh_v[0]}" -eq 4 -a "${zsh_v[1]}" -gt 3 ] && fpath=(/usr/local/share/zsh-completions $fpath) # zsh-completions.
 
   for file in "$ZDOTDIR"/{completion-keybindings,gib-theme,macos-setdir}.zsh; do
     source "$file" || true
@@ -167,10 +186,10 @@ elif [ "$shell" = bash ]; then # Bash specific options.
   _gib_bash_prompt_command() {
     local ret_status="$?"
     local no_col='\e[0m' ret_col='\e[38;5;46m'
-    [ "$ret_status" != 0 ] && ret_col='\e[38;5;196m'
+    [[ "$ret_status" != 0 ]] && ret_col='\e[38;5;196m'
 
     PS1="\n"
-    [ "$ssh" ] && PS1+='\e[38;5;161m\h '"$no_col"
+    [[ -n "$ssh" ]] && PS1+='\e[38;5;161m\h '"$no_col"
     PS1+="${ret_col}·❯${no_col} "
 
     local venv='' # If a virtual env was set, add it to the right prompt.
@@ -212,9 +231,9 @@ alias xv="xargs \$${ZSH_VERSION:+=}VISUAL" v="\$${ZSH_VERSION:+=}VISUAL" # Work 
 exists vimr && alias vm=vimr # Use `vm` for GUI vim, need to add a Linux equivalent.
 ulimit -c unlimited # Allow saving of coredumps.
 alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"' # Makes it look like you're busy with important hacker stuff.
-[ "$uname" = "Darwin" ] && alias ldd="otool -L" # macOS equivalent to ldd.
-[ "$uname" = "Darwin" ] && { alias cpy="pbcopy"; alias pst="pbpaste"; alias o=open; } # Cross-platform copy/paste/open terminal commands.
-[ "$uname" = "Linux" ] && { alias cpy="xclip -selection clipboard"; alias pst="xclip -selection clipboard -o"; alias o=xdg-open; }
+[ "$uname" = Darwin ] && alias ldd="otool -L" # macOS equivalent to ldd.
+[ "$uname" = Darwin ] && { alias cpy="pbcopy"; alias pst="pbpaste"; alias o=open; } # Cross-platform copy/paste/open terminal commands.
+[ "$uname" = Linux ] && { alias cpy="xclip -selection clipboard"; alias pst="xclip -selection clipboard -o"; alias o=xdg-open; }
 
 # *** TOOL SPECIFIC ***
 
@@ -254,7 +273,7 @@ if [ "$ssh" ]; then
   esac
 else # Things to only do if we're not in SSH mode.
   # Set key repeat rate if available (Linux only). You probably want something less insane here, like rate 250 30.
-  if [ "$(uname)" = Linux ]; then
+  if [ "$uname" = Linux ]; then
     exists xset && xset r rate 120 45
     export PANEL_FIFO="/tmp/panel-fifo" # Used by bspwm.
   fi
