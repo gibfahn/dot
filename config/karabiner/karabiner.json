@@ -195,32 +195,32 @@
                 "to": [{ "shell_command": "open -a 'Google Chrome'" }],
                 "type": "basic"
               }, {
-                "description": "Ж+s = Open Spotify",
                 "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
+                "description": "Ж+s = Open Spotify",
                 "from": { "key_code": "s", "modifiers": { "optional": [ "any" ] } },
                 "to": [{ "shell_command": "open -a Spotify" }],
                 "type": "basic"
               }, {
-                "description": "Ж+t = Open the Terminal",
                 "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
+                "description": "Ж+t = Open the Terminal",
                 "from": { "key_code": "t", "modifiers": { "optional": [ "option", "shift", "command" ] } },
                 "to": [{ "shell_command": "open -a kitty" }],
                 "type": "basic"
               }, {
-                "description": "Ж+Shift+w = disable then enable wifi",
                 "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
+                "description": "Ж+Shift+w = disable then enable wifi",
                 "from": { "key_code": "w", "modifiers": { "mandatory": [ "shift" ], "optional": [ "any" ] } },
                 "to": [{ "shell_command": "networksetup -setairportpower en0 off; networksetup -setairportpower en0 on" }],
                 "type": "basic"
               }, {
-                "description": "Ж+w = Open WorkFlowy",
                 "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
+                "description": "Ж+w = Open WorkFlowy",
                 "from": { "key_code": "w", "modifiers": { "optional": [ "any" ] } },
                 "to": [{ "shell_command": "open -a WorkFlowy" }],
                 "type": "basic"
               }, {
-                "description": "Ж+v = Open VimR",
                 "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
+                "description": "Ж+v = Open VimR",
                 "from": { "key_code": "v", "modifiers": { "optional": [ "any" ] } },
                 "to": [{ "shell_command": "open -a VimR" }],
                 "type": "basic"
@@ -366,11 +366,11 @@
               "from": { "key_code": "left_command" },
               "to": { "key_code": "left_option" }
             }, {
-              "from": { "key_code": "left_option" },
-              "to": { "key_code": "left_command" }
-            }, {
               "from": { "key_code": "left_control" },
               "to": { "key_code": "f17" }
+            }, {
+              "from": { "key_code": "left_option" },
+              "to": { "key_code": "left_command" }
             } ]
         } ],
       "fn_function_keys": [ {
