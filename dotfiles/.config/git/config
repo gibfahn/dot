@@ -32,7 +32,7 @@
   cm  = commit -S --amend              # Amend the previous commit.
   cmn = commit -S --amend --no-edit    # Amend the previous commit but don't change the message.
   can = commit -S --amend --no-edit -a # Add changed files and commit with the same message.
-  cn  = clean -fdx                     # Remove anything that's .gitignored
+  cn  = clean -ffdx                    # Remove anything that's .gitignored, including submodule changes.
   cl  = clone --recursive --origin up  # Always include submodules, set default remote to "up".
   cp  = cherry-pick                    # Apply commit hash(es) to current branch.
   cpa = cherry-pick --abort            # Bail out of cherry-pick.
@@ -101,7 +101,6 @@
   stp = stash pop
   std = stash drop
 
-  smc  = submodule foreach git clean -fdx      # Clean submodules.
   sme  = submodule foreach                     # Run a command in all submodules, e.g. `g sme git status`, can be used recursively.
   smf  = submodule update --init               # Update to main repo upstream branch's submodule versions (make submodules match parent's HEADs).
                                                # Like git rhh (above), but resets every submodule to upstream commit. Hopefully someone will upstream an easier way at some point.
@@ -123,6 +122,7 @@
 # Color options: normal, black, red, green, yellow, blue, magenta, cyan, or white (or 0-255).
 # Highlight options: bold, dim, ul (underline), blink, and reverse (swap fg and bg).
 
+# Change the colours for `git branch`.
 [color "branch"]
   current = 33      # The branch you're currently on.
   local = normal    # Other normal branches.
@@ -130,6 +130,7 @@
   upstream = 214 ul # No idea what this is (make it orange to find out).
   plain = normal ul # No idea what this is (underline it to find out).
 
+# Change colours for `git diff`.
 [color "diff"]
   meta = 8                     # Header (diff --git a/file b/file).
   frag = 8                     # Line numbers (@@ -7,20 +7,20 @@).
@@ -146,12 +147,14 @@
   newMoved = 42                # Line moved to here.
   newMovedAlternative = 42 ul  # Alternative color to show difference between moved blocks.
 
+# Change colours for moved hunks in `git diff`.
 [color "diff-highlight"] # See https://github.com/git/git/tree/master/contrib/diff-highlight
   oldHighlight = reverse # Apply this to highlight word diff deletion.
   oldReset = noreverse   # Apply this to undo word diff deletion highlighting.
   newHighlight = reverse # Apply this to highlight word diffs addition.
   newReset = noreverse   # Apply this to undo word diff addition highlighting.
 
+# Change colours for `git status`.
 [color "status"]
   localBranch = 27  # Only used in status --short.
   remoteBranch = 27 # Only used in status --short.
