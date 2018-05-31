@@ -1,16 +1,14 @@
-# vim: filetype=sh
-
 # My rc file, I include this from .profile, .bashrc, and .zshrc like so:
 # . "$HOME/.config/gibrc"
 # The script must be sourced.
 
-# *** INITIAL SETUP ***
+# {{{ Initial setup
 
 case $- in
   *i*) [ "$GIBRC" ] && echo "Reusing gibrc..." || echo "Using gibrc..." ;;
   *) return ;; # Exit if not running interactively.
 esac
-GIBRC="${GIBRC:-0}" # First time through this is 0, next time 1 (etc).
+: "${GIBRC:=0}" # First time through this is 0, next time 1 (etc).
 timer=$SECONDS # Show how long startup took from this point at first prompt.
 
 exists() { which "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
@@ -24,7 +22,7 @@ case $0 in
   -ksh) shell=ksh ;;
   -sh) shell=sh ;;
 esac
-shell=${shell:-"$(ls -l /proc/$$/exe | sed 's%.*/%%')"}
+: ${shell:="$(ls -l /proc/$$/exe | sed 's%.*/%%')"}
 uname="$(uname)"
 unamem="$(uname -m)"
 
@@ -41,7 +39,9 @@ if [ "$ssh" -a "$GIBRC" = 0 -a "$shell" != zsh ]; then
   fi
 fi
 
-# *** ENV VAR DEFAULTS ***
+# }}} Initial setup
+
+# {{{ Env var defaults
 
 export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-"$HOME/.config"} # Config stuff should go here.
 export XDG_CACHE_HOME=${XDG_CACHE_HOME:-"$HOME/.cache"} # Cache stuff should go here.
@@ -67,7 +67,9 @@ HISTSIZE=10000 SAVEHIST=10000 HISTFILE="$XDG_CACHE_HOME/$shell/history" # Set hi
 c="$XDG_CONFIG_HOME" # Shortcut to the config directory (`v $c/gibrc` to edit this file).
 [ -d "$XDG_CONFIG_HOME/terminfo" ] && export TERMINFO="$XDG_CONFIG_HOME/terminfo" # Put terminal info in here.
 
-# *** FUNCTIONS ***
+# }}} Env var defaults
+
+# {{{ Functions
 
 for i in please po pu rd d afind _ md run-help +; do alias | sed 's/^alias //' | grep -q "^$i=" && unalias "$i"; done; unset i # Remove unwanted aliases if defined.
 alias md="mkdir -p" # md foo = mkdir foo.
@@ -114,7 +116,9 @@ reprompt() {
   fi
 }
 
-# *** PATH ADDITIONS ***
+# }}} Functions
+
+# {{{ Path additions
 
 pathadd /usr/local/bin # Missed in some shells.
 pathadd /usr/local/sbin # Missed in some shells.
@@ -125,7 +129,9 @@ pathadd "$HOME/.local/bin"
 pathadd "$CARGO_HOME/bin" # Rust packages.
 [ -n "$VIRTUAL_ENV" ] && pathadd "$VIRTUAL_ENV/bin" # Virtual env needs to be in front of /usr/local/bin.
 
-# *** SHELL SPECIFIC ***
+# }}} Path Additions
+
+# {{{ Shell specific
 
 # Add to end of path.
 pathapp /usr/local/opt/coreutils/libexec/gnubin # Coreutils from brew on macOS, don't replace mac ls.
@@ -200,7 +206,9 @@ elif [ "$shell" = bash ]; then # Bash specific options.
 fi
 command mkdir -p "$XDG_CACHE_HOME/$shell"  # Create HISTFILE dir if necessary.
 
-# *** ALIASES ***
+# }}} Shell Specific
+
+# {{{ Aliases
 
 alias x="exit 0" # x exits the terminal.
 alias c=clear # c clears the terminal screen (can also use Ctrl-L).
@@ -235,7 +243,9 @@ alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"' # Makes it look like y
 [ "$uname" = Darwin ] && { alias cpy="pbcopy"; alias pst="pbpaste"; alias o=open; } # Cross-platform copy/paste/open terminal commands.
 [ "$uname" = Linux ] && { alias cpy="xclip -selection clipboard"; alias pst="xclip -selection clipboard -o"; alias o=xdg-open; }
 
-# *** TOOL SPECIFIC ***
+# }}} Aliases
+
+# {{{ Tool specific
 
 # Set up fzf.
 if exists fzf && fzf --version >/dev/null 2>&1; then
@@ -291,3 +301,7 @@ if [ "$shell" = ksh93 -o "$shell" = ksh ]; then
 fi
 
 export GIBRC="$(expr $GIBRC + 1)" # Increment GIBRC.
+
+# }}} Tool specific
+
+# vim: foldmethod=marker filetype=sh
