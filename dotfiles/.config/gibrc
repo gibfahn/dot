@@ -78,7 +78,10 @@ mdc() { command mkdir -p $*; [ $# = 1 ] && cd "$1" || true; } # mdc foo = mkdir 
 pathadd() { [ -d "$1" ] && export PATH="$1"$(echo ":$PATH:" | sed "s|:$1:|:|" | sed 's|:$||'); }
 # Add or move to end of path.
 pathapp() { [ -d "$1" ] && export PATH=$(echo ":$PATH:" | sed "s|:$1:|:|" | sed 's|^:||')"$1"; }
-exists fd || fd() { find . -iname "*$**"; } # Find by filename (case insensitive).
+# fda is find all (don't ignore anything).
+exists fd && alias fda="fd -HI" \
+  || fd() { find . -iname "*$**"; } # Find by filename (case insensitive).
+exists rg && alias rga="rg --hidden --no-ignore" # rga is grep all (don't ignore anything).
 pth() { # Returns absolute path to file(s) including file name.
   for i in "$@"; do # Args = relative filenames.
     if [ -d "$i" ]; then (pushd "$i" >/dev/null; pwd) # dir.
