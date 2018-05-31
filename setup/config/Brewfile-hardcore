@@ -21,6 +21,7 @@ cask "karabiner-elements"                # Key remapper (see $c/karabiner/karabi
 cask "keycastr"                          # Shows keystrokes in corner of screen (great for casting/demos).
 cask "geektool"                          # Display things on Desktop (I have a todo list).
 cask "kitty"                             # GPU Accelerated cross-platform Terminal Emulator.
+cask "workflowy"                         # Infinitely nested bullet point list app.
 
 # Chunkwm Window Manager (currently disabled):
 # tap "crisidev/homebrew-chunkwm"
