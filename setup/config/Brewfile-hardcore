@@ -1,26 +1,26 @@
 # vi: filetype=conf
 
-brew "dfu-util"                          # Used for flashing my Ergodox Infinity.
 brew "asciinema"                         # Take screen recordings of your terminal (https://asciinema.org).
-brew "exercism"                          # Learn coding languages.
-brew "cmake"                             # Commonly-used meta build system.
-brew "ninja"                             # Google meta build system (used in V8).
-brew "ctags"                             # Used for autocomplete in Vim (etc).
 brew "certbot"                           # LetsEncrypt.
+brew "cmake"                             # Commonly-used meta build system.
+brew "ctags"                             # Used for autocomplete in Vim (etc).
+brew "dfu-util"                          # Used for flashing my Ergodox Infinity.
+brew "exercism"                          # Learn coding languages.
 brew "groovy"                            # Helpful for testing Jenkins scripts.
 brew "kubernetes-cli"                    # Manage your docker clusters with kube.
 brew "kubernetes-helm"                   # Package manager for Docker.
+brew "ninja"                             # Google meta build system (used in V8).
 brew "postgresql"                        # Solid database.
 brew "redis"                             # In-memory key-object store.
+cask "firefox-nightly"                   # For those sweet Rust-based improvements.
+cask "geektool"                          # Display things on Desktop (I have a todo list).
 cask "gimp"                              # Heavyweight photo editor.
-cask "firefox-nightly"                    # For those sweet Rust-based improvements.
-cask "vagrant"                           # Quick command-line image spin-up.
-cask "virtualbox"                        # Manage VMs (Linux or Windows).
-cask "slack-beta"                        # Everyone uses Slack right?
 cask "karabiner-elements"                # Key remapper (see $c/karabiner/karabiner.json for my settings).
 cask "keycastr"                          # Shows keystrokes in corner of screen (great for casting/demos).
-cask "geektool"                          # Display things on Desktop (I have a todo list).
 cask "kitty"                             # GPU Accelerated cross-platform Terminal Emulator.
+cask "slack-beta"                        # Everyone uses Slack right?
+cask "vagrant"                           # Quick command-line image spin-up.
+cask "virtualbox"                        # Manage VMs (Linux or Windows).
 cask "workflowy"                         # Infinitely nested bullet point list app.
 
 # Chunkwm Window Manager (currently disabled):

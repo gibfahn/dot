@@ -1,17 +1,17 @@
 # Alternate version of ripgrep with optimisations on:
+tap "buo/cask-upgrade"                   # Upgrade all casks with `brew cu`.
 tap "burntsushi/ripgrep", "https://github.com/BurntSushi/ripgrep.git"
 tap "caskroom/cask"                      # `brew cask` for GUI apps.
+tap "caskroom/fonts"                     # Let's you `brew cask install` fonts.
 tap "caskroom/versions"                  # Beta versions of apps.
 tap "homebrew/bundle"                    # Allows you to use Brewfiles.
-tap "buo/cask-upgrade"                   # Upgrade all casks with `brew cu`.
-tap "caskroom/fonts"                     # Let's you `brew cask install` fonts.
 
 # Versions of utils that are out-of-date on macOS:
 # Defaults are in /usr/bin, brew installs to /usr/local/bin
-brew "python"                            # Python3
-brew "git"
-brew "python2"
 brew "bash"
+brew "git"
+brew "python"                            # Python3
+brew "python2"
 brew "zsh"
 
 # GNU versions of utils that are out-of-date or FreeBSD on macOS:
@@ -19,43 +19,42 @@ brew "binutils"
 brew "coreutils"
 brew "diffutils"
 brew "findutils", args: ["with-default-names"]
-brew "gnu-sed", args: ["with-default-names"]
-brew "gnu-indent", args: ["with-default-names"]
-brew "gnu-which", args: ["with-default-names"]
-brew "grep", args: ["with-default-names"]
-brew "gnu-tar", args: ["with-default-names"]
-brew "gnutls"
-brew "htop"                              # Terminal activity monitor.
-brew "tree"                              # Recursive ls.
-brew "make"
 brew "gawk"
+brew "gnu-indent", args: ["with-default-names"]
+brew "gnu-sed", args: ["with-default-names"]
+brew "gnu-tar", args: ["with-default-names"]
+brew "gnu-which", args: ["with-default-names"]
+brew "gnutls"
+brew "grep", args: ["with-default-names"]
+brew "htop"                              # Terminal activity monitor.
+brew "make"
+brew "tree"                              # Recursive ls.
 brew "wget"
 
 # Command-line helpers:
 brew "bash-completion"                   # Generally useful bash completions.
-brew "zsh-completions"                   # Generally useful  zsh completions.
-brew "zsh-syntax-highlighting"           # Syntax in the terminal.
+brew "burntsushi/ripgrep/ripgrep-bin"    # Super-fast recursive grep.
 brew "ccache"                            # Speeds up C/C++ recompilation.
 brew "entr"                              # Command line file watching.
-
-brew "neovim"                            # New and improved vim.
-brew "burntsushi/ripgrep/ripgrep-bin"    # Super-fast recursive grep.
-brew "fd"                                # Super-fast find replacement.
 brew "exa"                               # Nicer ls replacement.
-brew "tmux"                              # Terminal multiplexer.
+brew "fd"                                # Super-fast find replacement.
 brew "gnupg"                             # gpg command line.
 brew "gpg-agent"                         # gpg daemon.
+brew "neovim"                            # New and improved vim.
 brew "rmtrash"                           # `rm` to Trash, aliased to `dl` in gibrc.
 brew "tig"                               # `tig log` lets you view log and diffs side-by-side.
+brew "tmux"                              # Terminal multiplexer.
+brew "zsh-completions"                   # Generally useful  zsh completions.
+brew "zsh-syntax-highlighting"           # Syntax in the terminal.
 cask "docker"                            # Build and run docker images.
 
 # Casks (GUI Applications):
 cask "copyq"                             # Clipboard manager with history (needs manual setup).
+cask "disk-inventory-x"                  # Graphical view of what's taking up disk space.
+cask "font-fira-code"                    # Nicer programming font (supports powerline).
 cask "google-chrome"                     # You probably want/have Chrome.
 cask "gpg-suite"                         # GUI gpg key manager (manual setup required).
+cask "hyperswitch"                       # Better Cmd-Tab (only windows on a screen).
 cask "meld"                              # Visual file diffing tool.
 cask "spectacle"                         # Window manager that's easy to get used to.
 cask "vimr"                              # GUI neovim.
-cask "hyperswitch"                       # Better Cmd-Tab (only windows on a screen).
-cask "disk-inventory-x"                  # Graphical view of what's taking up disk space.
-cask "font-fira-code"                    # Nicer programming font (supports powerline).
