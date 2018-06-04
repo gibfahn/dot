@@ -231,7 +231,6 @@ function! DupBuffer()
   call setpos('.', pos) " Set cursor position to what is was before.
 endfunction
 
-if empty($XDG_CACHE_HOME)| let $XDG_CACHE_HOME = $HOME . '/.cache'| endif
 let s:sessionDir = $XDG_CACHE_HOME . "/vim/session/"
 if !isdirectory(s:sessionDir)| call mkdir(s:sessionDir, "p", 0700)| endif
 
@@ -287,6 +286,7 @@ let g:LanguageClient_serverCommands = {
     \ 'java': ['jdtls', '-Dlog.level=ALL'],
     \ 'sh': ['bash-language-server', 'start'],
     \ }
+let g:LanguageClient_settingsPath = $XDG_CONFIG_HOME . "/nvim/settings.json"
 
 " Highlight the 81st column of text (in dark grey so it doesn't distract).
 highlight ColorColumn ctermbg=234
