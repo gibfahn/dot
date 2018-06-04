@@ -2,7 +2,8 @@
 "                   <C-i> is now :bn (<C-i>==Tab for vim), use <C-p> for <C-i> function.
 " Complete list of all vim commands: http://vimdoc.sourceforge.net/htmldoc/vimindex.html
 
-"*** Load Plugins (uses vim-plug). ***"
+" {{{ Load plugins (uses vim-plug)
+
 try
   call plug#begin('~/.local/share/nvim/plugged')    " Load plugins with vim-plug.
 
@@ -38,7 +39,10 @@ endif
     echo "ERROR:\tvim-plug not installed, use :PI to install. Original error was:\n\t" . v:exception . "\n"
 endtry
 
-"*** Set vim options ***"
+" }}} Load plugins (uses vim-plug)
+
+" {{{ Set vim options
+
 set nocompatible                                    " Remove vi compatibility hacks.
 let mapleader = "\<Space>"                          " Set <Leader> (default shortcut used in mappings below) to Spacebar.
 
@@ -94,7 +98,9 @@ catch /E185: Cannot find color scheme 'gib'/
   colo desert
 endtry
 
-"*** Key mappings (see http://vim.wikia.com/wiki/Unused_keys for unused keys) ***"
+" }}} Set vim options
+
+" {{{ Key mappings (see http://vim.wikia.com/wiki/Unused_keys for unused keys)
 " Available (normal): <C-Space>, +, _, <C-q/s/[/_>, <leader>b/c/e/h/m/n/u/v
 
 inoremap          kj <ESC>|                         " kj = Esc in insert mode.
@@ -194,7 +200,10 @@ nnoremap          <C-p> <C-i>|                      " <C-o> = go to previous jum
 vnoremap          <Leader>o :<c-u>call OpenUrl(visualmode())<CR>| " Open the selected text with the appropriate program (like netrw-gx).
 vnoremap          // y/\V<C-R>"<CR>|                " Search for selected text with // (very no-magic mode, doesn't handle backslashes).
 
-"*** Functions used in key mappings above. ***"
+
+" }}} Key mappings (see http://vim.wikia.com/wiki/Unused_keys for unused keys)
+
+" {{{ Functions used in key mappings above.
 
 " Open selected text with native open command, used with `<Leader>o` mappings.
 function! OpenUrl(type)
@@ -249,7 +258,10 @@ if has("nvim")                                      " NeoVim specific settings.
   augroup end
 endif
 
-"*** Custom Commands ***"
+" }}} Functions used in key mappings above.
+
+" {{{ Custom commands
+
 command! W w !sudo tee % > /dev/null|               " :W saves file as sudo.
 command! Trim call TrimWhitespace()|                " :Trim runs :call Trim() (defined below).
 command! PU PlugClean | PlugUpdate | PlugUpgrade|   " :PI installs vim-plug, :PU updates/cleans plugins and vim-plug.
@@ -306,3 +318,7 @@ function! TrimWhitespace()
   %s/\s\+$//e
   call winrestview(l:save)
 endfun
+
+" }}} Custom commands
+
+" vim: foldmethod=marker
