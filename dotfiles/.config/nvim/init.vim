@@ -4,6 +4,10 @@
 
 " {{{ Load plugins (uses vim-plug)
 
+if empty($XDG_CONFIG_HOME)| let $XDG_CONFIG_HOME = $HOME . '/.config'| endif
+if empty($XDG_CACHE_HOME)| let $XDG_CACHE_HOME = $HOME . '/.cache'| endif
+if empty($XDG_DATA_HOME)| let $XDG_DATA_HOME = $HOME . '/.local/share'| endif
+
 try
   call plug#begin('~/.local/share/nvim/plugged')    " Load plugins with vim-plug.
 
@@ -81,7 +85,6 @@ set confirm                                         " Ask if you want to save un
 set wildchar=<Tab> wildmenu                         " Tab complete with files (e.g. `:e`)
 set wildmode=list:longest,list:full                 " 1st Tab completes to longest common string, 2nd+ cycles through options.
 set list listchars=tab:»·,trail:·,nbsp:·            " Display extra whitespace.
-if empty($XDG_CACHE_HOME)| let $XDG_CACHE_HOME = $HOME . '/.cache'| endif
 let s:undodir = $XDG_CACHE_HOME . "/vim/undo"
 if !isdirectory(s:undodir)| call mkdir(s:undodir, "p", 0700)| endif
 set undofile                                        " Persist undo history on file close.
@@ -133,8 +136,10 @@ nnoremap          <Leader>gc :cd %:p:h<CR>|         " Change vim directory (:pwd
 nnoremap          <Leader>gd :w !diff % - <CR>|     " Diff between saved file and current.
 nnoremap          <Leader>gf :call DupBuffer()<CR>gF|        " Open file path:row:col under cursor in last window.
 nnoremap          <Leader>gg :call LanguageClient_textDocument_documentSymbol()<CR>| " Grep for symbols in the current file.
-nnoremap          <Leader>gl :call LoadSession()<CR>|        " Load saved session for vim cwd to cached dir.
-nnoremap          <Leader>gs :call SaveSession()<CR>|        " Save current session for vim cwd from cached dir.
+nnoremap          <Leader>gl :source <C-r>=SessionFile()<CR><CR>| " Load saved session for vim cwd to a default session path.
+nnoremap          <Leader>gL :source <C-r>=SessionFile()<CR>| " Load saved session for vim cwd to a custom path.
+nnoremap          <Leader>gs :mksession! <C-r>=SessionFile()<CR><CR>| " Save current session for vim cwd from a default session path.
+nnoremap          <Leader>gS :mksession! <C-r>=SessionFile()<CR>| " Save current session for vim cwd from a custom path.
 nnoremap          <Leader>gt :set et!<CR>:set et?<CR>|       " Toggle tabs/spaces.
 nnoremap          <Leader>gq :set fo+=t<CR>:set fo?<CR>|     " Turn on  line wrapping,
 nnoremap          <Leader>gQ :set fo-=t<CR>:set fo?<CR>|     "  ↳   off
@@ -230,13 +235,9 @@ if empty($XDG_CACHE_HOME)| let $XDG_CACHE_HOME = $HOME . '/.cache'| endif
 let s:sessionDir = $XDG_CACHE_HOME . "/vim/session/"
 if !isdirectory(s:sessionDir)| call mkdir(s:sessionDir, "p", 0700)| endif
 
-" Saves session to ${XDG_CACHE_HOME:-$HOME/.cache}/vim/session/%path%to%vim%cwd
-function! SaveSession()
-  execute 'mksession! ' . $XDG_CACHE_HOME . "/vim/session/" . substitute(getcwd(), '/', '\\%', 'g')
-endfunction
-" Loads session from ${XDG_CACHE_HOME:-$HOME/.cache}/vim/session/%path%to%vim%cwd
-function! LoadSession()
-  execute 'source ' . $XDG_CACHE_HOME . "/vim/session/" . substitute(getcwd(), '/', '\\%', 'g')
+" Returns path to session ${XDG_CACHE_HOME:-$HOME/.cache}/vim/session/%path%to%vim%cwd
+function! SessionFile()
+  return $XDG_CACHE_HOME . "/vim/session/" . substitute(getcwd(), '/', '\\%', 'g')
 endfunction
 
 if has("nvim")                                      " NeoVim specific settings.
