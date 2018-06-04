@@ -134,19 +134,19 @@ nnoremap          <Leader>f :Files<CR>|             " Search file names    for f
 nnoremap          <Leader>F :grep |                 "  ↳          contents for file.
 nnoremap          <Leader>gc :cd %:p:h<CR>|         " Change vim directory (:pwd) to current file's dirname (e.g. for <space>f, <space>g, :e).
 nnoremap          <Leader>gd :w !diff % - <CR>|     " Diff between saved file and current.
-nnoremap          <Leader>gf :call DupBuffer()<CR>gF|        " Open file path:row:col under cursor in last window.
+nnoremap          <Leader>gf :call DupBuffer()<CR>gF| " Open file path:row:col under cursor in last window.
 nnoremap          <Leader>gg :call LanguageClient_textDocument_documentSymbol()<CR>| " Grep for symbols in the current file.
 nnoremap          <Leader>gl :source <C-r>=SessionFile()<CR><CR>| " Load saved session for vim cwd to a default session path.
 nnoremap          <Leader>gL :source <C-r>=SessionFile()<CR>| " Load saved session for vim cwd to a custom path.
 nnoremap          <Leader>gs :mksession! <C-r>=SessionFile()<CR><CR>| " Save current session for vim cwd from a default session path.
 nnoremap          <Leader>gS :mksession! <C-r>=SessionFile()<CR>| " Save current session for vim cwd from a custom path.
-nnoremap          <Leader>gt :set et!<CR>:set et?<CR>|       " Toggle tabs/spaces.
-nnoremap          <Leader>gq :set fo+=t<CR>:set fo?<CR>|     " Turn on  line wrapping,
-nnoremap          <Leader>gQ :set fo-=t<CR>:set fo?<CR>|     "  ↳   off
-nnoremap          <Leader>gv :e ~/.vimrc<CR>|       " <Space>gv opens ~/.vimrc in the editor (autoreloaded on save).
-nnoremap          <Leader>gw :call Trim()<CR>|      " <Space>gw trims trailing whitespace for file.
-nnoremap          <Leader>id :r !date +\%Y-\%m-\%d<CR>|      "  Insert readable    date on new line.
-nnoremap          <Leader>iD :r !date +\%d-\%b-\%y<CR>|      "  ↳      `:sort`able date on new line.
+nnoremap          <Leader>gt :set et!<CR>:set et?<CR>|   " Toggle tabs/spaces.
+nnoremap          <Leader>gq :set fo+=t<CR>:set fo?<CR>| " Turn on  line wrapping,
+nnoremap          <Leader>gQ :set fo-=t<CR>:set fo?<CR>| " ↳    off
+nnoremap          <Leader>gv :e ~/.vimrc<CR>|  " <Space>gv opens ~/.vimrc in the editor (autoreloaded on save).
+nnoremap          <Leader>gw :call Trim()<CR>| " <Space>gw trims trailing whitespace for file.
+nnoremap          <Leader>id :r !date +\%Y-\%m-\%d<CR>| " Insert readable    date on new line.
+nnoremap          <Leader>iD :r !date +\%d-\%b-\%y<CR>| " ↳      `:sort`able date on new line.
 nnoremap          <Leader>it ITODO(gib): <ESC>:Commentary<CR>$| " Insert a TODO, (Write todo, then `<Space>it`).
 nnoremap          <Leader>j :sp<CR><C-w>k:bp<CR>|   " Open horizontal split,
 nnoremap          <Leader>k <C-w>q|                 " Close current split (keeps buffer).
@@ -159,7 +159,7 @@ nnoremap          <Leader>q :qa<CR>|                " Quit if no    unsaved chan
 nnoremap          <Leader>QQ :q!<CR>|               "      ↳ losing unsaved changes (DANGER).
 nnoremap          <Leader>r :%s/|                   " Replace (e.g. <Space>rold/new),
 nnoremap          <Leader>R :%s//c<Left><Left>|     "  ↳ Replace with prompt on each match.
-map               <Leader>s <Plug>(easymotion-bd-w)|     " EasyMotion: Move to word.
+map               <Leader>s <Plug>(easymotion-bd-w)| " EasyMotion: Move to word.
 nnoremap          <Leader>u :GundoToggle<CR>|       " Toggle Undo tree visualisation.
 nnoremap          <Leader>w :up<CR>|                " Write if there were changes.
 nnoremap          <Leader>W :w<CR>|                 "  ↳    whether or not there were changes.
@@ -171,6 +171,16 @@ nnoremap          <Leader>z  za|                    " Toggle folding on current 
 nnoremap <expr>   <Leader>Z &foldlevel ? 'zM' :'zR'| " Toggle folding everywhere (see also "zi).
 nnoremap          <Leader>/ :noh<CR>|               " Turn off find highlighting.
 nnoremap          <Leader>? /<Up><CR>|              " Search for last searched thing.
+
+nmap <leader>1 <Plug>BufTabLine.Go(1)|         " <leader>1 goes to buffer 1 (see numbers in tab bar).
+nmap <leader>2 <Plug>BufTabLine.Go(2)|         " <leader>1 goes to buffer 2 (see numbers in tab bar).
+nmap <leader>3 <Plug>BufTabLine.Go(3)|         " <leader>1 goes to buffer 3 (see numbers in tab bar).
+nmap <leader>4 <Plug>BufTabLine.Go(4)|         " <leader>1 goes to buffer 4 (see numbers in tab bar).
+nmap <leader>5 <Plug>BufTabLine.Go(5)|         " <leader>1 goes to buffer 5 (see numbers in tab bar).
+nmap <leader>6 <Plug>BufTabLine.Go(6)|         " <leader>1 goes to buffer 6 (see numbers in tab bar).
+nmap <leader>7 <Plug>BufTabLine.Go(7)|         " <leader>1 goes to buffer 7 (see numbers in tab bar).
+nmap <leader>8 <Plug>BufTabLine.Go(8)|         " <leader>1 goes to buffer 8 (see numbers in tab bar).
+nmap <leader>9 <Plug>BufTabLine.Go(1) :bp<CR>| " <leader>1 goes to last buffer (see numbers in tab bar).
 
 " Leader + window size keys increases/decreases height/width by 3/2.
 nnoremap <silent> <Leader>+ :exe "resize " . (winheight(0) * 3/2)<CR>
@@ -277,6 +287,9 @@ let g:loaded_netrwPlugin = 1                        " Don't use the built-in fil
 let g:peekaboo_window = "vert bo 50new"             " Increase peekaboo window width to 50.
 let g:gundo_right = 1                               " Undo window on right.
 let g:gundo_preview_bottom = 1                      " Undo diff preview on bottom.
+let g:buftabline_numbers = 2                        " Show buftabline's count (use <Leader>1-9 to switch.
+let g:buftabline_indicators = 1                     " Show a + if the buffer has been modified.
+
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['rls'],
     \ 'swift': ['langserver-swift'],
