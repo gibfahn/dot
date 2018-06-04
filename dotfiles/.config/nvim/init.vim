@@ -58,6 +58,7 @@ set backspace=indent,eol,start                      " Backspace works across lin
 set ignorecase                                      " Ignore case for lowercase searches,
 set smartcase                                       "  ↳ don't for mixed-case.
 set autoindent                                      " Moving to a new line keeps the same indentation (overridden by filetype indent on).
+set foldmethod=syntax foldlevel=99                  " Fold according to the syntax rules, expand all by default.
 set gdefault                                        " Global replace default (off: /g).
 set history=1000                                    " More command/search history.
 set undolevels=1000                                 " More undo history.
@@ -128,8 +129,9 @@ nmap              t <Plug>Sneak_t|                  " ↳             t
 nmap              T <Plug>Sneak_T|                  " ↳             T
 
 nnoremap          <Leader>a @a<CR>|                 " Apply macro a (add with qa or yank to a reg with "ay).
-nnoremap          <Leader>d :bp\|bd  #<CR>|         " Close buffer without closing split,
-nnoremap          <Leader>D :bp\|bd! #<CR>|         "  ↳ Force close buffer.
+nnoremap          <Leader>b :Buffers<CR>|           " Search buffer list for file.
+nnoremap          <Leader>d :call BufferClose('')<CR>| " Close buffer without closing split,
+nnoremap          <Leader>D :call BufferClose('!')<CR>| "  ↳ Force close buffer.
 nnoremap          <Leader>f :Files<CR>|             " Search file names    for file,
 nnoremap          <Leader>F :grep |                 "  ↳          contents for file.
 nnoremap          <Leader>gc :cd %:p:h<CR>|         " Change vim directory (:pwd) to current file's dirname (e.g. for <space>f, <space>g, :e).
@@ -213,8 +215,13 @@ nnoremap          <Tab> :bn<CR>|                    " Tab to switch to next buff
 nnoremap          <S-Tab> :bp<CR>|                  "  ↳ Shift-Tab to switch to previous buffer.
 nnoremap          <C-p> <C-i>|                      " <C-o> = go to previous jump, <C-p> is go to next (normally <C-i>, but that == Tab, used above).
 vnoremap          <Leader>o :<c-u>call OpenUrl(visualmode())<CR>| " Open the selected text with the appropriate program (like netrw-gx).
-vnoremap          // y/\V<C-R>"<CR>|                " Search for selected text with // (very no-magic mode, doesn't handle backslashes).
+vnoremap // y/\V<C-r>=escape(@",'/\')<CR><CR>|      " Search for selected text with // (very no-magic mode, searches for exactly what you select).
 
+" Adds operator-pending mappings for folds, e.g. vif and vaf like vip and vap.
+vnoremap if :<C-U>silent!normal![zjV]zk<CR>
+onoremap if :normal Vif<CR>
+vnoremap af :<C-U>silent!normal![zV]z<CR>
+onoremap af :normal Vaf<CR>
 
 " }}} Key mappings (see http://vim.wikia.com/wiki/Unused_keys for unused keys)
 
@@ -248,6 +255,15 @@ if !isdirectory(s:sessionDir)| call mkdir(s:sessionDir, "p", 0700)| endif
 function! SessionFile()
   return $XDG_CACHE_HOME . "/vim/session/" . substitute(getcwd(), '/', '\\%', 'g')
 endfunction
+
+func! BufferClose(bang) abort " Set bang to ! to get bd!
+  let oldbuf = bufnr('%') | let oldwin = winnr()
+  if len(getbufinfo({'buflisted':1})) == 1 | enew | else | bp | endif " Open new if no other buffers.
+  " For each window with oldbuf open, switch to previous buffer.
+  while bufwinnr(oldbuf) != -1 | exec bufwinnr(oldbuf) 'wincmd w'| bp | endwhile
+  " Delete oldbuf and restore window to oldwin
+  exec oldwin 'wincmd w' | exec oldbuf 'bd' . a:bang
+endfunc
 
 if has("nvim")                                      " NeoVim specific settings.
   let g:terminal_scrollback_buffer_size = 100000    " Store lots of terminal history.
