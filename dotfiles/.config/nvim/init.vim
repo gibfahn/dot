@@ -135,7 +135,7 @@ nnoremap          <Leader>D :call BufferClose('!')<CR>| "  ↳ Force close buffe
 nnoremap          <Leader>f :Files<CR>|             " Search file names    for file,
 nnoremap          <Leader>F :grep |                 "  ↳          contents for file.
 nnoremap          <Leader>gc :cd %:p:h<CR>|         " Change vim directory (:pwd) to current file's dirname (e.g. for <space>f, <space>g, :e).
-nnoremap          <Leader>gd :w !diff % - <CR>|     " Diff between saved file and current.
+nnoremap          <Leader>gd :w !git diff --no-index % - <CR>|     " Diff between saved file and current.
 nnoremap          <Leader>gf :call DupBuffer()<CR>gF| " Open file path:row:col under cursor in last window.
 nnoremap          <Leader>gg :call LanguageClient_textDocument_documentSymbol()<CR>| " Grep for symbols in the current file.
 nnoremap          <Leader>gl :source <C-r>=SessionFile()<CR><CR>| " Load saved session for vim cwd to a default session path.
