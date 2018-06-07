@@ -189,6 +189,11 @@
   pretty = fuller          # Shows author and committer.
 [help]
   autocorrect = 1          # Autocorrect nonexistant commands after 0.1s.
+[filter "lfs"]
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true
 [log]
   follow = true            # Log tracks file move/rename.
 [merge]
