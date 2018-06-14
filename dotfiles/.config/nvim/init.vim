@@ -32,6 +32,7 @@ endif
   Plug 'pangloss/vim-javascript'                    " JS   language bindings.
   Plug 'rust-lang/rust.vim'                         " Rust language bindings.
   Plug 'sjl/gundo.vim'                              " Interactive undo tree (<space>u to toggle on/off, q to quit).
+  Plug 'tpope/vim-abolish'                          " Work with variants of words (replacing, capitalizing etc).
   Plug 'tpope/vim-commentary'                       " Autodetect comment type for lang.
   Plug 'tpope/vim-fugitive'                         " Git commands in vim.
   Plug 'tpope/vim-repeat'                           " Allows you to use . with plugin mappings.
@@ -143,8 +144,8 @@ nnoremap          <Leader>gL :source <C-r>=SessionFile()<CR>| " Load saved sessi
 nnoremap          <Leader>gs :mksession! <C-r>=SessionFile()<CR><CR>| " Save current session for vim cwd from a default session path.
 nnoremap          <Leader>gS :mksession! <C-r>=SessionFile()<CR>| " Save current session for vim cwd from a custom path.
 nnoremap          <Leader>gt :set et!<CR>:set et?<CR>|   " Toggle tabs/spaces.
-nnoremap          <Leader>gq :set fo+=t<CR>:set fo?<CR>| " Turn on  line wrapping,
-nnoremap          <Leader>gQ :set fo-=t<CR>:set fo?<CR>| " ↳    off
+nnoremap          <Leader>gq :set fo-=t<CR>:set fo?<CR>| " Turn off line wrapping,
+nnoremap          <Leader>gQ :set fo+=t<CR>:set fo?<CR>| " ↳    on
 nnoremap          <Leader>gv :e ~/.vimrc<CR>|  " <Space>gv opens ~/.vimrc in the editor (autoreloaded on save).
 nnoremap          <Leader>gw :call Trim()<CR>| " <Space>gw trims trailing whitespace for file.
 nnoremap          <Leader>id :r !date +\%Y-\%m-\%d<CR>| " Insert readable    date on new line.
