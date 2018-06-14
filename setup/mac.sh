@@ -50,6 +50,19 @@ if [ "$HARDCORE" ]; then # Set key repeat preferences.
     defaults write -g com.apple.trackpad.scaling -float 5.0
   fi
 
+  # System Preferences -> Keyboard -> Shortcuts -> Full Keyboard Access
+  # Full Keyboard Access: In Windows and Dialogs, press Tab to move keyboard
+  # focus between:
+  #   0: Text Boxes and Lists only
+  #   2: All controls
+  # Set it to 2 because that's much nicer (you can close confirmation prompts
+  # with the keyboard, Enter to press the blue one, tab to select between them,
+  # space to press the Tab-selected one. If there are underlined letters, hold
+  # Option and press the letter to choose that option.
+  if [[ "$(defaults read -g AppleKeyboardUIMode)" != 2 ]]; then
+    defaults write -g AppleKeyboardUIMode -int 2
+  fi
+
   # Allow Finder to be quit (hides Desktop files).
   if [[ "$(defaults read com.apple.finder QuitMenuItem)" != 1 ]]; then
     defaults write com.apple.finder QuitMenuItem -bool YES
@@ -100,6 +113,9 @@ fi
 
 # Upgrade everything, even things that weren't in your Brewfile.
 brew upgrade
+
+# Update Mac App Store apps.
+softwareupdate -i -a
 
 if not langserver-swift && ! not swift; then
   gitClone rlovelett/langserver-swift "$HOME"/bin/src/langserver-swift
