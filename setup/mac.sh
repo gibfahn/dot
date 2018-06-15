@@ -32,8 +32,34 @@ else
   skip "Xcode Command Line Tools (already installed)."
 fi
 
-if [ "$HARDCORE" ]; then # Set key repeat preferences.
+if [ "$HARDCORE" ]; then # Set keyboard preferences.
   get "Setting keyboard/trackpad preferences."
+
+  # Set Keyboard Shortcuts -> App Shortcuts
+  # To add your own, first add them in System Preferences -> Keyboard ->
+  # Shortcuts -> App Shortcuts, then find them in the output of:
+  #   defaults read
+  # Use the existing and the help output of `defaults` to work it out.
+
+  # Create global shortcut "Merge all windows" ⌘-M
+  if ! defaults read 'Apple Global Domain' NSUserKeyEquivalents | grep -q "Merge All Windows"; then
+    defaults write 'Apple Global Domain' NSUserKeyEquivalents -dict-add "Merge All Windows" '@$m'
+  fi
+
+  # Remove ⌘-h as a Hide Window shortcut in relevant apps.
+  # -> IntelliJ Community Edition:
+  if ! defaults read com.jetbrains.intellij.ce NSUserKeyEquivalents | grep -q "Hide IntelliJ IDEA"; then
+    defaults write com.jetbrains.intellij.ce NSUserKeyEquivalents -dict-add "Hide IntelliJ IDEA" '@~^\\U00a7'
+  fi
+  # -> IntelliJ:
+  if ! defaults read com.jetbrains.intellij NSUserKeyEquivalents | grep -q "Hide IntelliJ IDEA"; then
+    defaults write com.jetbrains.intellij NSUserKeyEquivalents -dict-add "Hide IntelliJ IDEA" '@~^\\U00a7'
+  fi
+  # -> Kitty:
+  if ! defaults read net.kovidgoyal.kitty NSUserKeyEquivalents | grep -q "Hide kitty"; then
+    defaults write net.kovidgoyal.kitty NSUserKeyEquivalents -dict-add "Hide kitty" '~^$\\U00a7'
+  fi
+
 
   # Set up fastest key repeat rate (needs relogin).
   if [[ "$(defaults read NSGlobalDomain KeyRepeat)" != 1 ]]; then
