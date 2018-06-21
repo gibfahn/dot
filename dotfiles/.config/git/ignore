@@ -1,6 +1,10 @@
 # Global list of things to ignore in every Git repo.
-.vscode/
-.DS_Store
-tags
-npm-debug.log
-*.swp
+
+# VS Code workspace.
+/.vscode/
+
+# macOS Finder cached info.
+.DS_Store/
+
+# IntelliJ IDEA workspace.
+/.idea/
