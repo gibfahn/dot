@@ -289,8 +289,6 @@ endif
 " }}} Functions used in key mappings above.
 
 " {{{ Custom commands
-
-command! W w !sudo tee % > /dev/null|               " :W saves file as sudo.
 command! Trim call TrimWhitespace()|                " :Trim runs :call Trim() (defined below).
 command! PU PlugClean | PlugUpdate | PlugUpgrade|   " :PI installs vim-plug, :PU updates/cleans plugins and vim-plug.
 command! PI !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
