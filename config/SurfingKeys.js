@@ -16,6 +16,7 @@
 
 Hints.characters = 'qwertyuiopasdfghjklzxcvbnm'; // Use whole alphabet for Link Hints (f).
 settings.scrollStepSize = 140; // Double scroll size (for j/k), default 70.
+iunmap(":"); // Disable emoji suggestions.
 
 aceVimMap('kj', '<Esc>', 'insert'); // Remap kj to Esc in the insert mode Ace editor.
 
