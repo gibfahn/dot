@@ -1,4 +1,4 @@
-" BREAKING CHANGES: s is now sneak (use `cl` for `s`) function.
+" BREAKING CHANGES: s is now sneak (use `cl` for `s`) function (:h sneak).
 "                   <C-i> is now :bn (<C-i>==Tab for vim), use <C-p> for <C-i> function.
 " Complete list of all vim commands: http://vimdoc.sourceforge.net/htmldoc/vimindex.html
 
@@ -84,6 +84,7 @@ set splitright                                      "  ↳ bottom, which feels m
 set diffopt+=vertical                               " Always use vertical diffs.
 set visualbell                                      " Flash the screen instead of beeping when doing something wrong.
 set confirm                                         " Ask if you want to save unsaved files instead of failing.
+set notildeop                                       " Keep tilde (~) as it's default. If you want the operator version use g~.
 set wildchar=<Tab> wildmenu                         " Tab complete with files (e.g. `:e`)
 set wildmode=list:longest,list:full                 " 1st Tab completes to longest common string, 2nd+ cycles through options.
 set list listchars=tab:»·,trail:·,nbsp:·            " Display extra whitespace.
