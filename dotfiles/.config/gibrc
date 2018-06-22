@@ -268,6 +268,11 @@ export npm_config_userconfig="$XDG_CONFIG_HOME/npm/config"
 export NVM_DIR="$XDG_DATA_HOME/$([ "$unamem" != x86_64 ] && echo "$unamem/")nvm"
 alias nv='. $NVM_DIR/nvm.sh'  # Start nvm with alias, o/w too much startup cost.
 
+# Set up rvm
+# I don't have rvm autorun on every shell, I use `rv` when I want to start it.
+export rvm_prefix="$XDG_DATA_HOME/rvm" rvm_path="$XDG_DATA_HOME/rvm" # Move rvm from ~.
+alias rv='. "$rvm_path"/scripts/rvm'  # Start rvm with alias, o/w too much startup cost.
+
 ## Rust commands.
 alias cn="cargo new --bin" cb="cargo build" cr="cargo run" ct="cargo test"
 alias ctag='ctags -R . $HOME/bin/src/rust' # Populate ctags from rust src.

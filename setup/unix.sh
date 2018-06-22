@@ -117,6 +117,19 @@ if no "$nvm_prefix"nvm; then
   npm completion --loglevel=error > "$XDG_DATA_HOME/.zfunc/_npm"
 fi
 
+# Install rvm
+if not rvm; then
+  curl -sSL https://get.rvm.io | bash -s -- --path "$XDG_DATA_HOME/rvm" --ignore-dotfiles
+  for i in "$XDG_DATA_HOME/rvm/bin/"*; do ln -sf "$i" "$HOME/bin/$(basename "$i")"; done
+  gpg2 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+fi
+# Update rvm
+rvm get stable
+# For some reason `rvm get stable` removes the rvm symlinks (not sure why) so replace them.
+for i in "$XDG_DATA_HOME/rvm/bin/"*; do ln -sf "$i" "$HOME/bin/$(basename "$i")"; done
+# Install or update the latest version of ruby.
+rvm install ruby-2 # Update this when ruby 3 comes out.
+
 # Symlink fzf
 if not fzf; then
   ln -s "$XDG_DATA_HOME"/fzf/bin/* "$HOME"/bin/
