@@ -225,6 +225,9 @@ onoremap if :normal Vif<CR>
 vnoremap af :<C-U>silent!normal![zV]z<CR>
 onoremap af :normal Vaf<CR>
 
+" %% expands to dirname of current file.
+cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
+
 " }}} Key mappings (see http://vim.wikia.com/wiki/Unused_keys for unused keys)
 
 " {{{ Functions used in key mappings above.
