@@ -13,7 +13,11 @@ try
 
 if has("nvim")                                      " NeoVim specific settings.
   Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh', } " LSP Support (:h LanguageClient).
-  Plug 'roxma/nvim-completion-manager'              " Completion plugin (used in LSP).
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " Asynchronous completion framework for neovim/Vim8 (used in LanguageClient).
+else
+  Plug 'Shougo/deoplete.nvim'                       " Same as neovim one but without UpdateRemotePlugins.
+  Plug 'roxma/nvim-yarp'                            " nvim compatibility plugin for vim used by deoplete.
+  Plug 'roxma/vim-hug-neovim-rpc'                   " nvim compatibility plugin for vim used by deoplete.
 endif
 
   Plug 'AndrewRadev/splitjoin.vim'                  " gS to split, gJ to join lines.
@@ -110,10 +114,8 @@ endtry
 " Available (normal): <C-Space>, +, _, <C-q/s/[/_>, <leader>b/c/e/h/m/n/u/v
 
 inoremap          kj <ESC>|                         " kj = Esc in insert mode.
-inoremap <expr>   <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")| " <Enter> hides completion menu and starts new line.
 inoremap <expr>   <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"| " Tab is next entry if completion menu open.
 inoremap <expr>   <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"| " Shift-Tab is previous entry if completion menu open.
-imap <C-j> <Plug>(cm_force_refresh)|                " Use Ctrl-j to trigger completion menu manually.
 nnoremap          k gk|                             " Move up   visually , don't skip wrapped lines,
 nnoremap          j gj|                             "  ↳   down visually , don't skip wrapped lines.
 nnoremap          Q <nop>|                          "  ↳ accidental triggering).
@@ -298,6 +300,7 @@ command! PI !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim &&
     \ ln -s ~/.local/share/nvim/site/autoload ~/.vim/autoload
 
+let g:deoplete#enable_at_startup = 1                " Enable deoplete by default.
 let g:is_posix = 1                                  " Assume shell for syntax highlighting.
 "let g:rustfmt_autosave = 1                         " Run rustfmt on save (from rust.vim).
 let g:sneak#use_ic_scs = 1                          " Sneak: respect smartcase setting.
