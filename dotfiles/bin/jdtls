@@ -15,7 +15,7 @@ java \
     -Declipse.product=org.eclipse.jdt.ls.core.product \
     -noverify \
     -Xms1G \
-    -jar "$XDG_DATA_HOME"/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository/plugins/org.eclipse.equinox.launcher_?.?.?.v*-*.jar \
+    -jar "$XDG_DATA_HOME"/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository/plugins/org.eclipse.equinox.launcher_[0-9]*.[0-9]*[0-9]*.v*.jar \
     -configuration "$XDG_DATA_HOME"/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository/config_$os/ \
     -data "${XDG_CACHE_HOME:-$HOME/.cache}/jdtls/${PWD//\//%}"
     "$@"
