@@ -209,6 +209,12 @@
                 "type": "basic"
               }, {
                 "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
+                "description": "Ж+Shift+x = restart the touch strip",
+                "from": { "key_code": "x", "modifiers": { "mandatory": [ "shift" ], "optional": [ "any" ] } },
+                "to": [{ "shell_command": "pkill ControlStrip" }],
+                "type": "basic"
+              }, {
+                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
                 "description": "Ж+Shift+w = disable then enable wifi",
                 "from": { "key_code": "w", "modifiers": { "mandatory": [ "shift" ], "optional": [ "any" ] } },
                 "to": [{ "shell_command": "networksetup -setairportpower en0 off; networksetup -setairportpower en0 on" }],
