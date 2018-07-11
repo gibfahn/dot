@@ -109,20 +109,20 @@ if [ ! -L "$specConfig" ]; then
   ln -s "$XDG_CONFIG_HOME/Spectacle/Shortcuts.json" "$specConfig"
 fi
 
-# Install brew
-if exists brew; then
-  skip "brew (already installed)."
-else
-  get "brew."
-  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-fi
-
 # Increase max file watch limit. See http://entrproject.org/limits.html
 if [[ -e /Library/LaunchDaemons/limit.maxfiles.plist ]]; then
   skip "File watcher limit (already increased)."
 else
   get "File watcher limit."
   sudo curl -sL http://entrproject.org/etc/limit.maxfiles.plist -o /Library/LaunchDaemons/limit.maxfiles.plist
+fi
+
+# Install brew
+if exists brew; then
+  skip "brew (already installed)."
+else
+  get "brew."
+  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
 # brew install things. Edit config/Brewfile to adjust.
