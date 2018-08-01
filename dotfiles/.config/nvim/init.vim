@@ -313,13 +313,14 @@ let g:buftabline_numbers = 2                        " Show buftabline's count (u
 let g:buftabline_indicators = 1                     " Show a + if the buffer has been modified.
 
 let g:LanguageClient_serverCommands = {
-    \ 'rust': ['rls'],
-    \ 'swift': ['langserver-swift'],
+    \ 'java': ['jdtls', '-Dlog.level=ALL'],
     \ 'javascript': ['javascript-typescript-stdio'],
     \ 'javascript.jsx': ['javascript-typescript-stdio'],
     \ 'python': ['pyls'],
-    \ 'java': ['jdtls', '-Dlog.level=ALL'],
+    \ 'ruby': ['solargraph', 'stdio', '.'],
+    \ 'rust': ['rls'],
     \ 'sh': ['bash-language-server', 'start'],
+    \ 'swift': ['langserver-swift'],
     \ }
 let g:LanguageClient_settingsPath = $XDG_CONFIG_HOME . "/nvim/settings.json"
 

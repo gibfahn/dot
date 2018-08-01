@@ -15,6 +15,10 @@ pip3_modules=(
   'python-language-server[all]' # Python language server (I use it in neovim).
 )
 
+ruby_gems=(
+  solargraph                    # Ruby LanguageServer Client.
+)
+
 # Initialise and update submodules (not yet mandatory).
 git submodule init && git submodule update || true
 
@@ -134,6 +138,19 @@ rvm install ruby-2 # Update this when ruby 3 comes out.
 if not fzf; then
   ln -s "$XDG_DATA_HOME"/fzf/bin/* "$HOME"/bin/
 fi
+
+# Install ruby gems
+for gem in "${ruby_gems[@]}"; do
+  if gem list -i "$gem"; then
+    get "gem: $gem"
+    gem install "$gem"
+  else
+    skip "gem: $gem"
+  fi
+done
+
+# Update ruby gems.
+gem update $(gem outdated | cut -d ' ' -f 1)
 
 # Install vim-plug (vim plugin manager):
 if no nvim/site/autoload/plug.vim; then
