@@ -138,19 +138,20 @@ nnoremap          <Leader>d :call BufferClose('')<CR>| " Close buffer without cl
 nnoremap          <Leader>D :call BufferClose('!')<CR>| "  ↳ Force close buffer.
 nnoremap          <Leader>f :Files<CR>|             " Search file names    for file,
 nnoremap          <Leader>F :grep |                 "  ↳          contents for file.
-nnoremap          <Leader>gc :cd %:p:h<CR>|         " Change vim directory (:pwd) to current file's dirname (e.g. for <space>f, <space>g, :e).
+nnoremap          <Leader>gc :cd %:p:h<CR>|         " Change vim directory (:pwd) to current file's dirname (e.g. for <space>f, :e).
 nnoremap          <Leader>gd :w !git diff --no-index % - <CR>|     " Diff between saved file and current.
 nnoremap          <Leader>gf :call DupBuffer()<CR>gF| " Open file path:row:col under cursor in last window.
 nnoremap          <Leader>gg :call LanguageClient_textDocument_documentSymbol()<CR>| " Grep for symbols in the current file.
 nnoremap          <Leader>gl :source <C-r>=SessionFile()<CR><CR>| " Load saved session for vim cwd to a default session path.
 nnoremap          <Leader>gL :source <C-r>=SessionFile()<CR>| " Load saved session for vim cwd to a custom path.
+nnoremap          <Leader>gp `[v`]| " Visual selection of the last thing you copied or pasted.
 nnoremap          <Leader>gs :mksession! <C-r>=SessionFile()<CR><CR>| " Save current session for vim cwd from a default session path.
 nnoremap          <Leader>gS :mksession! <C-r>=SessionFile()<CR>| " Save current session for vim cwd from a custom path.
 nnoremap          <Leader>gt :set et!<CR>:set et?<CR>|   " Toggle tabs/spaces.
 nnoremap          <Leader>gq :set fo-=t<CR>:set fo?<CR>| " Turn off line wrapping,
 nnoremap          <Leader>gQ :set fo+=t<CR>:set fo?<CR>| " ↳    on
 nnoremap          <Leader>gv :e ~/.vimrc<CR>|  " <Space>gv opens ~/.vimrc in the editor (autoreloaded on save).
-nnoremap          <Leader>gw :call Trim()<CR>| " <Space>gw trims trailing whitespace for file.
+nnoremap          <Leader>gw :setlocal wrap!<CR>| " <Space>gw toggles the soft-wrapping of text.
 nnoremap          <Leader>id :r !date +\%Y-\%m-\%d<CR>| " Insert readable    date on new line.
 nnoremap          <Leader>iD :r !date +\%d-\%b-\%y<CR>| " ↳      `:sort`able date on new line.
 nnoremap          <Leader>it ITODO(gib): <ESC>:Commentary<CR>$| " Insert a TODO, (Write todo, then `<Space>it`).
@@ -286,8 +287,25 @@ if has("nvim")                                      " NeoVim specific settings.
   tnoremap kj <C-\><C-n>|                           "  ↳    kj    work in terminal.
   tnoremap KJ kj|                                   "  Use KJ for a literal kj in the terminal.
 
-  augroup gibNvimGroup                              " Autocommands for nvim only
-  au TermOpen * setlocal nonumber norelativenumber  " No line numbers in terminal
+  augroup gibTermGroup                              " Autocommands for nvim only
+    au TermOpen * setlocal nonumber norelativenumber  " No line numbers in terminal
+    au TermOpen * setlocal wrap                     " Soft line wrapping in terminal.
+  augroup end
+else
+  set termwinscroll=100000                          " Store lots of terminal history.
+  nnoremap <Leader>t :term<CR>|wincmd L|                     " Open terminal in new split.
+  nnoremap <Leader>T :term ++curwin<CR>|                     " Open terminal in current split.
+  tnoremap <C-h> <C-w>h|                            " Switch left  a window in terminal,
+  tnoremap <C-j> <C-w>j|                            "  ↳     down  a window in terminal,
+  tnoremap <C-k> <C-w>k|                            "  ↳     up    a window in terminal,
+  tnoremap <C-l> <C-w>l|                            "  ↳     right a window in terminal.
+  tnoremap <C-n> <C-l>|                             " Ctrl-n is Ctrl-l in a terminal.
+  tnoremap <Esc> <C-W>N|                            " Make Escape work in terminal,
+  tnoremap kj <C-W>N|                               "  ↳    kj    work in terminal.
+  tnoremap KJ kj|                                   "  Use KJ for a literal kj in the terminal.
+
+  augroup gibTermGroup                              " Autocommands for nvim only
+    au TerminalOpen * if &buftype == 'terminal'| setlocal nonumber norelativenumber| endif " No line numbers in terminal
   augroup end
 endif
 
@@ -296,6 +314,7 @@ endif
 " {{{ Custom commands
 command! Trim call TrimWhitespace()|                " :Trim runs :call Trim() (defined below).
 command! PU PlugClean | PlugUpdate | PlugUpgrade|   " :PI installs vim-plug, :PU updates/cleans plugins and vim-plug.
+
 command! PI !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim &&
     \ ln -s ~/.local/share/nvim/site/autoload ~/.vim/autoload
