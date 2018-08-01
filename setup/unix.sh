@@ -195,7 +195,7 @@ if [ "$HARDCORE" ] && { no rustup || no cargo; }; then # Install/set up rust.
   rustup install stable
 
   # Download rls (https://github.com/rust-lang-nursery/rls):
-  rustup component add rls-preview rust-analysis rust-src
+  rustup component add rls-preview rust-analysis rust-src clippy-preview rustfmt-preview
 else
   update "Rust compiler and Cargo"
   rustup update
