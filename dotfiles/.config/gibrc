@@ -4,6 +4,8 @@
 
 # {{{ Initial setup
 
+[ -n "$NORC" ] && return # Don't run if NORC set.
+
 case $- in
   *i*) [ "$GIBRC" ] && echo "Reusing gibrc..." || echo "Using gibrc..." ;;
   *) return ;; # Exit if not running interactively.
@@ -93,7 +95,7 @@ pth() { # Returns absolute path to file(s) including file name.
 # Clone repo and cd into path.
 gcl() {
   local clone_dir
-  clone_dir="$(set -o pipefail; git cl $@ 3>&1 1>&2 2>&3 3>&- | tee /dev/stderr | awk -F \' '/Cloning into/ {print $2}' | head -1)"
+  clone_dir="$(set -o pipefail; git cl "$@" 3>&1 1>&2 2>&3 3>&- | tee /dev/stderr | awk -F \' '/Cloning into/ {print $2}' | head -1)"
   local ret="$?"
   [ "$clone_dir" -a -d "$clone_dir" ] && echo cd "$clone_dir" && cd "$clone_dir"
   return $ret
@@ -277,7 +279,7 @@ alias rv='. "$rvm_path"/scripts/rvm'  # Start rvm with alias, o/w too much start
 alias cn="cargo new --bin" cb="cargo build" cr="cargo run" ct="cargo test"
 alias ctag='ctags -R . $HOME/bin/src/rust' # Populate ctags from rust src.
 alias ru=rustup e=exercism k=kubectl
-rs() { for i in $@; do rustc ${i%.rs}.rs; ./${i%.rs}; done; } # Compile/run (rs a.rs b).
+rs() { for i in "$@"; do rustc ${i%.rs}.rs; ./${i%.rs}; done; } # Compile/run (rs a.rs b).
 
 # Build node with ninja.
 alias bn='export CPPFLAGS=-fdiagnostics-color && ./configure && tools/gyp_node.py -f ninja && ninja -C out/Release && ln -fs out/Release/node node'

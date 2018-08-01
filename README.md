@@ -86,9 +86,9 @@ Some things you have to do manually, here's a short list:
   - Similar to ssh keys, instructions
     [here](http://fahn.co/blog/setting-up-gpg-keys.html).
 - CopyQ setup (All)
-  - Check `Paste to Current Window`, `Focus to Last Window`, Set History to
-    `9999`
+  - Set History to `9999`
   - Add Global Shortcut: `Show/Hide Main Window` -> <kbd>⌘</kbd><kbd>Shift</kbd><kbd>v</kbd>
+  - Add Global Shortcut: `Paste as Plain Text` -> <kbd>Shift</kbd><kbd>Enter</kbd>
 - Run Spectacle on Login (macOS):
   - <kbd>⌘</kbd><kbd>Space</kbd>`Spectacle`<kbd>Enter</kbd>
   - Click on the spectacles in the Menu Bar, click Preferences
