@@ -172,26 +172,31 @@
                 "type": "basic"
               }, {
                 "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
+                "description": "Ж+a = Open IntelliJ IDEA",
                 "from": { "key_code": "a", "modifiers": { "optional": [ "option", "command" ] } },
-                "to": [{ "shell_command": "open -a Alacritty" }],
+                "to": [{ "shell_command": "open -a 'IntelliJ IDEA'" }],
                 "type": "basic"
               }, {
                 "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
+                "description": "Ж+c = Open HipChat",
                 "from": { "key_code": "c", "modifiers": { "optional": [ "any" ] } },
                 "to": [{ "shell_command": "open -a HipChat" }],
                 "type": "basic"
               }, {
                 "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
+                "description": "Ж+e = Open Finder",
                 "from": { "key_code": "e", "modifiers": { "optional": [ "any" ] } },
                 "to": [{ "shell_command": "open ~" }],
                 "type": "basic"
               }, {
                 "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
+                "description": "Ж+f = Open Firefox",
                 "from": { "key_code": "f", "modifiers": { "optional": [ "any" ] } },
                 "to": [{ "shell_command": "open -a 'Firefox Nightly'" }],
                 "type": "basic"
               }, {
                 "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
+                "description": "Ж+g = Open Google Chrome",
                 "from": { "key_code": "g", "modifiers": { "optional": [ "any" ] } },
                 "to": [{ "shell_command": "open -a 'Google Chrome'" }],
                 "type": "basic"
@@ -227,9 +232,10 @@
                 "type": "basic"
               }, {
                 "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "description": "Ж+d = Open IDE (IntelliJ)",
+                "description": "Ж+d = print today's date",
                 "from": { "key_code": "d", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "shell_command": "open -a 'IntelliJ IDEA'" }],
+                "to": [{ "shell_command": "printf `date \"+%Y-%m-%d\"` | pbcopy" },
+                  {"key_code": "v", "modifiers": ["command"]}],
                 "type": "basic"
               } ]
           }, {
