@@ -135,7 +135,6 @@ nmap              T <Plug>Sneak_T|                  " ↳             T
 nnoremap          <Leader>a @a<CR>|                 " Apply macro a (add with qa or yank to a reg with "ay).
 nnoremap          <Leader>b :Buffers<CR>|           " Search buffer list for file.
 nnoremap          <Leader>d :call BufferClose('')<CR>| " Close buffer without closing split,
-nnoremap          <Leader>D :call BufferClose('!')<CR>| "  ↳ Force close buffer.
 nnoremap          <Leader>f :Files<CR>|             " Search file names    for file,
 nnoremap          <Leader>F :grep |                 "  ↳          contents for file.
 nnoremap          <Leader>gc :cd %:p:h<CR>|         " Change vim directory (:pwd) to current file's dirname (e.g. for <space>f, :e).
@@ -264,7 +263,7 @@ function! SessionFile()
   return $XDG_CACHE_HOME . "/vim/session/" . substitute(getcwd(), '/', '\\%', 'g')
 endfunction
 
-func! BufferClose(bang) abort " Set bang to ! to get bd!
+func! BufferClose(bang) abort " Call BufferClose('!') to get bd!
   let oldbuf = bufnr('%') | let oldwin = winnr()
   if len(getbufinfo({'buflisted':1})) == 1 | enew | else | bp | endif " Open new if no other buffers.
   " For each window with oldbuf open, switch to previous buffer.
