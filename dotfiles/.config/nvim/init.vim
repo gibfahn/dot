@@ -126,7 +126,7 @@ nnoremap          gj j|                             "  ↳   down logically, do 
 nnoremap <silent> gr :call LanguageClient_textDocument_rename()<CR>| " Rename var/func under cursor.
 nnoremap          Y y$|                             " Make Y work like C and D (yank to end of line, not whole line).
 " To open vim's current directory, use `:e .`.
-nnoremap          - :e `dirname %`<CR>|             " - open current buffer directory in file browser (repeat for `cd ..`).
+nnoremap          - :e %:h<CR>|             " - open current buffer directory in file browser (repeat for `cd ..`).
 nmap              f <Plug>Sneak_f|                  " Use sneak for f (multiline+highlight).
 nmap              F <Plug>Sneak_F|                  " ↳             F
 nmap              t <Plug>Sneak_t|                  " ↳             t
@@ -335,7 +335,7 @@ let g:LanguageClient_serverCommands = {
     \ 'javascript': ['javascript-typescript-stdio'],
     \ 'javascript.jsx': ['javascript-typescript-stdio'],
     \ 'python': ['pyls'],
-    \ 'ruby': ['solargraph', 'stdio', '.'],
+    \ 'ruby': ['solargraph', 'stdio'],
     \ 'rust': ['rls'],
     \ 'sh': ['bash-language-server', 'start'],
     \ 'swift': ['langserver-swift'],
