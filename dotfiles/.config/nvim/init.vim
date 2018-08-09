@@ -111,7 +111,7 @@ endtry
 " }}} Set vim options
 
 " {{{ Key mappings (see http://vim.wikia.com/wiki/Unused_keys for unused keys)
-" Available (normal): <C-Space>, +, _, <C-q/s/[/_>, <leader>b/c/e/h/m/n/u/v
+" Available (normal): <C-Space>, +, _, <C-q/s/[/_>, <leader>b/e/h/m/n/u/v
 
 inoremap          kj <ESC>|                         " kj = Esc in insert mode.
 inoremap <expr>   <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"| " Tab is next entry if completion menu open.
@@ -119,11 +119,8 @@ inoremap <expr>   <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"| " Shift-Tab is p
 nnoremap          k gk|                             " Move up   visually , don't skip wrapped lines,
 nnoremap          j gj|                             "  ↳   down visually , don't skip wrapped lines.
 nnoremap          Q <nop>|                          "  ↳ accidental triggering).
-nnoremap <silent> gd :call DupBuffer()<CR>:call LanguageClient_textDocument_definition()<CR>| " Go to definition in last window.
-nnoremap <silent> gD :call LanguageClient_textDocument_definition()<CR>| " Go to definition in the same window.
 nnoremap          gk k|                             " Move up   logically, do    skip wrapped lines,
 nnoremap          gj j|                             "  ↳   down logically, do    skip wrapped lines.
-nnoremap <silent> gr :call LanguageClient_textDocument_rename()<CR>| " Rename var/func under cursor.
 nnoremap          Y y$|                             " Make Y work like C and D (yank to end of line, not whole line).
 " To open vim's current directory, use `:e .`.
 nnoremap          - :e %:h<CR>|             " - open current buffer directory in file browser (repeat for `cd ..`).
@@ -134,49 +131,62 @@ nmap              T <Plug>Sneak_T|                  " ↳             T
 
 nnoremap          <Leader>a @a<CR>|                 " Apply macro a (add with qa or yank to a reg with "ay).
 nnoremap          <Leader>b :Buffers<CR>|           " Search buffer list for file.
-nnoremap          <Leader>d :call BufferClose('')<CR>| " Close buffer without closing split,
-nnoremap          <Leader>f :Files<CR>|             " Search file names    for file,
-nnoremap          <Leader>F :grep |                 "  ↳          contents for file.
-nnoremap          <Leader>gc :cd %:p:h<CR>|         " Change vim directory (:pwd) to current file's dirname (e.g. for <space>f, :e).
-nnoremap          <Leader>gd :w !git diff --no-index % - <CR>|     " Diff between saved file and current.
-nnoremap          <Leader>gf :call DupBuffer()<CR>gF| " Open file path:row:col under cursor in last window.
-nnoremap          <Leader>gg :call LanguageClient_textDocument_documentSymbol()<CR>| " Grep for symbols in the current file.
-nnoremap          <Leader>gl :source <C-r>=SessionFile()<CR><CR>| " Load saved session for vim cwd to a default session path.
-nnoremap          <Leader>gL :source <C-r>=SessionFile()<CR>| " Load saved session for vim cwd to a custom path.
-nnoremap          <Leader>gp `[v`]| " Visual selection of the last thing you copied or pasted.
-nnoremap          <Leader>gs :mksession! <C-r>=SessionFile()<CR><CR>| " Save current session for vim cwd from a default session path.
-nnoremap          <Leader>gS :mksession! <C-r>=SessionFile()<CR>| " Save current session for vim cwd from a custom path.
-nnoremap          <Leader>gt :set et!<CR>:set et?<CR>|   " Toggle tabs/spaces.
-nnoremap          <Leader>gq :set fo-=t<CR>:set fo?<CR>| " Turn off line wrapping,
-nnoremap          <Leader>gQ :set fo+=t<CR>:set fo?<CR>| " ↳    on
-nnoremap          <Leader>gv :e ~/.vimrc<CR>|  " <Space>gv opens ~/.vimrc in the editor (autoreloaded on save).
-nnoremap          <Leader>gw :setlocal wrap!<CR>| " <Space>gw toggles the soft-wrapping of text.
-nnoremap          <Leader>id :r !date +\%Y-\%m-\%d<CR>| " Insert readable    date on new line.
-nnoremap          <Leader>iD :r !date +\%d-\%b-\%y<CR>| " ↳      `:sort`able date on new line.
-nnoremap          <Leader>it ITODO(gib): <ESC>:Commentary<CR>$| " Insert a TODO, (Write todo, then `<Space>it`).
-nnoremap          <Leader>j :sp<CR><C-w>k:bp<CR>|   " Open horizontal split,
-nnoremap          <Leader>k <C-w>q|                 " Close current split (keeps buffer).
-nnoremap <silent> <Leader>K :call LanguageClient_textDocument_hover()<CR>| " Show definition.
-nnoremap          <Leader>l :vsp<CR><C-w>h:bp<CR>|  " Open vertical split.
-nnoremap          <Leader>o :set operatorfunc=OpenUrl<CR>g@| " Open the selected text with the appropriate program (like netrw-gx).
-nnoremap          <Leader>p "+p|                    "  Paste from clipboard after cursor.
-nnoremap          <Leader>P "+P|                    "                    ↳  before cursor.
-nnoremap          <Leader>q :qa<CR>|                " Quit if no    unsaved changes (for single file use <Space>d instead).
-nnoremap          <Leader>QQ :q!<CR>|               "      ↳ losing unsaved changes (DANGER).
-nnoremap          <Leader>r :%s/|                   " Replace (e.g. <Space>rold/new),
-nnoremap          <Leader>R :%s//c<Left><Left>|     "  ↳ Replace with prompt on each match.
-map               <Leader>s <Plug>(easymotion-bd-w)| " EasyMotion: Move to word.
-nnoremap          <Leader>u :GundoToggle<CR>|       " Toggle Undo tree visualisation.
-nnoremap          <Leader>w :up<CR>|                " Write if there were changes.
-nnoremap          <Leader>W :w<CR>|                 "  ↳    whether or not there were changes.
-nnoremap          <Leader>x :x<CR>|                 " Save (if changes) and quit.
-nnoremap          <Leader>X :xa<CR>|                " Quit all windows.
-nnoremap          <Leader>y "+y|                    " Copy to clipboard (normal mode).
-nnoremap          <Leader>Y :%y+<CR>|               "  ↳  file to clipboard (normal mode).
-nnoremap          <Leader>z  za|                    " Toggle folding on current line.
-nnoremap <expr>   <Leader>Z &foldlevel ? 'zM' :'zR'| " Toggle folding everywhere (see also "zi).
-nnoremap          <Leader>/ :noh<CR>|               " Turn off find highlighting.
-nnoremap          <Leader>? /<Up><CR>|              " Search for last searched thing.
+
+" <Space>-c: call the LanguageClient (IDE type commands).
+nnoremap <Leader>ca :call LanguageClient#textDocument_codeAction()<CR>| " Show menu of available code actions.
+nnoremap <Leader>cc :call LanguageClient_contextMenu()<CR>| " Show menu of available actions.
+nnoremap <Leader>cd :call DupBuffer()<CR>:call LanguageClient_textDocument_definition()<CR>| " Go to definition in last window.
+nnoremap <Leader>cD :call LanguageClient_textDocument_definition()<CR>| " Go to definition in the same window.
+nnoremap <Leader>cf :call LanguageClient_textDocument_formatting()<CR>| " Format document.
+nnoremap <Leader>ck :call LanguageClient_textDocument_hover()<CR>| " Show definition.
+nnoremap <Leader>cl :call LanguageClient_textDocument_documentSymbol()<CR>| " List symbols in the current file.
+nnoremap <Leader>cr :call LanguageClient_textDocument_rename()<CR>| " Rename var/func under cursor.
+nnoremap <Leader>cu :call LanguageClient_textDocument_references()<CR>| " Show usages of current symbol.
+vnoremap <Leader>cf :call LanguageClient#textDocument_rangeFormatting()<CR>| " Format selected lines.
+
+nnoremap        <Leader>d :call BufferClose('')<CR>| " Close buffer without closing split,
+nnoremap        <Leader>f :Files<CR>|             " Search file names    for file,
+nnoremap        <Leader>F :grep |                 "  ↳          contents for file.
+nnoremap        <Leader>gc :cd %:p:h<CR>|         " Change vim directory (:pwd) to current file's dirname (e.g. for <space>f, :e).
+nnoremap        <Leader>gd :w !git diff --no-index % - <CR>|     " Diff between saved file and current.
+nnoremap        <Leader>gf :call DupBuffer()<CR>gF| " Open file path:row:col under cursor in last window.
+nnoremap        <Leader>gl :source <C-r>=SessionFile()<CR><CR>| " Load saved session for vim cwd to a default session path.
+nnoremap        <Leader>gL :source <C-r>=SessionFile()<CR>| " Load saved session for vim cwd to a custom path.
+nnoremap        <Leader>gp `[v`]| " Visual selection of the last thing you copied or pasted.
+nnoremap        <Leader>gs :mksession! <C-r>=SessionFile()<CR><CR>| " Save current session for vim cwd from a default session path.
+nnoremap        <Leader>gS :mksession! <C-r>=SessionFile()<CR>| " Save current session for vim cwd from a custom path.
+nnoremap        <Leader>gt :set et!<CR>:set et?<CR>|   " Toggle tabs/spaces.
+nnoremap        <Leader>gq :set fo-=t<CR>:set fo?<CR>| " Turn off line wrapping,
+nnoremap        <Leader>gQ :set fo+=t<CR>:set fo?<CR>| " ↳    on
+nnoremap        <Leader>gv :e ~/.vimrc<CR>|  " <Space>gv opens ~/.vimrc in the editor (autoreloaded on save).
+nnoremap        <Leader>gw :setlocal wrap!<CR>| " <Space>gw toggles the soft-wrapping of text.
+nnoremap        <Leader>id :r !date +\%Y-\%m-\%d<CR>| " Insert readable    date on new line.
+nnoremap        <Leader>iD :r !date +\%d-\%b-\%y<CR>| " ↳      `:sort`able date on new line.
+nnoremap        <Leader>it ITODO(gib): <ESC>:Commentary<CR>$| " Insert a TODO, (Write todo, then `<Space>it`).
+nnoremap        <Leader>j :sp<CR><C-w>k:bp<CR>|   " Open horizontal split,
+nnoremap        <Leader>k <C-w>q|                 " Close current split (keeps buffer).
+nnoremap        <Leader>K <C-w>j<C-w>q|           " Close split below (keeps buffer). Useful for LanguageClient splits.
+nnoremap        <Leader>l :vsp<CR><C-w>h:bp<CR>|  " Open vertical split.
+nnoremap        <Leader>L <C-w>b<C-w>q|           " Close last split (keeps buffer). Useful for quickfix splits.
+nnoremap        <Leader>o :set operatorfunc=OpenUrl<CR>g@| " Open the selected text with the appropriate program (like netrw-gx).
+nnoremap        <Leader>p "+p|                    "  Paste from clipboard after cursor.
+nnoremap        <Leader>P "+P|                    "                    ↳  before cursor.
+nnoremap        <Leader>q :qa<CR>|                " Quit if no    unsaved changes (for single file use <Space>d instead).
+nnoremap        <Leader>QQ :q!<CR>|               "      ↳ losing unsaved changes (DANGER).
+nnoremap        <Leader>r :%s/|                   " Replace (e.g. <Space>rold/new),
+nnoremap        <Leader>R :%s//c<Left><Left>|     "  ↳ Replace with prompt on each match.
+map             <Leader>s <Plug>(easymotion-bd-w)| " EasyMotion: Move to word.
+nnoremap        <Leader>u :GundoToggle<CR>|       " Toggle Undo tree visualisation.
+nnoremap        <Leader>w :up<CR>|                " Write if there were changes.
+nnoremap        <Leader>W :w<CR>|                 "  ↳    whether or not there were changes.
+nnoremap        <Leader>x :x<CR>|                 " Save (if changes) and quit.
+nnoremap        <Leader>X :xa<CR>|                " Quit all windows.
+nnoremap        <Leader>y "+y|                    " Copy to clipboard (normal mode).
+nnoremap        <Leader>Y :%y+<CR>|               "  ↳  file to clipboard (normal mode).
+nnoremap        <Leader>z  za|                    " Toggle folding on current line.
+nnoremap <expr> <Leader>Z &foldlevel ? 'zM' :'zR'| " Toggle folding everywhere (see also "zi).
+nnoremap        <Leader>/ :noh<CR>|               " Turn off find highlighting.
+nnoremap        <Leader>? /<Up><CR>|              " Search for last searched thing.
 
 nmap <leader>1 <Plug>BufTabLine.Go(1)|         " <leader>1 goes to buffer 1 (see numbers in tab bar).
 nmap <leader>2 <Plug>BufTabLine.Go(2)|         " <leader>1 goes to buffer 2 (see numbers in tab bar).
