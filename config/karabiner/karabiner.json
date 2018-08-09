@@ -252,8 +252,8 @@
                 "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
                 "description": "Ж+d = print today's date",
                 "from": { "key_code": "d", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "shell_command": "printf `date \"+%Y-%m-%d\"` | pbcopy" },
-                  {"key_code": "v", "modifiers": ["command"]}],
+                "to": [{ "shell_command": "printf `date \"+%Y-%m-%d\"` | pbcopy" }],
+                "to_after_key_up": [{"key_code": "v", "modifiers": ["command"]}],
                 "type": "basic"
               } ]
           }, {
