@@ -34,6 +34,7 @@ endif
   Plug 'justinmk/vim-sneak'                         " sab -> go to next ab in code.
   Plug 'keith/swift.vim'                            " Swift syntax highlighting.
   Plug 'pangloss/vim-javascript'                    " JS   language bindings.
+  Plug 'raghur/vim-ghost', {'do': ':GhostInstall'}  " Edit browser text areas in Neovim (:h ghost).
   Plug 'rust-lang/rust.vim'                         " Rust language bindings.
   Plug 'sjl/gundo.vim'                              " Interactive undo tree (<space>u to toggle on/off, q to quit).
   Plug 'tpope/vim-abolish'                          " Work with variants of words (replacing, capitalizing etc).
@@ -351,6 +352,7 @@ let g:LanguageClient_serverCommands = {
     \ 'swift': ['langserver-swift'],
     \ }
 let g:LanguageClient_settingsPath = $XDG_CONFIG_HOME . "/nvim/settings.json"
+let g:LanguageClient_diagnosticsList = "Location" " Don't overwrite quickfix list with linter/checker output.
 
 " Highlight the 81st column of text (in dark grey so it doesn't distract).
 highlight ColorColumn ctermbg=234
