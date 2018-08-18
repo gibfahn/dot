@@ -22,6 +22,8 @@ aceVimMap('kj', '<Esc>', 'insert'); // Remap kj to Esc in the insert mode Ace ed
 
 map('p', '<Alt-i>'); // Map p to toggle passthrough mode.
 
+map('F', 'gf'); // Map F to open links in a new tab (like in Vimium).
+
 /*
  * Examples:
  */
