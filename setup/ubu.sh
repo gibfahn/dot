@@ -44,6 +44,7 @@ list+=" ccache"                          # Makes recompilations faster.
 list+=" vagrant"                         # Spin up VMs with the convenience of Docker.
 list+=" python3-pip"                     # pip3 (used for newer python installers). Remove once python3 is default.
 list+=" fonts-firacode"                  # Nicer font for your terminal.
+list+=" golang-go"                       # Go programming language.
 get "apt installing/updating: $list"
 sudo apt install -y $list
 

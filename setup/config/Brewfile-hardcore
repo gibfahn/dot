@@ -6,6 +6,7 @@ brew "cmake"                             # Commonly-used meta build system.
 brew "ctags"                             # Used for autocomplete in Vim (etc).
 brew "dfu-util"                          # Used for flashing my Ergodox Infinity.
 brew "exercism"                          # Learn coding languages.
+brew "go"                                # Go progamming language.
 brew "groovy"                            # Helpful for testing Jenkins scripts.
 brew "kubernetes-cli"                    # Manage your docker clusters with kube.
 brew "kubernetes-helm"                   # Package manager for Docker.

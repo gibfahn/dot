@@ -65,6 +65,7 @@ export BLUEMIX_HOME="$XDG_DATA_HOME/bluemix" # Move Bluemix home directory from 
 export VIRTUAL_ENV_DISABLE_PROMPT=1 # Add the virtualenv prompt myself.
 export LESS="--tabs=1,3 --ignore-case --RAW-CONTROL-CHARS" # Tab is 2 spaces, search ignores case, enable colours.
 export PAGER=less
+export GOPATH="$HOME/code/go"
 HISTSIZE=10000 SAVEHIST=10000 HISTFILE="$XDG_CACHE_HOME/$shell/history" # Set history file location and size.
 c="$XDG_CONFIG_HOME" # Shortcut to the config directory (`v $c/gibrc` to edit this file).
 [ -d "$XDG_CONFIG_HOME/terminfo" ] && export TERMINFO="$XDG_CONFIG_HOME/terminfo" # Put terminal info in here.
@@ -127,6 +128,7 @@ reprompt() {
 
 pathadd /usr/local/bin # Missed in some shells.
 pathadd /usr/local/sbin # Missed in some shells.
+pathadd "$GOPATH/bin" # Go binaries.
 pathadd "$HOME/bin" # Put random binaries you want to run in here.
 pathadd /usr/lib/ccache # Add ccache to the path if installed (Linux).
 pathadd /usr/local/opt/ccache/libexec # Add ccache to the path if installed (macOS).
@@ -278,7 +280,7 @@ alias rv='. "$rvm_path"/scripts/rvm'  # Start rvm with alias, o/w too much start
 ## Rust commands.
 alias cn="cargo new --bin" cb="cargo build" cr="cargo run" ct="cargo test"
 alias ctag='ctags -R . $HOME/bin/src/rust' # Populate ctags from rust src.
-alias ru=rustup e=exercism k=kubectl
+alias ru=rustup e=exercism k=kak
 rs() { for i in "$@"; do rustc ${i%.rs}.rs; ./${i%.rs}; done; } # Compile/run (rs a.rs b).
 
 # Build node with ninja.
