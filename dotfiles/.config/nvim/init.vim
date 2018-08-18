@@ -35,6 +35,7 @@ endif
   Plug 'keith/swift.vim'                            " Swift syntax highlighting.
   Plug 'pangloss/vim-javascript'                    " JS   language bindings.
   Plug 'raghur/vim-ghost', {'do': ':GhostInstall'}  " Edit browser text areas in Neovim (:h ghost).
+  Plug 'redhat-developer/yaml-language-server', {'do': 'npm install && npm run compile'} " Language server for yaml files.
   Plug 'rust-lang/rust.vim'                         " Rust language bindings.
   Plug 'sjl/gundo.vim'                              " Interactive undo tree (<space>u to toggle on/off, q to quit).
   Plug 'tpope/vim-abolish'                          " Work with variants of words (replacing, capitalizing etc).
@@ -350,6 +351,7 @@ let g:LanguageClient_serverCommands = {
     \ 'rust': ['rls'],
     \ 'sh': ['bash-language-server', 'start'],
     \ 'swift': ['langserver-swift'],
+    \ 'yaml': ['yaml-language-server'],
     \ }
 let g:LanguageClient_settingsPath = $XDG_CONFIG_HOME . "/nvim/settings.json"
 let g:LanguageClient_diagnosticsList = "Location" " Don't overwrite quickfix list with linter/checker output.

@@ -1,0 +1,3 @@
+#!/bin/sh
+
+node "$XDG_DATA_HOME"/nvim/plugged/yaml-language-server/out/server/src/server.js --stdio
