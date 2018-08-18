@@ -1,0 +1,55 @@
+#################################
+# General settings and mappings #
+#################################
+
+set global tabstop 2
+set global indentwidth 2
+colorscheme gib
+
+# Map kj to <Esc> in insert mode.
+hook global InsertChar j %{ try %{
+  exec -draft hH <a-k>kj<ret> d
+  exec <esc>
+}}
+
+###########################################
+# User mode mappings (<Leader> mappings). #
+###########################################
+
+# Space is my leader key.
+map global normal '<space>'       '<,>'       -docstring 'leader'
+map global normal '<backspace>'   '<space>'   -docstring 'remove all sels except main'
+map global normal '<a-backspace>' '<a-space>' -docstring 'remove main sel'
+
+map global user   '<w>'     ':write<ret>'            -docstring 'Save file'
+map global user   '<W>'     ':write-all<ret>'        -docstring 'Save all files'
+map global user   '<q>'     ':quit<ret>'             -docstring 'Quit kakoune'
+map global user   '<Q>'     ':quit!<ret>'            -docstring 'Force quit kakoune'
+map global user   '<x>'     ':write-quit<ret>'       -docstring 'Save and quit'
+map global user   '<X>'     ':write-all-quit<ret>'   -docstring 'Save all and quit'
+map global user   '<d>'     ':delete-buffer<ret>'    -docstring 'Close current buffer.'
+map global normal '<tab>'   ':buffer-next<ret>'      -docstring 'Change to next buffer.'
+map global normal '<s-tab>' ':buffer-previous<ret>'  -docstring 'Change to next buffer.'
+
+# Copy and paste to the system clipboard with <Leader>y/p/R
+%sh{
+    case $(uname) in
+        Linux )  copy="xclip -i"; paste="xclip -o" ;;
+        Darwin)  copy="pbcopy"  ; paste="pbpaste"  ;;
+    esac
+    msg="%%{{Information}Copied selection to system clipboard}"
+
+    printf "map global user '<p>' '!%s<ret>'                            -docstring 'paste (after) from clipboard'\n"  "$paste"                                                          
+    printf "map global user '<P>' '<a-!>%s<ret>'                        -docstring 'paste (before) from clipboard'\n" "$paste"                                                      
+    printf "map global user '<y>' '<a-|>%s<ret>:echo -markup $msg<ret>' -docstring 'yank to clipboard'\n"             "$copy"
+    printf "map global user '<R>' '|%s<ret>'                            -docstring 'replace from clipboard'\n"        "$paste"                                                          
+}
+
+map global normal '#' :comment-line<ret> -docstring 'comment line'
+map global normal '<a-#>' :comment-block<ret> -docstring 'comment block'
+
+# Reload rc file when it's written.
+remove-hooks global gib
+hook global -group gib BufWritePost '.*' %{
+  source ~/.config/kak/kakrc
+}
