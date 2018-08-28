@@ -20,8 +20,8 @@
   bd  = branch -D # Delete branch.
   br  = branch -r # Show remote branches only.
   bdd = "!lastBranch=$(git headBranch); git checkout -; git branch -D $lastBranch" # Delete current branch.
-  bp  = "!git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -d" # Delete orphaned local branches.
-  bP  = "!git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D" # Delete orphaned local branches!
+  bp  = "!git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs -r git branch -d" # Delete orphaned local branches.
+  bP  = "!git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs -r git branch -D" # Delete orphaned local branches!
   bt  = "!git branch -u $1/$(git headBranch) #" # g bt origin sets upstream to origin.
 
   # I manually specify -S because gpgsign only works with Git 2.x. Also it
@@ -55,7 +55,7 @@
   fix = commit --fixup # g fix SHA means rebasing will attach to that SHA.
   # Like commit --amend but for an arbitrary commit (`g fixup @~3.`).
   fixup = "! hash=$(git rev-parse "$1"); git commit --fixup=$hash ${@:2} && EDITOR=true git rebase -i --autostash --autosquash $hash^ #"
-  # Create/update branch from Github PR, `g fp 657 origin` or `g fp` (Defaults: $1=HEAD, $2=upstreamRemote).
+  # Create/update branch from Github PR, `g fp 657 origin` or `g fp` (Defaults: $1=headBranch, $2=upstreamRemote).
   fp = "! b=${2:-$(git headRemote)}; b=${b:-up}; a=${1:-$(git headBranch)}; git fetch -fu $b pull/$a/head:$a; git checkout $a; git branch -u $b #"
 
   h = help
@@ -87,6 +87,7 @@
   ri  = rebase -i -S --autosquash                            # Interactive rebase.
   rim = "!git rebase -i -S --autosquash $(git merge-base ${1:-master} ${2:-HEAD} ${@:2}) # " # Rebase all commits since you forked the branch.
   rii = "!git rebase -i -S --autosquash $(git headUpstream)" # Reset to upstream branch, not needed with merge.defaultToUpstream.
+  rp  = rev-parse                                            # Get the hash from a revision (`g rp @` and `g rp --short @` are often useful).
   rr  = remote rename                                        # Change name of remote `g rr origin up`.
   rs  = remote set-url                                       # Change URL of remote `g rs up hsg:dot`.
   rv  = remote -v                                            # Show remotes (with URLs).
@@ -116,8 +117,6 @@
 
 [apply]
   whitespace = fix # Fix whitespace when applying patches.
-[color]
-  ui = true        # Default since git 1.8.4, remove when possible.
 
 # Color options: normal, black, red, green, yellow, blue, magenta, cyan, or white (or 0-255).
 # Highlight options: bold, dim, ul (underline), blink, and reverse (swap fg and bg).
@@ -132,14 +131,14 @@
 
 # Change colours for `git diff`.
 [color "diff"]
-  meta = 8                     # Header (diff --git a/file b/file).
+  meta = 249                   # Header (diff --git a/file b/file).
   frag = 8                     # Line numbers (@@ -7,20 +7,20 @@).
   func = 251                   # The part of the changed file after frag.
   context = 251                # Lines in the diff that haven't changed.
   old = red bold               # Removed lines (overwritten by diff-highlight).
   new = green bold             # Added lines (overwritten by diff-highlight).
   commit = 178                 # Commit hash in git show.
-  whitespace = red reverse     # Whitespace errors (trailing whitespace in the diff).
+  whitespace = normal reverse  # Whitespace errors (trailing whitespace in the diff).
   old = 160                    # Deleted lines (defaults to red bold).
   new = 40                     # Added lines (defaults to green bold).
   oldMoved = 161               # Line moved from here.
@@ -171,8 +170,7 @@
   # ^ is  off because some people might not have gpg keys (and it breaks the npm test suite).
 
 [core]
-  # Use diff-highlight script if it exists, or just use less. It's pretty awesome that you can do this.
-  pager = "$(dh=/usr/local/share/git-core/contrib/diff-highlight/diff-highlight; [ -x "$dh" ] && echo "$dh" || echo cat) | less"
+  pager = "$([ -x ~/bin/diff-so-fancy ] && echo diff-so-fancy || echo cat) | less"
 
 [credential]
   helper = osxkeychain   # Store Git credentials in the macOS keychain.

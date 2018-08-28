@@ -73,6 +73,11 @@ if exists git && [ "$(whoami)" != gib ] && {
   get "Git Config (git name set to $(git config --global user.name) and email set to $(git config --global user.email))"
 fi
 
+gitCloneOrUpdate so-fancy/diff-so-fancy "$XDG_DATA_HOME/diff-so-fancy"
+if not diff-so-fancy; then
+  ln -sf "$XDG_DATA_HOME/diff-so-fancy/diff-so-fancy" "$HOME/bin/diff-so-fancy"
+fi
+
 # Set up a default ssh config
 if [ ! -e ~/.ssh/config ]; then
   get "SSH Config (copying default)."
