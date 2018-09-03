@@ -7,6 +7,8 @@
   headBranch = symbolic-ref --short HEAD # e.g. master.
   # Quote an alias you want to save here (handles all the nonsense quoting stuff).
   quote-string = "!read -r l; printf \\\"!; printf %s \"$l\" | sed 's/\\([\\\"]\\)/\\\\\\1/g'; printf \" #\\\"\\n\" #"
+  # Removes all branches and tags except "$1" (default oldmaster).
+  clean-fork = "!git ls-remote --heads --tags fork | awk '!/\\^\\{\\}/ && !/refs\\/heads\\/'\"${1:-oldmaster}\"'/ {print $NF}' | xargs -n ${2:-10} git push --delete fork && git remote prune fork #"
 
   a   = add           # Add files to index.
   ap  = add -p        # Adds files in hunks (only add some of the changes you made).
@@ -65,6 +67,8 @@
   la  = log --graph --decorate --oneline --all                          # Graph log of all commits.
   las = log --graph --decorate --oneline --all --simplify-by-decoration # Graph log of tag/branch/labelled commits.
   ll  = log --color --graph --pretty=format:'%C(214)%h%C(reset)%C(196)%d%C(reset) %s %C(35)(%cr)%C(27) <%an>%C(reset)'
+  # Escape < and > for github markdown, (useful for generating changelogs).
+  changelog  = "! git log --pretty=format:'* %h - %s %n%w(76,4,4)%b%n' --abbrev-commit \"$@\" | perl -0 -p -e 's/(^|[^\\\\])([<>])/\\1\\\\\\2/g ; s/(\\s*\\n)+\\*/\\n\\n*/g' #"
 
   mb  = "!git merge-base ${1:-master} ${2:-HEAD} ${@:2} #" # Get commit this branch forked from.
   mc  = "!echo \"$VISUAL\" | grep -iq vi && c=\"-c /=======\" || c=\"\"; git diff --name-only --diff-filter=U | xargs $VISUAL $c" # Open merge conflicts in editor.
@@ -180,6 +184,9 @@
   renames = copies       # Copies count as renames.
   submodule = log        # Show information about submodules in diffs and logs.
   colorMoved = zebra     # Highlight moved lines as oldMoved -> newMoved.
+[diff-so-fancy]
+  markEmptyLines = false      # The red blobs are very distracting when only a newline has been added.
+  stripLeadingSymbols = false # Without `markEmptyLines` you need the +/- to show newline changes.
 
 [fetch]
   prune = true             # Delete local tracking branches if remote is gone.
