@@ -73,6 +73,13 @@ if exists git && [ "$(whoami)" != gib ] && {
   get "Git Config (git name set to $(git config --global user.name) and email set to $(git config --global user.email))"
 fi
 
+gitCloneOrUpdate rbenv/rbenv "$XDG_DATA_HOME/rbenv"
+# Only run make if there were changes.
+if [[ "$?" == 0 ]]; then
+  ln -sf "$XDG_DATA_HOME/rbenv/completions/rbenv.zsh" "$XDG_DATA_HOME/zfunc/rbenv.zsh"
+  (pushd "$XDG_DATA_HOME/rbenv" && src/configure && make -C src)
+fi
+
 gitCloneOrUpdate so-fancy/diff-so-fancy "$XDG_DATA_HOME/diff-so-fancy"
 if not diff-so-fancy; then
   ln -sf "$XDG_DATA_HOME/diff-so-fancy/diff-so-fancy" "$HOME/bin/diff-so-fancy"
@@ -127,17 +134,14 @@ if no "$nvm_prefix"nvm; then
 fi
 
 # Install rvm
-if not rvm; then
-  curl -sSL https://get.rvm.io | bash -s -- --path "$XDG_DATA_HOME/rvm" --ignore-dotfiles
-  for i in "$XDG_DATA_HOME/rvm/bin/"*; do ln -sf "$i" "$HOME/bin/$(basename "$i")"; done
-  gpg2 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+if not rbenv; then
+  export PATH="$XDG_DATA_HOME/rbenv/bin:$PATH"
+  export PATH="$XDG_CACHE_HOME/rbenv/shims:$PATH"
+  export RBENV_ROOT="${RBENV_ROOT:-"$XDG_CACHE_HOME/rbenv"}" # Set rbenv location.
 fi
-# Update rvm
-rvm get stable
-# For some reason `rvm get stable` removes the rvm symlinks (not sure why) so replace them.
-for i in "$XDG_DATA_HOME/rvm/bin/"*; do ln -sf "$i" "$HOME/bin/$(basename "$i")"; done
-# Install or update the latest version of ruby.
-rvm install ruby-2 # Update this when ruby 3 comes out.
+
+# Install latest version of ruby if changed.
+rbenv install --skip-existing $(rbenv install --list | grep -v - | tail -1)
 
 # Symlink fzf
 if not fzf; then

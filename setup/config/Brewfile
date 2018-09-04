@@ -13,6 +13,7 @@ brew "git"
 brew "python"                            # Python3
 brew "python2"
 brew "zsh"
+brew "ruby-build"                        # Helper to install ruby versions.
 
 # GNU versions of utils that are out-of-date or FreeBSD on macOS:
 brew "binutils"

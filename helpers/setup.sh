@@ -90,13 +90,14 @@ gitUpdate() {
   git fetch --all
 
   local skip=true   # Whether we did anything or just skipped this update.
-  local exit_code=0 # What the function should return (default 0 == success).
+  local exit_code=200 # What the function should return (default 200 == no changes so skipped).
   local uncommitted_changes="$(git status --porcelain)" # Is there anything in the working tree.
   local upstream_commits="$(git rev-list -1 $(git headUpstream) --not HEAD)" # Does upstream have something we don't.
   local upstream_submodule_updates="$(git submodule status --recursive 2>/dev/null | grep -q '^+')"
 
   if [[ -n "$upstream_commits" || -n "$upstream_submodule_updates" ]]; then
     unset skip # We need to do some work.
+    skip=0 # Means we did work and didn't fail.
 
     # If you have uncommitted changes, commit them.
     if [[ -n "$uncommitted_changes" ]]; then

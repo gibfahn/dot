@@ -55,6 +55,7 @@ export RUSTUP_HOME=${RUSTUP_HOME:-"$XDG_DATA_HOME/rustup"} # Rustup goes here.
 export ATOM_HOME=${ATOM_HOME:-"$XDG_CONFIG_HOME/atom"} # Atom goes here.
 export npm_config_devdir=${npm_config_devdir:-"$XDG_CACHE_HOME/node-gyp"} # Set node-gyp download location.
 export npm_config_cache=${npm_cache:-"$XDG_CACHE_HOME/npm"} # Set npm cache location.
+export RBENV_ROOT="${RBENV_ROOT:-"$XDG_CACHE_HOME/rbenv"}" # Set rbenv location.
 export NODE_REPL_HISTORY=${NODE_REPL_HISTORY="$XDG_CACHE_HOME/node_repl_history"} # Set node-gyp download location.
 export BABEL_CACHE_PATH=${BABEL_CACHE_PATH="$XDG_CACHE_HOME/babel/cache.json"} # Set babel cache location.
 export GRADLE_USER_HOME="$XDG_CACHE_HOME/gradle" # Also contains gradle.properties (symlink from XDG_CONFIG_HOME).
@@ -128,6 +129,8 @@ reprompt() {
 
 pathadd /usr/local/bin # Missed in some shells.
 pathadd /usr/local/sbin # Missed in some shells.
+pathadd "$XDG_DATA_HOME/rbenv/bin" # rbenv ruby version manager.
+pathadd "$XDG_CACHE_HOME/rbenv/shims" # rbenv installed versions.
 pathadd "$GOPATH/bin" # Go binaries.
 pathadd "$HOME/bin" # Put random binaries you want to run in here.
 pathadd /usr/lib/ccache # Add ccache to the path if installed (Linux).
@@ -175,11 +178,13 @@ if [ "$shell" = zsh ]; then # zsh specific options.
   CDPATH=~ # Check ~ for directories after checking . (`c/d/` matches `./c*/d*/`, then tries `~/c*/d*/`).
 
   # Put (or symlink) autocomplete scripts in here.
-  fpath=("$XDG_DATA_HOME/zfunc" $fpath)
+  fpath=("$XDG_DATA_HOME/zfunc" "${fpath[@]}")
 
   # Seems to be a bug in earlier zsh versions.
   zsh_v=(${(@s/./)ZSH_VERSION}) # Convert version string to an array.
-  [[ "${zsh_v[0]}" -gt 4 || ("${zsh_v[0]}" -eq 4 && "${zsh_v[1]}" -gt 3) ]] && fpath=(/usr/local/share/zsh-completions $fpath) # zsh-completions.
+  [[ "${zsh_v[0]}" -gt 4 || ("${zsh_v[0]}" -eq 4 && "${zsh_v[1]}" -gt 3) ]] && fpath=(/usr/local/share/zsh-completions  "${fpath[@]}") # zsh-completions.
+  # Load rbenv completions.
+  (( $+commands[rbenv] )) && source "$XDG_DATA_HOME/rbenv/completions/rbenv.zsh"
 
   for file in "$ZDOTDIR"/{completion-keybindings,gib-theme,macos-setdir}.zsh; do
     source "$file" || true
@@ -271,11 +276,6 @@ export npm_config_userconfig="$XDG_CONFIG_HOME/npm/config"
 [ ! -d "$(dirname "$npm_config_userconfig")" ] && command mkdir -p "$(dirname "$npm_config_userconfig")"
 export NVM_DIR="$XDG_DATA_HOME/$([ "$unamem" != x86_64 ] && echo "$unamem/")nvm"
 alias nv='. $NVM_DIR/nvm.sh'  # Start nvm with alias, o/w too much startup cost.
-
-# Set up rvm
-# I don't have rvm autorun on every shell, I use `rv` when I want to start it.
-export rvm_prefix="$XDG_DATA_HOME/rvm" rvm_path="$XDG_DATA_HOME/rvm" # Move rvm from ~.
-alias rv='. "$rvm_path"/scripts/rvm'  # Start rvm with alias, o/w too much startup cost.
 
 ## Rust commands.
 alias cn="cargo new --bin" cb="cargo build" cr="cargo run" ct="cargo test"
