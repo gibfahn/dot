@@ -24,7 +24,7 @@ endif
   Plug 'ap/vim-buftabline'                          " Show buffers in the tab bar.
   Plug 'ap/vim-readdir'                             " Nicer file browser plugin that works with buftabline.
   Plug 'easymotion/vim-easymotion'                  " Go to any word instantly.
-  Plug 'eclipse/eclipse.jdt.ls', { 'dir': '~/.local/share/eclipse.jdt.ls', 'do': './mvnw clean verify' } " Java Language Server.
+  Plug 'eclipse/eclipse.jdt.ls', { 'dir': '~/.local/share/eclipse.jdt.ls', 'tag': '*' } " Java Language Server.
   Plug 'fweep/vim-zsh-path-completion'              " Nicer file browser plugin.
   Plug 'gibfahn/vim-gib'                            " Use vim colorscheme.
   Plug 'godlygeek/tabular'                          " Make tables easier (:help Tabular).
