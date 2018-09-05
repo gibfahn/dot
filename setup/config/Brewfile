@@ -8,6 +8,7 @@ tap "homebrew/bundle"                    # Allows you to use Brewfiles.
 
 # Versions of utils that are out-of-date on macOS:
 # Defaults are in /usr/bin, brew installs to /usr/local/bin
+
 brew "bash"
 brew "git"
 brew "python"                            # Python3
@@ -16,6 +17,7 @@ brew "zsh"
 brew "ruby-build"                        # Helper to install ruby versions.
 
 # GNU versions of utils that are out-of-date or FreeBSD on macOS:
+
 brew "binutils"
 brew "coreutils"
 brew "diffutils"
@@ -33,14 +35,16 @@ brew "tree"                              # Recursive ls.
 brew "wget"
 
 # Command-line helpers:
+
 brew "bash-completion"                   # Generally useful bash completions.
+brew "bat"                               # Nicer cat with syntax highlighting etc.
 brew "burntsushi/ripgrep/ripgrep-bin"    # Super-fast recursive grep.
 brew "ccache"                            # Speeds up C/C++ recompilation.
 brew "entr"                              # Command line file watching.
-brew "exa"                               # Nicer ls replacement.
 brew "fd"                                # Super-fast find replacement.
 brew "gnupg"                             # gpg command line.
 brew "gpg-agent"                         # gpg daemon.
+brew "hyperfine"                         # Benchmark commands (time but a benchmarking suite).
 brew "neovim"                            # New and improved vim.
 brew "rmtrash"                           # `rm` to Trash, aliased to `dl` in gibrc.
 brew "tig"                               # `tig log` lets you view log and diffs side-by-side.
@@ -48,8 +52,10 @@ brew "tmux"                              # Terminal multiplexer.
 brew "zsh-completions"                   # Generally useful  zsh completions.
 brew "zsh-syntax-highlighting"           # Syntax in the terminal.
 cask "docker"                            # Build and run docker images.
+brew "xsv"                               # csv manipulator.
 
 # Casks (GUI Applications):
+
 cask "copyq"                             # Clipboard manager with history (needs manual setup).
 cask "disk-inventory-x"                  # Graphical view of what's taking up disk space.
 cask "font-fira-code"                    # Nicer programming font (supports powerline).

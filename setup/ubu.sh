@@ -98,18 +98,6 @@ if not google-chrome; then
   rm google-chrome-stable_current_amd64.deb
 fi
 
-if exists cargo && not rg "(ripgrep)"; then
-  cargo install ripgrep
-fi
-
-if exists cargo && not fd; then
-  cargo install fd-find
-fi
-
-if exists cargo && not exa; then
-  cargo install exa
-fi
-
 if not slack; then
   echo "deb https://packagecloud.io/slacktechnologies/slack/debian/ jessie main" | sudo tee /etc/apt/sources.list.d/slack.list >/dev/null
   sudo apt install -y slack

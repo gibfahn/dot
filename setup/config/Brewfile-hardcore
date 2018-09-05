@@ -5,6 +5,7 @@ brew "certbot"                           # LetsEncrypt.
 brew "cmake"                             # Commonly-used meta build system.
 brew "ctags"                             # Used for autocomplete in Vim (etc).
 brew "dfu-util"                          # Used for flashing my Ergodox Infinity.
+brew "exa"                               # Nicer ls replacement.
 brew "exercism"                          # Learn coding languages.
 brew "go"                                # Go progamming language.
 brew "groovy"                            # Helpful for testing Jenkins scripts.
@@ -13,6 +14,7 @@ brew "kubernetes-helm"                   # Package manager for Docker.
 brew "ninja"                             # Google meta build system (used in V8).
 brew "postgresql"                        # Solid database.
 brew "redis"                             # In-memory key-object store.
+brew "watchexec"                         # Like entr (evaluating which one is better).
 cask "firefox-nightly"                   # For those sweet Rust-based improvements.
 cask "geektool"                          # Display things on Desktop (I have a todo list).
 cask "gimp"                              # Heavyweight photo editor.
