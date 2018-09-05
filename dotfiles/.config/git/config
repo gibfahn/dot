@@ -40,7 +40,8 @@
   cpa = cherry-pick --abort            # Bail out of cherry-pick.
   cpc = cherry-pick --continue         # Accept current changes and continue to next commit.
   cpq = cherry-pick --quit             # Only undo last commit (that failed) not all of them.
-  co  = checkout                       # Change to a different commit or reset a file to a commit.
+  co  = checkout                       # Change to a different commit or reset a file to a commit (e.g. `g co new-feature`).
+  cob = checkout --no-track -b         # Create a new branch based on a different ref (e.g. `g cob new-feature up/master`).
   cop = checkout -p                    # Selectively undo some of the changes you made.
   cot = checkout -t                    # g cot up/master means checkout master tracking the one in up.
 
