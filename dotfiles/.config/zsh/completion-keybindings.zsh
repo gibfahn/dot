@@ -13,6 +13,8 @@ zstyle ':bracketed-paste-magic' active-widgets '.self-*' # https://github.com/zs
 
 # Vim mode and keybindings in zsh:
 autoload -U history-search-end # Not included by default so load (usually /usr/share/zsh/unctions/Zle/).
+autoload -Uz edit-command-line # Load command to open current line in $VISUAL.
+zle -N edit-command-line
 zle -N history-beginning-search-backward-end history-search-end # Add it to existing widgets.
 zle -N history-beginning-search-forward-end history-search-end  # Add it to existing widgets.
 accept-line() { [ -z "$BUFFER" ] && zle up-history; zle ".$WIDGET"; }
@@ -38,3 +40,4 @@ bindkey -M main "^[[A" history-beginning-search-backward-end # Re-enable up   fo
 bindkey -M main "^[[B" history-beginning-search-forward-end  # Re-enable down for history search.
 bindkey ' ' magic-space # <Space> = do history expansion
 bindkey "${terminfo[kcbt]}" reverse-menu-complete   # <Shift>-<Tab> - move backwards through the completion menu.
+bindkey -M vicmd ' ' edit-command-line # <Space> in cmd mode opens editor.
