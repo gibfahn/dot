@@ -22,6 +22,7 @@ cask "kitty"                             # GPU Accelerated cross-platform Termin
 cask "slack-beta"                        # Everyone uses Slack right?
 cask "vagrant"                           # Quick command-line image spin-up.
 cask "virtualbox"                        # Manage VMs (Linux or Windows).
+cask "vulkan-sdk"                        # Use the vulkan graphics APIs on macOS.
 cask "workflowy"                         # Infinitely nested bullet point list app.
 
 # Chunkwm Window Manager (currently disabled):
