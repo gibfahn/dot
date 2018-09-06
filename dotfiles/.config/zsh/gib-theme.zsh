@@ -29,8 +29,27 @@ _gib_prompt_check_cmd_exec_time() {
   (( elapsed > 1 )) && _gib_prompt_format_duration $elapsed "_gib_prompt_cmd_exec_time"
 }
 
-_gib_prompt_preexec() { # Run between user hitting Enter key, and command being run.
-  printf '\033[2 q'
+# Run before the prompt is displayed.
+_gib_prompt_precmd() {
+  # Set window title to current directory.
+  print -P "\e]2;%1~\a"
+  # printf "\e]2;%s\a" "${PWD/#$HOME/~}"
+  # check exec time and store it in a variable
+  _gib_prompt_check_cmd_exec_time
+  unset _gib_prompt_cmd_timestamp
+
+  # preform async git dirty check and fetch
+  _gib_prompt_async_tasks
+
+  # print the preprompt
+  _gib_prompt_preprompt_render "precmd"
+}
+
+# Run between user hitting Enter key, and command being run.
+_gib_prompt_preexec() {
+  printf '\033[2 q' # Reset prompt to normal mode.
+  # Set window title to first word of exec command.
+  [[ "$PWD" == "$HOME" ]] && printf "\e]2;%s\a" "${1%% *}"
   if [[ -n $_gib_prompt_git_fetch_pattern ]]; then
     # detect when git is performing pull/fetch (including git aliases).
     local -H MATCH MBEGIN MEND match mbegin mend
@@ -97,18 +116,6 @@ _gib_prompt_preprompt_render() {
   fi
 
   typeset -g _gib_prompt_last_rprompt="$expanded_rprompt"
-}
-
-_gib_prompt_precmd() {
-  # check exec time and store it in a variable
-  _gib_prompt_check_cmd_exec_time
-  unset _gib_prompt_cmd_timestamp
-
-  # preform async git dirty check and fetch
-  _gib_prompt_async_tasks
-
-  # print the preprompt
-  _gib_prompt_preprompt_render "precmd"
 }
 
 _gib_prompt_async_git_aliases() {
