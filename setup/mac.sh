@@ -139,6 +139,7 @@ fi
 
 # Upgrade everything, even things that weren't in your Brewfile.
 brew upgrade
+brew cask upgrade # You may occasionally want to run `brew cask upgrade --greedy` in case built-in updaters aren't working.
 
 # Update Mac App Store apps.
 softwareupdate -i -a
