@@ -31,3 +31,13 @@ cask "workflowy"                         # Infinitely nested bullet point list a
 # tap "crisidev/homebrew-chunkwm"
 # brew "chunkwm", restart_service: :changed
 # brew "koekeishiya/formulae/khd", restart_service: :changed
+
+# Mac App Store Apps (some paid).
+mas "Final Cut Pro", id: 424389933
+mas "GarageBand", id: 682658836
+mas "iMovie", id: 408981434
+mas "Keynote", id: 409183694
+mas "Logic Pro X", id: 634148309
+mas "Numbers", id: 409203825
+mas "Pages", id: 409201541
+mas "Pocket", id: 568494494

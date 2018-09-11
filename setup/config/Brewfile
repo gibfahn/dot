@@ -44,13 +44,14 @@ brew "fd"                                # Super-fast find replacement.
 brew "gnupg"                             # gpg command line.
 brew "gpg-agent"                         # gpg daemon.
 brew "hyperfine"                         # Benchmark commands (time but a benchmarking suite).
+brew "mas"                               # Mac App Store third-party cli.
 brew "neovim"                            # New and improved vim.
 brew "rmtrash"                           # `rm` to Trash, aliased to `dl` in gibrc.
 brew "tmux"                              # Terminal multiplexer.
+brew "xsv"                               # csv manipulator.
 brew "zsh-completions"                   # Generally useful  zsh completions.
 brew "zsh-syntax-highlighting"           # Syntax in the terminal.
 cask "docker"                            # Build and run docker images.
-brew "xsv"                               # csv manipulator.
 
 # Casks (GUI Applications):
 
