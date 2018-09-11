@@ -20,6 +20,12 @@
   b   = branch
   ba  = branch -a # Show all local and remote branches.
   bd  = branch -D # Delete branch.
+  # TODO(gib): Fix this to make it look nice (can also use git branch directly).
+  # Sorted list of branches.
+  bh  = for-each-ref --sort=committerdate refs/heads/ --format='%(committerdate:short) %(color: 178)%(refname:short)' # Branch sistory.
+  brs = !git for-each-ref --sort=-committerdate refs/heads/ \
+        --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset)|%(objectname:short)|%(color:green)%(committerdate:relative)%(color:reset)' \
+        | column -ts '|'
   br  = branch -r # Show remote branches only.
   bdd = "!lastBranch=$(git headBranch); git checkout -; git branch -D $lastBranch" # Delete current branch.
   bp  = "!git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs -r git branch -d" # Delete orphaned local branches.
