@@ -105,6 +105,7 @@ if exists git && [[ "$(whoami)" != gib ]] && {
 fi
 
 gitCloneOrUpdate rbenv/rbenv "$XDG_DATA_HOME/rbenv"
+gitCloneOrUpdate rbenv/rbenv-default-gems "$XDG_DATA_HOME/rbenv"/plugins/rbenv-default-gems
 # Only run make if there were changes.
 if [[ "$?" == 0 ]]; then
   ln -sf "$XDG_DATA_HOME/rbenv/completions/rbenv.zsh" "$XDG_DATA_HOME/zfunc/rbenv.zsh"
