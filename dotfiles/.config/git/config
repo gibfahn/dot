@@ -57,9 +57,14 @@
   fa = fetch --all     # Fetch from all the remotes.
   fix = commit --fixup # g fix SHA means rebasing will attach to that SHA.
   # Like commit --amend but for an arbitrary commit (`g fixup @~3.`).
-  fixup = "! hash=$(git rev-parse "$1"); git commit --fixup=$hash ${@:2} && EDITOR=true git rebase -i --autostash --autosquash $hash^ #"
+  fixup = "!  hash=$(git rev-parse "$1") \
+           && git commit --fixup=$hash ${@:2} \
+           && EDITOR=true git rebase -i --autostash --autosquash $hash^ #"
   # Create/update branch from Github PR, `g fp 657 origin` or `g fp` (Defaults: $1=headBranch, $2=upstreamRemote).
-  fp = "! b=${2:-$(git headRemote)}; b=${b:-up}; a=${1:-$(git headBranch)}; git fetch -fu $b pull/$a/head:$a; git checkout $a; git branch -u $b #"
+  fp = "! b=${2:-$(git headRemote)}; b=${b:-up}; a=${1:-$(git headBranch)} \
+        && git fetch -fu $b pull/$a/head:$a; \
+        git checkout $a \
+        && git branch -u $b #"
 
   h = help
 
@@ -79,7 +84,8 @@
 
   mb  = "!git merge-base ${1:-master} ${2:-HEAD} ${@:2} #" # Get commit this branch forked from.
   mc  = "!echo \"$VISUAL\" | grep -iq vi && c=\"-c /=======\" || c=\"\"; git diff --name-only --diff-filter=U | xargs $VISUAL $c" # Open merge conflicts in editor.
-  mf  = "!git merge --ff-only $@ && git submodule update --init #" # Update branch from other commit (default upstream) as long as other commit has HEAD as an ancestor.
+  mf  = "!  git merge --ff-only $@ \
+         && git submodule update --init #" # Update branch from other commit (default upstream) as long as other commit has HEAD as an ancestor.
 
   p   = push                                                    # Push commits to a remote.
   pf  = push --force-with-lease                                 # Better version of push -f.
