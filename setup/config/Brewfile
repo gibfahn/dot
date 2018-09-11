@@ -46,7 +46,6 @@ brew "gpg-agent"                         # gpg daemon.
 brew "hyperfine"                         # Benchmark commands (time but a benchmarking suite).
 brew "neovim"                            # New and improved vim.
 brew "rmtrash"                           # `rm` to Trash, aliased to `dl` in gibrc.
-brew "tig"                               # `tig log` lets you view log and diffs side-by-side.
 brew "tmux"                              # Terminal multiplexer.
 brew "zsh-completions"                   # Generally useful  zsh completions.
 brew "zsh-syntax-highlighting"           # Syntax in the terminal.

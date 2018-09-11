@@ -68,6 +68,12 @@
   la  = log --graph --decorate --oneline --all                          # Graph log of all commits.
   las = log --graph --decorate --oneline --all --simplify-by-decoration # Graph log of tag/branch/labelled commits.
   ll  = log --color --graph --pretty=format:'%C(214)%h%C(reset)%C(196)%d%C(reset) %s %C(35)(%cr)%C(27) <%an>%C(reset)'
+  # Need to add other commands (and maybe switch to shortcuts as in https://junegunn.kr/, e.g. https://junegunn.kr/2016/07/fzf-git).
+  lp = "!git log --graph --color=always --format=\"%C(auto)%h%d %s %C(black)%C(bold)%cr\" \"$@\" \
+        | fzf --ansi --no-sort --reverse --tiebreak=index \
+        --bind=ctrl-s:toggle-sort \
+        --preview \"(grep -o '[a-f0-9]\\{7\\}' | head -1 | xargs -I % sh -c 'git show --color=always % | /usr/bin/less -R') <<< {}\" \
+        --bind \"ctrl-o:execute: (grep -o '[a-f0-9]\\{7\\}' | head -1 | xargs -I % sh -c 'git show --color=always % | LINES=0 less -R') <<< {}\" #"
   # Escape < and > for github markdown, (useful for generating changelogs).
   changelog  = "! git log --pretty=format:'* %h - %s %n%w(76,4,4)%b%n' --abbrev-commit \"$@\" | perl -0 -p -e 's/(^|[^\\\\])([<>])/\\1\\\\\\2/g ; s/(\\s*\\n)+\\*/\\n\\n*/g' #"
 

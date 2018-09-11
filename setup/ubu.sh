@@ -35,7 +35,6 @@ list+=" copyq"                           # Clipboard manager with history (needs
 list+=" meld"                            # Graphical diff between folders.
 list+=" entr"                            # Run command on file change (Unixy file/folder watcher).
 list+=" xclip"                           # Copy/paste shell commands, used in gibrc.
-list+=" tig"                             # Some nice additions to git (e.g. `tig log`).
 list+=" i3"                              # Window manager. Obsolete since I moved to bspwm.
 list+=" dfu-util"                        # Used for flashing my ergodox.
 list+=" scrot"                           # Take screenshots (works from the command line).
