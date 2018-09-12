@@ -83,7 +83,8 @@ c="$XDG_CONFIG_HOME" # Shortcut to the config directory (`v $c/gibrc` to edit th
 
 for i in please po pu rd d afind _ md run-help +; do alias | sed 's/^alias //' | grep -q "^$i=" && unalias "$i"; done; unset i # Remove unwanted aliases if defined.
 alias md="mkdir -p" # md foo = mkdir foo.
-mdc() { command mkdir -p $*; [ $# = 1 ] && cd "$1" || true; } # mdc foo = mkdir foo && cd foo.
+mdc() { command mkdir -p "$@"; [[ $# == 1 ]] && cd "$1" || true; } # Mkdir then cd to dir (`mdc foo` = `mkdir foo && cd foo`).
+cpm() { command mkdir -p "${@: -1}" && cp "$@"; } # Mkdir then cp to dir (`cpm foo bar/baz` = `md bar/baz && cp foo bar/baz`).
 # Add or move to beginning of path.
 pathadd() { [ -d "$1" ] && export PATH="$1"$(echo ":$PATH:" | sed "s|:$1:|:|" | sed 's|:$||'); }
 # Add or move to end of path.
