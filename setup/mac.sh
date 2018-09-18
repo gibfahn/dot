@@ -38,57 +38,41 @@ if [ "$HARDCORE" ]; then # Set keyboard preferences.
   # Set Keyboard Shortcuts -> App Shortcuts
   # To add your own, first add them in System Preferences -> Keyboard ->
   # Shortcuts -> App Shortcuts, then find them in the output of:
-  #   defaults read
+  #   defaults find NSUserKeyEquivalents
   # Use the existing and the help output of `defaults` to work it out.
-  # @command, ~option, ^ctrl, $shift
+  #   @command, ~option, ^ctrl, $shift
+  # The global domain NSGlobalDomain NSGlobalDomain is the same as -g or -globalDomain.
+  # -bool YES/TRUE or FALSE/NO correspond to -int 1 or 0.
 
   # Create global shortcut "Merge all windows" ⌘-M
-  if ! defaults read 'Apple Global Domain' NSUserKeyEquivalents | grep -q "Merge All Windows"; then
-    defaults write 'Apple Global Domain' NSUserKeyEquivalents -dict-add "Merge All Windows" '@$m'
-  fi
+  updateMacOSKeyboardShortcut NSGlobalDomain "Merge All Windows" '@$m'
 
   # Remove ⌘-h as a Hide Window shortcut in relevant apps.
   # -> IntelliJ Community Edition:
-  if ! defaults read com.jetbrains.intellij.ce NSUserKeyEquivalents | grep -q "Hide IntelliJ IDEA"; then
-    defaults write com.jetbrains.intellij.ce NSUserKeyEquivalents -dict-add "Hide IntelliJ IDEA" '@~^\\U00a7'
-  fi
+  updateMacOSKeyboardShortcut com.jetbrains.intellij.ce "Hide IntelliJ IDEA" '@~^\\U00a7'
   # -> IntelliJ:
-  if ! defaults read com.jetbrains.intellij NSUserKeyEquivalents | grep -q "Hide IntelliJ IDEA"; then
-    defaults write com.jetbrains.intellij NSUserKeyEquivalents -dict-add "Hide IntelliJ IDEA" '@~^\\U00a7'
-  fi
+  updateMacOSKeyboardShortcut com.jetbrains.intellij "Hide IntelliJ IDEA" '@~^\\\\U00a7'
   # -> Kitty:
-  if ! defaults read net.kovidgoyal.kitty NSUserKeyEquivalents | grep -q "Hide kitty"; then
-    defaults write net.kovidgoyal.kitty NSUserKeyEquivalents -dict-add "Hide kitty" '~^$\\U00a7'
-  fi
+  updateMacOSKeyboardShortcut net.kovidgoyal.kitty "Hide kitty" '~^$\\U00a7'
   # -> Mail: ⌘-backspace moves to Archive.
-  if ! defaults read com.apple.mail NSUserKeyEquivalents | grep -q "Archive"; then
-    defaults write com.apple.mail NSUserKeyEquivalents -dict-add "Archive" '@\U0008'
-  fi
+  updateMacOSKeyboardShortcut com.apple.mail "Archive" '@\\b'
+  # -> Mail: ⌘-Enter sends the message.
+  updateMacOSKeyboardShortcut com.apple.mail "Send" "@\U21a9"
 
   # Set up fastest key repeat rate (needs relogin).
-  if [[ "$(defaults read NSGlobalDomain KeyRepeat)" != 1 ]]; then
-    defaults write NSGlobalDomain KeyRepeat -int 1
-  fi
+  updateMacOSDefault NSGlobalDomain KeyRepeat -int 1
 
   # Sets a low time before key starts repeating.
-  if [[ "$(defaults read NSGlobalDomain InitialKeyRepeat)" != 8 ]]; then
-    defaults write NSGlobalDomain InitialKeyRepeat -int 8
-  fi
+  updateMacOSDefault NSGlobalDomain InitialKeyRepeat -int 8
 
   # Increases trackpad sensitivity (SysPref max 3.0).
-  if [[ "$(defaults read -g com.apple.trackpad.scaling)" != 5 ]]; then
-    defaults write -g com.apple.trackpad.scaling -float 5.0
-  fi
+  updateMacOSDefault NSGlobalDomain com.apple.trackpad.scaling -float 5
 
   # Disables window minimizing animations.
-  if [[ "$(defaults read NSGlobalDomain NSAutomaticWindowAnimationsEnabled)" != 0 ]]; then
-    defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -int 0
-  fi
+  updateMacOSDefault NSGlobalDomain NSAutomaticWindowAnimationsEnabled -int 0
 
   # Greys out hidden apps in the dock (so you can see which are hidden).
-  if [[ "$(defaults read com.apple.Dock showhidden)" != 1 ]]; then
-    defaults write com.apple.Dock showhidden -int 1 && killall Dock
-  fi
+  updateMacOSDefault com.apple.Dock showhidden -int 1 && killall Dock
 
   # System Preferences -> Keyboard -> Shortcuts -> Full Keyboard Access
   # Full Keyboard Access: In Windows and Dialogs, press Tab to move keyboard
@@ -99,41 +83,32 @@ if [ "$HARDCORE" ]; then # Set keyboard preferences.
   # with the keyboard, Enter to press the blue one, tab to select between them,
   # space to press the Tab-selected one. If there are underlined letters, hold
   # Option and press the letter to choose that option.
-  if [[ "$(defaults read -g AppleKeyboardUIMode)" != 2 ]]; then
-    defaults write -g AppleKeyboardUIMode -int 2
-  fi
+  updateMacOSDefault -g AppleKeyboardUIMode -int 2
 
   # Show hidden files in the finder.
-  if [[ "$(defaults read com.apple.finder AppleShowAllFiles)" != 1 ]]; then
-    defaults write com.apple.finder AppleShowAllFiles -int 1 && killall Finder
-  fi
-
-  # Allow text selection in any QuickLook window.
-  if [[ "$(defaults read -g QLEnableTextSelection)" != 1 ]]; then
-    defaults write -g QLEnableTextSelection -int 1
-  fi
-
-  # Allow Finder to be quit (hides Desktop files).
-  if [[ "$(defaults read com.apple.finder QuitMenuItem)" != 1 ]]; then
-    defaults write com.apple.finder QuitMenuItem -bool YES
+  oldFinderValue="$(defaults read com.apple.finder QuitMenuItem)"
+  updateMacOSDefault com.apple.finder AppleShowAllFiles -int 1
+  if [[ "$oldFinderValue" != 1 ]]; then
     killall Finder
     open ~
   fi
 
-  # Show system info at the login screen when you click the clock icon.
-  if [[ "$(defaults read /Library/Preferences/com.apple.loginwindow AdminHostInfo)" != HostName ]]; then
-    sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
+  # Allow text selection in any QuickLook window.
+  updateMacOSDefault NSGlobalDomain QLEnableTextSelection -int 1
+
+  # Allow Finder to be quit (hides Desktop files).
+  oldFinderValue="$(defaults read com.apple.finder QuitMenuItem)"
+  updateMacOSDefault com.apple.finder QuitMenuItem -int 1
+  if [[ "$oldFinderValue" != 1 ]]; then
+    killall Finder
+    open ~
   fi
 
   # Disable the animations for opening Quick Look windows
-  if [[ "$(defaults read -g QLPanelAnimationDuration)" != 0 ]]; then
-    defaults write -g QLPanelAnimationDuration -float 0
-  fi
+  updateMacOSDefault NSGlobalDomain QLPanelAnimationDuration -float 0
 
   # System Preferences > General > Click in the scrollbar to: Jump to the spot that's clicked
-  if [[ "$(defaults read -g AppleScrollerPagingBehavior)" != 1 ]]; then
-    defaults write -globalDomain AppleScrollerPagingBehavior -int 1
-  fi
+  updateMacOSDefault NSGlobalDomain AppleScrollerPagingBehavior -int 1
 
   # TODO(gib): Add more shortcuts:
   #
@@ -155,7 +130,6 @@ if [ "$HARDCORE" ]; then # Set keyboard preferences.
   # Show path bar in finder:
   #   defaults write com.apple.finder ShowPathbar -bool true
   # Cmd-Enter sends email in Mail.
-  #   defaults write com.apple.mail NSUserKeyEquivalents -dict-add "Send" "@\U21a9"
 
 else
   skip "Not setting keyboard/trackpad preferences (HARDCORE not set)."

@@ -166,3 +166,84 @@ finalOutput() {
 addError() {
   FINAL_OUTPUT="$FINAL_OUTPUT\n${RED}ERR:${NC} $@"
 }
+
+# For usage see updateMacOSKeyboardShortcut
+updateMacOSDefaultDict() {
+  local domain subdomain key val currentVal;
+  domain="$1"; shift
+  subdomain="$1"; shift
+  key="$1"; shift
+  val="$1"; shift
+  [[ "$#" != 0 ]] && printf "Wrong number of args" && return 1
+
+  # If the dict hasn't been initialised yet, create it.
+  if ! defaults read "$domain" "$subdomain" >/dev/null; then
+    defaults write "$domain" "$subdomain" -dict
+  fi
+
+  # Get the current value of the dict[key] (empty if unset).
+  currentVal="$(defaults read "$domain" "$subdomain"                 \
+                | grep -F "$key"                                     \
+                | sed -E "s/\s*\"?$key\"?\s*=\s*\"?([^\"]*)\"?;/\1/" \
+              )"
+
+  if [[ "$currentVal" == "$val" ]]; then
+    skip "macOS default shortcut $domain $key is already set to $currentVal"
+    return 0
+  fi
+
+  if [[ -n "$currentVal" ]]; then
+    update "macOS default shortcut $domain $key is currently set to $currentVal, changing to $val"
+  else
+    update "macOS default shortcut $domain $key is unset, setting it to $val"
+  fi
+
+  defaults write "$domain" "$subdomain" -dict-add "$key" "$val"
+}
+
+# Run:
+#   defaults find NSUserKeyEquivalents
+# Example output:
+#   Found 1 keys in domain 'com.foo.bar': {
+#       NSUserKeyEquivalents =     {
+#           baz = bat;
+#       };
+#   }
+# Call to use:
+#   updateKeyboardShortcuts "com.foo.bar" "baz" "bat"
+# Set sudo=sudo for commands that need root access.
+updateMacOSKeyboardShortcut() {
+  updateMacOSDefaultDict "$1" NSUserKeyEquivalents "$2" "$3"
+  if ! defaults read com.apple.universalaccess com.apple.custommenu.apps | grep -qF "$1"; then
+    update "macOS default shortcut $1 is not in com.apple.universalaccess com.apple.custommenu.apps, adding it."
+    defaults write com.apple.universalaccess com.apple.custommenu.apps -array-add "$1"
+  fi
+}
+
+# If you get:
+#   defaults read foo bar -> 1
+#   defaults read-type foo bar -> Type is integer
+# Then you should set with:
+#   updateMacOSDefault foo bar -int 1
+updateMacOSDefault() {
+  local domain key val_type val currentVal;
+  domain="$1"; shift
+  key="$1"; shift
+  val_type="$1"; shift
+  val="$1"; shift
+  [[ "$#" != 0 ]] && printf "Wrong number of args" && return 1
+  currentVal="$(defaults read "$domain" "$key")"
+
+  if [[ "$currentVal" == "$val" ]]; then
+    skip "macOS default $domain $key is already set to $val"
+    return 0
+  fi
+
+  if [[ -n "$currentVal" ]]; then
+    update "macOS default $domain $key is currently set to $currentVal, changing to $val"
+  else
+    update "macOS default $domain $key is unset, setting it to $val"
+  fi
+
+  defaults write "$domain" "$subdomain" "$key" "$val_type" "$val"
+}
