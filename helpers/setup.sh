@@ -245,5 +245,5 @@ updateMacOSDefault() {
     update "macOS default $domain $key is unset, setting it to $val"
   fi
 
-  defaults write "$domain" "$subdomain" "$key" "$val_type" "$val"
+  defaults write "$domain" "$key" "$val_type" "$val"
 }

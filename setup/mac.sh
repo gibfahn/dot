@@ -83,7 +83,7 @@ if [ "$HARDCORE" ]; then # Set keyboard preferences.
   # with the keyboard, Enter to press the blue one, tab to select between them,
   # space to press the Tab-selected one. If there are underlined letters, hold
   # Option and press the letter to choose that option.
-  updateMacOSDefault -g AppleKeyboardUIMode -int 2
+  updateMacOSDefault NSGlobalDomain AppleKeyboardUIMode -int 2
 
   # Show hidden files in the finder.
   oldFinderValue="$(defaults read com.apple.finder QuitMenuItem)"
