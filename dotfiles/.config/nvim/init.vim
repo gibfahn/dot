@@ -160,7 +160,7 @@ nnoremap        <Leader>gS :mksession! <C-r>=SessionFile()<CR>| " Save current s
 nnoremap        <Leader>gt :set et!<CR>:set et?<CR>|   " Toggle tabs/spaces.
 nnoremap        <Leader>gq :set fo-=t<CR>:set fo?<CR>| " Turn off line wrapping,
 nnoremap        <Leader>gQ :set fo+=t<CR>:set fo?<CR>| " ↳    on
-nnoremap        <Leader>gv :e ~/.vimrc<CR>|  " <Space>gv opens ~/.vimrc in the editor (autoreloaded on save).
+nnoremap        <Leader>gv :e ~/.vim/vimrc<CR>|  " <Space>gv opens vimrc in the editor (autoreloaded on save).
 nnoremap        <Leader>gw :setlocal wrap!<CR>| " <Space>gw toggles the soft-wrapping of text.
 nnoremap        <Leader>id :r !date +\%Y-\%m-\%d<CR>| " Insert readable    date on new line.
 nnoremap        <Leader>iD :r !date +\%d-\%b-\%y<CR>| " ↳      `:sort`able date on new line.
