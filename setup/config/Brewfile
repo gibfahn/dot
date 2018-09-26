@@ -9,6 +9,7 @@ tap "homebrew/bundle"                    # Allows you to use Brewfiles.
 # Defaults are in /usr/bin, brew installs to /usr/local/bin
 
 brew "bash"
+brew "less"                              # Fixes -RX issue.
 brew "git"
 brew "python"                            # Python3
 brew "python2"
