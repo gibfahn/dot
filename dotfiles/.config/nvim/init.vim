@@ -21,6 +21,7 @@ else
 endif
 
   Plug 'AndrewRadev/splitjoin.vim'                  " gS to split, gJ to join lines.
+  Plug 'airblade/vim-gitgutter'                     " Show git diffs in the gutter (left of line numbers) (:h gitgutter).
   Plug 'ap/vim-buftabline'                          " Show buffers in the tab bar.
   Plug 'ap/vim-readdir'                             " Nicer file browser plugin that works with buftabline.
   Plug 'easymotion/vim-easymotion'                  " Go to any word instantly.
@@ -59,41 +60,43 @@ let mapleader = "\<Space>"                          " Set <Leader> (default shor
 
 syntax on                                           " Turn on syntax highlighting.
 filetype plugin indent on                           " Use file-specific plugins and indentation rules.
-set shiftwidth=2 tabstop=2 softtabstop=2            " Set tab width to 2.
-set expandtab                                       " Insert spaces when tab key pressed.
-set backspace=indent,eol,start                      " Backspace works across lines.
-set ignorecase                                      " Ignore case for lowercase searches,
-set smartcase                                       "  ↳ don't for mixed-case.
+
 set autoindent                                      " Moving to a new line keeps the same indentation (overridden by filetype indent on).
+set autoread                                        " Auto read when file is changed elsewhere.
+set backspace=indent,eol,start                      " Backspace works across lines.
+set confirm                                         " Ask if you want to save unsaved files instead of failing.
+set diffopt+=vertical                               " Always use vertical diffs.
+set expandtab                                       " Insert spaces when tab key pressed.
+set ffs=unix                                        " Force Unix line endings (\n) (always show \r (^M), never autoinsert them).
 set foldmethod=syntax foldlevel=99                  " Fold according to the syntax rules, expand all by default.
+set formatoptions-=t                                " Don't autowrap text at 80.
 set gdefault                                        " Global replace default (off: /g).
+set hidden                                          " Don't force saving buffers on switching.
 set history=1000                                    " More command/search history.
-set undolevels=1000                                 " More undo history.
-set ruler                                           " Always show cursor position.
-set showcmd                                         " Display incomplete commands.
-set lazyredraw                                      " Don't redraw if you don't have to (e.g. in macros).
+set hlsearch                                        " Highlight search matches (off: <Space>/).
+set ignorecase                                      " Ignore case for lowercase searches,
 set incsearch                                       " Incremental searching.
 set laststatus=2                                    " Always display the status line.
-set hidden                                          " Don't force saving buffers on switching.
-set textwidth=80                                    " Wrap at 79 chars (change: set tw=72).
-set formatoptions-=t                                " Don't autowrap text at 80.
-set autoread                                        " Auto read when file is changed elsewhere.
-set nojoinspaces                                    " One space (not two) after punctuation..
+set lazyredraw                                      " Don't redraw if you don't have to (e.g. in macros).
+set list listchars=tab:»·,trail:·,nbsp:·            " Display extra whitespace.
 set mouse=a                                         " Mouse in all modes (mac: Fn+drag = copy).
+set nojoinspaces                                    " One space (not two) after punctuation..
+set notildeop                                       " Keep tilde (~) as it's default. If you want the operator version use g~.
 set number                                          " Turn on line numbers.
-set numberwidth=5                                   " Width of line number buffer.
-set hlsearch                                        " Highlight search matches (off: <Space>/).
-set ffs=unix                                        " Force Unix line endings (\n) (always show \r (^M), never autoinsert them).
-set t_Co=256                                        " Use 256 color terminal.
+set ruler                                           " Always show cursor position.
+set shiftwidth=2 tabstop=2 softtabstop=2            " Set tab width to 2.
+set showcmd                                         " Display incomplete commands.
+set smartcase                                       "  ↳ don't for mixed-case.
 set splitbelow                                      " Open new split panes to right and,
 set splitright                                      "  ↳ bottom, which feels more natural.
-set diffopt+=vertical                               " Always use vertical diffs.
+set t_Co=256                                        " Use 256 color terminal.
+set textwidth=80                                    " Wrap at 79 chars (change: set tw=72).
+set undolevels=1000                                 " More undo history.
+set updatetime=100                                  " Delay after which to write to swap file and run CursorHold event.
 set visualbell                                      " Flash the screen instead of beeping when doing something wrong.
-set confirm                                         " Ask if you want to save unsaved files instead of failing.
-set notildeop                                       " Keep tilde (~) as it's default. If you want the operator version use g~.
 set wildchar=<Tab> wildmenu                         " Tab complete with files (e.g. `:e`)
 set wildmode=list:longest,list:full                 " 1st Tab completes to longest common string, 2nd+ cycles through options.
-set list listchars=tab:»·,trail:·,nbsp:·            " Display extra whitespace.
+
 let s:undodir = $XDG_CACHE_HOME . "/vim/undo"
 if !isdirectory(s:undodir)| call mkdir(s:undodir, "p", 0700)| endif
 set undofile                                        " Persist undo history on file close.
@@ -275,7 +278,10 @@ function! SessionFile()
   return $XDG_CACHE_HOME . "/vim/session/" . substitute(getcwd(), '/', '\\%', 'g')
 endfunction
 
-func! BufferClose(bang) abort " Call BufferClose('!') to get bd!
+" :Locate will search entire filesystem for file.
+command! -nargs=1 -bang Locate call fzf#run(fzf#wrap({'source': 'locate <q-args>', 'options': '-m'}, <bang>0))
+
+function! BufferClose(bang) abort " Call BufferClose('!') to get bd!
   let oldbuf = bufnr('%') | let oldwin = winnr()
   if len(getbufinfo({'buflisted':1})) == 1 | enew | else | bp | endif " Open new if no other buffers.
   " For each window with oldbuf open, switch to previous buffer.
@@ -367,18 +373,20 @@ if executable("rg")
 endif
 
 augroup gibAutoGroup                                " Group of automatic functions.
-  au!
-  au BufReadPost *|                                 " On open jump to last cursor position if possible.
+  autocmd!|                                         " Remove existing autocmds.
+  autocmd BufReadPost *|                            " On open jump to last cursor position if possible.
     \ if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") |
-    \   exe "normal g`\"" |
+    \   execute "normal g`\"" |
     \ endif
-  au BufRead,BufNewFile *.md set filetype=markdown  " Use markdown for md files.
-  au FileType help wincmd L                         " Open new help windows on the right,
-"  au FileType qf wincmd L                           "  ↳       build windows on the right.
-  au BufWritePost .vimrc so $MYVIMRC|               " Reload .vimrc on save.
-  au BufWritePost init.vim so $MYVIMRC|             " Reload init.vim (nvim) on save.
+  autocmd BufRead,BufNewFile *.md set filetype=markdown  " Use markdown for md files.
+  autocmd FileType help wincmd L                    " Open new help windows on the right,
+"  autocmd FileType qf wincmd L                          "  ↳       build windows on the right.
+  autocmd BufWritePost .vimrc so $MYVIMRC|          " Reload .vimrc on save.
+  autocmd BufWritePost init.vim so $MYVIMRC|        " Reload init.vim (nvim) on save.
   autocmd QuickFixCmdPost *grep* cwindow|           " Open the quickfix window on grep.
   autocmd VimEnter * silent! tabonly|               " Don't allow starting Vim with multiple tabs.
+  autocmd FocusGained * :checktime|                 " Check if files modified when you switch back to vim.
+  autocmd CursorHold * checktime|                        " Check if files modified when the cursor stops moving for 4s.
 augroup END
 
 " Function to trim trailing whitespace in a file.
@@ -386,7 +394,7 @@ function! TrimWhitespace()
   let l:save = winsaveview()
   %s/\s\+$//e
   call winrestview(l:save)
-endfun
+endfunction
 
 " }}} Custom commands
 
