@@ -24,6 +24,7 @@ endif
   Plug 'airblade/vim-gitgutter'                     " Show git diffs in the gutter (left of line numbers) (:h gitgutter).
   Plug 'ap/vim-buftabline'                          " Show buffers in the tab bar.
   Plug 'ap/vim-readdir'                             " Nicer file browser plugin that works with buftabline.
+  Plug 'cespare/vim-toml'                           " Toml syntax highlighting.
   Plug 'easymotion/vim-easymotion'                  " Go to any word instantly.
   Plug 'eclipse/eclipse.jdt.ls', { 'dir': '~/.local/share/eclipse.jdt.ls', 'tag': '*' } " Java Language Server.
   Plug 'fweep/vim-zsh-path-completion'              " Nicer file browser plugin.
