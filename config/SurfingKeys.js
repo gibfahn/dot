@@ -24,6 +24,10 @@ map('p', '<Alt-i>'); // Map p to toggle passthrough mode.
 
 map('F', 'gf'); // Map F to open links in a new tab (like in Vimium).
 
+// Turn off SurfingKeys on some sites (see commented line for example of regex with multiple sites).
+// settings.blacklistPattern = /.*quip-.*\.com.*|.*inbox.google.com.*|trello.com|duolingo.com|youtube.com|udemy.com/i;
+settings.blacklistPattern = /.*quip-.*\.com.*/i;
+
 /*
  * Examples:
  */
