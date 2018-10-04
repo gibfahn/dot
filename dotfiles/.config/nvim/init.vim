@@ -44,6 +44,7 @@ endif
   Plug 'tpope/vim-commentary'                       " Autodetect comment type for lang.
   Plug 'tpope/vim-fugitive'                         " Git commands in vim.
   Plug 'tpope/vim-repeat'                           " Allows you to use . with plugin mappings.
+  Plug 'tpope/vim-rhubarb'                          " GitHub support.
   Plug 'tpope/vim-surround'                         " Add/mod/remove surrounding chars.
   Plug 'tpope/vim-unimpaired'                       " [ and ] mappings (help unimpaired).
 
@@ -348,6 +349,8 @@ let g:gundo_right = 1                               " Undo window on right.
 let g:gundo_preview_bottom = 1                      " Undo diff preview on bottom.
 let g:buftabline_numbers = 2                        " Show buftabline's count (use <Leader>1-9 to switch.
 let g:buftabline_indicators = 1                     " Show a + if the buffer has been modified.
+" Add your Enterprise repo here so vim-fugitive's :Gbrowse! can work with it. Use with visual mode for line links.
+let g:github_enterprise_urls = ['https://github.pie.apple.com']
 
 let g:LanguageClient_serverCommands = {
     \ 'java': ['jdtls', '-Dlog.level=ALL'],
