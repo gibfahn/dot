@@ -373,7 +373,7 @@ call matchadd('ColorColumn', '\%81v', 100)
 set path=.,/usr/include,,**                         " Add ** to search path
 if executable("rg")
   set grepprg=rg\ -S\ --vimgrep\ --no-heading         " Use ripgrep for file searching.
-  set grepformat=%f:%l:%c:%m,%f:%l:%m
+  set grepformat=%f:%l:%c:%m,%f:%l:%m                 " Teach vim how to parse the ripgrep output.
 endif
 
 augroup gibAutoGroup                                " Group of automatic functions.
@@ -389,8 +389,9 @@ augroup gibAutoGroup                                " Group of automatic functio
   autocmd BufWritePost init.vim so $MYVIMRC|        " Reload init.vim (nvim) on save.
   autocmd QuickFixCmdPost *grep* cwindow|           " Open the quickfix window on grep.
   autocmd VimEnter * silent! tabonly|               " Don't allow starting Vim with multiple tabs.
-  autocmd FocusGained * :checktime|                 " Check if files modified when you switch back to vim.
-  autocmd CursorHold * checktime|                        " Check if files modified when the cursor stops moving for 4s.
+  " Check if files modified when you open a new window, switch back to vim, or if you don't move the cursor for 100ms.
+  " Use getcmdwintype() to avoid running in the q: window (otherwise you get lots of errors).
+  autocmd FocusGained,BufEnter,CursorHold,CursorHoldI * if getcmdwintype() == '' | checktime | endif
 augroup END
 
 " Function to trim trailing whitespace in a file.
