@@ -228,7 +228,7 @@
                 "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
                 "description": "Ж+t = Open the Terminal",
                 "from": { "key_code": "t", "modifiers": { "optional": [ "option", "shift", "command" ] } },
-                "to": [{ "shell_command": "open -a kitty" }],
+                "to": [{ "shell_command": "open -a kitty --args --single-instance" }],
                 "type": "basic"
               }, {
                 "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
