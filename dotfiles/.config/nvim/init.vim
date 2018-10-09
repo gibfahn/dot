@@ -41,6 +41,7 @@ endif
   Plug 'redhat-developer/yaml-language-server', {'do': 'npm install && npm run compile'} " Language server for yaml files.
   Plug 'rust-lang/rust.vim'                         " Rust language bindings.
   Plug 'sjl/gundo.vim'                              " Interactive undo tree (<space>u to toggle on/off, q to quit).
+  Plug 'takac/vim-hardtime'                         " Disable key repeat.
   Plug 'tpope/vim-abolish'                          " Work with variants of words (replacing, capitalizing etc).
   Plug 'tpope/vim-commentary'                       " Autodetect comment type for lang.
   Plug 'tpope/vim-fugitive'                         " Git commands in vim.
@@ -352,6 +353,7 @@ let g:buftabline_numbers = 2                        " Show buftabline's count (u
 let g:buftabline_indicators = 1                     " Show a + if the buffer has been modified.
 " Add your Enterprise repo here so vim-fugitive's :Gbrowse! can work with it. Use with visual mode for line links.
 let g:github_enterprise_urls = ['https://github.pie.apple.com']
+let g:hardtime_default_on = 1
 
 let g:LanguageClient_serverCommands = {
     \ 'java': ['jdtls', '-Dlog.level=ALL'],
