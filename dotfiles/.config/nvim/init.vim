@@ -25,6 +25,7 @@ endif
   Plug 'ap/vim-buftabline'                          " Show buffers in the tab bar.
   Plug 'ap/vim-readdir'                             " Nicer file browser plugin that works with buftabline.
   Plug 'cespare/vim-toml'                           " Toml syntax highlighting.
+  Plug 'coderifous/textobj-word-column.vim'         " Adds ic/ac and iC/aC motions to block select word column in paragraph.
   Plug 'easymotion/vim-easymotion'                  " Go to any word instantly.
   Plug 'eclipse/eclipse.jdt.ls', { 'dir': '~/.local/share/eclipse.jdt.ls', 'tag': '*' } " Java Language Server.
   Plug 'fweep/vim-zsh-path-completion'              " Nicer file browser plugin.
