@@ -1,0 +1,8 @@
+" List of mappings:
+" https://github.com/JetBrains/ideavim/blob/master/src/com/maddyhome/idea/vim/package-info.java
+
+source ~/.config/nvim/init.vim " Source my proper vim config.
+
+" https://github.com/JetBrains/ideavim/blob/master/doc/set-commands.md
+set surround  " Enables vim-surround plugin functionality.
+set gdefault  " :s has the global flag by default.
