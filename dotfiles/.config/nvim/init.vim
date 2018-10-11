@@ -388,6 +388,7 @@ augroup gibAutoGroup                                " Group of automatic functio
   autocmd BufRead,BufNewFile *.md set filetype=markdown  " Use markdown for md files.
   autocmd FileType help wincmd L                    " Open new help windows on the right,
 "  autocmd FileType qf wincmd L                          "  ↳       build windows on the right.
+  autocmd FileType yaml setlocal foldmethod=indent  " YAML files should be folded by indent.
   autocmd BufWritePost .vimrc so $MYVIMRC|          " Reload .vimrc on save.
   autocmd BufWritePost init.vim so $MYVIMRC|        " Reload init.vim (nvim) on save.
   autocmd QuickFixCmdPost *grep* cwindow|           " Open the quickfix window on grep.
