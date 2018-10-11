@@ -88,6 +88,7 @@
   # Escape < and > for github markdown, (useful for generating changelogs).
   changelog  = "! git log --pretty=format:'* %h - %s %n%w(76,4,4)%b%n' --abbrev-commit \"$@\" | perl -0 -p -e 's/(^|[^\\\\])([<>])/\\1\\\\\\2/g ; s/(\\s*\\n)+\\*/\\n\\n*/g' #"
 
+  ma  = merge --abort
   mb  = "!git merge-base ${1:-master} ${2:-HEAD} ${@:2} #" # Get commit this branch forked from.
   mc  = "!echo \"$VISUAL\" | grep -iq vi && c='-c /\\(|||||||\\|=======\\|>>>>>>>\\|<<<<<<<\\)' || c=\"\"; git diff --name-only --diff-filter=U | xargs $VISUAL $c" # Open merge conflicts in editor.
   mf  = "!  git merge --ff-only $@ \
