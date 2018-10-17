@@ -26,7 +26,6 @@ endif
   Plug 'ap/vim-readdir'                             " Nicer file browser plugin that works with buftabline.
   Plug 'cespare/vim-toml'                           " Toml syntax highlighting.
   Plug 'coderifous/textobj-word-column.vim'         " Adds ic/ac and iC/aC motions to block select word column in paragraph.
-  Plug 'easymotion/vim-easymotion'                  " Go to any word instantly.
   Plug 'eclipse/eclipse.jdt.ls', { 'dir': '~/.local/share/eclipse.jdt.ls', 'tag': '*' } " Java Language Server.
   Plug 'fweep/vim-zsh-path-completion'              " Nicer file browser plugin.
   Plug 'gibfahn/vim-gib'                            " Use vim colorscheme.
@@ -194,6 +193,7 @@ nnoremap        <Leader>y "+y|                    " Copy to clipboard (normal mo
 nnoremap        <Leader>Y :%y+<CR>|               "  ↳  file to clipboard (normal mode).
 nnoremap        <Leader>z  za|                    " Toggle folding on current line.
 nnoremap <expr> <Leader>Z &foldlevel ? 'zM' :'zR'| " Toggle folding everywhere (see also "zi).
+nnoremap        <Leader>; @:|                     " Repeat the last executed command.
 nnoremap        <Leader>/ :noh<CR>|               " Turn off find highlighting.
 nnoremap        <Leader>? /<Up><CR>|              " Search for last searched thing.
 
@@ -344,6 +344,7 @@ let g:deoplete#enable_at_startup = 1                " Enable deoplete by default
 let g:is_posix = 1                                  " Assume shell for syntax highlighting.
 "let g:rustfmt_autosave = 1                         " Run rustfmt on save (from rust.vim).
 let g:sneak#use_ic_scs = 1                          " Sneak: respect smartcase setting.
+let g:sneak#label = 1                               " Make sneak like easymotion (but nicer).
 let g:loaded_netrw = 1
 let g:loaded_netrwPlugin = 1                        " Don't use the built-in file browser (use vim-readdir instead).
 let g:peekaboo_window = "vert bo 50new"             " Increase peekaboo window width to 50.
