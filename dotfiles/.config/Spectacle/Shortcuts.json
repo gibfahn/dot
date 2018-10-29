@@ -4,7 +4,7 @@
     "shortcut_name" : "RedoLastMove"
   },
   {
-    "shortcut_key_binding" : "ctrl+alt+shift+left",
+    "shortcut_key_binding" : "ctrl+alt+cmd+j",
     "shortcut_name" : "MakeSmaller"
   },
   {
@@ -32,7 +32,7 @@
     "shortcut_name" : "MoveToLowerLeft"
   },
   {
-    "shortcut_key_binding" : "ctrl+alt+shift+right",
+    "shortcut_key_binding" : "ctrl+alt+cmd+k",
     "shortcut_name" : "MakeLarger"
   },
   {
@@ -56,7 +56,7 @@
     "shortcut_name" : "MoveToLeftHalf"
   },
   {
-    "shortcut_key_binding" : "alt+cmd+c",
+    "shortcut_key_binding" : null,
     "shortcut_name" : "MoveToCenter"
   },
   {
