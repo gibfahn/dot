@@ -48,6 +48,7 @@ brew "hyperfine"                         # Benchmark commands (time but a benchm
 brew "mas"                               # Mac App Store third-party cli.
 brew "neovim"                            # New and improved vim.
 brew "rmtrash"                           # `rm` to Trash, aliased to `dl` in gibrc.
+brew "terminal-notifier"                 # Log notifications from the terminal.
 brew "tmux"                              # Terminal multiplexer.
 brew "xsv"                               # csv manipulator.
 brew "zsh-completions"                   # Generally useful  zsh completions.
