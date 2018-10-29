@@ -65,6 +65,7 @@ export SCCACHE_DIR="$XDG_CACHE_HOME/sccache" # sccache cache dir.
 export IPYTHONDIR="$XDG_CACHE_HOME/ipython" # Move iPython dir from ~.
 export HELM_HOME="$XDG_DATA_HOME/helm" # Move Helm data dir from ~.
 export BLUEMIX_HOME="$XDG_DATA_HOME/bluemix" # Move Bluemix home directory from ~ (creates .bluemix inside).
+export PEX_ROOT="${PEX_ROOT:-$XDG_CACHE_HOME/pex}" # Cache directory for https://github.com/pantsbuild/pex.
 export VIRTUAL_ENV_DISABLE_PROMPT=1 # Add the virtualenv prompt myself.
 # Tab is 4 spaces, search ignores case, enable colours, cat if less than one screen.
 # Set colors for less. Borrowed from https://wiki.archlinux.org/index.php/Color_output_in_console#less .
@@ -85,7 +86,7 @@ VULKAN_SDK="$(echo /usr/local/Caskroom/vulkan-sdk/* | sort -V | tail -1)"/macOS 
 export DYLD_LIBRARY_PATH="$VULKAN_SDK/lib:$DYLD_LIBRARY_PATH"
 export VK_ICD_FILENAMES="$VULKAN_SDK/etc/vulkan/icd.d/MoltenVK_icd.json"
 export VK_LAYER_PATH="$VULKAN_SDK/etc/vulkan/explicit_layer.d"
-HISTSIZE=10000 SAVEHIST=10000 HISTFILE="$XDG_CACHE_HOME/$shell/history" # Set history file location and size.
+HISTSIZE=100000 SAVEHIST=100000 HISTFILE="$XDG_CACHE_HOME/$shell/history" # Set history file location and size.
 c="$XDG_CONFIG_HOME" # Shortcut to the config directory (`v $c/gibrc` to edit this file).
 [ -d "$XDG_CONFIG_HOME/terminfo" ] && export TERMINFO="$XDG_CONFIG_HOME/terminfo" # Put terminal info in here.
 
