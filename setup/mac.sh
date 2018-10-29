@@ -49,7 +49,8 @@ if [ "$HARDCORE" ]; then # Set keyboard preferences.
 
   # Remove ⌘-h as a Hide Window shortcut in relevant apps.
   # -> IntelliJ Community Edition:
-  updateMacOSKeyboardShortcut com.jetbrains.intellij.ce "Hide IntelliJ IDEA" '@~^\\U00a7'
+  # Removed because I haven't installed it.
+  # updateMacOSKeyboardShortcut com.jetbrains.intellij.ce "Hide IntelliJ IDEA" '@~^\\U00a7'
   # -> IntelliJ:
   updateMacOSKeyboardShortcut com.jetbrains.intellij "Hide IntelliJ IDEA" '@~^\\\\U00a7'
   # -> Kitty:
@@ -58,6 +59,9 @@ if [ "$HARDCORE" ]; then # Set keyboard preferences.
   updateMacOSKeyboardShortcut com.apple.mail "Archive" '@\\b'
   # -> Mail: ⌘-Enter sends the message.
   updateMacOSKeyboardShortcut com.apple.mail "Send" "@\U21a9"
+
+  # Radar: Ctrl-Alt-C copies as Markdown:
+  updateMacOSKeyboardShortcut com.apple.ist.Radar7 "Copy as Markdown" "~^c"
 
   # Set up fastest key repeat rate (needs relogin).
   updateMacOSDefault NSGlobalDomain KeyRepeat -int 1

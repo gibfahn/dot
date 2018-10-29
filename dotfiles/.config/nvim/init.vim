@@ -33,8 +33,8 @@ endif
   Plug 'junegunn/fzf', { 'dir': '~/.local/share/fzf', 'do': './install --bin' } " :h fzf
   Plug 'junegunn/fzf.vim'                           " Try :Files, :GFiles? :Buffers :Lines :History :Commits :BCommits
   Plug 'junegunn/vim-peekaboo'                      " Pop up register list when pasting/macroing.
+  Plug 'sheerun/vim-polyglot'                       " Syntax files for a large number of different languages.
   Plug 'justinmk/vim-sneak'                         " sab -> go to next ab in code.
-  Plug 'keith/swift.vim'                            " Swift syntax highlighting.
   Plug 'pangloss/vim-javascript'                    " JS   language bindings.
   Plug 'raghur/vim-ghost', {'do': ':GhostInstall'}  " Edit browser text areas in Neovim (:h ghost).
   Plug 'redhat-developer/yaml-language-server', {'do': 'npm install && npm run compile'} " Language server for yaml files.
@@ -345,6 +345,7 @@ let g:is_posix = 1                                  " Assume shell for syntax hi
 "let g:rustfmt_autosave = 1                         " Run rustfmt on save (from rust.vim).
 let g:sneak#use_ic_scs = 1                          " Sneak: respect smartcase setting.
 let g:sneak#label = 1                               " Make sneak like easymotion (but nicer).
+let g:sneak#target_labels = ";sftunqm/`'-+SFGHLTUNRMQZ?0123456789!()\\[]:|<>QWERTYUIOPASDFGHJKLZXCVBNM.\"\,:qwertyuiopasdfghjklzxcvbnm" " Labels sneak uses to show words.
 let g:loaded_netrw = 1
 let g:loaded_netrwPlugin = 1                        " Don't use the built-in file browser (use vim-readdir instead).
 let g:peekaboo_window = "vert bo 50new"             " Increase peekaboo window width to 50.
@@ -357,9 +358,11 @@ let g:github_enterprise_urls = ['https://github.pie.apple.com']
 let g:hardtime_default_on = 1
 
 let g:LanguageClient_serverCommands = {
+    \ 'go': ['go-langserver'],
     \ 'java': ['jdtls', '-Dlog.level=ALL'],
     \ 'javascript': ['javascript-typescript-stdio'],
     \ 'javascript.jsx': ['javascript-typescript-stdio'],
+    \ 'kotlin': ['kotlin-language-server'],
     \ 'python': ['pyls'],
     \ 'ruby': ['solargraph', 'stdio'],
     \ 'rust': ['rls'],
@@ -390,7 +393,7 @@ augroup gibAutoGroup                                " Group of automatic functio
   autocmd FileType help wincmd L                    " Open new help windows on the right,
 "  autocmd FileType qf wincmd L                          "  ↳       build windows on the right.
   autocmd FileType yaml setlocal foldmethod=indent  " YAML files should be folded by indent.
-  autocmd BufWritePost .vimrc so $MYVIMRC|          " Reload .vimrc on save.
+  autocmd BufWritePost vimrc so $MYVIMRC|          " Reload .vimrc on save.
   autocmd BufWritePost init.vim so $MYVIMRC|        " Reload init.vim (nvim) on save.
   autocmd QuickFixCmdPost *grep* cwindow|           " Open the quickfix window on grep.
   autocmd VimEnter * silent! tabonly|               " Don't allow starting Vim with multiple tabs.

@@ -25,6 +25,10 @@ rust_crates=(
   oxipng                        # Compress png images.
 )
 
+go_packages=(
+  github.com/sourcegraph/go-langserver # Go language server (used in nvim).
+)
+
 # These are installed and updated through brew on Darwin.
 if [[ "$(uname)" == Linux ]]; then
   rust_crates+=(
@@ -104,6 +108,7 @@ if exists git && [[ "$(whoami)" != gib ]] && {
   get "Git Config (git name set to $(git config --global user.name) and email set to $(git config --global user.email))"
 fi
 
+# Set up rbenv for ruby version management.
 gitCloneOrUpdate rbenv/rbenv "$XDG_DATA_HOME/rbenv"
 gitCloneOrUpdate rbenv/rbenv-default-gems "$XDG_DATA_HOME/rbenv"/plugins/rbenv-default-gems
 # Only run make if there were changes.
@@ -165,7 +170,7 @@ if no "$nvm_prefix"nvm; then
   npm completion --loglevel=error > "$XDG_DATA_HOME/.zfunc/_npm"
 fi
 
-# Install rvm
+# Add rbenv to path in case it was only just installed.
 if not rbenv; then
   export PATH="$XDG_DATA_HOME/rbenv/bin:$PATH"
   export PATH="$XDG_CACHE_HOME/rbenv/shims:$PATH"
@@ -216,6 +221,15 @@ for module in "${npm_modules[@]}"; do
   fi
 done
 
+gitCloneOrUpdate fwcd/KotlinLanguageServer "$XDG_DATA_HOME/KotlinLanguageServer"
+if [[ $? != 200 ]]; then
+  (
+    cd "$XDG_DATA_HOME/KotlinLanguageServer"
+    ./gradlew installDist # If tests passed we could use `./gradlew build`
+    ln -sf "$XDG_DATA_HOME/KotlinLanguageServer/build/install/kotlin-language-server/bin/kotlin-language-server" "$HOME/bin/kotlin-language-server"
+  )
+fi
+
 # If you don't use rust just choose the cancel option.
 if [[ -n "$HARDCORE" ]] && { no rustup || no cargo; }; then # Install/set up rust.
   # Install rustup. Don't modify path as that's already in gibrc.
@@ -242,8 +256,8 @@ else
   rustup update
   update "Global Cargo packages"
   not cargo-install-update && cargo install cargo-update
-  cargo install-update -a # Update everything installed with cargo install.
+  cargo install-update -ia  "${rust_crates[@]}" # Update everything installed with cargo install.
 fi
 
-# Install any crates that are missing.
-cargo install-update -i "${rust_crates[@]}"
+# Install or update any go packages we need.
+go get -u "${go_packages[@]}"

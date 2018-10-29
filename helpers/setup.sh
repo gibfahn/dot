@@ -133,7 +133,7 @@ gitUpdate() {
 
 # If the repo isn't there, clone it, if it is, update it.
 gitCloneOrUpdate() {
-  DIR="$2" # Directory to clone into.
+  local DIR="$2" # Directory to clone into.
   if [ ! -d "$DIR" ]; then
     gitClone $@
   else
@@ -188,14 +188,14 @@ updateMacOSDefaultDict() {
               )"
 
   if [[ "$currentVal" == "$val" ]]; then
-    skip "macOS default shortcut $domain $key is already set to $currentVal"
+    skip "macOS default shortcut $domain $key is already set to '$currentVal'"
     return 0
   fi
 
   if [[ -n "$currentVal" ]]; then
-    update "macOS default shortcut $domain $key is currently set to $currentVal, changing to $val"
+    update "macOS default shortcut $domain $key is currently set to '$currentVal', changing to '$val'"
   else
-    update "macOS default shortcut $domain $key is unset, setting it to $val"
+    update "macOS default shortcut $domain $key is unset, setting it to '$val'"
   fi
 
   defaults write "$domain" "$subdomain" -dict-add "$key" "$val"
@@ -216,7 +216,7 @@ updateMacOSKeyboardShortcut() {
   updateMacOSDefaultDict "$1" NSUserKeyEquivalents "$2" "$3"
   if ! defaults read com.apple.universalaccess com.apple.custommenu.apps | grep -qF "$1"; then
     update "macOS default shortcut $1 is not in com.apple.universalaccess com.apple.custommenu.apps, adding it."
-    defaults write com.apple.universalaccess com.apple.custommenu.apps -array-add "$1"
+    sudo defaults write com.apple.universalaccess com.apple.custommenu.apps -array-add "$1"
   fi
 }
 
