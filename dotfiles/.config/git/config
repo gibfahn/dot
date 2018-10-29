@@ -114,6 +114,7 @@
   rp  = rev-parse                                            # Get the hash from a revision (`g rp @` and `g rp --short @` are often useful).
   rr  = remote rename                                        # Change name of remote `g rr origin up`.
   rs  = remote set-url                                       # Change URL of remote `g rs up hsg:dot`.
+  rsp = remote set-url --push                                # Change push URL of remote (`g rs up hhg:dot && g rsp up hsg:dot` to use https for fetch and ssh for push, which is faster).
   rv  = remote -v                                            # Show remotes (with URLs).
 
   s   = status
