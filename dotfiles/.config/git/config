@@ -55,6 +55,7 @@
   de  = "!git diff HEAD --name-only $@ | xargs $VISUAL # " # Open files changed since last commit in editor.
   dn  = diff HEAD --name-only                          # diff of staged and unstaged file names.
   ds  = diff --staged                                  # Diff of staged files (`git diff` for unstaged).
+  dt  = difftool                                       # Nicer way to view diffs in vim.
   du  = "!git diff $(git headUpstream)"                # diff between working tree and upstream branch.
   dus = "!git diff --staged $(git headUpstream)"       # diff between working tree and upstream branch.
   dun = "!git diff $(git headUpstream) --name-only"    # diff between working tree and upstream branch file names.
@@ -93,6 +94,7 @@
   mc  = "!echo \"$VISUAL\" | grep -iq vi && c='-c /\\(|||||||\\|=======\\|>>>>>>>\\|<<<<<<<\\)' || c=\"\"; git diff --name-only --diff-filter=U | xargs $VISUAL $c" # Open merge conflicts in editor.
   mf  = "!  git merge --ff-only $@ \
          && git submodule update --init #" # Update branch from other commit (default upstream) as long as other commit has HEAD as an ancestor.
+  mt  = mergetool # Alternative to `g mc`, `:h vimdiff` in nvim for more info (try `:dif[fupdate]`, `]c`, `do`, `dp`).
 
   p   = push                                                    # Push commits to a remote.
   pf  = push --force-with-lease                                 # Better version of push -f.
@@ -205,6 +207,7 @@
   renames = copies       # Copies count as renames.
   submodule = log        # Show information about submodules in diffs and logs.
   colorMoved = zebra     # Highlight moved lines as oldMoved -> newMoved.
+  tool = vimdiff         # Use nvim vimdiff to view diffs (`git difftool`).
 [diff-so-fancy]
   markEmptyLines = false      # The red blobs are very distracting when only a newline has been added.
   stripLeadingSymbols = false # Without `markEmptyLines` you need the +/- to show newline changes.
@@ -225,6 +228,11 @@
 [merge]
   defaultToUpstream = true # Not set by default before Git 2.0, remove when possible.
   conflictstyle = diff3    # Show common ancestor in diffs (initially confusing, but very helpful).
+  tool = vimdiff           # Use vimdiff (actually neovim's vimdiff) to view and fix merge conflicts (instead of `g mc`).
+[mergetool]
+  prompt = false           # Don't confirm that I want to open the difftool every time.
+[mergetool "vimdiff"]
+  cmd = nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
 [pull]
   rebase = true            # pull = fetch + rebase, not fetch + merge.
 [push]
