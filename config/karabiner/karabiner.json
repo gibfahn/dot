@@ -234,7 +234,7 @@
                 "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
                 "description": "Ж+Shift+x = restart the touch strip",
                 "from": { "key_code": "x", "modifiers": { "mandatory": [ "shift" ], "optional": [ "any" ] } },
-                "to": [{ "shell_command": "pkill ControlStrip 2&>1 | tr -s '\n' ' ' | /usr/local/bin/terminal-notifier -title 'Restarting Touch Strip' -group Karabiner-Elements" }],
+                "to": [{ "shell_command": "pkill ControlStrip 1>&2 | /usr/local/bin/terminal-notifier -title 'Touch Strip Restarting' -group Karabiner-Elements" }],
                 "type": "basic"
               }, {
                 "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
@@ -246,13 +246,19 @@
                 "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
                 "description": "Ж+Shift+w = disable then enable wifi",
                 "from": { "key_code": "w", "modifiers": { "mandatory": [ "shift" ], "optional": [ "any" ] } },
-                "to": [{ "shell_command": "networksetup -setairportpower en0 off; networksetup -setairportpower en0 on | /usr/local/bin/terminal-notifier -title 'Wifi Restarting' -group Karabiner-Elements" }],
+                "to": [{ "shell_command": "networksetup -setairportpower en0 off; networksetup -setairportpower en0 on 1>&2 | /usr/local/bin/terminal-notifier -title 'Wifi Restarting' -group Karabiner-Elements" }],
                 "type": "basic"
               }, {
                 "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
                 "description": "Ж+w = Open WorkFlowy",
                 "from": { "key_code": "w", "modifiers": { "optional": [ "any" ] } },
                 "to": [{ "shell_command": "open -a WorkFlowy" }],
+                "type": "basic"
+              }, {
+                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
+                "description": "Ж+Alt+v = copy 2FA code",
+                "from": { "key_code": "v", "modifiers": { "mandatory": [ "option" ], "optional": [ "any" ] } },
+                "to": [{ "shell_command": "$HOME/bin/vpn code" }],
                 "type": "basic"
               }, {
                 "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
