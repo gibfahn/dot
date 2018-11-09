@@ -34,7 +34,7 @@ endif
   Plug 'junegunn/fzf.vim'                           " Try :Files, :GFiles? :Buffers :Lines :History :Commits :BCommits
   Plug 'junegunn/vim-peekaboo'                      " Pop up register list when pasting/macroing.
   Plug 'sheerun/vim-polyglot'                       " Syntax files for a large number of different languages.
-  Plug 'justinmk/vim-sneak'                         " sab -> go to next ab in code.
+  Plug 'justinmk/vim-sneak'                         " sab -> go to next ab in code (:h sneak-mappings for default mappings).
   Plug 'pangloss/vim-javascript'                    " JS   language bindings.
   Plug 'raghur/vim-ghost', {'do': ':GhostInstall'}  " Edit browser text areas in Neovim (:h ghost).
   Plug 'redhat-developer/yaml-language-server', {'do': 'npm install && npm run compile'} " Language server for yaml files.
@@ -81,7 +81,7 @@ set ignorecase                                      " Ignore case for lowercase 
 set incsearch                                       " Incremental searching.
 set laststatus=2                                    " Always display the status line.
 set lazyredraw                                      " Don't redraw if you don't have to (e.g. in macros).
-set list listchars=tab:»·,trail:·,nbsp:·            " Display extra whitespace.
+set list listchars=tab:»·,trail:·,nbsp:☠            " Display extra whitespace.
 set mouse=a                                         " Mouse in all modes (mac: Fn+drag = copy).
 set nojoinspaces                                    " One space (not two) after punctuation..
 set notildeop                                       " Keep tilde (~) as it's default. If you want the operator version use g~.
@@ -393,6 +393,7 @@ augroup gibAutoGroup                                " Group of automatic functio
   autocmd FileType help wincmd L                    " Open new help windows on the right,
 "  autocmd FileType qf wincmd L                          "  ↳       build windows on the right.
   autocmd FileType yaml setlocal foldmethod=indent  " YAML files should be folded by indent.
+  autocmd FileType python setlocal foldmethod=indent  " YAML files should be folded by indent.
   autocmd BufWritePost vimrc so $MYVIMRC|          " Reload .vimrc on save.
   autocmd BufWritePost init.vim so $MYVIMRC|        " Reload init.vim (nvim) on save.
   autocmd QuickFixCmdPost *grep* cwindow|           " Open the quickfix window on grep.
