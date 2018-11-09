@@ -32,7 +32,7 @@ _gib_prompt_check_cmd_exec_time() {
 # Run before the prompt is displayed.
 _gib_prompt_precmd() {
   # Set window title to current directory.
-  print -P "\e]2;%1~\a"
+  print -Pn "\e]2;%1~\a"
   # printf "\e]2;%s\a" "${PWD/#$HOME/~}"
   # check exec time and store it in a variable
   _gib_prompt_check_cmd_exec_time
