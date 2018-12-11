@@ -1,0 +1,104 @@
+#!/usr/bin/env node
+
+const fs = require('fs');
+
+// Custom JSON stringifying function, simplified 'json-stable-stringify'.
+const stringifyJSON = (jsonObj, cmp, space) => {
+  return (function stringify(node, level) {
+    const indent = '\n' + space.repeat(level);
+    let out = [];
+    if (typeof node !== 'object' || node === null) {
+      return JSON.stringify(node);
+    } else if (Array.isArray(node)) {
+      for (const val of node) {
+        out.push(indent + space + stringify(val, level+1));
+      }
+      return '[' + out.join(',') + indent + ']';
+    } else {
+      for (const key of Object.keys(node).sort(cmp)) {
+        var keyValue = JSON.stringify(key) + ': ' + stringify(node[key], level+1);
+        out.push(indent + space + keyValue);
+      }
+      return '{' + out.join(',') + indent + '}';
+    }
+  })(jsonObj, 0);
+};
+
+// Sort keys by order in this dict (not in dict means lowest order).
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Description
+const jsonSort = (a, b) => {
+  const keys = [
+    'title',
+    'name',
+    'description',
+    'global',
+    'type',
+    'profiles',
+    'selected',
+    'devices',
+    'is_keyboard',
+    'ignore',
+    'disable_built_in_keyboard_if_exists',
+    "virtual_hid_keyboard",
+    'parameters',
+    'rules',
+    'manipulators',
+    'identifiers',
+    'fn_function_keys',
+    'simple_modifications',
+    'complex_modifications',
+    'from',
+    'mandatory',
+    'optional',
+    'conditions',
+    'to',
+    'to_after_key_up',
+    'to_if_alone',
+    'key_code',
+    'modifiers',
+    'keyboard_type',
+    'caps_lock_delay_milliseconds',
+    'country_code',
+    'product_id',
+    'vendor_id',
+    'value',
+    'check_for_updates_on_startup',
+    'show_in_menu_bar',
+    'show_profile_name_in_menu_bar',
+    "basic.simultaneous_threshold_milliseconds",
+    "basic.to_delayed_action_delay_milliseconds",
+    "basic.to_if_alone_timeout_milliseconds",
+    "basic.to_if_held_down_threshold_milliseconds",
+    "manipulate_caps_lock_led",
+    "is_pointing_device",
+  ];
+
+  if (keys.includes(a) && keys.includes(b)) {
+    return keys[a] - keys[b]
+  }
+  console.log(`-----> New array value found, please add to keys array:
+    a ${keys.includes(a) ? '✔' : '✘'}: ${a}
+    b ${keys.includes(b) ? '✔' : '✘'}: ${b}
+    <------\n`);
+  return 0;
+}
+
+// Read file, convert to JSON (inc sorting), stringify.
+let file = __dirname + '/karabiner.json';
+const json = JSON.parse(fs.readFileSync(file, 'utf8'));
+let s = stringifyJSON(json, jsonSort, '  ');
+
+// Remove excess newlines in output.
+
+// Remove newlines in `[\n]`.
+s = s.replace(/\[\n +\]/g, '[]');
+// Remove newlines in `},\n{`.
+s = s.replace(/},\n +{/g, '}, {');
+// Remove newlines in `"<keyword>": { ... }`.
+s = s.replace(/"(?:to|from|conditions|to_after_key_up|to_if_alone|modifiers)": {[^{}]+}/g, (match) => match.replace(/\n +/g, ' ',));
+// Remove newlines in `"<keyword>": [ ... ]`.
+s = s.replace(/"(?:to|from|conditions|to_after_key_up|to_if_alone|modifiers)": \[[^\[\]]+\]/g, (match) => match.replace(/\n +/g, ' ',));
+
+// Uncomment this for testing purposes:
+// file += '.bak';
+fs.writeFileSync(file, s);

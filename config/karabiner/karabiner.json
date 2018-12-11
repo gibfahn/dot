@@ -1,371 +1,82 @@
 {
+  "title": "Gib's rules.",
   "description": "Each rule has a description describing what it changes",
   "global": {
     "check_for_updates_on_startup": true,
     "show_in_menu_bar": true,
     "show_profile_name_in_menu_bar": true
   },
-  "profiles": [ {
-      "complex_modifications": {
-        "parameters": {
-          "basic.simultaneous_threshold_milliseconds": 50,
-          "basic.to_delayed_action_delay_milliseconds": 0,
-          "basic.to_if_alone_timeout_milliseconds": 250,
-          "basic.to_if_held_down_threshold_milliseconds": 500
-        },
-        "rules": [ {
-            "description": "Caps Lock is Left Shift.",
-            "manipulators": [ {
-                "from": { "key_code": "caps_lock", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "key_code": "left_shift" }],
-                "type": "basic"
-              } ]
-          }, {
-            "description": "left_shift is escape if alone, left_control otherwise",
-            "manipulators": [ {
-                "from": { "key_code": "left_shift", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "key_code": "left_control" }],
-                "to_if_alone": [{ "key_code": "escape" }],
-                "type": "basic"
-              } ]
-          }, {
-            "description": "Change shift + delete to forward delete",
-            "manipulators": [ {
-                "from": { "key_code": "delete_or_backspace", "modifiers": { "mandatory": [ "shift" ], "optional": [ "caps_lock" ] } },
-                "to": [{ "key_code": "delete_forward" }],
-                "type": "basic"
-              } ]
-          }, {
-            "description": "Set f17 to Hyper key (Ж), mapped to ` or LCtrl in some keyboards below.",
-            "manipulators": [ {
-                "from": { "key_code": "f17", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "set_variable": { "name": "hyper", "value": 1 } }],
-                "to_after_key_up": [{ "set_variable": { "name": "hyper", "value": 0 } }],
-                "type": "basic"
-              } ]
-          }, {
-            "description": "Hyper key (Ж) + Spacebar turn on Ж🐭 (Hyper mouse options)",
-            "manipulators": [ {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "from": { "key_code": "spacebar", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "set_variable": { "name": "hyper_mouse", "value": 1 } }],
-                "to_after_key_up": [{ "set_variable": { "name": "hyper_mouse", "value": 0 } }],
-                "type": "basic"
-              } ]
-          }, {
-            "description": "Ж🐭+h/j/k/l = move mouse up/down/left/right.",
-            "manipulators": [ {
-                "conditions": [{ "name": "hyper_mouse", "type": "variable_if", "value": 1 }],
-                "from": { "key_code": "h", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "mouse_key": { "x": -1536 } }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper_mouse", "type": "variable_if", "value": 1 }],
-                "from": { "key_code": "j", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "mouse_key": { "y": 1536 } }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper_mouse", "type": "variable_if", "value": 1 }],
-                "from": { "key_code": "k", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "mouse_key": { "y": -1536 } }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper_mouse", "type": "variable_if", "value": 1 }],
-                "from": { "key_code": "l", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "mouse_key": { "x": 1536 } }],
-                "type": "basic"
-              } ]
-          }, {
-            "description": "Ж🐭+d/f/g = left/right/middle click.",
-            "manipulators": [ {
-                "conditions": [{ "name": "hyper_mouse", "type": "variable_if", "value": 1 }],
-                "from": { "key_code": "d", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "pointing_button": "button1" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper_mouse", "type": "variable_if", "value": 1 }],
-                "from": { "key_code": "f", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "pointing_button": "button2" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper_mouse", "type": "variable_if", "value": 1 }],
-                "from": { "key_code": "g", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "pointing_button": "button3" }],
-                "type": "basic"
-              } ]
-          }, {
-            "description": "Ж🐭+y/u/i/o = scroll up/down/left/right.",
-            "manipulators": [ {
-                "conditions": [{ "name": "hyper_mouse", "type": "variable_if", "value": 1 }],
-                "from": { "key_code": "y", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "mouse_key": { "horizontal_wheel": -52 } }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper_mouse", "type": "variable_if", "value": 1 }],
-                "from": { "key_code": "u", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "mouse_key": { "vertical_wheel": -52 } }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper_mouse", "type": "variable_if", "value": 1 }],
-                "from": { "key_code": "i", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "mouse_key": { "vertical_wheel": 52 } }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper_mouse", "type": "variable_if", "value": 1 }],
-                "from": { "key_code": "o", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "mouse_key": { "horizontal_wheel": 52 } }],
-                "type": "basic"
-              } ]
-          }, {
-            "description": "Ж+h/j/k/l to Arrows (vim style).",
-            "manipulators": [ {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "from": { "key_code": "h", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "key_code": "left_arrow" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "from": { "key_code": "j", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "key_code": "down_arrow" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "from": { "key_code": "k", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "key_code": "up_arrow" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "from": { "key_code": "l", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "key_code": "right_arrow" }],
-                "type": "basic"
-              } ]
-          }, {
-            "description": "Ж+y/u/i/o to Home/PgDn/PgUp/End",
-            "manipulators": [ {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "from": { "key_code": "y", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "key_code": "home" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "from": { "key_code": "u", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "key_code": "page_down" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "from": { "key_code": "i", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "key_code": "page_up" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "from": { "key_code": "o", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "key_code": "end" }],
-                "type": "basic"
-              } ]
-          }, {
-            "description": "Ж+Key switches to or opens App.",
-            "manipulators": [ {
-                "description": "Ж+Enter = Open new Terminal window.",
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "from": { "key_code": "return_or_enter", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "shell_command": "open -na kitty" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "description": "Ж+a = Open IntelliJ IDEA",
-                "from": { "key_code": "a", "modifiers": { "optional": [ "option", "command" ] } },
-                "to": [{ "shell_command": "open -a 'IntelliJ IDEA'" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "description": "Ж+c = Open HipChat",
-                "from": { "key_code": "c", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "shell_command": "open -a HipChat" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "description": "Ж+e = Open Finder",
-                "from": { "key_code": "e", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "shell_command": "open ~" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "description": "Ж+f = Open Firefox",
-                "from": { "key_code": "f", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "shell_command": "open -a 'Firefox Nightly'" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "description": "Ж+g = Open Google Chrome",
-                "from": { "key_code": "g", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "shell_command": "open -a 'Google Chrome'" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "description": "Ж+b = Open default browser (Safari)",
-                "from": { "key_code": "b", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "shell_command": "open -a Safari" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "description": "Ж+n = Open Calendar",
-                "from": { "key_code": "n", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "shell_command": "open -a Calendar" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "description": "Ж+m = Open Mail",
-                "from": { "key_code": "m", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "shell_command": "open -a Mail" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "description": "Ж+s = Open Spotify",
-                "from": { "key_code": "s", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "shell_command": "open -a Spotify" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "description": "Ж+t = Open the Terminal",
-                "from": { "key_code": "t", "modifiers": { "optional": [ "option", "shift", "command" ] } },
-                "to": [{ "shell_command": "open -a kitty --args --single-instance" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "description": "Ж+Shift+x = restart the touch strip",
-                "from": { "key_code": "x", "modifiers": { "mandatory": [ "shift" ], "optional": [ "any" ] } },
-                "to": [{ "shell_command": "pkill ControlStrip 1>&2 | /usr/local/bin/terminal-notifier -title 'Touch Strip Restarting' -group Karabiner-Elements" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "description": "Ж+x = Open Wechat",
-                "from": { "key_code": "x", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "shell_command": "open -a wechat" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "description": "Ж+Shift+w = disable then enable wifi",
-                "from": { "key_code": "w", "modifiers": { "mandatory": [ "shift" ], "optional": [ "any" ] } },
-                "to": [{ "shell_command": "networksetup -setairportpower en0 off; networksetup -setairportpower en0 on 1>&2 | /usr/local/bin/terminal-notifier -title 'Wifi Restarting' -group Karabiner-Elements" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "description": "Ж+w = Open WorkFlowy",
-                "from": { "key_code": "w", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "shell_command": "open -a WorkFlowy" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "description": "Ж+Alt+v = copy 2FA code",
-                "from": { "key_code": "v", "modifiers": { "mandatory": [ "option" ], "optional": [ "any" ] } },
-                "to": [{ "shell_command": "$HOME/bin/vpn code" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "description": "Ж+Shift+v = Disconnect from VPN",
-                "from": { "key_code": "v", "modifiers": { "mandatory": [ "shift" ], "optional": [ "any" ] } },
-                "to": [{ "shell_command": "$HOME/bin/vpn off" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "description": "Ж+Command+v = Connect to DCVPN",
-                "from": { "key_code": "v", "modifiers": { "mandatory": [ "command" ], "optional": [ "any" ] } },
-                "to": [{ "shell_command": "$HOME/bin/vpn dc" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "description": "Ж+v = Connect to VPN",
-                "from": { "key_code": "v", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "shell_command": "$HOME/bin/vpn london" }],
-                "type": "basic"
-              }, {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "description": "Ж+d = print today's date",
-                "from": { "key_code": "d", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "shell_command": "printf `date \"+%Y-%m-%d\"` | pbcopy" }],
-                "to_after_key_up": [{"key_code": "v", "modifiers": ["command"]}],
-                "type": "basic"
-              } ]
-          }, {
-            "description": "Ж+; = lock screen (darken screen)",
-            "manipulators": [ {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "from": { "key_code": "semicolon", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "key_code": "power", "modifiers": [ "left_control", "left_shift" ] }],
-                "type": "basic"
-              } ]
-          }, {
-            "description": "Ж+p = print screen (Screenshot to Clipboard)",
-            "manipulators": [ {
-                "conditions": [{ "name": "hyper", "type": "variable_if", "value": 1 }],
-                "from": { "key_code": "p", "modifiers": { "optional": [ "any" ] } },
-                "to": [{ "key_code": "4", "modifiers": [ "right_shift", "left_command" ] }],
-                "type": "basic"
-              } ]
-          } ]
-      },
+  "profiles": [
+    {
+      "name": "Gib",
       "description": "Main profile that I use.",
-      "devices": [ {
+      "selected": true,
+      "devices": [
+        {
           "description": "Infinity Ergodox",
+          "ignore": false,
           "disable_built_in_keyboard_if_exists": false,
-          "fn_function_keys": [],
           "identifiers": {
             "is_keyboard": true,
-            "is_pointing_device": false,
             "product_id": 45133,
-            "vendor_id": 7185
+            "vendor_id": 7185,
+            "is_pointing_device": false
           },
-          "ignore": false,
-          "manipulate_caps_lock_led": false,
-          "simple_modifications": []
+          "fn_function_keys": [],
+          "simple_modifications": [],
+          "manipulate_caps_lock_led": false
         }, {
           "description": "MacBook Pro Built-in Keyboard (15-inch 2015)",
+          "ignore": false,
           "disable_built_in_keyboard_if_exists": false,
-          "fn_function_keys": [],
           "identifiers": {
             "is_keyboard": true,
-            "is_pointing_device": false,
             "product_id": 628,
-            "vendor_id": 1452
+            "vendor_id": 1452,
+            "is_pointing_device": false
           },
-          "ignore": false,
-          "manipulate_caps_lock_led": true,
-          "simple_modifications": [ {
+          "fn_function_keys": [],
+          "simple_modifications": [
+            {
               "from": { "key_code": "grave_accent_and_tilde" },
               "to": { "key_code": "f17" }
             }, {
               "from": { "key_code": "non_us_backslash" },
               "to": { "key_code": "grave_accent_and_tilde" }
-            } ]
+            }
+          ],
+          "manipulate_caps_lock_led": true
         }, {
           "description": "Microsoft Sculpt Ergonomic Split Keyboard.",
+          "ignore": false,
           "disable_built_in_keyboard_if_exists": false,
-          "fn_function_keys": [],
           "identifiers": {
             "is_keyboard": true,
-            "is_pointing_device": false,
             "product_id": 1957,
-            "vendor_id": 1118
+            "vendor_id": 1118,
+            "is_pointing_device": false
           },
-          "ignore": false,
-          "manipulate_caps_lock_led": false,
-          "simple_modifications": [ {
+          "fn_function_keys": [],
+          "simple_modifications": [
+            {
               "from": { "key_code": "non_us_backslash" },
               "to": { "key_code": "f17" }
-            } ]
+            }
+          ],
+          "manipulate_caps_lock_led": false
         }, {
           "description": "Cherry Blues (CM Storm Quickfire TKL)",
+          "ignore": false,
           "disable_built_in_keyboard_if_exists": false,
-          "fn_function_keys": [],
           "identifiers": {
             "is_keyboard": true,
-            "is_pointing_device": false,
             "product_id": 17,
-            "vendor_id": 9494
+            "vendor_id": 9494,
+            "is_pointing_device": false
           },
-          "ignore": false,
-          "manipulate_caps_lock_led": false,
-          "simple_modifications": [ {
+          "fn_function_keys": [],
+          "simple_modifications": [
+            {
               "from": { "key_code": "left_command" },
               "to": { "key_code": "left_option" }
             }, {
@@ -380,50 +91,54 @@
             }, {
               "from": { "key_code": "right_option" },
               "to": { "key_code": "right_command" }
-            } ]
+            }
+          ],
+          "manipulate_caps_lock_led": false
         }, {
+          "ignore": false,
           "disable_built_in_keyboard_if_exists": false,
-          "fn_function_keys": [],
           "identifiers": {
             "is_keyboard": true,
-            "is_pointing_device": false,
             "product_id": 632,
-            "vendor_id": 1452
+            "vendor_id": 1452,
+            "is_pointing_device": false
           },
-          "ignore": false,
-          "manipulate_caps_lock_led": true,
-          "simple_modifications": [ {
+          "fn_function_keys": [],
+          "simple_modifications": [
+            {
               "from": { "key_code": "grave_accent_and_tilde" },
               "to": { "key_code": "f17" }
             }, {
               "from": { "key_code": "non_us_backslash" },
               "to": { "key_code": "grave_accent_and_tilde" }
-            } ]
+            }
+          ],
+          "manipulate_caps_lock_led": true
         }, {
+          "ignore": false,
           "disable_built_in_keyboard_if_exists": false,
-          "fn_function_keys": [],
           "identifiers": {
             "is_keyboard": true,
-            "is_pointing_device": false,
             "product_id": 25700,
-            "vendor_id": 65261
+            "vendor_id": 65261,
+            "is_pointing_device": false
           },
-          "ignore": false,
-          "manipulate_caps_lock_led": false,
-          "simple_modifications": []
+          "fn_function_keys": [],
+          "simple_modifications": [],
+          "manipulate_caps_lock_led": false
         }, {
           "description": "Razer BlackWidow X Chroma (Razer)",
+          "ignore": false,
           "disable_built_in_keyboard_if_exists": false,
-          "fn_function_keys": [],
           "identifiers": {
             "is_keyboard": true,
-            "is_pointing_device": false,
             "product_id": 534,
-            "vendor_id": 5426
+            "vendor_id": 5426,
+            "is_pointing_device": false
           },
-          "ignore": false,
-          "manipulate_caps_lock_led": false,
-          "simple_modifications": [ {
+          "fn_function_keys": [],
+          "simple_modifications": [
+            {
               "from": { "key_code": "left_command" },
               "to": { "key_code": "left_option" }
             }, {
@@ -432,9 +147,13 @@
             }, {
               "from": { "key_code": "left_option" },
               "to": { "key_code": "left_command" }
-            } ]
-        } ],
-      "fn_function_keys": [ {
+            }
+          ],
+          "manipulate_caps_lock_led": false
+        }
+      ],
+      "fn_function_keys": [
+        {
           "from": { "key_code": "f1" },
           "to": { "key_code": "vk_consumer_brightness_down" }
         }, {
@@ -470,27 +189,535 @@
         }, {
           "from": { "key_code": "f12" },
           "to": { "key_code": "volume_up" }
-        } ],
-      "name": "Gib",
-      "selected": true,
+        }
+      ],
       "simple_modifications": [],
-      "virtual_hid_keyboard": {
-        "caps_lock_delay_milliseconds": 0,
-        "country_code": 0,
-        "keyboard_type": "iso"
-      } }, {
       "complex_modifications": {
         "parameters": {
           "basic.simultaneous_threshold_milliseconds": 50,
-          "basic.to_delayed_action_delay_milliseconds": 500,
-          "basic.to_if_alone_timeout_milliseconds": 1000,
+          "basic.to_delayed_action_delay_milliseconds": 0,
+          "basic.to_if_alone_timeout_milliseconds": 250,
           "basic.to_if_held_down_threshold_milliseconds": 500
         },
-        "rules": []
+        "rules": [
+          {
+            "description": "Caps Lock is Left Shift.",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "caps_lock",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "to": [ { "key_code": "left_shift" } ]
+              }
+            ]
+          }, {
+            "description": "left_shift is escape if alone, left_control otherwise",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "left_shift",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "to": [ { "key_code": "left_control" } ],
+                "to_if_alone": [ { "key_code": "escape" } ]
+              }
+            ]
+          }, {
+            "description": "Change shift + delete to forward delete",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "delete_or_backspace",
+                  "modifiers": { "mandatory": [ "shift" ], "optional": [ "caps_lock" ] }
+                },
+                "to": [ { "key_code": "delete_forward" } ]
+              }
+            ]
+          }, {
+            "description": "Set f17 to Hyper key (Ж), mapped to ` or LCtrl in some keyboards below.",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "f17",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "to": [ { "set_variable": { "name": "hyper", "value": 1 } } ],
+                "to_after_key_up": [ { "set_variable": { "name": "hyper", "value": 0 } } ]
+              }
+            ]
+          }, {
+            "description": "Hyper key (Ж) + Spacebar turn on Ж🐭 (Hyper mouse options)",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "spacebar",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "set_variable": { "name": "hyper_mouse", "value": 1 } } ],
+                "to_after_key_up": [ { "set_variable": { "name": "hyper_mouse", "value": 0 } } ]
+              }
+            ]
+          }, {
+            "description": "Ж🐭+h/j/k/l = move mouse up/down/left/right.",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "h",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper_mouse", "type": "variable_if", "value": 1 } ],
+                "to": [ { "mouse_key": { "x": -1536 } } ]
+              }, {
+                "type": "basic",
+                "from": {
+                  "key_code": "j",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper_mouse", "type": "variable_if", "value": 1 } ],
+                "to": [ { "mouse_key": { "y": 1536 } } ]
+              }, {
+                "type": "basic",
+                "from": {
+                  "key_code": "k",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper_mouse", "type": "variable_if", "value": 1 } ],
+                "to": [ { "mouse_key": { "y": -1536 } } ]
+              }, {
+                "type": "basic",
+                "from": {
+                  "key_code": "l",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper_mouse", "type": "variable_if", "value": 1 } ],
+                "to": [ { "mouse_key": { "x": 1536 } } ]
+              }
+            ]
+          }, {
+            "description": "Ж🐭+d/f/g = left/right/middle click.",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "d",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper_mouse", "type": "variable_if", "value": 1 } ],
+                "to": [ { "pointing_button": "button1" } ]
+              }, {
+                "type": "basic",
+                "from": {
+                  "key_code": "f",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper_mouse", "type": "variable_if", "value": 1 } ],
+                "to": [ { "pointing_button": "button2" } ]
+              }, {
+                "type": "basic",
+                "from": {
+                  "key_code": "g",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper_mouse", "type": "variable_if", "value": 1 } ],
+                "to": [ { "pointing_button": "button3" } ]
+              }
+            ]
+          }, {
+            "description": "Ж🐭+y/u/i/o = scroll up/down/left/right.",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "y",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper_mouse", "type": "variable_if", "value": 1 } ],
+                "to": [ { "mouse_key": { "horizontal_wheel": -52 } } ]
+              }, {
+                "type": "basic",
+                "from": {
+                  "key_code": "u",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper_mouse", "type": "variable_if", "value": 1 } ],
+                "to": [ { "mouse_key": { "vertical_wheel": -52 } } ]
+              }, {
+                "type": "basic",
+                "from": {
+                  "key_code": "i",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper_mouse", "type": "variable_if", "value": 1 } ],
+                "to": [ { "mouse_key": { "vertical_wheel": 52 } } ]
+              }, {
+                "type": "basic",
+                "from": {
+                  "key_code": "o",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper_mouse", "type": "variable_if", "value": 1 } ],
+                "to": [ { "mouse_key": { "horizontal_wheel": 52 } } ]
+              }
+            ]
+          }, {
+            "description": "Ж+h/j/k/l to Arrows (vim style).",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "h",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "key_code": "left_arrow" } ]
+              }, {
+                "type": "basic",
+                "from": {
+                  "key_code": "j",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "key_code": "down_arrow" } ]
+              }, {
+                "type": "basic",
+                "from": {
+                  "key_code": "k",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "key_code": "up_arrow" } ]
+              }, {
+                "type": "basic",
+                "from": {
+                  "key_code": "l",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "key_code": "right_arrow" } ]
+              }
+            ]
+          }, {
+            "description": "Ж+y/u/i/o to Home/PgDn/PgUp/End",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "y",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "key_code": "home" } ]
+              }, {
+                "type": "basic",
+                "from": {
+                  "key_code": "u",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "key_code": "page_down" } ]
+              }, {
+                "type": "basic",
+                "from": {
+                  "key_code": "i",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "key_code": "page_up" } ]
+              }, {
+                "type": "basic",
+                "from": {
+                  "key_code": "o",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "key_code": "end" } ]
+              }
+            ]
+          }, {
+            "description": "Ж+Key switches to or opens App.",
+            "manipulators": [
+              {
+                "description": "Ж+Enter = Open new Terminal window.",
+                "type": "basic",
+                "from": {
+                  "key_code": "return_or_enter",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "open -na kitty" } ]
+              }, {
+                "description": "Ж+a = Open IntelliJ IDEA",
+                "type": "basic",
+                "from": {
+                  "key_code": "a",
+                  "modifiers": { "optional": [ "option", "command" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "open -a 'IntelliJ IDEA'" } ]
+              }, {
+                "description": "Ж+c = Open HipChat",
+                "type": "basic",
+                "from": {
+                  "key_code": "c",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "open -a HipChat" } ]
+              }, {
+                "description": "Ж+e = Open Finder",
+                "type": "basic",
+                "from": {
+                  "key_code": "e",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "open ~" } ]
+              }, {
+                "description": "Ж+f = Open Firefox",
+                "type": "basic",
+                "from": {
+                  "key_code": "f",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "open -a 'Firefox Nightly'" } ]
+              }, {
+                "description": "Ж+g = Open Google Chrome",
+                "type": "basic",
+                "from": {
+                  "key_code": "g",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "open -a 'Google Chrome'" } ]
+              }, {
+                "description": "Ж+b = Open default browser (Safari)",
+                "type": "basic",
+                "from": {
+                  "key_code": "b",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "open -a Safari" } ]
+              }, {
+                "description": "Ж+n = Open Calendar",
+                "type": "basic",
+                "from": {
+                  "key_code": "n",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "open -a Calendar" } ]
+              }, {
+                "description": "Ж+m = Open Mail",
+                "type": "basic",
+                "from": {
+                  "key_code": "m",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "open -a Mail" } ]
+              }, {
+                "description": "Ж+r = Open RadarX",
+                "type": "basic",
+                "from": {
+                  "key_code": "r",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "open -a RadarX" } ]
+              }, {
+                "description": "Ж+s = Open Spotify",
+                "type": "basic",
+                "from": {
+                  "key_code": "s",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "open -a Spotify" } ]
+              }, {
+                "description": "Ж+t = Open the Terminal",
+                "type": "basic",
+                "from": {
+                  "key_code": "t",
+                  "modifiers": { "optional": [ "option", "shift", "command" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "open -a kitty --args --single-instance" } ]
+              }, {
+                "description": "Ж+Shift+x = restart the touch strip",
+                "type": "basic",
+                "from": {
+                  "key_code": "x",
+                  "modifiers": { "mandatory": [ "shift" ], "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "pkill ControlStrip 1>&2 | /usr/local/bin/terminal-notifier -title 'Touch Strip Restarting' -group Karabiner-Elements" } ]
+              }, {
+                "description": "Ж+x = Open Wechat",
+                "type": "basic",
+                "from": {
+                  "key_code": "x",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "open -a wechat" } ]
+              }, {
+                "description": "Ж+Shift+w = disable then enable wifi",
+                "type": "basic",
+                "from": {
+                  "key_code": "w",
+                  "modifiers": { "mandatory": [ "shift" ], "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "networksetup -setairportpower en0 off; networksetup -setairportpower en0 on 1>&2 | /usr/local/bin/terminal-notifier -title 'Wifi Restarting' -group Karabiner-Elements" } ]
+              }, {
+                "description": "Ж+w = Open WorkFlowy",
+                "type": "basic",
+                "from": {
+                  "key_code": "w",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "open -a WorkFlowy" } ]
+              }, {
+                "description": "Ж+Alt+v = copy 2FA code",
+                "type": "basic",
+                "from": {
+                  "key_code": "v",
+                  "modifiers": { "mandatory": [ "option" ], "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "$HOME/bin/vpn code" } ]
+              }, {
+                "description": "Ж+Shift+v = Disconnect from VPN",
+                "type": "basic",
+                "from": {
+                  "key_code": "v",
+                  "modifiers": { "mandatory": [ "shift" ], "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "$HOME/bin/vpn off" } ]
+              }, {
+                "description": "Ж+Command+v = Connect to DCVPN",
+                "type": "basic",
+                "from": {
+                  "key_code": "v",
+                  "modifiers": { "mandatory": [ "command" ], "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "$HOME/bin/vpn dc" } ]
+              }, {
+                "description": "Ж+v = Connect to VPN",
+                "type": "basic",
+                "from": {
+                  "key_code": "v",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "$HOME/bin/vpn london" } ]
+              }, {
+                "description": "Ж+d = print today's date",
+                "type": "basic",
+                "from": {
+                  "key_code": "d",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "printf `date \"+%Y-%m-%d\"` | pbcopy" } ],
+                "to_after_key_up": [
+                  {
+                    "key_code": "v",
+                    "modifiers": [ "command" ]
+                  }
+                ]
+              }
+            ]
+          }, {
+            "description": "Ж+; = lock screen (darken screen)",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "semicolon",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [
+                  {
+                    "key_code": "power",
+                    "modifiers": [ "left_control", "left_shift" ]
+                  }
+                ]
+              }
+            ]
+          }, {
+            "description": "Ж+p = print screen (Screenshot to Clipboard)",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "p",
+                  "modifiers": { "optional": [ "any" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [
+                  {
+                    "key_code": "4",
+                    "modifiers": [ "right_shift", "left_command" ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       },
+      "virtual_hid_keyboard": {
+        "keyboard_type": "iso",
+        "caps_lock_delay_milliseconds": 0,
+        "country_code": 0
+      }
+    }, {
+      "name": "Clean",
       "description": "Stock configuration for when other people need to use the computer",
-      "devices": [],
-      "fn_function_keys": [ {
+      "selected": false,
+      "devices": [
+        {
+          "ignore": false,
+          "disable_built_in_keyboard_if_exists": false,
+          "identifiers": {
+            "is_keyboard": true,
+            "product_id": 632,
+            "vendor_id": 1452,
+            "is_pointing_device": false
+          },
+          "fn_function_keys": [],
+          "simple_modifications": [],
+          "manipulate_caps_lock_led": true
+        }, {
+          "ignore": false,
+          "disable_built_in_keyboard_if_exists": false,
+          "identifiers": {
+            "is_keyboard": true,
+            "product_id": 45133,
+            "vendor_id": 7185,
+            "is_pointing_device": false
+          },
+          "fn_function_keys": [],
+          "simple_modifications": [],
+          "manipulate_caps_lock_led": false
+        }
+      ],
+      "fn_function_keys": [
+        {
           "from": { "key_code": "f1" },
           "to": { "key_code": "display_brightness_decrement" }
         }, {
@@ -526,15 +753,9 @@
         }, {
           "from": { "key_code": "f12" },
           "to": { "key_code": "volume_increment" }
-        } ],
-      "name": "Clean",
-      "selected": false,
+        }
+      ],
       "simple_modifications": [],
-      "virtual_hid_keyboard": {
-        "caps_lock_delay_milliseconds": 0,
-        "country_code": 0,
-        "keyboard_type": "iso"
-      } }, {
       "complex_modifications": {
         "parameters": {
           "basic.simultaneous_threshold_milliseconds": 50,
@@ -544,20 +765,29 @@
         },
         "rules": []
       },
+      "virtual_hid_keyboard": {
+        "keyboard_type": "iso",
+        "caps_lock_delay_milliseconds": 0,
+        "country_code": 0
+      }
+    }, {
+      "name": "Pairing",
       "description": "Romain's configuration (used for pairing).",
-      "devices": [ {
+      "selected": false,
+      "devices": [
+        {
           "description": "Romain's keyboard.",
+          "ignore": false,
           "disable_built_in_keyboard_if_exists": false,
-          "fn_function_keys": [],
           "identifiers": {
             "is_keyboard": true,
-            "is_pointing_device": false,
             "product_id": 17733,
-            "vendor_id": 1241
+            "vendor_id": 1241,
+            "is_pointing_device": false
           },
-          "ignore": false,
-          "manipulate_caps_lock_led": false,
-          "simple_modifications": [ {
+          "fn_function_keys": [],
+          "simple_modifications": [
+            {
               "from": { "key_code": "caps_lock" },
               "to": { "key_code": "left_control" }
             }, {
@@ -572,9 +802,37 @@
             }, {
               "from": { "key_code": "right_option" },
               "to": { "key_code": "right_command" }
-            } ]
-        } ],
-      "fn_function_keys": [ {
+            }
+          ],
+          "manipulate_caps_lock_led": false
+        }, {
+          "ignore": false,
+          "disable_built_in_keyboard_if_exists": false,
+          "identifiers": {
+            "is_keyboard": true,
+            "product_id": 45133,
+            "vendor_id": 7185,
+            "is_pointing_device": false
+          },
+          "fn_function_keys": [],
+          "simple_modifications": [],
+          "manipulate_caps_lock_led": false
+        }, {
+          "ignore": false,
+          "disable_built_in_keyboard_if_exists": false,
+          "identifiers": {
+            "is_keyboard": true,
+            "product_id": 632,
+            "vendor_id": 1452,
+            "is_pointing_device": false
+          },
+          "fn_function_keys": [],
+          "simple_modifications": [],
+          "manipulate_caps_lock_led": true
+        }
+      ],
+      "fn_function_keys": [
+        {
           "from": { "key_code": "f1" },
           "to": { "key_code": "display_brightness_decrement" }
         }, {
@@ -610,15 +868,23 @@
         }, {
           "from": { "key_code": "f12" },
           "to": { "key_code": "volume_increment" }
-        } ],
-      "name": "Pairing",
-      "selected": false,
+        }
+      ],
       "simple_modifications": [],
+      "complex_modifications": {
+        "parameters": {
+          "basic.simultaneous_threshold_milliseconds": 50,
+          "basic.to_delayed_action_delay_milliseconds": 500,
+          "basic.to_if_alone_timeout_milliseconds": 1000,
+          "basic.to_if_held_down_threshold_milliseconds": 500
+        },
+        "rules": []
+      },
       "virtual_hid_keyboard": {
+        "keyboard_type": "iso",
         "caps_lock_delay_milliseconds": 0,
-        "country_code": 0,
-        "keyboard_type": "iso"
-      } }
-  ],
-  "title": "Gib's rules."
+        "country_code": 0
+      }
+    }
+  ]
 }

@@ -17,15 +17,14 @@ Editing the file manually is pretty straightforward, the `Karabiner-Elements`
 `Karabiner` updates as soon as you save the file.
 
 Once you make a change in the Karabiner UI, Karabiner will rewrite the json in
-super-expanded form. If you want to edit it manually trawling through
-thousands of lines of json is a bit of a pain, so you can run a quick script to
-condense it (only changes whitespace). I suggest running the script before
-committing changes.
-
+super-expanded form. If you want to edit it manually trawling through thousands
+of lines of json is a bit of a pain, so you can run a quick script to condense
+it (only changes whitespace and key sorting). I suggest running the script
+before committing changes. Script is written in Node.js as it is dealing with
+JSON.
 
 ```bash
-# Use vim instead of nvim if you don't have nvim.
-nvim karabiner.json -S format-lines.vim
+./format
 ```
 
 ### Hyper
