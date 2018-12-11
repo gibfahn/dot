@@ -104,7 +104,7 @@ pathadd() { [ -d "$1" ] && export PATH="$1"$(echo ":$PATH:" | sed "s|:$1:|:|" | 
 # Add or move to end of path.
 pathapp() { [ -d "$1" ] && export PATH=$(echo ":$PATH:" | sed "s|:$1:|:|" | sed 's|^:||')"$1"; }
 # fda is find all (don't ignore anything).
-exists fd && alias fda="fd -HI" \
+exists fd && alias fda="fd --no-ignore --hidden" \
   || fd() { find . -iname "*$**"; } # Find by filename (case insensitive).
 exists rg && alias rga="rg --hidden --no-ignore" # rga is grep all (don't ignore anything).
 pth() { # Returns absolute path to file(s) including file name.
@@ -153,12 +153,13 @@ pathadd /usr/local/sbin # Missed in some shells.
 pathadd "$XDG_DATA_HOME/rbenv/bin" # rbenv ruby version manager.
 pathadd "$XDG_CACHE_HOME/rbenv/shims" # rbenv installed versions.
 pathadd "$GOPATH/bin" # Go binaries.
-pathadd "$HOME/bin" # Put random binaries you want to run in here.
+pathadd "/usr/local/opt/llvm/bin" # Homebrew clangd tools.
 pathadd /usr/lib/ccache # Add ccache to the path if installed (Linux).
 pathadd /usr/local/opt/ccache/libexec # Add ccache to the path if installed (macOS).
-pathadd "$HOME/.local/bin"
 pathadd "$CARGO_HOME/bin" # Rust packages.
 pathadd "$VULKAN_SDK/bin" # VulkanSDK packages.
+pathadd "$HOME/.local/bin"
+pathadd "$HOME/bin" # Put random binaries you want to run in here.
 [ -n "$VIRTUAL_ENV" ] && pathadd "$VIRTUAL_ENV/bin" # Virtual env needs to be in front of /usr/local/bin.
 
 # }}} Path Additions
@@ -271,6 +272,7 @@ alias 1="fc -e : -2"; alias 2="fc -e : -3"
 export VISUAL=${VISUAL:-$VIM} EDITOR=${EDITOR:-$VIM} # Set vim/nvim as the default editor.
 alias xv="xargs \$${ZSH_VERSION:+=}VISUAL" v="\$${ZSH_VERSION:+=}VISUAL" # Work around zsh's "helpful" autoquoting.
 exists vimr && alias vm=vimr # Use `vm` for GUI vim, need to add a Linux equivalent.
+alias rv="$VIM "'-q <( $(fc -ln -1) --vimgrep)' # Open last ripgrep file list in vim quickfix window (next/prev = [q ]q ).
 ulimit -c unlimited # Allow saving of coredumps.
 alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"' # Makes it look like you're busy with important hacker stuff.
 [ "$uname" = Darwin ] && alias ldd="otool -L" # macOS equivalent to ldd.
@@ -287,7 +289,7 @@ if exists fzf && fzf --version >/dev/null 2>&1; then
                  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
                  # TODO(gib): Finish this (fix stdout, add git aliases).
                  alias preview="fzf --preview 'bat --color \"always\" {}'"
-                 export FZF_DEFAULT_OPTS="--bind='ctrl-o:execute(\$VISUAL {})'" # Open files in visual editor.
+                 export FZF_DEFAULT_OPTS="-m --bind='ctrl-o:execute(\$VISUAL {})',ctrl-t:toggle-all,alt-j:jump,alt-k:jump-accept" # Open files in visual editor.
                }
   for file in "$XDG_DATA_HOME"/fzf/shell/{completion,key-bindings}.$shell; do
     source "$file" # 2>/dev/null || true
