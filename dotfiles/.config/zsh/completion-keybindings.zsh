@@ -6,7 +6,7 @@ _gib_git_f() {
 }
 # Fzf git branches.
 _gib_git_b() {
-  git branch -a --color=always | grep -v '/HEAD\s' | sort |
+  git branch -a --color=always --sort=committerdate --sort=-refname:rstrip=2 | grep -v '/HEAD\s' |
   fzf --height 50% "$@" --border --ansi --multi --tac --preview-window right:70% \
     --preview 'git log --oneline --graph --date=short --pretty="format:%C(auto)%cd %h%d %s" $(sed s/^..// <<< {} | cut -d" " -f1) | head -'$LINES | sed 's/^..//' | cut -d' ' -f1 | sed 's#^remotes/##'
 }
@@ -18,7 +18,7 @@ _gib_git_t() {
 }
 # Fzf git hashes.
 _gib_git_h() {
-  git log --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --graph --color=always |
+  git log --all --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --graph --color=always |
   fzf --height 50% "$@" --border --ansi --no-sort --reverse --multi --bind 'ctrl-s:toggle-sort' \
     --header 'Press CTRL-S to toggle sort' \
     --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | xargs git show --color=always | head -'$LINES | grep -o "[a-f0-9]\{7,\}"
