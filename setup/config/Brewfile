@@ -45,6 +45,7 @@ brew "fd"                                # Super-fast find replacement.
 brew "gnupg"                             # gpg command line.
 brew "gpg-agent"                         # gpg daemon.
 brew "hyperfine"                         # Benchmark commands (time but a benchmarking suite).
+brew "llvm", args: ["with-toolchain"]    # Gives clangd (clang language server).
 brew "mas"                               # Mac App Store third-party cli.
 brew "neovim"                            # New and improved vim.
 brew "rmtrash"                           # `rm` to Trash, aliased to `dl` in gibrc.

@@ -150,6 +150,7 @@ nnoremap <Leader>ck :call LanguageClient_textDocument_hover()<CR>| " Show defini
 nnoremap <Leader>cl :call LanguageClient_textDocument_documentSymbol()<CR>| " List symbols in the current file.
 nnoremap <Leader>cr :call LanguageClient_textDocument_rename()<CR>| " Rename var/func under cursor.
 nnoremap <Leader>cu :call LanguageClient_textDocument_references()<CR>| " Show usages of current symbol.
+nnoremap <leader>ch :call LanguageClient#debugInfo()<CR>| " Show debugging (help) info.
 vnoremap <Leader>cf :call LanguageClient#textDocument_rangeFormatting()<CR>| " Format selected lines.
 
 nnoremap        <Leader>d :call BufferClose('')<CR>| " Close buffer without closing split,
@@ -358,6 +359,7 @@ let g:github_enterprise_urls = ['https://github.pie.apple.com']
 let g:hardtime_default_on = 1
 
 let g:LanguageClient_serverCommands = {
+    \ 'cpp': ['clangd'],
     \ 'go': ['go-langserver'],
     \ 'java': ['jdtls', '-Dlog.level=ALL'],
     \ 'javascript': ['javascript-typescript-stdio'],
@@ -392,8 +394,8 @@ augroup gibAutoGroup                                " Group of automatic functio
   autocmd BufRead,BufNewFile *.md set filetype=markdown  " Use markdown for md files.
   autocmd FileType help wincmd L                    " Open new help windows on the right,
 "  autocmd FileType qf wincmd L                          "  ↳       build windows on the right.
-  autocmd FileType yaml setlocal foldmethod=indent  " YAML files should be folded by indent.
-  autocmd FileType python setlocal foldmethod=indent  " YAML files should be folded by indent.
+  autocmd FileType yaml json setlocal foldmethod=indent  " YAML files should be folded by indent.
+  autocmd FileType python setlocal foldmethod=indent textwidth=100  " Python files should be folded by indent.
   autocmd BufWritePost vimrc so $MYVIMRC|          " Reload .vimrc on save.
   autocmd BufWritePost init.vim so $MYVIMRC|        " Reload init.vim (nvim) on save.
   autocmd QuickFixCmdPost *grep* cwindow|           " Open the quickfix window on grep.
