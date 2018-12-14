@@ -121,14 +121,9 @@ endtry
 " {{{ Key mappings (see http://vim.wikia.com/wiki/Unused_keys for unused keys)
 " Available (normal): <C-Space>, +, _, <C-q/s/[/_>, <leader>b/e/h/m/n/u/v
 
-inoremap          kj <ESC>|                         " kj = Esc in insert mode.
 inoremap <expr>   <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"| " Tab is next entry if completion menu open.
 inoremap <expr>   <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"| " Shift-Tab is previous entry if completion menu open.
-nnoremap          k gk|                             " Move up   visually , don't skip wrapped lines,
-nnoremap          j gj|                             "  ↳   down visually , don't skip wrapped lines.
 nnoremap          Q <nop>|                          "  ↳ accidental triggering).
-nnoremap          gk k|                             " Move up   logically, do    skip wrapped lines,
-nnoremap          gj j|                             "  ↳   down logically, do    skip wrapped lines.
 nnoremap          Y y$|                             " Make Y work like C and D (yank to end of line, not whole line).
 " To open vim's current directory, use `:e .`.
 nnoremap          - :e %:h<CR>|             " - open current buffer directory in file browser (repeat for `cd ..`).
@@ -305,9 +300,7 @@ if has("nvim")                                      " NeoVim specific settings.
   tnoremap <C-k> <C-\><C-n><C-w>k|                  "  ↳     up    a window in terminal,
   tnoremap <C-l> <C-\><C-n><C-w>l|                  "  ↳     right a window in terminal.
   tnoremap <C-n> <C-l>|                             " Ctrl-n is Ctrl-l in a terminal.
-  tnoremap <Esc> <C-\><C-n>|                        " Make Escape work in terminal,
-  tnoremap kj <C-\><C-n>|                           "  ↳    kj    work in terminal.
-  tnoremap KJ kj|                                   "  Use KJ for a literal kj in the terminal.
+  tnoremap <Esc><Esc> <C-\><C-n>|                   " Double escape in the terminal goes to normal mode.
 
   augroup gibTermGroup                              " Autocommands for nvim only
     au TermOpen * setlocal nonumber norelativenumber  " No line numbers in terminal
@@ -322,9 +315,7 @@ else
   tnoremap <C-k> <C-w>k|                            "  ↳     up    a window in terminal,
   tnoremap <C-l> <C-w>l|                            "  ↳     right a window in terminal.
   tnoremap <C-n> <C-l>|                             " Ctrl-n is Ctrl-l in a terminal.
-  tnoremap <Esc> <C-W>N|                            " Make Escape work in terminal,
-  tnoremap kj <C-W>N|                               "  ↳    kj    work in terminal.
-  tnoremap KJ kj|                                   "  Use KJ for a literal kj in the terminal.
+  tnoremap <Esc><Esc> <C-W>N|                       " Make Escape work in terminal.
 
   augroup gibTermGroup                              " Autocommands for nvim only
     au TerminalOpen * if &buftype == 'terminal'| setlocal nonumber norelativenumber| endif " No line numbers in terminal
