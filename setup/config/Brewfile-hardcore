@@ -1,5 +1,6 @@
 # vi: filetype=conf
 
+brew "git-lfs"                           # Git Large File Storage. Use with `git lfs`.
 brew "asciinema"                         # Take screen recordings of your terminal (https://asciinema.org).
 brew "certbot"                           # LetsEncrypt.
 brew "cmake"                             # Commonly-used meta build system.
@@ -26,6 +27,7 @@ cask "vagrant"                           # Quick command-line image spin-up.
 cask "virtualbox"                        # Manage VMs (Linux or Windows).
 cask "vulkan-sdk"                        # Use the vulkan graphics APIs on macOS.
 cask "workflowy"                         # Infinitely nested bullet point list app.
+cask "stay"                              # Save and restore window positions, invaluable with multi-monitor setups.
 
 # Chunkwm Window Manager (currently disabled):
 # tap "crisidev/homebrew-chunkwm"
@@ -41,3 +43,4 @@ mas "Logic Pro X", id: 634148309
 mas "Numbers", id: 409203825
 mas "Pages", id: 409201541
 mas "Pocket", id: 568494494
+mas "Xcode", id: 497799835
