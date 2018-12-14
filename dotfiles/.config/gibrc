@@ -148,16 +148,17 @@ reprompt() {
 
 # {{{ Path additions
 
+pathadd "$VULKAN_SDK/bin" # VulkanSDK packages.
+pathadd "/usr/local/opt/llvm/bin" # Homebrew clangd tools.
+pathadd "$GOPATH/bin" # Go binaries.
+pathadd /usr/bin # Should be after /usr/local/bin.
 pathadd /usr/local/bin # Missed in some shells.
 pathadd /usr/local/sbin # Missed in some shells.
 pathadd "$XDG_DATA_HOME/rbenv/bin" # rbenv ruby version manager.
 pathadd "$XDG_CACHE_HOME/rbenv/shims" # rbenv installed versions.
-pathadd "$GOPATH/bin" # Go binaries.
-pathadd "/usr/local/opt/llvm/bin" # Homebrew clangd tools.
 pathadd /usr/lib/ccache # Add ccache to the path if installed (Linux).
 pathadd /usr/local/opt/ccache/libexec # Add ccache to the path if installed (macOS).
 pathadd "$CARGO_HOME/bin" # Rust packages.
-pathadd "$VULKAN_SDK/bin" # VulkanSDK packages.
 pathadd "$HOME/.local/bin"
 pathadd "$HOME/bin" # Put random binaries you want to run in here.
 [ -n "$VIRTUAL_ENV" ] && pathadd "$VIRTUAL_ENV/bin" # Virtual env needs to be in front of /usr/local/bin.
@@ -272,7 +273,17 @@ alias 1="fc -e : -2"; alias 2="fc -e : -3"
 export VISUAL=${VISUAL:-$VIM} EDITOR=${EDITOR:-$VIM} # Set vim/nvim as the default editor.
 alias xv="xargs \$${ZSH_VERSION:+=}VISUAL" v="\$${ZSH_VERSION:+=}VISUAL" # Work around zsh's "helpful" autoquoting.
 exists vimr && alias vm=vimr # Use `vm` for GUI vim, need to add a Linux equivalent.
-alias rv="$VIM "'-q <( $(fc -ln -1) --vimgrep)' # Open last ripgrep file list in vim quickfix window (next/prev = [q ]q ).
+rv() {
+  local last_rg cmd
+  last_rg="$(fc -ln -m 'rg *|rga *' -100 | tail -n 1)" || { echo "No rg command found in last 100 commands." && return 1; }
+  cmd=("rg"
+    "$([[ "${last_rg%% *}" == rga ]] && echo "--hidden --no-ignore")"
+    "--vimgrep"
+    "${last_rg#* }"
+  )
+  [[ -n "$ZSH_VERSION" ]] && $VIM -q <($=cmd) || $VIM -q <($cmd)
+}
+
 ulimit -c unlimited # Allow saving of coredumps.
 alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"' # Makes it look like you're busy with important hacker stuff.
 [ "$uname" = Darwin ] && alias ldd="otool -L" # macOS equivalent to ldd.
