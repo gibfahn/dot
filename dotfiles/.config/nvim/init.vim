@@ -187,7 +187,7 @@ nnoremap        <Leader>R :%s//c<Left><Left>|     "  ↳ Replace with prompt on 
 map             <Leader>s <Plug>(easymotion-bd-w)| " EasyMotion: Move to word.
 nnoremap        <Leader>u :GundoToggle<CR>|       " Toggle Undo tree visualisation.
 nnoremap        <Leader>w :up<CR>|                " Write if there were changes.
-nnoremap        <Leader>W :w<CR>|                 "  ↳    whether or not there were changes.
+nnoremap        <Leader>W :w<CR>|                 " Write whether or not there were changes.
 nnoremap        <Leader>x :x<CR>|                 " Save (if changes) and quit.
 nnoremap        <Leader>X :xa<CR>|                " Quit all windows.
 nnoremap        <Leader>y "+y|                    " Copy to clipboard (normal mode).
@@ -394,8 +394,10 @@ augroup gibAutoGroup                                " Group of automatic functio
   autocmd BufRead,BufNewFile *.md set filetype=markdown  " Use markdown for md files.
   autocmd FileType help wincmd L                    " Open new help windows on the right,
 "  autocmd FileType qf wincmd L                          "  ↳       build windows on the right.
-  autocmd FileType yaml json setlocal foldmethod=indent  " YAML files should be folded by indent.
+  autocmd FileType yaml setlocal foldmethod=indent  " YAML files should be folded by indent.
+  autocmd FileType json setlocal foldmethod=indent  " JSON files should be folded by indent.
   autocmd FileType python setlocal foldmethod=indent textwidth=100  " Python files should be folded by indent.
+  autocmd BufNewFile,BufRead *.bats set filetype=sh " Bats is a shell test file type.
   autocmd BufWritePost vimrc so $MYVIMRC|          " Reload .vimrc on save.
   autocmd BufWritePost init.vim so $MYVIMRC|        " Reload init.vim (nvim) on save.
   autocmd QuickFixCmdPost *grep* cwindow|           " Open the quickfix window on grep.
