@@ -33,7 +33,7 @@ else
 fi
 
 if [ "$HARDCORE" ]; then # Set keyboard preferences.
-  get "Setting keyboard/trackpad preferences."
+  get "Setting macOS defaults."
 
   # Set Keyboard Shortcuts -> App Shortcuts
   # To add your own, first add them in System Preferences -> Keyboard ->
@@ -52,13 +52,13 @@ if [ "$HARDCORE" ]; then # Set keyboard preferences.
   # Removed because I haven't installed it.
   # updateMacOSKeyboardShortcut com.jetbrains.intellij.ce "Hide IntelliJ IDEA" '@~^\\U00a7'
   # -> IntelliJ:
-  updateMacOSKeyboardShortcut com.jetbrains.intellij "Hide IntelliJ IDEA" '@~^\\\\U00a7'
+  updateMacOSKeyboardShortcut com.jetbrains.intellij "Hide IntelliJ IDEA" '~^$\\U00a7'
   # -> Kitty:
   updateMacOSKeyboardShortcut net.kovidgoyal.kitty "Hide kitty" '~^$\\U00a7'
   # -> Mail: ⌘-backspace moves to Archive.
   updateMacOSKeyboardShortcut com.apple.mail "Archive" '@\\b'
   # -> Mail: ⌘-Enter sends the message.
-  updateMacOSKeyboardShortcut com.apple.mail "Send" "@\U21a9"
+  updateMacOSKeyboardShortcut com.apple.mail "Send" '@\\U21a9'
 
   # Radar: Ctrl-Alt-C copies as Markdown:
   updateMacOSKeyboardShortcut com.apple.ist.Radar7 "Copy as Markdown" "~^c"
@@ -74,6 +74,9 @@ if [ "$HARDCORE" ]; then # Set keyboard preferences.
 
   # Disables window minimizing animations.
   updateMacOSDefault NSGlobalDomain NSAutomaticWindowAnimationsEnabled -int 0
+
+  # Always open new things in tabs (not new windows) for document based apps.
+  updateMacOSDefault NSGlobalDomain AppleWindowTabbingMode -string always
 
   # Greys out hidden apps in the dock (so you can see which are hidden).
   updateMacOSDefault com.apple.Dock showhidden -int 1 && killall Dock
@@ -136,7 +139,7 @@ if [ "$HARDCORE" ]; then # Set keyboard preferences.
   # Cmd-Enter sends email in Mail.
 
 else
-  skip "Not setting keyboard/trackpad preferences (HARDCORE not set)."
+  skip "Not setting macOS defaults (HARDCORE not set)."
   # You can still change them in System Preferences/{Trackpad,Keyboard}.
 fi
 
