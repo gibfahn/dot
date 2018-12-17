@@ -1,5 +1,8 @@
 # vi: filetype=conf
 
+tap "srkomodo/tap"                       # ShadowFox Firefox Universal Dark Theme
+
+brew "srkomodo/tap/shadowfox-updater"    # ShadowFox Firefox Universal Dark Theme Updater (`shadowfox` to install).
 brew "git-lfs"                           # Git Large File Storage. Use with `git lfs`.
 brew "asciinema"                         # Take screen recordings of your terminal (https://asciinema.org).
 brew "certbot"                           # LetsEncrypt.
