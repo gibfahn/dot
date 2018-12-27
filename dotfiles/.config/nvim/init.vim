@@ -21,6 +21,7 @@ else
 endif
 
   Plug 'AndrewRadev/splitjoin.vim'                  " gS to split, gJ to join lines.
+  Plug 'Shougo/echodoc.vim'                         " Show function signatures where you're typing.
   Plug 'airblade/vim-gitgutter'                     " Show git diffs in the gutter (left of line numbers) (:h gitgutter).
   Plug 'ap/vim-buftabline'                          " Show buffers in the tab bar.
   Plug 'ap/vim-readdir'                             " Nicer file browser plugin that works with buftabline.
@@ -33,12 +34,12 @@ endif
   Plug 'junegunn/fzf', { 'dir': '~/.local/share/fzf', 'do': './install --bin' } " :h fzf
   Plug 'junegunn/fzf.vim'                           " Try :Files, :GFiles? :Buffers :Lines :History :Commits :BCommits
   Plug 'junegunn/vim-peekaboo'                      " Pop up register list when pasting/macroing.
-  Plug 'sheerun/vim-polyglot'                       " Syntax files for a large number of different languages.
   Plug 'justinmk/vim-sneak'                         " sab -> go to next ab in code (:h sneak-mappings for default mappings).
   Plug 'pangloss/vim-javascript'                    " JS   language bindings.
   Plug 'raghur/vim-ghost', {'do': ':GhostInstall'}  " Edit browser text areas in Neovim (:h ghost).
   Plug 'redhat-developer/yaml-language-server', {'do': 'npm install && npm run compile'} " Language server for yaml files.
   Plug 'rust-lang/rust.vim'                         " Rust language bindings.
+  Plug 'sheerun/vim-polyglot'                       " Syntax files for a large number of different languages.
   Plug 'sjl/gundo.vim'                              " Interactive undo tree (<space>u to toggle on/off, q to quit).
   Plug 'takac/vim-hardtime'                         " Disable key repeat.
   Plug 'tpope/vim-abolish'                          " Work with variants of words (replacing, capitalizing etc).
@@ -89,6 +90,7 @@ set number                                          " Turn on line numbers.
 set ruler                                           " Always show cursor position.
 set shiftwidth=2 tabstop=2 softtabstop=2            " Set tab width to 2.
 set showcmd                                         " Display incomplete commands.
+set signcolumn=yes                                  " Always show the colum with git and language server markers.
 set smartcase                                       "  ↳ don't for mixed-case.
 set splitbelow                                      " Open new split panes to right and,
 set splitright                                      "  ↳ bottom, which feels more natural.
@@ -364,6 +366,9 @@ let g:buftabline_indicators = 1                     " Show a + if the buffer has
 " Add your Enterprise repo here so vim-fugitive's :Gbrowse! can work with it. Use with visual mode for line links.
 let g:github_enterprise_urls = ['https://github.pie.apple.com']
 let g:hardtime_default_on = 1
+let g:echodoc#enable_at_startup = 1
+let g:echodoc#type = 'virtual' " Needs nvim 0.3.2 (`brew unlink neovim && brew install --HEAD neovim` for now).
+
 
 let g:LanguageClient_serverCommands = {
     \ 'cpp': ['clangd'],
@@ -379,8 +384,12 @@ let g:LanguageClient_serverCommands = {
     \ 'swift': ['langserver-swift'],
     \ 'yaml': ['yaml-language-server'],
     \ }
-let g:LanguageClient_settingsPath = $XDG_CONFIG_HOME . "/nvim/settings.json"
+let g:LanguageClient_settingsPath = $XDG_CONFIG_HOME . '/nvim/settings.json'
 let g:LanguageClient_diagnosticsList = "Location" " Don't overwrite quickfix list with linter/checker output.
+" Debugging options for the language client/server:
+" let g:LanguageClient_loggingLevel = 'DEBUG'
+" let g:LanguageClient_loggingFile =  expand('~/.local/share/nvim/LanguageClient.log')
+" let g:LanguageClient_serverStderr = expand('~/.local/share/nvim/LanguageServer.log')
 
 " Highlight the 81st column of text (in dark grey so it doesn't distract).
 highlight ColorColumn ctermbg=234
