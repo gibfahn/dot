@@ -124,7 +124,7 @@ gcl() {
   return $ret
 }
 # Change to the most vanilla prompt for copy/pasting into GitHub etc.
-unprompt() {
+nop() {
   if [[ -n "$ZSH_VERSION" ]]; then
     _dot_old_prompt="$PROMPT"
     PROMPT='$ ' NORPROMPT=true # Checked in gib-theme.zsh.
@@ -134,8 +134,8 @@ unprompt() {
     PS1='$ '
   fi
 }
-# Restore the normal prompt, undoes the effects of unprompt.
-reprompt() {
+# Restore the normal prompt, undoes the effects of nop.
+yep() {
   if [[ -n "$ZSH_VERSION" ]]; then
     PROMPT="$_dot_old_prompt"
     unset _dot_old_prompt NORPROMPT
@@ -250,7 +250,7 @@ alias x="exit 0" # x exits the terminal.
 alias c=clear # c clears the terminal screen (can also use Ctrl-L).
 alias g=git # Use with commands in $c/git/config for best results.
 
-alias path='echo $PATH' # Single quotes so we echo path at runtime, not alias time.
+alias path='echo $PATH | sed "s/:/\n/g"' # Single quotes so we echo path at runtime, not alias time.
 alias h=history # Shows command history.
 alias s="TERM=xterm-256color ssh" # Reset cursor to block and ssh.
 alias dt="date +%Y-%m-%d" # Basic date format (unambiguous, easy to sort etc.)
