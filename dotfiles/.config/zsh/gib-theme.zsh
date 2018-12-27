@@ -33,7 +33,6 @@ _gib_prompt_check_cmd_exec_time() {
 _gib_prompt_precmd() {
   # Set window title to current directory.
   print -Pn "\e]2;%1~\a"
-  # printf "\e]2;%s\a" "${PWD/#$HOME/~}"
   # check exec time and store it in a variable
   _gib_prompt_check_cmd_exec_time
   unset _gib_prompt_cmd_timestamp
@@ -47,7 +46,7 @@ _gib_prompt_precmd() {
 
 # Run between user hitting Enter key, and command being run.
 _gib_prompt_preexec() {
-  printf '\033[2 q' # Reset prompt to normal mode.
+  printf '\e[4 q' # Cursor is an underline (_) while command is running.
   # Set window title to first word of exec command.
   [[ "$PWD" == "$HOME" ]] && printf "\e]2;%s\a" "${1%% *}"
   if [[ -n $_gib_prompt_git_fetch_pattern ]]; then
@@ -134,7 +133,7 @@ _gib_prompt_async_git_aliases() {
     shift parts                   # remove aliasname
 
     # check alias for pull or fetch (must be exact match).
-    if [[ $parts =~ ^(.*\ )?(pull|fetch)(\ .*)?$ ]]; then
+    if [[ $parts =~ ^(.*\ )?(pull|fetch|merge)(\ .*)?$ ]]; then
       pullalias+=($aliasname)
     fi
   done
@@ -244,20 +243,20 @@ _gib_prompt_async_refresh() {
 
   if [[ -z $_gib_prompt_git_fetch_pattern ]]; then
     # we set the pattern here to avoid redoing the pattern check until the
-    # working three has changed. pull and fetch are always valid patterns.
+    # working tree has changed. pull and fetch are always valid patterns.
     typeset -g _gib_prompt_git_fetch_pattern="pull|fetch"
     async_job "_gib_prompt" _gib_prompt_async_git_aliases $working_tree
   fi
 
   async_job "_gib_prompt" _gib_prompt_async_git_arrows $PWD
 
-  # do not preform git fetch if it is disabled or working_tree == HOME
-  if (( ${PURE_GIT_PULL:-1} )) && [[ $working_tree != $HOME ]]; then
-    # tell worker to do a git fetch
+  # Do not preform git fetch if working_tree == HOME
+  if [[ $working_tree != $HOME ]]; then
+    # Tell worker to do a git fetch
     async_job "_gib_prompt" _gib_prompt_async_git_fetch $PWD
   fi
 
-  # if dirty checking is sufficiently fast, tell worker to check it again, or wait for timeout
+  # If dirty checking is sufficiently fast, tell worker to check it again, or wait for timeout
   integer time_since_last_dirty_check=$(( EPOCHSECONDS - ${_gib_prompt_git_last_dirty_check_timestamp:-0} ))
   if (( time_since_last_dirty_check > ${PURE_GIT_DELAY_DIRTY_CHECK:-1800} )); then
     unset _gib_prompt_git_last_dirty_check_timestamp

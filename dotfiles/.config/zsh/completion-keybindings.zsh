@@ -61,8 +61,23 @@ zle -N edit-command-line
 zle -N history-beginning-search-backward-end history-search-end # Add it to existing widgets.
 zle -N history-beginning-search-forward-end history-search-end  # Add it to existing widgets.
 accept-line() { [ -z "$BUFFER" ] && zle up-history; zle ".$WIDGET"; }
-zle-keymap-select () { [ $KEYMAP = vicmd ] && printf "\033[2 q" || printf "\033[6 q"; } # Other KEYMAPs are main and viins.
-zle-line-init () { zle -K viins; printf "\033[6 q"; }
+
+zle-keymap-select() {
+  if [[ $KEYMAP == vicmd || $1 = block ]]; then  # Other KEYMAPs are main and viins (or '').
+    printf "\e[2 q"
+  elif [[ $1 = underline ]]; then
+    printf "\e[4 q"
+  elif [[ $KEYMAP == main || $KEYMAP == viins || -z $KEYMAP || $1 = beam ]]; then
+    printf "\e[6 q"
+  else  # Default cursor is beam.
+    printf "\e[6 q"
+  fi
+}
+
+zle-line-init() {
+  zle -K viins; zle-keymap-select beam
+}
+
 zle -N accept-line # Redefine accept-line to insert last input if empty (Enter key).
 zle -N zle-keymap-select # I-beam cursor in insert mode, block otherwise.
 zle -N zle-line-init     # Part of above cursor hack ^.
