@@ -300,12 +300,28 @@ if has("nvim")                                      " NeoVim specific settings.
   tnoremap <C-k> <C-\><C-n><C-w>k|                  "  ↳     up    a window in terminal,
   tnoremap <C-l> <C-\><C-n><C-w>l|                  "  ↳     right a window in terminal.
   tnoremap <C-n> <C-l>|                             " Ctrl-n is Ctrl-l in a terminal.
-  tnoremap <Esc><Esc> <C-\><C-n>|                   " Double escape in the terminal goes to normal mode.
+  tnoremap <C-w> <C-\><C-n>|                        " Go to normal mode.
 
   augroup gibTermGroup                              " Autocommands for nvim only
     au TermOpen * setlocal nonumber norelativenumber  " No line numbers in terminal
     au TermOpen * setlocal wrap                     " Soft line wrapping in terminal.
   augroup end
+
+  " Make vim-surround work in operator-pending mode, so the cursor changes when
+  " you press e.g. ys.
+  let g:surround_no_mappings = 1
+  function! SurroundOp()
+      if v:operator ==# 'd'
+          return "\<plug>Dsurround"
+      elseif v:operator ==# 'c'
+          return "\<plug>Csurround"
+      elseif v:operator ==# 'y'
+          return "\<plug>Ysurround"
+      endif
+      return ''
+  endfunction
+  omap <expr> s '<esc>'.SurroundOp()
+
 else
   set termwinscroll=100000                          " Store lots of terminal history.
   nnoremap <Leader>t :term<CR>|wincmd L|                     " Open terminal in new split.
