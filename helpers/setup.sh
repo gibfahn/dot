@@ -169,12 +169,13 @@ addError() {
 
 # For usage see updateMacOSKeyboardShortcut
 updateMacOSDefaultDict() {
-  local domain subdomain key val currentVal;
+  local domain subdomain key val val2 currentVal;
   domain="$1"; shift
   subdomain="$1"; shift
   key="$1"; shift
   val="$1"; shift
   [[ "$#" != 0 ]] && printf "Wrong number of args" && return 1
+  val2="$(sed 's/\\/\\\\/g' <<<"$val")"  # `defaults` doubles the \ for no reason sometimes.
 
   # If the dict hasn't been initialised yet, create it.
   if ! defaults read "$domain" "$subdomain" >/dev/null; then
@@ -184,10 +185,10 @@ updateMacOSDefaultDict() {
   # Get the current value of the dict[key] (empty if unset).
   currentVal="$(defaults read "$domain" "$subdomain"                 \
                 | grep -F "$key"                                     \
-                | sed -E "s/\s*\"?$key\"?\s*=\s*\"?([^\"]*)\"?;/\1/" \
+                | sed -E "s/ *\"?$key\"? *= *\"?([^\"]*)\"?;/\1/" \
               )"
 
-  if [[ "$currentVal" == "$val" ]]; then
+  if [[ "$currentVal" == "$val" || "$currentVal" == "$val2" ]]; then
     skip "macOS default shortcut $domain $key is already set to '$currentVal'"
     return 0
   fi
