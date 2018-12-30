@@ -85,6 +85,7 @@ KEYTIMEOUT=10 # Key delay of 0.1s (Esc in vim mode is quicker).
 
 bindkey -v # Enable vim mode in zsh.
 
+bindkey -M viins 'kj' vi-cmd-mode # Map kj -> Esc in vim mode.
 bindkey -M viins "^?" backward-delete-char # Make backspace work properly.
 bindkey -M viins "^H" backward-delete-char # <Ctrl>-H = Backspace (Emacs default).
 bindkey -M viins "^W" backward-kill-word # <Ctrl>-W = Delete word (Emacs default).

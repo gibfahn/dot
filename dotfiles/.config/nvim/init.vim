@@ -9,22 +9,31 @@ if empty($XDG_CACHE_HOME)| let $XDG_CACHE_HOME = $HOME . '/.cache'| endif
 if empty($XDG_DATA_HOME)| let $XDG_DATA_HOME = $HOME . '/.local/share'| endif
 
 try
+  " Add vim-plug dir to vim runtimepath (already there for nvim).
+  exe 'set rtp+=' . $XDG_DATA_HOME . '/nvim/site'
+  " Install vim-plug if not already installed.
+  if empty(glob($XDG_DATA_HOME . '/nvim/site/autoload/plug.vim'))
+    echo "Vim-Plug not installed, downloading..."
+    !curl -fLo "$XDG_DATA_HOME/nvim/site/autoload/plug.vim" --create-dirs
+      \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+  endif
+
   call plug#begin('~/.local/share/nvim/plugged')    " Load plugins with vim-plug.
 
-if has("nvim")                                      " NeoVim specific settings.
-  Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh', } " LSP Support (:h LanguageClient).
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " Asynchronous completion framework for neovim/Vim8 (used in LanguageClient).
-else
-  Plug 'Shougo/deoplete.nvim'                       " Same as neovim one but without UpdateRemotePlugins.
-  Plug 'roxma/nvim-yarp'                            " nvim compatibility plugin for vim used by deoplete.
-  Plug 'roxma/vim-hug-neovim-rpc'                   " nvim compatibility plugin for vim used by deoplete.
-endif
+  " Conditionally enable plugin (always install, only activate if condition met).
+  function! Cond(cond, ...)
+    let opts = get(a:000, 0, {})
+    return a:cond ? opts : extend(opts, { 'on': [], 'for': [] })
+  endfunction
 
   Plug 'AndrewRadev/splitjoin.vim'                  " gS to split, gJ to join lines.
+  Plug 'Shougo/deoplete.nvim', has('nvim') ? { 'do': ':UpdateRemotePlugins' } : {} " Asynchronous completion.
   Plug 'Shougo/echodoc.vim'                         " Show function signatures where you're typing.
   Plug 'airblade/vim-gitgutter'                     " Show git diffs in the gutter (left of line numbers) (:h gitgutter).
   Plug 'ap/vim-buftabline'                          " Show buffers in the tab bar.
   Plug 'ap/vim-readdir'                             " Nicer file browser plugin that works with buftabline.
+  Plug 'autozimu/LanguageClient-neovim', Cond(has('nvim'), { 'branch': 'next', 'do': 'bash install.sh', }) " LSP Support (:h LanguageClient).
   Plug 'cespare/vim-toml'                           " Toml syntax highlighting.
   Plug 'coderifous/textobj-word-column.vim'         " Adds ic/ac and iC/aC motions to block select word column in paragraph.
   Plug 'eclipse/eclipse.jdt.ls', { 'dir': '~/.local/share/eclipse.jdt.ls', 'tag': '*' } " Java Language Server.
@@ -38,6 +47,8 @@ endif
   Plug 'pangloss/vim-javascript'                    " JS   language bindings.
   Plug 'raghur/vim-ghost', {'do': ':GhostInstall'}  " Edit browser text areas in Neovim (:h ghost).
   Plug 'redhat-developer/yaml-language-server', {'do': 'npm install && npm run compile'} " Language server for yaml files.
+  Plug 'roxma/nvim-yarp', Cond(v:version >= 800 && !has('nvim')) " UpdateRemotePlugins replacement for Vim8.
+  Plug 'roxma/vim-hug-neovim-rpc',  Cond(v:version >= 800 && !has('nvim')) " Neovim rpc client for Vim8.
   Plug 'rust-lang/rust.vim'                         " Rust language bindings.
   Plug 'sheerun/vim-polyglot'                       " Syntax files for a large number of different languages.
   Plug 'sjl/gundo.vim'                              " Interactive undo tree (<space>u to toggle on/off, q to quit).
@@ -52,7 +63,7 @@ endif
 
   call plug#end()                                   " Initialize plugin system
   catch /E117: Unknown function: plug#begin/
-    echo "ERROR:\tvim-plug not installed, use :PI to install. Original error was:\n\t" . v:exception . "\n"
+    echo "ERROR:\tvim-plug automatic install failed. Original error was:\n\t" . v:exception . "\n"
 endtry
 
 " }}} Load plugins (uses vim-plug)
@@ -123,8 +134,12 @@ endtry
 " {{{ Key mappings (see http://vim.wikia.com/wiki/Unused_keys for unused keys)
 " Available (normal): <C-Space>, +, _, <C-q/s/[/_>, <leader>b/e/h/m/n/u/v
 
-inoremap <expr>   <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"| " Tab is next entry if completion menu open.
+" In insert mode, if completion dropdown open, Tab/Shift-Tab switch between
+" entries. Otherwise if the previous character was a space they indent, else Tab
+" will trigger the completion manually.
+inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : <SID>check_last_char_was_space() ? "\<TAB>" : deoplete#mappings#manual_complete()
 inoremap <expr>   <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"| " Shift-Tab is previous entry if completion menu open.
+
 nnoremap          Q <nop>|                          "  ↳ accidental triggering).
 nnoremap          Y y$|                             " Make Y work like C and D (yank to end of line, not whole line).
 " To open vim's current directory, use `:e .`.
@@ -133,6 +148,12 @@ nmap              f <Plug>Sneak_f|                  " Use sneak for f (multiline
 nmap              F <Plug>Sneak_F|                  " ↳             F
 nmap              t <Plug>Sneak_t|                  " ↳             t
 nmap              T <Plug>Sneak_T|                  " ↳             T
+
+" Delete window to the left/below/above/to the right with d<C-h/j/k/l>.
+nnoremap d<C-j> <C-w>j<C-w>c
+nnoremap d<C-k> <C-w>k<C-w>c
+nnoremap d<C-h> <C-w>h<C-w>c
+nnoremap d<C-l> <C-w>l<C-w>c
 
 nnoremap          <Leader>a @a<CR>|                 " Apply macro a (add with qa or yank to a reg with "ay).
 nnoremap          <Leader>b :Buffers<CR>|           " Search buffer list for file.
@@ -164,14 +185,14 @@ nnoremap        <Leader>gS :mksession! <C-r>=SessionFile()<CR>| " Save current s
 nnoremap        <Leader>gt :set et!<CR>:set et?<CR>|   " Toggle tabs/spaces.
 nnoremap        <Leader>gq :set fo-=t<CR>:set fo?<CR>| " Turn off line wrapping,
 nnoremap        <Leader>gQ :set fo+=t<CR>:set fo?<CR>| " ↳    on
-nnoremap        <Leader>gv :e ~/.vim/vimrc<CR>|  " <Space>gv opens vimrc in the editor (autoreloaded on save).
+nnoremap        <Leader>gv :e $MYVIMRC<CR>|  " <Space>gv opens vimrc in the editor (autoreloaded on save).
 nnoremap        <Leader>gw :setlocal wrap!<CR>| " <Space>gw toggles the soft-wrapping of text.
 nnoremap        <Leader>id :r !date +\%Y-\%m-\%d<CR>| " Insert readable    date on new line.
 nnoremap        <Leader>iD :r !date +\%d-\%b-\%y<CR>| " ↳      `:sort`able date on new line.
 nnoremap        <Leader>it ITODO(gib): <ESC>:Commentary<CR>$| " Insert a TODO, (Write todo, then `<Space>it`).
 nnoremap        <Leader>j :sp<CR><C-w>k:bp<CR>|   " Open horizontal split,
 nnoremap        <Leader>k <C-w>q|                 " Close current split (keeps buffer).
-nnoremap        <Leader>K <C-w>j<C-w>q|           " Close split below (keeps buffer). Useful for LanguageClient splits.
+nnoremap        <Leader>K <C-W>z|                 " Close open preview windows (e.g. language server definitions).
 nnoremap        <Leader>l :vsp<CR><C-w>h:bp<CR>|  " Open vertical split.
 nnoremap        <Leader>L <C-w>b<C-w>q|           " Close last split (keeps buffer). Useful for quickfix splits.
 nnoremap        <Leader>o :set operatorfunc=OpenUrl<CR>g@| " Open the selected text with the appropriate program (like netrw-gx).
@@ -244,6 +265,9 @@ onoremap if :normal Vif<CR>
 vnoremap af :<C-U>silent!normal![zV]z<CR>
 onoremap af :normal Vaf<CR>
 
+" See SurroundOp function.
+omap <expr> s '<esc>'.SurroundOp()
+
 " %% expands to dirname of current file.
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 
@@ -292,7 +316,26 @@ function! BufferClose(bang) abort " Call BufferClose('!') to get bd!
   exec oldwin 'wincmd w' | exec oldbuf 'bd' . a:bang
 endfunc
 
-if has("nvim")                                      " NeoVim specific settings.
+" Used in the Tab mappings above.
+function! s:check_last_char_was_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+" Make vim-surround work in operator-pending mode, so the cursor changes when you press e.g. ys.
+" Requires custom mapping and disabling default mappings (/SurroundOp).
+function! SurroundOp()
+    if v:operator ==# 'd'
+        return "\<plug>Dsurround"
+    elseif v:operator ==# 'c'
+        return "\<plug>Csurround"
+    elseif v:operator ==# 'y'
+        return "\<plug>Ysurround"
+    endif
+    return ''
+endfunction
+
+if has('nvim')                                      " NeoVim specific settings.
   let g:terminal_scrollback_buffer_size = 100000    " Store lots of terminal history.
   if executable("nvr")| let $VISUAL = 'nvr --remote-wait'| endif " Use existing nvim window to open new files (e.g. `g cm`).
   nnoremap <Leader>t :vsplit term://$SHELL<CR>i|    " Open terminal in new split.
@@ -302,27 +345,12 @@ if has("nvim")                                      " NeoVim specific settings.
   tnoremap <C-k> <C-\><C-n><C-w>k|                  "  ↳     up    a window in terminal,
   tnoremap <C-l> <C-\><C-n><C-w>l|                  "  ↳     right a window in terminal.
   tnoremap <C-n> <C-l>|                             " Ctrl-n is Ctrl-l in a terminal.
-  tnoremap <C-w> <C-\><C-n>|                        " Go to normal mode.
+  tnoremap <Esc> <C-\><C-n>|                        " Go to normal mode.
 
   augroup gibTermGroup                              " Autocommands for nvim only
     au TermOpen * setlocal nonumber norelativenumber  " No line numbers in terminal
     au TermOpen * setlocal wrap                     " Soft line wrapping in terminal.
   augroup end
-
-  " Make vim-surround work in operator-pending mode, so the cursor changes when
-  " you press e.g. ys.
-  let g:surround_no_mappings = 1
-  function! SurroundOp()
-      if v:operator ==# 'd'
-          return "\<plug>Dsurround"
-      elseif v:operator ==# 'c'
-          return "\<plug>Csurround"
-      elseif v:operator ==# 'y'
-          return "\<plug>Ysurround"
-      endif
-      return ''
-  endfunction
-  omap <expr> s '<esc>'.SurroundOp()
 
 else
   set termwinscroll=100000                          " Store lots of terminal history.
@@ -333,7 +361,7 @@ else
   tnoremap <C-k> <C-w>k|                            "  ↳     up    a window in terminal,
   tnoremap <C-l> <C-w>l|                            "  ↳     right a window in terminal.
   tnoremap <C-n> <C-l>|                             " Ctrl-n is Ctrl-l in a terminal.
-  tnoremap <Esc><Esc> <C-W>N|                       " Make Escape work in terminal.
+  tnoremap <Esc> <C-W>N|                            " Make Escape work in terminal.
 
   augroup gibTermGroup                              " Autocommands for nvim only
     au TerminalOpen * if &buftype == 'terminal'| setlocal nonumber norelativenumber| endif " No line numbers in terminal
@@ -344,31 +372,31 @@ endif
 
 " {{{ Custom commands
 command! Trim call TrimWhitespace()|                " :Trim runs :call Trim() (defined below).
-command! PU PlugClean | PlugUpdate | PlugUpgrade|   " :PI installs vim-plug, :PU updates/cleans plugins and vim-plug.
+command! PU PlugClean | PlugUpdate | PlugUpgrade|   " :PU updates/cleans plugins and vim-plug.
 
-command! PI !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim &&
-    \ ln -s ~/.local/share/nvim/site/autoload ~/.vim/autoload
+" If you're wondering what the [A] things in the completion menu are, `:h deoplete-sources`:
+"   ~ [↑] [↓] [*] = current file, [B] open buffers, [D] vim dictionary, [F] file
+"   paths, [O] OmniFunc, [LC] LanguageClient.
+call deoplete#custom#var('around', {'range_above': 20, 'range_below': 20, 'mark_above': '[↑]', 'mark_below': '[↓]', 'mark_changes': '[*]', }) " deoplete-source-around
 
+let g:ghost_darwin_app = 'kitty'                    " Tell vim-ghost which terminal to open.
+let g:buftabline_indicators = 1                     " Show a + if the buffer has been modified.
+let g:buftabline_numbers = 2                        " Show buftabline's count (use <Leader>1-9 to switch.
 let g:deoplete#enable_at_startup = 1                " Enable deoplete by default.
+let g:echodoc#enable_at_startup = 1
+let g:echodoc#type = 'virtual' " Needs nvim 0.3.2 (`brew unlink neovim && brew install --HEAD neovim` for now).
+let g:github_enterprise_urls = ['https://github.pie.apple.com'] " Add your GHE repo so vim-fugitive's :Gbrowse! can use it (try with visual mode).
+let g:gundo_preview_bottom = 1                      " Undo diff preview on bottom.
+let g:gundo_right = 1                               " Undo window on right.
+let g:hardtime_default_on = 1
 let g:is_posix = 1                                  " Assume shell for syntax highlighting.
-"let g:rustfmt_autosave = 1                         " Run rustfmt on save (from rust.vim).
-let g:sneak#use_ic_scs = 1                          " Sneak: respect smartcase setting.
-let g:sneak#label = 1                               " Make sneak like easymotion (but nicer).
-let g:sneak#target_labels = ";sftunqm/`'-+SFGHLTUNRMQZ?0123456789!()\\[]:|<>QWERTYUIOPASDFGHJKLZXCVBNM.\"\,:qwertyuiopasdfghjklzxcvbnm" " Labels sneak uses to show words.
 let g:loaded_netrw = 1
 let g:loaded_netrwPlugin = 1                        " Don't use the built-in file browser (use vim-readdir instead).
 let g:peekaboo_window = "vert bo 50new"             " Increase peekaboo window width to 50.
-let g:gundo_right = 1                               " Undo window on right.
-let g:gundo_preview_bottom = 1                      " Undo diff preview on bottom.
-let g:buftabline_numbers = 2                        " Show buftabline's count (use <Leader>1-9 to switch.
-let g:buftabline_indicators = 1                     " Show a + if the buffer has been modified.
-" Add your Enterprise repo here so vim-fugitive's :Gbrowse! can work with it. Use with visual mode for line links.
-let g:github_enterprise_urls = ['https://github.pie.apple.com']
-let g:hardtime_default_on = 1
-let g:echodoc#enable_at_startup = 1
-let g:echodoc#type = 'virtual' " Needs nvim 0.3.2 (`brew unlink neovim && brew install --HEAD neovim` for now).
-
+let g:sneak#label = 1                               " Make sneak like easymotion (but nicer).
+let g:sneak#target_labels = ";sftunqm/`'-+SFGHLTUNRMQZ?0123456789!()\\[]:|<>QWERTYUIOPASDFGHJKLZXCVBNM.\"\,:qwertyuiopasdfghjklzxcvbnm" " Labels sneak uses to show words.
+let g:sneak#use_ic_scs = 1                          " Sneak: respect smartcase setting.
+let g:surround_no_mappings = 1                      " See SurroundOp function.
 
 let g:LanguageClient_serverCommands = {
     \ 'cpp': ['clangd'],
@@ -409,13 +437,12 @@ augroup gibAutoGroup                                " Group of automatic functio
     \ endif
   autocmd BufRead,BufNewFile *.md set filetype=markdown  " Use markdown for md files.
   autocmd FileType help wincmd L                    " Open new help windows on the right,
-"  autocmd FileType qf wincmd L                          "  ↳       build windows on the right.
+  " autocmd FileType qf wincmd L                       "  ↳       build windows on the right.
   autocmd FileType yaml setlocal foldmethod=indent  " YAML files should be folded by indent.
   autocmd FileType json setlocal foldmethod=indent  " JSON files should be folded by indent.
   autocmd FileType python setlocal foldmethod=indent textwidth=100  " Python files should be folded by indent.
   autocmd BufNewFile,BufRead *.bats set filetype=sh " Bats is a shell test file type.
-  autocmd BufWritePost vimrc so $MYVIMRC|          " Reload .vimrc on save.
-  autocmd BufWritePost init.vim so $MYVIMRC|        " Reload init.vim (nvim) on save.
+  autocmd BufWritePost $MYVIMRC so $MYVIMRC|        " Reload vimrc on save.
   autocmd QuickFixCmdPost *grep* cwindow|           " Open the quickfix window on grep.
   autocmd VimEnter * silent! tabonly|               " Don't allow starting Vim with multiple tabs.
   " Check if files modified when you open a new window, switch back to vim, or if you don't move the cursor for 100ms.

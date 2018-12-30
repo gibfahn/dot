@@ -23,7 +23,7 @@ else
 fi
 : ${TOPATH:="$PWD"}
 
-printf "❯❯❯ Updating dotfile symlinks (linking from path: $TOPATH)\n\n"
+printf "${CYAN}❯❯❯ Updating dotfile symlinks${NC} (linking from path: $TOPATH)\n\n"
 
 for FILE in $(find . -type f -o -type l | sed 's|./||'); do
   mkdir -p "$FROMPATH/$(dirname $FILE)"
@@ -35,16 +35,15 @@ for FILE in $(find . -type f -o -type l | sed 's|./||'); do
       printf "${BBLACK}SKIP: $FROMPATH/$FILE already points to $TOPATH/$FILE.${NC}\n"
       continue
     fi
-    echo "CHANGE: $FROMPATH/$FILE $(ls -l $FROMPATH/$FILE | awk '{print $NF}') \
-    -> $TOPATH/$FILE\n"
+    printf "CHANGE: $FROMPATH/$FILE $(ls -l $FROMPATH/$FILE | awk '{print $NF}') -> $TOPATH/$FILE\n"
     mkdir -p "$BACKUP/$(dirname $FILE)"
     rm "$FROMPATH/$FILE" "$BACKUP/$FILE"
   elif [ -e "$FROMPATH/$FILE" ]; then # File.
-    echo "MOVE: $FROMPATH/$FILE exists, moving to $BACKUP/$FILE"
+    printf "MOVE: $FROMPATH/$FILE exists, moving to $BACKUP/$FILE\n"
     mkdir -p "$BACKUP/$(dirname $FILE)"
     mv "$FROMPATH/$FILE" "$BACKUP/$FILE"
   else # Nothing there.
-    echo "LINK: $FROMPATH/$FILE -> $TOPATH/$FILE"
+    printf "LINK: $FROMPATH/$FILE -> $TOPATH/$FILE\n"
   fi
   ln -s "$TOPATH/$FILE" "$FROMPATH/$FILE"
 done
