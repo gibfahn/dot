@@ -30,6 +30,7 @@ try
   Plug 'AndrewRadev/splitjoin.vim'                  " gS to split, gJ to join lines.
   Plug 'Shougo/deoplete.nvim', has('nvim') ? { 'do': ':UpdateRemotePlugins' } : {} " Asynchronous completion.
   Plug 'Shougo/echodoc.vim'                         " Show function signatures where you're typing.
+  Plug 'SirVer/ultisnips'                           " Create and insert snippets with parameter completion.
   Plug 'airblade/vim-gitgutter'                     " Show git diffs in the gutter (left of line numbers) (:h gitgutter).
   Plug 'ap/vim-buftabline'                          " Show buffers in the tab bar.
   Plug 'ap/vim-readdir'                             " Nicer file browser plugin that works with buftabline.
@@ -40,6 +41,7 @@ try
   Plug 'fweep/vim-zsh-path-completion'              " Nicer file browser plugin.
   Plug 'gibfahn/vim-gib'                            " Use vim colorscheme.
   Plug 'godlygeek/tabular'                          " Make tables easier (:help Tabular).
+  Plug 'honza/vim-snippets'                         " List of premade snippets for many languages.
   Plug 'junegunn/fzf', { 'dir': '~/.local/share/fzf', 'do': './install --bin' } " :h fzf
   Plug 'junegunn/fzf.vim'                           " Try :Files, :GFiles? :Buffers :Lines :History :Commits :BCommits
   Plug 'junegunn/vim-peekaboo'                      " Pop up register list when pasting/macroing.
@@ -139,6 +141,8 @@ endtry
 " will trigger the completion manually.
 inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : <SID>check_last_char_was_space() ? "\<TAB>" : deoplete#mappings#manual_complete()
 inoremap <expr>   <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"| " Shift-Tab is previous entry if completion menu open.
+" In insert mode, if there is a snippet to be completed, Enter expands to it.
+inoremap <expr> <CR> pumvisible() ? "<C-R>=ExpandSnippetOrCarriageReturn()<CR>" : "\<CR>"
 
 nnoremap          Q <nop>|                          "  ↳ accidental triggering).
 nnoremap          Y y$|                             " Make Y work like C and D (yank to end of line, not whole line).
@@ -335,6 +339,12 @@ function! SurroundOp()
     return ''
 endfunction
 
+" See usage in inoremap above.
+function! ExpandSnippetOrCarriageReturn()
+    let snippet = UltiSnips#ExpandSnippetOrJump()
+    return g:ulti_expand_or_jump_res > 0 ? snippet : "\<CR>"
+endfunction
+
 if has('nvim')                                      " NeoVim specific settings.
   let g:terminal_scrollback_buffer_size = 100000    " Store lots of terminal history.
   if executable("nvr")| let $VISUAL = 'nvr --remote-wait'| endif " Use existing nvim window to open new files (e.g. `g cm`).
@@ -379,17 +389,22 @@ command! PU PlugClean | PlugUpdate | PlugUpgrade|   " :PU updates/cleans plugins
 "   paths, [O] OmniFunc, [LC] LanguageClient.
 call deoplete#custom#var('around', {'range_above': 20, 'range_below': 20, 'mark_above': '[↑]', 'mark_below': '[↓]', 'mark_changes': '[*]', }) " deoplete-source-around
 
-let g:ghost_darwin_app = 'kitty'                    " Tell vim-ghost which terminal to open.
+let g:UltiSnipsExpandTrigger = "<NUL>"              " Don't automatically set UltiSnips expand, called manually in ExpandSnippetOrCarriageReturn().
+let g:UltiSnipsJumpBackwardTrigger="<Up>"           " Up arrow goes to previous snippet area.
+let g:UltiSnipsJumpForwardTrigger="<Down>"          " Down arrow goes to next snippet area.
 let g:buftabline_indicators = 1                     " Show a + if the buffer has been modified.
 let g:buftabline_numbers = 2                        " Show buftabline's count (use <Leader>1-9 to switch.
 let g:deoplete#enable_at_startup = 1                " Enable deoplete by default.
 let g:echodoc#enable_at_startup = 1
 let g:echodoc#type = 'virtual' " Needs nvim 0.3.2 (`brew unlink neovim && brew install --HEAD neovim` for now).
+let g:ghost_darwin_app = 'kitty'                    " Tell vim-ghost which terminal to open.
 let g:github_enterprise_urls = ['https://github.pie.apple.com'] " Add your GHE repo so vim-fugitive's :Gbrowse! can use it (try with visual mode).
 let g:gundo_preview_bottom = 1                      " Undo diff preview on bottom.
 let g:gundo_right = 1                               " Undo window on right.
-let g:hardtime_default_on = 1
+let g:hardtime_allow_different_key = 1              " Allow alternating keys (e.g. kj).
+let g:hardtime_default_on = 1                       " Don't allow repeated keypresses by default.
 let g:is_posix = 1                                  " Assume shell for syntax highlighting.
+let g:list_of_insert_keys = ["<LEFT>", "<RIGHT>"]   " Don't use hardtime for <Up> <Down> (used in Ultisnips).
 let g:loaded_netrw = 1
 let g:loaded_netrwPlugin = 1                        " Don't use the built-in file browser (use vim-readdir instead).
 let g:peekaboo_window = "vert bo 50new"             " Increase peekaboo window width to 50.
@@ -397,6 +412,7 @@ let g:sneak#label = 1                               " Make sneak like easymotion
 let g:sneak#target_labels = ";sftunqm/`'-+SFGHLTUNRMQZ?0123456789!()\\[]:|<>QWERTYUIOPASDFGHJKLZXCVBNM.\"\,:qwertyuiopasdfghjklzxcvbnm" " Labels sneak uses to show words.
 let g:sneak#use_ic_scs = 1                          " Sneak: respect smartcase setting.
 let g:surround_no_mappings = 1                      " See SurroundOp function.
+let g:ulti_expand_or_jump_res = 0                   " Initial setting, used in ExpandSnippetOrCarriageReturn().
 
 let g:LanguageClient_serverCommands = {
     \ 'cpp': ['clangd'],
