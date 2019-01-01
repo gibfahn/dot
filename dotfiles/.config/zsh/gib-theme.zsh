@@ -1,6 +1,5 @@
-#!/usr/bin/env zsh
-
-[[ -n "$ssh" ]] || PROMPT="%m " # Set fallback PROMPT in case the below script fails.
+# shellcheck shell=bash disable=1090,2016
+[[ -n "${ssh:-}" ]] || PROMPT="%m " # Set fallback PROMPT in case the below script fails.
 PROMPT=$'\n%{\e[38;5;161m%}'"${PROMPT}"$'%{\e[38;5;242m···❯\e[0m%} '
 
 source "$XDG_DATA_HOME/zsh/zsh-async/async.zsh" || return # Async functions used here.
@@ -24,7 +23,7 @@ _gib_prompt_format_duration() { # Turns seconds into human readable time (165392
 # Stores (into _gib_prompt_cmd_exec_time) the exec time of the last command if set threshold was exceeded
 _gib_prompt_check_cmd_exec_time() {
   integer elapsed
-  (( elapsed = EPOCHSECONDS - ${_gib_prompt_cmd_timestamp:-$EPOCHSECONDS} ))
+  (( elapsed = SECONDS - ${_gib_prompt_cmd_elapsed:-$SECONDS} ))
   typeset -g _gib_prompt_cmd_exec_time=
   (( elapsed > 1 )) && _gib_prompt_format_duration $elapsed "_gib_prompt_cmd_exec_time"
 }
@@ -35,7 +34,7 @@ _gib_prompt_precmd() {
   print -Pn "\e]2;%1~\a"
   # check exec time and store it in a variable
   _gib_prompt_check_cmd_exec_time
-  unset _gib_prompt_cmd_timestamp
+  unset _gib_prompt_cmd_elapsed
 
   # preform async git dirty check and fetch
   _gib_prompt_async_tasks
@@ -58,7 +57,7 @@ _gib_prompt_preexec() {
       async_flush_jobs '_gib_prompt'
     fi
   fi
-  typeset -g _gib_prompt_cmd_timestamp=$EPOCHSECONDS
+  typeset -g _gib_prompt_cmd_elapsed=$SECONDS
 }
 
 # string length ignoring ansi escapes
@@ -86,7 +85,7 @@ _gib_prompt_preprompt_render() {
 
   # Add git branch and dirty status info.
   typeset -gA _gib_prompt_git
-  [[ -n $_gib_prompt_git[branch] ]] && git_prompt_parts+="%F{$git_color}"'${_gib_prompt_git[branch]}%F{226}${_gib_prompt_git_dirty}%f'
+  [[ -n ${_gib_prompt_git[branch]} ]] && git_prompt_parts+="%F{$git_color}"'${_gib_prompt_git[branch]}%F{226}${_gib_prompt_git_dirty}%f'
 
   [[ -n "$git_prompt_parts" ]] && git_prompt_parts="%F{33}($git_prompt_parts%F{33})%f"
   [[ -n "$_gib_prompt_cmd_exec_time" ]] && _gib_prompt_cmd_exec_time="%F{14}$_gib_prompt_cmd_exec_time%f"
@@ -123,11 +122,11 @@ _gib_prompt_async_git_aliases() {
   local -a gitalias pullalias
 
   # we enter repo to get local aliases as well.
-  builtin cd -q $dir
+  builtin cd -q "$dir"
 
   # list all aliases and split on newline.
   gitalias=(${(@f)"$(command git config --get-regexp "^alias\.")"})
-  for line in $gitalias; do
+  for line in "${gitalias[@]}"; do
     parts=(${(@)=line})           # split line on spaces
     aliasname=${parts[1]#alias.}  # grab the name (alias.[name])
     shift parts                   # remove aliasname

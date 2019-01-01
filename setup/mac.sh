@@ -1,13 +1,14 @@
 #!/bin/bash
+# shellcheck shell=bash disable=SC1090,SC2016
 
 # Things I like to have on a Mac.
 
-. $(dirname $0)/../helpers/setup.sh # Load helper script from dot/helpers.
+. "$(dirname "$0")/../helpers/setup.sh" # Load helper script from dot/helpers.
 
-if ! cat ~/Library/Preferences/com.apple.Terminal.plist | grep -q gib; then
+if ! grep -q gib ~/Library/Preferences/com.apple.Terminal.plist; then
   get "gib Terminal profile."
   # Install my terminal profile.
-  open $(dirname $0)/config/gib.terminal
+  open "$(dirname "$0")/config/gib.terminal"
 
   # Change the default to my profile (swap it back in settings if you want).
   if [[ "$(defaults read com.apple.Terminal "Default Window Settings")" != gib ]]; then
@@ -171,11 +172,11 @@ fi
 # brew install things. Edit config/Brewfile to adjust.
 get "brew installing/updating."
 brew tap Homebrew/bundle
-brew bundle --file=$(dirname $0)/config/Brewfile | grep -Evx "Using [-_/0-9a-zA-Z]+"
+brew bundle --file="$(dirname "$0")"/config/Brewfile | grep -Evx "Using [-_/0-9a-zA-Z]+"
 
 if [ "$HARDCORE" ]; then # Set up HARDCORE brew packages.
   get "brew HARDCORE packages."
-  brew bundle --file=$(dirname $0)/config/Brewfile-hardcore | grep -Evx "Using [-_/0-9a-zA-Z]+"
+  brew bundle --file="$(dirname "$0")"/config/Brewfile-hardcore | grep -Evx "Using [-_/0-9a-zA-Z]+"
 else
   skip "brew HARDCORE packages (HARDCORE not specified)."
 fi
@@ -189,6 +190,6 @@ softwareupdate -i -a
 
 if not langserver-swift && ! not swift; then
   gitClone rlovelett/langserver-swift "$HOME"/bin/src/langserver-swift
-  (cd "$HOME/bin/src/langserver-swift"; make release)
+  (cd "$HOME/bin/src/langserver-swift" || error "Failed to cd to the langserver directory"; make release)
   ln -s "$HOME/bin/src/langserver-swift/.build/$(uname -m)"-*/release/langserver-swift "$HOME"/bin/langserver-swift
 fi

@@ -1,4 +1,4 @@
-#!/bin/bash
+# shellcheck shell=bash disable=SC2034
 
 # Helper vars for printing in colour. Use with:
 # printf "${RED}foo${NC}\n" # Echo foo in red, then reset colour.

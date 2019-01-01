@@ -1,8 +1,9 @@
 #!/bin/bash
+# shellcheck shell=bash disable=SC1090,SC2016
 
 # Installs things that I use on all Unix systems (e.g. macOS and Linux).
 
-. $(dirname $0)/../helpers/setup.sh # Load helper script from dot/helpers.
+. "$(dirname "$0")/../helpers/setup.sh" # Load helper script from dot/helpers.
 
 npm_modules=(
   javascript-typescript-langserver # Language server for JavaScript and Typescript files.
@@ -48,27 +49,21 @@ if [[ "$(uname)" == Linux ]]; then
   fi
 fi
 
-# These are a bit more esoteric.
-if [[ -n "$HARDCORE" ]]; then
-  rust_crates+=(
-  )
-fi
-
 # Initialise and update submodules (not yet mandatory).
-git submodule init && git submodule update || true
+{ git submodule init && git submodule update; } || true
 
 # Set default shell to zsh (or $NEWSHELL if set).
 
 # $SHELL isn't updated until we logout, so check whether chsh was already run.
 if [[ "$(uname)" == Darwin ]]; then # macOS
-  shell=$(dscl . -read $HOME UserShell)
+  shell=$(dscl . -read "$HOME" UserShell)
 elif [[ "$(uname)" == Linux ]]; then # Linux.
-  shell=$(cat /etc/passwd | grep $USER | awk -F : '{print $NF}')
+  shell=$(grep "$USER" /etc/passwd | awk -F : '{print $NF}')
 fi
 # Fall back to $SHELL if that doesn't work.
 shell=${shell:-$SHELL}
 if [[ -z "$ZSH_VERSION" && "${shell##*/}" != zsh ]]; then
-  NEWSHELL=${NEWSHELL-$(cat /etc/shells | grep zsh | tail -1)} # Set NEWSHELL for a different shell.
+  NEWSHELL=${NEWSHELL-$(grep zsh /etc/shells | tail -1)} # Set NEWSHELL for a different shell.
   if [[ -e "$NEWSHELL" ]]; then
     get "Shell change (Current shell is $shell, changing to $NEWSHELL)."
     chsh -s "$NEWSHELL" || skip "Shell change (chsh failed)."
@@ -86,34 +81,36 @@ if exists git && [[ "$(whoami)" != gib ]] && {
  grep -q 'email = gibfahn@gmail.com # REPLACEME' "$XDG_CONFIG_HOME/git/config"
 }; then
   # Allow manual override with `GIT_NAME` and `GIT_EMAIL`.
-  [[ -n "$GIT_NAME" ]] && GITNAME="$GIT_NAME"
-  [[ -n "$GIT_EMAIL" ]] && GITEMAIL="$GIT_EMAIL"
+  # shellcheck disable=SC2153
+  [[ -n "$GIT_NAME" ]] && git_name="$GIT_NAME"
+  # shellcheck disable=SC2153
+  [[ -n "$GIT_EMAIL" ]] && git_email="$GIT_EMAIL"
   if [[ -z "$GIT_NAME" || -z "$GIT_EMAIL" ]] && [[ -e "$HOME/.gitconfig" ]]; then
-    GITNAME=$(git config --global user.name)
-    GITEMAIL=$(git config --global user.email)
-    get "Git Config (moving ~/.gitconfig to ~/backup/.gitconfig, preserving name as '$GITNAME' and email
-    as '$GITEMAIL'. Make sure to move any settings you want preserved across)."
+    git_name=$(git config --global user.name)
+    git_email=$(git config --global user.email)
+    get "Git Config (moving ~/.gitconfig to ~/backup/.gitconfig, preserving name as '$git_name' and email
+    as '$git_email'. Make sure to move any settings you want preserved across)."
     mv "$HOME/.gitconfig" "$HOME/backup/.gitconfig"
-    git config --global user.name "$GITNAME"
-    git config --global user.email "$GITEMAIL"
+    git config --global user.name "$git_name"
+    git config --global user.email "$git_email"
   fi
-  if [[ -z "$GITNAME" || "$(git config --global user.name)" == "Gibson Fahnestock" ]]; then
-    read -p "Git name not set, what's your full name? " GITNAME
-    git config --global user.name "$GITNAME"
+  if [[ -z "$git_name" || "$(git config --global user.name)" == "Gibson Fahnestock" ]]; then
+    read -rp "Git name not set, what's your full name? " git_name
+    git config --global user.name "$git_name"
   fi
-  if [[ -z "$GITEMAIL" || "$(git config --global user.email)" == "gibfahn@gmail.com" ]]; then
-    read -p "Git email not set, what's your email address? " GITEMAIL
-    git config --global user.email "$GITEMAIL"
+  if [[ -z "$git_email" || "$(git config --global user.email)" == "gibfahn@gmail.com" ]]; then
+    read -rp "Git email not set, what's your email address? " git_email
+    git config --global user.email "$git_email"
   fi
   get "Git Config (git name set to $(git config --global user.name) and email set to $(git config --global user.email))"
 fi
 
 # Set up rbenv for ruby version management.
-gitCloneOrUpdate rbenv/rbenv "$XDG_DATA_HOME/rbenv"
-gitCloneOrUpdate rbenv/rbenv-default-gems "$XDG_DATA_HOME/rbenv"/plugins/rbenv-default-gems
+
+
 # Only run make if there were changes.
-if [[ "$?" == 0 ]]; then
-  ln -sf "$XDG_DATA_HOME/rbenv/completions/rbenv.zsh" "$XDG_DATA_HOME/zfunc/rbenv.zsh"
+if gitCloneOrUpdate rbenv/rbenv "$XDG_DATA_HOME/rbenv" \
+  || gitCloneOrUpdate rbenv/rbenv-default-gems "$XDG_DATA_HOME/rbenv"/plugins/rbenv-default-gems; then
   (pushd "$XDG_DATA_HOME/rbenv" && src/configure && make -C src)
 fi
 
@@ -125,14 +122,14 @@ fi
 # Set up a default ssh config
 if [[ ! -e ~/.ssh/config ]]; then
   get "SSH Config (copying default)."
-  [[ ! -d ~/.ssh ]] && mkdir ~/.ssh && chmod 700 ~/.ssh || true
-  cp $(dirname $0)/config/ssh-config ~/.ssh/config
+  [[ -d ~/.ssh ]] || { mkdir ~/.ssh && chmod 700 ~/.ssh; }
+  cp "$(dirname "$0")"/config/ssh-config ~/.ssh/config
 else
   skip "SSH Config (not overwriting ~/.ssh/config, copy manually from ./config/ssh-config as necessary)."
 fi
 
-# Set up autocompletions:
-mkdir -p "$XDG_DATA_HOME/zfunc"
+# Set up autocompletions and source dir:
+mkdir -p "$XDG_DATA_HOME/zfunc/source"
 
 # Set up zsh scripts:
 mkdir -p "$XDG_DATA_HOME/zsh"
@@ -158,16 +155,13 @@ done
 gitCloneOrUpdate mafredri/zsh-async "$XDG_DATA_HOME/zsh/zsh-async"
 
 # Install nvm:
-nvm_prefix="$([[ "$(uname -m)" != x86_64 ]] && echo "$(uname -m)/")"
-if no "$nvm_prefix"nvm; then
+unamem="$(uname -m)"
+nvm_prefix="${unamem/x86_64/}"
+if no "$nvm_prefix"/nvm; then
   # No install scripts as path update isn't required, it's done in gibrc.
-  gitClone creationix/nvm "$XDG_DATA_HOME/${nvm_prefix}nvm"
-  . "$XDG_DATA_HOME/${nvm_prefix}"nvm/nvm.sh # Load nvm so we can use it below.
+  gitClone creationix/nvm "$XDG_DATA_HOME/${nvm_prefix}/nvm"
+  . "$XDG_DATA_HOME/${nvm_prefix}"/nvm/nvm.sh # Load nvm so we can use it below.
   nvm install --lts # Install the latest LTS version of node.
-
-  # Autocompletion for npm (probably needed)
-  mkdir -p "$XDG_DATA_HOME/.zfunc"
-  npm completion --loglevel=error > "$XDG_DATA_HOME/.zfunc/_npm"
 fi
 
 # Add rbenv to path in case it was only just installed.
@@ -178,11 +172,11 @@ if not rbenv; then
 fi
 
 # Install latest version of ruby if changed.
-rbenv install --skip-existing $(rbenv install --list | grep -v - | tail -1)
+rbenv install --skip-existing "$(rbenv install --list | awk '/^\s*[0-9]+\.[0-9]+\.[0-9]+\s*$/ {a=$1} END { print a }')"
 
 # Symlink fzf
 if not fzf; then
-  ln -s "$XDG_DATA_HOME"/fzf/bin/* "$HOME"/bin/
+  ln -sf "$XDG_DATA_HOME"/fzf/bin/* "$HOME"/bin/
 fi
 
 # Install ruby gems
@@ -196,7 +190,7 @@ for gem in "${ruby_gems[@]}"; do
 done
 
 # Update ruby gems.
-gem update $(gem outdated | cut -d ' ' -f 1)
+gem update "$(gem outdated | awk '{print $1}')"
 
 # Install vim-plug (vim plugin manager):
 if no nvim/site/autoload/plug.vim; then
@@ -209,7 +203,7 @@ if no nvim/site/autoload/plug.vim; then
 fi
 
 # Install npm modules.
-not npm && . "$XDG_DATA_HOME/${nvm_prefix}"nvm/nvm.sh # Load nvm so we can use npm.
+not npm && . "$XDG_DATA_HOME/${nvm_prefix}"/nvm/nvm.sh # Load nvm so we can use npm.
 installed_npm_module_versions="$(npm ls -g --depth=0 --loglevel=error | grep -Ex '.* [-_A-Za-z0-9]+@([0-9]+\.){2}[0-9]+' | sed -E 's/^.+ //' | sed 's/@/ /')"
 for module in "${npm_modules[@]}"; do
   if ! echo "$installed_npm_module_versions" | grep -qx "$module .*" \
@@ -224,40 +218,53 @@ done
 gitCloneOrUpdate fwcd/KotlinLanguageServer "$XDG_DATA_HOME/KotlinLanguageServer"
 if [[ $? != 200 ]]; then
   (
-    cd "$XDG_DATA_HOME/KotlinLanguageServer"
+    cd "$XDG_DATA_HOME/KotlinLanguageServer" || { echo "Failed to cd"; exit 1; }
     ./gradlew installDist # If tests passed we could use `./gradlew build`
     ln -sf "$XDG_DATA_HOME/KotlinLanguageServer/build/install/kotlin-language-server/bin/kotlin-language-server" "$HOME/bin/kotlin-language-server"
   )
 fi
 
 # If you don't use rust just choose the cancel option.
-if [[ -n "$HARDCORE" ]] && { no rustup || no cargo; }; then # Install/set up rust.
-  # Install rustup. Don't modify path as that's already in gibrc.
-  RUSTUP_HOME="$XDG_DATA_HOME"/rustup CARGO_HOME="$XDG_DATA_HOME"/cargo curl https://sh.rustup.rs -sSf | bash -s -- -y --no-modify-path
-  # Download zsh completion
-  exists zsh && curl https://raw.githubusercontent.com/rust-lang-nursery/rustup.rs/master/src/rustup-cli/zsh/_rustup >"$XDG_DATA_HOME/zfunc/_rustup"
+if [[ -n "$HARDCORE" ]]; then
+  if no rustup || no cargo; then # Install/set up rust.
+    # Install rustup. Don't modify path as that's already in gibrc.
+    RUSTUP_HOME="$XDG_DATA_HOME"/rustup CARGO_HOME="$XDG_DATA_HOME"/cargo curl https://sh.rustup.rs -sSf | bash -s -- -y --no-modify-path
 
-  if [[ -d "$HOME/.rustup" ]]; then
-    # Move to proper directories
-    mv "$HOME/.rustup" "$XDG_DATA_HOME/rustup"
-    mv "$HOME/.cargo" "$XDG_DATA_HOME/cargo"
+    if [[ -d "$HOME/.rustup" ]]; then
+      # Move to proper directories
+      mv "$HOME/.rustup" "$XDG_DATA_HOME/rustup"
+      mv "$HOME/.cargo" "$XDG_DATA_HOME/cargo"
+    fi
+
+    export PATH="$XDG_DATA_HOME/cargo/bin:$PATH"
+
+    # Install stable and nightly (stable should be a no-op).
+    rustup install nightly
+    rustup install stable
+
+    # Make sure we have useful components:
+    rustup component add rls rust-analysis rust-src clippy rustfmt
+  else
+    update "Rust compiler and Cargo"
+    rustup update
+    update "Global Cargo packages"
+    not cargo-install-update && cargo install cargo-update
+    cargo install-update -ia "${rust_crates[@]}" # Update everything installed with cargo install.
   fi
-
-  export PATH="$XDG_DATA_HOME/cargo/bin:$PATH"
-
-  # Install stable and nightly (stable should be a no-op).
-  rustup install nightly
-  rustup install stable
-
-  # Download rls (https://github.com/rust-lang-nursery/rls):
-  rustup component add rls-preview rust-analysis rust-src clippy-preview rustfmt-preview
-else
-  update "Rust compiler and Cargo"
-  rustup update
-  update "Global Cargo packages"
-  not cargo-install-update && cargo install cargo-update
-  cargo install-update -ia  "${rust_crates[@]}" # Update everything installed with cargo install.
+  [[ -d "$XDG_DATA_HOME/zfunc" ]] || mkdir -p "$XDG_DATA_HOME/zfunc"
 fi
 
 # Install or update any go packages we need.
 go get -u "${go_packages[@]}"
+
+get "Updating ZSH Completions"
+# There are two types of completion files. One is an actual zsh completion file (e.g. rustup). The
+# other is a file you source that generates the relevant functions (e.g. npm). Put the latter in
+# zfunc/source.
+exists rustup && {
+  rustup completions zsh > "$XDG_DATA_HOME/zfunc/_rustup"
+  ln -sf "$(realpath "$(dirname "$(rustup which cargo)")"/../share/zsh/site-functions)"/* "$XDG_DATA_HOME/zfunc/"
+}
+exists rbenv && ln -sf "$XDG_DATA_HOME/rbenv/completions/rbenv.zsh" "$XDG_DATA_HOME/zfunc/source/_rbenv"
+ln -sf "$XDG_DATA_HOME"/fzf/shell/completion.zsh "$XDG_DATA_HOME/zfunc/source/_fzf"
+exists npm && npm completion --loglevel=error > "$XDG_DATA_HOME/zfunc/source/_npm"

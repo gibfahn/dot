@@ -1,6 +1,6 @@
-# My rc file, I include this from .profile, .bashrc, and .zshrc like so:
-# . "$HOME/.config/gibrc"
-# The script must be sourced.
+# shellcheck shell=bash disable=SC1090
+# My shell configuation file. Must be sourced. I include this from .profile, .bashrc, and .zshrc like so:
+#   . "$HOME/.config/gibrc"
 
 # {{{ Initial setup
 
@@ -10,37 +10,46 @@ case $- in
   *i*) [ "$GIBRC" ] && echo "Reusing gibrc..." || echo "Using gibrc..." ;;
   *) return ;; # Exit if not running interactively.
 esac
+export GIBRC
 : "${GIBRC:=0}" # First time through this is 0, next time 1 (etc).
-timer=$SECONDS # Show how long startup took from this point at first prompt.
+# shellcheck disable=SC2034,SC2039 # (variable used in gib-theme.zsh).
+_gib_prompt_cmd_elapsed=$SECONDS # Show how long startup took from this point at first prompt.
 
 # Note that which is a built-in in zsh, so no speed issues.
-exists() { which "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
+exists() { command -v "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
 works() { "$1" --version >/dev/null 2>&1; } # Check if command actually works (can get its version).
 
 # Internal use variables (shell=current shell, ssh=whether we're sshed).
-[ "$SSH_CLIENT" -o "$SSH_TTY" ] && ssh="true" || ssh=""
-[ "$ZSH_VERSION" ] && shell=zsh
+{ [ "$SSH_CLIENT" ] || [ "$SSH_TTY" ]; } && ssh="true" || ssh=""
+# shellcheck disable=SC2154 # Zsh defines this variable.
+[ "$ZSH_VERSION" ] && shell=zsh && exists() { [[ -n "${commands[$1]}" ]]; }
 [ "$BASH_VERSION" ] && shell=bash
 case $0 in
-  -ksh) shell=ksh ;;
-  -sh) shell=sh ;;
+  -ksh|ksh) shell="ksh" ;;
+  -sh|sh) shell="sh" ;;
 esac
-: ${shell:="$(ls -l /proc/$$/exe | sed 's%.*/%%')"}
+: "${shell:="$(ps co command= "$$")"}" # Fallback shell name = name of current process.
 uname="$(uname)"
 unamem="$(uname -m)"
 
 # If we're sshed into a machine, and didn't manually run a different, try a better shell.
-if [ "$ssh" -a "$GIBRC" = 0 -a "$shell" != zsh ]; then
+if [ -n "$ssh" ] && [ "$GIBRC" = 0 ] && [ "$shell" != zsh ]; then
   if exists zsh; then
     echo "Upgrading to zsh"
-    export GIBRC=1
-    zsh && exit || printf "\nERROR(gibrc): Zsh crashed with exit code: $?\n" # Replace existing shell with zsh.
+    GIBRC=1
+    zsh && exit || printf "\nERROR(gibrc): Zsh crashed with exit code: %s\n" "$?" # Replace existing shell with zsh.
   elif [ "$shell" != bash ] && exists bash; then
     echo "Upgrading to bash"
-    export GIBRC=1
-    bash && exit || printf "\nERROR(gibrc): Bash crashed with exit code: $?\n" # Replace existing shell with bash.
+    GIBRC=1
+    bash && exit || printf "\nERROR(gibrc): Bash crashed with exit code: %s\n" "$?" # Replace existing shell with bash.
   fi
 fi
+
+# From here on out we can assume at least ksh (so [[]], $(), etc).
+case "$shell" in
+  ksh|bash|zsh|ksh93) ;;
+  *) echo "Skipping gibrc, unknown shell $shell"; return ;;
+esac
 
 # }}} Initial setup
 
@@ -51,11 +60,13 @@ export XDG_CACHE_HOME=${XDG_CACHE_HOME:-"$HOME/.cache"} # Cache stuff should go 
 export XDG_DATA_HOME=${XDG_DATA_HOME:-"$HOME/.local/share"} # Data should go here.
 export LESSHISTFILE=${LESSHISTFILE:-"$XDG_CACHE_HOME/less/history"} # Get less to put its history here.
 #export INPUTRC=${INPUTRC:-"$XDG_CONFIG_HOME/inputrc"} # inputrc file goes here (unused currently).
+# See: https://github.com/rust-lang/rustup.rs#choosing-where-to-install
 export CARGO_HOME=${CARGO_HOME:-"$XDG_DATA_HOME/cargo"} # Cargo goes here.
 export RUSTUP_HOME=${RUSTUP_HOME:-"$XDG_DATA_HOME/rustup"} # Rustup goes here.
 export ATOM_HOME=${ATOM_HOME:-"$XDG_CONFIG_HOME/atom"} # Atom goes here.
 export npm_config_devdir=${npm_config_devdir:-"$XDG_CACHE_HOME/node-gyp"} # Set node-gyp download location.
 export npm_config_cache=${npm_cache:-"$XDG_CACHE_HOME/npm"} # Set npm cache location.
+export npm_config_userconfig="$XDG_CONFIG_HOME/npm/config" # Set up my npm config location.
 export RBENV_ROOT="${RBENV_ROOT:-"$XDG_CACHE_HOME/rbenv"}" # Set rbenv location.
 export NODE_REPL_HISTORY=${NODE_REPL_HISTORY="$XDG_CACHE_HOME/node_repl_history"} # Set node-gyp download location.
 export BABEL_CACHE_PATH=${BABEL_CACHE_PATH="$XDG_CACHE_HOME/babel/cache.json"} # Set babel cache location.
@@ -86,68 +97,80 @@ VULKAN_SDK="$(echo /usr/local/Caskroom/vulkan-sdk/* | sort -V | tail -1)"/macOS 
 export DYLD_LIBRARY_PATH="$VULKAN_SDK/lib:$DYLD_LIBRARY_PATH"
 export VK_ICD_FILENAMES="$VULKAN_SDK/etc/vulkan/icd.d/MoltenVK_icd.json"
 export VK_LAYER_PATH="$VULKAN_SDK/etc/vulkan/explicit_layer.d"
+# shellcheck disable=SC2034
 HISTSIZE=100000 SAVEHIST=100000 HISTFILE="$XDG_CACHE_HOME/$shell/history" # Set history file location and size.
+# shellcheck disable=SC2034
 c="$XDG_CONFIG_HOME" # Shortcut to the config directory (`v $c/gibrc` to edit this file).
-[ -d "$XDG_CONFIG_HOME/terminfo" ] && export TERMINFO="$XDG_CONFIG_HOME/terminfo" # Put terminal info in here.
+[[ -d "$XDG_CONFIG_HOME/terminfo" ]] && export TERMINFO="$XDG_CONFIG_HOME/terminfo" # Put terminal info in here.
 
 # }}} Env var defaults
 
 # {{{ Functions
 
-for i in please po pu rd d afind _ md run-help +; do alias | sed 's/^alias //' | grep -q "^$i=" && unalias "$i"; done; unset i # Remove unwanted aliases if defined.
-alias md="mkdir -p" # md foo = mkdir foo.
-mdc() { command mkdir -p "$@"; [[ $# == 1 ]] && cd "$1" || true; } # Mkdir then cd to dir (`mdc foo` = `mkdir foo && cd foo`).
+mdc() { command mkdir -p "$@"; { [[ $# == 1 ]] && cd "$1"; } || true; } # Mkdir then cd to dir (`mdc foo` = `mkdir foo && cd foo`).
 cpm() { command mkdir -p "${@: -1}" && cp "$@"; } # Mkdir then cp to dir (`cpm foo bar/baz` = `md bar/baz && cp foo bar/baz`).
 mvm() { command mkdir -p "${@: -1}" && mv "$@"; } # Mkdir then mv to dir (`mvm foo bar/baz` = `md bar/baz && mv foo bar/baz`).
+
 # Add or move to beginning of path.
-pathadd() { [ -d "$1" ] && export PATH="$1"$(echo ":$PATH:" | sed "s|:$1:|:|" | sed 's|:$||'); }
+pathadd() { [[ -d "$1" ]] && PATH="$1"$(echo ":$PATH:" | sed "s|:$1:|:|" | sed 's|:$||'); }
 # Add or move to end of path.
-pathapp() { [ -d "$1" ] && export PATH=$(echo ":$PATH:" | sed "s|:$1:|:|" | sed 's|^:||')"$1"; }
-# fda is find all (don't ignore anything).
-exists fd && alias fda="fd --no-ignore --hidden" \
-  || fd() { find . -iname "*$**"; } # Find by filename (case insensitive).
-exists rg && alias rga="rg --hidden --no-ignore" # rga is grep all (don't ignore anything).
+pathapp() { [[ -d "$1" ]] && PATH=$(echo ":$PATH:" | sed "s|:$1:|:|" | sed 's|^:||')"$1"; }
+
 pth() { # Returns absolute path to file(s) including file name.
+  local i
   for i in "$@"; do # Args = relative filenames.
-    if [ -d "$i" ]; then (pushd "$i" >/dev/null; pwd) # dir.
-    elif [ -f "$i" ]; then  # file.
-      case $i in */*) echo "$(pushd ${i%/*} >/dev/null; pwd)/${i##*/}" ;; *) echo "$PWD/$i" ;; esac
+    if [[ -d "$i" ]]; then (pushd "$i" >/dev/null || return 1; pwd) # dir.
+    elif [[ -f "$i" ]]; then  # file.
+      case $i in */*) echo "$(pushd "${i%/*}" >/dev/null || return 1; pwd)/${i##*/}" ;; *) echo "$PWD/$i" ;; esac
     fi
   done
 }
-# Clone repo and cd into path.
+# Clone repo and cd into path (can't be in git config as we cd).
 gcl() {
-  local clone_dir
+  local clone_dir ret
   clone_dir="$(set -o pipefail; git cl "$@" 3>&1 1>&2 2>&3 3>&- | tee /dev/stderr | awk -F \' '/Cloning into/ {print $2}' | head -1)"
-  local ret="$?"
-  [ "$clone_dir" -a -d "$clone_dir" ] && echo cd "$clone_dir" && cd "$clone_dir"
+  ret="$?"
+  [[ -d "$clone_dir" ]] && echo "cd $clone_dir" && cd "$clone_dir" || return 1
   return $ret
 }
 # Change to the most vanilla prompt for copy/pasting into GitHub etc.
 nop() {
-  if [[ -n "$ZSH_VERSION" ]]; then
-    _dot_old_prompt="$PROMPT"
-    PROMPT='$ ' NORPROMPT=true # Checked in gib-theme.zsh.
-    unset RPROMPT
-  elif [[ -n "$BASH_VERSION" ]]; then
-    unset PROMPT_COMMAND
-    PS1='$ '
-  fi
+  case $shell in
+    zsh)
+      _dot_old_prompt="$PROMPT"
+      # shellcheck disable=SC2034
+      PROMPT='$ ' NORPROMPT=true # Checked in gib-theme.zsh.
+      unset RPROMPT
+      ;;
+    bash) unset PROMPT_COMMAND; PS1='$ ' ;;
+  esac
 }
 # Restore the normal prompt, undoes the effects of nop.
 yep() {
-  if [[ -n "$ZSH_VERSION" ]]; then
-    PROMPT="$_dot_old_prompt"
-    unset _dot_old_prompt NORPROMPT
-  elif [[ -n "$BASH_VERSION" ]]; then
-    PROMPT_COMMAND=_gib_bash_prompt_command
-  fi
+  case $shell in
+    zsh) PROMPT="$_dot_old_prompt"; unset _dot_old_prompt NORPROMPT ;;
+    bash) PROMPT_COMMAND=_gib_bash_prompt_command ;;
+  esac
+}
+
+# Open vim with the results of the last rg/rga command in the quickfix list.
+rv() {
+  local cmd
+  cmd="$(fc -lnr -100 | awk '$1 == "rg" || $1 == "rga" {
+    out="rg --vimgrep"
+    if ($1 == "rga") { out=out" --hidden --no-ignore" }
+    for (i=2; i<=NF; i++) { out=out" "$i }
+    print out; exit
+  }')"
+  [[ -z "$cmd" ]] && { echo "No rg in the last 100 history commands."; return 1; }
+  $VIM -q <(eval "$cmd")
 }
 
 # }}} Functions
 
 # {{{ Path additions
 
+# Beginning of path:
 pathadd "$VULKAN_SDK/bin" # VulkanSDK packages.
 pathadd "/usr/local/opt/llvm/bin" # Homebrew clangd tools.
 pathadd "$GOPATH/bin" # Go binaries.
@@ -161,198 +184,172 @@ pathadd /usr/local/opt/ccache/libexec # Add ccache to the path if installed (mac
 pathadd "$CARGO_HOME/bin" # Rust packages.
 pathadd "$HOME/.local/bin"
 pathadd "$HOME/bin" # Put random binaries you want to run in here.
-[ -n "$VIRTUAL_ENV" ] && pathadd "$VIRTUAL_ENV/bin" # Virtual env needs to be in front of /usr/local/bin.
+[[ -n "$VIRTUAL_ENV" ]] && pathadd "$VIRTUAL_ENV/bin" # Virtual env needs to be in front of /usr/local/bin.
+
+# End of path:
+pathapp /usr/local/opt/coreutils/libexec/gnubin # Coreutils from brew on macOS, don't replace mac ls.
 
 # }}} Path Additions
 
 # {{{ Shell specific
-
-# Add to end of path.
-pathapp /usr/local/opt/coreutils/libexec/gnubin # Coreutils from brew on macOS, don't replace mac ls.
 exists gls && alias ls=gls
 if ls --color=auto >/dev/null 2>&1; then
-  exists gls && alias ls='gls --color=auto' || alias ls='ls --color=auto'
-  if [ -e "$XDG_DATA_HOME"/LS_COLORS/LS_COLORS ]; then
+  { exists gls && alias ls='gls --color=auto'; } || alias ls='ls --color=auto'
+  if [[ -e "$XDG_DATA_HOME"/LS_COLORS/LS_COLORS ]]; then
     eval "$(dircolors -b "$XDG_DATA_HOME/LS_COLORS/LS_COLORS")" # Load custom LS_COLORS from project.
   else
     source "$XDG_DATA_HOME/LS_COLORS.old" # Use old version if LS_COLORS not installed.
   fi
-  [ "$LS_COLORS" ] && export LS_COLORS # ls isn't a builtin, so colors must be exported.
-elif [ "$uname" = Darwin ]; then
+  [[ "$LS_COLORS" ]] && export LS_COLORS # ls isn't a builtin, so colors must be exported.
+elif [[ "$uname" = Darwin ]]; then
   alias ls='ls -G' # Colour ls on macOS.
   export LSCOLORS="Gxfxcxdxbxegedabagacad"
 fi
 
-[ "$uname" = Darwin ] && alias dl=rmtrash
-[ "$uname" = Linux ] && alias dl="gio trash"
+case $shell in
+  zsh) # zsh specific options.
+    export ZDOTDIR="${XDG_CONFIG_HOME}/zsh" # Path to zsh config files.
+    # cd pushes onto pushd stack (Try `cd -<Tab>`)
+    # If you type a file name/path by itself, cd to it, don't print dir on cd unless in $CDPATH.
+    setopt autopushd autocd pushd_silent pushdignoredups pushdminus
+    setopt prompt_subst prompt_percent # Allow variables and functions to be used in the prompt.
+    setopt no_list_ambiguous # Show menu on first tab if multiple matches (don't wait for second tab).
+    setopt no_list_beep # Don't beep if tab-complete has multiple choices, only if no such file.
+    setopt incappendhistory # Add to history file immediately (don't wait till shell exits).
+    setopt hist_ignore_all_dups hist_ignore_space share_history extended_history hist_expire_dups_first
+    setopt always_to_end complete_in_word long_list_jobs # Completion related options.
+    setopt interactive_comments # Allow comments in the terminal.
+    chpwd() { ls -A; } # Auto ls after changing directory.
+    CDPATH=~ # Check ~ for directories after checking . (`c/d/` matches `./c*/d*/`, then tries `~/c*/d*/`).
 
-if [ "$shell" = zsh ]; then # zsh specific options.
-  export ZDOTDIR="${XDG_CONFIG_HOME}/zsh" # Path to zsh config files.
-  # cd pushes onto pushd stack (Try `cd -<Tab>`)
-  # If you type a file name/path by itself, cd to it, don't print dir on cd unless in $CDPATH.
-  setopt autopushd autocd pushd_silent pushdignoredups pushdminus
-  setopt prompt_subst prompt_percent # Allow variables and functions to be used in the prompt.
-  setopt no_list_ambiguous # Show menu on first tab if multiple matches (don't wait for second tab).
-  setopt no_list_beep # Don't beep if tab-complete has multiple choices, only if no such file.
-  setopt incappendhistory # Add to history file immediately (don't wait till shell exits).
-  setopt hist_ignore_all_dups hist_ignore_space share_history extended_history hist_expire_dups_first
-  setopt always_to_end complete_in_word long_list_jobs # Completion related options.
-  setopt interactive_comments # Allow comments in the terminal.
-  chpwd() { ls -A; } # Auto ls after changing directory.
-  CDPATH=~ # Check ~ for directories after checking . (`c/d/` matches `./c*/d*/`, then tries `~/c*/d*/`).
+    fpath=( # ZSH Completion definitions. If you update this run `exec zsh`.
+      "$XDG_DATA_HOME/zfunc" # Put (or symlink) autocomplete scripts in here.
+      /usr/local/share/zsh-completions # Common zsh completions.
+      "${fpath[@]}"
+    ) # zsh-completions.
+    # If you get a compinit error, run: compaudit | xargs chmod g-w
 
-  # Put (or symlink) autocomplete scripts in here.
-  fpath=("$XDG_DATA_HOME/zfunc" "${fpath[@]}")
+    _gib_source_files=( # Files to source.
+      "$XDG_DATA_HOME/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+      "$XDG_DATA_HOME"/fzf/shell/key-bindings.zsh
+      "$XDG_DATA_HOME"/zfunc/source/* # Put completion files that need to be sourced here.
+      "$ZDOTDIR"/{completion-keybindings,gib-theme,macos-setdir}.zsh
+    )
+    for _gib_file in "${_gib_source_files[@]}"; do
+      [[ -r "$_gib_file" ]] && source "$_gib_file" || echo "GIBRC: Couldn't find file to source - '$_gib_file'"
+    done
+    unset _gib_file _gib_source_files
+  ;;
+  bash) # Bash specific options.
+    set -o vi # Vim mode in bash.
+    shopt -s autocd 2>/dev/null # type directory name to cd.
+    cs() { cd "$@" && ls; } # cs => cd and ls.
+    cd=cs # Used in .. commands below (so .. does `cs ..`).
+    CDPATH=:~ # Check ~ for directories after checking .
+    bind Space:magic-space 2>/dev/null # !31 autoexpands on space.
+    bind 'set completion-ignore-case on' 2>/dev/null # case-insensitive tab completion.
 
-  # Seems to be a bug in earlier zsh versions.
-  zsh_v=(${(@s/./)ZSH_VERSION}) # Convert version string to an array.
-  [[ "${zsh_v[0]}" -gt 4 || ("${zsh_v[0]}" -eq 4 && "${zsh_v[1]}" -gt 3) ]] && fpath=(/usr/local/share/zsh-completions  "${fpath[@]}") # zsh-completions.
-  # Load rbenv completions.
-  (( $+commands[rbenv] )) && source "$XDG_DATA_HOME/rbenv/completions/rbenv.zsh"
+    _gib_bash_prompt_command() {
+      local ret_status="$?"
+      local no_col='\e[0m' ret_col='\e[38;5;46m'
+      [[ "$ret_status" != 0 ]] && ret_col='\e[38;5;196m'
 
-  for file in "$ZDOTDIR"/{completion-keybindings,gib-theme,macos-setdir}.zsh; do
-    source "$file" || true
-  done
-  [[ "$unamem" != s390x ]] && source "$XDG_DATA_HOME/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" || true
+      PS1="\n"
+      [[ -n "$ssh" ]] && PS1+='\[\e[38;5;161m\]\h '"\[$no_col\]"
+      PS1+="\[${ret_col}\]·❯\[${no_col}\] "
 
-elif [ "$shell" = bash ]; then # Bash specific options.
-  set -o vi # Vim mode in bash.
-  shopt -s autocd 2>/dev/null # type directory name to cd.
-  cs() { cd "$@" && ls; } # cs => cd and ls.
-  cd=cs # Used in .. commands below (so .. does `cs ..`).
-  CDPATH=:~ # Check ~ for directories after checking .
-  bind Space:magic-space 2>/dev/null # !31 autoexpands on space.
-  bind 'set completion-ignore-case on' 2>/dev/null # case-insensitive tab completion.
+      local venv='' # If a virtual env was set, add it to the right prompt.
+      [[ -n "$VIRTUAL_ENV" ]] && venv="(${VIRTUAL_ENV##*/}) " # TODO(gib): Color this in 242.
+      printf "${ret_col}%*s${no_col}" "$COLUMNS" "$venv$(pwd | sed "s|^$HOME|~|")" # Right prompt equivalent in bash.
+    }
+    PROMPT_COMMAND=_gib_bash_prompt_command # Use the above function to generate the prompt.
+  ;;
+  ksh|ksh93) set -o vi; PS1="❯ " ;;
+esac
 
-  # TODO(gib): Fix bug where if you type a whole line, the second line wraps and overwrites the first one.
-  _gib_bash_prompt_command() {
-    local ret_status="$?"
-    local no_col='\e[0m' ret_col='\e[38;5;46m'
-    [[ "$ret_status" != 0 ]] && ret_col='\e[38;5;196m'
-
-    PS1="\n"
-    [[ -n "$ssh" ]] && PS1+='\e[38;5;161m\h '"$no_col"
-    PS1+="${ret_col}·❯${no_col} "
-
-    local venv='' # If a virtual env was set, add it to the right prompt.
-    [[ -n "$VIRTUAL_ENV" ]] && venv="(${VIRTUAL_ENV##*/}) " # TODO(gib): Color this in 242.
-    printf "${ret_col}%*s${no_col}" "$COLUMNS" "$venv$(pwd | sed "s|^$HOME|~|")" # Right prompt equivalent in bash.
-  }
-  PROMPT_COMMAND=_gib_bash_prompt_command # Use the above function to generate the prompt.
-fi
 command mkdir -p "$XDG_CACHE_HOME/$shell"  # Create HISTFILE dir if necessary.
 
 # }}} Shell Specific
 
 # {{{ Aliases
 
-alias x="exit 0" # x exits the terminal.
-alias c=clear # c clears the terminal screen (can also use Ctrl-L).
-alias g=git # Use with commands in $c/git/config for best results.
-
-alias path='echo $PATH | sed "s/:/\n/g"' # Single quotes so we echo path at runtime, not alias time.
-alias h=history # Shows command history.
+# x->close terminal, c->clear screen (Ctrl-L), g->git, h->history, path->print $PATH, 
+alias x=exit c=clear g=git h=history path='echo $PATH | sed "s/:/\n/g"' dt="date +%Y-%m-%d"
 alias s="TERM=xterm-256color ssh" # Reset cursor to block and ssh.
-alias dt="date +%Y-%m-%d" # Basic date format (unambiguous, easy to sort etc.)
-alias dT="date +%d-%b-%y" # More readable date format (ambiguous).
 
-alias l='ls -lAh' # Hidden, detail, human readable numbers.
-alias la='ls -A'  # List hidden files as well.
-alias ll='ls -l'  # Gives more detail about files.
-[ -z "$cd" ] && cd=cd # We only want cd=cs in bash.
-alias ..="$cd .."             # .. -> go up a directory.
-alias ...="$cd ../.."             # ↳ go up two directories.
-alias ....="$cd ../../.."         # ↳ go up two directories.
-alias .....="$cd ../../../.."     # ↳ go up two directories.
-alias ......="$cd ../../../../.." # ↳ go up two directories.
-alias -- -="$cd -" # - cd's to the last directory.
-# Execute previous commands (1 = !-2, 2 = !-3 etc., remember that Enter is !!)
-alias 1="fc -e : -2"; alias 2="fc -e : -3"
+# l->full detail + hidden, la->no detail + hidden, ll->full detail no hidden, md->create dir.
+alias l='ls -lAh' la='ls -A' ll='ls -l' md="mkdir -p"
+[[ -z "$cd" ]] && cd="cd" # We only want cd=cs in bash.
+# .. = up 1 dir, ... = up 2 dirs, .... = up 3 dirs (etc.). - = go to last dir.
+# shellcheck disable=SC2139 # We want this to expand when defined.
+alias ..="$cd .." ...="$cd ../.." ....="$cd ../../.." .....="$cd ../../../.." ......="$cd ../../../../.."
+# shellcheck disable=SC2139 # We want this to expand when defined.
+alias -- -="$cd -"
+unset cd
 
-{ works nvim && VIM=nvim; } || { works vim && VIM=vim; } || VIM=vi # Take what you can get.
+{ works nvim && VIM="nvim"; } || { works vim && VIM="vim"; } || VIM="vi" # Take what you can get.
 export VISUAL=${VISUAL:-$VIM} EDITOR=${EDITOR:-$VIM} # Set vim/nvim as the default editor.
+# shellcheck disable=SC2139 # We want this to expand when defined.
 alias xv="xargs \$${ZSH_VERSION:+=}VISUAL" v="\$${ZSH_VERSION:+=}VISUAL" # Work around zsh's "helpful" autoquoting.
 exists vimr && alias vm=vimr # Use `vm` for GUI vim, need to add a Linux equivalent.
-rv() {
-  local last_rg cmd
-  last_rg="$(fc -ln -m 'rg *|rga *' -100 | tail -n 1)" || { echo "No rg command found in last 100 commands." && return 1; }
-  cmd=("rg"
-    "$([[ "${last_rg%% *}" == rga ]] && echo "--hidden --no-ignore")"
-    "--vimgrep"
-    "${last_rg#* }"
-  )
-  [[ -n "$ZSH_VERSION" ]] && $VIM -q <($=cmd) || $VIM -q <($cmd)
-}
 
 ulimit -c unlimited # Allow saving of coredumps.
 alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"' # Makes it look like you're busy with important hacker stuff.
-[ "$uname" = Darwin ] && alias ldd="otool -L" # macOS equivalent to ldd.
-[ "$uname" = Darwin ] && { alias cpy="pbcopy"; alias pst="pbpaste"; alias o=open; } # Cross-platform copy/paste/open terminal commands.
-[ "$uname" = Linux ] && { alias cpy="xclip -selection clipboard"; alias pst="xclip -selection clipboard -o"; alias o=xdg-open; }
+# Cross-platform copy/paste/open/ldd/delete terminal commands.
+case $uname in
+  Darwin) alias ldd="otool -L" cpy="pbcopy" pst="pbpaste" o=open dl=rmtrash ;;
+  Linux) alias cpy="xclip -selection clipboard" pst="xclip -selection clipboard -o" o=xdg-open dl="gio trash" ;;
+esac
+
+# fda is find all (don't ignore anything).
+{ exists fd && alias fda="fd --no-ignore --hidden"; } \
+  || fd() { find . -iname "*$**"; } # Find by filename (case insensitive).
+exists rg && alias rga="rg --hidden --no-ignore" # rga is grep all (don't ignore anything).
 
 # }}} Aliases
 
 # {{{ Tool specific
 
 # Set up fzf.
-if exists fzf && fzf --version >/dev/null 2>&1; then
-  exists fd && { export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git' # Use fd for fuzzy finding if available.
-                 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-                 # TODO(gib): Finish this (fix stdout, add git aliases).
-                 alias preview="fzf --preview 'bat --color \"always\" {}'"
-                 export FZF_DEFAULT_OPTS="-m --bind='ctrl-o:execute(\$VISUAL {})',ctrl-t:toggle-all,alt-j:jump,alt-k:jump-accept" # Open files in visual editor.
-               }
-  for file in "$XDG_DATA_HOME"/fzf/shell/{completion,key-bindings}.$shell; do
-    source "$file" # 2>/dev/null || true
-  done
+if [[ $shell == bash || $shell == zsh ]] && exists fzf && exists fd; then
+  export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git' # Use fd for fuzzy finding if available.
+  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+  # TODO(gib): Finish this (fix stdout, add git aliases).
+  alias preview="fzf --preview 'bat --color \"always\" {}'"
+  export FZF_DEFAULT_OPTS="-m --bind='ctrl-o:execute(\$VISUAL {})',ctrl-t:toggle-all,alt-j:jump,alt-k:jump-accept" # Open files in visual editor.
 fi
 
 # Set up nvm
 # I don't have nvm autorun on every shell, I use `nv` when I want to start it.
-# This also allows me to frequently `make -j4 install` node master, and have
-# that as the default (in /usr/local/bin/node).
-export npm_config_userconfig="$XDG_CONFIG_HOME/npm/config"
-[ ! -d "$(dirname "$npm_config_userconfig")" ] && command mkdir -p "$(dirname "$npm_config_userconfig")"
-export NVM_DIR="$XDG_DATA_HOME/$([ "$unamem" != x86_64 ] && echo "$unamem/")nvm"
+[[ ! -d "$(dirname "$npm_config_userconfig")" ]] && command mkdir -p "$(dirname "$npm_config_userconfig")"
+# On x86_64 machines nvm dir is ~/.local/share/nvm, on s390x it's ~/.local/share/s390x/nvm.
+NVM_DIR="$XDG_DATA_HOME/${unamem/x86_64/}/nvm"; export NVM_DIR
 alias nv='. $NVM_DIR/nvm.sh'  # Start nvm with alias, o/w too much startup cost.
 
 ## Rust commands.
-alias cn="cargo new --bin" cb="cargo build" cr="cargo run" ct="cargo test"
-alias ctag='ctags -R . $HOME/bin/src/rust' # Populate ctags from rust src.
-alias ru=rustup e=exercism k=kak
-rs() { for i in "$@"; do rustc ${i%.rs}.rs; ./${i%.rs}; done; } # Compile/run (rs a.rs b).
+alias cn="cargo new" cb="cargo build" cr="cargo run" ct="cargo test" ru=rustup
+rs() { for i in "$@"; do rustc "${i%.rs}.rs"; ./"${i%.rs}"; done; } # Compile/run (rs a.rs b).
 
 # Build node with ninja.
 alias bn='export CPPFLAGS=-fdiagnostics-color && ./configure && tools/gyp_node.py -f ninja && ninja -C out/Release && ln -fs out/Release/node node'
 
 ## Set prompt for SSH windows.
-if [ "$ssh" ]; then
+if [[ "$ssh" ]]; then
   case $shell in
     zsh|fish|bash) ;; # These should be set elsewhere.
-    ksh93) PS1='\E[35;1m '"$(hostname)"' \n $PWD \E[0m $ ' ;;
-    *) PS1="$(hostname) ·❯ " ;;
+    ksh93) PS1='\E[35;1m '"$(hostname)"' \n $PWD \E[0m ❯ ' ;;
+    *) PS1="$(hostname) ❯ " ;;
   esac
 else # Things to only do if we're not in SSH mode.
   # Set key repeat rate if available (Linux only). You probably want something less insane here, like rate 250 30.
-  if [ "$uname" = Linux ]; then
+  if [[ "$uname" = Linux ]]; then
     exists xset && xset r rate 120 45
     export PANEL_FIFO="/tmp/panel-fifo" # Used by bspwm.
   fi
 fi
 
-# Basic keys on old shells.
-if [ "$shell" = ksh93 -o "$shell" = ksh ]; then
-  set -o emacs
-  alias __A=`echo "\020"`     # up arrow = ^p = back a command.
-  alias __B=`echo "\016"`     # down arrow = ^n = down a command.
-  alias __C=`echo "\006"`     # right arrow = ^f = forward a character.
-  alias __D=`echo "\002"`     # left arrow = ^b = back a character.
-  alias __H=`echo "\001"`     # home = ^a = start of line.
-  alias __Y=`echo "\6"`       # end = ^e = end of line.
-fi
-
-export GIBRC="$(expr $GIBRC + 1)" # Increment GIBRC.
+GIBRC="$((GIBRC++))" # Increment GIBRC.
 
 # }}} Tool specific
 
-# vim: foldmethod=marker filetype=sh
+# vim: foldmethod=marker filetype=sh tw=100

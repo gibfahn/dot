@@ -13,7 +13,7 @@ function omz_urlencode() {
   local in_str=$1
   local url_str=""
   local spaces_as_plus
-  if [[ -z $opts[(r)-P] ]]; then spaces_as_plus=1; fi
+  [[ -n $opts[(r)-P] ]] || spaces_as_plus=1
   local str="$in_str"
 
   # URLs must use UTF-8 encoding; convert str to UTF-8 if required

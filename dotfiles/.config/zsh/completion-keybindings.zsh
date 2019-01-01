@@ -1,4 +1,5 @@
 # Fzf git files (unstaged).
+# shellcheck shell=bash disable=SC2016
 _gib_git_f() {
   git -c color.status=always status --short |
   fzf --height 50% "$@" --border -m --ansi --nth 2..,.. \
@@ -31,10 +32,11 @@ _gib_git_r() {
   cut -d$'\t' -f1
 }
 # More fzf helpers.
-_gib_join-lines() { local item; while read item; do echo -n "${(q)item} "; done; }
+# shellcheck disable=2034,SC2154
+_gib_join-lines() { local item; while read -r item; do echo -n "${(q)item} "; done; }
 bind-git-helper() {
   local c
-  for c in $@; do
+  for c in "$@"; do
     eval "_gib_fzf-g$c-widget() { git rev-parse HEAD > /dev/null 2>&1 || return; local result=\$(_gib_git_$c | _gib_join-lines); zle reset-prompt; LBUFFER+=\$result }"
     eval "zle -N _gib_fzf-g$c-widget"
     eval "bindkey -M viins '^g^$c' _gib_fzf-g$c-widget"
@@ -42,6 +44,7 @@ bind-git-helper() {
 }
 
 zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} r:|[.,_-]=*'
+# shellcheck disable=SC2154
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}" # Use LS_COLORS in file completion menu.
 zstyle ':completion:*:*:*:*:*' menu "select" # Make the completion selection menu a proper menu.
 
@@ -49,9 +52,9 @@ zstyle ':completion:*:*:*:*:*' menu "select" # Make the completion selection men
 zstyle ':completion::complete:*' use-cache 1
 zstyle ':completion::complete:*' cache-path "$XDG_CACHE_HOME"/zsh
 
-autoload -U compinit
+autoload -Uz compinit
 # TODO(gib): Work out why this is slow on Darwin and fix it.
-[ "$ssh" -a "$uname" = Darwin ] || compinit -d "$XDG_CACHE_HOME"/zsh/.zcompdump$(hostname)
+[[ -n "${ssh:-}" && "${uname:-}" = Darwin ]] || compinit -d "$XDG_CACHE_HOME/zsh/.zcompdump$(hostname)"
 zstyle ':bracketed-paste-magic' active-widgets '.self-*' # https://github.com/zsh-users/zsh-autosuggestions/issues/141
 
 # Vim mode and keybindings in zsh:
@@ -81,6 +84,7 @@ zle-line-init() {
 zle -N accept-line # Redefine accept-line to insert last input if empty (Enter key).
 zle -N zle-keymap-select # I-beam cursor in insert mode, block otherwise.
 zle -N zle-line-init     # Part of above cursor hack ^.
+# shellcheck disable=SC2034
 KEYTIMEOUT=10 # Key delay of 0.1s (Esc in vim mode is quicker).
 
 bindkey -v # Enable vim mode in zsh.
@@ -97,6 +101,7 @@ bindkey -M viins "^S" history-incremental-search-forward  # Restore <Ctrl>-S for
 bindkey -M main "^[[A" history-beginning-search-backward-end # Re-enable up   for history search.
 bindkey -M main "^[[B" history-beginning-search-forward-end  # Re-enable down for history search.
 bindkey ' ' magic-space # <Space> = do history expansion
+# shellcheck disable=SC2154
 bindkey "${terminfo[kcbt]}" reverse-menu-complete   # <Shift>-<Tab> - move backwards through the completion menu.
 bindkey -M vicmd ' ' edit-command-line # <Space> in cmd mode opens editor.
 
