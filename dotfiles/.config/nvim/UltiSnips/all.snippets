@@ -1,0 +1,19 @@
+# Copied from https://github.com/honza/vim-snippets/blob/master/UltiSnips/all.snippets
+
+# This file contains snippets that are always defined. I personally
+# have snippets for signatures and often needed texts
+
+# sligthly lower priority than everything else since specialized versions
+# should overwrite. The user needs to adjust her priority in her snippets to
+# ~-55 so that other filetypes will still overwrite.
+priority -55
+
+global !p
+from vimsnippets import get_comment_format
+endglobal
+
+snippet do "TODO(gib):" bw
+`!p snip.rv=get_comment_format()[0]` TODO(gib): $0
+endsnippet
+
+

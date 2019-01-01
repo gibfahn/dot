@@ -134,7 +134,7 @@ endtry
 " }}} Set vim options
 
 " {{{ Key mappings (see http://vim.wikia.com/wiki/Unused_keys for unused keys)
-" Available (normal): <C-Space>, +, _, <C-q/s/[/_>, <leader>b/e/h/m/n/u/v
+" Available (normal): <C-Space>, +, _, <C-q/s/[/_>, <leader>e/m/n/v
 
 " In insert mode, if completion dropdown open, Tab/Shift-Tab switch between
 " entries. Otherwise if the previous character was a space they indent, else Tab
@@ -171,6 +171,7 @@ nnoremap <Leader>cf :call LanguageClient_textDocument_formatting()<CR>| " Format
 nnoremap <Leader>ck :call LanguageClient_textDocument_hover()<CR>| " Show definition.
 nnoremap <Leader>cl :call LanguageClient_textDocument_documentSymbol()<CR>| " List symbols in the current file.
 nnoremap <Leader>cr :call LanguageClient_textDocument_rename()<CR>| " Rename var/func under cursor.
+nnoremap <Leader>cs :Snippets<CR>| " Show list of current snippets.
 nnoremap <Leader>cu :call LanguageClient_textDocument_references()<CR>| " Show usages of current symbol.
 nnoremap <leader>ch :call LanguageClient#debugInfo()<CR>| " Show debugging (help) info.
 vnoremap <Leader>cf :call LanguageClient#textDocument_rangeFormatting()<CR>| " Format selected lines.
@@ -413,6 +414,7 @@ let g:sneak#target_labels = ";sftunqm/`'-+SFGHLTUNRMQZ?0123456789!()\\[]:|<>QWER
 let g:sneak#use_ic_scs = 1                          " Sneak: respect smartcase setting.
 let g:surround_no_mappings = 1                      " See SurroundOp function.
 let g:ulti_expand_or_jump_res = 0                   " Initial setting, used in ExpandSnippetOrCarriageReturn().
+let g:snips_author = 'gib'                          " Your handle, used in ultisnips snippets.
 
 let g:LanguageClient_serverCommands = {
     \ 'cpp': ['clangd'],
@@ -423,7 +425,7 @@ let g:LanguageClient_serverCommands = {
     \ 'kotlin': ['kotlin-language-server'],
     \ 'python': ['pyls'],
     \ 'ruby': ['solargraph', 'stdio'],
-    \ 'rust': ['rls'],
+    \ 'rust': ['rustup', 'run', 'stable', 'rls'],
     \ 'sh': ['bash-language-server', 'start'],
     \ 'swift': ['langserver-swift'],
     \ 'yaml': ['yaml-language-server'],
