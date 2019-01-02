@@ -231,9 +231,9 @@ case $shell in
 
     _gib_source_files=( # Files to source.
       "$XDG_DATA_HOME/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-      "$XDG_DATA_HOME"/fzf/shell/key-bindings.zsh
       "$XDG_DATA_HOME"/zfunc/source/* # Put completion files that need to be sourced here.
       "$ZDOTDIR"/{completion-keybindings,gib-theme,macos-setdir}.zsh
+      "$XDG_DATA_HOME"/fzf/shell/key-bindings.zsh
     )
     for _gib_file in "${_gib_source_files[@]}"; do
       [[ -r "$_gib_file" ]] && source "$_gib_file" || echo "GIBRC: Couldn't find file to source - '$_gib_file'"
