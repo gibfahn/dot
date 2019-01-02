@@ -41,7 +41,7 @@ get() {
 
 # Used when you're going to install something.
 update() {
-    printf "${CYAN}❯❯❯   Updating:${NC} %s\n" "%s"
+    printf "${CYAN}❯❯❯   Updating:${NC} %s\n" "$1"
 }
 
 # Used when you're not going to install something.
@@ -86,9 +86,9 @@ gitUpdate() {
   DIR="$1" # First arg is directory.
 
   local skip exit_code uncommitted_changes upstream_commits upstream_submodule_updates
-  pushd "$DIR" || return 1
+  pushd "$DIR" >/dev/null || return 1
 
-  git fetch --all
+  git fetch --all >/dev/null || return 1
 
   skip=true   # Whether we did anything or just skipped this update.
   exit_code=200 # What the function should return (default 200 == no changes so skipped).
@@ -128,7 +128,7 @@ gitUpdate() {
   fi
 
   { [ "$skip" ] && skip "$@"; } || update "$@"
-  popd || return 1
+  popd >/dev/null || return 1
   return "$exit_code"
 }
 

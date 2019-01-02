@@ -181,7 +181,7 @@ fi
 
 # Install ruby gems
 for gem in "${ruby_gems[@]}"; do
-  if gem list -i "$gem"; then
+  if gem list -I "$gem" >/dev/null; then
     get "gem: $gem"
     gem install "$gem"
   else
