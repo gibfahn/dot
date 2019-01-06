@@ -42,10 +42,13 @@ try
   Plug 'gibfahn/vim-gib'                            " Use vim colorscheme.
   Plug 'godlygeek/tabular'                          " Make tables easier (:help Tabular).
   Plug 'honza/vim-snippets'                         " List of premade snippets for many languages.
+  Plug 'itchyny/lightline.vim'                      " Customize statusline and tabline.
   Plug 'junegunn/fzf', { 'dir': '~/.local/share/fzf', 'do': './install --bin' } " :h fzf
   Plug 'junegunn/fzf.vim'                           " Try :Files, :GFiles? :Buffers :Lines :History :Commits :BCommits
   Plug 'junegunn/vim-peekaboo'                      " Pop up register list when pasting/macroing.
   Plug 'justinmk/vim-sneak'                         " sab -> go to next ab in code (:h sneak-mappings for default mappings).
+  Plug 'kana/vim-textobj-line'                      " Adds `il` and `al` text objects for current line.
+  Plug 'kana/vim-textobj-user'                      " Allows you to create custom text objects (used in vim-textobj-line).
   Plug 'pangloss/vim-javascript'                    " JS   language bindings.
   Plug 'raghur/vim-ghost', {'do': ':GhostInstall'}  " Edit browser text areas in Neovim (:h ghost).
   Plug 'redhat-developer/yaml-language-server', {'do': 'npm install && npm run compile'} " Language server for yaml files.
@@ -53,13 +56,14 @@ try
   Plug 'roxma/vim-hug-neovim-rpc',  Cond(v:version >= 800 && !has('nvim')) " Neovim rpc client for Vim8.
   Plug 'rust-lang/rust.vim'                         " Rust language bindings.
   Plug 'sheerun/vim-polyglot'                       " Syntax files for a large number of different languages.
-  Plug 'sjl/gundo.vim'                              " Interactive undo tree (<space>u to toggle on/off, q to quit).
+  Plug 'simnalamburt/vim-mundo'                     " Graphical undo tree (updated fork of Gundo).
   Plug 'takac/vim-hardtime'                         " Disable key repeat.
   Plug 'tpope/vim-abolish'                          " Work with variants of words (replacing, capitalizing etc).
   Plug 'tpope/vim-commentary'                       " Autodetect comment type for lang.
   Plug 'tpope/vim-fugitive'                         " Git commands in vim.
   Plug 'tpope/vim-repeat'                           " Allows you to use . with plugin mappings.
   Plug 'tpope/vim-rhubarb'                          " GitHub support.
+  Plug 'tpope/vim-sleuth'                           " Automatically detect indentation.
   Plug 'tpope/vim-surround'                         " Add/mod/remove surrounding chars.
   Plug 'tpope/vim-unimpaired'                       " [ and ] mappings (help unimpaired).
 
@@ -98,6 +102,7 @@ set lazyredraw                                      " Don't redraw if you don't 
 set list listchars=tab:»·,trail:·,nbsp:☠            " Display extra whitespace.
 set mouse=a                                         " Mouse in all modes (mac: Fn+drag = copy).
 set nojoinspaces                                    " One space (not two) after punctuation..
+set noshowmode                                      " Don't show when in insert mode (set in lightline).
 set notildeop                                       " Keep tilde (~) as it's default. If you want the operator version use g~.
 set number                                          " Turn on line numbers.
 set ruler                                           " Always show cursor position.
@@ -147,11 +152,11 @@ inoremap <expr> <CR> pumvisible() ? "<C-R>=ExpandSnippetOrCarriageReturn()<CR>" 
 nnoremap          Q <nop>|                          "  ↳ accidental triggering).
 nnoremap          Y y$|                             " Make Y work like C and D (yank to end of line, not whole line).
 " To open vim's current directory, use `:e .`.
-nnoremap          - :e %:h<CR>|             " - open current buffer directory in file browser (repeat for `cd ..`).
-nmap              f <Plug>Sneak_f|                  " Use sneak for f (multiline+highlight).
-nmap              F <Plug>Sneak_F|                  " ↳             F
-nmap              t <Plug>Sneak_t|                  " ↳             t
-nmap              T <Plug>Sneak_T|                  " ↳             T
+nnoremap - :e %:h<CR>|    " - open current buffer directory in file browser (repeat for `cd ..`).
+nmap     f <Plug>Sneak_f| " Use sneak for f (multiline+highlight).
+nmap     F <Plug>Sneak_F| " ↳             F
+nmap     t <Plug>Sneak_t| " ↳             t
+nmap     T <Plug>Sneak_T| " ↳             T
 
 " Delete window to the left/below/above/to the right with d<C-h/j/k/l>.
 nnoremap d<C-j> <C-w>j<C-w>c
@@ -159,8 +164,8 @@ nnoremap d<C-k> <C-w>k<C-w>c
 nnoremap d<C-h> <C-w>h<C-w>c
 nnoremap d<C-l> <C-w>l<C-w>c
 
-nnoremap          <Leader>a @a<CR>|                 " Apply macro a (add with qa or yank to a reg with "ay).
-nnoremap          <Leader>b :Buffers<CR>|           " Search buffer list for file.
+nnoremap <Leader>a @a<CR>|       " Apply macro a (add with qa or yank to a reg with "ay).
+nnoremap <Leader>b :Buffers<CR>| " Search buffer list for file.
 
 " <Space>-c: call the LanguageClient (IDE type commands).
 nnoremap <Leader>ca :call LanguageClient#textDocument_codeAction()<CR>| " Show menu of available code actions.
@@ -208,7 +213,7 @@ nnoremap        <Leader>QQ :q!<CR>|               "      ↳ losing unsaved chan
 nnoremap        <Leader>r :%s/|                   " Replace (e.g. <Space>rold/new),
 nnoremap        <Leader>R :%s//c<Left><Left>|     "  ↳ Replace with prompt on each match.
 map             <Leader>s <Plug>(easymotion-bd-w)| " EasyMotion: Move to word.
-nnoremap        <Leader>u :GundoToggle<CR>|       " Toggle Undo tree visualisation.
+nnoremap        <Leader>u :MundoToggle<CR>|       " Toggle Undo tree visualisation.
 nnoremap        <Leader>w :up<CR>|                " Write if there were changes.
 nnoremap        <Leader>W :w<CR>|                 " Write whether or not there were changes.
 nnoremap        <Leader>x :x<CR>|                 " Save (if changes) and quit.
@@ -270,8 +275,9 @@ onoremap if :normal Vif<CR>
 vnoremap af :<C-U>silent!normal![zV]z<CR>
 onoremap af :normal Vaf<CR>
 
-" See SurroundOp function.
-omap <expr> s '<esc>'.SurroundOp()
+" See SurroundOp() function.
+omap <expr> s '<esc>'.SurroundOp('s')
+omap <expr> S '<esc>'.SurroundOp('S')
 
 " %% expands to dirname of current file.
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
@@ -328,14 +334,14 @@ function! s:check_last_char_was_space() abort
 endfunction
 
 " Make vim-surround work in operator-pending mode, so the cursor changes when you press e.g. ys.
-" Requires custom mapping and disabling default mappings (/SurroundOp).
-function! SurroundOp()
+" Requires custom mapping and disabling default mappings (SurroundOp).
+function! SurroundOp(char)
     if v:operator ==# 'd'
-        return "\<plug>Dsurround"
+        return "\<plug>D" . a:char . "urround"
     elseif v:operator ==# 'c'
-        return "\<plug>Csurround"
+        return "\<plug>C" . a:char . "urround"
     elseif v:operator ==# 'y'
-        return "\<plug>Ysurround"
+        return "\<plug>Y" . a:char . "urround"
     endif
     return ''
 endfunction
@@ -381,7 +387,7 @@ endif
 
 " }}} Functions used in key mappings above.
 
-" {{{ Custom commands
+" {{{ Custom commands, Autocommands, global variables
 command! Trim call TrimWhitespace()|                " :Trim runs :call Trim() (defined below).
 command! PU PlugClean | PlugUpdate | PlugUpgrade|   " :PU updates/cleans plugins and vim-plug.
 
@@ -395,41 +401,67 @@ let g:UltiSnipsJumpBackwardTrigger="<Up>"           " Up arrow goes to previous 
 let g:UltiSnipsJumpForwardTrigger="<Down>"          " Down arrow goes to next snippet area.
 let g:buftabline_indicators = 1                     " Show a + if the buffer has been modified.
 let g:buftabline_numbers = 2                        " Show buftabline's count (use <Leader>1-9 to switch.
-let g:deoplete#enable_at_startup = 1                " Enable deoplete by default.
-let g:echodoc#enable_at_startup = 1
+let g:echodoc#enable_at_startup = 1                 " Enable echodoc by default.
 let g:echodoc#type = 'virtual' " Needs nvim 0.3.2 (`brew unlink neovim && brew install --HEAD neovim` for now).
 let g:ghost_darwin_app = 'kitty'                    " Tell vim-ghost which terminal to open.
 let g:github_enterprise_urls = ['https://github.pie.apple.com'] " Add your GHE repo so vim-fugitive's :Gbrowse! can use it (try with visual mode).
-let g:gundo_preview_bottom = 1                      " Undo diff preview on bottom.
-let g:gundo_right = 1                               " Undo window on right.
 let g:hardtime_allow_different_key = 1              " Allow alternating keys (e.g. kj).
 let g:hardtime_default_on = 1                       " Don't allow repeated keypresses by default.
+let g:hardtime_ignore_quickfix = 1                  " Don't give me a hard time about repeated keys in quickfix window.
 let g:is_posix = 1                                  " Assume shell for syntax highlighting.
 let g:list_of_insert_keys = ["<LEFT>", "<RIGHT>"]   " Don't use hardtime for <Up> <Down> (used in Ultisnips).
-let g:loaded_netrw = 1
+let g:loaded_netrw = 1                              " Skip loading netrw file browser (use vim-readdir instead).
 let g:loaded_netrwPlugin = 1                        " Don't use the built-in file browser (use vim-readdir instead).
+let g:mundo_preview_bottom = 1                      " Undo diff preview on bottom.
+let g:mundo_right = 1                               " Undo window on right.
 let g:peekaboo_window = "vert bo 50new"             " Increase peekaboo window width to 50.
 let g:sneak#label = 1                               " Make sneak like easymotion (but nicer).
 let g:sneak#target_labels = ";sftunqm/`'-+SFGHLTUNRMQZ?0123456789!()\\[]:|<>QWERTYUIOPASDFGHJKLZXCVBNM.\"\,:qwertyuiopasdfghjklzxcvbnm" " Labels sneak uses to show words.
 let g:sneak#use_ic_scs = 1                          " Sneak: respect smartcase setting.
-let g:surround_no_mappings = 1                      " See SurroundOp function.
-let g:ulti_expand_or_jump_res = 0                   " Initial setting, used in ExpandSnippetOrCarriageReturn().
 let g:snips_author = 'gib'                          " Your handle, used in ultisnips snippets.
+let g:ulti_expand_or_jump_res = 0                   " Initial setting, used in ExpandSnippetOrCarriageReturn().
+let g:surround_no_mappings = 1                      " Manually map surround, see SurroundOp() function.
+
+let g:lightline = {
+  \ 'colorscheme': 'wombat',
+  \ 'active': {
+    \ 'left': [ [ 'mode', 'paste' ],
+    \           [ 'readonly', 'relativepath', 'modified' ],
+    \           [ 'gitbranch', ], ],
+    \ 'right': [ [ 'lineinfo' ],
+    \            [ 'percent' ],
+    \            [ 'fileformat', 'fileencoding', 'filetype' ] ] },
+  \ 'inactive': {
+    \ 'left': [ [ 'filename' ] ],
+    \ 'right': [ [ 'lineinfo' ],
+    \            [ 'percent' ] ] },
+  \ 'tabline': {
+    \ 'left': [ [ 'tabs' ] ],
+    \ 'right': [ [ 'close' ] ] },
+ \ 'component': {
+    \ 'fileformat': '%{&ff=="unix"?"":&ff}',
+    \ 'fileencoding': '%{&fenc=="utf-8"?"":&fenc}' },
+ \ 'component_visible_condition': {
+    \ 'fileformat': '&ff&&&ff!="unix"',
+    \ 'fileencoding': '&fenc&&&fenc!="utf-8"' },
+ \ 'component_function': {
+    \ 'gitbranch': 'fugitive#head', },
+  \ }
 
 let g:LanguageClient_serverCommands = {
-    \ 'cpp': ['clangd'],
-    \ 'go': ['go-langserver'],
-    \ 'java': ['jdtls', '-Dlog.level=ALL'],
-    \ 'javascript': ['javascript-typescript-stdio'],
-    \ 'javascript.jsx': ['javascript-typescript-stdio'],
-    \ 'kotlin': ['kotlin-language-server'],
-    \ 'python': ['pyls'],
-    \ 'ruby': ['solargraph', 'stdio'],
-    \ 'rust': ['rustup', 'run', 'stable', 'rls'],
-    \ 'sh': ['bash-language-server', 'start'],
-    \ 'swift': ['langserver-swift'],
-    \ 'yaml': ['yaml-language-server'],
-    \ }
+  \ 'cpp': ['clangd'],
+  \ 'go': ['go-langserver'],
+  \ 'java': ['jdtls', '-Dlog.level=ALL'],
+  \ 'javascript': ['javascript-typescript-stdio'],
+  \ 'javascript.jsx': ['javascript-typescript-stdio'],
+  \ 'kotlin': ['kotlin-language-server'],
+  \ 'python': ['pyls'],
+  \ 'ruby': ['solargraph', 'stdio'],
+  \ 'rust': ['rustup', 'run', 'stable', 'rls'],
+  \ 'sh': ['bash-language-server', 'start'],
+  \ 'swift': ['langserver-swift'],
+  \ 'yaml': ['yaml-language-server'],
+  \ }
 let g:LanguageClient_settingsPath = $XDG_CONFIG_HOME . '/nvim/settings.json'
 let g:LanguageClient_diagnosticsList = "Location" " Don't overwrite quickfix list with linter/checker output.
 " Debugging options for the language client/server:
@@ -449,6 +481,7 @@ endif
 
 augroup gibAutoGroup                                " Group of automatic functions.
   autocmd!|                                         " Remove existing autocmds.
+  autocmd InsertEnter * call deoplete#enable()|     " Only enable deoplete when you go into insert mode.
   autocmd BufReadPost *|                            " On open jump to last cursor position if possible.
     \ if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") |
     \   execute "normal g`\"" |
@@ -460,7 +493,7 @@ augroup gibAutoGroup                                " Group of automatic functio
   autocmd FileType json setlocal foldmethod=indent  " JSON files should be folded by indent.
   autocmd FileType python setlocal foldmethod=indent textwidth=100  " Python files should be folded by indent.
   autocmd BufNewFile,BufRead *.bats set filetype=sh " Bats is a shell test file type.
-  autocmd BufWritePost $MYVIMRC so $MYVIMRC|        " Reload vimrc on save.
+  autocmd BufWritePost $MYVIMRC nested source $MYVIMRC " Reload vimrc on save.
   autocmd QuickFixCmdPost *grep* cwindow|           " Open the quickfix window on grep.
   autocmd VimEnter * silent! tabonly|               " Don't allow starting Vim with multiple tabs.
   " Check if files modified when you open a new window, switch back to vim, or if you don't move the cursor for 100ms.
@@ -475,6 +508,6 @@ function! TrimWhitespace()
   call winrestview(l:save)
 endfunction
 
-" }}} Custom commands
+" }}} Custom commands, Autocommands, global variables
 
 " vim: foldmethod=marker
