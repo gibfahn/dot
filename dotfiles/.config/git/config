@@ -5,6 +5,8 @@
   headUpstream = rev-parse --abbrev-ref --symbolic-full-name @{u} # Upstream of current branch, e.g. origin/master.
   headRemote = "!git rev-parse --abbrev-ref --symbolic-full-name @{u} | cut -d '/' -f 1" # e.g. origin.
   headBranch = symbolic-ref --short HEAD # e.g. master.
+  remoteOrg = "!git remote get-url $1 | awk -F '/' '{print $(NF-1)}' #" # Github org for remote. `g remoteOrg up` -> gibfahn.
+  defaultBranch = "!git symbolic-ref --short refs/remotes/$1/HEAD | sed \"s|^$1/||\" #" # Default branch for remote. `g defaultBranch up` -> master
   # Quote an alias you want to save here (handles all the nonsense quoting stuff).
   quote-string = "!read -r l; printf \\\"!; printf %s \"$l\" | sed 's/\\([\\\"]\\)/\\\\\\1/g'; printf \" #\\\"\\n\" #"
   # Removes all branches and tags except "$1" (default oldmaster).
@@ -71,7 +73,7 @@
   fp = "! b=${2:-$(git headRemote)}; b=${b:-up}; a=${1:-$(git headBranch)} \
         && git fetch -fu $b pull/$a/head:$a; \
         git checkout $a \
-        && git branch -u $b #"
+        && git branch -u $(git symbolic-ref --short refs/remotes/$b/HEAD) #"
 
   h = help
 
