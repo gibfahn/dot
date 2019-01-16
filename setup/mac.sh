@@ -193,3 +193,14 @@ if not langserver-swift && ! not swift; then
   (cd "$HOME/bin/src/langserver-swift" || error "Failed to cd to the langserver directory"; make release)
   ln -s "$HOME/bin/src/langserver-swift/.build/$(uname -m)"-*/release/langserver-swift "$HOME"/bin/langserver-swift
 fi
+
+if [[ -d /Applications/Slack.app ]]; then
+  slack_path=/Applications/Slack.app/Contents/Resources/app.asar.unpacked/src/static/ssb-interop.js
+  [[ -e $slack_path ]] || skip "Slack path doesn't exist, unable to modify it"
+  if ! grep -q raw.githubusercontent.com $slack_path; then
+    get "Slack dark mode tweak"
+    cat "$(dirname "$0")/optional/slack-black.js" >> "$slack_path"
+  else
+    skip "Slack dark mode tweak"
+  fi
+fi
