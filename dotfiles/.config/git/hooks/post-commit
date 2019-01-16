@@ -1,0 +1,3 @@
+#!/bin/bash
+
+command -v rg >/dev/null && rg "TODO\($(whoami)\):" || true
