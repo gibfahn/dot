@@ -314,6 +314,7 @@ exists rg && alias rga="rg --hidden --no-ignore" # rga is grep all (don't ignore
 if [[ $shell == bash || $shell == zsh ]] && exists fzf && exists fd; then
   export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git' # Use fd for fuzzy finding if available.
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+  export FZF_ALT_C_COMMAND="fd --type d --hidden --follow --exclude .git"
   # TODO(gib): Finish this (fix stdout, add git aliases).
   alias preview="fzf --preview 'bat --color \"always\" {}'"
   export FZF_DEFAULT_OPTS="-m --bind='ctrl-o:execute(\$VISUAL {})',ctrl-t:toggle-all,alt-j:jump,alt-k:jump-accept" # Open files in visual editor.

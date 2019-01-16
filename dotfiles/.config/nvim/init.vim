@@ -278,6 +278,9 @@ onoremap af :normal Vaf<CR>
 " See SurroundOp() function.
 omap <expr> s '<esc>'.SurroundOp('s')
 omap <expr> S '<esc>'.SurroundOp('S')
+imap <C-S> <Plug>Isurround
+imap <C-G>s <Plug>Isurround
+imap <C-G>S <Plug>ISurround
 
 " %% expands to dirname of current file.
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
@@ -396,6 +399,11 @@ command! PU PlugClean | PlugUpdate | PlugUpgrade|   " :PU updates/cleans plugins
 "   paths, [O] OmniFunc, [LC] LanguageClient.
 call deoplete#custom#var('around', {'range_above': 20, 'range_below': 20, 'mark_above': '[↑]', 'mark_below': '[↓]', 'mark_changes': '[*]', }) " deoplete-source-around
 
+if exists('/usr/local/bin/python3')
+  let g:python3_host_prog = "/usr/local/bin/python3"  " Speed up startup by not looking for python3 every time.
+endif
+
+let g:fzf_history_dir = $XDG_CACHE_HOME . '/fzf-history' " Save history of fzf vim commands.
 let g:UltiSnipsExpandTrigger = "<NUL>"              " Don't automatically set UltiSnips expand, called manually in ExpandSnippetOrCarriageReturn().
 let g:UltiSnipsJumpBackwardTrigger="<Up>"           " Up arrow goes to previous snippet area.
 let g:UltiSnipsJumpForwardTrigger="<Down>"          " Down arrow goes to next snippet area.
