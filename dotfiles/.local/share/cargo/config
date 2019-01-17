@@ -1,0 +1,7 @@
+# https://doc.rust-lang.org/cargo/reference/config.html
+# Alias cargo commands. `b`, `r`, and `t` are built-in (build, test, release).
+[alias]
+br = "build --release"
+rr = "run --release"
+tr = "test --release"
+h = "help"

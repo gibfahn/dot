@@ -131,6 +131,7 @@
   stp = stash pop
   std = stash drop
 
+  sm   = submodule                             # For when you get bored of typing the word "submodule"
   sme  = submodule foreach                     # Run a command in all submodules, e.g. `g sme git status`, can be used recursively.
   smf  = submodule update --init               # Update to main repo upstream branch's submodule versions (make submodules match parent's HEADs).
                                                # Like git rhh (above), but resets every submodule to upstream commit. Hopefully someone will upstream an easier way at some point.

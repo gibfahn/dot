@@ -273,12 +273,14 @@ command mkdir -p "$XDG_CACHE_HOME/$shell"  # Create HISTFILE dir if necessary.
 
 # {{{ Aliases
 
-# x->close terminal, c->clear screen (Ctrl-L), g->git, h->history, path->print $PATH, 
-alias x=exit c=clear g=git h=history path='echo $PATH | sed "s/:/\n/g"' dt="date +%Y-%m-%d"
+# x->close terminal, g->git, h->history, path->print $PATH,
+alias x=exit g=git path='echo $PATH | sed "s/:/\n/g"' dt="date +%Y-%m-%d"
 alias s="TERM=xterm-256color ssh" # Reset cursor to block and ssh.
 
 # l->full detail + hidden, la->no detail + hidden, ll->full detail no hidden, md->create dir.
 alias l='ls -lAh' la='ls -A' ll='ls -l' md="mkdir -p"
+alias c=cargo ru=rustup  # Rust commands (try `c b`, `c r`, `c t`).
+rs() { for i in "$@"; do rustc "${i%.rs}.rs"; ./"${i%.rs}"; done; } # Compile/run (rs a.rs b).
 [[ -z "$cd" ]] && cd="cd" # We only want cd=cs in bash.
 # .. = up 1 dir, ... = up 2 dirs, .... = up 3 dirs (etc.). - = go to last dir.
 # shellcheck disable=SC2139 # We want this to expand when defined.
@@ -326,10 +328,6 @@ fi
 # On x86_64 machines nvm dir is ~/.local/share/nvm, on s390x it's ~/.local/share/s390x/nvm.
 NVM_DIR="$XDG_DATA_HOME/${unamem/x86_64/}/nvm"; export NVM_DIR
 alias nv='. $NVM_DIR/nvm.sh'  # Start nvm with alias, o/w too much startup cost.
-
-## Rust commands.
-alias cn="cargo new" cb="cargo build" cr="cargo run" ct="cargo test" ru=rustup
-rs() { for i in "$@"; do rustc "${i%.rs}.rs"; ./"${i%.rs}"; done; } # Compile/run (rs a.rs b).
 
 # Build node with ninja.
 alias bn='export CPPFLAGS=-fdiagnostics-color && ./configure && tools/gyp_node.py -f ninja && ninja -C out/Release && ln -fs out/Release/node node'
