@@ -5,10 +5,10 @@
   headUpstream = rev-parse --abbrev-ref --symbolic-full-name @{u} # Upstream of current branch, e.g. origin/master.
   headRemote = "!git rev-parse --abbrev-ref --symbolic-full-name @{u} | cut -d '/' -f 1" # e.g. origin.
   headBranch = symbolic-ref --short HEAD # e.g. master.
-  remoteOrg = "!git remote get-url $1 | awk -F '/' '{print $(NF-1)}' #" # Github org for remote. `g remoteOrg up` -> gibfahn.
+  remoteOrg = "!git remote get-url $1 | awk -F ':|/' '{print $(NF-1)}' #" # Github org for remote. `g remoteOrg up` -> gibfahn.
   defaultBranch = "!git symbolic-ref --short refs/remotes/$1/HEAD | sed \"s|^$1/||\" #" # Default branch for remote. `g defaultBranch up` -> master
-  # Quote an alias you want to save here (handles all the nonsense quoting stuff).
-  quote-string = "!read -r l; printf \\\"!; printf %s \"$l\" | sed 's/\\([\\\"]\\)/\\\\\\1/g'; printf \" #\\\"\\n\" #"
+  # Quote an alias you want to save here (quotes \ and ", and wraps in "! #" to handle args).
+  quote-string = "!read -r l; sed -E -e 's/([\\\"])/\\\\\\1/g' -e 's/(.*)/\"!\\1 #\"/' <<<\"$l\" #"
   # Removes all branches and tags except "$1" (default oldmaster).
   clean-fork = "!git ls-remote --heads --tags fork | awk '!/\\^\\{\\}/ && !/refs\\/heads\\/'\"${1:-oldmaster}\"'/ {print $NF}' | xargs -n ${2:-10} git push --delete fork && git remote prune fork #"
 
@@ -42,14 +42,17 @@
   cm  = commit -S --amend              # Amend the previous commit.
   cmn = commit -S --amend --no-edit    # Amend the previous commit but don't change the message.
   can = commit -S --amend --no-edit -a # Add changed files and commit with the same message.
-  cn  = clean -ffdx                    # Remove anything that's .gitignored, including submodule changes.
+  cn  = clean -ffx                     # Remove anything that's untracked (DANGER).
+  # Clean submodule directories that are no longer tracked.
+  cnm = "!git status --porcelain=v2 | awk '/^\\? / && !system(\"test -f \" $2 \"/.git\") { print $2 }' | xargs git clean -ff #"
   cl  = clone --recursive --origin up  # Always include submodules, set default remote to "up".
   cp  = cherry-pick                    # Apply commit hash(es) to current branch.
   cpa = cherry-pick --abort            # Bail out of cherry-pick.
   cpc = cherry-pick --continue         # Accept current changes and continue to next commit.
   cpq = cherry-pick --quit             # Only undo last commit (that failed) not all of them.
-  co  = checkout --recurse-submodules  # Change to a different commit or reset a file to a commit (e.g. `g co new-feature`), includes submodules.
-  cob = checkout --recurse-submodules --no-track -b # Create a new branch based on a different ref (e.g. `g cob new-feature up/master`).
+  co  = checkout                       # Change to a different commit or reset a file to a commit (e.g. `g co new-feature`).
+  cob = checkout --no-track -b         # Create a new branch based on a different ref (e.g. `g cob new-feature up/master`).
+  com = checkout --recurse-submodules  # Checkout and update submodules.
   cop = checkout -p                    # Selectively undo some of the changes you made.
   cot = checkout -t                    # g cot up/master means checkout master tracking the one in up.
 
@@ -100,9 +103,9 @@
 
   p   = push                                                    # Push commits to a remote.
   pf  = push --force-with-lease                                 # Better version of push -f.
-  pa  = "!curl -L ${1:%.patch}.patch | git am -S --whitespace=fix # "     # Patch Github PR.
-  pap = "!curl -L $1.patch | git am -3 -S --whitespace=fix  # " # Please patch it.
-  paw = "!curl -L $1.patch | git am -3 -S --whitespace=warn # " # Patch but don't fix whitespace.
+  pa  = "!curl -L ${1%.patch}.patch | git am -S --whitespace=fix # "     # Patch Github PR.
+  pap = "!curl -L ${1%.patch}.patch | git am -3 -S --whitespace=fix  # " # Please patch it.
+  paw = "!curl -L ${1%.patch}.patch | git am -3 -S --whitespace=warn # " # Patch but don't fix whitespace.
   pt  = "!git push -u $1 $(git headBranch) #"                   # g pt origin sets branch to track up + pushes.
 
   ra  = remote add                                           # Add new remote by url.
@@ -132,14 +135,18 @@
   std = stash drop
 
   sm   = submodule                             # For when you get bored of typing the word "submodule"
+  sma  = submodule add                         # Add new submodules
   sme  = submodule foreach                     # Run a command in all submodules, e.g. `g sme git status`, can be used recursively.
   smf  = submodule update --init               # Update to main repo upstream branch's submodule versions (make submodules match parent's HEADs).
-                                               # Like git rhh (above), but resets every submodule to upstream commit. Hopefully someone will upstream an easier way at some point.
-  smh  = "!while read s; do unset GIT_DIR; git -C \"${s##* }\" reset --hard \"$(awk '{print $8}' <<<\"$s\")\"; done <<<\"$(git status --porcelain=v2 | grep -E '^[12] ?? [^N]*')\" #"
+  # `g smh`: Like git rhh (above), but resets every submodule to upstream commit. Hopefully someone will upstream an easier way at some point.
+  smh  = "!while read sha pth; do unset GIT_DIR; git -C \"$pth\" reset --hard \"$sha\" || { git submodule deinit -f \"$pth\"; git submodule init \"$pth\"; }; \
+          done <<<\"$(git status --porcelain=v2 | awk '/^[12] ?? [^N]*/ { print $8 \" \" $NF }')\" #"
   smhh = submodule foreach git smh             # Recursive hard reset to parent's HEADS. Hopefully you never need smhhh.
   smi  = submodule update --init --recursive   # Initialise submodules.
+  smn  = "!git submodule deinit -f --all; git submodule sync; git cnm; git submodule init" # Nuke submodules (for when you just can't update them).
   smu  = submodule update --remote             # Update submodules to submodule repos latest versions (make submodules match submodule upstream HEADs).
   smr  = submodule foreach git reset --hard    # Hard reset all submodules to their HEAD.
+  sms  = submodule sync                        # Make .git/config match .gitmodules.
 
   # z is fuzzy log (fuzzy search through `git log $*`, za is the same with la (try g sh `g z`).
   z   = "!git l --color=always $* | grep -v '^\\.\\.\\.\\s\\+$' | fzf +s -m --ansi | sed 's/^\\W\\+\\(\\w\\+\\)\\s\\+.*/\\1/' #"
@@ -215,7 +222,6 @@
 [diff-so-fancy]
   markEmptyLines = false      # The red blobs are very distracting when only a newline has been added.
   stripLeadingSymbols = false # Without `markEmptyLines` you need the +/- to show newline changes.
-
 [fetch]
   prune = true             # Delete local tracking branches if remote is gone.
 [format]
@@ -247,6 +253,8 @@
   enabled = true           # Remember how I resolved the same merge conflict last time.
 [submodule]
   fetchJobs = 8            # Number of jobs to fetch when I submodule clone/update.
+[stash]
+  showPatch = true         # Show the actual diffs in `git stash show`.
 [status]
   showStash = true         # Show the number of commits in the stash in `git status` output.
 
