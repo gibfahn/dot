@@ -75,22 +75,14 @@ export CCACHE_DIR="$XDG_CACHE_HOME/ccache" # ccache cache dir.
 export SCCACHE_DIR="$XDG_CACHE_HOME/sccache" # sccache cache dir.
 export IPYTHONDIR="$XDG_CACHE_HOME/ipython" # Move iPython dir from ~.
 export HELM_HOME="$XDG_DATA_HOME/helm" # Move Helm data dir from ~.
-export BLUEMIX_HOME="$XDG_DATA_HOME/bluemix" # Move Bluemix home directory from ~ (creates .bluemix inside).
 export PEX_ROOT="${PEX_ROOT:-$XDG_CACHE_HOME/pex}" # Cache directory for https://github.com/pantsbuild/pex.
 export VIRTUAL_ENV_DISABLE_PROMPT=1 # Add the virtualenv prompt myself.
 # Tab is 4 spaces, search ignores case, enable colours, cat if less than one screen.
-# Set colors for less. Borrowed from https://wiki.archlinux.org/index.php/Color_output_in_console#less .
-export LESS_TERMCAP_mb=$'\E[1;31m'     # begin bold
-export LESS_TERMCAP_md=$'\E[1;36m'     # begin blink
-export LESS_TERMCAP_me=$'\E[0m'        # reset bold/blink
-export LESS_TERMCAP_so=$'\E[01;44;33m' # begin reverse video
-export LESS_TERMCAP_se=$'\E[0m'        # reset reverse video
-export LESS_TERMCAP_us=$'\E[1;32m'     # begin underline
-export LESS_TERMCAP_ue=$'\E[0m'        # reset underline
 # --status-column=>column to show lines matching current search or first unread line after moving
 # -quit-if-one-screen=>exit if file fits in one screen, --ignore-case=>smartcase search, --LONG-PROMPT=>verbose prompt, --RAW-CONTROL-CHARS=>show colors,
 # --HILITE-UNREAD=>highlight first unread line moving, --tabs=4=>tab is 4 spaces, --window=-4=>keep 4 lines overlapping when scrolling with the space key
 export LESS='--tabs=4 --ignore-case --RAW-CONTROL-CHARS --quit-if-one-screen --status-column --LONG-PROMPT --HILITE-UNREAD --window=-4'
+export LESSKEY="$XDG_CACHE_HOME/less" # Less color settings.
 export PAGER=less
 export GOPATH="$HOME/code/go"
 VULKAN_SDK="$(echo /usr/local/Caskroom/vulkan-sdk/* | sort -V | tail -1)"/macOS # Vulkan SDK for graphics programs.
@@ -194,16 +186,14 @@ pathapp /usr/local/opt/coreutils/libexec/gnubin # Coreutils from brew on macOS, 
 # {{{ Shell specific
 exists gls && alias ls=gls
 if ls --color=auto >/dev/null 2>&1; then
-  { exists gls && alias ls='gls --color=auto'; } || alias ls='ls --color=auto'
   if [[ -e "$XDG_DATA_HOME"/LS_COLORS/LS_COLORS ]]; then
-    eval "$(dircolors -b "$XDG_DATA_HOME/LS_COLORS/LS_COLORS")" # Load custom LS_COLORS from project.
+    eval "$(dircolors -b "$XDG_DATA_HOME/LS_COLORS/LS_COLORS" | head -1)" # Load custom LS_COLORS from project.
   else
     source "$XDG_DATA_HOME/LS_COLORS.old" # Use old version if LS_COLORS not installed.
   fi
-  [[ "$LS_COLORS" ]] && export LS_COLORS # ls isn't a builtin, so colors must be exported.
+  { exists gls && alias ls='LS_COLORS=$LS_COLORS gls --color=auto'; } || alias ls='LS_COLORS=$LS_COLORS ls --color=auto'
 elif [[ "$uname" = Darwin ]]; then
-  alias ls='ls -G' # Colour ls on macOS.
-  export LSCOLORS="Gxfxcxdxbxegedabagacad"
+  alias ls='LSCOLORS="Gxfxcxdxbxegedabagacad" ls -G' # Colour ls on macOS.
 fi
 
 case $shell in
@@ -325,8 +315,7 @@ fi
 # Set up nvm
 # I don't have nvm autorun on every shell, I use `nv` when I want to start it.
 [[ ! -d "$(dirname "$npm_config_userconfig")" ]] && command mkdir -p "$(dirname "$npm_config_userconfig")"
-# On x86_64 machines nvm dir is ~/.local/share/nvm, on s390x it's ~/.local/share/s390x/nvm.
-NVM_DIR="$XDG_DATA_HOME/${unamem/x86_64/}/nvm"; export NVM_DIR
+NVM_DIR="$XDG_DATA_HOME/nvm"; export NVM_DIR
 alias nv='. $NVM_DIR/nvm.sh'  # Start nvm with alias, o/w too much startup cost.
 
 # Build node with ninja.
