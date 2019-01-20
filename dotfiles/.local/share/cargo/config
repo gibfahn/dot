@@ -1,6 +1,9 @@
 # https://doc.rust-lang.org/cargo/reference/config.html
 # Alias cargo commands. `b`, `r`, and `t` are built-in (build, test, release).
 [alias]
+ta = "test --all"  # Run all tests.
+tar = "test --release --all"  # Run all tests in --release mode.
+
 br = "build --release"
 rr = "run --release"
 tr = "test --release"
