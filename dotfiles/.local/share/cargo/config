@@ -1,10 +1,28 @@
+[target.x87_64-unknown-linux-musl]
+linker = "x86_64-linux-musl-gcc"
+
 # https://doc.rust-lang.org/cargo/reference/config.html
-# Alias cargo commands. `b`, `r`, and `t` are built-in (build, test, release).
+# Alias cargo commands. `b`, `c`, `r`, and `t` are built-in (build, check, test, release).
 [alias]
-ta = "test --all"  # Run all tests.
-tar = "test --release --all"  # Run all tests in --release mode.
+ta = "test -- --ignored"  # Run all tests.
+tar = "test --release --ignored"  # Run all tests in --release mode.
 
 br = "build --release"
 rr = "run --release"
 tr = "test --release"
 h = "help"
+
+n = "new"
+nl = "new --lib"
+i = "init"
+il = "init --lib"
+cn = "clean"
+cnl = "clean --target x86_64-unknown-linux-musl"  # Clean linux target.
+
+cl = "clippy"
+f = "fmt"
+a = "add"  # From cargo-edit
+ud = "update"
+ug = "upgrade"
+
+# vim: ft=toml
