@@ -294,9 +294,9 @@ case $uname in
 esac
 
 # fda is find all (don't ignore anything).
-{ exists fd && alias fda="fd --no-ignore --hidden"; } \
+{ exists fd && alias fd='LS_COLORS="$LS_COLORS" fd' fda='LS_COLORS="$LS_COLORS" fd --no-ignore --hidden'; } \
   || fd() { find . -iname "*$**"; } # Find by filename (case insensitive).
-exists rg && alias rga="rg --hidden --no-ignore" # rga is grep all (don't ignore anything).
+exists rg && alias rg='LS_COLORS="$LS_COLORS" rg' rga='LS_COLORS="$LS_COLORS" rg --hidden --no-ignore' # rga is grep all (don't ignore anything).
 
 # }}} Aliases
 
