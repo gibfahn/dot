@@ -169,6 +169,7 @@ else
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
+sogou_dir_old="$(ls -a /usr/local/Caskroom/sogouinput 2>/dev/null || true)"
 # brew install things. Edit config/Brewfile to adjust.
 get "brew installing/updating."
 brew tap Homebrew/bundle
@@ -184,6 +185,14 @@ fi
 # Upgrade everything, even things that weren't in your Brewfile.
 brew upgrade
 brew cask upgrade # You may occasionally want to run `brew cask upgrade --greedy` in case built-in updaters aren't working.
+
+sogou_dir_new="$(ls -a /usr/local/Caskroom/sogouinput 2>/dev/null || true)"
+# If sogouinput was updated
+if [[ "$sogou_dir_old" != "$sogou_dir_new" ]]; then
+  update "Sogou Input"
+  sogou_dir="$(brew cask info sogouinput | awk '/^\/usr\/local\/Caskroom\/sogouinput\// { print $1 }')"
+  [[ -n "$sogou_dir" ]] && open "$sogou_dir"/sogou*.app
+fi
 
 # Update Mac App Store apps.
 softwareupdate -i -a
