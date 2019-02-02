@@ -136,17 +136,16 @@
 
   sm   = submodule                             # For when you get bored of typing the word "submodule"
   sma  = submodule add                         # Add new submodules
+  smd  = submodule deinit -f --all             # Deinit submodules (for when updating fails).
   sme  = submodule foreach                     # Run a command in all submodules, e.g. `g sme git status`, can be used recursively.
   smf  = submodule update --init               # Update to main repo upstream branch's submodule versions (make submodules match parent's HEADs).
   # `g smh`: Like git rhh (above), but resets every submodule to upstream commit. Hopefully someone will upstream an easier way at some point.
-  smh  = "!unset GIT_DIR; git cnm; while read sha pth && [[ -n $sha && -n $pth ]]; do  git -C \"$pth\" reset --hard \"$sha\" || { git submodule deinit -f \"$pth\"; git submodule init \"$pth\"; }; \
-          done <<<\"$(git status --porcelain=v2 | awk '/^[12] ?? [^N]*/ { print $8 \" \" $NF }')\" #"
+  smh  = "!unset GIT_DIR; git cnm; while read sha pth && [[ -n $sha && -n $pth ]]; do  git -C \"$pth\" reset --hard \"$sha\" || { git submodule deinit -f \"$pth\"; git submodule init \"$pth\"; }; done <<<\"$(git status --porcelain=v2 | awk '/^[12] ?? [^N]*/ { print $8 \" \" $NF }')\" #"
   smhh = submodule foreach git smh             # Recursive hard reset to parent's HEADS. Hopefully you never need smhhh.
   smi  = submodule update --init --recursive   # Initialise submodules.
-  smn  = "!git submodule deinit -f --all; git submodule sync --recursive; git cnm; git submodule update --init --recursive" # Nuke submodules (for when you just can't update them).
-  smu  = submodule update --remote             # Update submodules to submodule repos latest versions (make submodules match submodule upstream HEADs).
   smr  = submodule foreach git reset --hard    # Hard reset all submodules to their HEAD.
-  sms  = submodule sync                        # Make .git/config match .gitmodules.
+  sms  = submodule sync --recursive            # Make .git/config match .gitmodules.
+  smu  = submodule update --remote             # Update submodules to submodule repos latest versions (make submodules match submodule upstream HEADs).
 
   # z is fuzzy log (fuzzy search through `git log $*`, za is the same with la (try g sh `g z`).
   z   = "!git l --color=always $* | grep -v '^\\.\\.\\.\\s\\+$' | fzf +s -m --ansi | sed 's/^\\W\\+\\(\\w\\+\\)\\s\\+.*/\\1/' #"
