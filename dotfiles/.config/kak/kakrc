@@ -2,15 +2,85 @@
 # General settings and mappings #
 #################################
 
-set global tabstop 2
-set global indentwidth 2
-colorscheme gib
+# This var is false the first time this file is sourced, and true from the second time.
+declare-option -docstring 'Whether kakrc has been sourced before' bool gib_kakrc_sourced
 
-# Map kj to <Esc> in insert mode.
-hook global InsertChar j %{ try %{
-  exec -draft hH <a-k>kj<ret> d
-  exec <esc>
-}}
+# Remove existing hooks group so they can be re-added.
+remove-hooks global gib
+
+# Tab inserts 2 spaces.
+set-option global tabstop 2
+set-option global indentwidth 2
+colorscheme gruvbox
+
+# Set cache home if unset:
+declare-option -docstring '$XDG_CACHE_HOME or ~/.cache' str xdg_cache_home %sh{echo "${XDG_CACHE_HOME:-$HOME/.cache}" }
+
+##################
+# Plugin Manager #
+##################
+
+# Custom dir to install plug.kak to.
+declare-option -docstring "Dir to install plugins to." str gib_plug_dir "%opt{xdg_cache_home}/kakoune_plugins"
+# Install plug.kak if not already installed
+nop %sh{ [ ! -d "$kak_opt_gib_plug_dir"/plug.kak ] && git clone https://github.com/andreyorst/plug.kak.git "$kak_opt_gib_plug_dir/plug.kak" }
+
+# Source plug.kak plugin manager if it hasn't already been sourced.
+evaluate-commands %sh{ [ "$kak_opt_gib_kakrc_sourced" = false ] && printf "source '$kak_opt_gib_plug_dir/plug.kak/rc/plug.kak'" }
+# Set plugin install dir.
+set-option global plug_install_dir "%opt{gib_plug_dir}"
+
+###########
+# Plugins #
+###########
+
+# Allow plug.kak to update itself.
+plug "andreyorst/plug.kak" noload config %{
+  # Always ensure plugins are loaded on startup.
+  set-option global plug_always_ensure true
+}
+
+# Fzf integration.
+plug "andreyorst/fzf.kak" config %{
+  map global user <f> ': fzf-mode<ret>'
+}
+
+# LanguageServer Protocol Client (LSP Client).
+plug "ul/kak-lsp" do %{
+  cargo build --release --locked
+  cargo install --force
+} config %{
+  # Enable the LSP Client on startup.
+  lsp-enable
+  # Set max height of popup window with doc info etc.
+  set-option global lsp_hover_max_lines 40
+  # Run rustfmt before saving rust files.
+  hook global -group gib WinSetOption filetype=rust %{
+    hook window -group gib BufWritePre .* lsp-formatting-sync
+  }
+}
+
+plug "occivink/kakoune-vertical-selection" config %{
+  # <Leader>v,<a-v>,V to select selected columns below, above, and below+above.
+  map global user v     ': select-down<ret>'
+  map global user <a-v> ': select-up<ret>'
+  map global user V     ': select-vertically<ret>'
+}
+
+plug "Delapouite/kakoune-buffers" config %{
+  # <Leader>b to trigger a single buffer command.
+  map global user b ': enter-buffers-mode<ret>'              -docstring 'buffers…'
+  # <Leader>B to stay in buffer mode until you hit <Esc>.
+  map global user B ': enter-user-mode -lock buffers<ret>'   -docstring 'buffers (lock)…'
+  # Show buffer info whenever you change buffer.
+  hook global -group gib  WinDisplay .* info-buffers
+}
+
+# TODO(gib): Currently broken by https://github.com/danr/kakoune-easymotion/issues/16
+plug "danr/kakoune-easymotion" config %{
+  # <Leader>s to trigger a single easymotion command.
+  map global user s ': enter-user-mode easymotion<ret>'      -docstring 'buffers…'
+}
 
 ###########################################
 # User mode mappings (<Leader> mappings). #
@@ -21,18 +91,22 @@ map global normal '<space>'       '<,>'       -docstring 'leader'
 map global normal '<backspace>'   '<space>'   -docstring 'remove all sels except main'
 map global normal '<a-backspace>' '<a-space>' -docstring 'remove main sel'
 
-map global user   '<w>'     ':write<ret>'            -docstring 'Save file'
-map global user   '<W>'     ':write-all<ret>'        -docstring 'Save all files'
-map global user   '<q>'     ':quit<ret>'             -docstring 'Quit kakoune'
-map global user   '<Q>'     ':quit!<ret>'            -docstring 'Force quit kakoune'
-map global user   '<x>'     ':write-quit<ret>'       -docstring 'Save and quit'
-map global user   '<X>'     ':write-all-quit<ret>'   -docstring 'Save all and quit'
-map global user   '<d>'     ':delete-buffer<ret>'    -docstring 'Close current buffer.'
-map global normal '<tab>'   ':buffer-next<ret>'      -docstring 'Change to next buffer.'
-map global normal '<s-tab>' ':buffer-previous<ret>'  -docstring 'Change to next buffer.'
+# Leader key combinations:
+map global user   <w>     ':write<ret>'                         -docstring 'Save file'
+map global user   <W>     ':write-all<ret>'                     -docstring 'Save all files'
+map global user   <q>     ':quit<ret>'                          -docstring 'Quit kakoune'
+map global user   <Q>     ':quit!<ret>'                         -docstring 'Force quit'
+map global user   <x>     ':write-quit<ret>'                    -docstring 'Save and quit'
+map global user   <X>     ':write-all-quit<ret>'                -docstring 'Save all and quit'
+map global user   <d>     ': delete-buffer<ret>'                -docstring 'Close current buffer.'
+map global user   <l>     ': enter-user-mode lsp<ret>'          -docstring 'Enter LanguageServer mode.'
+map global user   <s>     ': enter-user-mode easymotion<ret>'   -docstring 'Enter EasyMotion mode.'
+
+map global normal <tab>   ':buffer-next<ret>'                   -docstring 'Change to next buffer.'
+map global normal <s-tab> ':buffer-previous<ret>'               -docstring 'Change to next buffer.'
 
 # Copy and paste to the system clipboard with <Leader>y/p/R
-%sh{
+evaluate-commands %sh{
     case $(uname) in
         Linux )  copy="xclip -i"; paste="xclip -o" ;;
         Darwin)  copy="pbcopy"  ; paste="pbpaste"  ;;
@@ -45,11 +119,14 @@ map global normal '<s-tab>' ':buffer-previous<ret>'  -docstring 'Change to next 
     printf "map global user '<R>' '|%s<ret>'                            -docstring 'replace from clipboard'\n"        "$paste"                                                          
 }
 
-map global normal '#' :comment-line<ret> -docstring 'comment line'
+map global normal '#'     :comment-line<ret>  -docstring 'comment line'
 map global normal '<a-#>' :comment-block<ret> -docstring 'comment block'
 
 # Reload rc file when it's written.
-remove-hooks global gib
-hook global -group gib BufWritePost '.*' %{
-  source ~/.config/kak/kakrc
-}
+hook global -group gib BufWritePost .*kakrc %{ source ~/.config/kak/kakrc }
+
+# Set "has been sourced" bool to true.
+set-option global gib_kakrc_sourced true
+
+# Useful resources:
+# - https://github.com/mawww/config/blob/master/kakrc
