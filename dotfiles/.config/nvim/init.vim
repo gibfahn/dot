@@ -226,6 +226,8 @@ nnoremap        <Leader>; @:|                     " Repeat the last executed com
 nnoremap        <Leader>/ :noh<CR>|               " Turn off find highlighting.
 nnoremap        <Leader>? /<Up><CR>|              " Search for last searched thing.
 
+vnoremap        <Leader>f y:Rg <C-r>=escape(@",'/\')<CR><CR>| " Search for string under cursor with ripgrep + fzf.
+
 nmap <leader>1 <Plug>BufTabLine.Go(1)|         " <leader>1 goes to buffer 1 (see numbers in tab bar).
 nmap <leader>2 <Plug>BufTabLine.Go(2)|         " <leader>1 goes to buffer 2 (see numbers in tab bar).
 nmap <leader>3 <Plug>BufTabLine.Go(3)|         " <leader>1 goes to buffer 3 (see numbers in tab bar).
@@ -470,12 +472,12 @@ let g:LanguageClient_serverCommands = {
   \ 'swift': ['langserver-swift'],
   \ 'yaml': ['yaml-language-server'],
   \ }
-let g:LanguageClient_settingsPath = $XDG_CONFIG_HOME . '/nvim/settings.json'
+let g:LanguageClient_settingsPath = $XDG_CONFIG_HOME . '/nvim/language_client_settings.json'
 let g:LanguageClient_diagnosticsList = "Location" " Don't overwrite quickfix list with linter/checker output.
 " Debugging options for the language client/server:
 " let g:LanguageClient_loggingLevel = 'DEBUG'
-" let g:LanguageClient_loggingFile =  expand('~/.local/share/nvim/LanguageClient.log')
-" let g:LanguageClient_serverStderr = expand('~/.local/share/nvim/LanguageServer.log')
+" let g:LanguageClient_loggingFile =  expand('~/.cache/vim/LanguageClient.log')
+" let g:LanguageClient_serverStderr = expand('~/.cache/vim/LanguageServer.log')
 
 " Highlight the 81st column of text (in dark grey so it doesn't distract).
 highlight ColorColumn ctermbg=234

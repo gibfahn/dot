@@ -1,0 +1,29 @@
+{
+  "pyls": {
+    "configurationSources": ["flake8"],
+    "plugins": {
+      "pyflakes": {
+        "enabled": true
+      },
+      "pydocstyle": {
+        "enabled": true
+      }
+    }
+  },
+  "rust": {
+    "clippy_preference": "on"
+  },
+  "yaml": {
+    "format": {
+      "enable": false,
+      "singleQuote": false
+    },
+    "validate": true,
+    "hover": true,
+    "completion": true,
+    "schemas": {
+      "http://json.schemastore.org/gitlab-ci": "/.gitlab-ci.yml",
+      "http://json.schemastore.org/package": "/package.json"
+    }
+  }
+}
