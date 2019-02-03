@@ -11,7 +11,7 @@ remove-hooks global gib
 # Tab inserts 2 spaces.
 set-option global tabstop 2
 set-option global indentwidth 2
-colorscheme gruvbox
+colorscheme tomorrow-night
 
 # Set cache home if unset:
 declare-option -docstring '$XDG_CACHE_HOME or ~/.cache' str xdg_cache_home %sh{echo "${XDG_CACHE_HOME:-$HOME/.cache}" }

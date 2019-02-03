@@ -282,7 +282,7 @@ unset cd
 { works nvim && VIM="nvim"; } || { works vim && VIM="vim"; } || VIM="vi" # Take what you can get.
 export VISUAL=${VISUAL:-$VIM} EDITOR=${EDITOR:-$VIM} # Set vim/nvim as the default editor.
 # shellcheck disable=SC2139 # We want this to expand when defined.
-alias xv="xargs \$${ZSH_VERSION:+=}VISUAL" v="\$${ZSH_VERSION:+=}VISUAL" # Work around zsh's "helpful" autoquoting.
+alias xv="xargs \$${ZSH_VERSION:+=}VISUAL" v="\$${ZSH_VERSION:+=}VISUAL" k=kak # Work around zsh's "helpful" autoquoting.
 exists vimr && alias vm=vimr # Use `vm` for GUI vim, need to add a Linux equivalent.
 
 ulimit -c unlimited # Allow saving of coredumps.
