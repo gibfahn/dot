@@ -66,6 +66,7 @@ try
   Plug 'tpope/vim-sleuth'                           " Automatically detect indentation.
   Plug 'tpope/vim-surround'                         " Add/mod/remove surrounding chars.
   Plug 'tpope/vim-unimpaired'                       " [ and ] mappings (help unimpaired).
+  Plug 'kana/vim-operator-user'                     " Make it easier to define operators.
 
   call plug#end()                                   " Initialize plugin system
   catch /E117: Unknown function: plug#begin/
@@ -125,7 +126,7 @@ if !isdirectory(s:undodir)| call mkdir(s:undodir, "p", 0700)| endif
 set undofile                                        " Persist undo history on file close.
 let &undodir=s:undodir                              " Store undo files in cache dir.
 set path=.,/usr/include,,**                         " Add ** to the search path so :find x works recursively.
-if exists('+breakindent')| set breakindent| let &showbreak = '↳ '| set cpo+=n| end " Nicer line wrapping for long lines.
+if exists('+breakindent')| set breakindent| let &showbreak = '↳   '| set cpo+=n| end " Nicer line wrapping for long lines.
 if exists('&inccommand')| set inccommand=split| endif " Show search and replace as you type.
 if exists("&wildignorecase")| set wildignorecase| endif " Case insensitive file tab completion with :e.
 try
@@ -211,7 +212,7 @@ nnoremap        <Leader>P "+P|                    "                    ↳  befo
 nnoremap        <Leader>q :qa<CR>|                " Quit if no    unsaved changes (for single file use <Space>d instead).
 nnoremap        <Leader>QQ :q!<CR>|               "      ↳ losing unsaved changes (DANGER).
 nnoremap        <Leader>r :%s/|                   " Replace (e.g. <Space>rold/new),
-nnoremap        <Leader>R :%s//c<Left><Left>|     "  ↳ Replace with prompt on each match.
+nnoremap        <Leader>R :cfdo %s//ec | up|     "  ↳ Replace in all quickfix files (use after gr).
 map             <Leader>s <Plug>(easymotion-bd-w)| " EasyMotion: Move to word.
 nnoremap        <Leader>u :MundoToggle<CR>|       " Toggle Undo tree visualisation.
 nnoremap        <Leader>w :up<CR>|                " Write if there were changes.
@@ -226,7 +227,9 @@ nnoremap        <Leader>; @:|                     " Repeat the last executed com
 nnoremap        <Leader>/ :noh<CR>|               " Turn off find highlighting.
 nnoremap        <Leader>? /<Up><CR>|              " Search for last searched thing.
 
-vnoremap        <Leader>f y:Rg <C-r>=escape(@",'/\')<CR><CR>| " Search for string under cursor with ripgrep + fzf.
+" Grep for operator or visual selection, uses fixed string ripgrep search.
+nmap gr <Plug>(operator-ripgrep-root)
+vmap gr <Plug>(operator-ripgrep-root)
 
 nmap <leader>1 <Plug>BufTabLine.Go(1)|         " <leader>1 goes to buffer 1 (see numbers in tab bar).
 nmap <leader>2 <Plug>BufTabLine.Go(2)|         " <leader>1 goes to buffer 2 (see numbers in tab bar).
@@ -291,6 +294,25 @@ cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 
 " {{{ Functions used in key mappings above.
 
+function! s:CallRipGrep(...) abort
+  call fzf#vim#grep('rg --vimgrep --color=always --smart-case --hidden  -F ' . shellescape(join(a:000, ' ')), 1,
+        \ fzf#vim#with_preview({ 'options': ['-m', '--bind=ctrl-a:toggle-all,alt-j:jump,alt-k:jump-accept']}, 'right:50%', 'ctrl-p'), 1)
+endfunction
+
+function! s:RipWithRange() range
+  call s:CallRipGrep(join(getline(a:firstline, a:lastline), '\n'))
+endfunction
+call operator#user#define('ripgrep-root', 'OperatorRip')
+
+function! OperatorRip(wiseness) abort
+  if a:wiseness ==# 'char'
+    normal! `[v`]"ay
+    call s:CallRipGrep(@a)
+  elseif a:wiseness ==# 'line'
+    '[,']call s:RipWithRange()
+  endif
+endfunction
+
 " Open selected text with native open command, used with `<Leader>o` mappings.
 function! OpenUrl(type)
   if a:type ==# 'v'| execute "normal! `<v`>y"| " If in charwise visual mode, copy selected URL.
@@ -319,9 +341,6 @@ if !isdirectory(s:sessionDir)| call mkdir(s:sessionDir, "p", 0700)| endif
 function! SessionFile()
   return $XDG_CACHE_HOME . "/vim/session/" . substitute(getcwd(), '/', '\\%', 'g')
 endfunction
-
-" :Locate will search entire filesystem for file.
-command! -nargs=1 -bang Locate call fzf#run(fzf#wrap({'source': 'locate <q-args>', 'options': '-m'}, <bang>0))
 
 function! BufferClose(bang) abort " Call BufferClose('!') to get bd!
   let oldbuf = bufnr('%') | let oldwin = winnr()
@@ -395,6 +414,15 @@ endif
 " {{{ Custom commands, Autocommands, global variables
 command! Trim call TrimWhitespace()|                " :Trim runs :call Trim() (defined below).
 command! PU PlugClean | PlugUpdate | PlugUpgrade|   " :PU updates/cleans plugins and vim-plug.
+
+" :Locate will search entire filesystem for file.
+command! -nargs=1 -bang Locate call fzf#run(fzf#wrap({'source': 'locate <q-args>', 'options': '-m'}, <bang>0))
+
+" Use Rg to specify the string to search for (can be regex).
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg  --vimgrep --color=always --smart-case --hidden ' . shellescape(<q-args>), 1,
+  \   fzf#vim#with_preview({'options': ['-m', '--bind=ctrl-a:toggle-all,alt-j:jump,alt-k:jump-accept']}, 'right:50%', 'ctrl-p'))
 
 " If you're wondering what the [A] things in the completion menu are, `:h deoplete-sources`:
 "   ~ [↑] [↓] [*] = current file, [B] open buffers, [D] vim dictionary, [F] file

@@ -9,27 +9,29 @@ _gib_git_f() {
 _gib_git_b() {
   git branch -a --color=always --sort=committerdate --sort=-refname:rstrip=2 | grep -v '/HEAD\s' |
   fzf "$@" --border --ansi --multi --tac --preview-window right:70% \
-    --preview 'git log --oneline --graph --date=short --pretty="format:%C(auto)%cd %h%d %s" $(sed s/^..// <<< {} | cut -d" " -f1) | head -'$LINES | sed 's/^..//' | cut -d' ' -f1 | sed 's#^remotes/##'
+    --preview 'git log --oneline --color=always --graph --date=short $(sed s/^..// <<< {} | cut -d" " -f1) | head -'$LINES \
+  | sed 's/^..//' | cut -d' ' -f1 | sed 's#^remotes/##'
 }
 # Fzf git tags.
 _gib_git_t() {
-  git tag --sort -version:refname |
+  git tag --color=always --sort -version:refname |
   fzf "$@" --border --multi --preview-window right:70% \
     --preview 'git show --color=always {} | head -'$LINES
 }
 # Fzf git hashes.
 _gib_git_h() {
   git log --all --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --graph --color=always |
-  fzf "$@" --border --ansi --no-sort --reverse --multi --bind 'ctrl-s:toggle-sort' \
-    --header 'Press CTRL-S to toggle sort' \
-    --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | xargs git show --color=always | head -'$LINES | grep -o "[a-f0-9]\{7,\}"
+  fzf "$@" --border --ansi --no-sort --reverse --multi --header 'Press CTRL-S to toggle sort' \
+    --bind 'ctrl-s:toggle-sort' \
+    --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | xargs git show --color=always | head -200' \
+  | grep -o "[a-f0-9]\{7,\}"
 }
 # Fzf git remotes.
 _gib_git_r() {
   git remote -v | awk '{print $1 "\t" $2}' | uniq |
   fzf "$@" --border --tac \
-    --preview 'git log --oneline --graph --date=short --pretty="format:%C(auto)%cd %h%d %s" {1} | head -200' |
-  cut -d$'\t' -f1
+    --preview 'git log --color=always --decorate --simplify-by-decoration --oneline --graph --date=short --remotes={1} | head -200' \
+  | cut -d$'\t' -f1
 }
 # More fzf helpers.
 # shellcheck disable=2034,SC2154
