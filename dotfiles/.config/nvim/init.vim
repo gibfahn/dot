@@ -212,7 +212,7 @@ nnoremap        <Leader>P "+P|                    "                    ↳  befo
 nnoremap        <Leader>q :qa<CR>|                " Quit if no    unsaved changes (for single file use <Space>d instead).
 nnoremap        <Leader>QQ :q!<CR>|               "      ↳ losing unsaved changes (DANGER).
 nnoremap        <Leader>r :%s/|                   " Replace (e.g. <Space>rold/new),
-nnoremap        <Leader>R :cfdo %s//ec | up|     "  ↳ Replace in all quickfix files (use after gr).
+nnoremap        <Leader>R :cfdo %s//ce <bar> up<S-Left><S-Left><Left><Left><Left><Left>| " Replace in all quickfix files (use after gr).
 map             <Leader>s <Plug>(easymotion-bd-w)| " EasyMotion: Move to word.
 nnoremap        <Leader>u :MundoToggle<CR>|       " Toggle Undo tree visualisation.
 nnoremap        <Leader>w :up<CR>|                " Write if there were changes.
