@@ -9,7 +9,7 @@ _gib_git_f() {
 _gib_git_b() {
   git branch -a --color=always --sort=committerdate --sort=-refname:rstrip=2 | grep -v '/HEAD\s' |
   fzf "$@" --border --ansi --multi --tac --preview-window right:70% \
-    --preview 'git log --oneline --color=always --graph --date=short $(sed s/^..// <<< {} | cut -d" " -f1) | head -'$LINES \
+    --preview 'git log --oneline --color=always --graph --decorate --date=short $(sed s/^..// <<< {} | cut -d" " -f1) | head -'$LINES \
   | sed 's/^..//' | cut -d' ' -f1 | sed 's#^remotes/##'
 }
 # Fzf git tags.
@@ -102,6 +102,7 @@ bindkey -M viins "^R" history-incremental-search-backward # Restore <Ctrl>-R sea
 bindkey -M viins "^S" history-incremental-search-forward  # Restore <Ctrl>-S forward search.
 bindkey -M main "^[[A" history-beginning-search-backward-end # Re-enable up   for history search.
 bindkey -M main "^[[B" history-beginning-search-forward-end  # Re-enable down for history search.
+bindkey -M main '\e.' insert-last-word
 bindkey ' ' magic-space # <Space> = do history expansion
 # shellcheck disable=SC2154
 bindkey "${terminfo[kcbt]}" reverse-menu-complete   # <Shift>-<Tab> - move backwards through the completion menu.

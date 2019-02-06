@@ -68,6 +68,7 @@ export npm_config_devdir=${npm_config_devdir:-"$XDG_CACHE_HOME/node-gyp"} # Set 
 export npm_config_cache=${npm_cache:-"$XDG_CACHE_HOME/npm"} # Set npm cache location.
 export npm_config_userconfig="$XDG_CONFIG_HOME/npm/config" # Set up my npm config location.
 export RBENV_ROOT="${RBENV_ROOT:-"$XDG_CACHE_HOME/rbenv"}" # Set rbenv location.
+export NOTION_HOME="${NOTION_HOME:-"$XDG_CACHE_HOME/notion"}" # Set directory to use for notion install.
 export NODE_REPL_HISTORY=${NODE_REPL_HISTORY="$XDG_CACHE_HOME/node_repl_history"} # Set node-gyp download location.
 export BABEL_CACHE_PATH=${BABEL_CACHE_PATH="$XDG_CACHE_HOME/babel/cache.json"} # Set babel cache location.
 export GRADLE_USER_HOME="$XDG_CACHE_HOME/gradle" # Also contains gradle.properties (symlink from XDG_CONFIG_HOME).
@@ -173,6 +174,7 @@ pathadd "$XDG_DATA_HOME/rbenv/bin" # rbenv ruby version manager.
 pathadd "$XDG_CACHE_HOME/rbenv/shims" # rbenv installed versions.
 pathadd /usr/lib/ccache # Add ccache to the path if installed (Linux).
 pathadd /usr/local/opt/ccache/libexec # Add ccache to the path if installed (macOS).
+pathadd "$NOTION_HOME/bin" # Node/npm packages.
 pathadd "$CARGO_HOME/bin" # Rust packages.
 pathadd "$HOME/.local/bin"
 pathadd "$HOME/bin" # Put random binaries you want to run in here.
@@ -313,11 +315,8 @@ if [[ $shell == bash || $shell == zsh ]] && exists fzf && exists fd; then
   -m --bind='ctrl-o:execute(\$VISUAL {} </dev/tty >/dev/tty),ctrl-a:toggle-all,alt-j:jump,alt-k:jump-accept,ctrl-p:toggle-preview'"
 fi
 
-# Set up nvm
-# I don't have nvm autorun on every shell, I use `nv` when I want to start it.
-[[ ! -d "$(dirname "$npm_config_userconfig")" ]] && command mkdir -p "$(dirname "$npm_config_userconfig")"
-NVM_DIR="$XDG_DATA_HOME/nvm"; export NVM_DIR
-alias nv='. $NVM_DIR/nvm.sh'  # Start nvm with alias, o/w too much startup cost.
+# Set up notion (nvm Node.js version management alternative), disabled as adds to startup time.
+# [ -s "$NOTION_HOME/load.sh" ] && time (\. "$NOTION_HOME/load.sh")
 
 # Build node with ninja.
 alias bn='export CPPFLAGS=-fdiagnostics-color && ./configure && tools/gyp_node.py -f ninja && ninja -C out/Release && ln -fs out/Release/node node'
