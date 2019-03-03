@@ -442,14 +442,13 @@
               }
             ]
           }, {
-            "description": "Ж+Key switches to or opens App.",
+            "description": "Ж+Key switches to or opens App. Free keys: q,u,y,z",
             "manipulators": [
               {
-                "description": "Ж+Enter = Open new Terminal window.",
+                "description": "Ж+⏎ = Open new Terminal window.",
                 "type": "basic",
                 "from": {
-                  "key_code": "return_or_enter",
-                  "modifiers": { "optional": [ "any" ] }
+                  "key_code": "return_or_enter"
                 },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": [ { "shell_command": "open -na kitty" } ]
@@ -457,26 +456,63 @@
                 "description": "Ж+a = Open IntelliJ IDEA",
                 "type": "basic",
                 "from": {
-                  "key_code": "a",
-                  "modifiers": { "optional": [ "option", "command" ] }
+                  "key_code": "a"
                 },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": [ { "shell_command": "open -a 'IntelliJ IDEA'" } ]
               }, {
+                "description": "Ж+b = Open default browser (Safari)",
+                "type": "basic",
+                "from": {
+                  "key_code": "b"
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "open -a Safari" } ]
+              }, {
                 "description": "Ж+c = Open HipChat",
                 "type": "basic",
                 "from": {
-                  "key_code": "c",
-                  "modifiers": { "optional": [ "any" ] }
+                  "key_code": "c"
                 },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": [ { "shell_command": "open -a HipChat" } ]
               }, {
+                "description": "Ж+⌘+c = Open Apple Chat",
+                "type": "basic",
+                "from": {
+                  "key_code": "c",
+                  "modifiers": { "mandatory": [ "command" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "open -a 'Apple Chat'" } ]
+              }, {
+                "description": "Ж+⇧+c = Open Apple Chat",
+                "type": "basic",
+                "from": {
+                  "key_code": "c",
+                  "modifiers": { "mandatory": [ "shift" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "open -a 'Apple Chat'" } ]
+              }, {
+                "description": "Ж+d = print today's date",
+                "type": "basic",
+                "from": {
+                  "key_code": "d"
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "printf `date \"+%Y-%m-%d\"` | pbcopy" } ],
+                "to_after_key_up": [
+                  {
+                    "key_code": "v",
+                    "modifiers": [ "command" ]
+                  }
+                ]
+              }, {
                 "description": "Ж+e = Open Finder",
                 "type": "basic",
                 "from": {
-                  "key_code": "e",
-                  "modifiers": { "optional": [ "any" ] }
+                  "key_code": "e"
                 },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": [ { "shell_command": "open ~" } ]
@@ -484,8 +520,7 @@
                 "description": "Ж+f = Open Firefox",
                 "type": "basic",
                 "from": {
-                  "key_code": "f",
-                  "modifiers": { "optional": [ "any" ] }
+                  "key_code": "f"
                 },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": [ { "shell_command": "open -a 'Firefox Nightly'" } ]
@@ -493,53 +528,48 @@
                 "description": "Ж+g = Open Google Chrome",
                 "type": "basic",
                 "from": {
-                  "key_code": "g",
-                  "modifiers": { "optional": [ "any" ] }
+                  "key_code": "g"
                 },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": [ { "shell_command": "open -a 'Google Chrome'" } ]
               }, {
-                "description": "Ж+b = Open default browser (Safari)",
-                "type": "basic",
-                "from": {
-                  "key_code": "b",
-                  "modifiers": { "optional": [ "any" ] }
-                },
-                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
-                "to": [ { "shell_command": "open -a Safari" } ]
-              }, {
-                "description": "Ж+n = Open Calendar",
-                "type": "basic",
-                "from": {
-                  "key_code": "n",
-                  "modifiers": { "optional": [ "any" ] }
-                },
-                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
-                "to": [ { "shell_command": "open -a Calendar" } ]
-              }, {
                 "description": "Ж+m = Open Mail",
                 "type": "basic",
                 "from": {
-                  "key_code": "m",
-                  "modifiers": { "optional": [ "any" ] }
+                  "key_code": "m"
                 },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": [ { "shell_command": "open -a Mail" } ]
               }, {
+                "description": "Ж+n = Open Calendar",
+                "type": "basic",
+                "from": {
+                  "key_code": "n"
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "open -a Calendar" } ]
+              }, {
                 "description": "Ж+r = Open RadarX",
                 "type": "basic",
                 "from": {
-                  "key_code": "r",
-                  "modifiers": { "optional": [ "any" ] }
+                  "key_code": "r"
                 },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": [ { "shell_command": "open -a RadarX" } ]
               }, {
+                "description": "Ж++r = Open Agile",
+                "type": "basic",
+                "from": {
+                  "key_code": "r",
+                  "modifiers": { "mandatory": [ "shift" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "open -a Agile" } ]
+              }, {
                 "description": "Ж+s = Open Spotify",
                 "type": "basic",
                 "from": {
-                  "key_code": "s",
-                  "modifiers": { "optional": [ "any" ] }
+                  "key_code": "s"
                 },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": [ { "shell_command": "open -a Spotify" } ]
@@ -553,96 +583,78 @@
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": [ { "shell_command": "open -a kitty --args --single-instance" } ]
               }, {
-                "description": "Ж+Shift+x = restart the touch strip",
-                "type": "basic",
-                "from": {
-                  "key_code": "x",
-                  "modifiers": { "mandatory": [ "shift" ], "optional": [ "any" ] }
-                },
-                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
-                "to": [ { "shell_command": "pkill ControlStrip 1>&2 | /usr/local/bin/terminal-notifier -title 'Touch Strip Restarting' -group Karabiner-Elements" } ]
-              }, {
-                "description": "Ж+x = Open Wechat",
-                "type": "basic",
-                "from": {
-                  "key_code": "x",
-                  "modifiers": { "optional": [ "any" ] }
-                },
-                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
-                "to": [ { "shell_command": "open -a wechat" } ]
-              }, {
-                "description": "Ж+Shift+w = disable then enable wifi",
-                "type": "basic",
-                "from": {
-                  "key_code": "w",
-                  "modifiers": { "mandatory": [ "shift" ], "optional": [ "any" ] }
-                },
-                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
-                "to": [ { "shell_command": "networksetup -setairportpower en0 off; networksetup -setairportpower en0 on 1>&2 | /usr/local/bin/terminal-notifier -title 'Wifi Restarting' -group Karabiner-Elements" } ]
-              }, {
-                "description": "Ж+w = Open WorkFlowy",
-                "type": "basic",
-                "from": {
-                  "key_code": "w",
-                  "modifiers": { "optional": [ "any" ] }
-                },
-                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
-                "to": [ { "shell_command": "open -a WorkFlowy" } ]
-              }, {
-                "description": "Ж+Alt+v = copy 2FA code",
-                "type": "basic",
-                "from": {
-                  "key_code": "v",
-                  "modifiers": { "mandatory": [ "option" ], "optional": [ "any" ] }
-                },
-                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
-                "to": [ { "shell_command": "$HOME/bin/vpn code" } ]
-              }, {
-                "description": "Ж+Shift+v = Disconnect from VPN",
-                "type": "basic",
-                "from": {
-                  "key_code": "v",
-                  "modifiers": { "mandatory": [ "shift" ], "optional": [ "any" ] }
-                },
-                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
-                "to": [ { "shell_command": "$HOME/bin/vpn off" } ]
-              }, {
-                "description": "Ж+Command+v = Connect to DCVPN",
-                "type": "basic",
-                "from": {
-                  "key_code": "v",
-                  "modifiers": { "mandatory": [ "command" ], "optional": [ "any" ] }
-                },
-                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
-                "to": [ { "shell_command": "$HOME/bin/vpn dc" } ]
-              }, {
                 "description": "Ж+v = Connect to VPN",
                 "type": "basic",
                 "from": {
-                  "key_code": "v",
-                  "modifiers": { "optional": [ "any" ] }
+                  "key_code": "v"
                 },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": [ { "shell_command": "$HOME/bin/vpn london" } ]
               }, {
-                "description": "Ж+d = print today's date",
+                "description": "Ж+⇧+v = Disconnect from VPN",
                 "type": "basic",
                 "from": {
-                  "key_code": "d",
-                  "modifiers": { "optional": [ "any" ] }
+                  "key_code": "v",
+                  "modifiers": { "mandatory": [ "shift" ] }
                 },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
-                "to": [ { "shell_command": "printf `date \"+%Y-%m-%d\"` | pbcopy" } ],
-                "to_after_key_up": [
-                  {
-                    "key_code": "v",
-                    "modifiers": [ "command" ]
-                  }
-                ]
+                "to": [ { "shell_command": "$HOME/bin/vpn off" } ]
+              }, {
+                "description": "Ж+⌘+v = Connect to DCVPN",
+                "type": "basic",
+                "from": {
+                  "key_code": "v",
+                  "modifiers": { "mandatory": [ "command" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "$HOME/bin/vpn dc" } ]
+              }, {
+                "description": "Ж+⌥+v = copy 2FA code",
+                "type": "basic",
+                "from": {
+                  "key_code": "v",
+                  "modifiers": { "mandatory": [ "option" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "$HOME/bin/vpn code" } ]
+              }, {
+                "description": "Ж+w = Open WorkFlowy",
+                "type": "basic",
+                "from": {
+                  "key_code": "w"
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "open -a WorkFlowy" } ]
+              }, {
+                "description": "Ж+⇧+w = disable then enable wifi",
+                "type": "basic",
+                "from": {
+                  "key_code": "w",
+                  "modifiers": { "mandatory": [ "shift" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "networksetup -setairportpower en0 off; networksetup -setairportpower en0 on 1>&2 | /usr/local/bin/terminal-notifier -title 'Wifi Restarting' -group Karabiner-Elements" } ]
+              }, {
+                "description": "Ж+x = Open Wechat",
+                "type": "basic",
+                "from": {
+                  "key_code": "x"
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "open -a wechat" } ]
+              }, {
+                "description": "Ж+⇧+x = restart the touch strip",
+                "type": "basic",
+                "from": {
+                  "key_code": "x",
+                  "modifiers": { "mandatory": [ "shift" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "pkill ControlStrip 1>&2 | /usr/local/bin/terminal-notifier -title 'Touch Strip Restarting' -group Karabiner-Elements" } ]
               }
             ]
           }, {
-            "description": "Ж+; = lock screen (darken screen)",
+            "description": "Ж+; = lock screen (go to sleep).",
             "manipulators": [
               {
                 "type": "basic",
