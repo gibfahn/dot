@@ -182,50 +182,49 @@ nnoremap <Leader>cu :call LanguageClient_textDocument_references()<CR>| " Show u
 nnoremap <leader>ch :call LanguageClient#debugInfo()<CR>| " Show debugging (help) info.
 vnoremap <Leader>cf :call LanguageClient#textDocument_rangeFormatting()<CR>| " Format selected lines.
 
-nnoremap        <Leader>d :call BufferClose('')<CR>| " Close buffer without closing split,
-nnoremap        <Leader>f :Files<CR>|             " Search file names    for file,
-nnoremap        <Leader>F :grep |                 "  ↳          contents for file.
-nnoremap        <Leader>gc :cd %:p:h<CR>|         " Change vim directory (:pwd) to current file's dirname (e.g. for <space>f, :e).
-nnoremap        <Leader>gd :w !git diff --no-index % - <CR>|     " Diff between saved file and current.
-nnoremap        <Leader>gf :call DupBuffer()<CR>gF| " Open file path:row:col under cursor in last window.
-nnoremap        <Leader>gl :source <C-r>=SessionFile()<CR><CR>| " Load saved session for vim cwd to a default session path.
-nnoremap        <Leader>gL :source <C-r>=SessionFile()<CR>| " Load saved session for vim cwd to a custom path.
-nnoremap        <Leader>gp `[v`]| " Visual selection of the last thing you copied or pasted.
-nnoremap        <Leader>gs :mksession! <C-r>=SessionFile()<CR><CR>| " Save current session for vim cwd from a default session path.
-nnoremap        <Leader>gS :mksession! <C-r>=SessionFile()<CR>| " Save current session for vim cwd from a custom path.
-nnoremap        <Leader>gt :set et!<CR>:set et?<CR>|   " Toggle tabs/spaces.
-nnoremap        <Leader>gq :set fo-=t<CR>:set fo?<CR>| " Turn off line wrapping,
-nnoremap        <Leader>gQ :set fo+=t<CR>:set fo?<CR>| " ↳    on
-nnoremap        <Leader>gv :e $MYVIMRC<CR>|  " <Space>gv opens vimrc in the editor (autoreloaded on save).
-nnoremap        <Leader>gw :setlocal wrap!<CR>| " <Space>gw toggles the soft-wrapping of text.
-nnoremap        <Leader>id :r !date +\%Y-\%m-\%d<CR>| " Insert readable    date on new line.
-nnoremap        <Leader>iD :r !date +\%d-\%b-\%y<CR>| " ↳      `:sort`able date on new line.
-nnoremap        <Leader>it ITODO(gib): <ESC>:Commentary<CR>$| " Insert a TODO, (Write todo, then `<Space>it`).
-nnoremap        <Leader>j :sp<CR><C-w>k:bp<CR>|   " Open horizontal split,
-nnoremap        <Leader>k <C-w>q|                 " Close current split (keeps buffer).
-nnoremap        <Leader>K <C-W>z|                 " Close open preview windows (e.g. language server definitions).
-nnoremap        <Leader>l :vsp<CR><C-w>h:bp<CR>|  " Open vertical split.
-nnoremap        <Leader>L <C-w>b<C-w>q|           " Close last split (keeps buffer). Useful for quickfix splits.
-nnoremap        <Leader>o :set operatorfunc=OpenUrl<CR>g@| " Open the selected text with the appropriate program (like netrw-gx).
-nnoremap        <Leader>p "+p|                    "  Paste from clipboard after cursor.
-nnoremap        <Leader>P "+P|                    "                    ↳  before cursor.
-nnoremap        <Leader>q :qa<CR>|                " Quit if no    unsaved changes (for single file use <Space>d instead).
-nnoremap        <Leader>QQ :q!<CR>|               "      ↳ losing unsaved changes (DANGER).
-nnoremap        <Leader>r :%s/|                   " Replace (e.g. <Space>rold/new),
-nnoremap        <Leader>R :cfdo %s//ce <bar> up<S-Left><S-Left><Left><Left><Left><Left>| " Replace in all quickfix files (use after gr).
-map             <Leader>s <Plug>(easymotion-bd-w)| " EasyMotion: Move to word.
-nnoremap        <Leader>u :MundoToggle<CR>|       " Toggle Undo tree visualisation.
-nnoremap        <Leader>w :up<CR>|                " Write if there were changes.
-nnoremap        <Leader>W :w<CR>|                 " Write whether or not there were changes.
-nnoremap        <Leader>x :x<CR>|                 " Save (if changes) and quit.
-nnoremap        <Leader>X :xa<CR>|                " Quit all windows.
-nnoremap        <Leader>y "+y|                    " Copy to clipboard (normal mode).
-nnoremap        <Leader>Y :%y+<CR>|               "  ↳  file to clipboard (normal mode).
-nnoremap        <Leader>z  za|                    " Toggle folding on current line.
+nnoremap <Leader>d :call BufferClose('')<CR>| " Close buffer without closing split,
+nnoremap <Leader>f :Files<CR>|             " Search file names    for file,
+nnoremap <Leader>F :grep |                 "  ↳          contents for file.
+nnoremap <Leader>gc :cd %:p:h<CR>|         " Change vim directory (:pwd) to current file's dirname (e.g. for <space>f, :e).
+nnoremap <Leader>gd :w !git diff --no-index % - <CR>|     " Diff between saved file and current.
+nnoremap <Leader>gf :call DupBuffer()<CR>gF| " Open file path:row:col under cursor in last window.
+nnoremap <Leader>gl :source <C-r>=SessionFile()<CR><CR>| " Load saved session for vim cwd to a default session path.
+nnoremap <Leader>gL :source <C-r>=SessionFile()<CR>| " Load saved session for vim cwd to a custom path.
+nnoremap <Leader>gp `[v`]| " Visual selection of the last thing you copied or pasted.
+nnoremap <Leader>gs :mksession! <C-r>=SessionFile()<CR><CR>| " Save current session for vim cwd from a default session path.
+nnoremap <Leader>gS :mksession! <C-r>=SessionFile()<CR>| " Save current session for vim cwd from a custom path.
+nnoremap <Leader>gt :set et!<CR>:set et?<CR>|   " Toggle tabs/spaces.
+nnoremap <Leader>gq :set fo-=t<CR>:set fo?<CR>| " Turn off line wrapping,
+nnoremap <Leader>gQ :set fo+=t<CR>:set fo?<CR>| " ↳    on
+nnoremap <Leader>gv :e $MYVIMRC<CR>|  " <Space>gv opens vimrc in the editor (autoreloaded on save).
+nnoremap <Leader>gw :setlocal wrap!<CR>| " <Space>gw toggles the soft-wrapping of text.
+nnoremap <Leader>id :r !date +\%Y-\%m-\%d<CR>| " Insert readable    date on new line.
+nnoremap <Leader>iD :r !date +\%d-\%b-\%y<CR>| " ↳      `:sort`able date on new line.
+nnoremap <Leader>it ITODO(gib): <ESC>:Commentary<CR>$| " Insert a TODO, (Write todo, then `<Space>it`).
+nnoremap <Leader>j :sp<CR><C-w>k:bp<CR>|   " Open horizontal split,
+nnoremap <Leader>k <C-w>q|                 " Close current split (keeps buffer).
+nnoremap <Leader>K :cclose<CR>:lclose<CR>:helpclose<CR><C-W>z| " Close open preview windows (e.g. language server definitions).
+nnoremap <Leader>l :vsp<CR><C-w>h:bp<CR>|  " Open vertical split.
+nnoremap <Leader>L <C-w>b<C-w>q|           " Close last split (keeps buffer). Useful for quickfix splits.
+nnoremap <Leader>o :set operatorfunc=OpenUrl<CR>g@| " Open the selected text with the appropriate program (like netrw-gx).
+nnoremap <Leader>p "+p|                    "  Paste from clipboard after cursor.
+nnoremap <Leader>P "+P|                    "                    ↳  before cursor.
+nnoremap <Leader>q :qa<CR>|                " Quit if no    unsaved changes (for single file use <Space>d instead).
+nnoremap <Leader>QQ :q!<CR>|               "      ↳ losing unsaved changes (DANGER).
+nnoremap <Leader>r :.,$S/|                 " Case-insensitive replace from current line to end of doc.
+nnoremap <Leader>R :cfdo %s//ce <bar> up<S-Left><S-Left><Left><Left><Left><Left>| " Replace in all quickfix files (use after gr).
+nnoremap <Leader>u :MundoToggle<CR>|       " Toggle Undo tree visualisation.
+nnoremap <Leader>w :up<CR>|                " Write if there were changes.
+nnoremap <Leader>W :w<CR>|                 " Write whether or not there were changes.
+nnoremap <Leader>x :x<CR>|                 " Save (if changes) and quit.
+nnoremap <Leader>X :xa<CR>|                " Quit all windows.
+nnoremap <Leader>y "+y|                    " Copy to clipboard (normal mode).
+nnoremap <Leader>Y :%y+<CR>|               "  ↳  file to clipboard (normal mode).
+nnoremap <Leader>z  za|                    " Toggle folding on current line.
 nnoremap <expr> <Leader>Z &foldlevel ? 'zM' :'zR'| " Toggle folding everywhere (see also "zi).
-nnoremap        <Leader>; @:|                     " Repeat the last executed command.
-nnoremap        <Leader>/ :noh<CR>|               " Turn off find highlighting.
-nnoremap        <Leader>? /<Up><CR>|              " Search for last searched thing.
+nnoremap <Leader>; @:|                     " Repeat the last executed command.
+nnoremap <Leader>/ :noh<CR>|               " Turn off find highlighting.
+nnoremap <Leader>? /<Up><CR>|              " Search for last searched thing.
 
 " Grep for operator or visual selection, uses fixed string ripgrep search.
 nmap gr <Plug>(operator-ripgrep-root)
