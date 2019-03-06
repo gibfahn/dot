@@ -2,7 +2,6 @@
   # Commits: @=HEAD, -=last commit.
   # N.B. # at end of func allows parsing $1 args.
   # Helper functions:
-  headUpstream = rev-parse --abbrev-ref --symbolic-full-name @{u} # Upstream of current branch, e.g. origin/master.
   headRemote = "!git rev-parse --abbrev-ref --symbolic-full-name @{u} | cut -d '/' -f 1" # e.g. origin.
   headBranch = symbolic-ref --short HEAD # e.g. master.
   remoteOrg = "!git remote get-url $1 | awk -F ':|/' '{print $(NF-1)}' #" # Github org for remote. `g remoteOrg up` -> gibfahn.
@@ -61,9 +60,9 @@
   dn  = diff HEAD --name-only                          # diff of staged and unstaged file names.
   ds  = diff --staged                                  # Diff of staged files (`git diff` for unstaged).
   dt  = difftool                                       # Nicer way to view diffs in vim.
-  du  = "!git diff $(git headUpstream)"                # diff between working tree and upstream branch.
-  dus = "!git diff --staged $(git headUpstream)"       # diff between working tree and upstream branch.
-  dun = "!git diff $(git headUpstream) --name-only"    # diff between working tree and upstream branch file names.
+  du  = diff @{u}                                      # diff between working tree and upstream branch.
+  dus = diff --staged @{u}                             # diff between working tree and upstream branch.
+  dun = diff --name-only @{u}                          # diff between working tree and upstream branch file names.
 
   f = fetch            # Fetch one remote.
   fa = fetch --all     # Fetch from all the remotes.
@@ -113,11 +112,10 @@
   rba = rebase --abort                                       # Bail on the rebase session.
   rbc = rebase --continue                                    # Accept the current commit.
   rbs = rebase --skip                                        # Skip current commit you're rebasing on.
-  rhh = "!git reset --hard $(git headUpstream)"              # Reset hard to the upstream commit.
+  rhh = reset --hard @{u}                                    # Reset hard to the upstream commit.
   rh  = reset --hard                                         # Reset hard (to HEAD by default).
-  ri  = rebase -i -S --autosquash                            # Interactive rebase.
+  ri  = rebase -i -S --autosquash                            # Interactive rebase (defaults to upstream commit @{u}).
   rim = "!git rebase -i -S --autosquash $(git merge-base ${1:-master} ${2:-HEAD} ${@:2}) # " # Rebase all commits since you forked the branch.
-  rii = "!git rebase -i -S --autosquash $(git headUpstream)" # Reset to upstream branch, not needed with merge.defaultToUpstream.
   rp  = rev-parse                                            # Get the hash from a revision (`g rp @` and `g rp --short @` are often useful).
   rr  = remote rename                                        # Change name of remote `g rr origin up`.
   rs  = remote set-url                                       # Change URL of remote `g rs up hsg:dot`.
@@ -235,7 +233,6 @@
 [log]
   follow = true            # Log tracks file move/rename.
 [merge]
-  defaultToUpstream = true # Not set by default before Git 2.0, remove when possible.
   conflictstyle = diff3    # Show common ancestor in diffs (initially confusing, but very helpful).
   tool = vimdiff           # Use vimdiff (actually neovim's vimdiff) to view and fix merge conflicts (instead of `g mc`).
 [mergetool]
