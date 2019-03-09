@@ -515,7 +515,7 @@
                   "key_code": "e"
                 },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
-                "to": [ { "shell_command": "open ~" } ]
+                "to": [ { "shell_command": "open -a Finder" } ]
               }, {
                 "description": "Ж+f = Open Firefox",
                 "type": "basic",
@@ -626,14 +626,22 @@
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": [ { "shell_command": "open -a WorkFlowy" } ]
               }, {
-                "description": "Ж+⇧+w = disable then enable wifi",
+                "description": "Ж+w = enable wifi",
+                "type": "basic",
+                "from": {
+                  "key_code": "w"
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": [ { "shell_command": "networksetup -setairportpower en0 off 2>&1 | /usr/local/bin/terminal-notifier -title 'Starting Wifi' -group Karabiner-Elements" } ]
+              }, {
+                "description": "Ж+⇧+w = disable wifi",
                 "type": "basic",
                 "from": {
                   "key_code": "w",
                   "modifiers": { "mandatory": [ "shift" ] }
                 },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
-                "to": [ { "shell_command": "networksetup -setairportpower en0 off; networksetup -setairportpower en0 on 1>&2 | /usr/local/bin/terminal-notifier -title 'Wifi Restarting' -group Karabiner-Elements" } ]
+                "to": [ { "shell_command": "networksetup -setairportpower en0 off 2>&1 | /usr/local/bin/terminal-notifier -title 'Stopping Wifi' -group Karabiner-Elements" } ]
               }, {
                 "description": "Ж+x = Open Wechat",
                 "type": "basic",
