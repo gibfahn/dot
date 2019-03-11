@@ -93,7 +93,7 @@ gitUpdate() {
   skip=true   # Whether we did anything or just skipped this update.
   exit_code=200 # What the function should return (default 200 == no changes so skipped).
   uncommitted_changes="$(git status --porcelain)" # Is there anything in the working tree.
-  upstream_commits="$(git rev-list -1 "$(git headUpstream)" --not HEAD)" # Does upstream have something we don't.
+  upstream_commits="$(git rev-list -1 @{u} --not HEAD)" # Does upstream have something we don't.
   upstream_submodule_updates="$(git submodule status --recursive 2>/dev/null | grep -q '^+')"
 
   if [[ -n "$upstream_commits" || -n "$upstream_submodule_updates" ]]; then

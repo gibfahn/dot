@@ -148,7 +148,7 @@ endtry
 inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : <SID>check_last_char_was_space() ? "\<TAB>" : deoplete#mappings#manual_complete()
 inoremap <expr>   <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"| " Shift-Tab is previous entry if completion menu open.
 " In insert mode, if there is a snippet to be completed, Enter expands to it.
-inoremap <expr> <CR> pumvisible() ? "<C-R>=ExpandSnippetOrCarriageReturn()<CR>" : "\<CR>"
+inoremap <expr> <CR> pumvisible() ? "<C-R>=ExpandSnippetOrCarriageReturn()<CR>" : "\<C-o>\<C-W>z\<CR>"
 
 nnoremap          Q <nop>|                          "  ↳ accidental triggering).
 nnoremap          Y y$|                             " Make Y work like C and D (yank to end of line, not whole line).
@@ -211,7 +211,7 @@ nnoremap <Leader>p "+p|                    "  Paste from clipboard after cursor.
 nnoremap <Leader>P "+P|                    "                    ↳  before cursor.
 nnoremap <Leader>q :qa<CR>|                " Quit if no    unsaved changes (for single file use <Space>d instead).
 nnoremap <Leader>QQ :q!<CR>|               "      ↳ losing unsaved changes (DANGER).
-nnoremap <Leader>r :.,$S/|                 " Case-insensitive replace from current line to end of doc.
+nnoremap <Leader>r :.,$s/|                 " Case-insensitive replace from current line to end of doc.
 nnoremap <Leader>R :cfdo %s//ce <bar> up<S-Left><S-Left><Left><Left><Left><Left>| " Replace in all quickfix files (use after gr).
 nnoremap <Leader>u :MundoToggle<CR>|       " Toggle Undo tree visualisation.
 nnoremap <Leader>w :up<CR>|                " Write if there were changes.
@@ -453,7 +453,7 @@ let g:mundo_preview_bottom = 1                      " Undo diff preview on botto
 let g:mundo_right = 1                               " Undo window on right.
 let g:peekaboo_window = "vert bo 50new"             " Increase peekaboo window width to 50.
 let g:sneak#label = 1                               " Make sneak like easymotion (but nicer).
-let g:sneak#target_labels = ";sftunqm/`'-+SFGHLTUNRMQZ?0123456789!()\\[]:|<>QWERTYUIOPASDFGHJKLZXCVBNM.\"\,:qwertyuiopasdfghjklzxcvbnm" " Labels sneak uses to show words.
+let g:sneak#target_labels = ";sftunqm/`'-+SFGHLTUNRMQZ?0123456789!()\\[]:|<>WEYIOPADJKXCVB.\"\,:qwertyuiopasdfghjklzxcvbnm" " Labels sneak uses to show words.
 let g:sneak#use_ic_scs = 1                          " Sneak: respect smartcase setting.
 let g:snips_author = 'gib'                          " Your handle, used in ultisnips snippets.
 let g:ulti_expand_or_jump_res = 0                   " Initial setting, used in ExpandSnippetOrCarriageReturn().

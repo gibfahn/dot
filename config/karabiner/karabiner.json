@@ -626,13 +626,14 @@
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": [ { "shell_command": "open -a WorkFlowy" } ]
               }, {
-                "description": "Ж+w = enable wifi",
+                "description": "Ж+⌘+w = enable wifi",
                 "type": "basic",
                 "from": {
-                  "key_code": "w"
+                  "key_code": "w",
+                  "modifiers": { "mandatory": [ "command" ] }
                 },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
-                "to": [ { "shell_command": "networksetup -setairportpower en0 off 2>&1 | /usr/local/bin/terminal-notifier -title 'Starting Wifi' -group Karabiner-Elements" } ]
+                "to": [ { "shell_command": "networksetup -setairportpower en0 on 2>&1 | /usr/local/bin/terminal-notifier -title 'Starting Wifi' -group Karabiner-Elements" } ]
               }, {
                 "description": "Ж+⇧+w = disable wifi",
                 "type": "basic",
