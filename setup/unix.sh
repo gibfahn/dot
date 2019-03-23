@@ -3,7 +3,7 @@
 
 # Installs things that I use on all Unix systems (e.g. macOS and Linux).
 
-. "$(dirname "$0")/../helpers/setup.sh" # Load helper script from dot/helpers.
+. "$(dirname "$0")"/../helpers/setup.sh # Load helper script from dot/helpers.
 
 npm_modules=(
   javascript-typescript-langserver # Language server for JavaScript and Typescript files.
@@ -12,7 +12,7 @@ npm_modules=(
 
 pip3_modules=(
   neovim-remote                 # Connect to existing nvim sessions (try `g cm` in a nvim terminal).
-  neovim                        # Python plugin framework for neovim.
+  pynvim                        # Python plugin framework for neovim.
   'python-language-server[all]' # Python language server (I use it in neovim).
 )
 
@@ -31,7 +31,7 @@ go_packages=(
 )
 
 # These are installed and updated through brew on Darwin.
-if [[ "$(uname)" == Linux ]]; then
+if [[ -z $MINIMAL && $(uname) == Linux ]]; then
   rust_crates+=(
     ripgrep                     # Super-fast version of grep/ack/ag that handles unicode etc.
     fd-find                     # Faster version of find.
@@ -76,7 +76,7 @@ else
 fi
 
 # Change git user.name and user.email
-if exists git && [[ "$(whoami)" != gib ]] && {
+if exists git && [[ $(whoami) != gib && $(id -u) != 0 ]] && {
  grep -q 'name = Gibson Fahnestock # REPLACEME' "$XDG_CONFIG_HOME/git/config" ||
  grep -q 'email = gibfahn@gmail.com # REPLACEME' "$XDG_CONFIG_HOME/git/config"
 }; then
@@ -107,9 +107,8 @@ fi
 
 # Set up rbenv for ruby version management.
 
-
 # Only run make if there were changes.
-if gitCloneOrUpdate rbenv/rbenv "$XDG_DATA_HOME/rbenv" \
+if [[ -z $MINIMAL ]] && gitCloneOrUpdate rbenv/rbenv "$XDG_DATA_HOME/rbenv" \
   || gitCloneOrUpdate rbenv/rbenv-default-gems "$XDG_DATA_HOME/rbenv"/plugins/rbenv-default-gems; then
   (pushd "$XDG_DATA_HOME/rbenv" && src/configure && make -C src)
 fi
@@ -179,7 +178,7 @@ gitCloneOrUpdate mafredri/zsh-async "$XDG_DATA_HOME/zsh/zsh-async"
 # Install nvm:
 unamem="$(uname -m)"
 nvm_prefix="${unamem/x86_64/}"
-if no "$nvm_prefix"/nvm; then
+if [[ -z $MINIMAL ]] && no "$nvm_prefix"/nvm; then
   # No install scripts as path update isn't required, it's done in gibrc.
   gitClone creationix/nvm "$XDG_DATA_HOME/${nvm_prefix}/nvm"
   . "$XDG_DATA_HOME/${nvm_prefix}"/nvm/nvm.sh # Load nvm so we can use it below.
@@ -187,29 +186,26 @@ if no "$nvm_prefix"/nvm; then
 fi
 
 # Add rbenv to path in case it was only just installed.
-if not rbenv; then
+if [[ -z $MINIMAL ]] && not rbenv; then
   export PATH="$XDG_DATA_HOME/rbenv/bin:$PATH"
   export PATH="$XDG_CACHE_HOME/rbenv/shims:$PATH"
   export RBENV_ROOT="${RBENV_ROOT:-"$XDG_CACHE_HOME/rbenv"}" # Set rbenv location.
 fi
 
 # Install latest version of ruby if changed.
-rbenv install --skip-existing "$(rbenv install --list | awk '/^\s*[0-9]+\.[0-9]+\.[0-9]+\s*$/ {a=$1} END { print a }')"
-
-# Symlink fzf
-if not fzf; then
-  ln -sf "$XDG_DATA_HOME"/fzf/bin/* "$HOME"/bin/
-fi
+[[ -z $MINIMAL ]] && rbenv install --skip-existing "$(rbenv install --list | awk '/^\s*[0-9]+\.[0-9]+\.[0-9]+\s*$/ {a=$1} END { print a }')"
 
 # Install ruby gems
-for gem in "${ruby_gems[@]}"; do
-  if gem list -I "$gem" >/dev/null; then
-    get "gem: $gem"
-    gem install "$gem"
-  else
-    skip "gem: $gem"
-  fi
-done
+if [[ -z $MINIMAL ]]; then
+  for gem in "${ruby_gems[@]}"; do
+    if gem list -I "$gem" >/dev/null; then
+      get "gem: $gem"
+      gem install "$gem"
+    else
+      skip "gem: $gem"
+    fi
+  done
+fi
 
 # Update ruby gems.
 gem update "$(gem outdated | awk '{print $1}')"
@@ -224,18 +220,25 @@ if no nvim/site/autoload/plug.vim; then
   exists $VIM && $VIM +PlugInstall +qall # Install/update vim plugins.
 fi
 
+# Symlink fzf
+if not fzf; then
+  ln -sf "$XDG_DATA_HOME"/fzf/bin/* "$HOME"/bin/
+fi
+
 # Install npm modules.
-not npm && . "$XDG_DATA_HOME/${nvm_prefix}"/nvm/nvm.sh # Load nvm so we can use npm.
-installed_npm_module_versions="$(npm ls -g --depth=0 --loglevel=error | grep -Ex '.* [-_A-Za-z0-9]+@([0-9]+\.){2}[0-9]+' | sed -E 's/^.+ //' | sed 's/@/ /')"
-for module in "${npm_modules[@]}"; do
-  if ! echo "$installed_npm_module_versions" | grep -qx "$module .*" \
-    || [[ "$(echo "$installed_npm_module_versions" | grep -x "$module .*" | awk '{print $NF}')" != "$(npm info --loglevel=error "$module" version)" ]]; then
-    get "npm: $module"
-    npm install --global --loglevel=error "$module"@latest
-  else
-    skip "npm: $module"
-  fi
-done
+if [[ -z $MINIMAL ]]; then
+  not npm && . "$XDG_DATA_HOME/${nvm_prefix}"/nvm/nvm.sh # Load nvm so we can use npm.
+  installed_npm_module_versions="$(npm ls -g --depth=0 --loglevel=error | grep -Ex '.* [-_A-Za-z0-9]+@([0-9]+\.){2}[0-9]+' | sed -E 's/^.+ //' | sed 's/@/ /')"
+  for module in "${npm_modules[@]}"; do
+    if ! echo "$installed_npm_module_versions" | grep -qx "$module .*" \
+      || [[ "$(echo "$installed_npm_module_versions" | grep -x "$module .*" | awk '{print $NF}')" != "$(npm info --loglevel=error "$module" version)" ]]; then
+      get "npm: $module"
+      npm install --global --loglevel=error "$module"@latest
+    else
+      skip "npm: $module"
+    fi
+  done
+fi
 
 gitCloneOrUpdate fwcd/KotlinLanguageServer "$XDG_DATA_HOME/KotlinLanguageServer"
 if [[ $? != 200 ]]; then
@@ -247,7 +250,7 @@ if [[ $? != 200 ]]; then
 fi
 
 # If you don't use rust just choose the cancel option.
-if [[ -n "$HARDCORE" ]]; then
+if [[ -z $MINIMAL && -n $HARDCORE ]]; then
   if no rustup || no cargo; then # Install/set up rust.
     # Install rustup. Don't modify path as that's already in gibrc.
     RUSTUP_HOME="$XDG_DATA_HOME"/rustup CARGO_HOME="$XDG_DATA_HOME"/cargo curl https://sh.rustup.rs -sSf | bash -s -- -y --no-modify-path

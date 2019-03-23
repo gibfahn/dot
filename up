@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Runs the setup to "install" my dotfiles on your machine. Runs scripts in
 # config/ and then runs ./link.
@@ -35,10 +35,11 @@ fi
 if [ "$(uname)" = Darwin ]; then # macOS
   $(dirname $0)/setup/mac.sh
 elif [ "$(uname)" = Linux ]; then # Linux specific stuff.
-  case "$(uname -v)" in
-    *Ubuntu* | *ubuntu*) # Ubuntu specific setup.
-      $(dirname $0)/setup/ubu.sh ;;
-    *) echo "No specific setup files for $(uname -v) yet" ;;
+  distro="$(cat /etc/*-release | grep '^ID=' | sed -E 's/^ID="?(.*)"?/\1/' | head -1)"
+  case "$distro" in
+    *[Uu]buntu*)                       "$(dirname $0)"/setup/ubuntu.sh ;;
+    *[Aa]lpine*) export MINIMAL=true;  "$(dirname $0)"/setup/alpine.sh || exit 1;;
+    *) echo "No specific setup files for $distro yet" ;;
   esac
 fi
 

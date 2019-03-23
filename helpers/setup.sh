@@ -143,12 +143,18 @@ gitCloneOrUpdate() {
 }
 
 # `hasSudo || exit` in individual install scripts to check for sudo.
+# Sets the $sudo variable to be blank (if running as root) or sudo if not.
 hasSudo() {
+  if [ "$(id -u)" = 0 ]; then
+    sudo=
+    return 0
+  fi
   if [ "$NO_SUDO" ] || ! sudo -v; then
     skip "Packages (user doesn't have sudo)."
     return 1
   else
     get "Packages."
+    sudo=sudo
     return 0
   fi
 }
