@@ -172,14 +172,18 @@ nnoremap <Leader>b :Buffers<CR>| " Search buffer list for file.
 nnoremap <Leader>ca :call LanguageClient#textDocument_codeAction()<CR>| " Show menu of available code actions.
 nnoremap <Leader>cc :call LanguageClient_contextMenu()<CR>| " Show menu of available actions.
 nnoremap <Leader>cd :call DupBuffer()<CR>:call LanguageClient_textDocument_definition()<CR>| " Go to definition in last window.
-nnoremap <Leader>cD :call LanguageClient_textDocument_definition()<CR>| " Go to definition in the same window.
+nnoremap <Leader>cD :call LanguageClient#textDocument_definition()<CR>| " Go to definition in the same window.
 nnoremap <Leader>cf :call LanguageClient_textDocument_formatting()<CR>| " Format document.
+nnoremap <leader>ch :call LanguageClient#debugInfo()<CR>| " Show debugging (help) info.
 nnoremap <Leader>ck :call LanguageClient_textDocument_hover()<CR>| " Show definition.
 nnoremap <Leader>cl :call LanguageClient_textDocument_documentSymbol()<CR>| " List symbols in the current file.
 nnoremap <Leader>cr :call LanguageClient_textDocument_rename()<CR>| " Rename var/func under cursor.
+nnoremap <leader>cRc :call LanguageClient#textDocument_rename({'newName': Abolish.camelcase(expand('<cword>'))})<CR>| " Rename camelCase
+nnoremap <leader>cRs :call LanguageClient#textDocument_rename({'newName': Abolish.snakecase(expand('<cword>'))})<CR>| " Rename snake_case
+nnoremap <leader>cRu :call LanguageClient#textDocument_rename({'newName': Abolish.uppercase(expand('<cword>'))})<CR>| " Rename UPPERCASE
 nnoremap <Leader>cs :Snippets<CR>| " Show list of current snippets.
 nnoremap <Leader>cu :call LanguageClient_textDocument_references()<CR>| " Show usages of current symbol.
-nnoremap <leader>ch :call LanguageClient#debugInfo()<CR>| " Show debugging (help) info.
+
 vnoremap <Leader>cf :call LanguageClient#textDocument_rangeFormatting()<CR>| " Format selected lines.
 
 nnoremap <Leader>d :call BufferClose('')<CR>| " Close buffer without closing split,
@@ -211,7 +215,7 @@ nnoremap <Leader>p "+p|                    "  Paste from clipboard after cursor.
 nnoremap <Leader>P "+P|                    "                    ↳  before cursor.
 nnoremap <Leader>q :qa<CR>|                " Quit if no    unsaved changes (for single file use <Space>d instead).
 nnoremap <Leader>QQ :q!<CR>|               "      ↳ losing unsaved changes (DANGER).
-nnoremap <Leader>r :.,$s/|                 " Case-insensitive replace from current line to end of doc.
+nnoremap <Leader>r :%s/|                   " Replace in current doc.
 nnoremap <Leader>R :cfdo %s//ce <bar> up<S-Left><S-Left><Left><Left><Left><Left>| " Replace in all quickfix files (use after gr).
 nnoremap <Leader>u :MundoToggle<CR>|       " Toggle Undo tree visualisation.
 nnoremap <Leader>w :up<CR>|                " Write if there were changes.
@@ -453,7 +457,7 @@ let g:mundo_preview_bottom = 1                      " Undo diff preview on botto
 let g:mundo_right = 1                               " Undo window on right.
 let g:peekaboo_window = "vert bo 50new"             " Increase peekaboo window width to 50.
 let g:sneak#label = 1                               " Make sneak like easymotion (but nicer).
-let g:sneak#target_labels = ";sftunqm/`'-+SFGHLTUNRMQZ?0123456789!()\\[]:|<>WEYIOPADJKXCVB.\"\,:qwertyuiopasdfghjklzxcvbnm" " Labels sneak uses to show words.
+let g:sneak#target_labels = ";sftunqm/`'-+SFGHLTUNRMQZ?0123456789!()\\[]:|<>WEYIOPADJKXCVB.\"\,:weryiopadghjklzxcvb" " Labels sneak uses to show words.
 let g:sneak#use_ic_scs = 1                          " Sneak: respect smartcase setting.
 let g:snips_author = 'gib'                          " Your handle, used in ultisnips snippets.
 let g:ulti_expand_or_jump_res = 0                   " Initial setting, used in ExpandSnippetOrCarriageReturn().
