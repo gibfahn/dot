@@ -442,17 +442,9 @@
               }
             ]
           }, {
-            "description": "Ж+Key switches to or opens App. Free keys: q,u,y,z",
+            "description": "Ж+Key switches to or opens App. Free keys: ⏎,q,u,y,z",
             "manipulators": [
               {
-                "description": "Ж+⏎ = Open new Terminal window.",
-                "type": "basic",
-                "from": {
-                  "key_code": "return_or_enter"
-                },
-                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
-                "to": [ { "shell_command": "open -na kitty" } ]
-              }, {
                 "description": "Ж+a = Open IntelliJ IDEA",
                 "type": "basic",
                 "from": {
@@ -549,13 +541,13 @@
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": [ { "shell_command": "open -a Calendar" } ]
               }, {
-                "description": "Ж+r = Open RadarX",
+                "description": "Ж+r = Open Radar",
                 "type": "basic",
                 "from": {
                   "key_code": "r"
                 },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
-                "to": [ { "shell_command": "open -a RadarX" } ]
+                "to": [ { "shell_command": "open -a Radar" } ]
               }, {
                 "description": "Ж++r = Open Agile",
                 "type": "basic",
