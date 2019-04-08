@@ -105,7 +105,9 @@
   pa  = "!curl -L ${1%.patch}.patch | git am -S --whitespace=fix # "     # Patch Github PR.
   pap = "!curl -L ${1%.patch}.patch | git am -3 -S --whitespace=fix  # " # Please patch it.
   paw = "!curl -L ${1%.patch}.patch | git am -3 -S --whitespace=warn # " # Patch but don't fix whitespace.
+  pl  = pull                                                    # Useful for `git pull up master`.
   pt  = "!git push -u $1 $(git headBranch) #"                   # g pt origin sets branch to track up + pushes.
+  pu  = "!git pull up $(git defaultBranch up) #"                # Pull Upstream: quick way to fetch and rebase on the default upstream branch.
 
   ra  = remote add                                           # Add new remote by url.
   rb  = rebase -S                                            # Rebase and gpg sign.
