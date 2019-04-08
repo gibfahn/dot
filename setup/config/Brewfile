@@ -1,8 +1,7 @@
 # Alternate version of ripgrep with optimisations on:
 tap "burntsushi/ripgrep", "https://github.com/BurntSushi/ripgrep.git"
 tap "homebrew/cask"                      # `brew cask` for GUI apps.
-tap "homebrew/fonts"                     # Let's you `brew cask install` fonts.
-tap "homebrew/versions"                  # Beta versions of apps.
+tap "homebrew/cask-fonts"                # Let's you `brew cask install` fonts.
 tap "homebrew/bundle"                    # Allows you to use Brewfiles.
 
 # Versions of utils that are out-of-date on macOS:
