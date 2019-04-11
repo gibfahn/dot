@@ -96,7 +96,7 @@ set gdefault                                        " Global replace default (of
 set hidden                                          " Don't force saving buffers on switching.
 set history=1000                                    " More command/search history.
 set hlsearch                                        " Highlight search matches (off: <Space>/).
-set ignorecase                                      " Ignore case for lowercase searches,
+set ignorecase                                      " Ignore case for lowercase searches (re-enable with \C in pattern),
 set incsearch                                       " Incremental searching.
 set laststatus=2                                    " Always display the status line.
 set lazyredraw                                      " Don't redraw if you don't have to (e.g. in macros).
