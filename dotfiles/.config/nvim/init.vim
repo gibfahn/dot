@@ -8,6 +8,11 @@ if empty($XDG_CONFIG_HOME)| let $XDG_CONFIG_HOME = $HOME . '/.config'| endif
 if empty($XDG_CACHE_HOME)| let $XDG_CACHE_HOME = $HOME . '/.cache'| endif
 if empty($XDG_DATA_HOME)| let $XDG_DATA_HOME = $HOME . '/.local/share'| endif
 
+" Plugins are installed here.
+let s:plugin_path = $XDG_DATA_HOME . '/nvim/plugged'
+" Path to colorscheme, change if you use a different color scheme.
+let $colorscheme_path = s:plugin_path . '/vim-gib/colors/gib.vim'
+
 try
   " Add vim-plug dir to vim runtimepath (already there for nvim).
   exe 'set rtp+=' . $XDG_DATA_HOME . '/nvim/site'
@@ -19,7 +24,7 @@ try
     autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
   endif
 
-  call plug#begin('~/.local/share/nvim/plugged')    " Load plugins with vim-plug.
+  call plug#begin(s:plugin_path)    " Load plugins with vim-plug.
 
   " Conditionally enable plugin (always install, only activate if condition met).
   function! Cond(cond, ...)
@@ -27,6 +32,7 @@ try
     return a:cond ? opts : extend(opts, { 'on': [], 'for': [] })
   endfunction
 
+  Plug 'chrisbra/Colorizer'                         " Color ansi escape codes (:h Colorizer).
   Plug 'AndrewRadev/splitjoin.vim'                  " gS to split, gJ to join lines.
   Plug 'Shougo/deoplete.nvim', has('nvim') ? { 'do': ':UpdateRemotePlugins' } : {} " Asynchronous completion.
   Plug 'Shougo/echodoc.vim'                         " Show function signatures where you're typing.
@@ -80,7 +86,7 @@ endtry
 set nocompatible                                    " Remove vi compatibility hacks.
 let mapleader = "\<Space>"                          " Set <Leader> (default shortcut used in mappings below) to Spacebar.
 
-syntax on                                           " Turn on syntax highlighting.
+syntax enable                                       " Turn on syntax highlighting.
 filetype plugin indent on                           " Use file-specific plugins and indentation rules.
 
 set autoindent                                      " Moving to a new line keeps the same indentation (overridden by filetype indent on).
@@ -114,6 +120,7 @@ set smartcase                                       "  ↳ don't for mixed-case.
 set splitbelow                                      " Open new split panes to right and,
 set splitright                                      "  ↳ bottom, which feels more natural.
 set t_Co=256                                        " Use 256 color terminal.
+set termguicolors                                   " Uses 24-bit colors in the terminal (guifg and guibg).
 set textwidth=80                                    " Wrap at 79 chars (change: set tw=72).
 set undolevels=1000                                 " More undo history.
 set updatetime=100                                  " Delay after which to write to swap file and run CursorHold event.
@@ -190,8 +197,10 @@ nnoremap <Leader>d :call BufferClose('')<CR>| " Close buffer without closing spl
 nnoremap <Leader>f :Files<CR>|             " Search file names    for file,
 nnoremap <Leader>F :grep |                 "  ↳          contents for file.
 nnoremap <Leader>gc :cd %:p:h<CR>|         " Change vim directory (:pwd) to current file's dirname (e.g. for <space>f, :e).
+nnoremap <Leader>gC :e $colorscheme_path<CR> " Edit colorscheme file.
 nnoremap <Leader>gd :w !git diff --no-index % - <CR>|     " Diff between saved file and current.
 nnoremap <Leader>gf :call DupBuffer()<CR>gF| " Open file path:row:col under cursor in last window.
+nnoremap <Leader>gh :call <SID>SynStack()<CR>| " Show which syntax is set for current cursor location.
 nnoremap <Leader>gl :source <C-r>=SessionFile()<CR><CR>| " Load saved session for vim cwd to a default session path.
 nnoremap <Leader>gL :source <C-r>=SessionFile()<CR>| " Load saved session for vim cwd to a custom path.
 nnoremap <Leader>gp `[v`]| " Visual selection of the last thing you copied or pasted.
@@ -379,6 +388,20 @@ function! ExpandSnippetOrCarriageReturn()
     return g:ulti_expand_or_jump_res > 0 ? snippet : "\<CR>"
 endfunction
 
+" Used in <Leader>gh shortcut, show syntax group under cursor.
+function! <SID>SynStack()
+  if !exists("*synstack")
+    return
+  endif
+  let l = line(".")
+  let c = col(".")
+  echo "hi<" . synIDattr(synID(l, c, 1),"name") . '> trans<'
+  \ . synIDattr(synID(l, c, 0), "name") . "> lo<"
+  \ . synIDattr(synIDtrans(synID(l, c, 1)), "name") . ">"
+
+  echo map(synstack(l, c), 'synIDattr(v:val, "name")')
+endfunc
+
 if has('nvim')                                      " NeoVim specific settings.
   let g:terminal_scrollback_buffer_size = 100000    " Store lots of terminal history.
   if executable("nvr")| let $VISUAL = 'nvr --remote-wait'| endif " Use existing nvim window to open new files (e.g. `g cm`).
@@ -535,6 +558,7 @@ augroup gibAutoGroup                                " Group of automatic functio
   autocmd FileType python setlocal foldmethod=indent textwidth=100  " Python files should be folded by indent.
   autocmd BufNewFile,BufRead *.bats set filetype=sh " Bats is a shell test file type.
   autocmd BufWritePost $MYVIMRC nested source $MYVIMRC " Reload vimrc on save.
+  autocmd BufWritePost $colorscheme_path nested source $colorscheme_path " Reload colorscheme on save:
   autocmd QuickFixCmdPost *grep* cwindow|           " Open the quickfix window on grep.
   autocmd VimEnter * silent! tabonly|               " Don't allow starting Vim with multiple tabs.
   " Check if files modified when you open a new window, switch back to vim, or if you don't move the cursor for 100ms.
