@@ -117,6 +117,7 @@
   rhh = reset --hard @{u}                                    # Reset hard to the upstream commit.
   rh  = reset --hard                                         # Reset hard (to HEAD by default).
   ri  = rebase -i -S --autosquash                            # Interactive rebase (defaults to upstream commit @{u}).
+  riu = "!git rebase -i -S --autosquash up/$(git defaultBranch up) #" # Interactive rebase on up/HEAD.
   rim = "!git rebase -i -S --autosquash $(git merge-base ${1:-master} ${2:-HEAD} ${@:2}) # " # Rebase all commits since you forked the branch.
   rp  = rev-parse                                            # Get the hash from a revision (`g rp @` and `g rp --short @` are often useful).
   rr  = remote rename                                        # Change name of remote `g rr origin up`.
