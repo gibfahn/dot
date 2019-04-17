@@ -6,14 +6,18 @@
 . "$(dirname "$0")"/../helpers/setup.sh # Load helper script from dot/helpers.
 
 npm_modules=(
-  javascript-typescript-langserver # Language server for JavaScript and Typescript files.
-  bash-language-server             # Language server for bash and other shell script files.
+  javascript-typescript-langserver  # Language server for JavaScript and Typescript files.
+  bash-language-server              # Language server for bash and other shell script files.
+  dockerfile-language-server-nodejs # Language server for Dockerfiles.
+  markdownlint-cli                  # Markdown linter.
+  diagnostic-languageserver         # Generic language server (see linters).
 )
 
 pip3_modules=(
   neovim-remote                 # Connect to existing nvim sessions (try `g cm` in a nvim terminal).
   pynvim                        # Python plugin framework for neovim.
   'python-language-server[all]' # Python language server (I use it in neovim).
+  vim-vint                      # Vim linter.
 )
 
 ruby_gems=(

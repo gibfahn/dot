@@ -1,0 +1,164 @@
+// See scheme for more options (although it's easier to just use autocomplete for it).
+//   https://github.com/neoclide/coc.nvim/blob/master/data/schema.json
+{
+  // COC OPTIONS
+
+  // Used to show a menu item is a snippet.
+  "suggest.snippetIndicator": " ►",
+  "suggest.enablePreview": true,
+  // Used in the gutter for errors.
+  "diagnostic.errorSign": "✖",
+  // Used in the gutter for warnings.
+  "diagnostic.warningSign": "⚠",
+  // Used in the gutter for Info messages.
+  "diagnostic.infoSign": "ℹ",
+  // Used in the gutter for Info messages.
+  "diagnostic.hintSign": "ℹ",
+  // Write errors and warnings to location list.
+  "diagnostic.locationlist": true,
+
+  // Used in diagnostics lists etc (:h coc-list-mappings).
+  "list.insertMappings": {
+    // Select all options (use with an action).
+    "<C-a>": "do:selectall",
+    "<C-r>": "do:refresh",
+    "<C-q>": "action:quickfix"
+  },
+  "codeLens.enable": true,
+  "coc.preferences.colorSupport": true,
+  "coc.preferences.formatOnType": true,
+  "coc.preferences.currentFunctionSymbolAutoUpdate": true,
+  // The symbol in the completion menu for words in the current file.
+  "coc.source.around.shortcut": "↕",
+  // The symbol in the completion menu for words in other open buffers.
+  "coc.source.buffer.shortcut": "↔",
+  // The symbol in the completion menu for words in other open buffers.
+  "coc.source.file.shortcut": "F",
+  // 🐓 🐔 Set this for LanguageServer symbol instead of LS once possible.
+
+  // COC EXTENSION OPTIONS
+  "python.linting.enabled": true,
+  "python.linting.flake8Enabled": true,
+  "python.linting.pydocstyleEnabled": true,
+  "yaml.format.enable": true,
+  "yaml.hover": true,
+  "yaml.schemas": {
+    "https://pages.github.pie.apple.com/dchao3/kw-to-json-schema/resources/rio.schema.json": "/rio.yml",
+    "http://json.schemastore.org/gitlab-ci": "/.gitlab-ci.yml"
+  },
+  "json.schemas": [
+    {
+      "fileMatch": ["package.json"],
+      "url": "http://json.schemastore.org/package"
+    }
+  ],
+  "prettier.disableLanguages": ["markdown"],
+  "prettier.trailingComma": "all",
+
+  // CUSTOM LANGUAGE SERVERS
+  // (for ones with coc extensions see g:coc_global_extensions in vimrc).
+  "languageserver": {
+    "dockerfile": {
+      "command": "docker-langserver",
+      "filetypes": ["Dockerfile"],
+      "args": ["--stdio"]
+    },
+    "bash": {
+      "command": "bash-language-server",
+      "filetypes": ["sh"],
+      "args": ["start"]
+    },
+    "kotlin": {
+      "command": "kotlin-language-server",
+      "filetypes": ["kotlin"]
+    },
+    "swift": {
+      "command": "sourcekit-lsp",
+      "filetypes": ["swift"]
+    },
+    "dls": {
+      "command": "diagnostic-languageserver",
+      "args": ["--stdio"],
+      "filetypes": [ "sh", "email", "vim" ],
+      "initializationOptions": {
+        "linters": {
+          "shellcheck": {
+            "command": "shellcheck",
+            "debounce": 100,
+            "args": [ "--format=gcc", "-"],
+            "offsetLine": 0,
+            "offsetColumn": 0,
+            "sourceName": "shellcheck",
+            "formatLines": 1,
+            "formatPattern": [
+              "^[^:]+:(\\d+):(\\d+):\\s+([^:]+):\\s+(.*)$",
+              {
+                "line": 1,
+                "column": 2,
+                "message": 4,
+                "security": 3
+              }
+            ],
+            "securities": {
+              "error": "error",
+              "warning": "warning",
+              "note": "info"
+            }
+          },
+          "languagetool": {
+            "command": "languagetool",
+            "debounce": 200,
+            "args": ["-"],
+            "offsetLine": 0,
+            "offsetColumn": 0,
+            "sourceName": "languagetool",
+            "formatLines": 2,
+            "formatPattern": [
+              "^\\d+?\\.\\)\\s+Line\\s+(\\d+),\\s+column\\s+(\\d+),\\s+([^\\n]+)\nMessage:\\s+(.*)$",
+              {
+                "line": 1,
+                "column": 2,
+                "message": [4, 3]
+              }
+            ],
+          },
+          "vint": {
+              "command": "vint",
+              "debounce": 100,
+              "args": [
+                  "--style-problem",
+                  "--no-color",
+                  "--enable-neovim",
+                  "-f",
+                  "'{file_path}:{line_number}:{column_number}: {severity}: {description} (see {reference})'",
+                  "-"
+              ],
+              "offsetLine": 0,
+              "offsetColumn": 0,
+              "sourceName": "vint",
+              "formatLines": 1,
+              "formatPattern": [
+                  "^[^:]+:(\\d+):(\\d+):\\s+([^:]+):\\s+(.*)$",
+                  {
+                      "line": 1,
+                      "column": 2,
+                      "message": 4,
+                      "security": 3
+                  }
+              ],
+              "securities": {
+                  "error": "error",
+                  "warning": "warning",
+                  "info": "style_problem"
+              }
+          }
+        },
+        "filetypes": {
+          "sh": "shellcheck",
+          "vim": "vint",
+          "email": "languagetool"
+        }
+      }
+    }
+  }
+}

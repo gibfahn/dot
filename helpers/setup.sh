@@ -98,7 +98,7 @@ gitUpdate() {
 
   if [[ -n "$upstream_commits" || -n "$upstream_submodule_updates" ]]; then
     unset skip # We need to do some work.
-    skip=0 # Means we did work and didn't fail.
+    exit_code=0 # Means we did work and didn't fail.
 
     # If you have uncommitted changes, commit them.
     if [[ -n "$uncommitted_changes" ]]; then
@@ -127,12 +127,14 @@ gitUpdate() {
     fi
   fi
 
-  { [ "$skip" ] && skip "$@"; } || update "$@"
+  { [[ -n "$skip" ]] && skip "$@"; } || update "$@"
   popd >/dev/null || return 1
   return "$exit_code"
 }
 
 # If the repo isn't there, clone it, if it is, update it.
+# $1: repo to clone (org/repo).
+# $2: dir to clone into.
 gitCloneOrUpdate() {
   local DIR="$2" # Directory to clone into.
   if [ ! -d "$DIR" ]; then

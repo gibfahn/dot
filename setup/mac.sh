@@ -197,11 +197,12 @@ fi
 # Update Mac App Store apps.
 softwareupdate -i -a
 
-if not langserver-swift && ! not swift; then
-  gitClone rlovelett/langserver-swift "$HOME"/bin/src/langserver-swift
-  (cd "$HOME/bin/src/langserver-swift" || error "Failed to cd to the langserver directory"; make release)
-  ln -s "$HOME/bin/src/langserver-swift/.build/$(uname -m)"-*/release/langserver-swift "$HOME"/bin/langserver-swift
-fi
+# Swift LanguageServer.
+sourcekit_lsp_path="$XDG_DATA_HOME"/sourcekit-lsp
+gitCloneOrUpdate apple/sourcekit-lsp "$sourcekit_lsp_path" && {
+  (cd "$XDG_DATA_HOME"/sourcekit-lsp || error "Failed to cd to the langserver directory"; swift package update && swift build -c release)
+  ln -s "$sourcekit_lsp_path"/.build/release/sourcekit-lsp "$HOME"/bin/sourcekit-lsp
+}
 
 if [[ -d /Applications/Slack.app ]]; then
   slack_path=/Applications/Slack.app/Contents/Resources/app.asar.unpacked/src/static/ssb-interop.js

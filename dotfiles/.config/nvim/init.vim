@@ -8,6 +8,9 @@ if empty($XDG_CONFIG_HOME)| let $XDG_CONFIG_HOME = $HOME . '/.config'| endif
 if empty($XDG_CACHE_HOME)| let $XDG_CACHE_HOME = $HOME . '/.cache'| endif
 if empty($XDG_DATA_HOME)| let $XDG_DATA_HOME = $HOME . '/.local/share'| endif
 
+" Sometimes vim runs before my dotfiles.
+if $PATH !~ '/usr/local/bin'| let $PATH = '/usr/local/bin/:' . $PATH| endif
+
 " Plugins are installed here.
 let s:plugin_path = $XDG_DATA_HOME . '/nvim/plugged'
 " Path to colorscheme, change if you use a different color scheme.
@@ -32,34 +35,26 @@ try
     return a:cond ? opts : extend(opts, { 'on': [], 'for': [] })
   endfunction
 
-  Plug 'chrisbra/Colorizer'                         " Color ansi escape codes (:h Colorizer).
   Plug 'AndrewRadev/splitjoin.vim'                  " gS to split, gJ to join lines.
-  Plug 'Shougo/deoplete.nvim', has('nvim') ? { 'do': ':UpdateRemotePlugins' } : {} " Asynchronous completion.
-  Plug 'Shougo/echodoc.vim'                         " Show function signatures where you're typing.
-  Plug 'SirVer/ultisnips'                           " Create and insert snippets with parameter completion.
   Plug 'airblade/vim-gitgutter'                     " Show git diffs in the gutter (left of line numbers) (:h gitgutter).
   Plug 'ap/vim-buftabline'                          " Show buffers in the tab bar.
   Plug 'ap/vim-readdir'                             " Nicer file browser plugin that works with buftabline.
-  Plug 'autozimu/LanguageClient-neovim', Cond(has('nvim'), { 'branch': 'next', 'do': 'bash install.sh', }) " LSP Support (:h LanguageClient).
   Plug 'cespare/vim-toml'                           " Toml syntax highlighting.
+  Plug 'chrisbra/Colorizer'                         " Color ansi escape codes (:h Colorizer).
   Plug 'coderifous/textobj-word-column.vim'         " Adds ic/ac and iC/aC motions to block select word column in paragraph.
-  Plug 'eclipse/eclipse.jdt.ls', { 'dir': '~/.local/share/eclipse.jdt.ls', 'tag': '*' } " Java Language Server.
   Plug 'fweep/vim-zsh-path-completion'              " Nicer file browser plugin.
   Plug 'gibfahn/vim-gib'                            " Use vim colorscheme.
   Plug 'godlygeek/tabular'                          " Make tables easier (:help Tabular).
-  Plug 'honza/vim-snippets'                         " List of premade snippets for many languages.
   Plug 'itchyny/lightline.vim'                      " Customize statusline and tabline.
   Plug 'junegunn/fzf', { 'dir': '~/.local/share/fzf', 'do': './install --bin' } " :h fzf
   Plug 'junegunn/fzf.vim'                           " Try :Files, :GFiles? :Buffers :Lines :History :Commits :BCommits
   Plug 'junegunn/vim-peekaboo'                      " Pop up register list when pasting/macroing.
   Plug 'justinmk/vim-sneak'                         " sab -> go to next ab in code (:h sneak-mappings for default mappings).
+  Plug 'kana/vim-operator-user'                     " Make it easier to define operators.
   Plug 'kana/vim-textobj-line'                      " Adds `il` and `al` text objects for current line.
   Plug 'kana/vim-textobj-user'                      " Allows you to create custom text objects (used in vim-textobj-line).
-  Plug 'pangloss/vim-javascript'                    " JS   language bindings.
+  Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}} " CoC language server + VS Code Extensions.
   Plug 'raghur/vim-ghost', {'do': ':GhostInstall'}  " Edit browser text areas in Neovim (:h ghost).
-  Plug 'redhat-developer/yaml-language-server', {'do': 'npm install && npm run compile'} " Language server for yaml files.
-  Plug 'roxma/nvim-yarp', Cond(v:version >= 800 && !has('nvim')) " UpdateRemotePlugins replacement for Vim8.
-  Plug 'roxma/vim-hug-neovim-rpc',  Cond(v:version >= 800 && !has('nvim')) " Neovim rpc client for Vim8.
   Plug 'rust-lang/rust.vim'                         " Rust language bindings.
   Plug 'sheerun/vim-polyglot'                       " Syntax files for a large number of different languages.
   Plug 'simnalamburt/vim-mundo'                     " Graphical undo tree (updated fork of Gundo).
@@ -67,18 +62,17 @@ try
   Plug 'tpope/vim-abolish'                          " Work with variants of words (replacing, capitalizing etc).
   Plug 'tpope/vim-commentary'                       " Autodetect comment type for lang.
   Plug 'tpope/vim-fugitive'                         " Git commands in vim.
+  Plug 'tpope/vim-markdown'                         " Better markdown highlight including support for code block highlighting.
   Plug 'tpope/vim-repeat'                           " Allows you to use . with plugin mappings.
   Plug 'tpope/vim-rhubarb'                          " GitHub support.
   Plug 'tpope/vim-sleuth'                           " Automatically detect indentation.
   Plug 'tpope/vim-surround'                         " Add/mod/remove surrounding chars.
   Plug 'tpope/vim-unimpaired'                       " [ and ] mappings (help unimpaired).
-  Plug 'kana/vim-operator-user'                     " Make it easier to define operators.
 
   call plug#end()                                   " Initialize plugin system
   catch /E117: Unknown function: plug#begin/
     echo "ERROR:\tvim-plug automatic install failed. Original error was:\n\t" . v:exception . "\n"
 endtry
-
 " }}} Load plugins (uses vim-plug)
 
 " {{{ Set vim options
@@ -149,13 +143,25 @@ endtry
 " {{{ Key mappings (see http://vim.wikia.com/wiki/Unused_keys for unused keys)
 " Available (normal): <C-Space>, +, _, <C-q/s/[/_>, <leader>e/m/n/v
 
-" In insert mode, if completion dropdown open, Tab/Shift-Tab switch between
-" entries. Otherwise if the previous character was a space they indent, else Tab
-" will trigger the completion manually.
-inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : <SID>check_last_char_was_space() ? "\<TAB>" : deoplete#mappings#manual_complete()
-inoremap <expr>   <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"| " Shift-Tab is previous entry if completion menu open.
-" In insert mode, if there is a snippet to be completed, Enter expands to it.
-inoremap <expr> <CR> pumvisible() ? "<C-R>=ExpandSnippetOrCarriageReturn()<CR>" : "\<C-o>\<C-W>z\<CR>"
+" In insert mode, if completion dropdown open, Tab/Shift-Tab switch between entries. Otherwise if
+" the previous character was a space they indent, else Tab will trigger the completion manually.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+" Use <C-j> for both expand and jump (make expand higher priority.)
+imap <C-j> <Plug>(coc-snippets-expand-jump)
+" Use <C-j> for select text for visual placeholder of snippet.
+vmap <C-j> <Plug>(coc-snippets-select)
+
+" Shift-Tab is previous entry if completion menu open.
+inoremap <expr>   <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+" Use <cr> for confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 nnoremap          Q <nop>|                          "  ↳ accidental triggering).
 nnoremap          Y y$|                             " Make Y work like C and D (yank to end of line, not whole line).
@@ -175,32 +181,66 @@ nnoremap d<C-l> <C-w>l<C-w>c
 nnoremap <Leader>a @a<CR>|       " Apply macro a (add with qa or yank to a reg with "ay).
 nnoremap <Leader>b :Buffers<CR>| " Search buffer list for file.
 
-" <Space>-c: call the LanguageClient (IDE type commands).
-nnoremap <Leader>ca :call LanguageClient#textDocument_codeAction()<CR>| " Show menu of available code actions.
-nnoremap <Leader>cc :call LanguageClient_contextMenu()<CR>| " Show menu of available actions.
-nnoremap <Leader>cd :call DupBuffer()<CR>:call LanguageClient_textDocument_definition()<CR>| " Go to definition in last window.
-nnoremap <Leader>cD :call LanguageClient#textDocument_definition()<CR>| " Go to definition in the same window.
-nnoremap <Leader>cf :call LanguageClient_textDocument_formatting()<CR>| " Format document.
-nnoremap <leader>ch :call LanguageClient#debugInfo()<CR>| " Show debugging (help) info.
-nnoremap <Leader>ck :call LanguageClient_textDocument_hover()<CR>| " Show definition.
-nnoremap <Leader>cl :call LanguageClient_textDocument_documentSymbol()<CR>| " List symbols in the current file.
-nnoremap <Leader>cr :call LanguageClient_textDocument_rename()<CR>| " Rename var/func under cursor.
-nnoremap <leader>cRc :call LanguageClient#textDocument_rename({'newName': Abolish.camelcase(expand('<cword>'))})<CR>| " Rename camelCase
-nnoremap <leader>cRs :call LanguageClient#textDocument_rename({'newName': Abolish.snakecase(expand('<cword>'))})<CR>| " Rename snake_case
-nnoremap <leader>cRu :call LanguageClient#textDocument_rename({'newName': Abolish.uppercase(expand('<cword>'))})<CR>| " Rename UPPERCASE
-nnoremap <Leader>cs :Snippets<CR>| " Show list of current snippets.
-nnoremap <Leader>cu :call LanguageClient_textDocument_references()<CR>| " Show usages of current symbol.
+""""""""""""""""""
+" CoC Remappings "
+""""""""""""""""""
 
-vnoremap <Leader>cf :call LanguageClient#textDocument_rangeFormatting()<CR>| " Format selected lines.
+" Remap keys for gotos
+nmap <silent> <Leader>cd <Plug>(coc-definition)
+nmap <silent> <Leader>cD :call DupBuffer()<CR><Plug>(coc-definition)
+nmap <silent> <Leader>cy <Plug>(coc-type-definition)
+nmap <silent> <Leader>cY :call DupBuffer()<CR><Plug>(coc-type-definition)
+nmap <silent> <Leader>ci <Plug>(coc-implementation)
+nmap <silent> <Leader>cI :call DupBuffer()<CR><Plug>(coc-implementation)
+nmap <silent> <Leader>cu <Plug>(coc-references)
+nmap <silent> <Leader>cU :call DupBuffer()<CR><Plug>(coc-references)
+
+" Use K for show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+" Remap for rename current word
+nmap <Leader>cr <Plug>(coc-rename)
+
+" Remap for format selected region
+vmap <Leader>cf  <Plug>(coc-format-selected)
+nmap <Leader>cf  <Plug>(coc-format-selected)
+
+" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
+" vmap <Leader>a  <Plug>(coc-codeaction-selected)
+" nmap <Leader>a  <Plug>(coc-codeaction-selected)
+
+" Remap for do codeAction of current line
+nmap <Leader>ca  <Plug>(coc-codeaction)
+" Fix autofix problem of current line
+nmap <Leader>cf  <Plug>(coc-fix-current)
+
+" Using CocList
+" Show all diagnostics
+nnoremap <silent> <Leader>ca  :<C-u>CocList diagnostics<cr>
+" Manage extensions
+nnoremap <silent> <Leader>ce  :<C-u>CocList extensions<cr>
+" Show commands
+nnoremap <silent> <Leader>cc  :<C-u>CocList commands<cr>
+" Find symbol of current document
+nnoremap <silent> <Leader>co  :<C-u>CocList outline<cr>
+" Search workspace symbols
+nnoremap <silent> <space>cs  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+nnoremap <silent> <space>cj  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent> <space>ck  :<C-u>CocPrev<CR>
+" Resume latest coc list
+nnoremap <silent> <space>cp  :<C-u>CocListResume<CR>
 
 nnoremap <Leader>d :call BufferClose('')<CR>| " Close buffer without closing split,
 nnoremap <Leader>f :Files<CR>|             " Search file names    for file,
 nnoremap <Leader>F :grep |                 "  ↳          contents for file.
 nnoremap <Leader>gc :cd %:p:h<CR>|         " Change vim directory (:pwd) to current file's dirname (e.g. for <space>f, :e).
-nnoremap <Leader>gC :e $colorscheme_path<CR> " Edit colorscheme file.
+nnoremap <Leader>gC :e ~/.config/nvim/coc-settings.json<CR> " Edit colorscheme file.
 nnoremap <Leader>gd :w !git diff --no-index % - <CR>|     " Diff between saved file and current.
 nnoremap <Leader>gf :call DupBuffer()<CR>gF| " Open file path:row:col under cursor in last window.
 nnoremap <Leader>gh :call <SID>SynStack()<CR>| " Show which syntax is set for current cursor location.
+nnoremap <Leader>gH :e $colorscheme_path<CR> " Edit colorscheme file.
 nnoremap <Leader>gl :source <C-r>=SessionFile()<CR><CR>| " Load saved session for vim cwd to a default session path.
 nnoremap <Leader>gL :source <C-r>=SessionFile()<CR>| " Load saved session for vim cwd to a custom path.
 nnoremap <Leader>gp `[v`]| " Visual selection of the last thing you copied or pasted.
@@ -252,6 +292,14 @@ nmap <leader>6 <Plug>BufTabLine.Go(6)|         " <leader>1 goes to buffer 6 (see
 nmap <leader>7 <Plug>BufTabLine.Go(7)|         " <leader>1 goes to buffer 7 (see numbers in tab bar).
 nmap <leader>8 <Plug>BufTabLine.Go(8)|         " <leader>1 goes to buffer 8 (see numbers in tab bar).
 nmap <leader>9 <Plug>BufTabLine.Go(1) :bp<CR>| " <leader>1 goes to last buffer (see numbers in tab bar).
+
+" Use `[c` and `]c` for next/previous diagnostic message.
+nmap <silent> [c <Plug>(coc-diagnostic-prev)
+nmap <silent> ]c <Plug>(coc-diagnostic-next)
+
+" Use `[h` and `]h` for next and previous changed git hunk.
+nmap [h <Plug>GitGutterPrevHunk
+nmap ]h <Plug>GitGutterNextHunk
 
 " Leader + window size keys increases/decreases height/width by 3/2.
 nnoremap <silent> <Leader>+ :exe "resize " . (winheight(0) * 3/2)<CR>
@@ -364,9 +412,9 @@ function! BufferClose(bang) abort " Call BufferClose('!') to get bd!
 endfunc
 
 " Used in the Tab mappings above.
-function! s:check_last_char_was_space() abort
+function! s:check_back_space() abort
   let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~ '\s'
+  return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
 " Make vim-surround work in operator-pending mode, so the cursor changes when you press e.g. ys.
@@ -382,12 +430,6 @@ function! SurroundOp(char)
     return ''
 endfunction
 
-" See usage in inoremap above.
-function! ExpandSnippetOrCarriageReturn()
-    let snippet = UltiSnips#ExpandSnippetOrJump()
-    return g:ulti_expand_or_jump_res > 0 ? snippet : "\<CR>"
-endfunction
-
 " Used in <Leader>gh shortcut, show syntax group under cursor.
 function! <SID>SynStack()
   if !exists("*synstack")
@@ -401,6 +443,28 @@ function! <SID>SynStack()
 
   echo map(synstack(l, c), 'synIDattr(v:val, "name")')
 endfunc
+
+" Used in K mapping above.
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Returns the function the cursor is currently in, used in lightline status bar.
+function! CocCurrentFunction()
+  let f = get(b:, 'coc_current_function', '')
+  return f == '' ? '' : f . '()'
+endfunction
+
+" Function to trim trailing whitespace in a file.
+function! TrimWhitespace()
+  let l:save = winsaveview()
+  %s/\s\+$//e
+  call winrestview(l:save)
+endfunction
 
 if has('nvim')                                      " NeoVim specific settings.
   let g:terminal_scrollback_buffer_size = 100000    " Store lots of terminal history.
@@ -450,22 +514,23 @@ command! -bang -nargs=* Rg
   \   'rg  --vimgrep --color=always --smart-case --hidden ' . shellescape(<q-args>), 1,
   \   fzf#vim#with_preview({'options': ['-m', '--bind=ctrl-a:toggle-all,alt-j:jump,alt-k:jump-accept']}, 'right:50%', 'ctrl-p'))
 
-" If you're wondering what the [A] things in the completion menu are, `:h deoplete-sources`:
-"   ~ [↑] [↓] [*] = current file, [B] open buffers, [D] vim dictionary, [F] file
-"   paths, [O] OmniFunc, [LC] LanguageClient.
-call deoplete#custom#var('around', {'range_above': 20, 'range_below': 20, 'mark_above': '[↑]', 'mark_below': '[↓]', 'mark_changes': '[*]', }) " deoplete-source-around
+" Use `:Format` to format current buffer
+command! -nargs=0 Format :call CocAction('format')
+" Use `:Fold` to fold current buffer
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+" Run a command and interpret the output in the quickfix window
+command! -nargs=+ -complete=file CRun cexpr system(<q-args>)
+" Run a command and interpret the output in the location window
+command! -nargs=+ -complete=file LRun lexpr system(<q-args>)
 
 if exists('/usr/local/bin/python3')
   let g:python3_host_prog = "/usr/local/bin/python3"  " Speed up startup by not looking for python3 every time.
 endif
 
 let g:fzf_history_dir = $XDG_CACHE_HOME . '/fzf-history' " Save history of fzf vim commands.
-let g:UltiSnipsExpandTrigger = "<NUL>"              " Don't automatically set UltiSnips expand, called manually in ExpandSnippetOrCarriageReturn().
-let g:UltiSnipsJumpBackwardTrigger="<Up>"           " Up arrow goes to previous snippet area.
-let g:UltiSnipsJumpForwardTrigger="<Down>"          " Down arrow goes to next snippet area.
 let g:buftabline_indicators = 1                     " Show a + if the buffer has been modified.
 let g:buftabline_numbers = 2                        " Show buftabline's count (use <Leader>1-9 to switch.
-let g:echodoc#enable_at_startup = 1                 " Enable echodoc by default.
 let g:echodoc#type = 'virtual' " Needs nvim 0.3.2 (`brew unlink neovim && brew install --HEAD neovim` for now).
 let g:ghost_darwin_app = 'kitty'                    " Tell vim-ghost which terminal to open.
 let g:github_enterprise_urls = ['https://github.pie.apple.com'] " Add your GHE repo so vim-fugitive's :Gbrowse! can use it (try with visual mode).
@@ -473,7 +538,6 @@ let g:hardtime_allow_different_key = 1              " Allow alternating keys (e.
 let g:hardtime_default_on = 1                       " Don't allow repeated keypresses by default.
 let g:hardtime_ignore_quickfix = 1                  " Don't give me a hard time about repeated keys in quickfix window.
 let g:is_posix = 1                                  " Assume shell for syntax highlighting.
-let g:list_of_insert_keys = ["<LEFT>", "<RIGHT>"]   " Don't use hardtime for <Up> <Down> (used in Ultisnips).
 let g:loaded_netrw = 1                              " Skip loading netrw file browser (use vim-readdir instead).
 let g:loaded_netrwPlugin = 1                        " Don't use the built-in file browser (use vim-readdir instead).
 let g:mundo_preview_bottom = 1                      " Undo diff preview on bottom.
@@ -482,70 +546,88 @@ let g:peekaboo_window = "vert bo 50new"             " Increase peekaboo window w
 let g:sneak#label = 1                               " Make sneak like easymotion (but nicer).
 let g:sneak#target_labels = ";sftunqm/`'-+SFGHLTUNRMQZ?0123456789!()\\[]:|<>WEYIOPADJKXCVB.\"\,:weryiopadghjklzxcvb" " Labels sneak uses to show words.
 let g:sneak#use_ic_scs = 1                          " Sneak: respect smartcase setting.
-let g:snips_author = 'gib'                          " Your handle, used in ultisnips snippets.
-let g:ulti_expand_or_jump_res = 0                   " Initial setting, used in ExpandSnippetOrCarriageReturn().
 let g:surround_no_mappings = 1                      " Manually map surround, see SurroundOp() function.
 
+" Settings for custom statusline.
 let g:lightline = {
   \ 'colorscheme': 'wombat',
   \ 'active': {
     \ 'left': [ [ 'mode', 'paste' ],
     \           [ 'readonly', 'relativepath', 'modified' ],
-    \           [ 'gitbranch', ], ],
+    \           [ 'gitbranch' ],
+    \           [ 'truncate_here' ],
+    \           [ 'cocstatus' ] ],
     \ 'right': [ [ 'lineinfo' ],
     \            [ 'percent' ],
-    \            [ 'fileformat', 'fileencoding', 'filetype' ] ] },
+    \            [ 'fileformat', 'fileencoding', 'filetype' ],
+    \            [ 'currentfunction' ] ] },
   \ 'inactive': {
-    \ 'left': [ [ 'filename' ] ],
+    \ 'left': [ [ 'filename' ], [ 'currentfunction' ]],
     \ 'right': [ [ 'lineinfo' ],
     \            [ 'percent' ] ] },
   \ 'tabline': {
     \ 'left': [ [ 'tabs' ] ],
     \ 'right': [ [ 'close' ] ] },
  \ 'component': {
+    \ 'truncate_here': '%<',
     \ 'fileformat': '%{&ff=="unix"?"":&ff}',
     \ 'fileencoding': '%{&fenc=="utf-8"?"":&fenc}' },
  \ 'component_visible_condition': {
+    \ 'truncate_here': 0,
     \ 'fileformat': '&ff&&&ff!="unix"',
     \ 'fileencoding': '&fenc&&&fenc!="utf-8"' },
+ \ 'component_type': {
+    \ 'truncate_here': 'raw' },
  \ 'component_function': {
+    \ 'cocstatus': 'coc#status',
+    \ 'currentfunction': 'CocCurrentFunction',
     \ 'gitbranch': 'fugitive#head', },
   \ }
 
-let g:LanguageClient_serverCommands = {
-  \ 'cpp': ['clangd'],
-  \ 'go': ['go-langserver'],
-  \ 'java': ['jdtls', '-Dlog.level=ALL'],
-  \ 'javascript': ['javascript-typescript-stdio'],
-  \ 'javascript.jsx': ['javascript-typescript-stdio'],
-  \ 'kotlin': ['kotlin-language-server'],
-  \ 'python': ['pyls'],
-  \ 'ruby': ['solargraph', 'stdio'],
-  \ 'rust': ['rustup', 'run', 'stable', 'rls'],
-  \ 'sh': ['bash-language-server', 'start'],
-  \ 'swift': ['langserver-swift'],
-  \ 'yaml': ['yaml-language-server'],
-  \ }
-let g:LanguageClient_settingsPath = $XDG_CONFIG_HOME . '/nvim/language_client_settings.json'
-let g:LanguageClient_diagnosticsList = "Location" " Don't overwrite quickfix list with linter/checker output.
-" Debugging options for the language client/server:
-" let g:LanguageClient_loggingLevel = 'DEBUG'
-" let g:LanguageClient_loggingFile =  expand('~/.cache/vim/LanguageClient.log')
-" let g:LanguageClient_serverStderr = expand('~/.cache/vim/LanguageServer.log')
+" Extensions (plugins) for CoC language client.
+let g:coc_global_extensions = [
+  \ 'coc-json',
+  \ 'coc-tsserver',
+  \ 'coc-html',
+  \ 'coc-css',
+  \ 'coc-vetur',
+  \ 'coc-java',
+  \ 'coc-solargraph',
+  \ 'coc-rls',
+  \ 'coc-yaml',
+  \ 'coc-python',
+  \ 'coc-highlight',
+  \ 'coc-snippets',
+  \ 'coc-svg',
+  \ 'coc-gocode',
+  \ 'coc-ccls',
+  \ 'coc-prettier',
+  \ 'coc-eslint',
+  \ 'coc-dictionary',
+  \ 'coc-word',
+  \ 'coc-emoji',
+  \ 'coc-syntax',
+  \ ]
+
+" Should be parsed by vim-markdown plugin to render code blocks properly, doesn't seem to work.
+" Block names: https://github.com/github/linguist/blob/master/lib/linguist/languages.yml
+let g:markdown_fenced_languages = ['bash=sh', 'c', 'console=sh', 'diff', 'dockerfile', 'go',
+  \ 'javascript', 'js=javascript', 'json', 'kotlin', 'python', 'rust', 'sh', 'toml', 'vim', 'yaml']
+
+" Don't use polyglot markdown so we can use vim-markdown and get highlighted blocks.
+let g:polyglot_disabled = ['markdown', 'pug']
 
 " Highlight the 81st column of text (in dark grey so it doesn't distract).
-highlight ColorColumn ctermbg=234
+highlight ColorColumn guibg=#383734
 call matchadd('ColorColumn', '\%81v', 100)
 
-set path=.,/usr/include,,**                         " Add ** to search path
 if executable("rg")
-  set grepprg=rg\ -S\ --vimgrep\ --no-heading         " Use ripgrep for file searching.
-  set grepformat=%f:%l:%c:%m,%f:%l:%m                 " Teach vim how to parse the ripgrep output.
+  set grepprg=rg\ -S\ --vimgrep\ --no-heading       " Use ripgrep for file searching.
+  set grepformat=%f:%l:%c:%m,%f:%l:%m               " Teach vim how to parse the ripgrep output.
 endif
 
 augroup gibAutoGroup                                " Group of automatic functions.
   autocmd!|                                         " Remove existing autocmds.
-  autocmd InsertEnter * call deoplete#enable()|     " Only enable deoplete when you go into insert mode.
   autocmd BufReadPost *|                            " On open jump to last cursor position if possible.
     \ if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") |
     \   execute "normal g`\"" |
@@ -564,14 +646,15 @@ augroup gibAutoGroup                                " Group of automatic functio
   " Check if files modified when you open a new window, switch back to vim, or if you don't move the cursor for 100ms.
   " Use getcmdwintype() to avoid running in the q: window (otherwise you get lots of errors).
   autocmd FocusGained,BufEnter,CursorHold,CursorHoldI * if getcmdwintype() == '' | checktime | endif
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json,rust setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+  " Highlight symbol under cursor on CursorHold
+  autocmd CursorHold * silent call CocActionAsync('highlight')
+  " Allow comments in json.
+  autocmd FileType json syntax match Comment +\/\/.\+$+
 augroup END
-
-" Function to trim trailing whitespace in a file.
-function! TrimWhitespace()
-  let l:save = winsaveview()
-  %s/\s\+$//e
-  call winrestview(l:save)
-endfunction
 
 " }}} Custom commands, Autocommands, global variables
 
