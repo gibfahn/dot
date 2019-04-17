@@ -26,7 +26,8 @@
   },
   "codeLens.enable": true,
   "coc.preferences.colorSupport": true,
-  "coc.preferences.formatOnType": true,
+  // Unset this as the python autoformat disagrees with flake8.
+  // "coc.preferences.formatOnType": true,
   "coc.preferences.currentFunctionSymbolAutoUpdate": true,
   // The symbol in the completion menu for words in the current file.
   "coc.source.around.shortcut": "↕",

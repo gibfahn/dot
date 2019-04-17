@@ -109,7 +109,7 @@ set number                                          " Turn on line numbers.
 set ruler                                           " Always show cursor position.
 set shiftwidth=2 tabstop=2 softtabstop=2            " Set tab width to 2.
 set showcmd                                         " Display incomplete commands.
-set signcolumn=yes                                  " Always show the colum with git and language server markers.
+set signcolumn=auto                                 " Resize the sign column automatically.
 set smartcase                                       "  ↳ don't for mixed-case.
 set splitbelow                                      " Open new split panes to right and,
 set splitright                                      "  ↳ bottom, which feels more natural.
