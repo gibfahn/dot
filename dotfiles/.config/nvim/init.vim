@@ -355,7 +355,7 @@ cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 " {{{ Functions used in key mappings above.
 
 function! s:CallRipGrep(...) abort
-  call fzf#vim#grep('rg --vimgrep --color=always --smart-case --hidden  -F ' . shellescape(join(a:000, ' ')), 1,
+  call fzf#vim#grep('rg --vimgrep --color=always --smart-case --hidden --glob !.git -F ' . shellescape(join(a:000, ' ')), 1,
         \ fzf#vim#with_preview({ 'options': ['-m', '--bind=ctrl-a:toggle-all,alt-j:jump,alt-k:jump-accept']}, 'right:50%', 'ctrl-p'), 1)
 endfunction
 

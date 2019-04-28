@@ -40,7 +40,7 @@
   // COC EXTENSION OPTIONS
   "python.linting.enabled": true,
   "python.linting.flake8Enabled": true,
-  "python.linting.pydocstyleEnabled": true,
+  "python.linting.pydocstyleEnabled": false,
   "yaml.format.enable": true,
   "yaml.hover": true,
   "yaml.schemas": {
