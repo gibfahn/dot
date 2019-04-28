@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if [[ -z $1 ]]; then
+    X="$(pbpaste)"
+else
+    X="$1"
+fi
+
+X=${X/>/}
+X=${X/</}
+X=${X// /}
+X=$(tr -cd '[:print:]' <<<"$X")
+echo "message://%3C${X}%3E" | tee >(pbcopy)
