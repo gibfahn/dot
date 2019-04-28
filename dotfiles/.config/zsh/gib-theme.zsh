@@ -96,7 +96,8 @@ _gib_prompt_preprompt_render() {
 
   local -ah rprompt_parts
   rprompt_parts=(
-    $venv
+    "%F{232}%D{%Y-%m-%d} %*%f"  # Date and time (hidden, highlight to show).
+    $venv                       # Virtualenv Info if enabled.
     "%(?:%F{28}:%F{88})%~%f"    # Path to cwd (green or red depending on previous command $?).
     $_gib_prompt_cmd_exec_time  # Command execution time (if more than 1s).
     $git_prompt_parts           # Git info.
