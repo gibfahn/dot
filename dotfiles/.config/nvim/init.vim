@@ -499,6 +499,31 @@ else
   augroup end
 endif
 
+" Used in Swapfile autocmds below.
+function! s:HandleRecover()
+  echo system('diff - ' . shellescape(expand('%:p')), join(getline(1, '$'), "\n") . "\n")
+  if v:shell_error
+    call s:DiffOrig()
+  else
+    call delete(b:swapname)
+    echohl WarningMsg
+    echomsg "No differences; deleting the old swap file."
+    echohl NONE
+    call feedkeys(" ")
+  endif
+endfunction
+
+" Used in Swapfile autocommands below.
+function! s:DiffOrig()
+  vert new
+  set bt=nofile
+  r #
+  0d_
+  diffthis
+  wincmd p
+  diffthis
+endfunction
+
 " }}} Functions used in key mappings above.
 
 " {{{ Custom commands, Autocommands, global variables
@@ -654,6 +679,13 @@ augroup gibAutoGroup                                " Group of automatic functio
   autocmd CursorHold * silent call CocActionAsync('highlight')
   " Allow comments in json.
   autocmd FileType json syntax match Comment +\/\/.\+$+
+
+  " Recover deletes swapfile if no difference, or shows diff if different.
+  autocmd SwapExists  * let b:swapchoice = '?' | let b:swapname = v:swapname
+  autocmd BufReadPost * let b:swapchoice_likely = (&l:ro ? 'o' : 'r')
+  autocmd BufEnter    * let b:swapchoice_likely = (&l:ro ? 'o' : 'e')
+  autocmd BufWinEnter * if exists('b:swapchoice') && exists('b:swapchoice_likely') | let b:swapchoice = b:swapchoice_likely | unlet b:swapchoice_likely | endif
+  autocmd BufWinEnter * if exists('b:swapchoice') && b:swapchoice == 'r' | call s:HandleRecover() | endif
 augroup END
 
 " }}} Custom commands, Autocommands, global variables
