@@ -303,6 +303,9 @@ esac
   || fd() { find . -iname "*$**"; } # Find by filename (case insensitive).
 exists rg && alias rg='LS_COLORS="$LS_COLORS" rg' rga='LS_COLORS="$LS_COLORS" rg --hidden --no-ignore' # rga is grep all (don't ignore anything).
 
+# Yaml to json, e.g. "y2j <t.yml | jq ."
+alias y2j="python -c 'import sys, yaml, json; json.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2)'"
+
 # }}} Aliases
 
 # {{{ Tool specific
