@@ -178,7 +178,7 @@ nnoremap d<C-k> <C-w>k<C-w>c
 nnoremap d<C-h> <C-w>h<C-w>c
 nnoremap d<C-l> <C-w>l<C-w>c
 
-nnoremap <Leader>a @a<CR>|       " Apply macro a (add with qa or yank to a reg with "ay).
+nnoremap <Leader>a @a|       " Apply macro a (add with qa or yank to a reg with "ay).
 nnoremap <Leader>b :Buffers<CR>| " Search buffer list for file.
 
 """"""""""""""""""
@@ -545,9 +545,9 @@ command! -nargs=0 Format :call CocAction('format')
 command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 
 " Run a command and interpret the output in the quickfix window
-command! -nargs=+ -complete=file CRun cexpr system(<q-args>)
+command! -nargs=+ -complete=file Cr cexpr system(<q-args>)
 " Run a command and interpret the output in the location window
-command! -nargs=+ -complete=file LRun lexpr system(<q-args>)
+command! -nargs=+ -complete=file Lr lexpr system(<q-args>)
 
 if exists('/usr/local/bin/python3')
   let g:python3_host_prog = "/usr/local/bin/python3"  " Speed up startup by not looking for python3 every time.
@@ -572,6 +572,7 @@ let g:sneak#label = 1                               " Make sneak like easymotion
 let g:sneak#target_labels = ";sftunqm/`'-+SFGHLTUNRMQZ?0123456789!()\\[]:|<>WEYIOPADJKXCVB.\"\,:weryiopadghjklzxcvb" " Labels sneak uses to show words.
 let g:sneak#use_ic_scs = 1                          " Sneak: respect smartcase setting.
 let g:surround_no_mappings = 1                      " Manually map surround, see SurroundOp() function.
+let g:colorizer_use_virtual_text = 1                " Use virtual text
 
 " Settings for custom statusline.
 let g:lightline = {

@@ -89,7 +89,7 @@
         | fzf --ansi -m --no-sort --reverse --tiebreak=index \
         --bind=ctrl-s:toggle-sort \
         --preview \"(grep -o '[a-f0-9]\\{7\\}' | head -1 | xargs -I % sh -c 'git show --color=always % | /usr/bin/less -R') <<< {}\" \
-        --bind \"ctrl-o:execute: (grep -o '[a-f0-9]\\{7\\}' | head -1 | xargs -I % sh -c 'git show --color=always % | LINES=0 less -R') <<< {}\" #"
+        --bind \"ctrl-o:execute: (grep -o '[a-f0-9]\\{7,\\}' | head -1 | xargs -I % bash -c 'git show --color=always % | LINES=0 less -R') <<< {}\" #"
   # Escape < and > for github markdown, (useful for generating changelogs).
   changelog  = "! git log --pretty=format:'* %h - %s %n%w(76,4,4)%b%n' --abbrev-commit \"$@\" | perl -0 -p -e 's/(^|[^\\\\])([<>])/\\1\\\\\\2/g ; s/(\\s*\\n)+\\*/\\n\\n*/g' #"
 
