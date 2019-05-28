@@ -59,7 +59,9 @@ cask "docker"                            # Build and run docker images.
 
 cask "copyq"                             # Clipboard manager with history (needs manual setup).
 cask "disk-inventory-x"                  # Graphical view of what's taking up disk space.
-cask "font-fira-code"                    # Nicer programming font (supports powerline).
+cask "font-fira-code"                    # Nicer programming font option 1.
+cask "font-hasklig"                      # Nicer programming font option 2.
+cask "font-source-code-pro"              # Nicer programming font option 3.
 cask "google-chrome"                     # You probably want/have Chrome.
 cask "gpg-suite"                         # GUI gpg key manager (manual setup required).
 cask "hyperswitch"                       # Better Cmd-Tab (only windows on a screen).

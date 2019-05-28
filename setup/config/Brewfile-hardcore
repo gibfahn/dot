@@ -6,15 +6,15 @@ brew "srkomodo/tap/shadowfox-updater"    # ShadowFox Firefox Universal Dark Them
 brew "git-lfs"                           # Git Large File Storage. Use with `git lfs`.
 brew "asciinema"                         # Take screen recordings of your terminal (https://asciinema.org).
 brew "certbot"                           # LetsEncrypt.
-brew "cmake"                             # Commonly-used meta build system.
-brew "ctags"                             # Used for autocomplete in Vim (etc).
+# brew "cmake"                             # Commonly-used meta build system.
+# brew "ctags"                             # Used for autocomplete in Vim (etc).
 brew "dfu-util"                          # Used for flashing my Ergodox Infinity.
-brew "exa"                               # Nicer ls replacement.
+# brew "exa"                               # Nicer ls replacement.
 brew "exercism"                          # Learn coding languages.
 brew "go"                                # Go progamming language.
-brew "groovy"                            # Helpful for testing Jenkins scripts.
-brew "kubernetes-cli"                    # Manage your docker clusters with kube.
-brew "kubernetes-helm"                   # Package manager for Docker.
+# brew "groovy"                            # Helpful for testing Jenkins scripts.
+# brew "kubernetes-cli"                    # Manage your docker clusters with kube.
+# brew "kubernetes-helm"                   # Package manager for Docker.
 brew "ninja"                             # Google meta build system (used in V8).
 brew "postgresql"                        # Solid database.
 brew "redis"                             # In-memory key-object store.
@@ -26,9 +26,9 @@ cask "karabiner-elements"                # Key remapper (see $c/karabiner/karabi
 cask "keycastr"                          # Shows keystrokes in corner of screen (great for casting/demos).
 cask "kitty"                             # GPU Accelerated cross-platform Terminal Emulator.
 cask "slack-beta"                        # Everyone uses Slack right?
-cask "vagrant"                           # Quick command-line image spin-up.
-cask "virtualbox"                        # Manage VMs (Linux or Windows).
-cask "vulkan-sdk"                        # Use the vulkan graphics APIs on macOS.
+# cask "vagrant"                           # Quick command-line image spin-up.
+# cask "virtualbox"                        # Manage VMs (Linux or Windows).
+# cask "vulkan-sdk"                        # Use the vulkan graphics APIs on macOS.
 cask "workflowy"                         # Infinitely nested bullet point list app.
 cask "stay"                              # Save and restore window positions, invaluable with multi-monitor setups.
 
@@ -38,12 +38,12 @@ cask "stay"                              # Save and restore window positions, in
 # brew "koekeishiya/formulae/khd", restart_service: :changed
 
 # Mac App Store Apps (some paid).
-mas "Final Cut Pro", id: 424389933
-mas "GarageBand", id: 682658836
-mas "iMovie", id: 408981434
+# mas "Final Cut Pro", id: 424389933
+# mas "GarageBand", id: 682658836
+# mas "iMovie", id: 408981434
+# mas "Logic Pro X", id: 634148309
 mas "Keynote", id: 409183694
-mas "Logic Pro X", id: 634148309
-mas "Numbers", id: 409203825
+# mas "Numbers", id: 409203825
 mas "Pages", id: 409201541
 mas "Pocket", id: 568494494
-mas "Xcode", id: 497799835
+# mas "Xcode", id: 497799835
