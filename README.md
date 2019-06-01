@@ -77,8 +77,16 @@ me!
 
 ## Post install setup
 
-Some things you have to do manually, here's a short list:
+Some things you have to do manually:
 
+- System Preferences:
+  - `General` -> `Automatically hide and show the menu bar`
+  - `Dock`
+    - `Automatically hide and show the dock`
+    - `Show recent applications in Dock`
+  - `Mission Control` -> `Displays have separate spaces` -> Uncheck
+  - `Touch ID` -> Add other fingerprints
+  - `Software Update` -> `Automatically keep my mac up to date`
 - Set up ssh keys (All)
   - If you don't have them you probably want them. Instructions
     [here](http://fahn.co/blog/setting-up-ssh-keys.html).
@@ -86,9 +94,19 @@ Some things you have to do manually, here's a short list:
   - Similar to ssh keys, instructions
     [here](http://fahn.co/blog/setting-up-gpg-keys.html).
 - CopyQ setup (All)
-  - Set History to `9999`
-  - Add Global Shortcut: `Show/Hide Main Window` -> <kbd>⌘</kbd><kbd>Shift</kbd><kbd>v</kbd>
-  - Add Global Shortcut: `Paste as Plain Text` -> <kbd>Shift</kbd><kbd>Enter</kbd>
+  - `General`
+    - `Vi style navigation`
+    - `Autostart`
+  - `History` -> `Maximum number of items in history` -> `9999`
+  - `Notifications`:
+    - `Notification position` -> `Top Right`
+    - `Interval in seconds to display notifications` -> `2`
+    - `Number of lines for clipboard notification` -> `5`
+    - `Maximum height` -> `300`
+  - `Shortcuts`:
+    - `Show/Hide Main Window` -> <kbd>⌘</kbd><kbd>Shift</kbd><kbd>v</kbd>
+    - `Paste as Plain Text` -> <kbd>Shift</kbd><kbd>Enter</kbd>
+  - `Appearance` -> `Theme` -> `Dark`
 - Run Spectacle on Login (macOS):
   - <kbd>⌘</kbd><kbd>Space</kbd>`Spectacle`<kbd>Enter</kbd>
   - Click on the spectacles in the Menu Bar, click Preferences
@@ -110,6 +128,24 @@ Some things you have to do manually, here's a short list:
   - `System Preferences` -> `Keyboard` -> `Shortcuts` -> `Screen Shots`
   - Swap `Save picture of selected area as file` and `Copy picture of selected
     area to the clipboard`.
+- Safari Extensions:
+  - Set up [sVim][] for Safari:
+    - [Install sVim][]
+    - Click the `sVim` icon by the address bar, then `Show sVimrc`
+    - Paste gist ids, `Sync`, `Save`
+      - `sVimrc`: [22c17d0059340e2c90c3c316b746ba8b][]
+      - `sVimcss`: [3cf4e6a17c85ff67d29fea37ed31963d][]
+- Safari settings:
+  - `General`
+    - `Safari opens with` -> `All windows from last session`
+    - `New windows open with` -> `Empty page`
+    - `New tabs open with` -> `Empty page`
+    - `Remove history items` -> `Manually`
+  - `Tabs` -> `Show website icons in tabs`
+  - `Advanced`
+    - `Show full website address` -> Tick
+    - `Press Tab to highlight each item on a webpage`
+    - `Show Develop menu in menu bar`
 
 ## Adding a new file to your dotfiles
 
@@ -117,4 +153,8 @@ As long as it goes in `$HOME`, just put it in the same relative directory inside
 `./dotfiles/` (so `~/.bashrc` becomes `dot/dotfiles/.bashrc`). If you rerun
 `link` it should get symlinked into the right place.
 
+[22c17d0059340e2c90c3c316b746ba8b]: https://gist.github.com/gibfahn/22c17d0059340e2c90c3c316b746ba8b
+[3cf4e6a17c85ff67d29fea37ed31963d]: https://gist.github.com/gibfahn/3cf4e6a17c85ff67d29fea37ed31963d/edit
+[Install sVim]: https://safari-extensions.apple.com/?q=svim
 [Post Install Setup]: #post-install-setup
+[sVim]: https://github.com/flipxfx/sVim

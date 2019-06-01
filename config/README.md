@@ -37,3 +37,12 @@ Color theme, see `./inkscape/README.md`.
 ### Gimp
 
 Color theme, see `./gimp/README.md`.
+
+### Safari Omnikey
+
+Json settings for Omnikey plugin
+
+- Install [Omnikey][]
+- `🔍` -> `Import/Export` -> Paste contents of `./safari-omnikey.json`
+
+[Omnikey]: http://marioestrada.github.io/safari-omnikey/
