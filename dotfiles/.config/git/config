@@ -29,8 +29,8 @@
         | column -ts '|'
   br  = branch -r # Show remote branches only.
   bdd = "!lastBranch=$(git headBranch); git checkout -; git branch -D $lastBranch" # Delete current branch.
-  bp  = "!git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs -r git branch -d" # Delete orphaned local branches.
-  bP  = "!git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs -r git branch -D" # Delete orphaned local branches!
+  bp  = "!git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -d" # Delete orphaned local branches.
+  bP  = "!git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D" # Delete orphaned local branches!
   bt  = "!git branch -u $1/$(git headBranch) #" # g bt origin sets upstream to origin.
 
   # I manually specify -S because gpgsign only works with Git 2.x. Also it

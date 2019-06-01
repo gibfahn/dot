@@ -86,10 +86,10 @@ export LESS='--tabs=4 --ignore-case --RAW-CONTROL-CHARS --quit-if-one-screen --s
 export LESSKEY="$XDG_CACHE_HOME/less" # Less color settings.
 export PAGER=less
 export GOPATH="$HOME/code/go"
-[[ "$uname" = Darwin ]] && VULKAN_SDK="$(echo /usr/local/Caskroom/vulkan-sdk/* | sort -V | tail -1)"/macOS # Vulkan SDK for graphics programs.
-export DYLD_LIBRARY_PATH="$VULKAN_SDK/lib:$DYLD_LIBRARY_PATH"
-export VK_ICD_FILENAMES="$VULKAN_SDK/etc/vulkan/icd.d/MoltenVK_icd.json"
-export VK_LAYER_PATH="$VULKAN_SDK/etc/vulkan/explicit_layer.d"
+# [[ "$uname" = Darwin ]] && VULKAN_SDK="$(echo /usr/local/Caskroom/vulkan-sdk/* | sort -V | tail -1)"/macOS # Vulkan SDK for graphics programs.
+# export DYLD_LIBRARY_PATH="$VULKAN_SDK/lib:$DYLD_LIBRARY_PATH"
+# export VK_ICD_FILENAMES="$VULKAN_SDK/etc/vulkan/icd.d/MoltenVK_icd.json"
+# export VK_LAYER_PATH="$VULKAN_SDK/etc/vulkan/explicit_layer.d"
 # shellcheck disable=SC2034
 HISTSIZE=100000 SAVEHIST=100000 HISTFILE="$XDG_CACHE_HOME/$shell/history" # Set history file location and size.
 # shellcheck disable=SC2034
@@ -177,13 +177,13 @@ pathadd /usr/lib/ccache # Add ccache to the path if installed (Linux).
 pathadd /usr/local/opt/ccache/libexec # Add ccache to the path if installed (macOS).
 pathadd "$VOLTA_HOME"     # Node/npm package manager.
 pathadd "$VOLTA_HOME/bin" # Node/npm packages.
+pathadd /usr/local/opt/coreutils/libexec/gnubin # Coreutils from brew on macOS, don't replace mac ls.
 pathadd "$CARGO_HOME/bin" # Rust packages.
 pathadd "$HOME/.local/bin"
 pathadd "$HOME/bin" # Put random binaries you want to run in here.
 [[ -n "$VIRTUAL_ENV" ]] && pathadd "$VIRTUAL_ENV/bin" # Virtual env needs to be in front of /usr/local/bin.
 
 # End of path:
-pathapp /usr/local/opt/coreutils/libexec/gnubin # Coreutils from brew on macOS, don't replace mac ls.
 
 # }}} Path Additions
 
@@ -269,7 +269,7 @@ command mkdir -p "$XDG_CACHE_HOME/$shell"  # Create HISTFILE dir if necessary.
 # {{{ Aliases
 
 # x->close terminal, g->git, h->history, path->print $PATH,
-alias x=exit g=git path='echo $PATH | sed "s/:/\n/g"' dt="date +%Y-%m-%d"
+alias x=exit g=git path='echo $PATH | tr : "\n"' dt="date +%Y-%m-%d"
 alias s="TERM=xterm-256color ssh" # Reset cursor to block and ssh.
 
 # l->full detail + hidden, la->no detail + hidden, ll->full detail no hidden, md->create dir.
