@@ -53,7 +53,7 @@ try
   Plug 'kana/vim-operator-user'                     " Make it easier to define operators.
   Plug 'kana/vim-textobj-line'                      " Adds `il` and `al` text objects for current line.
   Plug 'kana/vim-textobj-user'                      " Allows you to create custom text objects (used in vim-textobj-line).
-  Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}} " CoC language server + VS Code Extensions.
+  Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
   Plug 'raghur/vim-ghost', {'do': ':GhostInstall'}  " Edit browser text areas in Neovim (:h ghost).
   Plug 'rust-lang/rust.vim'                         " Rust language bindings.
   Plug 'sheerun/vim-polyglot'                       " Syntax files for a large number of different languages.
