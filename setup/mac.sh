@@ -153,6 +153,16 @@ if [ ! -L "$specConfig" ]; then
   ln -s "$XDG_CONFIG_HOME/Spectacle/Shortcuts.json" "$specConfig"
 fi
 
+# Set up gpg agent Keychain integration.
+# https://stackoverflow.com/questions/39494631/gpg-failed-to-sign-the-data-fatal-failed-to-write-commit-object-git-2-10-0
+if grep 'pinentry-program /usr/local/bin/pinentry-mac' ~/.gnupg/gpg-agent.conf; then
+  skip "Pinentry gpg config"
+else
+  get "Pinentry gpg config"
+  echo "pinentry-program /usr/local/bin/pinentry-mac" >> ~/.gnupg/gpg-agent.conf
+  grep no-tty ~/.gnupg/gpg.conf || echo "no-tty" >> ~/.gnupg/gpg.conf
+fi
+
 # Increase max file watch limit. See http://entrproject.org/limits.html
 if [[ -e /Library/LaunchDaemons/limit.maxfiles.plist ]]; then
   skip "File watcher limit (already increased)."

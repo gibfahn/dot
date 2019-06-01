@@ -2,6 +2,7 @@
 
 tap "srkomodo/tap"                       # ShadowFox Firefox Universal Dark Theme
 
+brew "gdub"                              # Wrapper around ./gradlew for gradle projects (gw).
 brew "srkomodo/tap/shadowfox-updater"    # ShadowFox Firefox Universal Dark Theme Updater (`shadowfox` to install).
 brew "git-lfs"                           # Git Large File Storage. Use with `git lfs`.
 brew "asciinema"                         # Take screen recordings of your terminal (https://asciinema.org).
@@ -31,19 +32,27 @@ cask "slack-beta"                        # Everyone uses Slack right?
 # cask "vulkan-sdk"                        # Use the vulkan graphics APIs on macOS.
 cask "workflowy"                         # Infinitely nested bullet point list app.
 cask "stay"                              # Save and restore window positions, invaluable with multi-monitor setups.
+cask "1password"                         # Password manager.
+cask "time-out"                          # Reminds you to take breaks.
+cask "caprine"                           # Facebook Messenger native app.
+cask "spotify"                           # Music.
+cask "intellij-idea"                     # Java-oriented IDE (good for debugging).
 
 # Chunkwm Window Manager (currently disabled):
 # tap "crisidev/homebrew-chunkwm"
 # brew "chunkwm", restart_service: :changed
 # brew "koekeishiya/formulae/khd", restart_service: :changed
 
-# Mac App Store Apps (some paid).
+# Mac App Store Apps (some paid). `mas list` to see what you've already installed.
 # mas "Final Cut Pro", id: 424389933
 # mas "GarageBand", id: 682658836
 # mas "iMovie", id: 408981434
 # mas "Logic Pro X", id: 634148309
 mas "Keynote", id: 409183694
+mas "Dark Reader for Safari", id: 1438243180 # Dark mode in every website.
 # mas "Numbers", id: 409203825
 mas "Pages", id: 409201541
 mas "Pocket", id: 568494494
-# mas "Xcode", id: 497799835
+mas "Xcode", id: 497799835               # Needed to compile llvm (among other things).
+
+brew "llvm"                              # Gives clangd (clang language server).
