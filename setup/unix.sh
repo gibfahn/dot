@@ -197,7 +197,11 @@ if [[ -z $MINIMAL ]] && not rbenv; then
 fi
 
 # Install latest version of ruby if changed.
-[[ -z $MINIMAL ]] && rbenv install --skip-existing "$(rbenv install --list | awk '/^\s*[0-9]+\.[0-9]+\.[0-9]+\s*$/ {a=$1} END { print a }')"
+[[ -z $MINIMAL ]] && {
+  latest_ruby_version=$(rbenv install --list | awk '/^\s*[0-9]+\.[0-9]+\.[0-9]+\s*$/ {a=$1} END { print a }')
+  rbenv install --skip-existing "$latest_ruby_version"
+  rbenv global "$latest_ruby_version"
+}
 
 # Install ruby gems
 if [[ -z $MINIMAL ]]; then
