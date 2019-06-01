@@ -39,7 +39,6 @@ const jsonSort = (a, b) => {
     'is_keyboard',
     'ignore',
     'disable_built_in_keyboard_if_exists',
-    "virtual_hid_keyboard",
     'parameters',
     'rules',
     'manipulators',
@@ -47,6 +46,7 @@ const jsonSort = (a, b) => {
     'fn_function_keys',
     'simple_modifications',
     'complex_modifications',
+    "virtual_hid_keyboard",
     'from',
     'mandatory',
     'optional',
@@ -71,14 +71,23 @@ const jsonSort = (a, b) => {
     "basic.to_if_held_down_threshold_milliseconds",
     "manipulate_caps_lock_led",
     "is_pointing_device",
+    "mouse_motion_to_scroll.speed",
+    "mouse_key_xy_scale",
   ];
 
-  if (keys.includes(a) && keys.includes(b)) {
-    return keys[a] - keys[b]
+  // Get position of each val in keys array, -1 if not present.
+  const aIndex = keys.indexOf(a);
+  const bIndex = keys.indexOf(b);
+
+  // If both are already in the keys array.
+  if (aIndex !== -1 && bIndex !== -1) {
+    return aIndex - bIndex;
   }
+
+  // If one is not, print out whether each is missing (✘ means missing).
   console.log(`-----> New array value found, please add to keys array:
-    a ${keys.includes(a) ? '✔' : '✘'}: ${a}
-    b ${keys.includes(b) ? '✔' : '✘'}: ${b}
+    a ${aIndex === -1 ? '✘' : '✔'}: ${a}
+    b ${bIndex === -1 ? '✘' : '✔'}: ${b}
     <------\n`);
   return 0;
 }
@@ -95,7 +104,7 @@ s = s.replace(/\[\n +\]/g, '[]');
 // Remove newlines in `},\n{`.
 s = s.replace(/},\n +{/g, '}, {');
 // Remove newlines in `"<keyword>": { ... }`.
-s = s.replace(/"(?:to|from|conditions|to_after_key_up|to_if_alone|modifiers)": {[^{}]+}/g, (match) => match.replace(/\n +/g, ' ',));
+s = s.replace(/"(?:to|from|conditions|to_after_key_up|to_if_alone|modifiers|mouse_key)": {[^{}]+}/g, (match) => match.replace(/\n +/g, ' ',));
 // Remove newlines in `"<keyword>": [ ... ]`.
 s = s.replace(/"(?:to|from|conditions|to_after_key_up|to_if_alone|modifiers)": \[[^\[\]]+\]/g, (match) => match.replace(/\n +/g, ' ',));
 

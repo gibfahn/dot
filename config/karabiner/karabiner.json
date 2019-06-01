@@ -150,6 +150,30 @@
             }
           ],
           "manipulate_caps_lock_led": false
+        }, {
+          "ignore": false,
+          "disable_built_in_keyboard_if_exists": false,
+          "identifiers": {
+            "is_keyboard": true,
+            "product_id": 45133,
+            "vendor_id": 7185,
+            "is_pointing_device": true
+          },
+          "fn_function_keys": [],
+          "simple_modifications": [],
+          "manipulate_caps_lock_led": false
+        }, {
+          "ignore": false,
+          "disable_built_in_keyboard_if_exists": false,
+          "identifiers": {
+            "is_keyboard": true,
+            "product_id": 34304,
+            "vendor_id": 1452,
+            "is_pointing_device": false
+          },
+          "fn_function_keys": [],
+          "simple_modifications": [],
+          "manipulate_caps_lock_led": true
         }
       ],
       "fn_function_keys": [
@@ -197,7 +221,8 @@
           "basic.simultaneous_threshold_milliseconds": 50,
           "basic.to_delayed_action_delay_milliseconds": 0,
           "basic.to_if_alone_timeout_milliseconds": 250,
-          "basic.to_if_held_down_threshold_milliseconds": 500
+          "basic.to_if_held_down_threshold_milliseconds": 500,
+          "mouse_motion_to_scroll.speed": 100
         },
         "rules": [
           {
@@ -246,8 +271,18 @@
                   "key_code": "f17",
                   "modifiers": { "optional": [ "any" ] }
                 },
-                "to": { "set_variable": { "name": "hyper", "value": 1 } },
-                "to_after_key_up": { "set_variable": { "name": "hyper", "value": 0 } }
+                "to": {
+                  "set_variable": {
+                    "name": "hyper",
+                    "value": 1
+                  }
+                },
+                "to_after_key_up": {
+                  "set_variable": {
+                    "name": "hyper",
+                    "value": 0
+                  }
+                }
               }
             ]
           }, {
@@ -260,8 +295,18 @@
                   "modifiers": { "optional": [ "any" ] }
                 },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
-                "to": { "set_variable": { "name": "hyper_mouse", "value": 1 } },
-                "to_after_key_up": { "set_variable": { "name": "hyper_mouse", "value": 0 } }
+                "to": {
+                  "set_variable": {
+                    "name": "hyper_mouse",
+                    "value": 1
+                  }
+                },
+                "to_after_key_up": {
+                  "set_variable": {
+                    "name": "hyper_mouse",
+                    "value": 0
+                  }
+                }
               }
             ]
           }, {
@@ -274,7 +319,9 @@
                   "modifiers": { "optional": [ "any" ] }
                 },
                 "conditions": [ { "name": "hyper_mouse", "type": "variable_if", "value": 1 } ],
-                "to": { "mouse_key": { "x": -1536 } }
+                "to": {
+                  "mouse_key": { "x": -1536 }
+                }
               }, {
                 "type": "basic",
                 "from": {
@@ -282,7 +329,9 @@
                   "modifiers": { "optional": [ "any" ] }
                 },
                 "conditions": [ { "name": "hyper_mouse", "type": "variable_if", "value": 1 } ],
-                "to": { "mouse_key": { "y": 1536 } }
+                "to": {
+                  "mouse_key": { "y": 1536 }
+                }
               }, {
                 "type": "basic",
                 "from": {
@@ -290,7 +339,9 @@
                   "modifiers": { "optional": [ "any" ] }
                 },
                 "conditions": [ { "name": "hyper_mouse", "type": "variable_if", "value": 1 } ],
-                "to": { "mouse_key": { "y": -1536 } }
+                "to": {
+                  "mouse_key": { "y": -1536 }
+                }
               }, {
                 "type": "basic",
                 "from": {
@@ -298,7 +349,9 @@
                   "modifiers": { "optional": [ "any" ] }
                 },
                 "conditions": [ { "name": "hyper_mouse", "type": "variable_if", "value": 1 } ],
-                "to": { "mouse_key": { "x": 1536 } }
+                "to": {
+                  "mouse_key": { "x": 1536 }
+                }
               }
             ]
           }, {
@@ -340,7 +393,9 @@
                   "modifiers": { "optional": [ "any" ] }
                 },
                 "conditions": [ { "name": "hyper_mouse", "type": "variable_if", "value": 1 } ],
-                "to": { "mouse_key": { "horizontal_wheel": -52 } }
+                "to": {
+                  "mouse_key": { "horizontal_wheel": -52 }
+                }
               }, {
                 "type": "basic",
                 "from": {
@@ -348,7 +403,9 @@
                   "modifiers": { "optional": [ "any" ] }
                 },
                 "conditions": [ { "name": "hyper_mouse", "type": "variable_if", "value": 1 } ],
-                "to": { "mouse_key": { "vertical_wheel": -52 } }
+                "to": {
+                  "mouse_key": { "vertical_wheel": -52 }
+                }
               }, {
                 "type": "basic",
                 "from": {
@@ -356,7 +413,9 @@
                   "modifiers": { "optional": [ "any" ] }
                 },
                 "conditions": [ { "name": "hyper_mouse", "type": "variable_if", "value": 1 } ],
-                "to": { "mouse_key": { "vertical_wheel": 52 } }
+                "to": {
+                  "mouse_key": { "vertical_wheel": 52 }
+                }
               }, {
                 "type": "basic",
                 "from": {
@@ -364,7 +423,9 @@
                   "modifiers": { "optional": [ "any" ] }
                 },
                 "conditions": [ { "name": "hyper_mouse", "type": "variable_if", "value": 1 } ],
-                "to": { "mouse_key": { "horizontal_wheel": 52 } }
+                "to": {
+                  "mouse_key": { "horizontal_wheel": 52 }
+                }
               }
             ]
           }, {
@@ -447,25 +508,13 @@
               {
                 "description": "Ж+a = Open IntelliJ IDEA",
                 "type": "basic",
-                "from": {
-                  "key_code": "a"
-                },
+                "from": { "key_code": "a" },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": { "shell_command": "open -a 'IntelliJ IDEA'" }
               }, {
-                "description": "Ж+b = Open default browser (Safari)",
-                "type": "basic",
-                "from": {
-                  "key_code": "b"
-                },
-                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
-                "to": { "shell_command": "open -a Safari" }
-              }, {
                 "description": "Ж+c = Open Slack",
                 "type": "basic",
-                "from": {
-                  "key_code": "c"
-                },
+                "from": { "key_code": "c" },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": { "shell_command": "open -a Slack" }
               }, {
@@ -489,45 +538,32 @@
               }, {
                 "description": "Ж+d = print today's date",
                 "type": "basic",
-                "from": {
-                  "key_code": "d"
-                },
+                "from": { "key_code": "d" },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": { "shell_command": "printf `date \"+%Y-%m-%d\"` | pbcopy" },
-                "to_after_key_up": {
-                  "key_code": "v",
-                  "modifiers": [ "command" ]
-                }
+                "to_after_key_up": { "key_code": "v", "modifiers": [ "command" ] }
               }, {
                 "description": "Ж+e = Open Finder",
                 "type": "basic",
-                "from": {
-                  "key_code": "e"
-                },
+                "from": { "key_code": "e" },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": { "shell_command": "open -a Finder" }
               }, {
                 "description": "Ж+f = Open Firefox",
                 "type": "basic",
-                "from": {
-                  "key_code": "f"
-                },
+                "from": { "key_code": "f" },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": { "shell_command": "open -a 'Firefox Nightly'" }
               }, {
                 "description": "Ж+g = Open Google Chrome",
                 "type": "basic",
-                "from": {
-                  "key_code": "g"
-                },
+                "from": { "key_code": "g" },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": { "shell_command": "open -a 'Google Chrome'" }
               }, {
                 "description": "Ж+m = Open Mail",
                 "type": "basic",
-                "from": {
-                  "key_code": "m"
-                },
+                "from": { "key_code": "m" },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": { "shell_command": "open -a Mail" }
               }, {
@@ -538,27 +574,20 @@
                   "modifiers": { "mandatory": [ "shift" ] }
                 },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
-                "to": {
-                  "key_code": "c",
-                  "modifiers": [ "command" ]
-                },
+                "to": { "key_code": "c", "modifiers": [ "command" ] },
                 "to_after_key_up": { "shell_command": "$HOME/bin/mail_link" }
               }, {
                 "description": "Ж+n = Open Calendar",
                 "type": "basic",
-                "from": {
-                  "key_code": "n"
-                },
+                "from": { "key_code": "n" },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": { "shell_command": "open -a Calendar" }
               }, {
                 "description": "Ж+r = Open Radar",
                 "type": "basic",
-                "from": {
-                  "key_code": "r"
-                },
+                "from": { "key_code": "r" },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
-                "to": { "shell_command": "open -a Radar" }
+                "to": { "shell_command": "open -a RadarX" }
               }, {
                 "description": "Ж++r = Open Agile",
                 "type": "basic",
@@ -571,9 +600,7 @@
               }, {
                 "description": "Ж+s = Open Spotify",
                 "type": "basic",
-                "from": {
-                  "key_code": "s"
-                },
+                "from": { "key_code": "s" },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": { "shell_command": "open -a Spotify" }
               }, {
@@ -588,9 +615,7 @@
               }, {
                 "description": "Ж+v = Connect to VPN",
                 "type": "basic",
-                "from": {
-                  "key_code": "v"
-                },
+                "from": { "key_code": "v" },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": { "shell_command": "$HOME/bin/vpn london" }
               }, {
@@ -623,9 +648,7 @@
               }, {
                 "description": "Ж+w = Open WorkFlowy",
                 "type": "basic",
-                "from": {
-                  "key_code": "w"
-                },
+                "from": { "key_code": "w" },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": { "shell_command": "open -a WorkFlowy" }
               }, {
@@ -649,9 +672,7 @@
               }, {
                 "description": "Ж+x = Open Wechat",
                 "type": "basic",
-                "from": {
-                  "key_code": "x"
-                },
+                "from": { "key_code": "x" },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": { "shell_command": "open -a wechat" }
               }, {
@@ -675,10 +696,7 @@
                   "modifiers": { "optional": [ "any" ] }
                 },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
-                "to": {
-                  "key_code": "power",
-                  "modifiers": [ "left_control", "left_shift" ]
-                }
+                "to": { "key_code": "power", "modifiers": [ "left_control", "left_shift" ] }
               }
             ]
           }, {
@@ -691,10 +709,7 @@
                   "modifiers": { "optional": [ "any" ] }
                 },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
-                "to": {
-                  "key_code": "4",
-                  "modifiers": [ "right_shift", "left_command" ]
-                }
+                "to": { "key_code": "4", "modifiers": [ "right_shift", "left_command" ] }
               }
             ]
           }
@@ -703,7 +718,8 @@
       "virtual_hid_keyboard": {
         "keyboard_type": "iso",
         "caps_lock_delay_milliseconds": 0,
-        "country_code": 0
+        "country_code": 0,
+        "mouse_key_xy_scale": 100
       }
     }, {
       "name": "Clean",
@@ -781,14 +797,16 @@
           "basic.simultaneous_threshold_milliseconds": 50,
           "basic.to_delayed_action_delay_milliseconds": 500,
           "basic.to_if_alone_timeout_milliseconds": 1000,
-          "basic.to_if_held_down_threshold_milliseconds": 500
+          "basic.to_if_held_down_threshold_milliseconds": 500,
+          "mouse_motion_to_scroll.speed": 100
         },
         "rules": []
       },
       "virtual_hid_keyboard": {
         "keyboard_type": "iso",
         "caps_lock_delay_milliseconds": 0,
-        "country_code": 0
+        "country_code": 0,
+        "mouse_key_xy_scale": 100
       }
     }, {
       "name": "Pairing",
@@ -896,14 +914,16 @@
           "basic.simultaneous_threshold_milliseconds": 50,
           "basic.to_delayed_action_delay_milliseconds": 500,
           "basic.to_if_alone_timeout_milliseconds": 1000,
-          "basic.to_if_held_down_threshold_milliseconds": 500
+          "basic.to_if_held_down_threshold_milliseconds": 500,
+          "mouse_motion_to_scroll.speed": 100
         },
         "rules": []
       },
       "virtual_hid_keyboard": {
         "keyboard_type": "iso",
         "caps_lock_delay_milliseconds": 0,
-        "country_code": 0
+        "country_code": 0,
+        "mouse_key_xy_scale": 100
       }
     }
   ]
