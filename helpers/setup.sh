@@ -226,7 +226,8 @@ updateMacOSKeyboardShortcut() {
   updateMacOSDefaultDict "$1" NSUserKeyEquivalents "$2" "$3"
   if ! defaults read com.apple.universalaccess com.apple.custommenu.apps | grep -qF "$1"; then
     update "macOS default shortcut $1 is not in com.apple.universalaccess com.apple.custommenu.apps, adding it."
-    sudo defaults write com.apple.universalaccess com.apple.custommenu.apps -array-add "$1"
+    defaults write com.apple.universalaccess com.apple.custommenu.apps -array-add "$1" \
+      || echo "Add the current Terminal app to System Preferences -> Privacy -> Full Disk Access."
   fi
 }
 

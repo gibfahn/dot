@@ -146,6 +146,7 @@ Some things you have to do manually:
     - `Show full website address` -> Tick
     - `Press Tab to highlight each item on a webpage`
     - `Show Develop menu in menu bar`
+- Give Kitty full disk access: `System Preferences` -> `Privacy` -> `Full Disk Access`.
 
 ## Adding a new file to your dotfiles
 

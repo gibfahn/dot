@@ -12,6 +12,7 @@ brew "go"                                # Go progamming language.
 brew "ninja"                             # Google meta build system (used in V8).
 brew "postgresql"                        # Solid database.
 brew "protobuf"                          # Serialization format.
+brew "shellcheck"                        # Linter for bash.
 brew "redis"                             # In-memory key-object store.
 brew "srkomodo/tap/shadowfox-updater"    # ShadowFox Firefox Universal Dark Theme Updater (`shadowfox` to install).
 brew "watchexec"                         # Like entr (evaluating which one is better).
