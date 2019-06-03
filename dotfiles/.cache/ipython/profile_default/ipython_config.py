@@ -29,7 +29,8 @@
 #c.InteractiveShellApp.exec_files = []
 
 ## lines of code to run at IPython startup.
-#c.InteractiveShellApp.exec_lines = []
+# Import often-used things.
+c.InteractiveShellApp.exec_lines = ['import sys, os']
 
 ## A list of dotted module names of IPython extensions to load.
 #c.InteractiveShellApp.extensions = []
@@ -162,7 +163,7 @@
 #c.InteractiveShell.autocall = 0
 
 ## Autoindent IPython code entered interactively.
-#c.InteractiveShell.autoindent = True
+c.InteractiveShell.autoindent = True
 
 ## Enable magic commands to be called without the leading %.
 #c.InteractiveShell.automagic = True
@@ -281,7 +282,7 @@
 ## Set to confirm when you try to exit IPython with an EOF (Control-D in Unix,
 #  Control-Z/Enter in Windows). By typing 'exit' or 'quit', you can force a
 #  direct exit without any confirmation.
-#c.TerminalInteractiveShell.confirm_exit = True
+c.TerminalInteractiveShell.confirm_exit = False
 
 ## Options for displaying tab completions, 'column', 'multicolumn', and
 #  'readlinelike'. These options are for `prompt_toolkit`, see `prompt_toolkit`
@@ -292,7 +293,7 @@
 #c.TerminalInteractiveShell.editing_mode = 'emacs'
 
 ## Set the editor used by IPython (default to $EDITOR/vi/notepad).
-#c.TerminalInteractiveShell.editor = 'nvim'
+c.TerminalInteractiveShell.editor = 'nvim'
 
 ## Allows to enable/disable the prompt toolkit history search
 #c.TerminalInteractiveShell.enable_history_search = True
