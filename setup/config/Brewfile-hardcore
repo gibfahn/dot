@@ -26,6 +26,7 @@ cask "karabiner-elements"                # Key remapper (see $c/karabiner/karabi
 cask "keycastr"                          # Shows keystrokes in corner of screen (great for casting/demos).
 cask "kitty"                             # GPU Accelerated cross-platform Terminal Emulator.
 cask "slack-beta"                        # Everyone uses Slack right?
+cask "sogouinput"                        # Nicer Chinese input experience.
 cask "spotify"                           # Music.
 cask "stay"                              # Save and restore window positions, invaluable with multi-monitor setups.
 cask "time-out"                          # Reminds you to take breaks.

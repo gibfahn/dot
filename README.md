@@ -125,9 +125,11 @@ Some things you have to do manually:
     - `About:`
       - `Download and install updates in the background`
 - Make default screenshot combination copy to clipboard:
-  - `System Preferences` -> `Keyboard` -> `Shortcuts` -> `Screen Shots`
-  - Swap `Save picture of selected area as file` and `Copy picture of selected
-    area to the clipboard`.
+  - `System Preferences` -> `Keyboard` -> `Shortcuts`:
+    - `Screen Shots`: Swap `Save picture of selected area as file` and `Copy
+      picture of selected area to the clipboard`.
+    - `Input Sources` -> tick `Select the previous input source`
+    - `Services` -> remove mappings from `man Page` shortcuts
 - Safari Extensions:
   - Set up [sVim][] for Safari:
     - [Install sVim][]
