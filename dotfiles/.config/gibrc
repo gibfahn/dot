@@ -222,11 +222,10 @@ case $shell in
       /usr/local/share/zsh-completions # Common zsh completions.
       "${fpath[@]}"
     ) # zsh-completions.
-    # If you get a compinit error, run: compaudit | xargs chmod g-w
 
     _gib_source_files=( # Files to source.
       "$XDG_DATA_HOME/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-      "$XDG_DATA_HOME"/zfunc/source/* # Put completion files that need to be sourced here.
+      "$XDG_DATA_HOME"/zfunc/source/*(N) # Put completion files that need to be sourced here.
       "$ZDOTDIR"/{completion-keybindings,gib-theme,macos-setdir}.zsh
       "$XDG_DATA_HOME"/fzf/shell/key-bindings.zsh
     )
