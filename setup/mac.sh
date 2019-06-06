@@ -73,11 +73,27 @@ if [ "$HARDCORE" ]; then # Set keyboard preferences.
   # Increases trackpad sensitivity (SysPref max 3.0).
   updateMacOSDefault NSGlobalDomain com.apple.trackpad.scaling -float 5
 
+  # Increases trackpad sensitivity (SysPref max 3.0).
+  updateMacOSDefault NSGlobalDomain com.apple.trackpad.forceClick -bool false
+
   # Disables window minimizing animations.
   updateMacOSDefault NSGlobalDomain NSAutomaticWindowAnimationsEnabled -int 0
 
   # Always open new things in tabs (not new windows) for document based apps.
   updateMacOSDefault NSGlobalDomain AppleWindowTabbingMode -string always
+
+  # Maximise window when you double-click on the title bar.
+  updateMacOSDefault NSGlobalDomain AppleActionOnDoubleClick -string Maximize
+
+  # Use Dark mode.
+  updateMacOSDefault NSGlobalDomain AppleInterfaceStyle -string Dark
+
+  # Auto-hide menu bar.
+  updateMacOSDefault NSGlobalDomain _HIHideMenuBar -bool true
+  # Auto-hide dock.
+  updateMacOSDefault com.apple.dock autohide -bool true
+  # Don't show recents in dock.
+  updateMacOSDefault com.apple.dock show-recents -bool false
 
   # Greys out hidden apps in the dock (so you can see which are hidden).
   updateMacOSDefault com.apple.Dock showhidden -int 1 && killall Dock
