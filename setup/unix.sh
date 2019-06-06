@@ -253,7 +253,7 @@ if [[ $? != 200 ]]; then
   (
     cd "$XDG_DATA_HOME/KotlinLanguageServer" || { echo "Failed to cd"; exit 1; }
     ./gradlew installDist # If tests passed we could use `./gradlew build`
-    ln -sf "$XDG_DATA_HOME/KotlinLanguageServer/build/install/kotlin-language-server/bin/kotlin-language-server" "$HOME/bin/kotlin-language-server"
+    ln -sf "$XDG_DATA_HOME/KotlinLanguageServer/server/build/install/server/bin/server" "$HOME/bin/kotlin-language-server"
   )
 fi
 
