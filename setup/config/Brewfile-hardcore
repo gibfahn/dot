@@ -23,6 +23,7 @@ cask "geektool"                          # Display things on Desktop (I have a t
 cask "gimp"                              # Heavyweight photo editor.
 cask "intellij-idea"                     # Java-oriented IDE (good for debugging).
 cask "karabiner-elements"                # Key remapper (see $c/karabiner/karabiner.json for my settings).
+cask "keyboard-cleaner"                  # Block all keystrokes except ⌘-q so you can wipe your keyboard.
 cask "keycastr"                          # Shows keystrokes in corner of screen (great for casting/demos).
 cask "kitty"                             # GPU Accelerated cross-platform Terminal Emulator.
 cask "slack-beta"                        # Everyone uses Slack right?
