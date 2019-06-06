@@ -150,6 +150,7 @@ if [ ! -L "$specConfig" ]; then
   get "Overwriting Spectacle shortcuts with link to dot ones."
   mkdir -p "$HOME/.backup"
   [ -e "$specConfig" ] && mv "$specConfig" "$HOME/.backup/Shortcuts.json"
+  mkdir -p "$XDG_CONFIG_HOME"/Spectacle
   ln -s "$XDG_CONFIG_HOME/Spectacle/Shortcuts.json" "$specConfig"
 fi
 
@@ -160,7 +161,8 @@ if grep 'pinentry-program /usr/local/bin/pinentry-mac' ~/.gnupg/gpg-agent.conf; 
 else
   get "Pinentry gpg config"
   echo "pinentry-program /usr/local/bin/pinentry-mac" >> ~/.gnupg/gpg-agent.conf
-  grep no-tty ~/.gnupg/gpg.conf || echo "no-tty" >> ~/.gnupg/gpg.conf
+  # Disabling this as it breaks tty use-cases, not sure if needed.
+  # grep no-tty ~/.gnupg/gpg.conf || echo "no-tty" >> ~/.gnupg/gpg.conf
 fi
 
 # Increase max file watch limit. See http://entrproject.org/limits.html
