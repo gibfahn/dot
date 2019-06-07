@@ -74,7 +74,7 @@ if [ "$HARDCORE" ]; then # Set keyboard preferences.
   updateMacOSDefault NSGlobalDomain com.apple.trackpad.scaling -float 5
 
   # Increases trackpad sensitivity (SysPref max 3.0).
-  updateMacOSDefault NSGlobalDomain com.apple.trackpad.forceClick -bool false
+  updateMacOSDefault NSGlobalDomain com.apple.trackpad.forceClick -int 0
 
   # Disables window minimizing animations.
   updateMacOSDefault NSGlobalDomain NSAutomaticWindowAnimationsEnabled -int 0
@@ -89,11 +89,11 @@ if [ "$HARDCORE" ]; then # Set keyboard preferences.
   updateMacOSDefault NSGlobalDomain AppleInterfaceStyle -string Dark
 
   # Auto-hide menu bar.
-  updateMacOSDefault NSGlobalDomain _HIHideMenuBar -bool true
+  updateMacOSDefault NSGlobalDomain _HIHideMenuBar -int 1
   # Auto-hide dock.
-  updateMacOSDefault com.apple.dock autohide -bool true
+  updateMacOSDefault com.apple.dock autohide -int 1
   # Don't show recents in dock.
-  updateMacOSDefault com.apple.dock show-recents -bool false
+  updateMacOSDefault com.apple.dock show-recents -int 0
 
   # Greys out hidden apps in the dock (so you can see which are hidden).
   updateMacOSDefault com.apple.Dock showhidden -int 1 && killall Dock
