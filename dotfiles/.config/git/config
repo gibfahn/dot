@@ -57,6 +57,7 @@
 
   d   = diff HEAD                                      # diff of staged and unstaged..
   de  = "!git diff HEAD --name-only $@ | xargs $VISUAL # " # Open files changed since last commit in editor.
+  di  = diff --no-index
   dn  = diff HEAD --name-only                          # diff of staged and unstaged file names.
   ds  = diff --staged                                  # Diff of staged files (`git diff` for unstaged).
   dt  = difftool                                       # Nicer way to view diffs in vim.
@@ -71,11 +72,12 @@
   fixup = "!  hash=$(git rev-parse "$1") \
            && git commit --fixup=$hash ${@:2} \
            && EDITOR=true git rebase -i --autostash --autosquash $hash^ #"
-  # Create/update branch from Github PR, `g fp 657 origin` or `g fp` (Defaults: $1=headBranch, $2=upstreamRemote).
-  fp = "! b=${2:-$(git headRemote)}; b=${b:-up}; a=${1:-$(git headBranch)} \
-        && git fetch -fu $b pull/$a/head:$a; \
-        git checkout $a \
-        && git branch -u $(git symbolic-ref --short refs/remotes/$b/HEAD) #"
+  # Create/update branch from Github PR, `g fp 657 origin` or `g fp` (Defaults: $1=headBranch, $2=headRemote if $1 not set, else "up").
+  fp = "! a=${1:-$(git headBranch)} b=${2:-up}; [[ -z $@ ]] && b=$(git headRemote); \
+        git checkout --quiet @ \
+        && git fetch --force --update-head-ok $b pull/$a/head:$a \
+        && git checkout --quiet $a \
+        && git branch --quiet --set-upstream-to=$(git symbolic-ref --short refs/remotes/$b/HEAD) #"
 
   h = help
 
