@@ -189,6 +189,7 @@ pathadd "$HOME/bin" # Put random binaries you want to run in here.
 
 # {{{ Shell specific
 exists gls && alias ls=gls
+exists gsed && alias sed=gsed
 if ls --color=auto >/dev/null 2>&1; then
   if [[ -e "$XDG_DATA_HOME"/LS_COLORS/LS_COLORS ]]; then
     eval "$(dircolors -b "$XDG_DATA_HOME/LS_COLORS/LS_COLORS" | head -1)" # Load custom LS_COLORS from project.
@@ -223,12 +224,17 @@ case $shell in
       "${fpath[@]}"
     ) # zsh-completions.
 
+    # Don't crash shell if "$XDG_DATA_HOME"/zfunc/source/* matches nothing.
+    setopt | grep -qxF nullglob || { _gib_changed=true && setopt nullglob; }
     _gib_source_files=( # Files to source.
-      "$XDG_DATA_HOME/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-      "$XDG_DATA_HOME"/zfunc/source/*(N) # Put completion files that need to be sourced here.
+      "$XDG_DATA_HOME"/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+      "$XDG_DATA_HOME"/zfunc/source/* # Put completion files that need to be sourced here.
       "$ZDOTDIR"/{completion-keybindings,gib-theme,macos-setdir}.zsh
       "$XDG_DATA_HOME"/fzf/shell/key-bindings.zsh
     )
+    # Unset nullglob if we set it.
+    [[ -n $_gib_changed ]] && { setopt nonullglob; unset _gib_changed; }
+
     for _gib_file in "${_gib_source_files[@]}"; do
       [[ -r "$_gib_file" ]] && source "$_gib_file" || echo "GIBRC: Couldn't find file to source - '$_gib_file'"
     done
@@ -296,6 +302,8 @@ case $uname in
   Darwin) alias ldd="otool -L" cpy="pbcopy" pst="pbpaste" o=open dl=rmtrash ;;
   Linux) alias cpy="xclip -selection clipboard" pst="xclip -selection clipboard -o" o=xdg-open dl="gio trash" ;;
 esac
+# Copy last command.
+alias clc="fc -ln -1 | sed -e 's/\\\\n/\\n/g' -e 's/\\\\t/\\t/g' | cpy"
 
 # fda is find all (don't ignore anything).
 { exists fd && alias fd='LS_COLORS="$LS_COLORS" fd' fda='LS_COLORS="$LS_COLORS" fd --no-ignore --hidden'; } \
