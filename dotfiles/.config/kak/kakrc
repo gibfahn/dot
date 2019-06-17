@@ -80,6 +80,7 @@ plug "Delapouite/kakoune-buffers" config %{
 plug "danr/kakoune-easymotion" config %{
   # <Leader>s to trigger a single easymotion command.
   map global user s ': enter-user-mode easymotion<ret>'      -docstring 'buffers…'
+  set-option global em_jumpchars abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ
 }
 
 ###########################################
