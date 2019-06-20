@@ -73,9 +73,9 @@
            && git commit --fixup=$hash ${@:2} \
            && EDITOR=true git rebase -i --autostash --autosquash $hash^ #"
   # Create/update branch from Github PR, `g fp 657 origin` or `g fp` (Defaults: $1=headBranch, $2=headRemote if $1 not set, else "up").
-  fp = "! a=${1:-$(git headBranch)} b=${2:-up}; [[ -z $@ ]] && b=$(git headRemote); \
-        git checkout --quiet @ \
-        && git fetch --force --update-head-ok $b pull/$a/head:$a \
+  fp = "! a=${1:-$(git headBranch)} b=${2:-up}; [[ -z $@ ]] && b=$(git headRemote) \
+        ; [[ -z $1 ]] && git checkout --quiet @ \
+        ; git fetch --force --update-head-ok $b pull/$a/head:$a \
         && git checkout --quiet $a \
         && git branch --quiet --set-upstream-to=$(git symbolic-ref --short refs/remotes/$b/HEAD) #"
 
