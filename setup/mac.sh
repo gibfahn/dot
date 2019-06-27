@@ -172,7 +172,7 @@ fi
 
 # Set up gpg agent Keychain integration.
 # https://stackoverflow.com/questions/39494631/gpg-failed-to-sign-the-data-fatal-failed-to-write-commit-object-git-2-10-0
-if grep 'pinentry-program /usr/local/bin/pinentry-mac' ~/.gnupg/gpg-agent.conf; then
+if grep -q 'pinentry-program /usr/local/bin/pinentry-mac' ~/.gnupg/gpg-agent.conf; then
   skip "Pinentry gpg config"
 else
   get "Pinentry gpg config"
