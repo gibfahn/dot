@@ -56,7 +56,6 @@ try
   Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
   Plug 'raghur/vim-ghost', {'do': ':GhostInstall'}  " Edit browser text areas in Neovim (:h ghost).
   Plug 'rust-lang/rust.vim'                         " Rust language bindings.
-  Plug 'sheerun/vim-polyglot'                       " Syntax files for a large number of different languages.
   Plug 'simnalamburt/vim-mundo'                     " Graphical undo tree (updated fork of Gundo).
   Plug 'takac/vim-hardtime'                         " Disable key repeat.
   Plug 'tpope/vim-abolish'                          " Work with variants of words (replacing, capitalizing etc).
@@ -65,9 +64,13 @@ try
   Plug 'tpope/vim-markdown'                         " Better markdown highlight including support for code block highlighting.
   Plug 'tpope/vim-repeat'                           " Allows you to use . with plugin mappings.
   Plug 'tpope/vim-rhubarb'                          " GitHub support.
-  Plug 'tpope/vim-sleuth'                           " Automatically detect indentation.
   Plug 'tpope/vim-surround'                         " Add/mod/remove surrounding chars.
   Plug 'tpope/vim-unimpaired'                       " [ and ] mappings (help unimpaired).
+
+  " Plugins where order is important (last one wins).
+  Plug 'sheerun/vim-polyglot'                       " Syntax files for a large number of different languages.
+  Plug 'tpope/vim-sleuth'                           " Automatically detect indentation.
+  Plug 'editorconfig/editorconfig-vim'              " Parse .editorconfig files (https://editorconfig.org/).
 
   call plug#end()                                   " Initialize plugin system
   catch /E117: Unknown function: plug#begin/
@@ -115,7 +118,6 @@ set splitbelow                                      " Open new split panes to ri
 set splitright                                      "  ↳ bottom, which feels more natural.
 set t_Co=256                                        " Use 256 color terminal.
 set termguicolors                                   " Uses 24-bit colors in the terminal (guifg and guibg).
-set textwidth=80                                    " Wrap at 79 chars (change: set tw=72).
 set undolevels=1000                                 " More undo history.
 set updatetime=100                                  " Delay after which to write to swap file and run CursorHold event.
 set visualbell                                      " Flash the screen instead of beeping when doing something wrong.
@@ -247,10 +249,10 @@ nnoremap <Leader>gp `[v`]| " Visual selection of the last thing you copied or pa
 nnoremap <Leader>gs :mksession! <C-r>=SessionFile()<CR><CR>| " Save current session for vim cwd from a default session path.
 nnoremap <Leader>gS :mksession! <C-r>=SessionFile()<CR>| " Save current session for vim cwd from a custom path.
 nnoremap <Leader>gt :set et!<CR>:set et?<CR>|   " Toggle tabs/spaces.
-nnoremap <Leader>gq :set fo-=t<CR>:set fo?<CR>| " Turn off line wrapping,
+nnoremap <Leader>gq :set fo-=t<CR>:set fo?<CR>| " Turn off line wrapping (auto-inserting newlines when you go over the textwidth).
 nnoremap <Leader>gQ :set fo+=t<CR>:set fo?<CR>| " ↳    on
 nnoremap <Leader>gv :e $MYVIMRC<CR>|  " <Space>gv opens vimrc in the editor (autoreloaded on save).
-nnoremap <Leader>gw :setlocal wrap!<CR>| " <Space>gw toggles the soft-wrapping of text.
+nnoremap <Leader>gw :setlocal wrap!<CR>| " <Space>gw toggles the soft-wrapping of text (whether text runs off the screen).
 nnoremap <Leader>id :r !date +\%Y-\%m-\%d<CR>| " Insert readable    date on new line.
 nnoremap <Leader>iD :r !date +\%d-\%b-\%y<CR>| " ↳      `:sort`able date on new line.
 nnoremap <Leader>it ITODO(gib): <ESC>:Commentary<CR>$| " Insert a TODO, (Write todo, then `<Space>it`).
