@@ -229,7 +229,7 @@ softwareupdate -i -a
 sourcekit_lsp_path="$XDG_DATA_HOME"/sourcekit-lsp
 gitCloneOrUpdate apple/sourcekit-lsp "$sourcekit_lsp_path" && {
   (cd "$XDG_DATA_HOME"/sourcekit-lsp || error "Failed to cd to the langserver directory"; swift package update && swift build -c release)
-  ln -s "$sourcekit_lsp_path"/.build/release/sourcekit-lsp "$HOME"/bin/sourcekit-lsp
+  ln -sf "$sourcekit_lsp_path"/.build/release/sourcekit-lsp "$HOME"/bin/sourcekit-lsp
 }
 
 if [[ -d /Applications/Slack.app ]]; then
