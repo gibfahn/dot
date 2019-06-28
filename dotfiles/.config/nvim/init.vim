@@ -551,7 +551,7 @@ command! -nargs=+ -complete=file Cr cexpr system(<q-args>)
 " Run a command and interpret the output in the location window
 command! -nargs=+ -complete=file Lr lexpr system(<q-args>)
 
-if exists('/usr/local/bin/python3')
+if filereadable('/usr/local/bin/python3')
   let g:python3_host_prog = "/usr/local/bin/python3"  " Speed up startup by not looking for python3 every time.
 endif
 
