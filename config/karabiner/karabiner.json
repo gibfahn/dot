@@ -503,9 +503,18 @@
               }
             ]
           }, {
-            "description": "Ж+Key switches to or opens App. Free keys: ⏎,q,u,y,z",
+            "description": "Ж+Key switches to or opens App. Free keys: ⏎,q,z",
             "manipulators": [
               {
+                "description": "Ж+⌘+Enter = open clipboard contents",
+                "type": "basic",
+                "from": {
+                  "key_code": "return_or_enter",
+                  "modifiers": { "mandatory": [ "command" ] }
+                },
+                "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
+                "to": { "shell_command": "open \"$(pbpaste)\"" }
+              }, {
                 "description": "Ж+a = Open IntelliJ IDEA",
                 "type": "basic",
                 "from": { "key_code": "a" },
@@ -589,7 +598,7 @@
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": { "shell_command": "open -a RadarX" }
               }, {
-                "description": "Ж++r = Open Agile",
+                "description": "Ж+⇧+r = Open Agile",
                 "type": "basic",
                 "from": {
                   "key_code": "r",
