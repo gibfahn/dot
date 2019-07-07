@@ -134,6 +134,9 @@ if [ "$HARDCORE" ]; then # Set keyboard preferences.
   # System Preferences > General > Click in the scrollbar to: Jump to the spot that's clicked
   updateMacOSDefault NSGlobalDomain AppleScrollerPagingBehavior -int 1
 
+  # Show developer options in Radar 8.
+  updateMacOSDefault com.apple.radar.gm shouldShowDeveloperOptions -int 1
+
   # TODO(gib): Add more shortcuts:
   #
   # Make changing windows quicker with keyboard.
