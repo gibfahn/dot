@@ -176,9 +176,6 @@
           "manipulate_caps_lock_led": true
         }
       ],
-      "parameters": {
-        "delay_milliseconds_before_open_device": 1000
-      },
       "fn_function_keys": [
         {
           "from": { "key_code": "f1" },
@@ -764,9 +761,6 @@
           "manipulate_caps_lock_led": false
         }
       ],
-      "parameters": {
-        "delay_milliseconds_before_open_device": 1000
-      },
       "fn_function_keys": [
         {
           "from": { "key_code": "f1" },
@@ -884,9 +878,6 @@
           "manipulate_caps_lock_led": true
         }
       ],
-      "parameters": {
-        "delay_milliseconds_before_open_device": 1000
-      },
       "fn_function_keys": [
         {
           "from": { "key_code": "f1" },
