@@ -78,6 +78,8 @@ export IPYTHONDIR="$XDG_CACHE_HOME/ipython" # Move iPython dir from ~.
 export HELM_HOME="$XDG_DATA_HOME/helm" # Move Helm data dir from ~.
 export PEX_ROOT="${PEX_ROOT:-$XDG_CACHE_HOME/pex}" # Cache directory for https://github.com/pantsbuild/pex.
 export VIRTUAL_ENV_DISABLE_PROMPT=1 # Add the virtualenv prompt myself.
+export AWS_CONFIG_FILE="$XDG_CONFIG_HOME/aws/config"
+export AWS_SHARED_CREDENTIALS_FILE="$HOME/.ssh/tokens/aws/credentials"
 # Tab is 4 spaces, search ignores case, enable colours, cat if less than one screen.
 # --status-column=>column to show lines matching current search or first unread line after moving
 # -quit-if-one-screen=>exit if file fits in one screen, --ignore-case=>smartcase search, --LONG-PROMPT=>verbose prompt, --RAW-CONTROL-CHARS=>show colors,
@@ -229,7 +231,7 @@ case $shell in
     _gib_source_files=( # Files to source.
       "$XDG_DATA_HOME"/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
       "$XDG_DATA_HOME"/zfunc/source/* # Put completion files that need to be sourced here.
-      "$ZDOTDIR"/{completion-keybindings,gib-theme,macos-setdir}.zsh
+      "$ZDOTDIR"/*.zsh
       "$XDG_DATA_HOME"/fzf/shell/key-bindings.zsh
     )
     # Unset nullglob if we set it.
@@ -292,7 +294,7 @@ unset cd
 { works nvim && VIM="nvim"; } || { works vim && VIM="vim"; } || VIM="vi" # Take what you can get.
 export VISUAL=${VISUAL:-$VIM} EDITOR=${EDITOR:-$VIM} # Set vim/nvim as the default editor.
 # shellcheck disable=SC2139 # We want this to expand when defined.
-alias xv="xargs \$${ZSH_VERSION:+=}VISUAL" v="\$${ZSH_VERSION:+=}VISUAL" k=kak # Work around zsh's "helpful" autoquoting.
+alias xv="xargs \$${ZSH_VERSION:+=}VISUAL" v="\$${ZSH_VERSION:+=}VISUAL" k=kubectl # Work around zsh's "helpful" autoquoting.
 exists vimr && alias vm=vimr # Use `vm` for GUI vim, need to add a Linux equivalent.
 
 # ulimit -c unlimited # Allow saving of coredumps.
