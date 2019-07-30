@@ -27,7 +27,7 @@
   "codeLens.enable": true,
   "coc.preferences.colorSupport": true,
   // Unset this as the python autoformat disagrees with flake8.
-  // "coc.preferences.formatOnType": true,
+  "coc.preferences.formatOnType": true,
   "coc.preferences.currentFunctionSymbolAutoUpdate": true,
   // The symbol in the completion menu for words in the current file.
   "coc.source.around.shortcut": "↕",
@@ -41,6 +41,7 @@
   "python.linting.enabled": true,
   "python.linting.flake8Enabled": true,
   "python.linting.pydocstyleEnabled": false,
+  "python.jediEnabled": false,
   "yaml.format.enable": true,
   "yaml.hover": true,
   "yaml.schemas": {
