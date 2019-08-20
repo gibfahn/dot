@@ -261,7 +261,7 @@ fi
 if [[ -z $MINIMAL && -n $HARDCORE ]]; then
   if no rustup || no cargo; then # Install/set up rust.
     # Install rustup. Don't modify path as that's already in gibrc.
-    RUSTUP_HOME="$XDG_DATA_HOME"/rustup CARGO_HOME="$XDG_DATA_HOME"/cargo curl https://sh.rustup.rs -sSf | bash -s -- -y --no-modify-path
+    RUSTUP_HOME="$XDG_DATA_HOME"/rustup CARGO_HOME="$XDG_DATA_HOME"/cargo curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
 
     if [[ -d "$HOME/.rustup" ]]; then
       # Move to proper directories
