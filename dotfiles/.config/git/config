@@ -5,6 +5,7 @@
   headRemote = "!git rev-parse --abbrev-ref --symbolic-full-name @{u} | cut -d '/' -f 1" # e.g. origin.
   headBranch = symbolic-ref --short HEAD # e.g. master.
   remoteOrg = "!git remote get-url $1 | awk -F ':|/' '{if ($NF) {print $(NF-1)} else {print $(NF-2)}}' #" # Github org for remote. `g remoteOrg up` -> gibfahn.
+  # You might occasionally have to run `git remote set-head --auto up` if the upstream HEAD hasn't been synced for some reason.
   defaultBranch = "!git symbolic-ref --short refs/remotes/$1/HEAD | sed \"s|^$1/||\" #" # Default branch for remote. `g defaultBranch up` -> master
   # Quote an alias you want to save here (quotes \ and ", and wraps in "! #" to handle args).
   quote-string = "!read -r l; sed -E -e 's/([\\\"])/\\\\\\1/g' -e 's/(.*)/\"!\\1 #\"/' <<<\"$l\" #"
