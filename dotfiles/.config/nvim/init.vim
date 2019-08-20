@@ -268,6 +268,7 @@ nnoremap <Leader>q :qa<CR>|                " Quit if no    unsaved changes (for 
 nnoremap <Leader>QQ :q!<CR>|               "      ↳ losing unsaved changes (DANGER).
 nnoremap <Leader>r :%s/|                   " Replace in current doc.
 nnoremap <Leader>R :cfdo %s//ce <bar> up<S-Left><S-Left><Left><Left><Left><Left>| " Replace in all quickfix files (use after gr).
+nnoremap <Leader>S :<C-u>set operatorfunc=<SID>SortLinesOpFunc<CR>g@| " Sort lines in <motion>.
 nnoremap <Leader>u :MundoToggle<CR>|       " Toggle Undo tree visualisation.
 nnoremap <Leader>w :up<CR>|                " Write if there were changes.
 nnoremap <Leader>W :w<CR>|                 " Write whether or not there were changes.
@@ -295,9 +296,9 @@ nmap <leader>7 <Plug>BufTabLine.Go(7)|         " <leader>1 goes to buffer 7 (see
 nmap <leader>8 <Plug>BufTabLine.Go(8)|         " <leader>1 goes to buffer 8 (see numbers in tab bar).
 nmap <leader>9 <Plug>BufTabLine.Go(1) :bp<CR>| " <leader>1 goes to last buffer (see numbers in tab bar).
 
-" Use `[c` and `]c` for next/previous diagnostic message.
-nmap <silent> [c <Plug>(coc-diagnostic-prev)
-nmap <silent> ]c <Plug>(coc-diagnostic-next)
+" Use `[g` and `]g` for next/previous diagnostic message.
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " Use `[h` and `]h` for next and previous changed git hunk.
 nmap [h <Plug>GitGutterPrevHunk
@@ -466,6 +467,11 @@ function! TrimWhitespace()
   let l:save = winsaveview()
   %s/\s\+$//e
   call winrestview(l:save)
+endfunction
+
+" Function to sort lines as an operator.
+function! s:SortLinesOpFunc(...)
+    '[,']sort
 endfunction
 
 if has('nvim')                                      " NeoVim specific settings.
