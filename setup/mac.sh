@@ -235,13 +235,11 @@ gitCloneOrUpdate apple/sourcekit-lsp "$sourcekit_lsp_path" && {
   ln -sf "$sourcekit_lsp_path"/.build/release/sourcekit-lsp "$HOME"/bin/sourcekit-lsp
 }
 
-if [[ -d /Applications/Slack.app ]]; then
-  slack_path=/Applications/Slack.app/Contents/Resources/app.asar.unpacked/src/static/ssb-interop.js
-  [[ -e $slack_path ]] || skip "Slack path doesn't exist, unable to modify it"
-  if ! grep -q raw.githubusercontent.com $slack_path; then
-    get "Slack dark mode tweak"
-    cat "$(dirname "$0")/optional/slack-black.js" >> "$slack_path"
-  else
-    skip "Slack dark mode tweak"
-  fi
+if [[ -d /Applications/Slack.app ]] && ! grep -q dark-theme.css /Applications/Slack.app/Contents/Resources/app.asar.unpacked/dist/ssb-interop.bundle.js; then
+  get "Slack dark mode tweak"
+  slack_dark_mode_path="$XDG_DATA_HOME"/slack-dark-mode
+  gitCloneOrUpdate LanikSJ/slack-dark-mode "$slack_dark_mode_path"
+  cd "$slack_dark_mode_path" && source slack-dark-mode.sh
+else
+  skip "Slack dark mode tweak"
 fi
