@@ -31,6 +31,7 @@ cask "sogouinput"                        # Nicer Chinese input experience.
 cask "spotify"                           # Music.
 cask "stay"                              # Save and restore window positions, invaluable with multi-monitor setups.
 cask "time-out"                          # Reminds you to take breaks.
+cask "trailer"                           # GitHub push notifications.
 cask "workflowy"                         # Infinitely nested bullet point list app.
 # brew "cmake"                             # Commonly-used meta build system.
 # brew "ctags"                             # Used for autocomplete in Vim (etc).
