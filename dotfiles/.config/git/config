@@ -234,6 +234,8 @@
   prompt = false           # Don't confirm that I want to open the difftool every time.
 [mergetool "vimdiff"]
   cmd = nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+[protocol]
+  version = 2              # https://github.blog/changelog/2018-11-08-git-protocol-v2-support/.
 [pull]
   rebase = true            # pull = fetch + rebase, not fetch + merge.
 [push]
@@ -251,28 +253,28 @@
 
 # Try `g cl hh:nodejs/node`.
 [url "https://bitbucket.org/"]
-    insteadOf = bb:
+  insteadOf = bb:
 
 [url "https://github.com/"]
-    insteadOf = hh:                 # Hub https.
+  insteadOf = hh:                 # Hub https.
 [url "git@github.com:"]
-    insteadOf = hs:                 # Hub ssh.
+  insteadOf = hs:                 # Hub ssh.
 [url "https://github.com/gibfahn/"]
-    insteadOf = hhg:                # Hub https gibfahn.
+  insteadOf = hhg:                # Hub https gibfahn.
 [url "git@github.com:gibfahn/"]
-    insteadOf = hsg:                # Hub ssh gibfahn.
+  insteadOf = hsg:                # Hub ssh gibfahn.
 
 [url "https://gist.github.com/"]
-    insteadOf = gist:
+  insteadOf = gist:
 
 [url "https://gitlab.com/"]
-    insteadOf = lh:                 # Lab https.
+  insteadOf = lh:                 # Lab https.
 [url "git@gitlab.com:"]
-    insteadOf = ls:                 # Lab ssh.
+  insteadOf = ls:                 # Lab ssh.
 [url "https://gitlab.com/gib/"]
-    insteadOf = lhg:                # Lab https gib.
+  insteadOf = lhg:                # Lab https gib.
 [url "git@gitlab.com:gib/"]
-    insteadOf = lsg:                # Lab ssh gib.
+  insteadOf = lsg:                # Lab ssh gib.
 
 [user]
   # Needs to match gpg signing email.
