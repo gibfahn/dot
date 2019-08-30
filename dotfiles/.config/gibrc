@@ -292,7 +292,8 @@ unset cd
 { works nvim && VIM="nvim"; } || { works vim && VIM="vim"; } || VIM="vi" # Take what you can get.
 export VISUAL=${VISUAL:-$VIM} EDITOR=${EDITOR:-$VIM} # Set vim/nvim as the default editor.
 # shellcheck disable=SC2139 # We want this to expand when defined.
-alias xv="xargs \$${ZSH_VERSION:+=}VISUAL" v="\$${ZSH_VERSION:+=}VISUAL" k=kubectl # Work around zsh's "helpful" autoquoting.
+alias xv="xargs \$${ZSH_VERSION:+=}VISUAL" v="\$${ZSH_VERSION:+=}VISUAL" # Work around zsh's "helpful" autoquoting.
+alias b=bazelisk k=kubectl # Build tools.
 exists vimr && alias vm=vimr # Use `vm` for GUI vim, need to add a Linux equivalent.
 
 # ulimit -c unlimited # Allow saving of coredumps.
@@ -313,8 +314,9 @@ exists rg && alias rg='LS_COLORS="$LS_COLORS" rg' rga='LS_COLORS="$LS_COLORS" rg
 # Start using volta (Node version manager).
 alias vlt='pathadd "$VOLTA_HOME"; pathadd "$VOLTA_HOME"/bin'
 
-# Yaml to json, e.g. "y2j <t.yml | jq ."
+# Yaml to json, e.g. "y2j <t.yml | jq .". Requires a `pip install pyyaml`.
 alias y2j="python -c 'import sys, yaml, json; json.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2)'"
+alias y2y="python -c 'import sys, yaml; yaml.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2)'"
 
 # }}} Aliases
 
