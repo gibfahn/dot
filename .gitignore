@@ -1,2 +1,2 @@
-/dotfiles/.config/nvim/autoload
-/.env
+# Karabiner backs up format when it makes automated changes.
+/config/karabiner/automatic_backups/
