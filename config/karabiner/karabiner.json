@@ -313,7 +313,7 @@
               }
             ]
           }, {
-            "description": "Ж🐭+h/j/k/l = move mouse up/down/left/right.",
+            "description": "Ж🐭+h/n/e/i (Ж🐭+h/j/k/l) = move mouse up/down/left/right.",
             "manipulators": [
               {
                 "type": "basic",
@@ -358,7 +358,7 @@
               }
             ]
           }, {
-            "description": "Ж🐭+d/f/g = left/right/middle click.",
+            "description": "Ж🐭+s/t/d (Ж🐭+d/f/g) = left/right/middle click.",
             "manipulators": [
               {
                 "type": "basic",
@@ -387,7 +387,7 @@
               }
             ]
           }, {
-            "description": "Ж🐭+y/u/i/o = scroll up/down/left/right.",
+            "description": "Ж🐭+y/u/i/o (Ж🐭+y/u/i/o) = scroll up/down/left/right.",
             "manipulators": [
               {
                 "type": "basic",
@@ -432,7 +432,7 @@
               }
             ]
           }, {
-            "description": "Ж+h/j/k/l to Arrows (vim style).",
+            "description": "Ж+h/n/e/i (Ж+h/j/k/l) to Arrows (vim style).",
             "manipulators": [
               {
                 "type": "basic",
@@ -469,7 +469,7 @@
               }
             ]
           }, {
-            "description": "Ж+y/u/i/o to Home/PgDn/PgUp/End",
+            "description": "Ж+j/l/u/y (Ж+y/u/i/o) to Home/PgDn/PgUp/End",
             "manipulators": [
               {
                 "type": "basic",
@@ -530,14 +530,14 @@
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": { "shell_command": "open -a Slack" }
               }, {
-                "description": "Ж+⌘+c = Open Hipchat",
+                "description": "Ж+⌘+c = Open iMessage",
                 "type": "basic",
                 "from": {
                   "key_code": "c",
                   "modifiers": { "mandatory": [ "command" ] }
                 },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
-                "to": { "shell_command": "open -a Hipchat" }
+                "to": { "shell_command": "open -a Messages" }
               }, {
                 "description": "Ж+⇧+c = Open Apple Chat",
                 "type": "basic",
@@ -548,28 +548,28 @@
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": { "shell_command": "open -a 'Apple Chat'" }
               }, {
-                "description": "Ж+d = print today's date",
+                "description": "Ж+d (Ж+g) = print today's date",
                 "type": "basic",
-                "from": { "key_code": "d" },
+                "from": { "key_code": "g" },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": { "shell_command": "printf `date \"+%Y-%m-%d\"` | pbcopy" },
                 "to_after_key_up": { "key_code": "v", "modifiers": [ "command" ] }
               }, {
-                "description": "Ж+e = Open Finder",
+                "description": "Ж+/ = Open Finder",
                 "type": "basic",
-                "from": { "key_code": "e" },
+                "from": { "key_code": "slash" },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": { "shell_command": "open -a Finder" }
               }, {
-                "description": "Ж+f = Open Firefox",
+                "description": "Ж+f (Ж+e) = Open Firefox",
                 "type": "basic",
-                "from": { "key_code": "f" },
+                "from": { "key_code": "e" },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": { "shell_command": "open -a 'Firefox Nightly'" }
               }, {
-                "description": "Ж+g = Open Google Chrome",
+                "description": "Ж+g (Ж+t) = Open Google Chrome",
                 "type": "basic",
-                "from": { "key_code": "g" },
+                "from": { "key_code": "t" },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": { "shell_command": "open -a 'Google Chrome'" }
               }, {
@@ -589,37 +589,37 @@
                 "to": { "key_code": "c", "modifiers": [ "command" ] },
                 "to_after_key_up": { "shell_command": "$HOME/bin/mail_link" }
               }, {
-                "description": "Ж+n = Open Calendar",
+                "description": "Ж+k (Ж+n) = Open Calendar",
                 "type": "basic",
                 "from": { "key_code": "n" },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": { "shell_command": "open -a Calendar" }
               }, {
-                "description": "Ж+r = Open Radar",
+                "description": "Ж+r (Ж+s) = Open Radar",
                 "type": "basic",
-                "from": { "key_code": "r" },
+                "from": { "key_code": "s" },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": { "shell_command": "open -a RadarX" }
               }, {
-                "description": "Ж+⇧+r = Open Agile",
+                "description": "Ж+⇧+r (Ж+⇧+s) = Open Agile",
                 "type": "basic",
                 "from": {
-                  "key_code": "r",
+                  "key_code": "s",
                   "modifiers": { "mandatory": [ "shift" ] }
                 },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": { "shell_command": "open -a Agile" }
               }, {
-                "description": "Ж+s = Open Spotify",
+                "description": "Ж+s (Ж+d) = Open Spotify",
                 "type": "basic",
-                "from": { "key_code": "s" },
+                "from": { "key_code": "d" },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": { "shell_command": "open -a Spotify" }
               }, {
-                "description": "Ж+t = Open the Terminal",
+                "description": "Ж+t (Ж+f) = Open the Terminal",
                 "type": "basic",
                 "from": {
-                  "key_code": "t",
+                  "key_code": "f",
                   "modifiers": { "optional": [ "option", "shift", "command" ] }
                 },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
@@ -708,12 +708,12 @@
               }
             ]
           }, {
-            "description": "Ж+; = lock screen (go to sleep).",
+            "description": "Ж+; (Ж+p) = lock screen (go to sleep).",
             "manipulators": [
               {
                 "type": "basic",
                 "from": {
-                  "key_code": "semicolon",
+                  "key_code": "p",
                   "modifiers": { "optional": [ "any" ] }
                 },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
@@ -721,12 +721,12 @@
               }
             ]
           }, {
-            "description": "Ж+p = print screen (Screenshot to Clipboard)",
+            "description": "Ж+p (Ж+r) = print screen (Screenshot to Clipboard)",
             "manipulators": [
               {
                 "type": "basic",
                 "from": {
-                  "key_code": "p",
+                  "key_code": "r",
                   "modifiers": { "optional": [ "any" ] }
                 },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
