@@ -53,7 +53,7 @@ try
   Plug 'kana/vim-operator-user'                     " Make it easier to define operators.
   Plug 'kana/vim-textobj-line'                      " Adds `il` and `al` text objects for current line.
   Plug 'kana/vim-textobj-user'                      " Allows you to create custom text objects (used in vim-textobj-line).
-  Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}   " Language Server with VSCode Extensions.
   Plug 'raghur/vim-ghost', {'do': ':GhostInstall'}  " Edit browser text areas in Neovim (:h ghost).
   Plug 'rust-lang/rust.vim'                         " Rust language bindings.
   Plug 'simnalamburt/vim-mundo'                     " Graphical undo tree (updated fork of Gundo).
@@ -151,21 +151,28 @@ inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-" Use <C-j> for both expand and jump (make expand higher priority.)
-imap <C-j> <Plug>(coc-snippets-expand-jump)
-" Use <C-j> for select text for visual placeholder of snippet.
-vmap <C-j> <Plug>(coc-snippets-select)
-
 " Shift-Tab is previous entry if completion menu open.
-inoremap <expr>   <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+" Use <C-n> for both expand and jump (make expand higher priority.)
+" Use <C-j> for jump to next placeholder, it's default of coc.nvim
+let g:coc_snippet_next = '<a-l>'
+
+" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+let g:coc_snippet_prev = '<a-u>'
+imap <C-n> <Plug>(coc-snippets-expand-jump)
+imap <A-n> <Plug>(coc-snippets-expand-jump)
+" Use <C-n> for select text for visual placeholder of snippet.
+vmap <C-n> <Plug>(coc-snippets-select)
 
 " Use <cr> for confirm completion, `<C-g>u` means break undo chain at current position.
 " Coc only does snippet and additional edit on confirm.
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" Enables formatting on enter.
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+      \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
-nnoremap          Q <nop>|                          "  ↳ accidental triggering).
+nnoremap          Q <nop>|                          " Avoid accidental triggering.
 nnoremap          Y y$|                             " Make Y work like C and D (yank to end of line, not whole line).
 " To open vim's current directory, use `:e .`.
 nnoremap - :e %:h<CR>|    " - open current buffer directory in file browser (repeat for `cd ..`).
@@ -173,12 +180,6 @@ nmap     f <Plug>Sneak_f| " Use sneak for f (multiline+highlight).
 nmap     F <Plug>Sneak_F| " ↳             F
 nmap     t <Plug>Sneak_t| " ↳             t
 nmap     T <Plug>Sneak_T| " ↳             T
-
-" Delete window to the left/below/above/to the right with d<C-h/j/k/l>.
-nnoremap d<C-j> <C-w>j<C-w>c
-nnoremap d<C-k> <C-w>k<C-w>c
-nnoremap d<C-h> <C-w>h<C-w>c
-nnoremap d<C-l> <C-w>l<C-w>c
 
 nnoremap <Leader>a @a|       " Apply macro a (add with qa or yank to a reg with "ay).
 nnoremap <Leader>b :Buffers<CR>| " Search buffer list for file.
@@ -235,6 +236,8 @@ nnoremap <silent> <space>ck  :<C-u>CocPrev<CR>
 nnoremap <silent> <space>cp  :<C-u>CocListResume<CR>
 
 nnoremap <Leader>d :call BufferClose('')<CR>| " Close buffer without closing split,
+nnoremap <Leader>e <C-w>q|                 " Close current split (keeps buffer).
+nnoremap <Leader>E :cclose<CR>:lclose<CR>:helpclose<CR><C-W>z| " Close open preview windows (e.g. language server definitions).
 nnoremap <Leader>f :Files<CR>|             " Search file names    for file,
 nnoremap <Leader>F :grep |                 "  ↳          contents for file.
 nnoremap <Leader>gc :cd %:p:h<CR>|         " Change vim directory (:pwd) to current file's dirname (e.g. for <space>f, :e).
@@ -253,19 +256,15 @@ nnoremap <Leader>gq :set fo-=t<CR>:set fo?<CR>| " Turn off line wrapping (auto-i
 nnoremap <Leader>gQ :set fo+=t<CR>:set fo?<CR>| " ↳    on
 nnoremap <Leader>gv :e $MYVIMRC<CR>|  " <Space>gv opens vimrc in the editor (autoreloaded on save).
 nnoremap <Leader>gw :setlocal wrap!<CR>| " <Space>gw toggles the soft-wrapping of text (whether text runs off the screen).
-nnoremap <Leader>id :r !date +\%Y-\%m-\%d<CR>| " Insert readable    date on new line.
-nnoremap <Leader>iD :r !date +\%d-\%b-\%y<CR>| " ↳      `:sort`able date on new line.
-nnoremap <Leader>it ITODO(gib): <ESC>:Commentary<CR>$| " Insert a TODO, (Write todo, then `<Space>it`).
-nnoremap <Leader>j :sp<CR><C-w>k:bp<CR>|   " Open horizontal split,
-nnoremap <Leader>k <C-w>q|                 " Close current split (keeps buffer).
-nnoremap <Leader>K :cclose<CR>:lclose<CR>:helpclose<CR><C-W>z| " Close open preview windows (e.g. language server definitions).
-nnoremap <Leader>l :vsp<CR><C-w>h:bp<CR>|  " Open vertical split.
-nnoremap <Leader>L <C-w>b<C-w>q|           " Close last split (keeps buffer). Useful for quickfix splits.
+nnoremap <Leader>Id :r !date +\%Y-\%m-\%d<CR>| " Insert readable    date on new line.
+nnoremap <Leader>ID :r !date +\%d-\%b-\%y<CR>| " ↳      `:sort`able date on new line.
+nnoremap <Leader>It ITODO(gib): <ESC>:Commentary<CR>$| " Insert a TODO, (Write todo, then `<Space>it`).
+nnoremap <Leader>n :sp<CR><C-w>k:bp<CR>|   " Open horizontal split,
+nnoremap <Leader>i :vsp<CR><C-w>h:bp<CR>|  " Open vertical split.
 nnoremap <Leader>o :set operatorfunc=OpenUrl<CR>g@| " Open the selected text with the appropriate program (like netrw-gx).
 nnoremap <Leader>p "+p|                    "  Paste from clipboard after cursor.
 nnoremap <Leader>P "+P|                    "                    ↳  before cursor.
 nnoremap <Leader>q :qa<CR>|                " Quit if no    unsaved changes (for single file use <Space>d instead).
-nnoremap <Leader>QQ :q!<CR>|               "      ↳ losing unsaved changes (DANGER).
 nnoremap <Leader>r :%s/|                   " Replace in current doc.
 nnoremap <Leader>R :cfdo %s//ce <bar> up<S-Left><S-Left><Left><Left><Left><Left>| " Replace in all quickfix files (use after gr).
 nnoremap <Leader>S :<C-u>set operatorfunc=<SID>SortLinesOpFunc<CR>g@| " Sort lines in <motion>.
@@ -301,8 +300,8 @@ nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " Use `[h` and `]h` for next and previous changed git hunk.
-nmap [h <Plug>GitGutterPrevHunk
-nmap ]h <Plug>GitGutterNextHunk
+nmap [h <Plug>(GitGutterPrevHunk)
+nmap ]h <Plug>(GitGutterNextHunk)
 
 " Leader + window size keys increases/decreases height/width by 3/2.
 nnoremap <silent> <Leader>+ :exe "resize " . (winheight(0) * 3/2)<CR>
@@ -314,12 +313,10 @@ vnoremap          <Leader>y "+y|                    "  ↳                (visua
 vnoremap          <Leader>d "+d|                    " Cut from clipboard (visual mode).
 vnoremap          <Leader>p "+p|                    " Paste from clipboard (visual mode).
 
-nnoremap          <C-h> <C-w>h|                     " Switch left  a window,
-nnoremap          <C-j> <C-w>j|                     "  ↳     down  a window,
-nnoremap          <C-k> <C-w>k|                     "  ↳     up    a window,
-nnoremap          <C-l> <C-w>l|                     "  ↳     right a window.
-nnoremap          <C-n> <C-l>|                      " Redraw the screen.
-
+nnoremap          <A-h> <C-w>h|                     " Switch left  a window,
+nnoremap          <A-n> <C-w>j|                     "  ↳     down  a window,
+nnoremap          <A-e> <C-w>k|                     "  ↳     up    a window,
+nnoremap          <A-i> <C-w>l|                     "  ↳     right a window.
 
 nmap              <C-W>>     <C-W>><SID>ws|         " Adds mappings to make Ctrl-W -/+/</>
 nmap              <C-W><     <C-W><<SID>ws|         " ↳ repeatable, so you can press Ctrl-W
@@ -479,11 +476,10 @@ if has('nvim')                                      " NeoVim specific settings.
   if executable("nvr")| let $VISUAL = 'nvr --remote-wait'| endif " Use existing nvim window to open new files (e.g. `g cm`).
   nnoremap <Leader>t :vsplit term://$SHELL<CR>i|    " Open terminal in new split.
   nnoremap <Leader>T :term<CR>|                     " Open terminal in current split.
-  tnoremap <C-h> <C-\><C-n><C-w>h|                  " Switch left  a window in terminal,
-  tnoremap <C-j> <C-\><C-n><C-w>j|                  "  ↳     down  a window in terminal,
-  tnoremap <C-k> <C-\><C-n><C-w>k|                  "  ↳     up    a window in terminal,
-  tnoremap <C-l> <C-\><C-n><C-w>l|                  "  ↳     right a window in terminal.
-  tnoremap <C-n> <C-l>|                             " Ctrl-n is Ctrl-l in a terminal.
+  tnoremap <A-h> <C-\><C-n><C-w>h|                  " Switch left  a window in terminal,
+  tnoremap <A-n> <C-\><C-n><C-w>j|                  "  ↳     down  a window in terminal,
+  tnoremap <A-e> <C-\><C-n><C-w>k|                  "  ↳     up    a window in terminal,
+  tnoremap <A-i> <C-\><C-n><C-w>l|                  "  ↳     right a window in terminal.
   tnoremap <Esc> <C-\><C-n>|                        " Go to normal mode.
 
   augroup gibTermGroup                              " Autocommands for nvim only
@@ -495,11 +491,10 @@ else
   set termwinscroll=100000                          " Store lots of terminal history.
   nnoremap <Leader>t :term<CR>|wincmd L|                     " Open terminal in new split.
   nnoremap <Leader>T :term ++curwin<CR>|                     " Open terminal in current split.
-  tnoremap <C-h> <C-w>h|                            " Switch left  a window in terminal,
-  tnoremap <C-j> <C-w>j|                            "  ↳     down  a window in terminal,
-  tnoremap <C-k> <C-w>k|                            "  ↳     up    a window in terminal,
-  tnoremap <C-l> <C-w>l|                            "  ↳     right a window in terminal.
-  tnoremap <C-n> <C-l>|                             " Ctrl-n is Ctrl-l in a terminal.
+  tnoremap <A-h> <C-w>h|                            " Switch left  a window in terminal,
+  tnoremap <A-n> <C-w>j|                            "  ↳     down  a window in terminal,
+  tnoremap <A-e> <C-w>k|                            "  ↳     up    a window in terminal,
+  tnoremap <A-i> <C-w>l|                            "  ↳     right a window in terminal.
   tnoremap <Esc> <C-W>N|                            " Make Escape work in terminal.
 
   augroup gibTermGroup                              " Autocommands for nvim only
@@ -620,27 +615,28 @@ let g:lightline = {
 
 " Extensions (plugins) for CoC language client.
 let g:coc_global_extensions = [
-  \ 'coc-json',
-  \ 'coc-tsserver',
-  \ 'coc-html',
-  \ 'coc-css',
-  \ 'coc-vetur',
-  \ 'coc-java',
-  \ 'coc-solargraph',
-  \ 'coc-rls',
-  \ 'coc-yaml',
-  \ 'coc-python',
-  \ 'coc-highlight',
-  \ 'coc-snippets',
-  \ 'coc-svg',
-  \ 'coc-gocode',
   \ 'coc-ccls',
-  \ 'coc-prettier',
-  \ 'coc-eslint',
+  \ 'coc-css',
   \ 'coc-dictionary',
-  \ 'coc-word',
   \ 'coc-emoji',
+  \ 'coc-eslint',
+  \ 'coc-gocode',
+  \ 'coc-highlight',
+  \ 'coc-html',
+  \ 'coc-java',
+  \ 'coc-json',
+  \ 'coc-prettier',
+  \ 'coc-python',
+  \ 'coc-rls',
+  \ 'coc-snippets',
+  \ 'coc-solargraph',
+  \ 'coc-svg',
   \ 'coc-syntax',
+  \ 'coc-tabnine',
+  \ 'coc-tsserver',
+  \ 'coc-vetur',
+  \ 'coc-word',
+  \ 'coc-yaml',
   \ ]
 
 " Should be parsed by vim-markdown plugin to render code blocks properly, doesn't seem to work.

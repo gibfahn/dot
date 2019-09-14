@@ -38,7 +38,7 @@
   // 🐓 🐔 Set this for LanguageServer symbol instead of LS once possible.
 
   // COC EXTENSION OPTIONS
-  "python.linting.enabled": true,
+  "python.linting.enabled": false,
   "python.linting.flake8Enabled": true,
   "python.linting.pydocstyleEnabled": false,
   "python.jediEnabled": false,
