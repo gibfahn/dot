@@ -235,12 +235,3 @@ gitCloneOrUpdate apple/sourcekit-lsp "$sourcekit_lsp_path" && {
   (cd "$XDG_DATA_HOME"/sourcekit-lsp || error "Failed to cd to the langserver directory"; swift package update && swift build -c release)
   ln -sf "$sourcekit_lsp_path"/.build/release/sourcekit-lsp "$HOME"/bin/sourcekit-lsp
 }
-
-if [[ -d /Applications/Slack.app ]] && ! grep -q dark-theme.css /Applications/Slack.app/Contents/Resources/app.asar.unpacked/dist/ssb-interop.bundle.js; then
-  get "Slack dark mode tweak"
-  slack_dark_mode_path="$XDG_DATA_HOME"/slack-dark-mode
-  gitCloneOrUpdate LanikSJ/slack-dark-mode "$slack_dark_mode_path"
-  cd "$slack_dark_mode_path" && source slack-dark-mode.sh
-else
-  skip "Slack dark mode tweak"
-fi
