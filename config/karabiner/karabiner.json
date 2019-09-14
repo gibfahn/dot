@@ -174,6 +174,33 @@
           "fn_function_keys": [],
           "simple_modifications": [],
           "manipulate_caps_lock_led": true
+        }, {
+          "ignore": false,
+          "description": "Das Keyboard (Browns)",
+          "disable_built_in_keyboard_if_exists": false,
+          "identifiers": {
+            "is_keyboard": true,
+            "product_id": 8211,
+            "vendor_id": 1241,
+            "is_pointing_device": false
+          },
+          "fn_function_keys": [],
+          "simple_modifications": [
+            {
+              "from": { "key_code": "left_command" },
+              "to": { "key_code": "left_option" }
+            }, {
+              "from": { "key_code": "left_option" },
+              "to": { "key_code": "left_command" }
+            }, {
+              "from": { "key_code": "right_shift" },
+              "to": { "key_code": "f17" }
+            }, {
+              "from": { "key_code": "left_control" },
+              "to": { "key_code": "f17" }
+            }
+          ],
+          "manipulate_caps_lock_led": false
         }
       ],
       "parameters": {
@@ -522,7 +549,7 @@
                 "type": "basic",
                 "from": { "key_code": "a" },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
-                "to": { "shell_command": "open -a 'IntelliJ IDEA'" }
+                "to": { "shell_command": "open -a 'IntelliJ IDEA CE'" }
               }, {
                 "description": "Ж+c = Open Slack",
                 "type": "basic",
