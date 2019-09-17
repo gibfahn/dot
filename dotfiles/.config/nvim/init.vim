@@ -156,10 +156,10 @@ inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 " Use <C-n> for both expand and jump (make expand higher priority.)
 " Use <C-j> for jump to next placeholder, it's default of coc.nvim
-let g:coc_snippet_next = '<a-l>'
+let g:coc_snippet_next = '<a-u>'
 
 " Use <C-k> for jump to previous placeholder, it's default of coc.nvim
-let g:coc_snippet_prev = '<a-u>'
+let g:coc_snippet_prev = '<a-l>'
 imap <C-n> <Plug>(coc-snippets-expand-jump)
 imap <A-n> <Plug>(coc-snippets-expand-jump)
 " Use <C-n> for select text for visual placeholder of snippet.
