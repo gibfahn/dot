@@ -126,7 +126,7 @@ pth() { # Returns absolute path to file(s) including file name.
 # Clone repo and cd into path (can't be in git config as we cd).
 gcl() {
   local clone_dir ret
-  clone_dir="$(set -o pipefail; git cl "$@" 3>&1 1>&2 2>&3 3>&- | tee /dev/stderr | awk -F \' '/Cloning into/ {print $2}' | head -1)"
+  clone_dir="$(set -o pipefail; git cl --progress "$@" 3>&1 1>&2 2>&3 3>&- | tee /dev/stderr | awk -F \' '/Cloning into/ {print $2}' | head -1)"
   ret="$?"
   [[ -d "$clone_dir" ]] && echo "cd $clone_dir" && cd "$clone_dir" || return 1
   return $ret
