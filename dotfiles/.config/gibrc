@@ -72,10 +72,12 @@ export GNUPGHOME="$XDG_DATA_HOME"/gnupg # Gpg data.
 export GOPATH="$HOME/code/go"
 export GRADLE_USER_HOME="$XDG_DATA_HOME"/gradle # Also contains gradle.properties (symlink from XDG_CONFIG_HOME).
 export HELM_HOME="$XDG_DATA_HOME/helm" # Move Helm data dir from ~.
+export HTTPIE_CONFIG_DIR="$XDG_CONFIG_HOME/httpie" # https://github.com/jakubroztocil/httpie/issues/145
 export IPYTHONDIR="$XDG_CACHE_HOME/ipython" # Move iPython dir from ~.
 export LESS='--tabs=4 --ignore-case --RAW-CONTROL-CHARS --quit-if-one-screen --status-column --LONG-PROMPT --HILITE-UNREAD --window=-4' # See less options comment below.
 export LESSHISTFILE="$XDG_CACHE_HOME/less/history" # Get less to put its history here.
 export LESSKEY="$XDG_CACHE_HOME/less" # Less color settings.
+export MINIKUBE_HOME="$XDG_CACHE_HOME/minikube" # https://github.com/kubernetes/minikube/issues/4109
 export NODE_REPL_HISTORY="$XDG_CACHE_HOME/node_repl_history" # Set node-gyp download location.
 export NPM_CONFIG_CACHE="$XDG_CACHE_HOME/npm" # Set npm cache location.
 export NPM_CONFIG_DEVDIR="$XDG_CACHE_HOME/node-gyp" # Set node-gyp download location.
