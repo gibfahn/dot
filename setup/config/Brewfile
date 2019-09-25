@@ -51,6 +51,7 @@ brew "hub"                               # GitHub CLI tool.
 brew "hyperfine"                         # Benchmark commands (time but a benchmarking suite).
 brew "mas"                               # Mac App Store third-party cli.
 brew "neovim"                            # New and improved vim.
+brew "pv"                                # Show data flow through bash pipes.
 brew "rmtrash"                           # `rm` to Trash, aliased to `dl` in gibrc.
 brew "terminal-notifier"                 # Log notifications from the terminal.
 brew "tmux"                              # Terminal multiplexer.
