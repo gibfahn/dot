@@ -1,6 +1,5 @@
 # vi: filetype=conf
 
-tap "srkomodo/tap"                       # ShadowFox Firefox Universal Dark Theme
 
 brew "asciinema"                         # Take screen recordings of your terminal (https://asciinema.org).
 brew "certbot"                           # LetsEncrypt.
@@ -14,7 +13,6 @@ brew "postgresql"                        # Solid database.
 brew "protobuf"                          # Serialization format.
 brew "shellcheck"                        # Linter for bash.
 brew "redis"                             # In-memory key-object store.
-brew "srkomodo/tap/shadowfox-updater"    # ShadowFox Firefox Universal Dark Theme Updater (`shadowfox` to install).
 brew "watchexec"                         # Like entr (evaluating which one is better).
 cask "1password"                         # Password manager.
 cask "caprine"                           # Facebook Messenger native app.
@@ -42,11 +40,6 @@ cask "workflowy"                         # Infinitely nested bullet point list a
 # cask "vagrant"                           # Quick command-line image spin-up.
 # cask "virtualbox"                        # Manage VMs (Linux or Windows).
 # cask "vulkan-sdk"                        # Use the vulkan graphics APIs on macOS.
-
-# Chunkwm Window Manager (currently disabled):
-# tap "crisidev/homebrew-chunkwm"
-# brew "chunkwm", restart_service: :changed
-# brew "koekeishiya/formulae/khd", restart_service: :changed
 
 # Mac App Store Apps (some paid). `mas list` to see what you've already installed.
 mas "Keynote", id: 409183694

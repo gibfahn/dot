@@ -202,16 +202,22 @@ else
 fi
 
 sogou_dir_old="$(ls -a /usr/local/Caskroom/sogouinput 2>/dev/null || true)"
-# brew install things. Edit config/Brewfile to adjust.
-get "brew installing/updating."
-brew tap Homebrew/bundle
-brew bundle --file="$(dirname "$0")"/config/Brewfile | grep -Evx "Using [-_/0-9a-zA-Z ]+"
 
-if [ "$HARDCORE" ]; then # Set up HARDCORE brew packages.
+# brew install things. Edit config/Brewfile to adjust.
+brew tap Homebrew/bundle
+if brew bundle --file="$(dirname "$0")"/config/Brewfile check >/dev/null; then
+  skip "brew packages."
+else
+  get "brew packages."
+  brew bundle --file="$(dirname "$0")"/config/Brewfile | grep -Evx "Using [-_/0-9a-zA-Z ]+"
+fi
+
+# Set up HARDCORE brew packages.
+if [[ -e "$HARDCORE" ]] && ! brew bundle --file="$(dirname "$0")"/config/Brewfile-hardcore check >/dev/null; then
   get "brew HARDCORE packages."
   brew bundle --file="$(dirname "$0")"/config/Brewfile-hardcore | grep -Evx "Using [-_/0-9a-zA-Z ]+"
 else
-  skip "brew HARDCORE packages (HARDCORE not specified)."
+  skip "brew HARDCORE packages."
 fi
 
 # Upgrade everything, even things that weren't in your Brewfile.
@@ -227,7 +233,8 @@ if [[ "$sogou_dir_old" != "$sogou_dir_new" ]]; then
 fi
 
 # Update Mac App Store apps.
-softwareupdate -i -a
+softwareupdate --install --all || skip "To autorestart run:
+sudo softwareupdate --install --all --restart"
 
 # Swift LanguageServer.
 sourcekit_lsp_path="$XDG_DATA_HOME"/sourcekit-lsp
