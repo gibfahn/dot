@@ -69,25 +69,28 @@ zle -N history-beginning-search-backward-end history-search-end # Add it to exis
 zle -N history-beginning-search-forward-end history-search-end  # Add it to existing widgets.
 accept-line() { [ -z "$BUFFER" ] && zle up-history; zle ".$WIDGET"; }
 
+# Changes the cursor shape. KEYMAP is set when called by zsh keymap change.
+# If normal mode then 'vicmd', if insert mode then 'main' or 'viins'.
 zle-keymap-select() {
-  if [[ $KEYMAP == vicmd || $1 = block ]]; then  # Other KEYMAPs are main and viins (or '').
-    printf "\e[2 q"
+  if [[ $KEYMAP == vicmd || $1 = block ]]; then
+    printf "\e[2 q"  # Block cursor '█'
   elif [[ $1 = underline ]]; then
-    printf "\e[4 q"
+    printf "\e[4 q"  # Underline cursor '_'.
   elif [[ $KEYMAP == main || $KEYMAP == viins || -z $KEYMAP || $1 = beam ]]; then
-    printf "\e[6 q"
-  else  # Default cursor is beam.
-    printf "\e[6 q"
+    printf "\e[6 q"  # I-beam cursor 'I' or '|'.
+  else  # Default cursor is I-beam.
+    printf "\e[6 q"  # I-beam cursor 'I' or '|'.
   fi
 }
 
 zle-line-init() {
-  zle -K viins; zle-keymap-select beam
+  zle -K viins  # Every line starts in insert mode.
+  zle-keymap-select beam # Every line starts with I-beam cursor.
 }
 
 zle -N accept-line # Redefine accept-line to insert last input if empty (Enter key).
-zle -N zle-keymap-select # I-beam cursor in insert mode, block otherwise.
-zle -N zle-line-init     # Part of above cursor hack ^.
+zle -N zle-keymap-select # Bind zle-keymap-select() above to be called when the keymap is changed.
+zle -N zle-line-init     # Bind zle-line-init() above to be called when the line editor is initialized.
 # shellcheck disable=SC2034
 KEYTIMEOUT=10 # Key delay of 0.1s (Esc in vim mode is quicker).
 
