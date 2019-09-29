@@ -14,10 +14,12 @@ h = "help"
 
 n = "new"
 nl = "new --lib"
-i = "init"
-il = "init --lib"
+in = "init"
+inl = "init --lib"
 cn = "clean"
 cnl = "clean --target x86_64-unknown-linux-musl"  # Clean linux target.
+
+i = "install"
 
 cl = "clippy"
 f = "fmt"
