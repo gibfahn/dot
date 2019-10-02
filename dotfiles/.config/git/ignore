@@ -8,3 +8,6 @@
 
 # IntelliJ IDEA workspace.
 /.idea/
+
+# Bazel build dependencies.
+/.bazel/
