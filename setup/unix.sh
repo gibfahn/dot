@@ -28,6 +28,7 @@ rust_crates=(
   tally                         # Nicer time (shows memory, page faults etc).
   svgcleaner                    # Remove unnecessary info from svgs.
   oxipng                        # Compress png images.
+  find_unicode                  # Find unicode.
 )
 
 go_packages=(
@@ -253,7 +254,7 @@ if [[ $? != 200 ]]; then
   (
     cd "$XDG_DATA_HOME/KotlinLanguageServer" || { echo "Failed to cd"; exit 1; }
     ./gradlew installDist # If tests passed we could use `./gradlew build`
-    ln -sf "$XDG_DATA_HOME/KotlinLanguageServer/server/build/install/server/bin/server" "$HOME/bin/kotlin-language-server"
+    ln -sf "$XDG_DATA_HOME/KotlinLanguageServer/server/build/install/server/bin/kotlin-language-server" "$HOME/bin/kotlin-language-server"
   )
 fi
 
