@@ -51,7 +51,8 @@ _gib_prompt_preexec() {
   if [[ -n $_gib_prompt_git_fetch_pattern ]]; then
     # detect when git is performing pull/fetch (including git aliases).
     local -H MATCH MBEGIN MEND match mbegin mend
-    if [[ $2 =~ (git|hub)\ (.*\ )?($_gib_prompt_git_fetch_pattern)(\ .*)?$ ]]; then
+    # e.g. `git fetch` or `g mf`.
+    if [[ $2 =~ (g|git|hub)\ (.*\ )?($_gib_prompt_git_fetch_pattern)(\ .*)?$ ]]; then
       # we must flush the async jobs to cancel our git fetch in order
       # to avoid conflicts with the user issued pull / fetch.
       async_flush_jobs '_gib_prompt'
