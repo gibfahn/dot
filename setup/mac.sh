@@ -26,6 +26,9 @@ if [[ -d "$HOME/Library/Application Support/Code/" ]]; then
 fi
 
 # Install xcode command line tools
+# If these are messed up run `xcode-select -p`. It will normally print one of:
+# - /Library/Developer/CommandLineTools
+# - /Applications/Xcode.app/Contents/Developer
 if ! xcode-select -p &>/dev/null; then
   skip "Xcode Command Line Tools."
   xcode-select --install
