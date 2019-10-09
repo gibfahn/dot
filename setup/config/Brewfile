@@ -44,13 +44,15 @@ brew "burntsushi/ripgrep/ripgrep-bin"    # Super-fast recursive grep.
 brew "ccache"                            # Speeds up C/C++ recompilation.
 brew "entr"                              # Command line file watching.
 brew "fd"                                # Super-fast find replacement.
+brew "fswatch"                           # See which files are opened on the system (`fswatch /`).
 brew "gnupg"                             # gpg command line.
 brew "httpie"                            # Alternative to curl, `http` binary.
-brew "pinentry-mac"                      # Gpg password Keychain integration.
 brew "hub"                               # GitHub CLI tool.
 brew "hyperfine"                         # Benchmark commands (time but a benchmarking suite).
+brew "jq"                                # Makes it easy to deal with JSON on the command line.
 brew "mas"                               # Mac App Store third-party cli.
 brew "neovim"                            # New and improved vim.
+brew "pinentry-mac"                      # Gpg password Keychain integration.
 brew "pv"                                # Show data flow through bash pipes.
 brew "rmtrash"                           # `rm` to Trash, aliased to `dl` in gibrc.
 brew "terminal-notifier"                 # Log notifications from the terminal.
@@ -58,7 +60,6 @@ brew "tmux"                              # Terminal multiplexer.
 brew "xsv"                               # csv manipulator.
 brew "zsh-completions"                   # Generally useful  zsh completions.
 brew "zsh-syntax-highlighting"           # Syntax in the terminal.
-brew "jq"                                # Makes it easy to deal with JSON on the command line.
 cask "docker"                            # Build and run docker images.
 
 # Casks (GUI Applications):
