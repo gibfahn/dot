@@ -3,6 +3,7 @@
 # - Use a different username: s gib@host
 # - Don't use ssh key (force password): s gib:@host
 # However if you don't want to specify them every time, set them in here.
+# See `man ssh_config` for more information.
 
 
 # Defaults for all hosts
@@ -11,12 +12,22 @@ Host *
    IdentityFile ~/.ssh/id_ed25519
 # You'll want an old-style key for older machines though (see README).
    IdentityFile ~/.ssh/id_rsa
-# Stops the "do you accept this RSA key" rubbish.
-   StrictHostKeyChecking=no
+# Ask about host keys.
+   StrictHostKeyChecking=ask
 # Stops servers closing the connection because you didn't use it.
    ServerAliveInterval 120
 # Uncomment this if your default user on remote machines != `whoami` on this one.
 #   User gib
+# Use macOS keychain to store ssh key passwords so you don't have to type your SSH Key password every time you restart.
+  IgnoreUnknown UseKeychain
+  UseKeychain yes
+# Ping the server every 120s to see if the connection is live.
+# Stops you being kicked if you don't use the connection for a while.
+  ServerAliveInterval 120
+# Add SSH Key to agent when you use it. Means you don't have to type your password every time you ssh.
+  AddKeysToAgent yes
+# Restrict ciphers to a modern and hopefully more-secure (and hardware-acceleratable) subset.
+  Ciphers aes128-ctr,aes128-gcm@openssh.com,aes192-ctr,aes256-ctr,aes256-gcm@openssh.com,chacha20-poly1305@openssh.com
 
 ###########################
 #  Sample Machine Config  #
