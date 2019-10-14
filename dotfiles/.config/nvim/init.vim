@@ -236,6 +236,7 @@ nnoremap <silent> <space>ck  :<C-u>CocPrev<CR>
 nnoremap <silent> <space>cp  :<C-u>CocListResume<CR>
 
 nnoremap <Leader>d :call BufferClose('')<CR>| " Close buffer without closing split,
+nnoremap <Leader>D :%d<CR>|                " Delete all text in buffer.
 nnoremap <Leader>e <C-w>q|                 " Close current split (keeps buffer).
 nnoremap <Leader>E :cclose<CR>:lclose<CR>:helpclose<CR><C-W>z| " Close open preview windows (e.g. language server definitions).
 nnoremap <Leader>f :Files<CR>|             " Search file names    for file,
