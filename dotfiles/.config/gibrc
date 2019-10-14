@@ -193,19 +193,38 @@ pathadd "$HOME/bin" # Put random binaries you want to run in here.
 exists gls && alias ls=gls
 exists gsed && alias sed=gsed
 if ls --color=auto >/dev/null 2>&1; then
-  if [[ -e "$XDG_DATA_HOME"/LS_COLORS/LS_COLORS ]]; then
-    eval "$(dircolors -b "$XDG_DATA_HOME/LS_COLORS/LS_COLORS" | head -1)" # Load custom LS_COLORS from project.
-  else
-    source "$XDG_DATA_HOME/LS_COLORS.old" # Use old version if LS_COLORS not installed.
-  fi
-  { exists gls && alias ls='LS_COLORS=$LS_COLORS gls --color=auto'; } || alias ls='LS_COLORS=$LS_COLORS ls --color=auto'
-  export LS_COLORS
+  { exists gls && alias ls='gls --color=auto'; } || alias ls='ls --color=auto'
 elif [[ "$uname" == Darwin ]]; then
   alias ls='LSCOLORS="Gxfxcxdxbxegedabagacad" ls -G' # Colour ls on macOS.
 fi
 
 case $shell in
   zsh) # zsh specific options.
+    # Zsh Plugins (managed with zplugin).
+    # Profile plugin loading by changing `zplugin light` to `zplugin load`.
+    declare -A ZPLGM
+    ZPLGM[HOME_DIR]=$XDG_DATA_HOME/zsh/zplugin
+    ZPLGM[BIN_DIR]=$XDG_DATA_HOME/zsh/zplugin/bin # Where zplugin is installed.
+    ZPLGM[ZCOMPDUMP_PATH]=$XDG_CACHE_HOME/zsh/.zcompdump$(hostname)
+
+    source "$XDG_DATA_HOME/zsh/zplugin/bin/zplugin.zsh" # Source plugin manager.
+
+    zplugin ice wait blockf atpull'zplugin creinstall -q .'
+    zplugin light zsh-users/zsh-completions # Auto-complete for common commands.
+
+    # If you get a compinit error, run:
+    #   autoload -Uz compinit && compaudit | xargs chmod g-w
+    zplugin ice wait atinit"zpcompinit; zpcdreplay"
+    zplugin light zdharma/fast-syntax-highlighting # Syntax highlighting.
+
+    zplugin ice atclone"dircolors -b LS_COLORS > c.zsh" atpull'%atclone' pick"c.zsh" nocompile'!'
+    zplugin light trapd00r/LS_COLORS # Nicer terminal colours.
+
+    zplugin ice wait atload"_zsh_autosuggest_start"
+    zplugin light zsh-users/zsh-autosuggestions # Autosuggest completion (accept with -> arrow).
+
+    zplugin light mafredri/zsh-async # Async zsh library, used in gib-theme.
+
     export ZDOTDIR="${XDG_CONFIG_HOME}/zsh" # Path to zsh config files.
     # cd pushes onto pushd stack (Try `cd -<Tab>`)
     # If you type a file name/path by itself, cd to it, don't print dir on cd unless in $CDPATH.
@@ -222,14 +241,12 @@ case $shell in
 
     fpath=( # ZSH Completion definitions. If you update this run `exec zsh`.
       "$XDG_DATA_HOME/zfunc" # Put (or symlink) autocomplete scripts in here.
-      /usr/local/share/zsh-completions # Common zsh completions.
       "${fpath[@]}"
     ) # zsh-completions.
 
     # Don't crash shell if "$XDG_DATA_HOME"/zfunc/source/* matches nothing.
     setopt | grep -qxF nullglob || { _gib_changed=true && setopt nullglob; }
     _gib_source_files=( # Files to source.
-      "$XDG_DATA_HOME"/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
       "$XDG_DATA_HOME"/zfunc/source/* # Put completion files that need to be sourced here.
       "$ZDOTDIR"/*.zsh
       "$XDG_DATA_HOME"/fzf/shell/key-bindings.zsh

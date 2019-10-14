@@ -160,7 +160,8 @@ else
   skip "Lesskey"
 fi
 
-gitCloneOrUpdate zsh-users/zsh-syntax-highlighting "$XDG_DATA_HOME/zsh/zsh-syntax-highlighting"
+gitCloneOrUpdate zdharma/zplugin "$XDG_DATA_HOME/zsh/zplugin/bin" # Zsh plugin manager.
+zsh -ic 'zplugin self-update; zplugin update --all' # Update zsh plugins.
 
 # Install or update pip modules.
 pip=pip
@@ -177,8 +178,6 @@ for module in "${pip3_modules[@]}"; do
     skip "$pip: $module"
   fi
 done
-
-gitCloneOrUpdate mafredri/zsh-async "$XDG_DATA_HOME/zsh/zsh-async"
 
 # Install nvm:
 unamem="$(uname -m)"

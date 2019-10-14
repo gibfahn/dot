@@ -54,12 +54,8 @@ zstyle ':completion:*:*:*:*:*' menu "select" # Make the completion selection men
 zstyle ':completion::complete:*' use-cache 1
 zstyle ':completion::complete:*' cache-path "$XDG_CACHE_HOME"/zsh
 
-autoload -Uz compinit
 # TODO(gib): Work out why this is slow on Darwin and fix it.
-[[ -n "${ssh:-}" && "${uname:-}" = Darwin ]] || compinit -d "$XDG_CACHE_HOME/zsh/.zcompdump$(hostname)"
 zstyle ':bracketed-paste-magic' active-widgets '.self-*' # https://github.com/zsh-users/zsh-autosuggestions/issues/141
-# If you get a compinit error, run: compaudit | xargs chmod g-w
-compaudit | xargs chmod g-w || true
 
 # Vim mode and keybindings in zsh:
 autoload -U history-search-end # Not included by default so load (usually /usr/share/zsh/unctions/Zle/).

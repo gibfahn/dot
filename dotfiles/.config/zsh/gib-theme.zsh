@@ -2,7 +2,7 @@
 [[ -n "${ssh:-}" ]] || PROMPT="%m " # Set fallback PROMPT in case the below script fails.
 PROMPT=$'\n%{\e[38;5;161m%}'"${PROMPT}"$'%{\e[38;5;242m···❯\e[0m%} '
 
-source "$XDG_DATA_HOME/zsh/zsh-async/async.zsh" || return # Async functions used here.
+# Requires async plugin, e.g. with zplugin run: `zplugin light mafredri/zsh-async`
 
 # Based on Pure by Sindre Sorhus (https://github.com/sindresorhus/pure, MIT License)
 

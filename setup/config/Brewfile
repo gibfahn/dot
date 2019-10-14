@@ -58,8 +58,6 @@ brew "rmtrash"                           # `rm` to Trash, aliased to `dl` in gib
 brew "terminal-notifier"                 # Log notifications from the terminal.
 brew "tmux"                              # Terminal multiplexer.
 brew "xsv"                               # csv manipulator.
-brew "zsh-completions"                   # Generally useful  zsh completions.
-brew "zsh-syntax-highlighting"           # Syntax in the terminal.
 cask "docker"                            # Build and run docker images.
 
 # Casks (GUI Applications):
