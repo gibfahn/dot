@@ -161,6 +161,7 @@ else
 fi
 
 gitCloneOrUpdate zdharma/zplugin "$XDG_DATA_HOME/zsh/zplugin/bin" # Zsh plugin manager.
+# A bit slow, see https://github.com/zdharma/zplugin/issues/184.
 zsh -ic 'zplugin self-update; zplugin update --all' # Update zsh plugins.
 
 # Install or update pip modules.
