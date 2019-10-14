@@ -274,12 +274,11 @@ case $shell in
       [[ "$ret_status" != 0 ]] && ret_col='\e[38;5;196m'
 
       PS1="\n"
-      [[ -n "$ssh" ]] && PS1+='\[\e[38;5;161m\]\h '"\[$no_col\]"
+      [[ -n "$ssh" ]] && PS1+='\[\e[38;5;161m\]\h '"\[$no_col\] "
+      PS1+="\[${ret_col}\]\w\[${no_col}\] "
+      [[ -n "$VIRTUAL_ENV" ]] && PS1+="(${VIRTUAL_ENV##*/})"
+      PS1+="\n"
       PS1+="\[${ret_col}\]·❯\[${no_col}\] "
-
-      local venv='' # If a virtual env was set, add it to the right prompt.
-      [[ -n "$VIRTUAL_ENV" ]] && venv="(${VIRTUAL_ENV##*/}) " # TODO(gib): Color this in 242.
-      printf "${ret_col}%*s${no_col}" "$COLUMNS" "$venv$(pwd | sed "s|^$HOME|~|")" # Right prompt equivalent in bash.
     }
     PROMPT_COMMAND=_gib_bash_prompt_command # Use the above function to generate the prompt.
   ;;
