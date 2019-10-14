@@ -47,7 +47,7 @@ mas "Dark Reader for Safari", id: 1438243180 # Dark mode in every website.
 mas "Pages", id: 409201541
 mas "Pocket", id: 568494494
 mas "Xcode", id: 497799835               # Needed to compile llvm (among other things).
-# mas "Numbers", id: 409203825
+mas "Numbers", id: 409203825
 # mas "Final Cut Pro", id: 424389933
 # mas "GarageBand", id: 682658836
 # mas "iMovie", id: 408981434
