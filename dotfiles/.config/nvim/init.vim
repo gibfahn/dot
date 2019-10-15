@@ -57,7 +57,6 @@ try
   Plug 'raghur/vim-ghost', {'do': ':GhostInstall'}  " Edit browser text areas in Neovim (:h ghost).
   Plug 'rust-lang/rust.vim'                         " Rust language bindings.
   Plug 'simnalamburt/vim-mundo'                     " Graphical undo tree (updated fork of Gundo).
-  Plug 'takac/vim-hardtime'                         " Disable key repeat.
   Plug 'tpope/vim-abolish'                          " Work with variants of words (replacing, capitalizing etc).
   Plug 'tpope/vim-commentary'                       " Autodetect comment type for lang.
   Plug 'tpope/vim-fugitive'                         " Git commands in vim.
@@ -172,6 +171,33 @@ inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
       \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 " inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
+" Remap vim keys for Colemak (h/n/e/i <-> h/j/k/l).
+" Changes: J <-> N, E <-> K, I <-> L
+
+noremap n j
+noremap j n
+noremap e k
+noremap k e
+noremap i l
+noremap l i
+
+noremap N J
+noremap J N
+noremap E K
+noremap K E
+noremap I L
+noremap L I
+
+call textobj#user#plugin('line', {
+\      '-': {
+\        'select-a': 'ai', 'select-a-function': 'textobj#line#select_a',
+\        'select-i': 'li', 'select-i-function': 'textobj#line#select_i',
+\      },
+\    })
+
+" Use K for show documentation in preview window
+nnoremap <silent> E :call <SID>show_documentation()<CR>
+
 nnoremap          Q <nop>|                          " Avoid accidental triggering.
 nnoremap          Y y$|                             " Make Y work like C and D (yank to end of line, not whole line).
 " To open vim's current directory, use `:e .`.
@@ -197,9 +223,6 @@ nmap <silent> <Leader>ci <Plug>(coc-implementation)
 nmap <silent> <Leader>cI :call DupBuffer()<CR><Plug>(coc-implementation)
 nmap <silent> <Leader>cu <Plug>(coc-references)
 nmap <silent> <Leader>cU :call DupBuffer()<CR><Plug>(coc-references)
-
-" Use K for show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
 
 " Remap for rename current word
 nmap <Leader>cr <Plug>(coc-rename)
@@ -557,15 +580,13 @@ if filereadable('/usr/local/bin/python3')
   let g:python3_host_prog = "/usr/local/bin/python3"  " Speed up startup by not looking for python3 every time.
 endif
 
-let g:fzf_history_dir = $XDG_CACHE_HOME . '/fzf-history' " Save history of fzf vim commands.
 let g:buftabline_indicators = 1                     " Show a + if the buffer has been modified.
 let g:buftabline_numbers = 2                        " Show buftabline's count (use <Leader>1-9 to switch.
+let g:colorizer_use_virtual_text = 1                " Use virtual text
 let g:echodoc#type = 'virtual' " Needs nvim 0.3.2 (`brew unlink neovim && brew install --HEAD neovim` for now).
+let g:fzf_history_dir = $XDG_CACHE_HOME . '/fzf-history' " Save history of fzf vim commands.
 let g:ghost_darwin_app = 'kitty'                    " Tell vim-ghost which terminal to open.
 let g:github_enterprise_urls = ['https://github.pie.apple.com'] " Add your GHE repo so vim-fugitive's :Gbrowse! can use it (try with visual mode).
-let g:hardtime_allow_different_key = 1              " Allow alternating keys (e.g. kj).
-let g:hardtime_default_on = 1                       " Don't allow repeated keypresses by default.
-let g:hardtime_ignore_quickfix = 1                  " Don't give me a hard time about repeated keys in quickfix window.
 let g:is_posix = 1                                  " Assume shell for syntax highlighting.
 let g:loaded_netrw = 1                              " Skip loading netrw file browser (use vim-readdir instead).
 let g:loaded_netrwPlugin = 1                        " Don't use the built-in file browser (use vim-readdir instead).
@@ -576,7 +597,7 @@ let g:sneak#label = 1                               " Make sneak like easymotion
 let g:sneak#target_labels = ";sftunqm/`'-+SFGHLTUNRMQZ?0123456789!()\\[]:|<>WEYIOPADJKXCVB.\"\,:weryiopadghjklzxcvb" " Labels sneak uses to show words.
 let g:sneak#use_ic_scs = 1                          " Sneak: respect smartcase setting.
 let g:surround_no_mappings = 1                      " Manually map surround, see SurroundOp() function.
-let g:colorizer_use_virtual_text = 1                " Use virtual text
+let g:textobj_line_no_default_key_mappings = 1      " Manually redefine due to Colemak remappings.
 
 " Settings for custom statusline.
 let g:lightline = {
