@@ -183,6 +183,7 @@ pathadd /usr/local/opt/coreutils/libexec/gnubin # Coreutils from brew on macOS, 
 pathadd "$CARGO_HOME/bin" # Rust packages.
 pathadd "$HOME/.local/bin"
 pathadd "$HOME/bin" # Put random binaries you want to run in here.
+PATH=".git/safe/../../bin:$PATH" # `mkdir .git/safe` if you trust the repo (https://thoughtbot.com/blog/git-safe).
 [[ -n "$VIRTUAL_ENV" ]] && pathadd "$VIRTUAL_ENV/bin" # Virtual env needs to be in front of /usr/local/bin.
 
 # End of path:
@@ -336,6 +337,9 @@ alias vlt='pathadd "$VOLTA_HOME"; pathadd "$VOLTA_HOME"/bin'
 # Yaml to json, e.g. "y2j <t.yml | jq .". Requires a `pip install pyyaml`.
 alias y2j="python -c 'import sys, yaml, json; json.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2)'"
 alias y2y="python -c 'import sys, yaml; yaml.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2)'"
+if exists kitty; then
+  alias icat="kitty +kitten icat" # Kitty terminal specific: https://sw.kovidgoyal.net/kitty/kittens/icat.html
+fi
 
 # }}} Aliases
 
