@@ -27,4 +27,6 @@ fi
 # Apply latest dotfile changes to your system.
 pushd "$dotDir" &>/dev/null
 ./up
+status=$?
 popd
+exit "$status"
