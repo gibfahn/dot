@@ -582,6 +582,8 @@ endfunction
 command! Trim call TrimWhitespace()|                " :Trim runs :call Trim() (defined below).
 command! PU PlugClean | PlugUpdate | PlugUpgrade|   " :PU updates/cleans plugins and vim-plug.
 
+" TODO(gib): Also start using proximity-sort in vimrc.
+
 " :Locate will search entire filesystem for file.
 command! -nargs=1 -bang Locate call fzf#run(fzf#wrap({'source': 'locate <q-args>', 'options': '-m'}, <bang>0))
 

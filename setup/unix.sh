@@ -29,6 +29,8 @@ rust_crates=(
   svgcleaner                    # Remove unnecessary info from svgs.
   oxipng                        # Compress png images.
   find_unicode                  # Find unicode.
+  # TODO(gib): Add proximity-sort and update their readme with `cargo install proximity-sort` instructions.
+  # https://github.com/jonhoo/proximity-sort
 )
 
 go_packages=(
@@ -131,9 +133,6 @@ if [[ ! -e ~/.ssh/config ]]; then
 else
   skip "SSH Config (not overwriting ~/.ssh/config, copy manually from ./config/ssh-config as necessary)."
 fi
-
-# Set up autocompletions and source dir:
-mkdir -p "$XDG_DATA_HOME/zfunc/source"
 
 # Set up zsh scripts:
 mkdir -p "$XDG_DATA_HOME/zsh"
@@ -285,7 +284,6 @@ if [[ -z $MINIMAL && -n $HARDCORE ]]; then
     not cargo-install-update && cargo install cargo-update
     cargo install-update -ia "${rust_crates[@]}" # Update everything installed with cargo install.
   fi
-  [[ -d "$XDG_DATA_HOME/zfunc" ]] || mkdir -p "$XDG_DATA_HOME/zfunc"
 fi
 
 # Install or update any go packages we need.
@@ -295,6 +293,8 @@ get "Updating ZSH Completions"
 # There are two types of completion files. One is an actual zsh completion file (e.g. rustup). The
 # other is a file you source that generates the relevant functions (e.g. npm). Put the latter in
 # zfunc/source.
+mkdir -p "$XDG_DATA_HOME/zfunc/source"
+
 exists rustup && {
   rustup completions zsh > "$XDG_DATA_HOME/zfunc/_rustup"
   ln -sf "$(realpath "$(dirname "$(rustup which cargo)")"/../share/zsh/site-functions)"/* "$XDG_DATA_HOME/zfunc/"
@@ -302,3 +302,7 @@ exists rustup && {
 exists rbenv && ln -sf "$XDG_DATA_HOME/rbenv/completions/rbenv.zsh" "$XDG_DATA_HOME/zfunc/source/_rbenv"
 ln -sf "$XDG_DATA_HOME"/fzf/shell/completion.zsh "$XDG_DATA_HOME/zfunc/source/_fzf"
 exists npm && npm completion --loglevel=error > "$XDG_DATA_HOME/zfunc/source/_npm"
+
+# TODO(gib): Does this actually work?
+# Run the source
+# zplugin creinstall "$XDG_DATA_HOME"/zfunc/
