@@ -659,7 +659,7 @@ let g:coc_global_extensions = [
   \ 'coc-json',
   \ 'coc-prettier',
   \ 'coc-python',
-  \ 'coc-rls',
+  \ 'coc-rust-analyzer',
   \ 'coc-snippets',
   \ 'coc-solargraph',
   \ 'coc-svg',
