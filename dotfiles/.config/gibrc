@@ -30,7 +30,6 @@ case $0 in
 esac
 : "${shell:="$(ps co command= "$$")"}" # Fallback shell name = name of current process.
 uname="$(uname)"
-unamem="$(uname -m)"
 
 # If we're sshed into a machine, and didn't manually run a different, try a better shell.
 if [ -n "$ssh" ] && [ "$GIBRC" = 0 ] && [ "$shell" != zsh ]; then
@@ -226,7 +225,22 @@ case $shell in
 
     zplugin light mafredri/zsh-async # Async zsh library, used in gib-theme.
 
+    # Don't crash shell if "$XDG_DATA_HOME"/zfunc/source/* matches nothing.
+    setopt | grep -qxF nullglob || { _gib_changed=true && setopt nullglob; }
     export ZDOTDIR="${XDG_CONFIG_HOME}/zsh" # Path to zsh config files.
+    _gib_source_files=( # Files to source.
+      "$XDG_DATA_HOME"/fzf/shell/key-bindings.zsh
+      "$XDG_DATA_HOME"/zfunc/source/* # Put completion files that need to be sourced here.
+      "$ZDOTDIR"/*.zsh
+    )
+    # Unset nullglob if we set it.
+    [[ -n $_gib_changed ]] && { setopt nonullglob; unset _gib_changed; }
+
+    for _gib_file in "${_gib_source_files[@]}"; do
+      zplugin snippet "$_gib_file"
+    done
+    unset _gib_file _gib_source_files
+
     # cd pushes onto pushd stack (Try `cd -<Tab>`)
     # If you type a file name/path by itself, cd to it, don't print dir on cd unless in $CDPATH.
     setopt autopushd autocd pushd_silent pushdignoredups pushdminus
@@ -245,20 +259,6 @@ case $shell in
       "${fpath[@]}"
     ) # zsh-completions.
 
-    # Don't crash shell if "$XDG_DATA_HOME"/zfunc/source/* matches nothing.
-    setopt | grep -qxF nullglob || { _gib_changed=true && setopt nullglob; }
-    _gib_source_files=( # Files to source.
-      "$XDG_DATA_HOME"/zfunc/source/* # Put completion files that need to be sourced here.
-      "$ZDOTDIR"/*.zsh
-      "$XDG_DATA_HOME"/fzf/shell/key-bindings.zsh
-    )
-    # Unset nullglob if we set it.
-    [[ -n $_gib_changed ]] && { setopt nonullglob; unset _gib_changed; }
-
-    for _gib_file in "${_gib_source_files[@]}"; do
-      [[ -r "$_gib_file" ]] && source "$_gib_file" || echo "GIBRC: Couldn't find file to source - '$_gib_file'"
-    done
-    unset _gib_file _gib_source_files
   ;;
   bash) # Bash specific options.
     set -o vi # Vim mode in bash.
