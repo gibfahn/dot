@@ -1,8 +1,6 @@
 " BREAKING CHANGES:
 " - s is now sneak (use `cl` for `s`) function (:h sneak).
 " - <C-i> is now :bn (<C-i>==Tab for vim), use <C-p> for <C-i> function.
-" - Colemak remapping: n,e,i <-> j,k,l in non-insert modes.
-" Complete list of all vim commands: http://vimdoc.sourceforge.net/htmldoc/vimindex.html
 
 " {{{ Load plugins (uses vim-plug)
 
@@ -173,32 +171,8 @@ inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
       \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 " inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
-" Remap vim keys for Colemak (h/n/e/i <-> h/j/k/l).
-" Changes: J <-> N, E <-> K, I <-> L
-
-noremap n j
-noremap j n
-noremap e k
-noremap k e
-noremap i l
-noremap l i
-
-noremap N J
-noremap J N
-noremap E K
-noremap K E
-noremap I L
-noremap L I
-
-call textobj#user#plugin('line', {
-\      '-': {
-\        'select-a': 'ai', 'select-a-function': 'textobj#line#select_a',
-\        'select-i': 'li', 'select-i-function': 'textobj#line#select_i',
-\      },
-\    })
-
 " Use K for show documentation in preview window
-nnoremap <silent> E :call <SID>show_documentation()<CR>
+nnoremap <silent> K :call <SID>show_documentation()<CR>
 
 nnoremap          Q <nop>|                          " Avoid accidental triggering.
 nnoremap          Y y$|                             " Make Y work like C and D (yank to end of line, not whole line).
@@ -624,7 +598,6 @@ let g:sneak#label = 1                               " Make sneak like easymotion
 let g:sneak#target_labels = ";sftunqm/`'-+SFGHLTUNRMQZ?0123456789!()\\[]:|<>WEYIOPADJKXCVB.\"\,:weryiopadghjklzxcvb" " Labels sneak uses to show words.
 let g:sneak#use_ic_scs = 1                          " Sneak: respect smartcase setting.
 let g:surround_no_mappings = 1                      " Manually map surround, see SurroundOp() function.
-let g:textobj_line_no_default_key_mappings = 1      " Manually redefine due to Colemak remappings.
 
 " Settings for custom statusline.
 let g:lightline = {
