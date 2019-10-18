@@ -259,6 +259,7 @@ nnoremap <Leader>gw :setlocal wrap!<CR>| " <Space>gw toggles the soft-wrapping o
 nnoremap <Leader>Id :r !date +\%Y-\%m-\%d<CR>| " Insert readable    date on new line.
 nnoremap <Leader>ID :r !date +\%d-\%b-\%y<CR>| " ↳      `:sort`able date on new line.
 nnoremap <Leader>It ITODO(gib): <ESC>:Commentary<CR>$| " Insert a TODO, (Write todo, then `<Space>it`).
+nnoremap <Leader>m :!mkdir -p "%:p:h"<CR>
 nnoremap <Leader>n :sp<CR><C-w>k:bp<CR>|   " Open horizontal split,
 nnoremap <Leader>i :vsp<CR><C-w>h:bp<CR>|  " Open vertical split.
 nnoremap <Leader>o :set operatorfunc=OpenUrl<CR>g@| " Open the selected text with the appropriate program (like netrw-gx).
