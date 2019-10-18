@@ -1,5 +1,7 @@
-" BREAKING CHANGES: s is now sneak (use `cl` for `s`) function (:h sneak).
-"                   <C-i> is now :bn (<C-i>==Tab for vim), use <C-p> for <C-i> function.
+" BREAKING CHANGES:
+" - s is now sneak (use `cl` for `s`) function (:h sneak).
+" - <C-i> is now :bn (<C-i>==Tab for vim), use <C-p> for <C-i> function.
+" - Colemak remapping: n,e,i <-> j,k,l in non-insert modes.
 " Complete list of all vim commands: http://vimdoc.sourceforge.net/htmldoc/vimindex.html
 
 " {{{ Load plugins (uses vim-plug)
@@ -317,7 +319,7 @@ nmap <leader>5 <Plug>BufTabLine.Go(5)|         " <leader>1 goes to buffer 5 (see
 nmap <leader>6 <Plug>BufTabLine.Go(6)|         " <leader>1 goes to buffer 6 (see numbers in tab bar).
 nmap <leader>7 <Plug>BufTabLine.Go(7)|         " <leader>1 goes to buffer 7 (see numbers in tab bar).
 nmap <leader>8 <Plug>BufTabLine.Go(8)|         " <leader>1 goes to buffer 8 (see numbers in tab bar).
-nmap <leader>9 <Plug>BufTabLine.Go(1) :bp<CR>| " <leader>1 goes to last buffer (see numbers in tab bar).
+nmap <leader>9 <Plug>BufTabLine.Go(-1)|        " <leader>1 goes to last buffer (see numbers in tab bar).
 
 " Use `[g` and `]g` for next/previous diagnostic message.
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
@@ -551,6 +553,29 @@ function! s:DiffOrig()
   diffthis
 endfunction
 
+ " Helper function for LightlineCoc*() functions.
+function! s:lightline_coc_diagnostic(kind, sign) abort
+  let info = get(b:, 'coc_diagnostic_info', 0)
+  if empty(info) || get(info, a:kind, 0) == 0
+    return ''
+  endif
+  return printf("%s %d", a:sign, info[a:kind])
+endfunction
+
+" Used in LightLine config to show diagnostic messages.
+function! LightlineCocErrors() abort
+  return s:lightline_coc_diagnostic('error', '✖')
+endfunction
+function! LightlineCocWarnings() abort
+    return s:lightline_coc_diagnostic('warning', "⚠")
+endfunction
+function! LightlineCocInfos() abort
+  return s:lightline_coc_diagnostic('information', "ℹ")
+endfunction
+function! LightlineCocHints() abort
+  return s:lightline_coc_diagnostic('hints', "ℹ")
+endfunction
+
 " }}} Functions used in key mappings above.
 
 " {{{ Custom commands, Autocommands, global variables
@@ -607,30 +632,39 @@ let g:lightline = {
     \           [ 'readonly', 'relativepath', 'modified' ],
     \           [ 'gitbranch' ],
     \           [ 'truncate_here' ],
-    \           [ 'cocstatus' ] ],
+    \           [ 'coc_error', 'coc_warning', 'coc_info', 'coc_hint' ], ],
     \ 'right': [ [ 'lineinfo' ],
     \            [ 'percent' ],
     \            [ 'fileformat', 'fileencoding', 'filetype' ],
-    \            [ 'currentfunction' ] ] },
+    \            [ 'currentfunction' ], ] },
   \ 'inactive': {
-    \ 'left': [ [ 'filename' ], [ 'currentfunction' ]],
+    \ 'left': [ [ 'relativepath' ] ],
     \ 'right': [ [ 'lineinfo' ],
     \            [ 'percent' ] ] },
   \ 'tabline': {
     \ 'left': [ [ 'tabs' ] ],
     \ 'right': [ [ 'close' ] ] },
- \ 'component': {
+  \ 'component': {
     \ 'truncate_here': '%<',
     \ 'fileformat': '%{&ff=="unix"?"":&ff}',
     \ 'fileencoding': '%{&fenc=="utf-8"?"":&fenc}' },
- \ 'component_visible_condition': {
+  \ 'component_expand': {
+    \ 'coc_error': 'LightlineCocErrors',
+    \ 'coc_warning': 'LightlineCocWarnings',
+    \ 'coc_info': 'LightlineCocInfos',
+    \ 'coc_hint': 'LightlineCocHints', },
+  \ 'component_visible_condition': {
     \ 'truncate_here': 0,
     \ 'fileformat': '&ff&&&ff!="unix"',
     \ 'fileencoding': '&fenc&&&fenc!="utf-8"' },
- \ 'component_type': {
+  \ 'component_type': {
+    \ 'coc_error': 'error',
+    \ 'coc_warning': 'warning',
+    \ 'coc_info': 'tabsel',
+    \ 'coc_hint': 'middle',
+    \ 'coc_fix': 'middle',
     \ 'truncate_here': 'raw' },
- \ 'component_function': {
-    \ 'cocstatus': 'coc#status',
+  \ 'component_function': {
     \ 'currentfunction': 'CocCurrentFunction',
     \ 'gitbranch': 'fugitive#head', },
   \ }
@@ -713,6 +747,7 @@ augroup gibAutoGroup                                " Group of automatic functio
   autocmd BufEnter    * let b:swapchoice_likely = (&l:ro ? 'o' : 'e')
   autocmd BufWinEnter * if exists('b:swapchoice') && exists('b:swapchoice_likely') | let b:swapchoice = b:swapchoice_likely | unlet b:swapchoice_likely | endif
   autocmd BufWinEnter * if exists('b:swapchoice') && b:swapchoice == 'r' | call s:HandleRecover() | endif
+  autocmd User CocDiagnosticChange call lightline#update()
 augroup END
 
 " }}} Custom commands, Autocommands, global variables
