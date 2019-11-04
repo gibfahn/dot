@@ -42,6 +42,7 @@
   "python.linting.flake8Enabled": true,
   "python.linting.pydocstyleEnabled": false,
   "python.jediEnabled": false,
+  "rust-analyzer.cargo-watch.command": "clippy",
   "yaml.format.enable": true,
   "yaml.hover": true,
   "yaml.schemas": {
