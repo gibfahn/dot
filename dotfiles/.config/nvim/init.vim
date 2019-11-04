@@ -2,7 +2,7 @@
 " - s is now sneak (use `cl` for `s`) function (:h sneak).
 " - <C-i> is now :bn (<C-i>==Tab for vim), use <C-p> for <C-i> function.
 
-" {{{ Load plugins (uses vim-plug)
+" {{{ Load plugins
 
 if empty($XDG_CONFIG_HOME)| let $XDG_CONFIG_HOME = $HOME . '/.config'| endif
 if empty($XDG_CACHE_HOME)| let $XDG_CACHE_HOME = $HOME . '/.cache'| endif
@@ -75,9 +75,10 @@ try
   catch /E117: Unknown function: plug#begin/
     echo "ERROR:\tvim-plug automatic install failed. Original error was:\n\t" . v:exception . "\n"
 endtry
-" }}} Load plugins (uses vim-plug)
 
-" {{{ Set vim options
+" }}} Load plugins
+
+" {{{ Vim options
 
 set nocompatible                                    " Remove vi compatibility hacks.
 let mapleader = "\<Space>"                          " Set <Leader> (default shortcut used in mappings below) to Spacebar.
@@ -139,9 +140,11 @@ catch /E185: Cannot find color scheme 'gib'/
   colo desert
 endtry
 
-" }}} Set vim options
+" }}} Vim options
 
-" {{{ Key mappings (see http://vim.wikia.com/wiki/Unused_keys for unused keys)
+" {{{ Key mappings
+
+" (see http://vim.wikia.com/wiki/Unused_keys for unused keys)
 " Available (normal): <C-Space>, +, _, <C-q/s/[/_>, <leader>e/m/n/v
 
 " In insert mode, if completion dropdown open, Tab/Shift-Tab switch between entries. Otherwise if
@@ -351,9 +354,9 @@ imap <C-G>S <Plug>ISurround
 " %% expands to dirname of current file.
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'
 
-" }}} Key mappings (see http://vim.wikia.com/wiki/Unused_keys for unused keys)
+" }}} Key mappings
 
-" {{{ Functions used in key mappings above.
+" {{{ Functions
 
 function! s:CallRipGrep(...) abort
   call fzf#vim#grep('rg --vimgrep --color=always --smart-case --hidden --glob !.git -F ' . shellescape(join(a:000, ' ')), 1,
@@ -551,9 +554,10 @@ function! LightlineCocHints() abort
   return s:lightline_coc_diagnostic('hints', "ℹ")
 endfunction
 
-" }}} Functions used in key mappings above.
+" }}} Functions
 
-" {{{ Custom commands, Autocommands, global variables
+" {{{ Commands
+
 command! Trim call TrimWhitespace()|                " :Trim runs :call Trim() (defined below).
 command! PU PlugClean | PlugUpdate | PlugUpgrade|   " :PU updates/cleans plugins and vim-plug.
 
@@ -571,12 +575,16 @@ command! -bang -nargs=* Rg
 " Use `:Format` to format current buffer
 command! -nargs=0 Format :call CocAction('format')
 " Use `:Fold` to fold current buffer
-command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+command! -nargs=? Fold :call CocAction('fold', <f-args>)
 
 " Run a command and interpret the output in the quickfix window
 command! -nargs=+ -complete=file Cr cexpr system(<q-args>)
 " Run a command and interpret the output in the location window
 command! -nargs=+ -complete=file Lr lexpr system(<q-args>)
+
+" }}} Commands
+
+" {{{ Global Variables
 
 if filereadable('/usr/local/bin/python3')
   let g:python3_host_prog = "/usr/local/bin/python3"  " Speed up startup by not looking for python3 every time.
@@ -679,6 +687,10 @@ let g:markdown_fenced_languages = ['bash=sh', 'c', 'console=sh', 'diff', 'docker
 " Don't use polyglot markdown so we can use vim-markdown and get highlighted blocks.
 let g:polyglot_disabled = ['markdown', 'pug']
 
+" }}} Global Variables
+
+" {{{ Autocommands
+
 " Highlight the 81st column of text (in dark grey so it doesn't distract).
 highlight ColorColumn guibg=#383734
 call matchadd('ColorColumn', '\%81v', 100)
@@ -726,6 +738,6 @@ augroup gibAutoGroup                                " Group of automatic functio
   autocmd User CocDiagnosticChange call lightline#update()
 augroup END
 
-" }}} Custom commands, Autocommands, global variables
+" }}} Autocommands
 
 " vim: foldmethod=marker
