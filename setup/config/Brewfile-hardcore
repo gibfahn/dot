@@ -1,6 +1,14 @@
 # vi: filetype=conf
 
-
+# brew "cmake"                             # Commonly-used meta build system.
+# brew "ctags"                             # Used for autocomplete in Vim (etc).
+# brew "exa"                               # Nicer ls replacement.
+# brew "groovy"                            # Helpful for testing Jenkins scripts.
+# brew "kubernetes-cli"                    # Manage your docker clusters with kube.
+# brew "kubernetes-helm"                   # Package manager for Docker.
+# cask "vagrant"                           # Quick command-line image spin-up.
+# cask "virtualbox"                        # Manage VMs (Linux or Windows).
+# cask "vulkan-sdk"                        # Use the vulkan graphics APIs on macOS.
 brew "asciinema"                         # Take screen recordings of your terminal (https://asciinema.org).
 brew "certbot"                           # LetsEncrypt.
 brew "dfu-util"                          # Used for flashing my Ergodox Infinity.
@@ -11,8 +19,8 @@ brew "go"                                # Go progamming language.
 brew "ninja"                             # Google meta build system (used in V8).
 brew "postgresql"                        # Solid database.
 brew "protobuf"                          # Serialization format.
-brew "shellcheck"                        # Linter for bash.
 brew "redis"                             # In-memory key-object store.
+brew "shellcheck"                        # Linter for bash.
 brew "watchexec"                         # Like entr (evaluating which one is better).
 cask "1password"                         # Password manager.
 cask "caprine"                           # Facebook Messenger native app.
@@ -30,16 +38,8 @@ cask "spotify"                           # Music.
 cask "stay"                              # Save and restore window positions, invaluable with multi-monitor setups.
 cask "time-out"                          # Reminds you to take breaks.
 cask "trailer"                           # GitHub push notifications.
+cask "visual-studio-code"                # IDE that supports debugging Rust code.
 cask "workflowy"                         # Infinitely nested bullet point list app.
-# brew "cmake"                             # Commonly-used meta build system.
-# brew "ctags"                             # Used for autocomplete in Vim (etc).
-# brew "exa"                               # Nicer ls replacement.
-# brew "groovy"                            # Helpful for testing Jenkins scripts.
-# brew "kubernetes-cli"                    # Manage your docker clusters with kube.
-# brew "kubernetes-helm"                   # Package manager for Docker.
-# cask "vagrant"                           # Quick command-line image spin-up.
-# cask "virtualbox"                        # Manage VMs (Linux or Windows).
-# cask "vulkan-sdk"                        # Use the vulkan graphics APIs on macOS.
 
 # Mac App Store Apps (some paid). `mas list` to see what you've already installed.
 mas "Keynote", id: 409183694
