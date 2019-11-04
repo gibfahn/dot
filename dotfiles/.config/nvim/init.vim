@@ -377,17 +377,21 @@ function! OperatorRip(wiseness) abort
   endif
 endfunction
 
-" Open selected text with native open command, used with `<Leader>o` mappings.
+" Open selected text with Browse function below, used with `<Leader>o` mappings.
 function! OpenUrl(type)
   if a:type ==# 'v'| execute "normal! `<v`>y"| " If in charwise visual mode, copy selected URL.
   elseif a:type ==# 'char'| execute "normal! `[v`]y"| " If given a text object URL, copy it.
   else| return
   endif
+  call Browse(@@)
+endfunction
 
+" Open path or URL using system open command.
+function! Browse(pathOrUrl)
   " This doesn't work with /usr/bin/vim on macOS (doesn't identify as macOS).
   if has('mac')| let openCmd = 'open'| else| let openCmd = 'xdg-open'| endif
-    silent execute "! " . openCmd . " " . shellescape(@@, 1)| " Escape URL and pass as arg to open command.
-    echo openCmd . " " shellescape(@@, 1)| " Echo what we ran so it's visible.
+    silent execute "! " . openCmd . " " . shellescape(a:pathOrUrl, 1)| " Escape Path or URL and pass as arg to open command.
+    echo openCmd . " " shellescape(a:pathOrUrl, 1)| " Echo what we ran so it's visible.
 endfunction
 
 " Opens current buffer in previous split (at the same position but centered).
@@ -558,7 +562,9 @@ endfunction
 
 " {{{ Commands
 
-command! Trim call TrimWhitespace()|                " :Trim runs :call Trim() (defined below).
+" Browse command is used by fugitive as I have Netrw disabled.
+command! -nargs=1 Browse call Browse(<q-args>)|     " :Browse runs :call Browse() (defined above).
+command! Trim call TrimWhitespace()|                " :Trim runs :call Trim() (defined above).
 command! PU PlugClean | PlugUpdate | PlugUpgrade|   " :PU updates/cleans plugins and vim-plug.
 
 " TODO(gib): Also start using proximity-sort in vimrc.
