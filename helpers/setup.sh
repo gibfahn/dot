@@ -27,35 +27,33 @@ exists() { type "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
 
 ### Logging functions
 
-# TODO(gib): Add log prefix to these.
-
-# Used when you're not sure if you'll install or update something.
-getOrUpdate() {
-    printf "${CYAN}❯❯❯ Installing/Updating:${NC} %s\n" "$@"
+# Used when you're starting a new section.
+log_section() {
+    printf "❯❯❯ Installing: %s\n" "$@"
 }
 
 # Used when you're going to install something.
-get() {
+log_get() {
     printf "${CYAN}❯❯❯ Installing:${NC} %s\n" "$@"
 }
 
 # Used when you're going to install something.
-update() {
+log_update() {
     printf "${CYAN}❯❯❯   Updating:${NC} %s\n" "$1"
 }
 
 # Used when you're not going to install something.
-skip() {
+log_skip() {
     printf "${YELLOW}❯❯❯   Skipping:${NC} %s\n" "$@"
 }
 
 # `if no foo` then foo isn't in $XDG_DATA_HOME and we should install it.
 no() { # Do we need to install $1?
   if [ ! -e "$XDG_DATA_HOME/$1" ]; then
-    get "$1"
+    log_get "$1"
     return 0 # Directory is missing.
   else
-    skip "$1 (already exists)."
+    log_skip "$1 (already exists)."
     return 1 # Directory not missing.
   fi
 }
@@ -63,17 +61,17 @@ no() { # Do we need to install $1?
 # `if not foo` then foo isn't in path and we should install it.
 not() { # Do we need to install $1?
   if ! exists "$1"; then
-    get "$@"
+    log_get "$@"
     return 0 # Binary not in path.
   else
-    skip "$@"
+    log_skip "$@"
     return 1 # Binary in path.
   fi
 }
 
 # Some machines can't understand GitHub's https certs for some reason.
 gitClone() {
-  get "$@"
+  log_get "$@"
   REPO=$1; shift # First arg is repo, rest are passed on to git clone.
   git clone "git@github.com:$REPO.git" "$@" ||
     git clone "https://github.com/$REPO.git" "$@"
@@ -127,7 +125,7 @@ gitUpdate() {
     fi
   fi
 
-  { [[ -n "$skip" ]] && skip "$@"; } || update "$@"
+  { [[ -n "$skip" ]] && log_skip "$@"; } || log_update  "$@"
   popd >/dev/null || return 1
   return "$exit_code"
 }
@@ -152,10 +150,10 @@ hasSudo() {
     return 0
   fi
   if [ "$NO_SUDO" ] || ! sudo -v; then
-    skip "Packages (user doesn't have sudo)."
+    log_skip "Packages (user doesn't have sudo)."
     return 1
   else
-    get "Packages."
+    log_get "Packages."
     sudo=sudo
     return 0
   fi
@@ -198,14 +196,14 @@ updateMacOSDefaultDict() {
               )"
 
   if [[ "$currentVal" == "$val" || "$currentVal" == "$val2" ]]; then
-    skip "macOS default shortcut $domain $key is already set to '$currentVal'"
+    log_skip "macOS default shortcut $domain $key is already set to '$currentVal'"
     return 0
   fi
 
   if [[ -n "$currentVal" ]]; then
-    update "macOS default shortcut $domain $key is currently set to '$currentVal', changing to '$val'"
+    log_update  "macOS default shortcut $domain $key is currently set to '$currentVal', changing to '$val'"
   else
-    update "macOS default shortcut $domain $key is unset, setting it to '$val'"
+    log_update  "macOS default shortcut $domain $key is unset, setting it to '$val'"
   fi
 
   defaults write "$domain" "$subdomain" -dict-add "$key" "$val"
@@ -225,7 +223,7 @@ updateMacOSDefaultDict() {
 updateMacOSKeyboardShortcut() {
   updateMacOSDefaultDict "$1" NSUserKeyEquivalents "$2" "$3"
   if ! defaults read com.apple.universalaccess com.apple.custommenu.apps | grep -qF "$1"; then
-    update "macOS default shortcut $1 is not in com.apple.universalaccess com.apple.custommenu.apps, adding it."
+    log_update  "macOS default shortcut $1 is not in com.apple.universalaccess com.apple.custommenu.apps, adding it."
     defaults write com.apple.universalaccess com.apple.custommenu.apps -array-add "$1" \
       || echo "Add the current Terminal app to System Preferences -> Privacy -> Full Disk Access."
   fi
@@ -246,14 +244,14 @@ updateMacOSDefault() {
   currentVal="$(defaults read "$domain" "$key")"
 
   if [[ "$currentVal" == "$val" ]]; then
-    skip "macOS default $domain $key is already set to $val"
+    log_skip "macOS default $domain $key is already set to $val"
     return 0
   fi
 
   if [[ -n "$currentVal" ]]; then
-    update "macOS default $domain $key is currently set to $currentVal, changing to $val"
+    log_update  "macOS default $domain $key is currently set to $currentVal, changing to $val"
   else
-    update "macOS default $domain $key is unset, setting it to $val"
+    log_update  "macOS default $domain $key is unset, setting it to $val"
   fi
 
   defaults write "$domain" "$key" "$val_type" "$val"

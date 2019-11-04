@@ -6,7 +6,7 @@
 . "$(dirname "$0")/../helpers/setup.sh" # Load helper script from dot/helpers.
 
 if ! grep -q gib ~/Library/Preferences/com.apple.Terminal.plist; then
-  get "gib Terminal profile."
+  log_get "gib Terminal profile."
   # Install my terminal profile.
   open "$(dirname "$0")/config/gib.terminal"
 
@@ -15,7 +15,7 @@ if ! grep -q gib ~/Library/Preferences/com.apple.Terminal.plist; then
     defaults write com.apple.Terminal "Default Window Settings" gib
   fi
 else
-  skip "gib Terminal profile (already installed)."
+  log_skip "gib Terminal profile (already installed)."
 fi
 
 # Link VS Code preferences into the macOS specific folder.
@@ -30,14 +30,14 @@ fi
 # - /Library/Developer/CommandLineTools
 # - /Applications/Xcode.app/Contents/Developer
 if ! xcode-select -p &>/dev/null; then
-  skip "Xcode Command Line Tools."
+  log_skip "Xcode Command Line Tools."
   xcode-select --install
 else
-  skip "Xcode Command Line Tools (already installed)."
+  log_skip "Xcode Command Line Tools (already installed)."
 fi
 
 if [ "$HARDCORE" ]; then # Set keyboard preferences.
-  get "Setting macOS defaults."
+  log_section "Setting macOS defaults."
 
   # Set Keyboard Shortcuts -> App Shortcuts
   # To add your own, first add them in System Preferences -> Keyboard ->
@@ -162,14 +162,14 @@ if [ "$HARDCORE" ]; then # Set keyboard preferences.
   # Cmd-Enter sends email in Mail.
 
 else
-  skip "Not setting macOS defaults (HARDCORE not set)."
+  log_skip "Not setting macOS defaults (HARDCORE not set)."
   # You can still change them in System Preferences/{Trackpad,Keyboard}.
 fi
 
 # Setup spectacle config.
 specConfig="$HOME/Library/Application Support/Spectacle/Shortcuts.json"
 if [ ! -L "$specConfig" ]; then
-  get "Overwriting Spectacle shortcuts with link to dot ones."
+  log_get "Overwriting Spectacle shortcuts with link to dot ones."
   mkdir -p "$HOME/.backup"
   [ -e "$specConfig" ] && mv "$specConfig" "$HOME/.backup/Shortcuts.json"
   mkdir -p "$XDG_CONFIG_HOME"/Spectacle
@@ -180,9 +180,9 @@ fi
 # https://stackoverflow.com/questions/39494631/gpg-failed-to-sign-the-data-fatal-failed-to-write-commit-object-git-2-10-0
 mkdir -p "${GNUPGHOME:="$XDG_DATA_HOME"/gnupg}"
 if grep -q 'pinentry-program /usr/local/bin/pinentry-mac' "$GNUPGHOME"/gpg-agent.conf; then
-  skip "Pinentry gpg config"
+  log_skip "Pinentry gpg config"
 else
-  get "Pinentry gpg config"
+  log_get "Pinentry gpg config"
   echo "pinentry-program /usr/local/bin/pinentry-mac" >> "$GNUPGHOME"/gpg-agent.conf
   # Disabling this as it breaks tty use-cases, not sure if needed.
   # grep no-tty "$GNUPGHOME"/gpg.conf || echo "no-tty" >> "$GNUPGHOME"/gpg.conf
@@ -190,17 +190,17 @@ fi
 
 # Increase max file watch limit. See http://entrproject.org/limits.html
 if [[ -e /Library/LaunchDaemons/limit.maxfiles.plist ]]; then
-  skip "File watcher limit (already increased)."
+  log_skip "File watcher limit (already increased)."
 else
-  get "File watcher limit."
+  log_get "File watcher limit."
   sudo curl -sL http://entrproject.org/etc/limit.maxfiles.plist -o /Library/LaunchDaemons/limit.maxfiles.plist
 fi
 
 # Install brew
 if exists brew; then
-  skip "brew (already installed)."
+  log_skip "brew (already installed)."
 else
-  get "brew."
+  log_get "brew."
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
@@ -209,18 +209,18 @@ sogou_dir_old="$(ls -a /usr/local/Caskroom/sogouinput 2>/dev/null || true)"
 # brew install things. Edit config/Brewfile to adjust.
 brew tap Homebrew/bundle
 if brew bundle --file="$(dirname "$0")"/config/Brewfile check >/dev/null; then
-  skip "brew packages."
+  log_skip "brew packages."
 else
-  get "brew packages."
+  log_get "brew packages."
   brew bundle --file="$(dirname "$0")"/config/Brewfile | grep -Evx "Using [-_/0-9a-zA-Z ]+"
 fi
 
 # Set up HARDCORE brew packages.
 if [[ -e "$HARDCORE" ]] && ! brew bundle --file="$(dirname "$0")"/config/Brewfile-hardcore check >/dev/null; then
-  get "brew HARDCORE packages."
+  log_get "brew HARDCORE packages."
   brew bundle --file="$(dirname "$0")"/config/Brewfile-hardcore | grep -Evx "Using [-_/0-9a-zA-Z ]+"
 else
-  skip "brew HARDCORE packages."
+  log_skip "brew HARDCORE packages."
 fi
 
 # Upgrade everything, even things that weren't in your Brewfile.
@@ -230,13 +230,13 @@ brew cask upgrade # You may occasionally want to run `brew cask upgrade --greedy
 sogou_dir_new="$(ls -a /usr/local/Caskroom/sogouinput 2>/dev/null || true)"
 # If sogouinput was updated
 if [[ "$sogou_dir_old" != "$sogou_dir_new" ]]; then
-  update "Sogou Input"
+  log_update  "Sogou Input"
   sogou_dir="$(brew cask info sogouinput | awk '/^\/usr\/local\/Caskroom\/sogouinput\// { print $1 }')"
   [[ -n "$sogou_dir" ]] && open "$sogou_dir"/sogou*.app
 fi
 
 # Update Mac App Store apps.
-softwareupdate --install --all || skip "To autorestart run:
+softwareupdate --install --all || log_skip "To autorestart run:
 sudo softwareupdate --install --all --restart"
 
 # Swift LanguageServer.

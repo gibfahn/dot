@@ -15,7 +15,7 @@ addPPA() {
   local added
   for i in "$@"; do
     if ! grep -q "^deb .*${i#ppa:}" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
-      get "Adding ppa: $i"
+      log_get "Adding ppa: $i"
       sudo add-apt-repository -y "$i"
       added="true"
     fi
@@ -50,7 +50,7 @@ apt_list=(                        # List of things to install.
   golang-go                       # Go programming language.
 )
 
-get "apt installing/updating: ${apt_list[*]}"
+log_get "apt installing/updating: ${apt_list[*]}"
 sudo apt install -y "${apt_list[@]}"
 
 if not bspwm; then
@@ -89,11 +89,11 @@ fi
 gpgVersion=$(gpg --version | head -1 | awk '{print $NF}')
 if [[ ${gpgVersion%%.*} = 1 ]] && exists gpg2 &&
   [[ "$(command -v gpg)" = /usr/bin/gpg && "$(command -v gpg2)" = /usr/bin/gpg2 ]]; then
-  get "Setting default gpg to gpg2 not gpg1"
+  log_get "Setting default gpg to gpg2 not gpg1"
   sudo mv /usr/bin/gpg /usr/bin/gpg1
   sudo update-alternatives --verbose --install /usr/bin/gpg gnupg /usr/bin/gpg2 50
 else
-  skip "Setting gpg2 as default (not messing with default)"
+  log_skip "Setting gpg2 as default (not messing with default)"
 fi
 
 
@@ -120,7 +120,7 @@ gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/k
 
 XKB=/usr/share/X11/xkb/
 if [[ "$HARDCORE" && ! -d "$XKB".git ]]; then # Set up xkb key remapping.
-  get "Setting up personal xkb shortcuts at $XKB."
+  log_get "Setting up personal xkb shortcuts at $XKB."
   sudo chown -R "$USER:$(id -gn)" "$XKB"
   pushd /usr/share/X11/xkb || { echo "Failed to cd"; exit 1; }
   git init
@@ -135,5 +135,5 @@ if [[ "$HARDCORE" && ! -d "$XKB".git ]]; then # Set up xkb key remapping.
   git checkout gibLayout
   sudo dpkg-reconfigure xkb-data
 else
-  skip "Not setting up personal xkb shortcuts (not HARDCORE or non-standard xkb dir)."
+  log_skip "Not setting up personal xkb shortcuts (not HARDCORE or non-standard xkb dir)."
 fi

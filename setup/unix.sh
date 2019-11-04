@@ -72,14 +72,14 @@ shell=${shell:-$SHELL}
 if [[ -z "$ZSH_VERSION" && "${shell##*/}" != zsh ]]; then
   NEWSHELL=${NEWSHELL-$(grep zsh /etc/shells | tail -1)} # Set NEWSHELL for a different shell.
   if [[ -e "$NEWSHELL" ]]; then
-    get "Shell change (Current shell is $shell, changing to $NEWSHELL)."
-    chsh -s "$NEWSHELL" || skip "Shell change (chsh failed)."
+    log_get "Shell change (Current shell is $shell, changing to $NEWSHELL)."
+    chsh -s "$NEWSHELL" || log_skip "Shell change (chsh failed)."
   else
-    skip "Shell change (current shell is $shell (\$SHELL=$SHELL) but shell $NEWSHELL (zsh) doesn't exist)
+    log_skip "Shell change (current shell is $shell (\$SHELL=$SHELL) but shell $NEWSHELL (zsh) doesn't exist)
     Install zsh and then run chsh -s /path/to/zsh"
   fi
 else
-  skip "Shell change ($shell is already the default shell)"
+  log_skip "Shell change ($shell is already the default shell)"
 fi
 
 # Change git user.name and user.email
@@ -95,7 +95,7 @@ if exists git && [[ $(whoami) != gib && $(id -u) != 0 ]] && {
   if [[ -z "$GIT_NAME" || -z "$GIT_EMAIL" ]] && [[ -e "$HOME/.gitconfig" ]]; then
     git_name=$(git config --global user.name)
     git_email=$(git config --global user.email)
-    get "Git Config (moving ~/.gitconfig to ~/backup/.gitconfig, preserving name as '$git_name' and email
+    log_get "Git Config (moving ~/.gitconfig to ~/backup/.gitconfig, preserving name as '$git_name' and email
     as '$git_email'. Make sure to move any settings you want preserved across)."
     mv "$HOME/.gitconfig" "$HOME/backup/.gitconfig"
     git config --global user.name "$git_name"
@@ -109,7 +109,7 @@ if exists git && [[ $(whoami) != gib && $(id -u) != 0 ]] && {
     read -rp "Git email not set, what's your email address? " git_email
     git config --global user.email "$git_email"
   fi
-  get "Git Config (git name set to $(git config --global user.name) and email set to $(git config --global user.email))"
+  log_get "Git Config (git name set to $(git config --global user.name) and email set to $(git config --global user.email))"
 fi
 
 # Set up rbenv for ruby version management.
@@ -127,11 +127,11 @@ fi
 
 # Set up a default ssh config
 if [[ ! -e ~/.ssh/config ]]; then
-  get "SSH Config (copying default)."
+  log_get "SSH Config (copying default)."
   [[ -d ~/.ssh ]] || { mkdir ~/.ssh && chmod 700 ~/.ssh; }
   cp "$(dirname "$0")"/config/ssh-config ~/.ssh/config
 else
-  skip "SSH Config (not overwriting ~/.ssh/config, copy manually from ./config/ssh-config as necessary)."
+  log_skip "SSH Config (not overwriting ~/.ssh/config, copy manually from ./config/ssh-config as necessary)."
 fi
 
 # Set up zsh scripts:
@@ -141,7 +141,7 @@ mkdir -p "$XDG_DATA_HOME/zsh"
 # We don't save the input to a lesskey file because we need the terminal to
 # resolve the tput commands.
 if exists lesskey; then
-  update "Lesskey"
+  log_update  "Lesskey"
   lesskey -o "$XDG_CACHE_HOME/less" <(
 cat << EOF
 $(echo "#env") # Get a comment.
@@ -156,7 +156,7 @@ LESS_TERMCAP_mh = $(tput dim)
 EOF
   )
 else
-  skip "Lesskey"
+  log_skip "Lesskey"
 fi
 
 gitCloneOrUpdate zdharma/zplugin "$XDG_DATA_HOME/zsh/zplugin/bin" # Zsh plugin manager.
@@ -172,10 +172,10 @@ pip_outdated="$($pip list --outdated | awk '{print $1}')"
 for module in "${pip3_modules[@]}"; do
   if ! echo "$pip_installed" | grep -qx "${module%[*}" \
       || echo "$pip_outdated" | grep -qx "${module%[*}"; then
-    get "$pip: $module"
+    log_get "$pip: $module"
     $pip install -Uq "$module"
   else
-    skip "$pip: $module"
+    log_skip "$pip: $module"
   fi
 done
 
@@ -207,10 +207,10 @@ fi
 if [[ -z $MINIMAL ]]; then
   for gem in "${ruby_gems[@]}"; do
     if gem list -I "$gem" >/dev/null; then
-      get "gem: $gem"
+      log_get "gem: $gem"
       gem install "$gem"
     else
-      skip "gem: $gem"
+      log_skip "gem: $gem"
     fi
   done
 fi
@@ -240,10 +240,10 @@ if [[ -z $MINIMAL ]]; then
   for module in "${npm_modules[@]}"; do
     if ! echo "$installed_npm_module_versions" | grep -qx "$module .*" \
       || [[ "$(echo "$installed_npm_module_versions" | grep -x "$module .*" | awk '{print $NF}')" != "$(npm info --loglevel=error "$module" version)" ]]; then
-      get "npm: $module"
+      log_get "npm: $module"
       npm install --global --loglevel=error "$module"@latest
     else
-      skip "npm: $module"
+      log_skip "npm: $module"
     fi
   done
 fi
@@ -278,9 +278,9 @@ if [[ -z $MINIMAL && -n $HARDCORE ]]; then
     # Make sure we have useful components:
     rustup component add rls rust-analysis rust-src clippy rustfmt
   else
-    update "Rust compiler and Cargo"
+    log_update  "Rust compiler and Cargo"
     rustup update
-    update "Global Cargo packages"
+    log_update  "Global Cargo packages"
     not cargo-install-update && cargo install cargo-update
     cargo install-update -ia "${rust_crates[@]}" # Update everything installed with cargo install.
   fi
@@ -297,7 +297,7 @@ fi
 # Install or update any go packages we need.
 go get -u "${go_packages[@]}"
 
-get "Updating ZSH Completions"
+log_get "Updating ZSH Completions"
 # There are two types of completion files. One is an actual zsh completion file (e.g. rustup). The
 # other is a file you source that generates the relevant functions (e.g. npm). Put the latter in
 # zfunc/source.

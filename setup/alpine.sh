@@ -31,7 +31,7 @@ apk_list=(           # List of things to install.
   gcc g++
 )
 
-get "apk installing/updating: ${apk_list[*]}"
+log_get "apk installing/updating: ${apk_list[*]}"
 $sudo apk update
 $sudo apk add "${apk_list[@]}"
 $sudo apk upgrade
