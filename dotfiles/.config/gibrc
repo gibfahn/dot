@@ -113,12 +113,15 @@ pathadd() { [[ -d "$1" ]] && PATH="$1"$(echo ":$PATH:" | sed "s|:$1:|:|" | sed '
 # Add or move to end of path.
 pathapp() { [[ -d "$1" ]] && PATH=$(echo ":$PATH:" | sed "s|:$1:|:|" | sed 's|^:||')"$1"; }
 
-pth() { # Returns absolute path to file(s) including file name.
+pth() { # Returns absolute path to each file or dir arg.
   local i
-  for i in "$@"; do # Args = relative filenames.
+  for i in "$@"; do
     if [[ -d "$i" ]]; then (pushd "$i" >/dev/null || return 1; pwd) # dir.
     elif [[ -f "$i" ]]; then  # file.
-      case $i in */*) echo "$(pushd "${i%/*}" >/dev/null || return 1; pwd)/${i##*/}" ;; *) echo "$PWD/$i" ;; esac
+      case $i in
+        */*) echo "$(pushd "${i%/*}" >/dev/null || return 1; pwd)/${i##*/}" ;;
+          *) echo "$PWD/$i" ;;
+      esac
     fi
   done
 }
