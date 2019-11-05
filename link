@@ -23,7 +23,7 @@ else
 fi
 : ${TOPATH:="$PWD"}
 
-printf "${CYAN}❯❯❯ Updating dotfile symlinks${NC} (linking from path: $TOPATH)\n\n"
+printf "❯❯❯ Updating dotfile symlinks (linking from path: $TOPATH)\n\n"
 
 for FILE in $(find . -type f -o -type l | sed 's|./||'); do
   mkdir -p "$FROMPATH/$(dirname $FILE)"
