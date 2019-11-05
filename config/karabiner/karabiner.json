@@ -557,14 +557,14 @@
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": { "shell_command": "open -a Slack" }
               }, {
-                "description": "Ж+⌘+c = Open iMessage",
+                "description": "Ж+⌘+c = Open Wechat",
                 "type": "basic",
                 "from": {
                   "key_code": "c",
                   "modifiers": { "mandatory": [ "command" ] }
                 },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
-                "to": { "shell_command": "open -a Messages" }
+                "to": { "shell_command": "open -a WeChat" }
               }, {
                 "description": "Ж+⇧+c = Open Apple Chat",
                 "type": "basic",
@@ -715,14 +715,14 @@
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
                 "to": { "shell_command": "open -a caprine" }
               }, {
-                "description": "Ж+⌘+x = Open Wechat",
+                "description": "Ж+⌘+x = Open iMessage",
                 "type": "basic",
                 "from": {
                   "key_code": "x",
                   "modifiers": { "mandatory": [ "command" ] }
                 },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
-                "to": { "shell_command": "open -a wechat" }
+                "to": { "shell_command": "open -a Messages" }
               }, {
                 "description": "Ж+⇧+x = restart the touch strip",
                 "type": "basic",
