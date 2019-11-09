@@ -37,9 +37,9 @@
   # I manually specify -S because gpgsign only works with Git 2.x. Also it
   # means that test suites using `git commit` don't break.
   ce  = config --global --edit         # Open this file with $VISUAL.
-  c   = commit -S                      # Commit with gpg signing.
-  ca  = commit -S -a                   # Commit all changed files with gpg.
-  cm  = commit -S --amend              # Amend the previous commit.
+  c   = commit -S -v                   # Commit with gpg signing.
+  ca  = commit -S -a -v                # Commit all changed files with gpg.
+  cm  = commit -S --amend -v           # Amend the previous commit.
   cmn = commit -S --amend --no-edit    # Amend the previous commit but don't change the message.
   can = commit -S --amend --no-edit -a # Add changed files and commit with the same message.
   cn  = clean -ffdx                    # Remove anything that's untracked (DANGER).
