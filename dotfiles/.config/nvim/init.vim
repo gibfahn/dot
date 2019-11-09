@@ -318,9 +318,13 @@ vnoremap          <Leader>d "+d|                    " Cut from clipboard (visual
 vnoremap          <Leader>p "+p|                    " Paste from clipboard (visual mode).
 
 nnoremap          <A-h> <C-w>h|                     " Switch left  a window,
-nnoremap          <A-n> <C-w>j|                     "  ↳     down  a window,
-nnoremap          <A-e> <C-w>k|                     "  ↳     up    a window,
-nnoremap          <A-i> <C-w>l|                     "  ↳     right a window.
+nnoremap          <A-n> <C-w>j|                     " Switch down  a window,
+nnoremap          <A-e> <C-w>k|                     " Switch up    a window,
+nnoremap          <A-i> <C-w>l|                     " Switch right a window.
+nnoremap          <A-H> 100<C-w>h|                  " Switch to the far left window,
+nnoremap          <A-N> 100<C-w>j|                  " Switch to the far down  window,
+nnoremap          <A-E> 100<C-w>k|                  " Switch to the far up    window,
+nnoremap          <A-I> 100<C-w>l|                  " Switch to the far right window.
 
 nmap              <C-W>>     <C-W>><SID>ws|         " Adds mappings to make Ctrl-W -/+/</>
 nmap              <C-W><     <C-W><<SID>ws|         " ↳ repeatable, so you can press Ctrl-W
