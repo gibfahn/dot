@@ -175,8 +175,8 @@
           "simple_modifications": [],
           "manipulate_caps_lock_led": true
         }, {
-          "ignore": false,
           "description": "Das Keyboard (Browns)",
+          "ignore": false,
           "disable_built_in_keyboard_if_exists": false,
           "identifiers": {
             "is_keyboard": true,
@@ -190,13 +190,13 @@
               "from": { "key_code": "left_command" },
               "to": { "key_code": "left_option" }
             }, {
+              "from": { "key_code": "left_control" },
+              "to": { "key_code": "f17" }
+            }, {
               "from": { "key_code": "left_option" },
               "to": { "key_code": "left_command" }
             }, {
               "from": { "key_code": "right_shift" },
-              "to": { "key_code": "f17" }
-            }, {
-              "from": { "key_code": "left_control" },
               "to": { "key_code": "f17" }
             }
           ],
