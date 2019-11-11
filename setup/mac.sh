@@ -84,15 +84,15 @@ if [ "$HARDCORE" ]; then # Set keyboard preferences.
   updateMacOSDefault NSGlobalDomain com.apple.swipescrolldirection -int 0
 
   # Expand save panel by default
-  updateMacOSDefault NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
-  updateMacOSDefault NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
+  updateMacOSDefault NSGlobalDomain NSNavPanelExpandedStateForSaveMode -int 1
+  updateMacOSDefault NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -int 1
 
   # Disable the “Are you sure you want to open this application?” dialog
-  updateMacOSDefault com.apple.LaunchServices LSQuarantine -bool false
+  updateMacOSDefault com.apple.LaunchServices LSQuarantine -int 0
 
   # Expand print panel by default
-  updateMacOSDefault NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
-  updateMacOSDefault NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
+  updateMacOSDefault NSGlobalDomain PMPrintingExpandedStateForPrint -int 1
+  updateMacOSDefault NSGlobalDomain PMPrintingExpandedStateForPrint2 -int 1
 
   # Disables window minimizing animations.
   updateMacOSDefault NSGlobalDomain NSAutomaticWindowAnimationsEnabled -int 0
