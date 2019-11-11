@@ -47,6 +47,7 @@ if [ "$HARDCORE" ]; then # Set keyboard preferences.
   #   @command, ~option, ^ctrl, $shift
   # The global domain NSGlobalDomain NSGlobalDomain is the same as -g or -globalDomain.
   # -bool YES/TRUE or FALSE/NO correspond to -int 1 or 0.
+  # You can view plist files with /usr/libexec/PlistBuddy
 
   # Create global shortcut "Merge all windows" ⌘-M
   updateMacOSKeyboardShortcut NSGlobalDomain "Merge All Windows" '@$m'
@@ -78,6 +79,20 @@ if [ "$HARDCORE" ]; then # Set keyboard preferences.
 
   # Increases trackpad sensitivity (SysPref max 3.0).
   updateMacOSDefault NSGlobalDomain com.apple.trackpad.forceClick -int 0
+
+  # Unnatual scrolling direction (swipe down to scroll down).
+  updateMacOSDefault NSGlobalDomain com.apple.swipescrolldirection -int 0
+
+  # Expand save panel by default
+  updateMacOSDefault NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
+  updateMacOSDefault NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
+
+  # Disable the “Are you sure you want to open this application?” dialog
+  updateMacOSDefault com.apple.LaunchServices LSQuarantine -bool false
+
+  # Expand print panel by default
+  updateMacOSDefault NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
+  updateMacOSDefault NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
 
   # Disables window minimizing animations.
   updateMacOSDefault NSGlobalDomain NSAutomaticWindowAnimationsEnabled -int 0
@@ -137,8 +152,54 @@ if [ "$HARDCORE" ]; then # Set keyboard preferences.
   # System Preferences > General > Click in the scrollbar to: Jump to the spot that's clicked
   updateMacOSDefault NSGlobalDomain AppleScrollerPagingBehavior -int 1
 
+  # Set sidebar icon size to medium
+  updateMacOSDefault NSGlobalDomain NSTableViewDefaultSizeMode -int 2
+
   # Show developer options in Radar 8.
   updateMacOSDefault com.apple.radar.gm shouldShowDeveloperOptions -int 1
+
+  spotlight_preferences=(
+    '{"enabled" = 1;"name" = "APPLICATIONS";}'
+    '{"enabled" = 1;"name" = "MENU_EXPRESSION";}'
+    '{"enabled" = 1;"name" = "MENU_DEFINITION";}'
+    '{"enabled" = 0;"name" = "SYSTEM_PREFS";}'
+    '{"enabled" = 0;"name" = "DIRECTORIES";}'
+    '{"enabled" = 0;"name" = "PDF";}'
+    '{"enabled" = 0;"name" = "FONTS";}'
+    '{"enabled" = 0;"name" = "DOCUMENTS";}'
+    '{"enabled" = 0;"name" = "MESSAGES";}'
+    '{"enabled" = 0;"name" = "CONTACT";}'
+    '{"enabled" = 0;"name" = "EVENT_TODO";}'
+    '{"enabled" = 0;"name" = "IMAGES";}'
+    '{"enabled" = 0;"name" = "BOOKMARKS";}'
+    '{"enabled" = 0;"name" = "MUSIC";}'
+    '{"enabled" = 0;"name" = "MOVIES";}'
+    '{"enabled" = 0;"name" = "PRESENTATIONS";}'
+    '{"enabled" = 0;"name" = "SPREADSHEETS";}'
+    '{"enabled" = 0;"name" = "SOURCE";}'
+    '{"enabled" = 0;"name" = "MENU_OTHER";}'
+    '{"enabled" = 0;"name" = "MENU_CONVERSION";}'
+    '{"enabled" = 0;"name" = "MENU_WEBSEARCH";}'
+    '{"enabled" = 0;"name" = "MENU_SPOTLIGHT_SUGGESTIONS";}'
+  )
+
+  existing_spotlight_preferences=$(defaults read com.apple.Spotlight orderedItems | tr -d '\n' | tr -d ' ' | tr -d ',' | tr -d '"')
+  trimmed_expected_spotlight_preferences=$(printf "(${spotlight_preferences[*]})" | tr -d ' ' | tr -d '"')
+  if  [[ $existing_spotlight_preferences == $trimmed_expected_spotlight_preferences ]]; then
+    log_skip "macOS default Spotlight Preferences"
+  else
+    log_get "macOS default Spotlight Preferences"
+
+    # Change indexing order and disable some search results
+    defaults write com.apple.Spotlight orderedItems -array "${spotlight_preferences[@]}"
+
+    # Load new settings before rebuilding the index
+    killall mds > /dev/null 2>&1
+    # Make sure indexing is enabled for the main volume
+    sudo mdutil -i on / > /dev/null
+    # Rebuild the index from scratch
+    sudo mdutil -E / > /dev/null
+  fi
 
   # TODO(gib): Add more shortcuts:
   #
