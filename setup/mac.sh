@@ -84,7 +84,7 @@ if [ "$HARDCORE" ]; then # Set keyboard preferences.
   # Increases trackpad sensitivity (SysPref max 3.0).
   updateMacOSDefault NSGlobalDomain com.apple.trackpad.forceClick -int 0
 
-  # Unnatual scrolling direction (swipe down to scroll down).
+  # Unnatural scrolling direction (swipe down to scroll down).
   updateMacOSDefault NSGlobalDomain com.apple.swipescrolldirection -int 0
 
   # Expand save panel by default
@@ -139,6 +139,16 @@ if [ "$HARDCORE" ]; then # Set keyboard preferences.
     open ~
   fi
 
+  # Finder: show all filename extensions
+  updateMacOSDefault NSGlobalDomain AppleShowAllExtensions -int 1
+
+  # Display full POSIX path as Finder window title
+  updateMacOSDefault com.apple.finder _FXShowPosixPathInTitle -int 1
+
+  # Use list view in all Finder windows by default
+  # Four-letter codes for the other view modes: `icnv`, `clmv`, `glyv`
+  updateMacOSDefault com.apple.finder FXPreferredViewStyle -string "Nlsv"
+
   # Allow text selection in any QuickLook window.
   updateMacOSDefault NSGlobalDomain QLEnableTextSelection -int 1
 
@@ -161,6 +171,9 @@ if [ "$HARDCORE" ]; then # Set keyboard preferences.
 
   # Show developer options in Radar 8.
   updateMacOSDefault com.apple.radar.gm shouldShowDeveloperOptions -int 1
+
+  # Show all processes in Activity Monitor
+  updateMacOSDefault com.apple.ActivityMonitor ShowCategory -int 0
 
   spotlight_preferences=(
     '{"enabled" = 1;"name" = "APPLICATIONS";}'
