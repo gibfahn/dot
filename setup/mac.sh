@@ -49,6 +49,10 @@ if [ "$HARDCORE" ]; then # Set keyboard preferences.
   # -bool YES/TRUE or FALSE/NO correspond to -int 1 or 0.
   # You can view plist files with /usr/libexec/PlistBuddy
 
+  # Make user keyboard layout the default layout on login (maybe dangerous):
+  #   sudo cp ~/Library/Preferences/com.apple.HIToolbox.plist /Library/Preferences/com.apple.HIToolbox.plist
+  #   sudo chmod 644 /Library/Preferences/com.apple.HIToolbox.plist
+
   # Create global shortcut "Merge all windows" ⌘-M
   updateMacOSKeyboardShortcut NSGlobalDomain "Merge All Windows" '@$m'
 
