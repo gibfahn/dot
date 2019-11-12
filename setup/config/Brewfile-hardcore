@@ -9,6 +9,8 @@
 # cask "vagrant"                           # Quick command-line image spin-up.
 # cask "virtualbox"                        # Manage VMs (Linux or Windows).
 # cask "vulkan-sdk"                        # Use the vulkan graphics APIs on macOS.
+# cask "balenaetcher"                      # Flash disk images (e.g. Linux bootable USB sticks).
+# cask "grandperspective"                  # Alternative to disk-inventory-x, shows disk space usage.
 brew "asciinema"                         # Take screen recordings of your terminal (https://asciinema.org).
 brew "certbot"                           # LetsEncrypt.
 brew "dfu-util"                          # Used for flashing my Ergodox Infinity.
