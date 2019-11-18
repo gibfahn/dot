@@ -163,5 +163,6 @@
         }
       }
     }
-  }
+  },
+  "java.errors.incompleteClasspath.severity": "ignore"
 }
