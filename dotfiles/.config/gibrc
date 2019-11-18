@@ -250,8 +250,9 @@ case $shell in
     setopt prompt_subst prompt_percent # Allow variables and functions to be used in the prompt.
     setopt no_list_ambiguous # Show menu on first tab if multiple matches (don't wait for second tab).
     setopt no_list_beep # Don't beep if tab-complete has multiple choices, only if no such file.
-    setopt incappendhistory # Add to history file immediately (don't wait till shell exits).
-    setopt hist_ignore_all_dups hist_ignore_space share_history extended_history hist_expire_dups_first
+    # share_history: <Up> shows history from other open tabs
+    # inc_append_history extended_history: <Up> shows local history first, then remote history from before this shell started.
+    setopt hist_ignore_all_dups hist_ignore_space share_history hist_expire_dups_first
     setopt always_to_end complete_in_word long_list_jobs # Completion related options.
     setopt interactive_comments # Allow comments in the terminal.
     chpwd() { ls -A; } # Auto ls after changing directory.
