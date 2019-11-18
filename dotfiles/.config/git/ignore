@@ -10,4 +10,4 @@
 /.idea/
 
 # Bazel build dependencies.
-/.bazel/
+.bazel/

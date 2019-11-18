@@ -317,7 +317,7 @@ export VISUAL=${VISUAL:-$VIM} EDITOR=${EDITOR:-$VIM} # Set vim/nvim as the defau
 alias vim='VIMINIT=":source $XDG_CONFIG_HOME/nvim/init.vim" vim' # Make vim use nvim config file.
 # shellcheck disable=SC2139 # We want this to expand when defined.
 alias xv="xargs \$${ZSH_VERSION:+=}VISUAL" v="\$${ZSH_VERSION:+=}VISUAL" # Work around zsh's "helpful" autoquoting.
-alias b='bazelisk --bazelrc "$XDG_CONFIG_HOME"/bazel/bazelrc' k=kubectl # Build tools.
+alias b=bazel bazel='bazelisk --bazelrc "$XDG_CONFIG_HOME"/bazel/bazelrc' k=kubectl # Build tools.
 exists vimr && alias vm=vimr # Use `vm` for GUI vim, need to add a Linux equivalent.
 
 # ulimit -c unlimited # Allow saving of coredumps.
