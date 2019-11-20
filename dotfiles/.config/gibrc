@@ -244,24 +244,32 @@ case $shell in
     done
     unset _gib_file _gib_source_files
 
-    # cd pushes onto pushd stack (Try `cd -<Tab>`)
-    # If you type a file name/path by itself, cd to it, don't print dir on cd unless in $CDPATH.
-    setopt autopushd autocd pushd_silent pushdignoredups pushdminus
-    setopt prompt_subst prompt_percent # Allow variables and functions to be used in the prompt.
+    setopt always_to_end # Move to end of word after completing that word from the middle of it.
+    setopt auto_cd # Typing a path that isn't a command will cd to it.
+    setopt auto_pushd # cd pushes onto pushd stack (Try `cd -<Tab>`)
+    setopt complete_in_word # Allow completing words when you're in the middle of them.
+    setopt extended_history # Save timestamps in history.
+    setopt hist_ignore_all_dups # Remove older dups in HISTFILE when adding newer ones.
+    setopt hist_ignore_space # Don't save history lines if they start with ' ' (use for secret values).
+    setopt inc_append_history # Show local history before remote.
+    setopt interactive_comments # Allow comments in the terminal.
+    setopt long_list_jobs # Show more info on background jobs.
     setopt no_list_ambiguous # Show menu on first tab if multiple matches (don't wait for second tab).
     setopt no_list_beep # Don't beep if tab-complete has multiple choices, only if no such file.
-    # share_history: <Up> shows history from other open tabs
-    # inc_append_history extended_history: <Up> shows local history first, then remote history from before this shell started.
-    setopt hist_ignore_all_dups hist_ignore_space share_history hist_expire_dups_first
-    setopt always_to_end complete_in_word long_list_jobs # Completion related options.
-    setopt interactive_comments # Allow comments in the terminal.
+    setopt no_share_history # Don't show history from other open tabs.
+    setopt prompt_percent # Allow variables and functions to be used in the prompt.
+    setopt prompt_subst # Perform expansion and subsitution on PROMPT and RPROMPT.
+    setopt pushd_ignore_dups # Don't push multiple copies onto the directory stack.
+    setopt pushd_minus # Make `cd -2` be two dirs ago rather than `cd +2`.
+    setopt pushd_silent # Don't print pushd stack after pushd or cd (unless in CDPATH).
+
     chpwd() { ls -A; } # Auto ls after changing directory.
     CDPATH=~ # Check ~ for directories after checking . (`c/d/` matches `./c*/d*/`, then tries `~/c*/d*/`).
 
     fpath=( # ZSH Completion definitions. If you update this run `exec zsh`.
       "$XDG_DATA_HOME/zfunc" # Put (or symlink) autocomplete scripts in here.
       "${fpath[@]}"
-    ) # zsh-completions.
+    )
 
   ;;
   bash) # Bash specific options.
