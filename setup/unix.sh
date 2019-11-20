@@ -25,10 +25,10 @@ ruby_gems=(
 )
 
 rust_crates=(
-  tally                         # Nicer time (shows memory, page faults etc).
-  svgcleaner                    # Remove unnecessary info from svgs.
-  oxipng                        # Compress png images.
-  find_unicode                  # Find unicode.
+  # tally                         # Nicer time (shows memory, page faults etc), I'm using hyperfine instead.
+  # svgcleaner                    # Remove unnecessary info from svgs.
+  # oxipng                        # Compress png images.
+  # find_unicode                  # Find unicode.
   # TODO(gib): Add proximity-sort and update their readme with `cargo install proximity-sort` instructions.
   # https://github.com/jonhoo/proximity-sort
 )
@@ -38,22 +38,14 @@ go_packages=(
 )
 
 # These are installed and updated through brew on Darwin.
-if [[ -z $MINIMAL && $(uname) == Linux ]]; then
+if [[ -n $HARDCORE && $(uname) == Linux ]]; then
   rust_crates+=(
-    ripgrep                     # Super-fast version of grep/ack/ag that handles unicode etc.
-    fd-find                     # Faster version of find.
+    # exa
+    # watchexec                   # Like entr (evaluating which one is better).
+    # xsv                         # csv manipulator.
     bat                         # Nicer cat with syntax highlighting etc.
-    xsv                         # csv manipulator.
-    watchexec                   # Like entr (evaluating which one is better).
     hyperfine                   # Benchmark commands (time but a benchmarking suite).
   )
-
-  # Less likely to be used and on brew.
-  if [[ -n "$HARDCORE" ]]; then
-    rust_crates+=(
-      exa
-    )
-  fi
 fi
 
 # Initialise and update submodules (not yet mandatory).
@@ -115,7 +107,7 @@ fi
 # Set up rbenv for ruby version management.
 
 # Only run make if there were changes.
-if [[ -z $MINIMAL ]] && gitCloneOrUpdate rbenv/rbenv "$XDG_DATA_HOME/rbenv" \
+if [[ -n $HARDCORE ]] && gitCloneOrUpdate rbenv/rbenv "$XDG_DATA_HOME/rbenv" \
   || gitCloneOrUpdate rbenv/rbenv-default-gems "$XDG_DATA_HOME/rbenv"/plugins/rbenv-default-gems; then
   (pushd "$XDG_DATA_HOME/rbenv" && src/configure && make -C src)
 fi
@@ -182,7 +174,7 @@ done
 # Install nvm:
 unamem="$(uname -m)"
 nvm_prefix="${unamem/x86_64/}"
-if [[ -z $MINIMAL ]] && no "$nvm_prefix"/nvm; then
+if [[ -n $HARDCORE ]] && no "$nvm_prefix"/nvm; then
   # No install scripts as path update isn't required, it's done in gibrc.
   gitClone creationix/nvm "$XDG_DATA_HOME/${nvm_prefix}/nvm"
   . "$XDG_DATA_HOME/${nvm_prefix}"/nvm/nvm.sh # Load nvm so we can use it below.
@@ -190,21 +182,21 @@ if [[ -z $MINIMAL ]] && no "$nvm_prefix"/nvm; then
 fi
 
 # Add rbenv to path in case it was only just installed.
-if [[ -z $MINIMAL ]] && not rbenv; then
+if [[ -n $HARDCORE ]] && not rbenv; then
   export PATH="$XDG_DATA_HOME/rbenv/bin:$PATH"
   export PATH="$XDG_CACHE_HOME/rbenv/shims:$PATH"
   export RBENV_ROOT="${RBENV_ROOT:-"$XDG_CACHE_HOME/rbenv"}" # Set rbenv location.
 fi
 
 # Install latest version of ruby if changed.
-[[ -z $MINIMAL ]] && {
+[[ -n $HARDCORE ]] && {
   latest_ruby_version=$(rbenv install --list | awk '/^\s*[0-9]+\.[0-9]+\.[0-9]+\s*$/ {a=$1} END { print a }')
   rbenv install --skip-existing "$latest_ruby_version"
   rbenv global "$latest_ruby_version"
 }
 
 # Install ruby gems
-if [[ -z $MINIMAL ]]; then
+if [[ -n $HARDCORE ]]; then
   for gem in "${ruby_gems[@]}"; do
     if gem list -I "$gem" >/dev/null; then
       log_get "gem: $gem"
@@ -229,12 +221,12 @@ if no nvim/site/autoload/plug.vim; then
 fi
 
 # Symlink fzf
-if not fzf; then
+if not fzf && [[ -d "$XDG_DATA_HOME"/fzf/bin/ ]]; then
   ln -sf "$XDG_DATA_HOME"/fzf/bin/* "$HOME"/bin/
 fi
 
 # Install npm modules.
-if [[ -z $MINIMAL ]]; then
+if [[ -n "$HARDCORE" ]]; then
   not npm && . "$XDG_DATA_HOME/${nvm_prefix}"/nvm/nvm.sh # Load nvm so we can use npm.
   installed_npm_module_versions="$(npm ls -g --depth=0 --loglevel=error | grep -Ex '.* [-_A-Za-z0-9]+@([0-9]+\.){2}[0-9]+' | sed -E 's/^.+ //' | sed 's/@/ /')"
   for module in "${npm_modules[@]}"; do
@@ -248,17 +240,18 @@ if [[ -z $MINIMAL ]]; then
   done
 fi
 
-gitCloneOrUpdate fwcd/KotlinLanguageServer "$XDG_DATA_HOME/KotlinLanguageServer"
-if [[ $? != 200 ]]; then
-  (
-    cd "$XDG_DATA_HOME/KotlinLanguageServer" || { echo "Failed to cd"; exit 1; }
-    ./gradlew installDist # If tests passed we could use `./gradlew build`
-    ln -sf "$XDG_DATA_HOME/KotlinLanguageServer/server/build/install/server/bin/kotlin-language-server" "$HOME/bin/kotlin-language-server"
-  )
+if [[ -n "$HARDCORE" ]]; then
+  gitCloneOrUpdate fwcd/KotlinLanguageServer "$XDG_DATA_HOME/KotlinLanguageServer"
+  if [[ $? != 200 ]]; then
+    (
+      cd "$XDG_DATA_HOME/KotlinLanguageServer" || { echo "Failed to cd"; exit 1; }
+      ./gradlew installDist # If tests passed we could use `./gradlew build`
+      ln -sf "$XDG_DATA_HOME/KotlinLanguageServer/server/build/install/server/bin/kotlin-language-server" "$HOME/bin/kotlin-language-server"
+    )
+  fi
 fi
 
-# If you don't use rust just choose the cancel option.
-if [[ -z $MINIMAL && -n $HARDCORE ]]; then
+if [[ -n $HARDCORE ]]; then
   if no rustup || no cargo; then # Install/set up rust.
     # Install rustup. Don't modify path as that's already in gibrc.
     RUSTUP_HOME="$XDG_DATA_HOME"/rustup CARGO_HOME="$XDG_DATA_HOME"/cargo curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
@@ -286,16 +279,18 @@ if [[ -z $MINIMAL && -n $HARDCORE ]]; then
   fi
 fi
 
-gitCloneOrUpdate rust-analyzer/rust-analyzer "$XDG_DATA_HOME"/rust-analyzer
-if [[ $? != 200 ]]; then
-  (
-    cd "$XDG_DATA_HOME"/rust-analyzer || { echo "Failed to cd"; exit 1; }
-    cargo install-ra --server
-  )
+if [[ -n "$HARDCORE" ]]; then
+  gitCloneOrUpdate rust-analyzer/rust-analyzer "$XDG_DATA_HOME"/rust-analyzer
+  if [[ $? != 200 ]]; then
+    (
+      cd "$XDG_DATA_HOME"/rust-analyzer || { echo "Failed to cd"; exit 1; }
+      cargo install-ra --server
+    )
+  fi
 fi
 
 # Install or update any go packages we need.
-go get -u "${go_packages[@]}"
+[[ -n "$HARDCORE" ]] && go get -u "${go_packages[@]}"
 
 log_get "Updating ZSH Completions"
 # There are two types of completion files. One is an actual zsh completion file (e.g. rustup). The

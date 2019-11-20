@@ -32,6 +32,8 @@ apt_list=(                        # List of things to install.
   curl                            # Amazingly some installations don't come with curl.
   zsh                             # I use zsh wherever possible.
   tree                            # Recursive ls.
+  fd-find                         # Faster find (installed as fd-find, needs to be aliased).
+  ripgrep                         # Faster grep.
   gcc make                        # Needed to build C/C++ apps from source (and run Makefiles).
   gnome-terminal                  # Good basic terminal, used in my bspwm config.
   neovim                          # Better vim (works well with my vim config.
@@ -53,7 +55,7 @@ apt_list=(                        # List of things to install.
 log_get "apt installing/updating: ${apt_list[*]}"
 sudo apt install -y "${apt_list[@]}"
 
-if not bspwm; then
+if [[ -n "$HARDCORE" ]] && not bspwm; then
   # Install bspwm dependencies.
   sudo apt install -y xcb libxcb-util0-dev libxcb-ewmh-dev libxcb-randr0-dev libxcb-icccm4-dev \
     libxcb-keysyms1-dev libxcb-xinerama0-dev libasound2-dev libxcb-xtest0-dev
@@ -72,7 +74,7 @@ if not bspwm; then
 fi
 
 # Build j4-dmenu-desktop (used in bspwm).
-if not j4-dmenu-desktop; then
+if [[ -n "$HARDCORE" ]] && not j4-dmenu-desktop; then
   # This is an extension for dmenu, so make sure we have that.
   sudo apt install -y dmenu
   mkdir -p "$BUILD_DIR"
@@ -87,7 +89,7 @@ fi
 # Change default version of gpg to gpg2 (which Ubuntu should be doing soon, it's
 # in Debian Stretch). Don't do anything unless we're sure.
 gpgVersion=$(gpg --version | head -1 | awk '{print $NF}')
-if [[ ${gpgVersion%%.*} = 1 ]] && exists gpg2 &&
+if [[ ${gpgVersion%%.*} == 1 ]] && exists gpg2 &&
   [[ "$(command -v gpg)" = /usr/bin/gpg && "$(command -v gpg2)" = /usr/bin/gpg2 ]]; then
   log_get "Setting default gpg to gpg2 not gpg1"
   sudo mv /usr/bin/gpg /usr/bin/gpg1
@@ -104,7 +106,7 @@ if not google-chrome; then
   rm google-chrome-stable_current_amd64.deb
 fi
 
-if not slack; then
+if [[ -n "$HARDCORE" ]] && not slack; then
   echo "deb https://packagecloud.io/slacktechnologies/slack/debian/ jessie main" | sudo tee /etc/apt/sources.list.d/slack.list >/dev/null
   sudo apt install -y slack
 fi
@@ -119,7 +121,7 @@ gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/k
 # TODO(gib): Add setting to make gnome-terminal use the FiraCode font (installed above).
 
 XKB=/usr/share/X11/xkb/
-if [[ "$HARDCORE" && ! -d "$XKB".git ]]; then # Set up xkb key remapping.
+if [[ -n "$HARDCORE" && ! -d "$XKB".git ]]; then # Set up xkb key remapping.
   log_get "Setting up personal xkb shortcuts at $XKB."
   sudo chown -R "$USER:$(id -gn)" "$XKB"
   pushd /usr/share/X11/xkb || { echo "Failed to cd"; exit 1; }

@@ -18,13 +18,6 @@ else
   log_skip "gib Terminal profile (already installed)."
 fi
 
-# Link VS Code preferences into the macOS specific folder.
-if [[ -d "$HOME/Library/Application Support/Code/" ]]; then
-  for file in "$HOME"/.config/code/*.json; do
-    ln -sf "$file" "$HOME/Library/Application Support/Code/User/$(basename "$file")"
-  done
-fi
-
 # Install xcode command line tools
 # If these are messed up run `xcode-select -p`. It will normally print one of:
 # - /Library/Developer/CommandLineTools
@@ -36,7 +29,14 @@ else
   log_skip "Xcode Command Line Tools (already installed)."
 fi
 
-if [ "$HARDCORE" ]; then # Set keyboard preferences.
+# Link VS Code preferences into the macOS specific folder.
+if [[ -n $HARDCORE && -d "$HOME/Library/Application Support/Code/" ]]; then
+  for file in "$HOME"/.config/code/*.json; do
+    ln -sf "$file" "$HOME/Library/Application Support/Code/User/$(basename "$file")"
+  done
+fi
+
+if [[ -n "$HARDCORE" ]]; then # Set keyboard preferences.
   log_section "Setting macOS defaults."
 
   # Set Keyboard Shortcuts -> App Shortcuts
@@ -294,7 +294,7 @@ else
 fi
 
 # Set up HARDCORE brew packages.
-if [[ -e "$HARDCORE" ]] && ! brew bundle --file="$(dirname "$0")"/config/Brewfile-hardcore check >/dev/null; then
+if [[ -n "$HARDCORE" ]] && ! brew bundle --file="$(dirname "$0")"/config/Brewfile-hardcore check >/dev/null; then
   log_get "brew HARDCORE packages."
   brew bundle --file="$(dirname "$0")"/config/Brewfile-hardcore | grep -Evx "Using [-_/0-9a-zA-Z ]+"
 else
@@ -319,7 +319,7 @@ sudo softwareupdate --install --all --restart"
 
 # Swift LanguageServer.
 sourcekit_lsp_path="$XDG_DATA_HOME"/sourcekit-lsp
-gitCloneOrUpdate apple/sourcekit-lsp "$sourcekit_lsp_path" && {
+[[ -n "$HARDCORE" ]] && gitCloneOrUpdate apple/sourcekit-lsp "$sourcekit_lsp_path" && {
   (cd "$XDG_DATA_HOME"/sourcekit-lsp || error "Failed to cd to the langserver directory"; swift package update && swift build -c release)
   ln -sf "$sourcekit_lsp_path"/.build/release/sourcekit-lsp "$HOME"/bin/sourcekit-lsp
 }

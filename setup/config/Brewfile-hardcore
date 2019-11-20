@@ -8,6 +8,7 @@
 # brew "kubectx"                           # Easily change Kubernetes context or namespace.
 # brew "kubernetes-cli"                    # Manage your docker clusters with kube.
 # brew "kubernetes-helm"                   # Package manager for Docker.
+# brew "xsv"                               # csv manipulator.
 # cask "balenaetcher"                      # Flash disk images (e.g. Linux bootable USB sticks).
 # cask "disk-inventory-x"                  # Graphical view of what's taking up disk space.
 # cask "font-fira-code"                    # Nicer programming font option 1.
@@ -43,7 +44,6 @@ brew "shellcheck"                        # Linter for bash.
 brew "tmux"                              # Terminal multiplexer.
 brew "tokei"                             # Counts lines of code in a project.
 brew "watchexec"                         # Like entr (evaluating which one is better).
-brew "xsv"                               # csv manipulator.
 cask "adoptopenjdk8"                     # Java 8 that is still supported.
 cask "caprine"                           # Facebook Messenger native app.
 cask "docker"                            # Build and run docker images.

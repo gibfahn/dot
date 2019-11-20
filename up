@@ -37,8 +37,8 @@ if [ "$(uname)" = Darwin ]; then # macOS
 elif [ "$(uname)" = Linux ]; then # Linux specific stuff.
   distro="$(cat /etc/*-release | grep '^ID=' | sed -E 's/^ID="?(.*)"?/\1/' | head -1)"
   case "$distro" in
-    *[Uu]buntu*)                       "$(dirname $0)"/setup/ubuntu.sh ;;
-    *[Aa]lpine*) export MINIMAL=true;  "$(dirname $0)"/setup/alpine.sh || exit 1;;
+    *[Uu]buntu*) "$(dirname $0)"/setup/ubuntu.sh ;;
+    *[Aa]lpine*) "$(dirname $0)"/setup/alpine.sh || exit 1;;
     *) echo "No specific setup files for $distro yet" ;;
   esac
 fi

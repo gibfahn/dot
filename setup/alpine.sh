@@ -2,9 +2,7 @@
 
 # shellcheck shell=bash disable=SC1090,SC2016
 
-# Things I like to have on Ubuntu.
-
-# TODO(gib): Get newer version of less (at least version 520) to fix the -RF bug.
+# Things I like to have on Alpine.
 
 . "$(dirname "$0")"/../helpers/setup.sh # Load helper script from dot/helpers.
 
