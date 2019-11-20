@@ -1,47 +1,64 @@
-# vi: filetype=conf
+# Things I use on my development machine. Commented lines are things I have
+# previously used but don't currently.
 
 # brew "cmake"                             # Commonly-used meta build system.
 # brew "ctags"                             # Used for autocomplete in Vim (etc).
 # brew "exa"                               # Nicer ls replacement.
 # brew "groovy"                            # Helpful for testing Jenkins scripts.
+# brew "kubectx"                           # Easily change Kubernetes context or namespace.
 # brew "kubernetes-cli"                    # Manage your docker clusters with kube.
 # brew "kubernetes-helm"                   # Package manager for Docker.
+# cask "balenaetcher"                      # Flash disk images (e.g. Linux bootable USB sticks).
+# cask "disk-inventory-x"                  # Graphical view of what's taking up disk space.
+# cask "font-fira-code"                    # Nicer programming font option 1.
+# cask "font-source-code-pro"              # Nicer programming font option 3.
+# cask "geektool"                          # Display things on Desktop (I have a todo list).
+# cask "grandperspective"                  # Alternative to disk-inventory-x, shows disk space usage.
 # cask "vagrant"                           # Quick command-line image spin-up.
 # cask "virtualbox"                        # Manage VMs (Linux or Windows).
 # cask "vulkan-sdk"                        # Use the vulkan graphics APIs on macOS.
-# cask "balenaetcher"                      # Flash disk images (e.g. Linux bootable USB sticks).
-# cask "grandperspective"                  # Alternative to disk-inventory-x, shows disk space usage.
 brew "asciinema"                         # Take screen recordings of your terminal (https://asciinema.org).
+brew "bash-completion"                   # Generally useful bash completions.
+brew "bat"                               # Nicer cat with syntax highlighting etc.
+brew "ccache"                            # Speeds up C/C++ recompilation.
 brew "certbot"                           # LetsEncrypt.
 brew "dfu-util"                          # Used for flashing my Ergodox Infinity.
 brew "exercism"                          # Learn coding languages.
+brew "fswatch"                           # See which files are opened on the system (`fswatch /`).
 brew "gdub"                              # Wrapper around ./gradlew for gradle projects (gw).
 brew "git-lfs"                           # Git Large File Storage. Use with `git lfs`.
 brew "go"                                # Go progamming language.
+brew "httpie"                            # Alternative to curl, `http` binary.
+brew "hub"                               # GitHub CLI tool.
+brew "hyperfine"                         # Benchmark commands (time but a benchmarking suite).
+brew "ipython"                           # Interactive python shell.
+brew "jq"                                # Makes it easy to deal with JSON on the command line.
 brew "ninja"                             # Google meta build system (used in V8).
 brew "postgresql"                        # Solid database.
 brew "protobuf"                          # Serialization format.
+brew "pv"                                # Show data flow through bash pipes.
 brew "redis"                             # In-memory key-object store.
+brew "ruby-build"                        # Helper to install ruby versions.
 brew "shellcheck"                        # Linter for bash.
+brew "tmux"                              # Terminal multiplexer.
+brew "tokei"                             # Counts lines of code in a project.
 brew "watchexec"                         # Like entr (evaluating which one is better).
-cask "1password"                         # Password manager.
+brew "xsv"                               # csv manipulator.
+cask "adoptopenjdk8"                     # Java 8 that is still supported.
 cask "caprine"                           # Facebook Messenger native app.
+cask "docker"                            # Build and run docker images.
 cask "firefox-nightly"                   # For those sweet Rust-based improvements.
-cask "geektool"                          # Display things on Desktop (I have a todo list).
 cask "gimp"                              # Heavyweight photo editor.
-cask "intellij-idea"                     # Java-oriented IDE (good for debugging).
-cask "karabiner-elements"                # Key remapper (see $c/karabiner/karabiner.json for my settings).
-cask "keyboard-cleaner"                  # Block all keystrokes except ⌘-q so you can wipe your keyboard.
+cask "hyperswitch"                       # Better Cmd-Tab (only windows on a screen).
+cask "intellij-idea-ce"                  # Java-oriented IDE (good for debugging).
 cask "keycastr"                          # Shows keystrokes in corner of screen (great for casting/demos).
-cask "kitty"                             # GPU Accelerated cross-platform Terminal Emulator.
+cask "meld"                              # Visual file diffing tool.
 cask "slack-beta"                        # Everyone uses Slack right?
-cask "sogouinput"                        # Nicer Chinese input experience.
 cask "spotify"                           # Music.
 cask "stay"                              # Save and restore window positions, invaluable with multi-monitor setups.
-cask "time-out"                          # Reminds you to take breaks.
 cask "trailer"                           # GitHub push notifications.
+cask "vimr"                              # GUI neovim.
 cask "visual-studio-code"                # IDE that supports debugging Rust code.
-cask "workflowy"                         # Infinitely nested bullet point list app.
 
 # Mac App Store Apps (some paid). `mas list` to see what you've already installed.
 mas "Keynote", id: 409183694
@@ -56,3 +73,5 @@ mas "Numbers", id: 409203825
 # mas "Logic Pro X", id: 634148309
 
 brew "llvm"                              # Gives clangd (clang language server).
+
+# vi: filetype=conf

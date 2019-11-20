@@ -1,5 +1,5 @@
-# Alternate version of ripgrep with optimisations on:
-tap "burntsushi/ripgrep", "https://github.com/BurntSushi/ripgrep.git"
+# Basic things I'd install on any machine.
+
 tap "homebrew/cask"                      # `brew cask` for GUI apps.
 tap "homebrew/cask-fonts"                # Let's you `brew cask install` fonts.
 tap "homebrew/bundle"                    # Allows you to use Brewfiles.
@@ -9,14 +9,11 @@ tap "homebrew/cask-versions"             # Allows installing other versions of c
 # Defaults are in /usr/bin, brew installs to /usr/local/bin
 
 brew "bash"                              # macOS Bash is very old.
-brew "less"                              # Fixes -RX issue.
 brew "git"                               # Bleeding-edge git.
+brew "less"                              # Fixes -RX issue.
 brew "python"                            # Python 3
 brew "python2"                           # Python 2
-brew "ipython"                           # Interactive python shell.
 brew "zsh"                               # Nicer interactive shell.
-brew "ruby-build"                        # Helper to install ruby versions.
-cask "adoptopenjdk8"                     # Java 8 that is still supported.
 
 # GNU versions of utils that are out-of-date or FreeBSD on macOS:
 
@@ -25,9 +22,9 @@ brew "coreutils"
 brew "diffutils"
 brew "findutils"
 brew "gawk"
-brew "gnu-indent"
 brew "gnu-sed"                           # A sed that actually supports `sed -i`.
 brew "gnu-tar"
+brew "gnu-time"
 brew "gnu-which"
 brew "gnutls"
 brew "grep"
@@ -38,37 +35,26 @@ brew "wget"
 
 # Command-line helpers:
 
-brew "bash-completion"                   # Generally useful bash completions.
-brew "bat"                               # Nicer cat with syntax highlighting etc.
-brew "burntsushi/ripgrep/ripgrep-bin"    # Super-fast recursive grep.
-brew "ccache"                            # Speeds up C/C++ recompilation.
 brew "entr"                              # Command line file watching.
 brew "fd"                                # Super-fast find replacement.
-brew "fswatch"                           # See which files are opened on the system (`fswatch /`).
 brew "gnupg"                             # gpg command line.
-brew "httpie"                            # Alternative to curl, `http` binary.
-brew "hub"                               # GitHub CLI tool.
-brew "hyperfine"                         # Benchmark commands (time but a benchmarking suite).
-brew "jq"                                # Makes it easy to deal with JSON on the command line.
 brew "mas"                               # Mac App Store third-party cli.
 brew "neovim"                            # New and improved vim.
 brew "pinentry-mac"                      # Gpg password Keychain integration.
-brew "pv"                                # Show data flow through bash pipes.
+brew "ripgrep"                           # Super-fast version of grep.
 brew "rmtrash"                           # `rm` to Trash, aliased to `dl` in gibrc.
 brew "terminal-notifier"                 # Log notifications from the terminal.
-brew "tmux"                              # Terminal multiplexer.
-brew "xsv"                               # csv manipulator.
-cask "docker"                            # Build and run docker images.
 
 # Casks (GUI Applications):
 
 cask "copyq"                             # Clipboard manager with history (needs manual setup).
-# cask "disk-inventory-x"                  # Graphical view of what's taking up disk space.
-cask "font-fira-code"                    # Nicer programming font option 1.
 cask "font-hasklig"                      # Nicer programming font option 2.
-cask "font-source-code-pro"              # Nicer programming font option 3.
 cask "google-chrome"                     # You probably want/have Chrome.
-cask "hyperswitch"                       # Better Cmd-Tab (only windows on a screen).
-cask "meld"                              # Visual file diffing tool.
+cask "kitty"                             # GPU Accelerated cross-platform Terminal Emulator.
+cask "sogouinput"                        # Nicer Chinese input experience.
+cask "workflowy"                         # Infinitely nested bullet point list app.
+cask "time-out"                          # Reminds you to take breaks.
+cask "karabiner-elements"                # Key remapper (see $c/karabiner/karabiner.json for my settings).
+cask "keyboard-cleaner"                  # Block all keystrokes except ⌘-q so you can wipe your keyboard.
+cask "1password"                         # Password manager.
 cask "spectacle"                         # Window manager that's easy to get used to.
-cask "vimr"                              # GUI neovim.
