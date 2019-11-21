@@ -21,17 +21,19 @@
 
   b   = branch
   ba  = branch -a # Show all local and remote branches.
+  bb  = bisect bad
   bd  = branch -D # Delete branch.
-  # TODO(gib): Fix this to make it look nice (can also use git branch directly).
+  bdd = "!lastBranch=$(git headBranch); git checkout -; git branch -D $lastBranch" # Delete current branch.
+  bg  = bisect good
   # Sorted list of branches.
-  bh  = for-each-ref --sort=committerdate refs/heads/ --format='%(committerdate:short) %(color: 178)%(refname:short)' # Branch sistory.
+  # TODO(gib): Fix this to make it look nice (can also use git branch directly).
+  bh  = for-each-ref --sort=committerdate refs/heads/ --format='%(committerdate:short) %(color: 178)%(refname:short)' # Branch history.
+  bp  = "!git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -d" # Delete orphaned local branches.
+  br  = bisect reset
   brs = !git for-each-ref --sort=-committerdate refs/heads/ \
         --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset)|%(objectname:short)|%(color:green)%(committerdate:relative)%(color:reset)' \
         | column -ts '|'
-  br  = branch -r # Show remote branches only.
-  bdd = "!lastBranch=$(git headBranch); git checkout -; git branch -D $lastBranch" # Delete current branch.
-  bp  = "!git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -d" # Delete orphaned local branches.
-  bP  = "!git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D" # Delete orphaned local branches!
+  bs  = bisect start
   bt  = "!git branch -u $1/$(git headBranch) #" # g bt origin sets upstream to origin.
 
   # I manually specify -S because gpgsign only works with Git 2.x. Also it
