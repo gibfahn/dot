@@ -201,6 +201,32 @@
             }
           ],
           "manipulate_caps_lock_led": false
+        }, {
+          "description": "KeyboardIO Model 01",
+          "ignore": false,
+          "disable_built_in_keyboard_if_exists": false,
+          "identifiers": {
+            "is_keyboard": true,
+            "product_id": 8961,
+            "vendor_id": 4617,
+            "is_pointing_device": true
+          },
+          "fn_function_keys": [],
+          "simple_modifications": [],
+          "manipulate_caps_lock_led": false
+        }, {
+          "description": "KeyboardIO Model 01 duplicate (not sure why this exists)",
+          "ignore": false,
+          "disable_built_in_keyboard_if_exists": false,
+          "identifiers": {
+            "is_keyboard": false,
+            "product_id": 8961,
+            "vendor_id": 4617,
+            "is_pointing_device": true
+          },
+          "fn_function_keys": [],
+          "simple_modifications": [],
+          "manipulate_caps_lock_led": false
         }
       ],
       "parameters": {
