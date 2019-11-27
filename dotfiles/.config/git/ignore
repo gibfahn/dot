@@ -14,3 +14,4 @@
 
 # Bazel build dependencies (no leading slash as you can multiple bazel projects in one repo).
 .bazel/
+bazel-out
