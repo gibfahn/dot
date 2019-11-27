@@ -290,6 +290,20 @@
                   "key_code": "caps_lock",
                   "modifiers": { "optional": [ "any" ] }
                 },
+                "conditions": [
+                  {
+                    "type": "device_unless",
+                    "identifiers": [
+                      {
+                        "product_id": 8961,
+                        "vendor_id": 4617
+                      }, {
+                        "product_id": 45133,
+                        "vendor_id": 7185
+                      }
+                    ]
+                  }
+                ],
                 "to": { "key_code": "left_shift" }
               }
             ]
@@ -302,6 +316,20 @@
                   "key_code": "left_shift",
                   "modifiers": { "optional": [ "any" ] }
                 },
+                "conditions": [
+                  {
+                    "type": "device_unless",
+                    "identifiers": [
+                      {
+                        "product_id": 8961,
+                        "vendor_id": 4617
+                      }, {
+                        "product_id": 45133,
+                        "vendor_id": 7185
+                      }
+                    ]
+                  }
+                ],
                 "to": { "key_code": "left_control" },
                 "to_if_alone": { "key_code": "escape" }
               }

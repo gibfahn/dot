@@ -108,6 +108,10 @@ s = s.replace(/"(?:to|from|conditions|to_after_key_up|to_if_alone|modifiers|mous
 // Remove newlines in `"<keyword>": [ ... ]`.
 s = s.replace(/"(?:to|from|conditions|to_after_key_up|to_if_alone|modifiers)": \[[^\[\]]+\]/g, (match) => match.replace(/\n +/g, ' ',));
 
+if (s[s.length - 1] !== '\n') {
+  s += '\n'
+}
+
 // Uncomment this for testing purposes:
 // file += '.bak';
 fs.writeFileSync(file, s);
