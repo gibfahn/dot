@@ -738,6 +738,7 @@ augroup gibAutoGroup                                " Group of automatic functio
   autocmd CursorHold * silent call CocActionAsync('highlight')
   " Allow comments in json.
   autocmd FileType json syntax match Comment +\/\/.\+$+
+  autocmd FileType go set listchars=tab:\ \ ,trail:·,nbsp:☠ " Don't highlight tabs in Go.
 
   " Recover deletes swapfile if no difference, or shows diff if different.
   autocmd SwapExists  * let b:swapchoice = '?' | let b:swapname = v:swapname
