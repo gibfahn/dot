@@ -195,7 +195,7 @@ if [[ -n "$HARDCORE" ]]; then # Set keyboard preferences.
     '{"enabled" = 0;"name" = "SPREADSHEETS";}'
     '{"enabled" = 0;"name" = "SOURCE";}'
     '{"enabled" = 0;"name" = "MENU_OTHER";}'
-    '{"enabled" = 0;"name" = "MENU_CONVERSION";}'
+    '{"enabled" = 1;"name" = "MENU_CONVERSION";}'
     '{"enabled" = 0;"name" = "MENU_WEBSEARCH";}'
     '{"enabled" = 0;"name" = "MENU_SPOTLIGHT_SUGGESTIONS";}'
   )
