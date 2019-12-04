@@ -202,6 +202,8 @@ if [[ -n "$HARDCORE" ]]; then # Set keyboard preferences.
 
   existing_spotlight_preferences=$(defaults read com.apple.Spotlight orderedItems | tr -d '\n' | tr -d ' ' | tr -d ',' | tr -d '"')
   trimmed_expected_spotlight_preferences=$(printf "(${spotlight_preferences[*]})" | tr -d ' ' | tr -d '"')
+  log_debug "Existing spotlight preferences: $existing_spotlight_preferences"
+  log_debug "Expected spotlight preferences: $trimmed_expected_spotlight_preferences"
   if  [[ $existing_spotlight_preferences == $trimmed_expected_spotlight_preferences ]]; then
     log_skip "macOS default Spotlight Preferences"
   else

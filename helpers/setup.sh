@@ -23,28 +23,35 @@ mkdir -p "$BUILD_DIR"
 : "${BIN_DIR:="$HOME/bin"}" # Directory to copy binaries to.
 mkdir -p "$BIN_DIR"
 
+mkdir -p "$HOME/tmp"
+[[ ! -e "$HOME"/tmp/dot.log ]] || mv "$HOME"/tmp/dot.log{,.old}
+
 exists() { type "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
 
 ### Logging functions
 
 # Used when you're starting a new section.
 log_section() {
-    printf "❯❯❯ Installing: %s\n" "$@"
+  printf "❯❯❯ Installing: %s\n" "$@"
 }
 
 # Used when you're going to install something.
 log_get() {
-    printf "${CYAN}❯❯❯ Installing:${NC} %s\n" "$@"
+  printf "${CYAN}❯❯❯ Installing:${NC} %s\n" "$@"
 }
 
 # Used when you're going to install something.
 log_update() {
-    printf "${CYAN}❯❯❯   Updating:${NC} %s\n" "$1"
+  printf "${CYAN}❯❯❯   Updating:${NC} %s\n" "$1"
 }
 
 # Used when you're not going to install something.
 log_skip() {
-    printf "${YELLOW}❯❯❯   Skipping:${NC} %s\n" "$@"
+  printf "${YELLOW}❯❯❯   Skipping:${NC} %s\n" "$@"
+}
+
+log_debug() {
+    printf "$1\n" >> "$HOME"/tmp/dot.log
 }
 
 # `if no foo` then foo isn't in $XDG_DATA_HOME and we should install it.
