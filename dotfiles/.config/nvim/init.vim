@@ -186,9 +186,6 @@ nmap     F <Plug>Sneak_F| " ↳             F
 nmap     t <Plug>Sneak_t| " ↳             t
 nmap     T <Plug>Sneak_T| " ↳             T
 
-nnoremap <Leader>a @a|       " Apply macro a (add with qa or yank to a reg with "ay).
-nnoremap <Leader>b :Buffers<CR>| " Search buffer list for file.
-
 """"""""""""""""""
 " CoC Remappings "
 """"""""""""""""""
@@ -237,6 +234,8 @@ nnoremap <silent> <space>ck  :<C-u>CocPrev<CR>
 " Resume latest coc list
 nnoremap <silent> <space>cp  :<C-u>CocListResume<CR>
 
+nnoremap <Leader>a @a|       " Apply macro a (add with qa or yank to a reg with "ay).
+nnoremap <Leader>b :Buffers<CR>| " Search buffer list for file.
 nnoremap <Leader>d :call BufferClose('')<CR>| " Close buffer without closing split,
 nnoremap <Leader>D :%d<CR>|                " Delete all text in buffer.
 nnoremap <Leader>e <C-w>q|                 " Close current split (keeps buffer).
