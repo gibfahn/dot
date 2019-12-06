@@ -5,12 +5,15 @@
   headRemote = "!git rev-parse --abbrev-ref --symbolic-full-name @{u} | cut -d '/' -f 1" # e.g. origin.
   headBranch = symbolic-ref --short HEAD # e.g. master.
   remoteOrg = "!git remote get-url $1 | awk -F ':|/' '{if ($NF) {print $(NF-1)} else {print $(NF-2)}}' #" # Github org for remote. `g remoteOrg up` -> gibfahn.
+  remoteRepo = "!git remote get-url $1 | sed -e 's|.*/||' -e 's/.git$//' #" # Github repo for remote. `g remoteRepo up` -> dot.
   # You might occasionally have to run `git remote set-head --auto up` if the upstream HEAD hasn't been synced for some reason.
   defaultBranch = "!git symbolic-ref --short refs/remotes/$1/HEAD | sed \"s|^$1/||\" #" # Default branch for remote. `g defaultBranch up` -> master
   # Quote an alias you want to save here (quotes \ and ", and wraps in "! #" to handle args).
   quote-string = "!read -r l; sed -E -e 's/([\\\"])/\\\\\\1/g' -e 's/(.*)/\"!\\1 #\"/' <<<\"$l\" #"
-  # Removes all branches and tags except "$1" (default oldmaster).
+  # Removes all branches and tags except "$1" (default: oldmaster).
   clean-fork = "!git ls-remote --heads --tags fork | awk '!/\\^\\{\\}/ && !/refs\\/heads\\/'\"${1:-oldmaster}\"'/ {print $NF}' | xargs -n ${2:-10} git push --delete fork && git remote prune fork #"
+  # Change the remote default branch to "$1" (default: "oldmaster"), for remote $2 (default: "fork").
+  change-branch = "!hub api -XPATCH repos/$(git remoteOrg ${2:-fork})/$(git remoteRepo ${2:-fork}) -f name=$(git remoteRepo ${2:-fork}) -f default_branch=${1:-oldmaster} && git remote set-head --auto ${2:-fork} #"
 
   a   = add           # Add files to index.
   ap  = add -p        # Adds files in hunks (only add some of the changes you made).
