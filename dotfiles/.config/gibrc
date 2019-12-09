@@ -227,8 +227,7 @@ alias xv="xargs \$${ZSH_VERSION:+=}VISUAL" v="\$${ZSH_VERSION:+=}VISUAL" # Work 
 alias b=bazel bazel='bazelisk --bazelrc "$XDG_CONFIG_HOME"/bazel/bazelrc' k=kubectl # Build tools.
 exists vimr && alias vm=vimr # Use `vm` for GUI vim, need to add a Linux equivalent.
 
-# ulimit -c unlimited # Allow saving of coredumps.
-alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"' # Makes it look like you're busy with important hacker stuff.
+# ulimit -c unlimited # Uncommeent to allow saving of coredumps.
 # Cross-platform copy/paste/open/ldd/delete terminal commands.
 case $uname in
   Darwin) alias ldd="otool -L" cpy="pbcopy" pst="pbpaste" o=open dl=rmtrash ;;
@@ -251,6 +250,7 @@ alias y2y="python -c 'import sys, yaml; yaml.dump(yaml.safe_load(sys.stdin), sys
 if exists kitty; then
   alias icat="kitty +kitten icat" # Kitty terminal specific: https://sw.kovidgoyal.net/kitty/kittens/icat.html
 fi
+alias idea="/Applications/IntelliJ\ IDEA\ CE.app/Contents/MacOS/idea" # IntelliJ CE
 
 # }}} Aliases
 
