@@ -192,7 +192,9 @@ PATH=".git/safe/../../bin:$PATH" # `mkdir .git/safe` if you trust the repo (http
 
 # }}} Path Additions
 
-# {{{ Shell specific
+# {{{ Aliases
+
+# Better ls commands (used below in zsh chpwd(), so needs to be above).
 exists gls && alias ls=gls
 exists gsed && alias sed=gsed
 if ls --color=auto >/dev/null 2>&1; then
@@ -200,6 +202,59 @@ if ls --color=auto >/dev/null 2>&1; then
 elif [[ "$uname" == Darwin ]]; then
   alias ls='LSCOLORS="Gxfxcxdxbxegedabagacad" ls -G' # Colour ls on macOS.
 fi
+
+# x->close terminal, g->git, h->history, path->print $PATH,
+alias x=exit g=git path='echo $PATH | tr : "\n"' dt="date +%Y-%m-%d"
+alias s="TERM=xterm-256color ssh" # Reset cursor to block and ssh.
+
+# l->full detail + hidden, la->no detail + hidden, ll->full detail no hidden, md->create dir.
+alias l='ls -lAh' la='ls -A' ll='ls -l' md="mkdir -p"
+alias c=cargo ru=rustup  # Rust commands (try `c b`, `c r`, `c t`).
+rs() { for i in "$@"; do rustc "${i%.rs}.rs"; ./"${i%.rs}"; done; } # Compile/run (rs a.rs b).
+[[ -z "$cd" ]] && cd="cd" # We only want cd=cs in bash.
+# .. = up 1 dir, ... = up 2 dirs, .... = up 3 dirs (etc.). - = go to last dir.
+# shellcheck disable=SC2139 # We want this to expand when defined.
+alias ..="$cd .." ...="$cd ../.." ....="$cd ../../.." .....="$cd ../../../.." ......="$cd ../../../../.."
+# shellcheck disable=SC2139 # We want this to expand when defined.
+alias -- -="$cd -"
+unset cd
+
+{ works nvim && VIM="nvim"; } || { works vim && VIM="vim"; } || VIM="vi" # Take what you can get.
+export VISUAL=${VISUAL:-$VIM} EDITOR=${EDITOR:-$VIM} # Set vim/nvim as the default editor.
+alias vim='VIMINIT=":source $XDG_CONFIG_HOME/nvim/init.vim" vim' # Make vim use nvim config file.
+# shellcheck disable=SC2139 # We want this to expand when defined.
+alias xv="xargs \$${ZSH_VERSION:+=}VISUAL" v="\$${ZSH_VERSION:+=}VISUAL" # Work around zsh's "helpful" autoquoting.
+alias b=bazel bazel='bazelisk --bazelrc "$XDG_CONFIG_HOME"/bazel/bazelrc' k=kubectl # Build tools.
+exists vimr && alias vm=vimr # Use `vm` for GUI vim, need to add a Linux equivalent.
+
+# ulimit -c unlimited # Allow saving of coredumps.
+alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"' # Makes it look like you're busy with important hacker stuff.
+# Cross-platform copy/paste/open/ldd/delete terminal commands.
+case $uname in
+  Darwin) alias ldd="otool -L" cpy="pbcopy" pst="pbpaste" o=open dl=rmtrash ;;
+  Linux) alias cpy="xclip -selection clipboard" pst="xclip -selection clipboard -o" o=xdg-open dl="gio trash" ;;
+esac
+# Copy last command.
+alias clc="fc -ln -1 | sed -e 's/\\\\n/\\n/g' -e 's/\\\\t/\\t/g' | cpy"
+
+# fda is find all (don't ignore anything).
+{ exists fd && alias fd='LS_COLORS="$LS_COLORS" fd' fda='LS_COLORS="$LS_COLORS" fd --no-ignore --hidden'; } \
+  || fd() { find . -iname "*$**"; } # Find by filename (case insensitive).
+exists rg && alias rg='LS_COLORS="$LS_COLORS" rg' rga='LS_COLORS="$LS_COLORS" rg --hidden --no-ignore' # rga is grep all (don't ignore anything).
+
+# Start using volta (Node version manager).
+alias vlt='pathadd "$VOLTA_HOME"; pathadd "$VOLTA_HOME"/bin'
+
+# Yaml to json, e.g. "y2j <t.yml | jq .". Requires a `pip install pyyaml`.
+alias y2j="python -c 'import sys, yaml, json; json.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2)'"
+alias y2y="python -c 'import sys, yaml; yaml.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2)'"
+if exists kitty; then
+  alias icat="kitty +kitten icat" # Kitty terminal specific: https://sw.kovidgoyal.net/kitty/kittens/icat.html
+fi
+
+# }}} Aliases
+
+# {{{ Shell specific
 
 case $shell in
   zsh) # zsh specific options.
@@ -301,59 +356,6 @@ esac
 command mkdir -p "$XDG_CACHE_HOME/$shell"  # Create HISTFILE dir if necessary.
 
 # }}} Shell Specific
-
-# {{{ Aliases
-
-# x->close terminal, g->git, h->history, path->print $PATH,
-alias x=exit g=git path='echo $PATH | tr : "\n"' dt="date +%Y-%m-%d"
-alias s="TERM=xterm-256color ssh" # Reset cursor to block and ssh.
-
-# l->full detail + hidden, la->no detail + hidden, ll->full detail no hidden, md->create dir.
-alias l='ls -lAh' la='ls -A' ll='ls -l' md="mkdir -p"
-alias c=cargo ru=rustup  # Rust commands (try `c b`, `c r`, `c t`).
-rs() { for i in "$@"; do rustc "${i%.rs}.rs"; ./"${i%.rs}"; done; } # Compile/run (rs a.rs b).
-[[ -z "$cd" ]] && cd="cd" # We only want cd=cs in bash.
-# .. = up 1 dir, ... = up 2 dirs, .... = up 3 dirs (etc.). - = go to last dir.
-# shellcheck disable=SC2139 # We want this to expand when defined.
-alias ..="$cd .." ...="$cd ../.." ....="$cd ../../.." .....="$cd ../../../.." ......="$cd ../../../../.."
-# shellcheck disable=SC2139 # We want this to expand when defined.
-alias -- -="$cd -"
-unset cd
-
-{ works nvim && VIM="nvim"; } || { works vim && VIM="vim"; } || VIM="vi" # Take what you can get.
-export VISUAL=${VISUAL:-$VIM} EDITOR=${EDITOR:-$VIM} # Set vim/nvim as the default editor.
-alias vim='VIMINIT=":source $XDG_CONFIG_HOME/nvim/init.vim" vim' # Make vim use nvim config file.
-# shellcheck disable=SC2139 # We want this to expand when defined.
-alias xv="xargs \$${ZSH_VERSION:+=}VISUAL" v="\$${ZSH_VERSION:+=}VISUAL" # Work around zsh's "helpful" autoquoting.
-alias b=bazel bazel='bazelisk --bazelrc "$XDG_CONFIG_HOME"/bazel/bazelrc' k=kubectl # Build tools.
-exists vimr && alias vm=vimr # Use `vm` for GUI vim, need to add a Linux equivalent.
-
-# ulimit -c unlimited # Allow saving of coredumps.
-alias busy='cat /dev/urandom | hexdump -C | grep "ca fe"' # Makes it look like you're busy with important hacker stuff.
-# Cross-platform copy/paste/open/ldd/delete terminal commands.
-case $uname in
-  Darwin) alias ldd="otool -L" cpy="pbcopy" pst="pbpaste" o=open dl=rmtrash ;;
-  Linux) alias cpy="xclip -selection clipboard" pst="xclip -selection clipboard -o" o=xdg-open dl="gio trash" ;;
-esac
-# Copy last command.
-alias clc="fc -ln -1 | sed -e 's/\\\\n/\\n/g' -e 's/\\\\t/\\t/g' | cpy"
-
-# fda is find all (don't ignore anything).
-{ exists fd && alias fd='LS_COLORS="$LS_COLORS" fd' fda='LS_COLORS="$LS_COLORS" fd --no-ignore --hidden'; } \
-  || fd() { find . -iname "*$**"; } # Find by filename (case insensitive).
-exists rg && alias rg='LS_COLORS="$LS_COLORS" rg' rga='LS_COLORS="$LS_COLORS" rg --hidden --no-ignore' # rga is grep all (don't ignore anything).
-
-# Start using volta (Node version manager).
-alias vlt='pathadd "$VOLTA_HOME"; pathadd "$VOLTA_HOME"/bin'
-
-# Yaml to json, e.g. "y2j <t.yml | jq .". Requires a `pip install pyyaml`.
-alias y2j="python -c 'import sys, yaml, json; json.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2)'"
-alias y2y="python -c 'import sys, yaml; yaml.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2)'"
-if exists kitty; then
-  alias icat="kitty +kitten icat" # Kitty terminal specific: https://sw.kovidgoyal.net/kitty/kittens/icat.html
-fi
-
-# }}} Aliases
 
 # {{{ Tool specific
 
