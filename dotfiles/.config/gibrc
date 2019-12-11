@@ -73,7 +73,6 @@ export GRADLE_USER_HOME="$XDG_DATA_HOME"/gradle # Also contains gradle.propertie
 export HELM_HOME="$XDG_DATA_HOME/helm" # Move Helm data dir from ~.
 export HTTPIE_CONFIG_DIR="$XDG_CONFIG_HOME/httpie" # https://github.com/jakubroztocil/httpie/issues/145
 export IPYTHONDIR="$XDG_CACHE_HOME/ipython" # Move iPython dir from ~.
-export LESS='--tabs=4 --ignore-case --RAW-CONTROL-CHARS --quit-if-one-screen --status-column --LONG-PROMPT --HILITE-UNREAD --window=-4' # See less options comment below.
 export LESSHISTFILE="$XDG_CACHE_HOME/less/history" # Get less to put its history here.
 export LESSKEY="$XDG_CACHE_HOME/less" # Less color settings.
 export MINIKUBE_HOME="$XDG_CACHE_HOME/minikube" # https://github.com/kubernetes/minikube/issues/4109
@@ -93,6 +92,8 @@ export VOLTA_HOME="$XDG_CACHE_HOME/volta" # Set directory to use for volta insta
 # --status-column=>column to show lines matching current search or first unread line after moving
 # -quit-if-one-screen=>exit if file fits in one screen, --ignore-case=>smartcase search, --LONG-PROMPT=>verbose prompt, --RAW-CONTROL-CHARS=>show colors,
 # --HILITE-UNREAD=>highlight first unread line moving, --tabs=4=>tab is 4 spaces, --window=-4=>keep 4 lines overlapping when scrolling with the space key
+export LESS='--tabs=4 --ignore-case --RAW-CONTROL-CHARS --quit-if-one-screen --status-column --LONG-PROMPT --HILITE-UNREAD --window=-4' # See less options comment below.
+export BAT_PAGER="less $LESS" # Make bat use less pager options.
 
 HISTSIZE=100000 SAVEHIST=100000 HISTFILE="$XDG_CACHE_HOME/$shell/history" # Set history file location and size.
 c="$XDG_CONFIG_HOME" # Shortcut to the config directory (`v $c/gibrc` to edit this file).
@@ -227,7 +228,7 @@ alias xv="xargs \$${ZSH_VERSION:+=}VISUAL" v="\$${ZSH_VERSION:+=}VISUAL" # Work 
 alias b=bazel bazel='bazelisk --bazelrc "$XDG_CONFIG_HOME"/bazel/bazelrc' k=kubectl # Build tools.
 exists vimr && alias vm=vimr # Use `vm` for GUI vim, need to add a Linux equivalent.
 
-# ulimit -c unlimited # Uncommeent to allow saving of coredumps.
+# ulimit -c unlimited # Uncomment to allow saving of coredumps.
 # Cross-platform copy/paste/open/ldd/delete terminal commands.
 case $uname in
   Darwin) alias ldd="otool -L" cpy="pbcopy" pst="pbpaste" o=open dl=rmtrash ;;

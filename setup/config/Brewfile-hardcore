@@ -28,6 +28,7 @@ brew "exercism"                          # Learn coding languages.
 brew "fswatch"                           # See which files are opened on the system (`fswatch /`).
 brew "gdub"                              # Wrapper around ./gradlew for gradle projects (gw).
 brew "git-lfs"                           # Git Large File Storage. Use with `git lfs`.
+brew "git-delta"                         # Nicer git diff viewer.
 brew "go"                                # Go progamming language.
 brew "httpie"                            # Alternative to curl, `http` binary.
 brew "hub"                               # GitHub CLI tool.

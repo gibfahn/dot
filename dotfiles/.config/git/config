@@ -157,6 +157,7 @@
 
 # Color options: normal, black, red, green, yellow, blue, magenta, cyan, or white (or 0-255).
 # Highlight options: bold, dim, ul (underline), blink, and reverse (swap fg and bg).
+# Diff colours aren't needed as using delta as a pager.
 
 # Change the colours for `git branch`.
 [color "branch"]
@@ -165,30 +166,6 @@
   remote = 180      # Local-tracking branches for your remotes.
   upstream = 214 ul # No idea what this is (make it orange to find out).
   plain = normal ul # No idea what this is (underline it to find out).
-
-# Change colours for `git diff`.
-[color "diff"]
-  meta = 249                   # Header (diff --git a/file b/file).
-  frag = 8                     # Line numbers (@@ -7,20 +7,20 @@).
-  func = 251                   # The part of the changed file after frag.
-  context = 251                # Lines in the diff that haven't changed.
-  old = red bold               # Removed lines (overwritten by diff-highlight).
-  new = green bold             # Added lines (overwritten by diff-highlight).
-  commit = 178                 # Commit hash in git show.
-  whitespace = normal reverse  # Whitespace errors (trailing whitespace in the diff).
-  old = 160                    # Deleted lines (defaults to red bold).
-  new = 40                     # Added lines (defaults to green bold).
-  oldMoved = 161               # Line moved from here.
-  oldMovedAlternative = 161 ul # Alternative color to show difference between moved blocks.
-  newMoved = 42                # Line moved to here.
-  newMovedAlternative = 42 ul  # Alternative color to show difference between moved blocks.
-
-# Change colours for moved hunks in `git diff`.
-[color "diff-highlight"] # See https://github.com/git/git/tree/master/contrib/diff-highlight
-  oldHighlight = reverse # Apply this to highlight word diff deletion.
-  oldReset = noreverse   # Apply this to undo word diff deletion highlighting.
-  newHighlight = reverse # Apply this to highlight word diffs addition.
-  newReset = noreverse   # Apply this to undo word diff addition highlighting.
 
 # Change colours for `git status`.
 [color "status"]
@@ -207,7 +184,7 @@
   # ^ is  off because some people might not have gpg keys (and it breaks the npm test suite).
 
 [core]
-  pager = "$([ -x ~/bin/diff-so-fancy ] && echo diff-so-fancy || echo cat) | less"
+  pager = delta --theme=TwoDark
   hooksPath = "~/.config/git/hooks" # Put global git hooks here.
 
 [credential]
