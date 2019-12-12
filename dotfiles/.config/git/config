@@ -4,6 +4,12 @@
   # Helper functions:
   headRemote = "!git rev-parse --abbrev-ref --symbolic-full-name @{u} | cut -d '/' -f 1" # e.g. origin.
   headBranch = symbolic-ref --short HEAD # e.g. master.
+  pushBranch = "!git rev-parse --abbrev-ref --symbolic-full-name @{push}" # What would be pushed to, pushRemote/$(git headBranch) if set, else @{u}.
+  # Show the status of this branch relative to @{push}.
+  pushStatus = "! pushBranch=$(git pushBranch 2>/dev/null) || { echo \"No push branch set.\" && exit 0; } \
+    ; both=$(git rev-list --left-right --count HEAD...@{push}) \
+    ; [[ $both == '0	0' ]] && echo \"Your branch is up to date with push branch $pushBranch.\" \
+    || echo \"Your branch is ${both%%	*} commit(s) ahead  and ${both##*	} commit(s) behind push branch $pushBranch.\" #"
   remoteOrg = "!git remote get-url $1 | awk -F ':|/' '{if ($NF) {print $(NF-1)} else {print $(NF-2)}}' #" # Github org for remote. `g remoteOrg up` -> gibfahn.
   remoteRepo = "!git remote get-url $1 | sed -e 's|.*/||' -e 's/.git$//' #" # Github repo for remote. `g remoteRepo up` -> dot.
   # You might occasionally have to run `git remote set-head --auto up` if the upstream HEAD hasn't been synced for some reason.
@@ -31,13 +37,15 @@
   # Sorted list of branches.
   # TODO(gib): Fix this to make it look nice (can also use git branch directly).
   bh  = for-each-ref --sort=committerdate refs/heads/ --format='%(committerdate:short) %(color: 178)%(refname:short)' # Branch history.
-  bp  = "!git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -d" # Delete orphaned local branches.
+  bp  = "!git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D" # Delete orphaned local branches.
   br  = bisect reset
   brs = !git for-each-ref --sort=-committerdate refs/heads/ \
         --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset)|%(objectname:short)|%(color:green)%(committerdate:relative)%(color:reset)' \
         | column -ts '|'
   bs  = bisect start
-  bt  = "!git branch -u $1/$(git headBranch) #" # g bt origin sets upstream to origin.
+  bt  = "!git branch -u $1/$(git headBranch) #" # g bt fork sets upstream to fork.
+  btu = "!git branch -u up/$(git defaultBranch ${1:-up}) #" # g btu to up/HEAD.
+  btp = "!git config branch.$(git headBranch).pushRemote ${1:-fork} #" # `g btp up` sets push remote for this branch to up, useful when pushing directly to 'up'.
 
   # I manually specify -S because gpgsign only works with Git 2.x. Also it
   # means that test suites using `git commit` don't break.
@@ -54,10 +62,10 @@
   cpc = cherry-pick --continue         # Accept current changes and continue to next commit.
   cpq = cherry-pick --quit             # Only undo last commit (that failed) not all of them.
   co  = checkout                       # Change to a different commit or reset a file to a commit (e.g. `g co new-feature`).
-  cob = checkout --no-track -b         # Create a new branch based on a different ref (e.g. `g cob new-feature up/master`).
   com = checkout --recurse-submodules  # Checkout and update submodules.
   cop = checkout -p                    # Selectively undo some of the changes you made.
   cot = checkout -t                    # g cot up/master means checkout master tracking the one in up.
+  cu  = "!git checkout -b $1 ${2:-up/$(git defaultBranch up)} #" # Create new PR branch $1, pulls from upstream, pushes to fork (due to remote.pushDefault).
 
   d   = "!git diff \"${@:-HEAD}\" #"                   # diff of staged and unstaged..
   de  = "!git diff HEAD --name-only $@ | xargs $VISUAL # " # Open files changed since last commit in editor.
@@ -120,18 +128,18 @@
   rba = rebase --abort                                       # Bail on the rebase session.
   rbc = rebase --continue                                    # Accept the current commit.
   rbs = rebase --skip                                        # Skip current commit you're rebasing on.
-  rhh = reset --hard @{u}                                    # Reset hard to the upstream commit.
+  rhu = reset --hard @{u}                                    # Reset hard to the upstream commit.
+  rhp = reset --hard @{push}                                 # Reset hard to the push commit.
   rh  = reset --hard                                         # Reset hard (to HEAD by default).
   ri  = rebase -i -S --autosquash                            # Interactive rebase (defaults to upstream commit @{u}).
-  riu = "!git rebase -i -S --autosquash up/$(git defaultBranch up) #" # Interactive rebase on up/HEAD.
+  rip = rebase -i -S --autosquash @{push}                    # Interactive rebase on push branch.
   rim = "!git rebase -i -S --autosquash $(git merge-base ${1:-master} ${2:-HEAD} ${@:2}) # " # Rebase all commits since you forked the branch.
-  rp  = rev-parse                                            # Get the hash from a revision (`g rp @` and `g rp --short @` are often useful).
   rr  = remote rename                                        # Change name of remote `g rr origin up`.
   rs  = remote set-url                                       # Change URL of remote `g rs up hsg:dot`.
   rsp = remote set-url --push                                # Change push URL of remote (`g rs up hhg:dot && g rsp up hsg:dot` to use https for fetch and ssh for push, which is faster).
   rv  = remote -v                                            # Show remotes (with URLs).
 
-  s   = status
+  s   = "!git status && git pushStatus #" # Status including diff from @{push}.
   ss  = status --short --branch
   sh  = show
   she = "!git show --pretty="" --name-only $@ | xargs $VISUAL #" # Open files changed in last commit in editor.
@@ -221,9 +229,12 @@
 [pull]
   rebase = true            # pull = fetch + rebase, not fetch + merge.
 [push]
-  default = simple         # Only push the branch I'm on.
+  default = current        # Only push the branch I'm on (made less dangerous by remote.pushDefault).
 [rebase]
   autosquash = true        # Squash/fixup commits starting with squash!/fixup! + commit subject.
+  missingCommitsCheck = warn # Print a warning if a rebase removes commits.
+[remote]
+  pushDefault = fork       # Push to the fork remote unless a pushRemote is specified. Prevents pushing to wrong branch by mistake.
 [rerere]
   enabled = true           # Remember how I resolved the same merge conflict last time.
 [submodule]
@@ -232,6 +243,8 @@
   showPatch = true         # Show the actual diffs in `git stash show`.
 [status]
   showStash = true         # Show the number of commits in the stash in `git status` output.
+  relativePaths = false    # Always show absolute paths from the repo root.
+  submoduleSummary = true  # Show submodule status in `git status`.
 
 # Try `g cl hh:nodejs/node`.
 [url "https://bitbucket.org/"]

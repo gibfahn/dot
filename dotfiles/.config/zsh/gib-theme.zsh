@@ -121,14 +121,10 @@ _gib_prompt_preprompt_render() {
 
 _gib_prompt_async_git_aliases() {
   setopt localoptions noshwordsplit
-  local dir=$1
   local -a gitalias pullalias
 
-  # we enter repo to get local aliases as well.
-  builtin cd -q "$dir"
-
   # list all aliases and split on newline.
-  gitalias=(${(@f)"$(command git config --get-regexp "^alias\.")"})
+  gitalias=(${(@f)"$(command git config -C "$1" --get-regexp "^alias\.")"})
   for line in "${gitalias[@]}"; do
     parts=(${(@)=line})           # split line on spaces
     aliasname=${parts[1]#alias.}  # grab the name (alias.[name])
@@ -171,13 +167,10 @@ _gib_prompt_async_git_dirty() {
   setopt localoptions noshwordsplit
   local untracked_dirty=$1 dir=$2
 
-  # use cd -q to avoid side effects of changing directory, e.g. chpwd hooks
-  builtin cd -q $dir
-
   if [[ $untracked_dirty = 0 ]]; then
-    command git diff --no-ext-diff --quiet --exit-code
+    command git -C "$dir" diff --no-ext-diff --quiet --exit-code
   else
-    test -z "$(command git status --porcelain --ignore-submodules -unormal)"
+    test -z "$(command git -C "$2" status --porcelain --ignore-submodules -unormal)"
   fi
 
   return $?
@@ -185,15 +178,13 @@ _gib_prompt_async_git_dirty() {
 
 _gib_prompt_async_git_fetch() {
   setopt localoptions noshwordsplit
-  # use cd -q to avoid side effects of changing directory, e.g. chpwd hooks
-  builtin cd -q $1
 
   # set GIT_TERMINAL_PROMPT=0 to disable auth prompting for git fetch (git 2.3+)
   export GIT_TERMINAL_PROMPT=0
   # set ssh BachMode to disable all interactive ssh password prompting
   export GIT_SSH_COMMAND=${GIT_SSH_COMMAND:-"ssh -o BatchMode=yes"}
 
-  command git -c gc.auto=0 fetch &>/dev/null || return 99
+  command git -C "$1" -c gc.auto=0 fetch &>/dev/null || return 99
 
   # check arrow status after a successful git fetch
   _gib_prompt_async_git_arrows $1
@@ -201,8 +192,10 @@ _gib_prompt_async_git_fetch() {
 
 _gib_prompt_async_git_arrows() {
   setopt localoptions noshwordsplit
-  builtin cd -q $1
-  command git rev-list --left-right --count HEAD...@'{u}'
+  local upstream push_upstream
+  upstream=$(command git -C "$1" rev-list --left-right --count HEAD...@'{u}')
+  push_upstream=$(command git -C "$1" rev-list --left-right --count HEAD...@{push})
+  echo "$upstream	$push_upstream"
 }
 
 _gib_prompt_async_tasks() {
@@ -269,10 +262,12 @@ _gib_prompt_async_refresh() {
 
 _gib_prompt_check_git_arrows() {
   setopt localoptions noshwordsplit
-  local arrows left=${1:-0} right=${2:-0}
+  local arrows left=${1:-0} right=${2:-0} push_left=${3:-0} push_right=${4:-0}
 
-  (( right > 0 )) && arrows+=${PURE_GIT_DOWN_ARROW:-⇣}
-  (( left > 0 )) && arrows+=${PURE_GIT_UP_ARROW:-⇡}
+  (( right > 0 )) && arrows+=⇣
+  (( left > 0 )) && arrows+=⇡
+  (( push_right > 0 )) && arrows+=⇠
+  (( push_left > 0 )) && arrows+=⇢
 
   [[ -n $arrows ]] || return
   typeset -g REPLY=$arrows
