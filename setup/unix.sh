@@ -269,7 +269,8 @@ if [[ -n $HARDCORE ]]; then
     rustup install stable
 
     # Make sure we have useful components:
-    rustup component add rls rust-analysis rust-src clippy rustfmt
+    rustup component add --toolchain stable rls rust-analysis rust-src clippy rustfmt
+    rustup component add --toolchain nightly rls rust-analysis rust-src clippy rustfmt
   else
     log_update  "Rust compiler and Cargo"
     rustup update
