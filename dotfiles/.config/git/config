@@ -71,11 +71,14 @@
   de  = "!git diff HEAD --name-only $@ | xargs $VISUAL # " # Open files changed since last commit in editor.
   di  = diff --no-index
   dn  = diff HEAD --name-only                          # diff of staged and unstaged file names.
+  dp  = diff @{push}                                   # diff between working tree and upstream branch.
+  dpn = diff --name-only @{push}                       # diff between working tree and upstream branch file names.
+  dps = diff --staged @{push}                          # diff between working tree and upstream branch.
   ds  = diff --staged                                  # Diff of staged files (`git diff` for unstaged).
   dt  = difftool                                       # Nicer way to view diffs in vim.
   du  = diff @{u}                                      # diff between working tree and upstream branch.
-  dus = diff --staged @{u}                             # diff between working tree and upstream branch.
   dun = diff --name-only @{u}                          # diff between working tree and upstream branch file names.
+  dus = diff --staged @{u}                             # diff between working tree and upstream branch.
 
   f = fetch            # Fetch one remote.
   fa = fetch --all     # Fetch from all the remotes.
