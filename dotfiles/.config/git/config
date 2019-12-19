@@ -16,8 +16,7 @@
   push-status = "! push_branch=$(git push-branch 2>/dev/null) || { echo \"No push branch set.\" && exit 0; } \
     ; both=$(git rev-list --left-right --count HEAD...@{push}) \
     ; [[ $both == '0	0' ]] && echo \"Your branch is up to date with push branch $push_branch.\" \
-    || echo \"Your branch is ${both%%	*} commit(s) ahead  and ${both##*	} commit(s) behind push branch $push_branch.\" #"
-
+    || echo \"Your branch is ${both%%	*} commit(s) ahead and ${both##*	} commit(s) behind push branch $push_branch.\" #"
   # Quote an alias you want to save here (quotes \ and ", and wraps in "! #" to handle args).
   quote-string = "!read -r l; sed -E -e 's/([\\\"])/\\\\\\1/g' -e 's/(.*)/\"!\\1 #\"/' <<<\"$l\" #"
   remote-org = "!git remote get-url $1 | awk -F ':|/' '{if ($NF) {print $(NF-1)} else {print $(NF-2)}}' #" # Github org for remote. `g remote-org up` -> gibfahn.
@@ -39,7 +38,6 @@
   # Sorted list of branches.
   # TODO(gib): Fix this to make it look nice (can also use git branch directly).
   bh  = for-each-ref --sort=committerdate refs/heads/ --format='%(committerdate:short) %(color: 178)%(refname:short)' # Branch history.
-  ; bp  = "!git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D" # Delete orphaned local branches.
 
   br  = bisect reset
   brs = !git for-each-ref --sort=-committerdate refs/heads/ \
