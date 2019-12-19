@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# `git branch prune`: delete local branches whose commits have already been merged.
+
+branches_to_prune=()
+
+while read -r branch up_branch; do
+  # If no remote-tracking branch with the same name in any remote,
+  if [[ -z $(for remote in $(git remote); do git rev-parse --verify --quiet "$remote/$branch" ; done) ]] &&
+    # and upstream branch exists,
+    [[ -n "$up_branch" ]] &&
+    # and upstream branch contains all the commits in fork branch.
+    ! git cherry -v "$up_branch" "$branch" | grep -q '^+'; then
+    # then we should delete the branch.
+    branches_to_prune+=("$branch")
+  fi
+done <<<"$(git for-each-ref refs/heads --format='%(refname:short) %(upstream:short)')"
+
+if [[ ${#branches_to_prune[@]} = 0 ]]; then
+  echo "Nothing to prune."
+  exit 0
+fi
+
+echo "Branches to delete: ${branches_to_prune[*]}"
+read -rp "Continue? [Y/n] " choice
+
+case $choice in
+  N|n|no|No|NO) echo "Exiting..."; exit 1 ;;
+esac
+
+git branch -D "${branches_to_prune[@]}"

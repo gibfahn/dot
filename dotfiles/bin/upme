@@ -25,7 +25,7 @@ exists cargo-clippy && cargo install --force clippy # We have to recompile when 
 # Keep a copy of the node source code here to get an up-to-date install.
 if [ -d "$HOME/wrk/com/node" ]; then
   pushd ~/wrk/com/node
-  if [ $(git headBranch) = master ]; then
+  if [ $(git head-branch) = master ]; then
     ./configure
     $SUDO make -j4 install
   fi

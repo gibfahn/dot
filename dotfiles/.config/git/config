@@ -1,25 +1,27 @@
 [alias]
   # Commits: @=HEAD, -=last commit.
   # N.B. # at end of func allows parsing $1 args.
-  # Helper functions:
-  headRemote = "!git rev-parse --abbrev-ref --symbolic-full-name @{u} | cut -d '/' -f 1" # e.g. origin.
-  headBranch = symbolic-ref --short HEAD # e.g. master.
-  pushBranch = "!git rev-parse --abbrev-ref --symbolic-full-name @{push}" # What would be pushed to, pushRemote/$(git headBranch) if set, else @{u}.
-  # Show the status of this branch relative to @{push}.
-  pushStatus = "! pushBranch=$(git pushBranch 2>/dev/null) || { echo \"No push branch set.\" && exit 0; } \
-    ; both=$(git rev-list --left-right --count HEAD...@{push}) \
-    ; [[ $both == '0	0' ]] && echo \"Your branch is up to date with push branch $pushBranch.\" \
-    || echo \"Your branch is ${both%%	*} commit(s) ahead  and ${both##*	} commit(s) behind push branch $pushBranch.\" #"
-  remoteOrg = "!git remote get-url $1 | awk -F ':|/' '{if ($NF) {print $(NF-1)} else {print $(NF-2)}}' #" # Github org for remote. `g remoteOrg up` -> gibfahn.
-  remoteRepo = "!git remote get-url $1 | sed -e 's|.*/||' -e 's/.git$//' #" # Github repo for remote. `g remoteRepo up` -> dot.
-  # You might occasionally have to run `git remote set-head --auto up` if the upstream HEAD hasn't been synced for some reason.
-  defaultBranch = "!git symbolic-ref --short refs/remotes/$1/HEAD | sed \"s|^$1/||\" #" # Default branch for remote. `g defaultBranch up` -> master
-  # Quote an alias you want to save here (quotes \ and ", and wraps in "! #" to handle args).
-  quote-string = "!read -r l; sed -E -e 's/([\\\"])/\\\\\\1/g' -e 's/(.*)/\"!\\1 #\"/' <<<\"$l\" #"
+
+  # Helper functions where a full name is easier:
+  # Change the remote default branch to "$1" (default: "oldmaster"), for remote $2 (default: "fork").
+  change-branch = "!hub api -XPATCH repos/$(git remote-org ${2:-fork})/$(git remote-repo ${2:-fork}) -f name=$(git remote-repo ${2:-fork}) -f default_branch=${1:-oldmaster} && git remote set-head --auto ${2:-fork} #"
   # Removes all branches and tags except "$1" (default: oldmaster).
   clean-fork = "!git ls-remote --heads --tags fork | awk '!/\\^\\{\\}/ && !/refs\\/heads\\/'\"${1:-oldmaster}\"'/ {print $NF}' | xargs -n ${2:-10} git push --delete fork && git remote prune fork #"
-  # Change the remote default branch to "$1" (default: "oldmaster"), for remote $2 (default: "fork").
-  change-branch = "!hub api -XPATCH repos/$(git remoteOrg ${2:-fork})/$(git remoteRepo ${2:-fork}) -f name=$(git remoteRepo ${2:-fork}) -f default_branch=${1:-oldmaster} && git remote set-head --auto ${2:-fork} #"
+  # You might occasionally have to run `git remote set-head --auto up` if the upstream HEAD hasn't been synced for some reason.
+  default-branch = "!git symbolic-ref --short refs/remotes/$1/HEAD | sed \"s|^$1/||\" #" # Default branch for remote. `g default-branch up` -> master
+  head-branch = symbolic-ref --short HEAD # e.g. master.
+  head-remote = "!git rev-parse --abbrev-ref --symbolic-full-name @{u} | cut -d '/' -f 1" # e.g. origin.
+  push-branch = "!git rev-parse --abbrev-ref --symbolic-full-name @{push}" # What would be pushed to, pushRemote/$(git head-branch) if set, else @{u}.
+  # Show the status of this branch relative to @{push}.
+  push-status = "! push_branch=$(git push-branch 2>/dev/null) || { echo \"No push branch set.\" && exit 0; } \
+    ; both=$(git rev-list --left-right --count HEAD...@{push}) \
+    ; [[ $both == '0	0' ]] && echo \"Your branch is up to date with push branch $push_branch.\" \
+    || echo \"Your branch is ${both%%	*} commit(s) ahead  and ${both##*	} commit(s) behind push branch $push_branch.\" #"
+
+  # Quote an alias you want to save here (quotes \ and ", and wraps in "! #" to handle args).
+  quote-string = "!read -r l; sed -E -e 's/([\\\"])/\\\\\\1/g' -e 's/(.*)/\"!\\1 #\"/' <<<\"$l\" #"
+  remote-org = "!git remote get-url $1 | awk -F ':|/' '{if ($NF) {print $(NF-1)} else {print $(NF-2)}}' #" # Github org for remote. `g remote-org up` -> gibfahn.
+  remote-repo = "!git remote get-url $1 | sed -e 's|.*/||' -e 's/.git$//' #" # Github repo for remote. `g remote-repo up` -> dot.
 
   a   = add           # Add files to index.
   ap  = add -p        # Adds files in hunks (only add some of the changes you made).
@@ -32,20 +34,20 @@
   ba  = branch -a # Show all local and remote branches.
   bb  = bisect bad
   bd  = branch -D # Delete branch.
-  bdd = "!lastBranch=$(git headBranch); git checkout -; git branch -D $lastBranch" # Delete current branch.
+  bdd = "!lastBranch=$(git head-branch); git checkout -; git branch -D $lastBranch" # Delete current branch.
   bg  = bisect good
   # Sorted list of branches.
   # TODO(gib): Fix this to make it look nice (can also use git branch directly).
   bh  = for-each-ref --sort=committerdate refs/heads/ --format='%(committerdate:short) %(color: 178)%(refname:short)' # Branch history.
-  bp  = "!git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D" # Delete orphaned local branches.
+  ; bp  = "!git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D" # Delete orphaned local branches.
+
   br  = bisect reset
   brs = !git for-each-ref --sort=-committerdate refs/heads/ \
         --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset)|%(objectname:short)|%(color:green)%(committerdate:relative)%(color:reset)' \
         | column -ts '|'
   bs  = bisect start
-  bt  = "!git branch -u $1/$(git headBranch) #" # g bt fork sets upstream to fork.
-  btu = "!git branch -u up/$(git defaultBranch ${1:-up}) #" # g btu to up/HEAD.
-  btp = "!git config branch.$(git headBranch).pushRemote ${1:-fork} #" # `g btp up` sets push remote for this branch to up, useful when pushing directly to 'up'.
+  btu = "!git branch -u ${1:-up}/$(git default-branch ${1:-up}) #" # g btu to up/HEAD.
+  btp = "!git config branch.$(git head-branch).pushRemote ${1:-fork} #" # `g btp up` sets push remote for this branch to up, useful when pushing directly to 'up'.
 
   # I manually specify -S because gpgsign only works with Git 2.x. Also it
   # means that test suites using `git commit` don't break.
@@ -65,7 +67,7 @@
   com = checkout --recurse-submodules  # Checkout and update submodules.
   cop = checkout -p                    # Selectively undo some of the changes you made.
   cot = checkout -t                    # g cot up/master means checkout master tracking the one in up.
-  cu  = "!git checkout -b $1 ${2:-up/$(git defaultBranch up)} #" # Create new PR branch $1, pulls from upstream, pushes to fork (due to remote.pushDefault).
+  cu  = "!git checkout -b $1 ${2:-up/$(git default-branch up)} #" # Create new PR branch $1, pulls from upstream, pushes to fork (due to remote.pushDefault).
 
   d   = "!git diff \"${@:-HEAD}\" #"                   # diff of staged and unstaged..
   de  = "!git diff HEAD --name-only $@ | xargs $VISUAL # " # Open files changed since last commit in editor.
@@ -87,8 +89,8 @@
   fixup = "!  hash=$(git rev-parse "$1") \
            && git commit --fixup=$hash ${@:2} \
            && EDITOR=true git rebase -i --autostash --autosquash $hash^ #"
-  # Create/update branch from Github PR, `g fp 657 origin` or `g fp` (Defaults: $1=headBranch, $2=headRemote if $1 not set, else "up").
-  fp = "! a=${1:-$(git headBranch)} b=${2:-up}; [[ -z $@ ]] && b=$(git headRemote) \
+  # Create/update branch from Github PR, `g fp 657 origin` or `g fp` (Defaults: $1=head-branch, $2=head-remote if $1 not set, else "up").
+  fp = "! a=${1:-$(git head-branch)} b=${2:-up}; [[ -z $@ ]] && b=$(git head-remote) \
         ; [[ -z $1 ]] && git checkout --quiet @ \
         ; git fetch --force --update-head-ok $b pull/$a/head:$a \
         && git checkout --quiet $a \
@@ -122,9 +124,9 @@
   pa  = "!curl -L ${1%.patch}.patch | git am -S --whitespace=fix # "     # Patch Github PR.
   pap = "!curl -L ${1%.patch}.patch | git am -3 -S --whitespace=fix  # " # Please patch it.
   paw = "!curl -L ${1%.patch}.patch | git am -3 -S --whitespace=warn # " # Patch but don't fix whitespace.
-  pr  = "!hub pull-request --base $(git remoteOrg up):${1:-$(git defaultBranch up)} -o #" # Raise PR against upstream default branch (or $1).
-  pt  = "!git push -u $1 $(git headBranch) #"                   # g pt origin sets branch to track up + pushes.
-  pu  = "!git pull up $(git defaultBranch up) #"                # Pull Upstream: quick way to fetch and rebase on the default upstream branch.
+  pr  = "!hub pull-request --base $(git remote-org up):${1:-$(git default-branch up)} -o #" # Raise PR against upstream default branch (or $1).
+  pt  = "!git push -u $1 $(git head-branch) #"                   # g pt origin sets branch to track up + pushes.
+  pu  = "!git pull up $(git default-branch up) #"                # Pull Upstream: quick way to fetch and rebase on the default upstream branch.
 
   ra  = remote add                                           # Add new remote by url.
   rb  = rebase -S                                            # Rebase and gpg sign.
@@ -142,7 +144,7 @@
   rsp = remote set-url --push                                # Change push URL of remote (`g rs up hhg:dot && g rsp up hsg:dot` to use https for fetch and ssh for push, which is faster).
   rv  = remote -v                                            # Show remotes (with URLs).
 
-  s   = "!git status && git pushStatus #" # Status including diff from @{push}.
+  s   = "!git status && git push-status #" # Status including diff from @{push}.
   ss  = status --short --branch
   sh  = show
   she = "!git show --pretty="" --name-only $@ | xargs $VISUAL #" # Open files changed in last commit in editor.
