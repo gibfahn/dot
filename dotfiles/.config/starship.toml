@@ -1,0 +1,46 @@
+# Needs to be updated when new things are added.
+prompt_order = [
+    "username",
+    "hostname",
+    "kubernetes",
+    "directory",
+    "git_branch",
+    "git_commit",
+    "git_state",
+    "git_status",
+    "hg_branch",
+    "package",
+    "dotnet",
+    "golang",
+    "java",
+    "nodejs",
+    "php",
+    "python",
+    "ruby",
+    "rust",
+    "terraform",
+    "nix_shell",
+    "conda",
+    "memory_usage",
+    "aws",
+    "env_var",
+    "cmd_duration",
+    "jobs",
+    "battery",
+    "time", # Moved above line_break.
+    "line_break",
+    "character",
+]
+
+[directory]
+fish_style_pwd_dir_length = 1 # Show ~/c/dot not just dot
+style = "180" # Path to cwd is yellow-ish.
+
+[git_branch]
+style = "33"
+# TODO: needs a way to track @{upstream} and @{push} branches.
+
+[time]
+disabled = false
+format = "%Y-%m-%d %T"
+style = "black"

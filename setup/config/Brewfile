@@ -43,6 +43,7 @@ brew "neovim"                            # New and improved vim.
 brew "pinentry-mac"                      # Gpg password Keychain integration.
 brew "ripgrep"                           # Super-fast version of grep.
 brew "rmtrash"                           # `rm` to Trash, aliased to `dl` in gibrc.
+# brew "starship"                          # Rust shell prompt.
 brew "terminal-notifier"                 # Log notifications from the terminal.
 
 # Casks (GUI Applications):

@@ -7,7 +7,7 @@
 [ -n "$NORC" ] && return # Don't run if NORC set.
 
 case $- in
-  *i*) [ "$GIBRC" ] && echo "Reusing gibrc..." || echo "Using gibrc..." ;;
+  *i*) [ "$GIBRC" ] && echo "Reusing gibrc..." ;;
   *) return ;; # Exit if not running interactively.
 esac
 export GIBRC
@@ -29,8 +29,17 @@ case $0 in
   -sh|sh) shell="sh" ;;
 esac
 : "${shell:="$(ps co command= "$$")"}" # Fallback shell name = name of current process.
-uname="$(uname)"
 
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block, everything else may go below.
+# if [[ $shell == zsh ]]; then
+#   if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+#     source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+#   fi
+# fi
+
+uname="$(uname)"
 # If we're sshed into a machine, and didn't manually run a different, try a better shell.
 if [ -n "$ssh" ] && [ "$GIBRC" = 0 ] && [ "$shell" != zsh ]; then
   if exists zsh; then
@@ -288,6 +297,8 @@ case $shell in
     zplugin light zsh-users/zsh-autosuggestions # Autosuggest completion (accept with -> arrow).
 
     zplugin light mafredri/zsh-async # Async zsh library, used in gib-theme.
+
+    zplugin ice depth=1; zplugin light romkatv/powerlevel10k
 
     # Don't crash shell if "$XDG_DATA_HOME"/zfunc/source/* matches nothing.
     setopt | grep -qxF nullglob || { _gib_changed=true && setopt nullglob; }
