@@ -1,4 +1,6 @@
 # shellcheck shell=bash disable=1090,2016
+
+return
 [[ -n "${ssh:-}" ]] || PROMPT="%m " # Set fallback PROMPT in case the below script fails.
 PROMPT=$'\n%{\e[38;5;161m%}'"${PROMPT}"$'%{\e[38;5;242m···❯\e[0m%} '
 
