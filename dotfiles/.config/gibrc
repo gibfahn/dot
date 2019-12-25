@@ -12,8 +12,6 @@ case $- in
 esac
 export GIBRC
 : "${GIBRC:=0}" # First time through this is 0, next time 1 (etc).
-# shellcheck disable=SC2034,SC2039 # (variable used in gib-theme.zsh).
-_gib_prompt_cmd_elapsed=$SECONDS # Show how long startup took from this point at first prompt.
 
 # Note that which is a built-in in zsh, so no speed issues.
 exists() { command -v "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
@@ -34,6 +32,7 @@ esac
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block, everything else may go below.
 if [[ $shell == zsh ]]; then
+  printf '\e[4 q' # Cursor is an underline (_) while shell setup is running.
   if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${USER}.zsh" ]]; then
     source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${USER}.zsh"
   fi
@@ -263,6 +262,7 @@ fi
 alias idea="/Applications/IntelliJ\ IDEA\ CE.app/Contents/MacOS/idea" # IntelliJ CE
 
 for _gib_bin in grep find; do
+  # shellcheck disable=SC2139 # Alias is meant to be expanded when defined.
   exists g$_gib_bin && alias $_gib_bin="g$_gib_bin --color=auto"
 done
 unset _gib_bin

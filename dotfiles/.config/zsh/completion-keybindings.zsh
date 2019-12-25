@@ -113,3 +113,21 @@ bindkey -M vicmd ' ' edit-command-line # <Space> in cmd mode opens editor.
 bindkey -r -M viins "^G" # Remove list-expand binding so we can use <C-g> for git.
 bind-git-helper f b t r h # Bind <C-g><C-{f,b,t,r,h}> to fuzzy-find show {files,branches,tags,remotes,hashes}.
 unset -f bind-git-helper
+
+# Run before the prompt is displayed.
+_gib_prompt_precmd() {
+  # Set window title to current directory.
+  print -Pn "\e]2;%1~\a"
+}
+
+# Run between user hitting Enter key, and command being run.
+_gib_prompt_preexec() {
+  printf '\e[4 q' # Cursor is an underline (_) while command is running.
+  # Set window title to first word of exec command.
+  [[ "$PWD" == "$HOME" ]] && printf "\e]2;%s\a" "${1%% *}"
+}
+
+autoload -Uz add-zsh-hook
+
+add-zsh-hook precmd _gib_prompt_precmd
+add-zsh-hook preexec _gib_prompt_preexec
