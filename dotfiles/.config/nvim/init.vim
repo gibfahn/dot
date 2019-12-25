@@ -246,6 +246,7 @@ nnoremap <Leader>gc :cd %:p:h<CR>|         " Change vim directory (:pwd) to curr
 nnoremap <Leader>gC :e ~/.config/nvim/coc-settings.json<CR> " Edit colorscheme file.
 nnoremap <Leader>gd :w !git diff --no-index % - <CR>|     " Diff between saved file and current.
 nnoremap <Leader>gf :call DupBuffer()<CR>gF| " Open file path:row:col under cursor in last window.
+nnoremap <Leader>gg :tab G<CR>| " Open fugitive Gstatus in a new tab.
 nnoremap <Leader>gh :call <SID>SynStack()<CR>| " Show which syntax is set for current cursor location.
 nnoremap <Leader>gH :e $colorscheme_path<CR> " Edit colorscheme file.
 nnoremap <Leader>gl :source <C-r>=SessionFile()<CR><CR>| " Load saved session for vim cwd to a default session path.
