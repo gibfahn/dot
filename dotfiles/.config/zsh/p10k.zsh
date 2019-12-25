@@ -395,6 +395,18 @@
     # ⇡42 if ahead of the remote; no leading space if also behind the remote: ⇣42⇡42.
     (( VCS_STATUS_COMMITS_AHEAD && !VCS_STATUS_COMMITS_BEHIND )) && res+=" "
     (( VCS_STATUS_COMMITS_AHEAD  )) && res+="${clean}⇡${VCS_STATUS_COMMITS_AHEAD}"
+
+    # Remove when https://github.com/romkatv/powerlevel10k/issues/395 resolved.
+    local -a push_behind_ahead=(${(ps:\t:)"$(command git rev-list --left-right --count HEAD...@{push} 2>/dev/null)"})
+    local VCS_STATUS_PUSH_COMMITS_AHEAD="${push_behind_ahead[1]}"
+    local VCS_STATUS_PUSH_COMMITS_BEHIND="${push_behind_ahead[2]}"
+
+    # ⇠42 if behind the @{push} branch.
+    (( VCS_STATUS_PUSH_COMMITS_BEHIND )) && res+=" ${clean}⇠${VCS_STATUS_PUSH_COMMITS_BEHIND}"
+    (( VCS_STATUS_PUSH_COMMITS_AHEAD && !VCS_STATUS_PUSH_COMMITS_BEHIND )) && res+=" "
+    # ⇢42 if ahead of the @{push} branch; no leading space if also behind: ⇠42⇢42.
+    (( VCS_STATUS_PUSH_COMMITS_AHEAD  )) && res+="${clean}⇢${VCS_STATUS_PUSH_COMMITS_AHEAD}"
+
     # *42 if have stashes.
     (( VCS_STATUS_STASHES        )) && res+=" ${clean}*${VCS_STATUS_STASHES}"
     # 'merge' if the repo is in an unusual state.
