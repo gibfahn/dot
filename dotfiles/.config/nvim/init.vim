@@ -326,6 +326,18 @@ nnoremap          <A-N> 100<C-w>j|                  " Switch to the far down  wi
 nnoremap          <A-E> 100<C-w>k|                  " Switch to the far up    window,
 nnoremap          <A-I> 100<C-w>l|                  " Switch to the far right window.
 
+nnoremap          <A-q> :cnext<CR>|                 " Next item in the quickfix list.
+nnoremap          <A-Q> :cprev<CR>|                 " Prev item in the quickfix list.
+nnoremap          <A-l> :lnext<CR>|                 " Next item in the location list.
+nnoremap          <A-L> :lprev<CR>|                 " Prev item in the location list.
+nmap          <A-g> <Plug>(GitGutterNextHunk)|  " Next changed git hunk.
+nmap          <A-G> <Plug>(GitGutterPrevHunk)|  " Prev changed git hunk.
+nmap          <A-c> <Plug>(coc-diagnostic-next)| " Next changed Coc message (e.g. compile error).
+nmap          <A-C> <Plug>(coc-diagnostic-prev)| " Prev changed Coc message (e.g. compile error).
+nnoremap          <A-t> :tabnext<CR>|               " Next tab.
+nnoremap          <A-T> :tabprev<CR>|               " Prev tab.
+nnoremap          <A-d> :tabclose<CR>|              " Close current tab.
+
 nmap              <C-W>>     <C-W>><SID>ws|         " Adds mappings to make Ctrl-W -/+/</>
 nmap              <C-W><     <C-W><<SID>ws|         " ↳ repeatable, so you can press Ctrl-W
 nnoremap <script> <SID>ws>   <C-W>><SID>ws|         " ↳ and then hold > to increase width,
