@@ -152,8 +152,15 @@ else
 fi
 
 gitCloneOrUpdate zdharma/zplugin "$XDG_DATA_HOME/zsh/zplugin/bin" # Zsh plugin manager.
-# A bit slow, see https://github.com/zdharma/zplugin/issues/184.
-zsh -ic 'zplugin self-update; zplugin update --all' # Update zsh plugins.
+# Update zsh plugins, a bit slow, see https://github.com/zdharma/zplugin/issues/184.
+zsh -c '
+declare -A ZPLGM
+ZPLGM[HOME_DIR]=$XDG_DATA_HOME/zsh/zplugin
+ZPLGM[BIN_DIR]=$XDG_DATA_HOME/zsh/zplugin/bin # Where zplugin is installed.
+ZPLGM[ZCOMPDUMP_PATH]=$XDG_CACHE_HOME/zsh/.zcompdump$(hostname)
+source "$XDG_DATA_HOME/zsh/zplugin/bin/zplugin.zsh" # Source plugin manager.
+
+zplugin self-update; zplugin update --all'
 
 # Install or update pip modules.
 pip=pip
