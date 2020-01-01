@@ -124,7 +124,7 @@
   paw = "!curl -L ${1%.patch}.patch | git am -3 -S --whitespace=warn # " # Patch but don't fix whitespace.
   pr  = "!hub pull-request --base $(git remote-org up):${1:-$(git default-branch up)} -o #" # Raise PR against upstream default branch (or $1).
   pt  = "!git push -u $1 $(git head-branch) #"                   # g pt origin sets branch to track up + pushes.
-  pu  = "!git pull up $(git default-branch up) #"                # Pull Upstream: quick way to fetch and rebase on the default upstream branch.
+  pl  = pull
 
   ra  = remote add                                           # Add new remote by url.
   rb  = rebase -S                                            # Rebase and gpg sign.
