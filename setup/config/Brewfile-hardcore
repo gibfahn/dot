@@ -73,6 +73,9 @@ mas "Numbers", id: 409203825
 # mas "iMovie", id: 408981434
 # mas "Logic Pro X", id: 634148309
 
+brew "bazel"
+brew "bazelisk"
+
 brew "llvm"                              # Gives clangd (clang language server).
 
 # vi: filetype=conf
