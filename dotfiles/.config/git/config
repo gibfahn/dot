@@ -247,7 +247,7 @@
   showPatch = true         # Show the actual diffs in `git stash show`.
 [status]
   showStash = true         # Show the number of commits in the stash in `git status` output.
-  relativePaths = false    # Always show absolute paths from the repo root.
+  relativePaths = true     # Always show relative paths from the repo root.
   submoduleSummary = true  # Show submodule status in `git status`.
 
 # Try `g cl hh:nodejs/node`.
