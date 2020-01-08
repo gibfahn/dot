@@ -75,6 +75,7 @@ export CARGO_HOME="$XDG_DATA_HOME/cargo" # Cargo goes here.
 export CCACHE_CONFIGPATH="$XDG_CONFIG_HOME"/ccache.config
 export CCACHE_DIR="$XDG_CACHE_HOME"/ccache # Ccache cache.
 export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
+export FZFZ_SUBDIR_LIMIT=0 # Don't show subdirs of current dir in Ctrl-N fzf-z shortcut.
 export GNUPGHOME="$XDG_DATA_HOME"/gnupg # Gpg data.
 export GOPATH="$HOME/code/go"
 export GRADLE_USER_HOME="$XDG_DATA_HOME"/gradle # Also contains gradle.properties (symlink from XDG_CONFIG_HOME).
@@ -95,6 +96,7 @@ export RUSTUP_HOME="$XDG_DATA_HOME/rustup" # Rustup goes here.
 export SCCACHE_DIR="$XDG_CACHE_HOME/sccache" # sccache cache dir.
 export VIRTUAL_ENV_DISABLE_PROMPT=1 # Add the virtualenv prompt myself.
 export VOLTA_HOME="$XDG_CACHE_HOME/volta" # Set directory to use for volta install.
+export _Z_DATA=$XDG_CACHE_HOME/z # Z Cache Directory.
 
 # Less options: Tab is 4 spaces, search ignores case, enable colours, cat if less than one screen.
 # --status-column=>column to show lines matching current search or first unread line after moving
@@ -299,6 +301,13 @@ case $shell in
     zplugin light mafredri/zsh-async # Async zsh library, used in gib-theme.
 
     zplugin ice depth=1; zplugin light romkatv/powerlevel10k
+
+    zplugin ice wait"0b" lucid
+    zplugin light rupa/z               # Autojump command
+    zplugin ice wait"0a" lucid
+    zplugin light changyuheng/fz       # Fzf tab completion for z.
+    zplugin ice wait"0a" lucid
+    zplugin light gibfahn/fzf-z        # Use <Ctrl>-n instead of `z <Tab>`.
 
     # Don't crash shell if "$XDG_DATA_HOME"/zfunc/source/* matches nothing.
     setopt | grep -qxF nullglob || { _gib_changed=true && setopt nullglob; }
