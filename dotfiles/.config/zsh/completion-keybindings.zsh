@@ -26,12 +26,13 @@ _gib_git_h() {
     --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | xargs git show --color=always | head -200' \
   | grep -o "[a-f0-9]\{7,\}"
 }
-# Fzf git remotes.
+# Fzf git reflog history.
 _gib_git_r() {
-  git remote -v | awk '{print $1 "\t" $2}' | uniq |
-  fzf "$@" --border --tac \
-    --preview 'git log --color=always --decorate --simplify-by-decoration --oneline --graph --date=short --remotes={1} | head -200' \
-  | cut -d$'\t' -f1
+  git reflog --date=short --pretty=oneline --color=always --decorate |
+  fzf "$@" --border --ansi --no-sort --reverse --multi --header 'Press CTRL-S to toggle sort' \
+    --bind 'ctrl-s:toggle-sort' \
+    --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | xargs git show --color=always | head -200' \
+  | grep -o "[a-f0-9]\{7,\}"
 }
 # More fzf helpers.
 # shellcheck disable=2034,SC2154
@@ -111,7 +112,7 @@ bindkey -M vicmd ' ' edit-command-line # <Space> in cmd mode opens editor.
 
 # Bind git shortcuts to <c-g><c-$@> (see above functions for more info).
 bindkey -r -M viins "^G" # Remove list-expand binding so we can use <C-g> for git.
-bind-git-helper f b t r h # Bind <C-g><C-{f,b,t,r,h}> to fuzzy-find show {files,branches,tags,remotes,hashes}.
+bind-git-helper f b t r h # Bind <C-g><C-{f,b,t,r,h}> to fuzzy-find show {files,branches,tags,reflog,hashes}.
 unset -f bind-git-helper
 
 # Run before the prompt is displayed.
