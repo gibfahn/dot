@@ -284,29 +284,27 @@ case $shell in
 
     source "$XDG_DATA_HOME/zsh/zplugin/bin/zplugin.zsh" # Source plugin manager.
 
-    zplugin ice wait blockf atpull'zplugin creinstall -q .'
+    zplugin ice blockf atpull'zplugin creinstall -q .'
     zplugin light zsh-users/zsh-completions # Auto-complete for common commands.
 
     # If you get a compinit error, run:
     #   autoload -Uz compinit && compaudit | xargs chmod g-w
-    zplugin ice wait atinit"zpcompinit; zpcdreplay" atload"unset 'FAST_HIGHLIGHT[chroma-whatis]' 'FAST_HIGHLIGHT[chroma-man]'"
+    zplugin ice atinit"zpcompinit; zpcdreplay" atload"unset 'FAST_HIGHLIGHT[chroma-whatis]' 'FAST_HIGHLIGHT[chroma-man]'"
     zplugin light zdharma/fast-syntax-highlighting # Syntax highlighting.
 
     zplugin ice atclone"dircolors -b LS_COLORS > c.zsh" atpull'%atclone' pick"c.zsh" nocompile'!'
     zplugin light trapd00r/LS_COLORS # Nicer terminal colours.
 
-    zplugin ice wait atload"_zsh_autosuggest_start"
+    zplugin ice atload"_zsh_autosuggest_start"
     zplugin light zsh-users/zsh-autosuggestions # Autosuggest completion (accept with -> arrow).
 
     zplugin light mafredri/zsh-async # Async zsh library, used in gib-theme.
 
-    zplugin ice depth=1; zplugin light romkatv/powerlevel10k
+    zplugin ice depth=1
+    zplugin light romkatv/powerlevel10k
 
-    zplugin ice wait"0b" lucid
     zplugin light rupa/z               # Autojump command
-    zplugin ice wait"0a" lucid
     zplugin light changyuheng/fz       # Fzf tab completion for z.
-    zplugin ice wait"0a" lucid
     zplugin light gibfahn/fzf-z        # Use <Ctrl>-n instead of `z <Tab>`.
 
     # Don't crash shell if "$XDG_DATA_HOME"/zfunc/source/* matches nothing.
