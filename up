@@ -10,12 +10,12 @@ cd $(dirname $0)
 # TODO(gib): Need a better way to opt-in or out of different things than
 # HARDCORE and NO_SUDO options. Ideally there should be a config that remembers
 # your choices too.
-[[ "$USER" == gib ]] && export HARDCORE=1
-
-# Enable hardcore mode if you're sure.
-# Only prompt if HARDCORE is unset, not if it's set to empty string ("").
-[ -z ${HARDCORE+x} ] && read -p "HARDCORE mode (leave blank to not enable)? " HARDCORE
-export HARDCORE
+if [[ "$USER" == gib ]]; then
+  # - not :- because set to "" means explicitly disabled.
+  export HARDCORE=${HARDCORE-1}
+else
+  export HARDCORE=${HARDCORE-""}
+fi
 
 if [ "$HARDCORE" ]; then
   log_get "HARDCORE mode"
