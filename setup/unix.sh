@@ -72,33 +72,46 @@ else
 fi
 
 # Change git user.name and user.email
-if exists git && [[ $(whoami) != gib && $(id -u) != 0 ]] && {
- grep -q 'name = Gibson Fahnestock # REPLACEME' "$XDG_CONFIG_HOME/git/config" ||
- grep -q 'email = gibfahn@gmail.com # REPLACEME' "$XDG_CONFIG_HOME/git/config"
-}; then
+if exists git && [[ $(whoami) != gib && $(id -u) != 0 ]] && [[ ! -f "$XDG_CONFIG_HOME/git/my-config" ]]; then
   # Allow manual override with `GIT_NAME` and `GIT_EMAIL`.
   # shellcheck disable=SC2153
   [[ -n "$GIT_NAME" ]] && git_name="$GIT_NAME"
   # shellcheck disable=SC2153
   [[ -n "$GIT_EMAIL" ]] && git_email="$GIT_EMAIL"
-  if [[ -z "$GIT_NAME" || -z "$GIT_EMAIL" ]] && [[ -e "$HOME/.gitconfig" ]]; then
-    git_name=$(git config --global user.name)
-    git_email=$(git config --global user.email)
+
+  if [[ "$USER" == gib ]]; then
+    git_name=${git_name:-"Gibson Fahnestock"}
+    git_email=${git_email:-"gibfahn@gmail.com"}
+  fi
+
+  if [[ -e "$HOME/.gitconfig" ]]; then
+    git_name=${git_name:-"$(git config user.name)"}
+    git_email=${git_email:-"$(git config user.email)"}
     log_get "Git Config (moving ~/.gitconfig to ~/backup/.gitconfig, preserving name as '$git_name' and email
     as '$git_email'. Make sure to move any settings you want preserved across)."
     mv "$HOME/.gitconfig" "$HOME/backup/.gitconfig"
-    git config --global user.name "$git_name"
-    git config --global user.email "$git_email"
   fi
-  if [[ -z "$git_name" || "$(git config --global user.name)" == "Gibson Fahnestock" ]]; then
+
+  if [[ -z "$git_name" ]]; then
     read -rp "Git name not set, what's your full name? " git_name
-    git config --global user.name "$git_name"
   fi
-  if [[ -z "$git_email" || "$(git config --global user.email)" == "gibfahn@gmail.com" ]]; then
+  if [[ -z "$git_email" ]]; then
     read -rp "Git email not set, what's your email address? " git_email
-    git config --global user.email "$git_email"
   fi
-  log_get "Git Config (git name set to $(git config --global user.name) and email set to $(git config --global user.email))"
+
+  my_git_config="# vi filetype=gitconfig
+
+[user]
+  # Needs to match gpg signing email.
+  name = $git_name
+  email = $git_email
+"
+
+  printf "%s" "$my_git_config" > "$XDG_CONFIG_HOME/git/my-config"
+
+  log_get "Git Config (git name set to $(git config user.name) and email set to $(git config user.email))"
+else
+  log_skip "Git Config as already set to $(git config user.name) <$(git config user.email)>"
 fi
 
 # Set up rbenv for ruby version management.

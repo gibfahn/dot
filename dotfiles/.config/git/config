@@ -275,10 +275,9 @@
 [url "git@gitlab.com:gib/"]
   insteadOf = lsg:                # Lab ssh gib.
 
-[user]
-  # Needs to match gpg signing email.
-  name = Gibson Fahnestock  # REPLACEME
-  email = gibfahn@gmail.com # REPLACEME
+# Personal config for non-work repos.
+[include]
+  path = ~/.config/git/my-config
 
 # Work config for work repos.
 [includeIf "gitdir:~/wrk/**"]
