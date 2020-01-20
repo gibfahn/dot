@@ -21,30 +21,43 @@
 brew "asciinema"                         # Take screen recordings of your terminal (https://asciinema.org).
 brew "bash-completion"                   # Generally useful bash completions.
 brew "bat"                               # Nicer cat with syntax highlighting etc.
+brew "binutils"                          # GNU versions of tools for interacting with binaries (nm, strings etc).
 brew "ccache"                            # Speeds up C/C++ recompilation.
 brew "certbot"                           # LetsEncrypt.
+brew "coreutils"                         # GNU versions of utils that are out-of-date or FreeBSD on macOS:
 brew "dfu-util"                          # Used for flashing my Ergodox Infinity.
+brew "diffutils"                         # GNU versions of diff and related tools.
 brew "exercism"                          # Learn coding languages.
+brew "findutils"                         # GNU versions of find, locate, updatedb, xargs.
 brew "fswatch"                           # See which files are opened on the system (`fswatch /`).
+brew "gawk"                              # GNU versions of awk.
 brew "gdub"                              # Wrapper around ./gradlew for gradle projects (gw).
-brew "git-lfs"                           # Git Large File Storage. Use with `git lfs`.
 brew "git-delta"                         # Nicer git diff viewer.
+brew "git-lfs"                           # Git Large File Storage. Use with `git lfs`.
+brew "gnu-tar"                           # GNU version of tar.
+brew "gnu-time"                          # GNU version of time.
+brew "gnu-which"                         # GNU version of which.
+brew "gnutls"                            # Provides gnutls-cli for setting up TLS connections.
 brew "go"                                # Go progamming language.
+brew "grep"                              # GNU version of grep.
 brew "httpie"                            # Alternative to curl, `http` binary.
 brew "hub"                               # GitHub CLI tool.
 brew "hyperfine"                         # Benchmark commands (time but a benchmarking suite).
 brew "ipython"                           # Interactive python shell.
 brew "jq"                                # Makes it easy to deal with JSON on the command line.
+brew "make"                              # GNU version of make.
 brew "ninja"                             # Google meta build system (used in V8).
 brew "postgresql"                        # Solid database.
 brew "protobuf"                          # Serialization format.
 brew "pv"                                # Show data flow through bash pipes.
+brew "python2"                           # Python 2
 brew "redis"                             # In-memory key-object store.
 brew "ruby-build"                        # Helper to install ruby versions.
 brew "shellcheck"                        # Linter for bash.
 brew "tmux"                              # Terminal multiplexer.
 brew "tokei"                             # Counts lines of code in a project.
 brew "watchexec"                         # Like entr (evaluating which one is better).
+brew "wget"                              # Alternative to curl for downloading files.
 cask "adoptopenjdk8"                     # Java 8 that is still supported.
 cask "caprine"                           # Facebook Messenger native app.
 cask "docker"                            # Build and run docker images.
@@ -55,7 +68,6 @@ cask "intellij-idea-ce"                  # Java-oriented IDE (good for debugging
 cask "keycastr"                          # Shows keystrokes in corner of screen (great for casting/demos).
 cask "meld"                              # Visual file diffing tool.
 cask "slack-beta"                        # Everyone uses Slack right?
-cask "spotify"                           # Music.
 cask "stay"                              # Save and restore window positions, invaluable with multi-monitor setups.
 cask "trailer"                           # GitHub push notifications.
 cask "vimr"                              # GUI neovim.
@@ -64,7 +76,6 @@ cask "visual-studio-code"                # IDE that supports debugging Rust code
 # Mac App Store Apps (some paid). `mas list` to see what you've already installed.
 mas "Keynote", id: 409183694
 mas "Dark Reader for Safari", id: 1438243180 # Dark mode in every website.
-mas "Pages", id: 409201541
 mas "Pocket", id: 568494494
 mas "Xcode", id: 497799835               # Needed to compile llvm (among other things).
 mas "Numbers", id: 409203825
@@ -73,8 +84,8 @@ mas "Numbers", id: 409203825
 # mas "iMovie", id: 408981434
 # mas "Logic Pro X", id: 634148309
 
-brew "bazel"
-brew "bazelisk"
+brew "bazel"                             # Multi-language build tool.
+brew "bazelisk"                          # Easily use the latest version of bazel.
 
 brew "llvm"                              # Gives clangd (clang language server).
 

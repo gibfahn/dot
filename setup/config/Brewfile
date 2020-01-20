@@ -10,28 +10,12 @@ tap "homebrew/cask-versions"             # Allows installing other versions of c
 
 brew "bash"                              # macOS Bash is very old.
 brew "git"                               # Bleeding-edge git.
+brew "gnu-sed"                           # A sed that actually supports `sed -i`.
+brew "htop"                              # Terminal activity monitor.
 brew "less"                              # Fixes -RX issue.
 brew "python"                            # Python 3
-brew "python2"                           # Python 2
-brew "zsh"                               # Nicer interactive shell.
-
-# GNU versions of utils that are out-of-date or FreeBSD on macOS:
-
-brew "binutils"
-brew "coreutils"
-brew "diffutils"
-brew "findutils"
-brew "gawk"
-brew "gnu-sed"                           # A sed that actually supports `sed -i`.
-brew "gnu-tar"
-brew "gnu-time"
-brew "gnu-which"
-brew "gnutls"
-brew "grep"
-brew "htop"                              # Terminal activity monitor.
-brew "make"
 brew "tree"                              # Recursive ls.
-brew "wget"
+brew "zsh"                               # Nicer interactive shell.
 
 # Command-line helpers:
 
@@ -47,14 +31,19 @@ brew "terminal-notifier"                 # Log notifications from the terminal.
 
 # Casks (GUI Applications):
 
+# cask "rectangle"                         # Window manager that's easy to get used to.
+cask "1password"                         # Password manager.
 cask "copyq"                             # Clipboard manager with history (needs manual setup).
 cask "font-hasklig"                      # Nicer programming font option 2.
 cask "google-chrome"                     # You probably want/have Chrome.
-cask "kitty"                             # GPU Accelerated cross-platform Terminal Emulator.
-cask "sogouinput"                        # Nicer Chinese input experience.
-cask "workflowy"                         # Infinitely nested bullet point list app.
-cask "time-out"                          # Reminds you to take breaks.
 cask "karabiner-elements"                # Key remapper (see $c/karabiner/karabiner.json for my settings).
 cask "keyboard-cleaner"                  # Block all keystrokes except ⌘-q so you can wipe your keyboard.
-cask "1password"                         # Password manager.
-cask "rectangle"                         # Window manager that's easy to get used to.
+cask "kitty"                             # GPU Accelerated cross-platform Terminal Emulator.
+cask "sogouinput"                        # Nicer Chinese input experience.
+cask "spectacle"                         # Window manager that's easy to get used to.
+cask "spotify"                           # Music.
+cask "time-out"                          # Reminds you to take breaks.
+cask "workflowy"                         # Infinitely nested bullet point list app.
+
+mas "Pages", id: 409201541               # Edit docx and pages files.
+mas "Runcat", id: 1429033973             # Show CPU usage in menu bar.
