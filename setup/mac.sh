@@ -36,22 +36,95 @@ if [[ -n $HARDCORE && -d "$HOME/Library/Application Support/Code/" ]]; then
   done
 fi
 
+# Set Keyboard Shortcuts -> App Shortcuts
+# To add your own, first add them in System Preferences -> Keyboard ->
+# Shortcuts -> App Shortcuts, then find them in the output of:
+#   defaults find NSUserKeyEquivalents
+# Use the existing and the help output of `defaults` to work it out.
+#   @command, ~option, ^ctrl, $shift
+# The global domain NSGlobalDomain NSGlobalDomain is the same as -g or -globalDomain.
+# -bool YES/TRUE or FALSE/NO correspond to -int 1 or 0.
+# You can view plist files with /usr/libexec/PlistBuddy
+
+# Make user keyboard layout the default layout on login (maybe dangerous):
+#   sudo cp ~/Library/Preferences/com.apple.HIToolbox.plist /Library/Preferences/com.apple.HIToolbox.plist
+#   sudo chmod 644 /Library/Preferences/com.apple.HIToolbox.plist
+
+log_section "Setting macOS defaults."
+
+# -> Kitty:
+updateMacOSKeyboardShortcut net.kovidgoyal.kitty "Hide kitty" '~^$\\U00a7'
+# -> Mail: ⌘-backspace moves to Archive.
+updateMacOSKeyboardShortcut com.apple.mail "Archive" '@\\b'
+# -> Mail: ⌘-Enter sends the message.
+updateMacOSKeyboardShortcut com.apple.mail "Send" '@\\U21a9'
+
+# Unnatural scrolling direction (swipe down to scroll down).
+updateMacOSDefault NSGlobalDomain com.apple.swipescrolldirection -int 0
+
+# Expand save panel by default
+updateMacOSDefault NSGlobalDomain NSNavPanelExpandedStateForSaveMode -int 1
+updateMacOSDefault NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -int 1
+
+# Expand print panel by default
+updateMacOSDefault NSGlobalDomain PMPrintingExpandedStateForPrint -int 1
+updateMacOSDefault NSGlobalDomain PMPrintingExpandedStateForPrint2 -int 1
+
+# Disable the “Are you sure you want to open this application?” dialog
+updateMacOSDefault com.apple.LaunchServices LSQuarantine -int 0
+
+# Always open new things in tabs (not new windows) for document based apps.
+updateMacOSDefault NSGlobalDomain AppleWindowTabbingMode -string always
+
+# Maximise window when you double-click on the title bar.
+updateMacOSDefault NSGlobalDomain AppleActionOnDoubleClick -string Maximize
+
+# Don't show recents in dock.
+updateMacOSDefault com.apple.dock show-recents -int 0
+
+# Uncheck "Displays have separate spaces" to allow multi-screen windows.
+updateMacOSDefault com.apple.spaces spans-displays -int 1
+
+# Greys out hidden apps in the dock (so you can see which are hidden).
+updateMacOSDefault com.apple.Dock showhidden -int 1 && killall Dock
+
+# System Preferences -> Keyboard -> Shortcuts -> Full Keyboard Access
+# Full Keyboard Access: In Windows and Dialogs, press Tab to move keyboard
+# focus between:
+#   0: Text Boxes and Lists only
+#   2: All controls
+# Set it to 2 because that's much nicer (you can close confirmation prompts
+# with the keyboard, Enter to press the blue one, tab to select between them,
+# space to press the Tab-selected one. If there are underlined letters, hold
+# Option and press the letter to choose that option.
+updateMacOSDefault NSGlobalDomain AppleKeyboardUIMode -int 2
+
+# Show hidden files in the finder.
+oldFinderValue="$(defaults read com.apple.finder QuitMenuItem)"
+updateMacOSDefault com.apple.finder AppleShowAllFiles -int 1
+if [[ "$oldFinderValue" != 1 ]]; then
+  killall Finder
+  open ~
+fi
+
+# Finder: show all filename extensions
+updateMacOSDefault NSGlobalDomain AppleShowAllExtensions -int 1
+
+# Display full POSIX path as Finder window title
+updateMacOSDefault com.apple.finder _FXShowPosixPathInTitle -int 1
+
+# Use list view in all Finder windows by default
+# Four-letter codes for the other view modes: `icnv`, `clmv`, `glyv`
+updateMacOSDefault com.apple.finder FXPreferredViewStyle -string "Nlsv"
+
+# Allow text selection in any QuickLook window.
+updateMacOSDefault NSGlobalDomain QLEnableTextSelection -int 1
+
+# System Preferences > General > Click in the scrollbar to: Jump to the spot that's clicked
+updateMacOSDefault NSGlobalDomain AppleScrollerPagingBehavior -int 1
+
 if [[ -n "$HARDCORE" ]]; then # Set keyboard preferences.
-  log_section "Setting macOS defaults."
-
-  # Set Keyboard Shortcuts -> App Shortcuts
-  # To add your own, first add them in System Preferences -> Keyboard ->
-  # Shortcuts -> App Shortcuts, then find them in the output of:
-  #   defaults find NSUserKeyEquivalents
-  # Use the existing and the help output of `defaults` to work it out.
-  #   @command, ~option, ^ctrl, $shift
-  # The global domain NSGlobalDomain NSGlobalDomain is the same as -g or -globalDomain.
-  # -bool YES/TRUE or FALSE/NO correspond to -int 1 or 0.
-  # You can view plist files with /usr/libexec/PlistBuddy
-
-  # Make user keyboard layout the default layout on login (maybe dangerous):
-  #   sudo cp ~/Library/Preferences/com.apple.HIToolbox.plist /Library/Preferences/com.apple.HIToolbox.plist
-  #   sudo chmod 644 /Library/Preferences/com.apple.HIToolbox.plist
+  log_section "Setting Hardcore macOS defaults."
 
   # Create global shortcut "Merge all windows" ⌘-M
   updateMacOSKeyboardShortcut NSGlobalDomain "Merge All Windows" '@$m'
@@ -62,12 +135,6 @@ if [[ -n "$HARDCORE" ]]; then # Set keyboard preferences.
   # updateMacOSKeyboardShortcut com.jetbrains.intellij.ce "Hide IntelliJ IDEA" '@~^\\U00a7'
   # -> IntelliJ:
   updateMacOSKeyboardShortcut com.jetbrains.intellij "Hide IntelliJ IDEA" '~^$\\U00a7'
-  # -> Kitty:
-  updateMacOSKeyboardShortcut net.kovidgoyal.kitty "Hide kitty" '~^$\\U00a7'
-  # -> Mail: ⌘-backspace moves to Archive.
-  updateMacOSKeyboardShortcut com.apple.mail "Archive" '@\\b'
-  # -> Mail: ⌘-Enter sends the message.
-  updateMacOSKeyboardShortcut com.apple.mail "Send" '@\\U21a9'
 
   # Radar: Ctrl-Alt-C copies as Markdown:
   updateMacOSKeyboardShortcut com.apple.ist.Radar7 "Copy as Markdown" "~^c"
@@ -80,32 +147,11 @@ if [[ -n "$HARDCORE" ]]; then # Set keyboard preferences.
 
   # Increases trackpad sensitivity (SysPref max 3.0).
   updateMacOSDefault NSGlobalDomain com.apple.trackpad.scaling -float 5
-
-  # Increases trackpad sensitivity (SysPref max 3.0).
+  # Disable force clicking.
   updateMacOSDefault NSGlobalDomain com.apple.trackpad.forceClick -int 0
-
-  # Unnatural scrolling direction (swipe down to scroll down).
-  updateMacOSDefault NSGlobalDomain com.apple.swipescrolldirection -int 0
-
-  # Expand save panel by default
-  updateMacOSDefault NSGlobalDomain NSNavPanelExpandedStateForSaveMode -int 1
-  updateMacOSDefault NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -int 1
-
-  # Disable the “Are you sure you want to open this application?” dialog
-  updateMacOSDefault com.apple.LaunchServices LSQuarantine -int 0
-
-  # Expand print panel by default
-  updateMacOSDefault NSGlobalDomain PMPrintingExpandedStateForPrint -int 1
-  updateMacOSDefault NSGlobalDomain PMPrintingExpandedStateForPrint2 -int 1
 
   # Disables window minimizing animations.
   updateMacOSDefault NSGlobalDomain NSAutomaticWindowAnimationsEnabled -int 0
-
-  # Always open new things in tabs (not new windows) for document based apps.
-  updateMacOSDefault NSGlobalDomain AppleWindowTabbingMode -string always
-
-  # Maximise window when you double-click on the title bar.
-  updateMacOSDefault NSGlobalDomain AppleActionOnDoubleClick -string Maximize
 
   # Use Dark mode.
   updateMacOSDefault NSGlobalDomain AppleInterfaceStyle -string Dark
@@ -114,43 +160,6 @@ if [[ -n "$HARDCORE" ]]; then # Set keyboard preferences.
   updateMacOSDefault NSGlobalDomain _HIHideMenuBar -int 1
   # Auto-hide dock.
   updateMacOSDefault com.apple.dock autohide -int 1
-  # Don't show recents in dock.
-  updateMacOSDefault com.apple.dock show-recents -int 0
-
-  # Greys out hidden apps in the dock (so you can see which are hidden).
-  updateMacOSDefault com.apple.Dock showhidden -int 1 && killall Dock
-
-  # System Preferences -> Keyboard -> Shortcuts -> Full Keyboard Access
-  # Full Keyboard Access: In Windows and Dialogs, press Tab to move keyboard
-  # focus between:
-  #   0: Text Boxes and Lists only
-  #   2: All controls
-  # Set it to 2 because that's much nicer (you can close confirmation prompts
-  # with the keyboard, Enter to press the blue one, tab to select between them,
-  # space to press the Tab-selected one. If there are underlined letters, hold
-  # Option and press the letter to choose that option.
-  updateMacOSDefault NSGlobalDomain AppleKeyboardUIMode -int 2
-
-  # Show hidden files in the finder.
-  oldFinderValue="$(defaults read com.apple.finder QuitMenuItem)"
-  updateMacOSDefault com.apple.finder AppleShowAllFiles -int 1
-  if [[ "$oldFinderValue" != 1 ]]; then
-    killall Finder
-    open ~
-  fi
-
-  # Finder: show all filename extensions
-  updateMacOSDefault NSGlobalDomain AppleShowAllExtensions -int 1
-
-  # Display full POSIX path as Finder window title
-  updateMacOSDefault com.apple.finder _FXShowPosixPathInTitle -int 1
-
-  # Use list view in all Finder windows by default
-  # Four-letter codes for the other view modes: `icnv`, `clmv`, `glyv`
-  updateMacOSDefault com.apple.finder FXPreferredViewStyle -string "Nlsv"
-
-  # Allow text selection in any QuickLook window.
-  updateMacOSDefault NSGlobalDomain QLEnableTextSelection -int 1
 
   # Allow Finder to be quit (hides Desktop files).
   oldFinderValue="$(defaults read com.apple.finder QuitMenuItem)"
@@ -163,9 +172,6 @@ if [[ -n "$HARDCORE" ]]; then # Set keyboard preferences.
   # Disable the animations for opening Quick Look windows
   updateMacOSDefault NSGlobalDomain QLPanelAnimationDuration -float 0
 
-  # System Preferences > General > Click in the scrollbar to: Jump to the spot that's clicked
-  updateMacOSDefault NSGlobalDomain AppleScrollerPagingBehavior -int 1
-
   # Set sidebar icon size to medium
   updateMacOSDefault NSGlobalDomain NSTableViewDefaultSizeMode -int 2
 
@@ -175,6 +181,7 @@ if [[ -n "$HARDCORE" ]]; then # Set keyboard preferences.
   # Show all processes in Activity Monitor
   updateMacOSDefault com.apple.ActivityMonitor ShowCategory -int 0
 
+  # Order matters here for the "has it changed" comparison.
   spotlight_preferences=(
     '{"enabled" = 1;"name" = "APPLICATIONS";}'
     '{"enabled" = 1;"name" = "MENU_EXPRESSION";}'
@@ -242,8 +249,7 @@ if [[ -n "$HARDCORE" ]]; then # Set keyboard preferences.
   # Cmd-Enter sends email in Mail.
 
 else
-  log_skip "Not setting macOS defaults (HARDCORE not set)."
-  # You can still change them in System Preferences/{Trackpad,Keyboard}.
+  log_skip "Not setting Hardcore macOS defaults (HARDCORE not set)."
 fi
 
 # Setup spectacle config.
@@ -321,7 +327,7 @@ sudo softwareupdate --install --all --restart"
 
 # Swift LanguageServer.
 sourcekit_lsp_path="$XDG_DATA_HOME"/sourcekit-lsp
-[[ -n "$HARDCORE" ]] && gitCloneOrUpdate apple/sourcekit-lsp "$sourcekit_lsp_path" && {
+if [[ -n "$HARDCORE" ]] && gitCloneOrUpdate apple/sourcekit-lsp "$sourcekit_lsp_path"; then
   (cd "$XDG_DATA_HOME"/sourcekit-lsp || error "Failed to cd to the langserver directory"; swift package update && swift build -c release)
   ln -sf "$sourcekit_lsp_path"/.build/release/sourcekit-lsp "$HOME"/bin/sourcekit-lsp
-}
+fi
