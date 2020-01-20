@@ -19,6 +19,7 @@ brew "htop"                              # Terminal activity monitor.
 brew "less"                              # Fixes -RX issue.
 brew "mas"                               # Mac App Store third-party cli.
 brew "neovim"                            # New and improved vim.
+brew "node"                              # Node.js programming language.
 brew "pinentry-mac"                      # Gpg password Keychain integration.
 brew "python"                            # Python 3
 brew "ripgrep"                           # Super-fast version of grep.
