@@ -32,7 +32,6 @@ brew "findutils"                         # GNU versions of find, locate, updated
 brew "fswatch"                           # See which files are opened on the system (`fswatch /`).
 brew "gawk"                              # GNU versions of awk.
 brew "gdub"                              # Wrapper around ./gradlew for gradle projects (gw).
-brew "git-delta"                         # Nicer git diff viewer.
 brew "git-lfs"                           # Git Large File Storage. Use with `git lfs`.
 brew "gnu-tar"                           # GNU version of tar.
 brew "gnu-time"                          # GNU version of time.
