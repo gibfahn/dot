@@ -13,11 +13,6 @@ following:
 
 ### System Preferences:
 
-- `General` -> `Automatically hide and show the menu bar`
-- `Dock`
-  - `Automatically hide and show the dock`
-  - `Show recent applications in Dock`
-- `Mission Control` -> `Displays have separate spaces` -> Uncheck
 - `Touch ID` -> Add other fingerprints
 - `Software Update` -> `Automatically keep my mac up to date`
 - `Keyboard` -> `Shortcuts`:
