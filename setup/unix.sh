@@ -48,9 +48,6 @@ if [[ -n $HARDCORE && $(uname) == Linux ]]; then
   )
 fi
 
-# Initialise and update submodules (not yet mandatory).
-{ git submodule init && git submodule update; } || true
-
 # Set default shell to zsh (or $NEWSHELL if set).
 
 # $SHELL isn't updated until we logout, so check whether chsh was already run.
@@ -110,11 +107,6 @@ fi
 if [[ -n $HARDCORE ]] && gitCloneOrUpdate rbenv/rbenv "$XDG_DATA_HOME/rbenv" \
   || gitCloneOrUpdate rbenv/rbenv-default-gems "$XDG_DATA_HOME/rbenv"/plugins/rbenv-default-gems; then
   (pushd "$XDG_DATA_HOME/rbenv" && src/configure && make -C src)
-fi
-
-gitCloneOrUpdate so-fancy/diff-so-fancy "$XDG_DATA_HOME/diff-so-fancy"
-if not diff-so-fancy; then
-  ln -sf "$XDG_DATA_HOME/diff-so-fancy/diff-so-fancy" "$HOME/bin/diff-so-fancy"
 fi
 
 # Set up a default ssh config
