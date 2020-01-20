@@ -227,6 +227,26 @@
           "fn_function_keys": [],
           "simple_modifications": [],
           "manipulate_caps_lock_led": false
+        }, {
+          "ignore": false,
+          "disable_built_in_keyboard_if_exists": false,
+          "identifiers": {
+            "is_keyboard": true,
+            "product_id": 832,
+            "vendor_id": 1452,
+            "is_pointing_device": false
+          },
+          "fn_function_keys": [],
+          "simple_modifications": [
+            {
+              "from": { "key_code": "grave_accent_and_tilde" },
+              "to": { "key_code": "f17" }
+            }, {
+              "from": { "key_code": "non_us_backslash" },
+              "to": { "key_code": "grave_accent_and_tilde" }
+            }
+          ],
+          "manipulate_caps_lock_led": true
         }
       ],
       "parameters": {
@@ -873,6 +893,12 @@
         {
           "from": { "key_code": "caps_lock" },
           "to": { "key_code": "left_shift" }
+        }, {
+          "from": { "key_code": "grave_accent_and_tilde" },
+          "to": { "key_code": "f17" }
+        }, {
+          "from": { "key_code": "non_us_backslash" },
+          "to": { "key_code": "grave_accent_and_tilde" }
         }
       ],
       "complex_modifications": {
