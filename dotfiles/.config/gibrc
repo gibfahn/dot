@@ -399,10 +399,6 @@ fi
 # Set up volta (nvm Node.js version management alternative), disabled as adds to startup time.
 # [ -s "$VOLTA_HOME/load.sh" ] && time (\. "$VOLTA_HOME/load.sh")
 
-_gib_corp_certs="$HOME/.ssh/tokens/apple-corp-root-certs"
-[ -e "$_gib_corp_certs" ] && export NODE_EXTRA_CA_CERTS="$_gib_corp_certs"
-unset _gib_corp_certs
-
 # Build node with ninja.
 alias bn='export CPPFLAGS=-fdiagnostics-color && ./configure && tools/gyp_node.py -f ninja && ninja -C out/Release && ln -fs out/Release/node node'
 
