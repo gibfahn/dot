@@ -123,6 +123,11 @@ updateMacOSDefault NSGlobalDomain QLEnableTextSelection -int 1
 # System Preferences > General > Click in the scrollbar to: Jump to the spot that's clicked
 updateMacOSDefault NSGlobalDomain AppleScrollerPagingBehavior -int 1
 
+# Increases trackpad sensitivity (SysPref max 3.0).
+updateMacOSDefault NSGlobalDomain com.apple.trackpad.scaling -float 5
+# Disable force clicking.
+updateMacOSDefault NSGlobalDomain com.apple.trackpad.forceClick -int 0
+
 if [[ -n "$HARDCORE" ]]; then # Set keyboard preferences.
   log_section "Setting Hardcore macOS defaults."
 
@@ -144,11 +149,6 @@ if [[ -n "$HARDCORE" ]]; then # Set keyboard preferences.
 
   # Sets a low time before key starts repeating.
   updateMacOSDefault NSGlobalDomain InitialKeyRepeat -int 8
-
-  # Increases trackpad sensitivity (SysPref max 3.0).
-  updateMacOSDefault NSGlobalDomain com.apple.trackpad.scaling -float 5
-  # Disable force clicking.
-  updateMacOSDefault NSGlobalDomain com.apple.trackpad.forceClick -int 0
 
   # Disables window minimizing animations.
   updateMacOSDefault NSGlobalDomain NSAutomaticWindowAnimationsEnabled -int 0

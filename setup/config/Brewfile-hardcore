@@ -26,7 +26,6 @@ brew "bat"                               # Nicer cat with syntax highlighting et
 brew "binutils"                          # GNU versions of tools for interacting with binaries (nm, strings etc).
 brew "ccache"                            # Speeds up C/C++ recompilation.
 brew "certbot"                           # LetsEncrypt.
-brew "coreutils"                         # GNU versions of utils that are out-of-date or FreeBSD on macOS:
 brew "dfu-util"                          # Used for flashing my Ergodox Infinity.
 brew "diffutils"                         # GNU versions of diff and related tools.
 brew "exercism"                          # Learn coding languages.
