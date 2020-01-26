@@ -1,6 +1,8 @@
 # Things I use on my development machine. Commented lines are things I have
 # previously used but don't currently.
 
+tap "bazelbuild/tap"                      # Provides bazelisk and other bazel tools.
+
 # brew "cmake"                             # Commonly-used meta build system.
 # brew "ctags"                             # Used for autocomplete in Vim (etc).
 # brew "exa"                               # Nicer ls replacement.
@@ -83,8 +85,7 @@ mas "Numbers", id: 409203825
 # mas "iMovie", id: 408981434
 # mas "Logic Pro X", id: 634148309
 
-brew "bazel"                             # Multi-language build tool.
-brew "bazelisk"                          # Easily use the latest version of bazel.
+brew "bazelbuild/tap/bazelisk"           # Easily use the latest version of bazel.
 
 brew "llvm"                              # Gives clangd (clang language server).
 
