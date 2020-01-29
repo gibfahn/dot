@@ -44,6 +44,7 @@ cask "spectacle"                         # Window manager that's easy to get use
 cask "spotify"                           # Music.
 cask "time-out"                          # Reminds you to take breaks.
 cask "workflowy"                         # Infinitely nested bullet point list app.
+cask "steam"                             # Play games on macOS.
 
 mas "Pages", id: 409201541               # Edit docx and pages files.
 mas "Runcat", id: 1429033973             # Show CPU usage in menu bar.
