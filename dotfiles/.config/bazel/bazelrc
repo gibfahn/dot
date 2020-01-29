@@ -1,6 +1,9 @@
 # Install things to .bazel/bin not bazel-bin/
 build --symlink_prefix=.bazel/
 
+# Use a persistent disk cache.
+build --disk_cache=~/.cache/bazel/
+
 # Print command to run to reproduce a test failure.
 test --verbose_failures
 # Sends combined stdout/stderr output from failed tests only into the stdout immediately after test is completed
