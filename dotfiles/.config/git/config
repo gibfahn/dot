@@ -3,6 +3,8 @@
   # N.B. # at end of func allows parsing $1 args.
 
   # Helper functions where a full name is easier:
+  # Set up a fork the way I like it:
+  fork = "! hub fork --remote-name=fork && git remote -v && git push fork master:refs/heads/oldmaster && git change-branch && git default-branch fork && git clean-fork #"
   # Change the remote default branch to "$1" (default: "oldmaster"), for remote $2 (default: "fork").
   change-branch = "!hub api -XPATCH repos/$(git remote-org ${2:-fork})/$(git remote-repo ${2:-fork}) -f name=$(git remote-repo ${2:-fork}) -f default_branch=${1:-oldmaster} && git remote set-head --auto ${2:-fork} #"
   # Removes all branches and tags except "$1" (default: oldmaster).
