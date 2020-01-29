@@ -12,6 +12,7 @@ brew "bash"                              # macOS Bash is very old.
 brew "coreutils"                         # GNU versions of utils that are out-of-date or FreeBSD on macOS (inc dircolors).
 brew "entr"                              # Command line file watching.
 brew "fd"                                # Super-fast find replacement.
+brew "fzf"                               # Fuzzy file finder.
 brew "git"                               # Bleeding-edge git.
 brew "git-delta"                         # Nicer git diff viewer.
 brew "gnu-sed"                           # A sed that actually supports `sed -i`.
@@ -42,9 +43,10 @@ cask "kitty"                             # GPU Accelerated cross-platform Termin
 cask "sogouinput"                        # Nicer Chinese input experience.
 cask "spectacle"                         # Window manager that's easy to get used to.
 cask "spotify"                           # Music.
-cask "time-out"                          # Reminds you to take breaks.
-cask "workflowy"                         # Infinitely nested bullet point list app.
 cask "steam"                             # Play games on macOS.
+cask "time-out"                          # Reminds you to take breaks.
+cask "wechat"                            # Chinese chat client.
+cask "workflowy"                         # Infinitely nested bullet point list app.
 
 mas "Pages", id: 409201541               # Edit docx and pages files.
 mas "Runcat", id: 1429033973             # Show CPU usage in menu bar.

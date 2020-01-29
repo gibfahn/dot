@@ -20,6 +20,7 @@ tap "bazelbuild/tap"                      # Provides bazelisk and other bazel to
 # cask "vagrant"                           # Quick command-line image spin-up.
 # cask "virtualbox"                        # Manage VMs (Linux or Windows).
 # cask "vulkan-sdk"                        # Use the vulkan graphics APIs on macOS.
+brew "buildifier"                        # Bazel code formatter.
 brew "asciinema"                         # Take screen recordings of your terminal (https://asciinema.org).
 brew "bash-completion"                   # Generally useful bash completions.
 brew "bat"                               # Nicer cat with syntax highlighting etc.
