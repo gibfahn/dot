@@ -294,20 +294,22 @@ sogou_dir_old="$(ls -a /usr/local/Caskroom/sogouinput 2>/dev/null || true)"
 
 # brew install things. Edit config/Brewfile to adjust.
 brew tap Homebrew/bundle
-if brew bundle --file="$(dirname "$0")"/config/Brewfile check >/dev/null; then
+if [[ -n "$HARDCORE" ]]; then
+  brewfiles=$(ls "$XDG_CONFIG_HOME"/brew/*)
+else
+  brewfiles=$(ls "$XDG_CONFIG_HOME"/brew/* | grep -v hardcore)
+fi
+
+if brew bundle --file=<(cat $brewfiles) check >/dev/null; then
   log_skip "brew packages."
 else
   log_get "brew packages."
-  brew bundle --file="$(dirname "$0")"/config/Brewfile | grep -Evx "Using [-_/0-9a-zA-Z ]+"
+  brew bundle --file=<(cat $brewfiles) | grep -Evx "Using [-_/0-9a-zA-Z ]+"
 fi
 
-# Set up HARDCORE brew packages.
-if [[ -n "$HARDCORE" ]] && ! brew bundle --file="$(dirname "$0")"/config/Brewfile-hardcore check >/dev/null; then
-  log_get "brew HARDCORE packages."
-  brew bundle --file="$(dirname "$0")"/config/Brewfile-hardcore | grep -Evx "Using [-_/0-9a-zA-Z ]+"
-else
-  log_skip "brew HARDCORE packages."
-fi
+# Useful to see what you need to add to your Brewfiles.
+log_get "Brew packages that would be cleaned up:"
+brew bundle cleanup --file=<(cat $brewfiles)
 
 # Upgrade everything, even things that weren't in your Brewfile.
 brew upgrade

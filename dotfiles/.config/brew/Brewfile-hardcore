@@ -59,6 +59,7 @@ brew "tmux"                              # Terminal multiplexer.
 brew "tokei"                             # Counts lines of code in a project.
 brew "watchexec"                         # Like entr (evaluating which one is better).
 brew "wget"                              # Alternative to curl for downloading files.
+
 cask "adoptopenjdk8"                     # Java 8 that is still supported.
 cask "caprine"                           # Facebook Messenger native app.
 cask "docker"                            # Build and run docker images.
