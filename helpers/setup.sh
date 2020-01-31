@@ -32,15 +32,15 @@ exists() { type "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
 
 # Used when you're starting a new section.
 log_section() {
-  printf "❯❯❯ Installing: %s\n" "$@"
+  printf "❯❯❯ %s\n" "$@"
 }
 
 # Used when you're going to install something.
 log_get() {
-  printf "${CYAN}❯❯❯ Installing:${NC} %s\n" "$@"
+  printf "${CYAN}❯❯❯   Installing:${NC} %s\n" "$@"
 }
 
-# Used when you're going to install something.
+# Used when you're going to update something.
 log_update() {
   printf "${CYAN}❯❯❯   Updating:${NC} %s\n" "$1"
 }
