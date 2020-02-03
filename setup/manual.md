@@ -63,8 +63,8 @@ following:
   - Install sVim
   - Click the `sVim` icon by the address bar, then `Show sVimrc`
   - Paste gist ids, `Sync`, `Save`
-    - `sVimrc`: [22c17d0059340e2c90c3c316b746ba8b][]
-    - `sVimcss`: [3cf4e6a17c85ff67d29fea37ed31963d][]
+    - `sVimrc`: `22c17d0059340e2c90c3c316b746ba8b`
+    - `sVimcss`: `3cf4e6a17c85ff67d29fea37ed31963d`
 
 - `General`
   - `Safari opens with` -> `All windows from last session`
@@ -94,6 +94,12 @@ After installing:
 - Open Preferences
 - `NTFS for Mac Menu` -> `OFF`
 - Untick `Launch on System Startup`
+
+### Autostart
+
+Remove things that shouldn't need to auto-start.
+
+- `System Preferences` -> `Users & Groups` -> `Login Items`
 
 [Paragon for NTFS]: https://www.seagate.com/gb/en/support/software/paragon/
 [`paragon-ntfs`]: https://formulae.brew.sh/cask/paragon-ntfs
