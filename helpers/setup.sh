@@ -231,6 +231,7 @@ updateMacOSKeyboardShortcut() {
   updateMacOSDefaultDict "$1" NSUserKeyEquivalents "$2" "$3"
   if ! defaults read com.apple.universalaccess com.apple.custommenu.apps | grep -qF "$1"; then
     log_update  "macOS default shortcut $1 is not in com.apple.universalaccess com.apple.custommenu.apps, adding it."
+    log_debug "defaults write com.apple.universalaccess com.apple.custommenu.apps -array-add \"$1\""
     defaults write com.apple.universalaccess com.apple.custommenu.apps -array-add "$1" \
       || echo "Add the current Terminal app to System Preferences -> Privacy -> Full Disk Access."
   fi
@@ -261,5 +262,6 @@ updateMacOSDefault() {
     log_update  "macOS default $domain $key is unset, setting it to $val"
   fi
 
+  log_debug "defaults write \"$domain\" \"$key\" \"$val_type\" \"$val\""
   defaults write "$domain" "$key" "$val_type" "$val"
 }
