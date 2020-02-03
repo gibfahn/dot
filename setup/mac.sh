@@ -314,6 +314,9 @@ if [[ -n "$HARDCORE" ]]; then
 else
   brewfiles=$(ls "$XDG_CONFIG_HOME"/brew/* | grep -v hardcore)
 fi
+# Replace '\n' with ' ':
+brewfiles=${brewfiles//
+/ }
 
 if brew bundle --file=<(cat $brewfiles) check >/dev/null; then
   log_skip "brew packages."
@@ -323,8 +326,10 @@ else
 fi
 
 # Useful to see what you need to add to your Brewfiles.
-log_get "Brew packages that would be cleaned up:"
+log_get "Brew packages that would be cleaned up, run this to actually clean:
+  brew bundle cleanup --force --file=<(cat $brewfiles)"
 brew bundle cleanup --file=<(cat $brewfiles)
+
 
 # Upgrade everything, even things that weren't in your Brewfile.
 brew upgrade
