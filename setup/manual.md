@@ -60,7 +60,7 @@ following:
 ### Safari
 
 - Set up [sVim][] for Safari:
-  - [Install sVim][]
+  - Install sVim
   - Click the `sVim` icon by the address bar, then `Show sVimrc`
   - Paste gist ids, `Sync`, `Save`
     - `sVimrc`: [22c17d0059340e2c90c3c316b746ba8b][]
@@ -80,3 +80,21 @@ following:
 ### Kitty
 
 - Give Kitty full disk access: `System Preferences` -> `Privacy` -> `Full Disk Access`.
+
+### NTFS
+
+If you want to write to NTFS-formatted drives (i.e. most external hard drives), then you need third-party software.
+
+Seagate provides [Paragon for NTFS][], which seems to be the full version, unlike the [`paragon-ntfs`][] brew cask, which is a trial version.
+
+After installing:
+
+- click on the icon in the menu bar
+- click "Open Application"
+- Open Preferences
+- `NTFS for Mac Menu` -> `OFF`
+- Untick `Launch on System Startup`
+
+[Paragon for NTFS]: https://www.seagate.com/gb/en/support/software/paragon/
+[`paragon-ntfs`]: https://formulae.brew.sh/cask/paragon-ntfs
+[sVim]: https://github.com/flippidippi/sVim
