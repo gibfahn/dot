@@ -1,12 +1,13 @@
 # Basic things I'd install on any machine.
 
+# Brew taps
+
 tap "homebrew/cask"                      # `brew cask` for GUI apps.
 tap "homebrew/cask-fonts"                # Let's you `brew cask install` fonts.
 tap "homebrew/bundle"                    # Allows you to use Brewfiles.
 tap "homebrew/cask-versions"             # Allows installing other versions of casks.
 
-# Versions of utils that are out-of-date on macOS:
-# Defaults are in /usr/bin, brew installs to /usr/local/bin
+# Brew formulae
 
 brew "bash"                              # macOS Bash is very old.
 brew "coreutils"                         # GNU versions of utils that are out-of-date or FreeBSD on macOS (inc dircolors).
@@ -30,7 +31,7 @@ brew "terminal-notifier"                 # Log notifications from the terminal.
 brew "tree"                              # Recursive ls.
 brew "zsh"                               # Nicer interactive shell.
 
-# Casks (GUI Applications):
+# Brew casks (GUI Applications):
 
 # cask "rectangle"                         # Window manager that's easy to get used to.
 cask "1password"                         # Password manager.
@@ -47,6 +48,8 @@ cask "steam"                             # Play games on macOS.
 cask "time-out"                          # Reminds you to take breaks.
 cask "wechat"                            # Chinese chat client.
 cask "workflowy"                         # Infinitely nested bullet point list app.
+
+# Mac App Store Apps (some paid). `mas list` to see what you've already installed.
 
 mas "Pages", id: 409201541               # Edit docx and pages files.
 mas "Runcat", id: 1429033973             # Show CPU usage in menu bar.
