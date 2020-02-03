@@ -86,7 +86,12 @@ updateMacOSDefault com.apple.dock show-recents -int 0
 updateMacOSDefault com.apple.spaces spans-displays -int 1
 
 # Greys out hidden apps in the dock (so you can see which are hidden).
-updateMacOSDefault com.apple.Dock showhidden -int 1 && killall Dock
+old_showhidden_value=$(defaults read com.apple.Dock showhidden)
+updateMacOSDefault com.apple.Dock showhidden -int 1
+if [[ "$old_showhidden_value" != 1 ]]; then
+  log_debug "Applying showhidden changes with 'killall Dock' as previous value was '$old_showhidden_value' not 1"
+  killall Dock
+fi
 
 # System Preferences -> Keyboard -> Shortcuts -> Full Keyboard Access
 # Full Keyboard Access: In Windows and Dialogs, press Tab to move keyboard
@@ -100,9 +105,10 @@ updateMacOSDefault com.apple.Dock showhidden -int 1 && killall Dock
 updateMacOSDefault NSGlobalDomain AppleKeyboardUIMode -int 2
 
 # Show hidden files in the finder.
-oldFinderValue="$(defaults read com.apple.finder QuitMenuItem)"
+old_AppleShowAllFiles_value="$(defaults read com.apple.finder AppleShowAllFiles)"
 updateMacOSDefault com.apple.finder AppleShowAllFiles -int 1
-if [[ "$oldFinderValue" != 1 ]]; then
+if [[ "$old_AppleShowAllFiles_value" != 1 ]]; then
+  log_debug "Applying AppleShowAllFiles changes with 'killall Finder' as previous value was '$old_AppleShowAllFiles_value' not 1"
   killall Finder
   open ~
 fi
@@ -127,6 +133,14 @@ updateMacOSDefault NSGlobalDomain AppleScrollerPagingBehavior -int 1
 updateMacOSDefault NSGlobalDomain com.apple.trackpad.scaling -float 5
 # Disable force clicking.
 updateMacOSDefault NSGlobalDomain com.apple.trackpad.forceClick -int 0
+
+old_percent_value=$(defaults read com.apple.menuextra.battery ShowPercent)
+# Show battery percentage in menu bar.
+updateMacOSDefault com.apple.menuextra.battery ShowPercent -string YES
+if [[ "$old_percent_value" != YES ]]; then
+  log_debug "Applying ShowPercent changes with 'killall SystemUIServer' as previous value was '$old_percent_value' not YES"
+  killall SystemUIServer
+fi
 
 if [[ -n "$HARDCORE" ]]; then # Set keyboard preferences.
   log_section "Setting Hardcore macOS defaults."
@@ -162,9 +176,10 @@ if [[ -n "$HARDCORE" ]]; then # Set keyboard preferences.
   updateMacOSDefault com.apple.dock autohide -int 1
 
   # Allow Finder to be quit (hides Desktop files).
-  oldFinderValue="$(defaults read com.apple.finder QuitMenuItem)"
+  old_QuitMenuItem_value="$(defaults read com.apple.finder QuitMenuItem)"
   updateMacOSDefault com.apple.finder QuitMenuItem -int 1
-  if [[ "$oldFinderValue" != 1 ]]; then
+  if [[ "$old_QuitMenuItem_value" != 1 ]]; then
+    log_debug "Applying QuitMenuItem changes with 'killall Finder' as previous value was '$old_QuitMenuItem_value' not 1"
     killall Finder
     open ~
   fi
