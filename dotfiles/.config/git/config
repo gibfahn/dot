@@ -12,7 +12,8 @@
   # You might occasionally have to run `git remote set-head --auto up` if the upstream HEAD hasn't been synced for some reason.
   default-branch = "!git symbolic-ref --short refs/remotes/$1/HEAD | sed \"s|^$1/||\" #" # Default branch for remote. `g default-branch up` -> master
   head-branch = symbolic-ref --short HEAD # e.g. master.
-  head-remote = "!git rev-parse --abbrev-ref --symbolic-full-name @{u} | cut -d '/' -f 1" # e.g. origin.
+  up-remote = "!git rev-parse --abbrev-ref --symbolic-full-name @{u} | cut -d '/' -f 1" # e.g. origin.
+  up-branch = "!git rev-parse --abbrev-ref --symbolic-full-name @{u} | cut -d '/' -f 2-" # e.g. master.
   push-branch = "!git rev-parse --abbrev-ref --symbolic-full-name @{push}" # What would be pushed to, pushRemote/$(git head-branch) if set, else @{u}.
   # Show the status of this branch relative to @{push}.
   push-status = "! push_branch=$(git push-branch 2>/dev/null) || { echo \"No push branch set.\" && exit 0; } \
@@ -46,7 +47,7 @@
         --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset)|%(objectname:short)|%(color:green)%(committerdate:relative)%(color:reset)' \
         | column -ts '|'
   bs  = bisect start
-  btu = "!git branch -u ${1:-up}/$(git default-branch ${1:-up}) #" # g btu to up/HEAD.
+  btu = "!git branch -u ${1:-up}/${2:-$(git default-branch ${1:-up})} #" # g btu to up/HEAD.
   btp = "!git config branch.$(git head-branch).pushRemote ${1:-fork} #" # `g btp up` sets push remote for this branch to up, useful when pushing directly to 'up'.
 
   # I manually specify -S because gpgsign only works with Git 2.x. Also it
@@ -89,8 +90,8 @@
   fixup = "!  hash=$(git rev-parse "$1") \
            && git commit --fixup=$hash ${@:2} \
            && EDITOR=true git rebase -i --autostash --autosquash $hash^ #"
-  # Create/update branch from Github PR, `g fp 657 origin` or `g fp` (Defaults: $1=head-branch, $2=head-remote if $1 not set, else "up").
-  fp = "! a=${1:-$(git head-branch)} b=${2:-up}; [[ -z $@ ]] && b=$(git head-remote) \
+  # Create/update branch from Github PR, `g fp 657 origin` or `g fp` (Defaults: $1=head-branch, $2=up-remote if $1 not set, else "up").
+  fp = "! a=${1:-$(git head-branch)} b=${2:-up}; [[ -z $@ ]] && b=$(git up-remote) \
         ; [[ -z $1 ]] && git checkout --quiet @ \
         ; git fetch --force --update-head-ok $b pull/$a/head:$a \
         && git checkout --quiet $a \
@@ -125,7 +126,8 @@
   pa  = "!curl -L ${1%.patch}.patch | git am -S --whitespace=fix # "     # Patch Github PR.
   pap = "!curl -L ${1%.patch}.patch | git am -3 -S --whitespace=fix  # " # Please patch it.
   paw = "!curl -L ${1%.patch}.patch | git am -3 -S --whitespace=warn # " # Patch but don't fix whitespace.
-  pr  = "!hub pull-request --base $(git remote-org ${1:-up}):${2:-$(git default-branch up)} -o #" # Raise PR against upstream default branch (or $1).
+  ppr = "!git push && git pr #" # Push and raise PR at the same time.
+  pr  = "!hub pull-request --base $(git remote-org ${1:-$(git up-remote)}):${2:-$(git up-branch)} -o #" # Raise PR against upstream remote/branch (or $1/$2).
   pt  = "!git push -u $1 $(git head-branch) #"                   # g pt origin sets branch to track up + pushes.
   pl  = pull
 
