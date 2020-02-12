@@ -46,6 +46,7 @@ cask "spectacle"                         # Window manager that's easy to get use
 cask "spotify"                           # Music.
 cask "steam"                             # Play games on macOS.
 cask "time-out"                          # Reminds you to take breaks.
+cask "vlc"                               # Nice video player.
 cask "wechat"                            # Chinese chat client.
 cask "workflowy"                         # Infinitely nested bullet point list app.
 
