@@ -394,16 +394,11 @@
     (( VCS_STATUS_COMMITS_AHEAD && !VCS_STATUS_COMMITS_BEHIND )) && res+=" "
     (( VCS_STATUS_COMMITS_AHEAD  )) && res+="${clean}⇡${VCS_STATUS_COMMITS_AHEAD}"
 
-    # Remove when https://github.com/romkatv/powerlevel10k/issues/395 resolved.
-    local -a push_behind_ahead=(${(ps:\t:)"$(command git rev-list --left-right --count HEAD...@{push} 2>/dev/null)"})
-    local VCS_STATUS_PUSH_COMMITS_AHEAD="${push_behind_ahead[1]}"
-    local VCS_STATUS_PUSH_COMMITS_BEHIND="${push_behind_ahead[2]}"
-
-    # ⇠42 if behind the @{push} branch.
-    (( VCS_STATUS_PUSH_COMMITS_BEHIND )) && res+=" ${diverged}⇠${VCS_STATUS_PUSH_COMMITS_BEHIND}"
+    # ⇠42 if behind the push remote.
+    (( VCS_STATUS_PUSH_COMMITS_BEHIND )) && res+=" ${clean}⇠${VCS_STATUS_PUSH_COMMITS_BEHIND}"
     (( VCS_STATUS_PUSH_COMMITS_AHEAD && !VCS_STATUS_PUSH_COMMITS_BEHIND )) && res+=" "
-    # ⇢42 if ahead of the @{push} branch; no leading space if also behind: ⇠42⇢42.
-    (( VCS_STATUS_PUSH_COMMITS_AHEAD  )) && res+="${diverged}⇢${VCS_STATUS_PUSH_COMMITS_AHEAD}"
+    # ⇢42 if ahead of the push remote; no leading space if also behind: ⇠42⇢42.
+    (( VCS_STATUS_PUSH_COMMITS_AHEAD  )) && res+="${clean}⇢${VCS_STATUS_PUSH_COMMITS_AHEAD}"
 
     if [[ -n $VCS_STATUS_LOCAL_BRANCH ]]; then
       res+=" ${clean}${POWERLEVEL9K_VCS_BRANCH_ICON}"
