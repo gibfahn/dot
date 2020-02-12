@@ -36,7 +36,7 @@ brew "zsh"                               # Nicer interactive shell.
 # cask "rectangle"                         # Window manager that's easy to get used to.
 cask "1password"                         # Password manager.
 cask "copyq"                             # Clipboard manager with history (needs manual setup).
-cask "font-hasklig"                      # Nicer programming font option 2.
+cask "font-hasklig-nerd-font"            # Nice programming font Hasklig (Source Code Pro + Ligatures) + Nerd Font extensions.
 cask "google-chrome"                     # You probably want/have Chrome.
 cask "karabiner-elements"                # Key remapper (see $c/karabiner/karabiner.json for my settings).
 cask "keyboard-cleaner"                  # Block all keystrokes except ⌘-q so you can wipe your keyboard.
