@@ -2,6 +2,7 @@
 # previously used but don't currently.
 
 tap "bazelbuild/tap"                      # Provides bazelisk and other bazel tools.
+tap "github/gh"
 
 # Brew formulae
 
@@ -37,6 +38,7 @@ brew "fswatch"                           # See which files are opened on the sys
 brew "gawk"                              # GNU versions of awk.
 brew "gdub"                              # Wrapper around ./gradlew for gradle projects (gw).
 brew "git-lfs"                           # Git Large File Storage. Use with `git lfs`.
+brew "github/gh/gh"                      # New GitHub CLI (will eventually replace hub).
 brew "gnu-tar"                           # GNU version of tar.
 brew "gnu-time"                          # GNU version of time.
 brew "gnu-which"                         # GNU version of which.
