@@ -703,7 +703,7 @@ let g:coc_global_extensions = [
 
 " Should be parsed by vim-markdown plugin to render code blocks properly, doesn't seem to work.
 " Block names: https://github.com/github/linguist/blob/master/lib/linguist/languages.yml
-let g:markdown_fenced_languages = ['bash=sh', 'c', 'console=sh', 'diff', 'dockerfile', 'go', 'java',
+let g:markdown_fenced_languages = ['bash=sh', 'c', 'console=sh', 'shell=sh', 'diff', 'dockerfile', 'go', 'java',
   \ 'javascript', 'js=javascript', 'json', 'kotlin', 'python', 'rust', 'sh', 'toml', 'vim', 'yaml']
 
 " Don't use polyglot markdown so we can use vim-markdown and get highlighted blocks.
