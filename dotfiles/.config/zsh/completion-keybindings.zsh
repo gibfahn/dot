@@ -23,7 +23,7 @@ _gib_git_h() {
   git log --all --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --graph --color=always |
   fzf "$@" --border --ansi --no-sort --reverse --multi --header 'Press CTRL-S to toggle sort' \
     --bind 'ctrl-s:toggle-sort' \
-    --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | xargs git show --color=always | head -200' \
+    --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | xargs git show --color=always | delta --theme=TwoDark' \
   | grep -o "[a-f0-9]\{7,\}"
 }
 # Fzf git reflog history.
@@ -31,7 +31,7 @@ _gib_git_r() {
   git reflog --date=short --pretty=oneline --color=always --decorate |
   fzf "$@" --border --ansi --no-sort --reverse --multi --header 'Press CTRL-S to toggle sort' \
     --bind 'ctrl-s:toggle-sort' \
-    --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | xargs git show --color=always | head -200' \
+    --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | xargs git show --color=always | delta --theme=TwoDark' \
   | grep -o "[a-f0-9]\{7,\}"
 }
 # More fzf helpers.

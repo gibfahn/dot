@@ -36,7 +36,7 @@
   ba  = branch -a # Show all local and remote branches.
   bb  = bisect bad
   bd  = branch -D # Delete branch.
-  bdd = "!:; lastBranch=$(git head-branch); git checkout ${1:--}; git branch -D $lastBranch #" # Delete current branch.
+  bdd = "!:; lastBranch=$(git head-branch); git checkout - || git checkout $(git default-branch up); git branch -D $lastBranch #" # Delete current branch.
   bg  = bisect good
   # Sorted list of branches.
   # TODO(gib): Fix this to make it look nice (can also use git branch directly).
@@ -108,7 +108,7 @@
   lp = "!git log --graph --color=always --format=\"%C(auto)%h%d %s %C(black)%C(bold)<%an> %cr%C(auto)\" \"$@\" \
         | fzf --ansi -m --no-sort --reverse --tiebreak=index \
         --bind=ctrl-s:toggle-sort \
-        --preview \"(grep -o '[a-f0-9]\\{7\\}' | head -1 | xargs -I % sh -c 'git show --color=always % | /usr/bin/less -R') <<< {}\" \
+        --preview \"(grep -o '[a-f0-9]\\{7\\}' | head -1 | xargs -I % sh -c 'git show --color=always % | delta --theme=TwoDark') <<< {}\" \
         --bind \"ctrl-o:execute: (grep -o '[a-f0-9]\\{7,\\}' | head -1 | xargs -I % bash -c 'git show --color=always % | LINES=0 less -R') <<< {}\" #"
   # Escape < and > for github markdown, (useful for generating changelogs).
   lpr = "log -s --format='%h %s%n%n%b%n<br/>%n' @{upstream}..@" # Log to paste into a PR comment.
