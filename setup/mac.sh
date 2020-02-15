@@ -307,6 +307,11 @@ fi
 
 sogou_dir_old="$(ls -a /usr/local/Caskroom/sogouinput 2>/dev/null || true)"
 
+# Upgrade everything, even things that weren't in your Brewfile.
+brew update
+brew upgrade
+brew cask upgrade # You may occasionally want to run `brew cask upgrade --greedy` in case built-in updaters aren't working.
+
 # brew install things. Edit config/Brewfile to adjust.
 brew tap Homebrew/bundle
 if [[ -n "$HARDCORE" ]]; then
@@ -329,11 +334,6 @@ fi
 log_get "Brew packages that would be cleaned up, run this to actually clean:
   brew bundle cleanup --force --file=<(cat $brewfiles)"
 brew bundle cleanup --file=<(cat $brewfiles)
-
-
-# Upgrade everything, even things that weren't in your Brewfile.
-brew upgrade
-brew cask upgrade # You may occasionally want to run `brew cask upgrade --greedy` in case built-in updaters aren't working.
 
 sogou_dir_new="$(ls -a /usr/local/Caskroom/sogouinput 2>/dev/null || true)"
 # If sogouinput was updated
