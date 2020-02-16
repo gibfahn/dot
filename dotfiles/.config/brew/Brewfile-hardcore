@@ -73,6 +73,7 @@ brew "wget"                              # Alternative to curl for downloading f
 # Brew formulae from taps.
 
 brew "bazelbuild/tap/bazelisk"           # Easily use the latest version of bazel.
+brew "bazelbuild/tap/buildozer"          # Automatically apply fixes to bazel files.
 
 # Brew casks
 
