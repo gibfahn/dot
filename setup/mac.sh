@@ -307,6 +307,7 @@ fi
 
 sogou_dir_old="$(ls -a /usr/local/Caskroom/sogouinput 2>/dev/null || true)"
 
+log_update "Brew update && upgrade"
 # Upgrade everything, even things that weren't in your Brewfile.
 brew update
 brew upgrade
