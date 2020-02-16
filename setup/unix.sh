@@ -292,16 +292,6 @@ if [[ -n $HARDCORE ]]; then
   fi
 fi
 
-if [[ -n "$HARDCORE" ]]; then
-  gitCloneOrUpdate rust-analyzer/rust-analyzer "$XDG_DATA_HOME"/rust-analyzer
-  if [[ $? != 200 ]]; then
-    (
-      cd "$XDG_DATA_HOME"/rust-analyzer || { echo "Failed to cd"; exit 1; }
-      cargo install-ra --server
-    )
-  fi
-fi
-
 # Install or update any go packages we need.
 [[ -n "$HARDCORE" ]] && go get -u "${go_packages[@]}"
 
