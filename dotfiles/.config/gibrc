@@ -264,11 +264,7 @@ if exists kitty; then
 fi
 alias idea="/Applications/IntelliJ\ IDEA\ CE.app/Contents/MacOS/idea" # IntelliJ CE
 
-for _gib_bin in grep find; do
-  # shellcheck disable=SC2139 # Alias is meant to be expanded when defined.
-  exists g$_gib_bin && alias $_gib_bin="g$_gib_bin --color=auto"
-done
-unset _gib_bin
+exists ggrep && alias grep='ggrep --color=auto'
 
 # }}} Aliases
 
@@ -298,8 +294,6 @@ case $shell in
 
     zplugin ice atload"_zsh_autosuggest_start"
     zplugin light zsh-users/zsh-autosuggestions # Autosuggest completion (accept with -> arrow).
-
-    zplugin light mafredri/zsh-async # Async zsh library, used in gib-theme.
 
     zplugin ice depth=1
     zplugin light romkatv/powerlevel10k
