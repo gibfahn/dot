@@ -353,6 +353,7 @@ nnoremap          <S-Tab> :bp<CR>|                  "  ↳ Shift-Tab to switch t
 nnoremap          <C-p> <C-i>|                      " <C-o> = go to previous jump, <C-p> is go to next (normally <C-i>, but that == Tab, used above).
 vnoremap          <Leader>o :<c-u>call OpenUrl(visualmode())<CR>| " Open the selected text with the appropriate program (like netrw-gx).
 vnoremap // y/\V<C-r>=escape(@",'/\')<CR><CR>|      " Search for selected text with // (very no-magic mode, searches for exactly what you select).
+vnoremap g// y/\V<C-R>=&ic?'\c':'\C'<CR><C-r>=escape(@",'/\')<CR><CR>| " Search for selected text case-insensitively.
 
 " Adds operator-pending mappings for folds, e.g. vif and vaf like vip and vap.
 vnoremap if :<C-U>silent!normal![zjV]zk<CR>
@@ -511,7 +512,7 @@ if has('nvim')                                      " NeoVim specific settings.
     au TermOpen * setlocal wrap                     " Soft line wrapping in terminal.
   augroup end
 
-else
+else                                                " Vim-specific settings.
   set termwinscroll=100000                          " Store lots of terminal history.
   nnoremap <Leader>t :term<CR>|wincmd L|                     " Open terminal in new split.
   nnoremap <Leader>T :term ++curwin<CR>|                     " Open terminal in current split.
