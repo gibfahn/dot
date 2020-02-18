@@ -71,6 +71,7 @@ export ATOM_HOME="$XDG_DATA_HOME"/atom # Atom data goes here.
 export AWS_CONFIG_FILE="$XDG_CONFIG_HOME/aws/config"
 export AWS_SHARED_CREDENTIALS_FILE="$HOME/.ssh/tokens/aws/credentials"
 export BABEL_CACHE_PATH=${BABEL_CACHE_PATH="$XDG_CACHE_HOME/babel/cache.json"} # Set babel cache location.
+export BAT_THEME="TwoDark" # Set the default theme for bat and delta.
 export CARGO_HOME="$XDG_DATA_HOME/cargo" # Cargo goes here.
 export CCACHE_CONFIGPATH="$XDG_CONFIG_HOME"/ccache.config
 export CCACHE_DIR="$XDG_CACHE_HOME"/ccache # Ccache cache.
