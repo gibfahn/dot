@@ -27,4 +27,7 @@ a = "add"  # From cargo-edit
 ud = "update"
 ug = "upgrade"
 
+w = "watch"
+wt = "watch -x test"
+wb = "watch -x build"
 # vim: ft=toml
