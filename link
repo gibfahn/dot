@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# This script symlinks everything from $TOPATH (default: ./dotfiles/) into
-# $FROMPATH (default: $HOME). Anything that would be overwritten is copied into
-# $BACKUP (default: $FROMPATH/backup/).
+# This script symlinks everything from $FROMPATH (default: ./dotfiles/) into
+# $TOPATH (default: $HOME). Anything that would be overwritten is copied into
+# $BACKUP (default: $TOPATH/backup/).
 
 # Basically you put your dotfiles in ./dotfiles/, in the same structure they
 # were in relative to $HOME. Then if you want to edit your .bashrc (for
@@ -12,40 +12,40 @@
 . $(dirname $0)/helpers/colours.sh # Load helper script from dot/helpers.
 
 
-: ${FROMPATH:="$HOME"} # Where you keep your dotfiles, overwrite if necessary.
-: ${BACKUP:="$FROMPATH/backup"} # Place to back up old files.
+: ${TOPATH:="$HOME"} # Where to write links to, update if necessary.
+: ${BACKUP:="$TOPATH/backup"} # Place to back up old files.
 mkdir -p "$BACKUP"
 
-if [ -z "$TOPATH" ]; then
+if [ -z "$FROMPATH" ]; then
   cd "$(dirname $0)/dotfiles/"
 else
-  cd "$TOPATH"
+  cd "$FROMPATH"
 fi
-: ${TOPATH:="$PWD"}
+: ${FROMPATH:="$PWD"} # Where you keep your dotfiles.
 
-printf "❯❯❯ Updating dotfile symlinks (linking from path: $TOPATH)\n\n"
+printf "❯❯❯ Updating dotfile symlinks (linking from path: $FROMPATH)\n\n"
 
 for FILE in $(find . -type f -o -type l | sed 's|./||'); do
-  mkdir -p "$FROMPATH/$(dirname $FILE)"
-  if [ -d "$FROMPATH/$FILE" -a ! -L "$FROMPATH/$FILE" ]; then # Directory.
-    printf "${RED}DIRSKIP: $FROMPATH/$FILE is a directory!${NC}\n" # This shouldn't happen.
+  mkdir -p "$TOPATH/$(dirname $FILE)"
+  if [ -d "$TOPATH/$FILE" -a ! -L "$TOPATH/$FILE" ]; then # Directory.
+    printf "${RED}DIRSKIP: $TOPATH/$FILE is a directory!${NC}\n" # This shouldn't happen.
     continue
-  elif [ -L "$FROMPATH/$FILE" ]; then # Symlink.
-    if [ "$(ls -l $FROMPATH/$FILE | awk '{print $NF}')" = "$TOPATH/$FILE" ]; then
-      printf "${BBLACK}SKIP: $FROMPATH/$FILE already points to $TOPATH/$FILE.${NC}\n"
+  elif [ -L "$TOPATH/$FILE" ]; then # Symlink.
+    if [ "$(ls -l $TOPATH/$FILE | awk '{print $NF}')" = "$FROMPATH/$FILE" ]; then
+      printf "${BBLACK}SKIP: $TOPATH/$FILE already points to $FROMPATH/$FILE.${NC}\n"
       continue
     fi
-    printf "CHANGE: $FROMPATH/$FILE $(ls -l $FROMPATH/$FILE | awk '{print $NF}') -> $TOPATH/$FILE\n"
+    printf "CHANGE: $TOPATH/$FILE $(ls -l $TOPATH/$FILE | awk '{print $NF}') -> $FROMPATH/$FILE\n"
     mkdir -p "$BACKUP/$(dirname $FILE)"
-    rm "$FROMPATH/$FILE" "$BACKUP/$FILE"
-  elif [ -e "$FROMPATH/$FILE" ]; then # File.
-    printf "MOVE: $FROMPATH/$FILE exists, moving to $BACKUP/$FILE\n"
+    rm "$TOPATH/$FILE" "$BACKUP/$FILE"
+  elif [ -e "$TOPATH/$FILE" ]; then # File.
+    printf "MOVE: $TOPATH/$FILE exists, moving to $BACKUP/$FILE\n"
     mkdir -p "$BACKUP/$(dirname $FILE)"
-    mv "$FROMPATH/$FILE" "$BACKUP/$FILE"
+    mv "$TOPATH/$FILE" "$BACKUP/$FILE"
   else # Nothing there.
-    printf "LINK: $FROMPATH/$FILE -> $TOPATH/$FILE\n"
+    printf "LINK: $TOPATH/$FILE -> $FROMPATH/$FILE\n"
   fi
-  ln -s "$TOPATH/$FILE" "$FROMPATH/$FILE"
+  ln -s "$FROMPATH/$FILE" "$TOPATH/$FILE"
 done
 
 [ "$(ls -A $BACKUP)" ] || rm -r "$BACKUP" # Clean up backup folder if empty
