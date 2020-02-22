@@ -183,7 +183,7 @@ addError() {
 
 # For usage see updateMacOSKeyboardShortcut
 updateMacOSDefaultDict() {
-  local domain subdomain key val val2 currentVal;
+  local domain subdomain key val val2 current_val;
   domain="$1"; shift
   subdomain="$1"; shift
   key="$1"; shift
@@ -197,18 +197,18 @@ updateMacOSDefaultDict() {
   fi
 
   # Get the current value of the dict[key] (empty if unset).
-  currentVal="$(defaults read "$domain" "$subdomain"                 \
+  current_val="$(defaults read "$domain" "$subdomain"                 \
                 | grep -F "$key"                                     \
                 | sed -E "s/ *\"?$key\"? *= *\"?([^\"]*)\"?;/\1/" \
               )"
 
-  if [[ "$currentVal" == "$val" || "$currentVal" == "$val2" ]]; then
-    log_skip "macOS default shortcut $domain $key is already set to '$currentVal'"
+  if [[ "$current_val" == "$val" || "$current_val" == "$val2" ]]; then
+    log_skip "macOS default shortcut $domain $key is already set to '$current_val'"
     return 0
   fi
 
-  if [[ -n "$currentVal" ]]; then
-    log_update  "macOS default shortcut $domain $key is currently set to '$currentVal', changing to '$val'"
+  if [[ -n "$current_val" ]]; then
+    log_update  "macOS default shortcut $domain $key is currently set to '$current_val', changing to '$val'"
   else
     log_update  "macOS default shortcut $domain $key is unset, setting it to '$val'"
   fi
@@ -243,21 +243,33 @@ updateMacOSKeyboardShortcut() {
 # Then you should set with:
 #   updateMacOSDefault foo bar -int 1
 updateMacOSDefault() {
-  local domain key val_type val currentVal;
+  local domain key val_type val; # Args.
+  local current_val expected_val expected_val_type;
   domain="$1"; shift
   key="$1"; shift
   val_type="$1"; shift
   val="$1"; shift
-  [[ "$#" != 0 ]] && printf "Wrong number of args" && return 1
-  currentVal="$(defaults read "$domain" "$key")"
 
-  if [[ "$currentVal" == "$val" ]]; then
+  [[ "$#" != 0 ]] && printf "Wrong number of args" && return 1
+  current_val="$(defaults read "$domain" "$key")"
+
+  # If we write as -bool it will be read as -int.
+  if [[ "$val_type" == -bool ]]; then
+    case "$val" in
+      TRUE|YES) expected_val=1 ;;
+      FALSE|NO) expected_val=0 ;;
+    esac
+  else
+    expected_val=$val
+  fi
+
+  if [[ "$current_val" == "$expected_val" ]]; then
     log_skip "macOS default $domain $key is already set to $val"
     return 0
   fi
 
-  if [[ -n "$currentVal" ]]; then
-    log_update  "macOS default $domain $key is currently set to $currentVal, changing to $val"
+  if [[ -n "$current_val" ]]; then
+    log_update  "macOS default $domain $key is currently set to $current_val, changing to $val"
   else
     log_update  "macOS default $domain $key is unset, setting it to $val"
   fi

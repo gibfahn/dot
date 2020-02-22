@@ -60,7 +60,7 @@ updateMacOSKeyboardShortcut com.apple.mail "Archive" '@\\b'
 updateMacOSKeyboardShortcut com.apple.mail "Send" '@\\U21a9'
 
 # Unnatural scrolling direction (swipe down to scroll down).
-updateMacOSDefault NSGlobalDomain com.apple.swipescrolldirection -int 0
+updateMacOSDefault NSGlobalDomain com.apple.swipescrolldirection -bool NO
 
 # Expand save panel by default
 updateMacOSDefault NSGlobalDomain NSNavPanelExpandedStateForSaveMode -int 1
