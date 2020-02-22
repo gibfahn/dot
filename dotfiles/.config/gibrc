@@ -388,7 +388,7 @@ if [[ $shell == bash || $shell == zsh ]] && exists fzf && exists fd; then
   export FZF_ALT_C_COMMAND='fd --type d --hidden --no-ignore --follow --exclude .git'
   # Ctrl-a -> select/deselect all, Alt-j -> sneak to line, Alt-k -> sneak to line + enter, Ctrl-p is open/close preview window.
   export FZF_DEFAULT_OPTS="--preview-window=right:50% --preview '[[ -d {} ]] && tree -aClF {} || { [[ -e {} ]] && $XDG_DATA_HOME/nvim/plugged/fzf.vim/bin/preview.sh {} } || printf {}' \
-  -m --bind='ctrl-o:execute(\$VISUAL {} </dev/tty >/dev/tty),ctrl-a:toggle-all,alt-j:jump,alt-k:jump-accept,ctrl-p:toggle-preview'"
+  -m --bind='ctrl-o:execute(\$VISUAL {} </dev/tty >/dev/tty),ctrl-a:toggle-all,ctrl-s:toggle-sort,ctrl-w:toggle-preview-wrap,alt-j:jump,alt-k:jump-accept,ctrl-p:toggle-preview'"
 fi
 
 # Set up volta (nvm Node.js version management alternative), disabled as adds to startup time.
