@@ -79,7 +79,7 @@
   di = "!git diff --color=always --stat --format=\"\" \"${@:-@}\" \
     | fzf --ansi -m --no-sort --reverse --tiebreak=index \
     --preview \"git diff --color=always ${@:-@} -- \\$(sed -E -e 's/^\\s*([^\\|]*)\\s*\\|.*/\\1/' -e 's/(.*)\\{(.*) => (.*)\\}(.*)/\\1\\2\\4 \\1\\3\\4/' <<< {})\" \
-    --bind \"ctrl-o:execute: git diff --color=always ${@:-@} \\$(awk '{print \\$1}' <<< {}) | less -+F\" \
+    --bind \"ctrl-o:execute: git diff --color=always ${@:-@} \\$(sed -E -e 's/^\\s*([^\\|]*)\\s*\\|.*/\\1/' -e 's/(.*)\\{(.*) => (.*)\\}(.*)/\\1\\2\\4 \\1\\3\\4/' <<< {}) | less -+F\" \
     | awk '{print $1}' #"
   dn  = diff HEAD --name-only                          # diff of staged and unstaged file names.
   dp  = diff @{push}                                   # diff between working tree and upstream branch.
@@ -116,7 +116,7 @@
   li = "!git log --graph --color=always --format=\"%C(auto)%h%d %s %C(black)%C(bold)<%an> %cr%C(auto)\" \"$@\" \
     | fzf --ansi -m --no-sort --reverse --tiebreak=index \
     --preview \"git show --color=always \\$(grep -oE '[a-f0-9]{7,}' <<< {} | head -1)\" \
-    --bind \"ctrl-o:execute: git show --color=always \\$(grep -oE '[a-f0-9]{7,}' <<< {} | head -1) <<< {} | less -+F\" \
+    --bind \"ctrl-o:execute: git shi \\$(grep -oE '[a-f0-9]{7,}' <<< {} | head -1) | less -+F\" \
     | grep -oE '[a-f0-9]{7,}' #"
   # Escape < and > for github markdown, (useful for generating changelogs).
   lpr = "log -s --format='%h %s%n%n%b%n<br/>%n' @{upstream}..@" # Log to paste into a PR comment.
@@ -167,7 +167,7 @@
   shi = "!git show --color=always --stat=1000 --format=\"\" \"${@:-@}\" \
     | fzf --ansi -m --no-sort --reverse --tiebreak=index \
     --preview \"git show --color=always ${@:-@} -- \\$(sed -E -e 's/^\\s*([^\\|]*)\\s*\\|.*/\\1/' -e 's/(.*)\\{(.*) => (.*)\\}(.*)/\\1\\2\\4 \\1\\3\\4/' <<< {})\" \
-    --bind \"ctrl-o:execute: git show --color=always ${@:-@} -- \\$(awk '{print \\$1}' <<< {}) | less -+F\" \
+    --bind \"ctrl-o:execute: git show --color=always ${@:-@} -- \\$(sed -E -e 's/^\\s*([^\\|]*)\\s*\\|.*/\\1/' -e 's/(.*)\\{(.*) => (.*)\\}(.*)/\\1\\2\\4 \\1\\3\\4/' <<< {}) | less -+F\" \
     | awk '{print $1}' #"
   st  = stash
   stp = stash pop
