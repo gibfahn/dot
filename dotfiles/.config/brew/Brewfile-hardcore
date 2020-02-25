@@ -60,7 +60,6 @@ brew "postgresql"                        # Solid database.
 brew "protobuf"                          # Serialization format.
 brew "pstree"                            # Hierarchical tree of processes, `pstree -g 3`.
 brew "pv"                                # Show data flow through bash pipes.
-brew "python2"                           # Python 2
 brew "redis"                             # In-memory key-object store.
 brew "ruby-build"                        # Helper to install ruby versions.
 brew "shellcheck"                        # Linter for bash.
