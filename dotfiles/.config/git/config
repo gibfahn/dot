@@ -9,8 +9,7 @@
   change-branch = "!hub api -XPATCH repos/$(git remote-org ${2:-fork})/$(git remote-repo ${2:-fork}) -f name=$(git remote-repo ${2:-fork}) -f default_branch=${1:-oldmaster} && git remote set-head --auto ${2:-fork} #"
   # Removes all branches and tags except "$1" (default: oldmaster).
   clean-fork = "!git ls-remote --heads --tags fork | awk '!/\\^\\{\\}/ && !/refs\\/heads\\/'\"${1:-oldmaster}\"'/ {print $NF}' | xargs -n ${2:-10} git push --delete fork && git remote prune fork #"
-  # You might occasionally have to run `git remote set-head --auto up` if the upstream HEAD hasn't been synced for some reason.
-  default-branch = "!git symbolic-ref --short refs/remotes/$1/HEAD | sed \"s|^$1/||\" #" # Default branch for remote. `g default-branch up` -> master
+  default-branch = "!(git symbolic-ref --short refs/remotes/$1/HEAD || { git remote set-head --auto $1 && git symbolic-ref --short refs/remotes/$1/HEAD; }) | sed \"s|^$1/||\" #" # Default branch for remote. `g default-branch up` -> master
   # Show diff of a binary plist file $1 between current working tree and $2 (defaults to HEAD).
   diff-plist = "!bash -c \"diff <(git show ${2:-HEAD}:$1 | plutil -p -) <(plutil -p $1)\" #"
   head-branch = symbolic-ref --short HEAD # e.g. master.
