@@ -108,7 +108,7 @@ set mouse=a                                         " Mouse in all modes (mac: F
 set nojoinspaces                                    " One space (not two) after punctuation..
 set noshowmode                                      " Don't show when in insert mode (set in lightline).
 set notildeop                                       " Keep tilde (~) as it's default. If you want the operator version use g~.
-set number                                          " Turn on line numbers.
+set nonumber                                        " Turn off line numbers.
 set ruler                                           " Always show cursor position.
 set shiftwidth=2 tabstop=2 softtabstop=2            " Set tab width to 2.
 set showcmd                                         " Display incomplete commands.
