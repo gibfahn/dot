@@ -12,6 +12,7 @@ tap "github/gh"
 # brew "groovy"                            # Helpful for testing Jenkins scripts.
 # brew "kakoune"                           # Nicer but WIP alternative to neovim.
 # brew "kubernetes-helm"                   # Package manager for Docker.
+# brew "tmux"                              # Terminal multiplexer.
 # brew "xsv"                               # csv manipulator.
 # cask "balenaetcher"                      # Flash disk images (e.g. Linux bootable USB sticks).
 # cask "disk-inventory-x"                  # Graphical view of what's taking up disk space.
@@ -22,7 +23,6 @@ tap "github/gh"
 # cask "vagrant"                           # Quick command-line image spin-up.
 # cask "virtualbox"                        # Manage VMs (Linux or Windows).
 # cask "vulkan-sdk"                        # Use the vulkan graphics APIs on macOS.
-brew "asciinema"                         # Take screen recordings of your terminal (https://asciinema.org).
 brew "bash-completion"                   # Generally useful bash completions.
 brew "bat"                               # Nicer cat with syntax highlighting etc.
 brew "binutils"                          # GNU versions of tools for interacting with binaries (nm, strings etc).
@@ -63,7 +63,6 @@ brew "pv"                                # Show data flow through bash pipes.
 brew "redis"                             # In-memory key-object store.
 brew "ruby-build"                        # Helper to install ruby versions.
 brew "shellcheck"                        # Linter for bash.
-brew "tmux"                              # Terminal multiplexer.
 brew "tokei"                             # Counts lines of code in a project.
 brew "watch"                             # Rerun a command every n seconds.
 brew "watchexec"                         # Like entr (evaluating which one is better).
