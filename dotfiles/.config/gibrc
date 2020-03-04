@@ -309,6 +309,7 @@ case $shell in
       "$XDG_DATA_HOME"/zfunc/source/* # Put completion files that need to be sourced here.
       "$ZDOTDIR"/*.zsh
       "$XDG_DATA_HOME"/fzf/shell/key-bindings.zsh
+      ~/Library/Preferences/org.dystroy.broot/launcher/bash/br # Broot launcher.
     )
     # Unset nullglob if we set it.
     [[ -n $_gib_changed ]] && { setopt nonullglob; unset _gib_changed; }
