@@ -22,18 +22,14 @@ default_flags = "gh"
 ###############################################################
 # Verbs and shortcuts
 
-# If $EDITOR isn't set on your computer, you should either set it using
-#  something similar to
-#   export EDITOR=/usr/bin/nvim
-#  or just replace it with your editor of choice in the 'execution'
-#  pattern.
-# Example:
-#  execution = "/usr/bin/nvim {file}"
-#
+[[verbs]]
+key = "ctrl-o"
+execution = ":open_stay"
+leave_broot = false
+
 [[verbs]]
 invocation = "edit"
-key = "ctrl-o"
-shortcut = "e"
+key = "enter"
 execution = "$EDITOR {file}"
 leave_broot = false
 
