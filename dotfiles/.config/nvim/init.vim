@@ -259,12 +259,14 @@ nnoremap <Leader>gq :set fo-=t<CR>:set fo?<CR>| " Turn off line wrapping (auto-i
 nnoremap <Leader>gQ :set fo+=t<CR>:set fo?<CR>| " ↳    on
 nnoremap <Leader>gv :e $MYVIMRC<CR>|  " <Space>gv opens vimrc in the editor (autoreloaded on save).
 nnoremap <Leader>gw :setlocal wrap!<CR>| " <Space>gw toggles the soft-wrapping of text (whether text runs off the screen).
+nnoremap <Leader>gx :grep -F 'XXX(gib)'<CR>" <Space>gx searches for XXX comments.
+nnoremap <Leader>i :vsp<CR><C-w>h:bp<CR>|  " Open vertical split.
 nnoremap <Leader>Id :r !date +\%Y-\%m-\%d<CR>| " Insert readable    date on new line.
 nnoremap <Leader>ID :r !date +\%d-\%b-\%y<CR>| " ↳      `:sort`able date on new line.
 nnoremap <Leader>It ITODO(gib): <ESC>:Commentary<CR>$| " Insert a TODO, (Write todo, then `<Space>it`).
+nnoremap <Leader>Ix IXXX(gib): <ESC>:Commentary<CR>$| " Insert an XXX, (Write todo, then `<Space>it`).
 nnoremap <Leader>m :!mkdir -p "%:p:h"<CR>
 nnoremap <Leader>n :sp<CR><C-w>k:bp<CR>|   " Open horizontal split,
-nnoremap <Leader>i :vsp<CR><C-w>h:bp<CR>|  " Open vertical split.
 nnoremap <Leader>o :set operatorfunc=OpenUrl<CR>g@| " Open the selected text with the appropriate program (like netrw-gx).
 nnoremap <Leader>p "+p|                    "  Paste from clipboard after cursor.
 nnoremap <Leader>P "+P|                    "                    ↳  before cursor.
