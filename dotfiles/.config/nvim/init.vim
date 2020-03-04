@@ -55,6 +55,7 @@ try
   Plug 'kana/vim-textobj-user'                      " Allows you to create custom text objects (used in vim-textobj-line).
   Plug 'neoclide/coc.nvim', {'branch': 'release'}   " Language Server with VSCode Extensions.
   Plug 'pechorin/any-jump.nvim'                     " Go to definition that doesn't require a language server.
+  Plug 'puremourning/vimspector'                    " Multi-language debugger using the VSCode Debug Adapter Protocol.
   Plug 'raghur/vim-ghost', {'do': ':GhostInstall'}  " Edit browser text areas in Neovim (:h ghost).
   Plug 'rust-lang/rust.vim'                         " Rust language bindings.
   Plug 'simnalamburt/vim-mundo'                     " Graphical undo tree (updated fork of Gundo).
