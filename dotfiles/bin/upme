@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 exists() { type "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
 
 # Upgrade brew packages and casks.

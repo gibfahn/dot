@@ -1,4 +1,5 @@
 #!/bin/bash -x
+
 mkdir ~/tmp || true
 cd ~/tmp || { echo "Failed to cd"; exit 1; }
 sudo apt install -y dmenu

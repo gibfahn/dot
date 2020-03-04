@@ -1,6 +1,8 @@
 #!/bin/bash
 # shellcheck shell=bash disable=SC2016
 
+set -e
+
 # Update this repo to the latest upstream version, preserving your changes.
 
 cd "$(dirname "$0")" || { echo "Failed to cd"; exit 1; }

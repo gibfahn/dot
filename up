@@ -3,7 +3,9 @@
 # Runs the setup to "install" my dotfiles on your machine. Runs scripts in
 # config/ and then runs ./link.
 
-cd $(dirname $0)
+set -e
+
+cd "$(dirname "$0")"
 
 . ./helpers/setup.sh # Load helper script from dot/helpers.
 

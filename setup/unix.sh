@@ -3,6 +3,8 @@
 
 # Installs things that I use on all Unix systems (e.g. macOS and Linux).
 
+set -e
+
 . "$(dirname "$0")"/../helpers/setup.sh # Load helper script from dot/helpers.
 
 npm_modules=(
@@ -117,8 +119,8 @@ fi
 # Set up rbenv for ruby version management.
 
 # Only run make if there were changes.
-if [[ -n $HARDCORE ]] && gitCloneOrUpdate rbenv/rbenv "$XDG_DATA_HOME/rbenv" \
-  || gitCloneOrUpdate rbenv/rbenv-default-gems "$XDG_DATA_HOME/rbenv"/plugins/rbenv-default-gems; then
+if [[ -n $HARDCORE ]] && [[ -n "$(gitCloneOrUpdate rbenv/rbenv "$XDG_DATA_HOME/rbenv")" ]] \
+  || [[ -n "$(gitCloneOrUpdate rbenv/rbenv-default-gems "$XDG_DATA_HOME/rbenv"/plugins/rbenv-default-gems)" ]]; then
   (pushd "$XDG_DATA_HOME/rbenv" && src/configure && make -C src)
 fi
 
@@ -252,15 +254,12 @@ if [[ -n "$HARDCORE" ]]; then
   done
 fi
 
-if [[ -n "$HARDCORE" ]]; then
-  gitCloneOrUpdate fwcd/KotlinLanguageServer "$XDG_DATA_HOME/KotlinLanguageServer"
-  if [[ $? != 200 ]]; then
+if [[ -n "$HARDCORE" && -n "$(gitCloneOrUpdate fwcd/KotlinLanguageServer "$XDG_DATA_HOME/KotlinLanguageServer")" ]]; then
     (
       cd "$XDG_DATA_HOME/KotlinLanguageServer" || { echo "Failed to cd"; exit 1; }
       ./gradlew installDist # If tests passed we could use `./gradlew build`
       ln -sf "$XDG_DATA_HOME/KotlinLanguageServer/server/build/install/server/bin/kotlin-language-server" "$HOME/bin/kotlin-language-server"
     )
-  fi
 fi
 
 if [[ -n $HARDCORE ]]; then
@@ -307,7 +306,9 @@ exists rustup && {
 }
 exists rbenv && ln -sf "$XDG_DATA_HOME/rbenv/completions/rbenv.zsh" "$XDG_DATA_HOME/zfunc/source/_rbenv"
 ln -sf "$XDG_DATA_HOME"/fzf/shell/completion.zsh "$XDG_DATA_HOME/zfunc/source/_fzf"
-exists npm && npm completion --loglevel=error > "$XDG_DATA_HOME/zfunc/source/_npm"
+if exists npm; then
+  npm completion --loglevel=error > "$XDG_DATA_HOME/zfunc/source/_npm"
+fi
 
 # TODO(gib): Does this actually work?
 # Run the source

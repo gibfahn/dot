@@ -4,6 +4,8 @@
 
 # Things I like to have on Ubuntu.
 
+set -e
+
 # TODO(gib): Get newer version of less (at least version 520) to fix the -RF bug.
 
 . "$(dirname "$0")/../helpers/setup.sh" # Load helper script from dot/helpers.

@@ -3,6 +3,8 @@
 # Updates everything on your system, starting with the dotfiles themselves. If
 # you add your own things that need updating, add to this script.
 
+set -e
+
 # Get path to dotfiles.
 dotDir="$(cd "$(dirname "$(readlink $0)")"/../..; pwd)"
 
@@ -11,8 +13,7 @@ dotDir="$(cd "$(dirname "$(readlink $0)")"/../..; pwd)"
 # Update dotfiles repo to the latest upstream version, preserving your changes.
 # TODO(gib): # Should really prompt you to go update, not just bail, definitely shouldn't just continue.
 
-gitUpdate "$dotDir"
-if [[ "$?" != 0 && "$?" != 200 ]]; then
+if ! gitUpdate "$dotDir"; then
   printf "${RED}ERROR:${NC} Update failed, go to your dot repo and manually run these commands to rebase and fix conflicts:
     git rebase
     git mc # Runs my alias to fix merge conflicts.

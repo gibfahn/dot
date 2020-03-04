@@ -3,6 +3,8 @@
 
 # Things I like to have on a Mac.
 
+set -e
+
 . "$(dirname "$0")/../helpers/setup.sh" # Load helper script from dot/helpers.
 
 if ! grep -q gib ~/Library/Preferences/com.apple.Terminal.plist; then
@@ -226,7 +228,7 @@ if [[ -n "$HARDCORE" ]]; then # Set keyboard preferences.
   trimmed_expected_spotlight_preferences=$(printf "(${spotlight_preferences[*]})" | tr -d ' ' | tr -d '"')
   log_debug "Existing spotlight preferences: $existing_spotlight_preferences"
   log_debug "Expected spotlight preferences: $trimmed_expected_spotlight_preferences"
-  if  [[ $existing_spotlight_preferences == $trimmed_expected_spotlight_preferences ]]; then
+  if  [[ $existing_spotlight_preferences == "$trimmed_expected_spotlight_preferences" ]]; then
     log_skip "macOS default Spotlight Preferences"
   else
     log_get "macOS default Spotlight Preferences"
@@ -350,7 +352,7 @@ sudo softwareupdate --install --all --restart"
 
 # Swift LanguageServer.
 sourcekit_lsp_path="$XDG_DATA_HOME"/sourcekit-lsp
-if [[ -n "$HARDCORE" ]] && gitCloneOrUpdate apple/sourcekit-lsp "$sourcekit_lsp_path"; then
+if [[ -n "$HARDCORE" ]] && [[ -n "$(gitCloneOrUpdate apple/sourcekit-lsp "$sourcekit_lsp_path")" ]]; then
   (cd "$XDG_DATA_HOME"/sourcekit-lsp || error "Failed to cd to the langserver directory"; swift package update && swift build -c release)
   ln -sf "$sourcekit_lsp_path"/.build/release/sourcekit-lsp "$HOME"/bin/sourcekit-lsp
 fi

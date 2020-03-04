@@ -4,6 +4,8 @@
 
 # Things I like to have on Alpine.
 
+set -e
+
 . "$(dirname "$0")"/../helpers/setup.sh # Load helper script from dot/helpers.
 
 hasSudo || exit

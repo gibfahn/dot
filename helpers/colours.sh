@@ -14,6 +14,8 @@
 # There are also a bajillion more combos (e.g. BGREDFGBLUE) with different
 # FG/BG colour combos, but I haven't needed these yet.
 
+set -e
+
 # Reset colour:
 NC='\033[0m' # No Colour.
 
