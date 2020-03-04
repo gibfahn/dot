@@ -246,43 +246,94 @@ updateMacOSKeyboardShortcut() {
   fi
 }
 
+# Read a macOS default with the correct type.
+# Errors:
+#   1: Value not set
+#   2: type mismatch
+#   3: defaults returned an unexpected type.
+#   3: user provided an unexpected type.
+#   4: defaults returned an unexpected value.
+# Examples:
+#  readMacOSDefault NSGlobalDomain com.apple.swipescrolldirection bool
+readMacOSDefault() {
+  local domain key expected_type # args to function.
+  local parsed_type actual_type
+
+  domain="$1"; shift
+  key="$1"; shift
+  expected_type="$1"; shift
+  [[ "$#" != 0 ]] && printf "Wrong number of args" && return 1
+
+  parsed_type=$(defaults read-type "$domain" "$key")
+  parsed_value=$(defaults read "$domain" "$key")
+
+  if grep -q "Type is " <<<"$parsed_type"; then
+    parsed_type=$(sed 's/^Type is //' <<<"$parsed_type")
+  else
+    return 1
+  fi
+
+  case $parsed_type in
+    boolean) actual_type=bool ;;
+    integer) actual_type=int ;;
+    dictionary) actual_type=dict ;;
+    float|string|array) actual_type=$parsed_type ;;
+    *) log_error "Unexpected type $parsed_type"; return 3 ;;
+  esac
+
+  case $expected_type in
+    boolean) expected_type=bool ;;
+    integer) expected_type=int ;;
+    dictionary) expected_type=dict ;;
+    float|string|array|bool|int|dict) ;;
+    *) log_error "Unexpected expected_type $expected_type"; return 4 ;;
+  esac
+
+  if [[ $expected_type != "$actual_type" ]]; then
+    log_error "Expected type for $domain $key to be $expected_type with but was $actual_type with value $parsed_value."
+    return 2
+  fi
+
+  if [[ $expected_type == bool ]]; then
+    case $parsed_value in
+      1) echo "TRUE" ;;
+      0) echo "FALSE" ;;
+      *) log_error "Unexpected parsed value $parsed_value"; return 5 ;;
+    esac
+  else
+    echo "$parsed_value"
+  fi
+}
+
 # If you get:
 #   defaults read foo bar -> 1
 #   defaults read-type foo bar -> Type is integer
 # Then you should set with:
-#   updateMacOSDefault foo bar -int 1
+#   updateMacOSDefault foo bar int 1
+# Prints nothing to stdout if there were no changes.
 updateMacOSDefault() {
-  local domain key val_type val; # Args.
-  local current_val expected_val expected_val_type;
+  local domain key val_type val # Args.
+  local current_val
   domain="$1"; shift
   key="$1"; shift
   val_type="$1"; shift
   val="$1"; shift
 
   [[ "$#" != 0 ]] && printf "Wrong number of args" && return 1
-  current_val="$(defaults read "$domain" "$key")"
+  current_val=$(readMacOSDefault "$domain" "$key" "$val_type") || return "$?"
 
-  # If we write as -bool it will be read as -int.
-  if [[ "$val_type" == -bool ]]; then
-    case "$val" in
-      TRUE|YES) expected_val=1 ;;
-      FALSE|NO) expected_val=0 ;;
-    esac
-  else
-    expected_val=$val
-  fi
-
-  if [[ "$current_val" == "$expected_val" ]]; then
+  if [[ "$current_val" == "$val" ]]; then
     log_skip "macOS default $domain $key is already set to $val"
     return 0
   fi
 
+  echo "1"
   if [[ -n "$current_val" ]]; then
     log_update  "macOS default $domain $key is currently set to $current_val, changing to $val"
   else
     log_update  "macOS default $domain $key is unset, setting it to $val"
   fi
 
-  log_debug "defaults write \"$domain\" \"$key\" \"$val_type\" \"$val\""
-  defaults write "$domain" "$key" "$val_type" "$val"
+  log_debug "defaults write \"$domain\" \"$key\" \"-$val_type\" \"$val\""
+  defaults write "$domain" "$key" "-$val_type" "$val" 1>&2
 }

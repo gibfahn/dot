@@ -13,9 +13,7 @@ if ! grep -q gib ~/Library/Preferences/com.apple.Terminal.plist; then
   open "$(dirname "$0")/config/gib.terminal"
 
   # Change the default to my profile (swap it back in settings if you want).
-  if [[ "$(defaults read com.apple.Terminal "Default Window Settings")" != gib ]]; then
-    defaults write com.apple.Terminal "Default Window Settings" gib
-  fi
+  updateMacOSDefault com.apple.Terminal "Default Window Settings" "gib"
 else
   log_skip "gib Terminal profile (already installed)."
 fi
@@ -62,35 +60,39 @@ updateMacOSKeyboardShortcut com.apple.mail "Archive" '@\\b'
 updateMacOSKeyboardShortcut com.apple.mail "Send" '@\\U21a9'
 
 # Unnatural scrolling direction (swipe down to scroll down).
-updateMacOSDefault NSGlobalDomain com.apple.swipescrolldirection -bool NO
+old_swipescrolldirection_value=$(readMacOSDefault NSGlobalDomain com.apple.swipescrolldirection bool)
+updateMacOSDefault NSGlobalDomain com.apple.swipescrolldirection bool FALSE
+if [[ $old_swipescrolldirection_value != FALSE ]]; then
+  log_debug "Applying scroll direction changes with '/System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u' as previous value was '$old_swipescrolldirection_value' not FALSE"
+  /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+fi
 
 # Expand save panel by default
-updateMacOSDefault NSGlobalDomain NSNavPanelExpandedStateForSaveMode -int 1
-updateMacOSDefault NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -int 1
+updateMacOSDefault NSGlobalDomain NSNavPanelExpandedStateForSaveMode bool TRUE
+updateMacOSDefault NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 bool TRUE
 
 # Expand print panel by default
-updateMacOSDefault NSGlobalDomain PMPrintingExpandedStateForPrint -int 1
-updateMacOSDefault NSGlobalDomain PMPrintingExpandedStateForPrint2 -int 1
+updateMacOSDefault NSGlobalDomain PMPrintingExpandedStateForPrint bool TRUE
+updateMacOSDefault NSGlobalDomain PMPrintingExpandedStateForPrint2 bool TRUE
 
 # Disable the “Are you sure you want to open this application?” dialog
-updateMacOSDefault com.apple.LaunchServices LSQuarantine -int 0
+updateMacOSDefault com.apple.LaunchServices LSQuarantine bool FALSE
 
 # Always open new things in tabs (not new windows) for document based apps.
-updateMacOSDefault NSGlobalDomain AppleWindowTabbingMode -string always
+updateMacOSDefault NSGlobalDomain AppleWindowTabbingMode string always
 
 # Maximise window when you double-click on the title bar.
-updateMacOSDefault NSGlobalDomain AppleActionOnDoubleClick -string Maximize
+updateMacOSDefault NSGlobalDomain AppleActionOnDoubleClick string Maximize
 
 # Don't show recents in dock.
-updateMacOSDefault com.apple.dock show-recents -int 0
+updateMacOSDefault com.apple.dock show-recents bool FALSE
 
 # Uncheck "Displays have separate spaces" to allow multi-screen windows.
-updateMacOSDefault com.apple.spaces spans-displays -int 1
+updateMacOSDefault com.apple.spaces spans-displays bool TRUE
 
 # Greys out hidden apps in the dock (so you can see which are hidden).
-old_showhidden_value=$(defaults read com.apple.Dock showhidden)
-updateMacOSDefault com.apple.Dock showhidden -int 1
-if [[ "$old_showhidden_value" != 1 ]]; then
+changed=$(updateMacOSDefault com.apple.Dock showhidden int 1)
+if [[ -n "$changed" ]]; then
   log_debug "Applying showhidden changes with 'killall Dock' as previous value was '$old_showhidden_value' not 1"
   killall Dock
 fi
@@ -104,42 +106,40 @@ fi
 # with the keyboard, Enter to press the blue one, tab to select between them,
 # space to press the Tab-selected one. If there are underlined letters, hold
 # Option and press the letter to choose that option.
-updateMacOSDefault NSGlobalDomain AppleKeyboardUIMode -int 2
+updateMacOSDefault NSGlobalDomain AppleKeyboardUIMode int 2
 
 # Show hidden files in the finder.
-old_AppleShowAllFiles_value="$(defaults read com.apple.finder AppleShowAllFiles)"
-updateMacOSDefault com.apple.finder AppleShowAllFiles -int 1
-if [[ "$old_AppleShowAllFiles_value" != 1 ]]; then
+changed=$(updateMacOSDefault com.apple.finder AppleShowAllFiles int 1)
+if [[ -n "$changed" ]]; then
   log_debug "Applying AppleShowAllFiles changes with 'killall Finder' as previous value was '$old_AppleShowAllFiles_value' not 1"
   killall Finder
   open ~
 fi
 
 # Finder: show all filename extensions
-updateMacOSDefault NSGlobalDomain AppleShowAllExtensions -int 1
+updateMacOSDefault NSGlobalDomain AppleShowAllExtensions bool TRUE
 
 # Display full POSIX path as Finder window title
-updateMacOSDefault com.apple.finder _FXShowPosixPathInTitle -int 1
+updateMacOSDefault com.apple.finder _FXShowPosixPathInTitle int 1
 
 # Use list view in all Finder windows by default
 # Four-letter codes for the other view modes: `icnv`, `clmv`, `glyv`
-updateMacOSDefault com.apple.finder FXPreferredViewStyle -string "Nlsv"
+updateMacOSDefault com.apple.finder FXPreferredViewStyle string "Nlsv"
 
 # Allow text selection in any QuickLook window.
-updateMacOSDefault NSGlobalDomain QLEnableTextSelection -int 1
+updateMacOSDefault NSGlobalDomain QLEnableTextSelection int 1
 
 # System Preferences > General > Click in the scrollbar to: Jump to the spot that's clicked
-updateMacOSDefault NSGlobalDomain AppleScrollerPagingBehavior -int 1
+updateMacOSDefault NSGlobalDomain AppleScrollerPagingBehavior int 1
 
 # Increases trackpad sensitivity (SysPref max 3.0).
-updateMacOSDefault NSGlobalDomain com.apple.trackpad.scaling -float 5
+updateMacOSDefault NSGlobalDomain com.apple.trackpad.scaling float 5
 # Disable force clicking.
-updateMacOSDefault NSGlobalDomain com.apple.trackpad.forceClick -int 0
+updateMacOSDefault NSGlobalDomain com.apple.trackpad.forceClick bool FALSE
 
-old_percent_value=$(defaults read com.apple.menuextra.battery ShowPercent)
 # Show battery percentage in menu bar.
-updateMacOSDefault com.apple.menuextra.battery ShowPercent -string YES
-if [[ "$old_percent_value" != YES ]]; then
+changed=$(updateMacOSDefault com.apple.menuextra.battery ShowPercent string YES)
+if [[ -n "$changed" ]]; then
   log_debug "Applying ShowPercent changes with 'killall SystemUIServer' as previous value was '$old_percent_value' not YES"
   killall SystemUIServer
 fi
@@ -161,42 +161,41 @@ if [[ -n "$HARDCORE" ]]; then # Set keyboard preferences.
   updateMacOSKeyboardShortcut com.apple.ist.Radar7 "Copy as Markdown" "~^c"
 
   # Set up fastest key repeat rate (needs relogin).
-  updateMacOSDefault NSGlobalDomain KeyRepeat -int 1
+  updateMacOSDefault NSGlobalDomain KeyRepeat int 1
 
   # Sets a low time before key starts repeating.
-  updateMacOSDefault NSGlobalDomain InitialKeyRepeat -int 8
+  updateMacOSDefault NSGlobalDomain InitialKeyRepeat int 8
 
   # Disables window minimizing animations.
-  updateMacOSDefault NSGlobalDomain NSAutomaticWindowAnimationsEnabled -int 0
+  updateMacOSDefault NSGlobalDomain NSAutomaticWindowAnimationsEnabled int 0
 
   # Use Dark mode.
-  updateMacOSDefault NSGlobalDomain AppleInterfaceStyle -string Dark
+  updateMacOSDefault NSGlobalDomain AppleInterfaceStyle string Dark
 
   # Auto-hide menu bar.
-  updateMacOSDefault NSGlobalDomain _HIHideMenuBar -int 1
+  updateMacOSDefault NSGlobalDomain _HIHideMenuBar bool TRUE
   # Auto-hide dock.
-  updateMacOSDefault com.apple.dock autohide -int 1
+  updateMacOSDefault com.apple.dock autohide bool TRUE
 
   # Allow Finder to be quit (hides Desktop files).
-  old_QuitMenuItem_value="$(defaults read com.apple.finder QuitMenuItem)"
-  updateMacOSDefault com.apple.finder QuitMenuItem -int 1
-  if [[ "$old_QuitMenuItem_value" != 1 ]]; then
+  changed=$(updateMacOSDefault com.apple.finder QuitMenuItem int 1)
+  if [[ -n "$changed" ]]; then
     log_debug "Applying QuitMenuItem changes with 'killall Finder' as previous value was '$old_QuitMenuItem_value' not 1"
     killall Finder
     open ~
   fi
 
   # Disable the animations for opening Quick Look windows
-  updateMacOSDefault NSGlobalDomain QLPanelAnimationDuration -float 0
+  updateMacOSDefault NSGlobalDomain QLPanelAnimationDuration float 0
 
   # Set sidebar icon size to medium
-  updateMacOSDefault NSGlobalDomain NSTableViewDefaultSizeMode -int 2
+  updateMacOSDefault NSGlobalDomain NSTableViewDefaultSizeMode int 2
 
   # Show developer options in Radar 8.
-  updateMacOSDefault com.apple.radar.gm shouldShowDeveloperOptions -int 1
+  updateMacOSDefault com.apple.radar.gm shouldShowDeveloperOptions int 1
 
   # Show all processes in Activity Monitor
-  updateMacOSDefault com.apple.ActivityMonitor ShowCategory -int 0
+  updateMacOSDefault com.apple.ActivityMonitor ShowCategory int 0
 
   # Order matters here for the "has it changed" comparison.
   spotlight_preferences=(
