@@ -7,6 +7,7 @@
   fork = "! hub fork --remote-name=fork && git remote -v && git push fork master:refs/heads/oldmaster && git change-branch && git default-branch fork && git clean-fork #"
   # Change the remote default branch to "$1" (default: "oldmaster"), for remote $2 (default: "fork").
   change-branch = "!hub api -XPATCH repos/$(git remote-org ${2:-fork})/$(git remote-repo ${2:-fork}) -f name=$(git remote-repo ${2:-fork}) -f default_branch=${1:-oldmaster} && git remote set-head --auto ${2:-fork} #"
+  check-pr-branch = "! [[ $(git head-branch) != $(git up-branch) ]] || { printf \"\\033[0;31m  ERROR\\033[0m: Create a new branch before raising PR.\\n\" >&2 && exit 1; } #"
   # Removes all branches and tags except "$1" (default: oldmaster).
   clean-fork = "!git ls-remote --heads --tags fork | awk '!/\\^\\{\\}/ && !/refs\\/heads\\/'\"${1:-oldmaster}\"'/ {print $NF}' | xargs -n ${2:-10} git push --delete fork && git remote prune fork #"
   default-branch = "!(git symbolic-ref --short refs/remotes/$1/HEAD || { git remote set-head --auto $1 && git symbolic-ref --short refs/remotes/$1/HEAD; }) | sed \"s|^$1/||\" #" # Default branch for remote. `g default-branch up` -> master
@@ -135,9 +136,9 @@
   pa  = "!curl -L ${1%.patch}.patch | git am -S --whitespace=fix # "     # Patch Github PR.
   pap = "!curl -L ${1%.patch}.patch | git am -3 -S --whitespace=fix  # " # Please patch it.
   paw = "!curl -L ${1%.patch}.patch | git am -3 -S --whitespace=warn # " # Patch but don't fix whitespace.
-  ppr = "!git push && git pr #" # Push and raise PR at the same time.
+  ppr = "!git check-pr-branch && git push && git pr #"          # Push and raise PR at the same time.
   pr  = "!hub pull-request --base $(git remote-org ${1:-$(git up-remote)}):${2:-$(git up-branch)} -o #" # Raise PR against upstream remote/branch (or $1/$2).
-  pt  = "!git push -u $1 $(git head-branch) #"                   # g pt origin sets branch to track up + pushes.
+  pt  = "!git push -u $1 $(git head-branch) #"                  # g pt origin sets branch to track up + pushes.
   pl  = pull
 
   ra  = remote add                                           # Add new remote by url.
