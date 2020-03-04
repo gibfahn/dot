@@ -119,8 +119,10 @@ fi
 # Set up rbenv for ruby version management.
 
 # Only run make if there were changes.
-if [[ -n $HARDCORE ]] && [[ -n "$(gitCloneOrUpdate rbenv/rbenv "$XDG_DATA_HOME/rbenv")" ]] \
-  || [[ -n "$(gitCloneOrUpdate rbenv/rbenv-default-gems "$XDG_DATA_HOME/rbenv"/plugins/rbenv-default-gems)" ]]; then
+changed1=$(gitCloneOrUpdate rbenv/rbenv "$XDG_DATA_HOME/rbenv")
+changed2=$(gitCloneOrUpdate rbenv/rbenv-default-gems "$XDG_DATA_HOME/rbenv"/plugins/rbenv-default-gems)
+if [[ -n $HARDCORE ]] && [[ -n "$changed1" ]] \
+  || [[ -n "$changed2" ]]; then
   (pushd "$XDG_DATA_HOME/rbenv" && src/configure && make -C src)
 fi
 
@@ -254,7 +256,8 @@ if [[ -n "$HARDCORE" ]]; then
   done
 fi
 
-if [[ -n "$HARDCORE" && -n "$(gitCloneOrUpdate fwcd/KotlinLanguageServer "$XDG_DATA_HOME/KotlinLanguageServer")" ]]; then
+changed=$(gitCloneOrUpdate fwcd/KotlinLanguageServer "$XDG_DATA_HOME/KotlinLanguageServer")
+if [[ -n "$HARDCORE" && -n "$changed" ]]; then
     (
       cd "$XDG_DATA_HOME/KotlinLanguageServer" || { echo "Failed to cd"; exit 1; }
       ./gradlew installDist # If tests passed we could use `./gradlew build`

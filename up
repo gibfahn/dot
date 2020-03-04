@@ -19,7 +19,7 @@ else
   export HARDCORE=${HARDCORE-""}
 fi
 
-if [ "$HARDCORE" ]; then
+if [[ "$HARDCORE" ]]; then
   log_get "HARDCORE mode"
 else
   log_skip "HARDCORE skipping"
