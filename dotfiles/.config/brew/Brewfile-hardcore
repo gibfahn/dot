@@ -23,6 +23,7 @@ tap "github/gh"
 # cask "vagrant"                           # Quick command-line image spin-up.
 # cask "virtualbox"                        # Manage VMs (Linux or Windows).
 # cask "vulkan-sdk"                        # Use the vulkan graphics APIs on macOS.
+brew "asciinema"                         # Screen recorder for the terminal.
 brew "bash-completion"                   # Generally useful bash completions.
 brew "bat"                               # Nicer cat with syntax highlighting etc.
 brew "binutils"                          # GNU versions of tools for interacting with binaries (nm, strings etc).
