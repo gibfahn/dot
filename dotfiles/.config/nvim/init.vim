@@ -54,6 +54,7 @@ try
   Plug 'kana/vim-textobj-line'                      " Adds `il` and `al` text objects for current line.
   Plug 'kana/vim-textobj-user'                      " Allows you to create custom text objects (used in vim-textobj-line).
   Plug 'neoclide/coc.nvim', {'branch': 'release'}   " Language Server with VSCode Extensions.
+  Plug 'pechorin/any-jump.nvim'                     " Go to definition that doesn't require a language server.
   Plug 'raghur/vim-ghost', {'do': ':GhostInstall'}  " Edit browser text areas in Neovim (:h ghost).
   Plug 'rust-lang/rust.vim'                         " Rust language bindings.
   Plug 'simnalamburt/vim-mundo'                     " Graphical undo tree (updated fork of Gundo).
@@ -242,6 +243,8 @@ nnoremap <Leader>e <C-w>q|                 " Close current split (keeps buffer).
 nnoremap <Leader>E :cclose<CR>:lclose<CR>:helpclose<CR><C-W>z| " Close open preview windows (e.g. language server definitions).
 nnoremap <Leader>f :Files<CR>|             " Search file names    for file,
 nnoremap <Leader>F :grep |                 "  ↳          contents for file.
+nnoremap <leader>ga :AnyJumpLastResults<CR>| " open last closed search window again
+nnoremap <leader>gb :AnyJumpBack<CR>|      " open previous opened file (after jump)
 nnoremap <Leader>gc :cd %:p:h<CR>|         " Change vim directory (:pwd) to current file's dirname (e.g. for <space>f, :e).
 nnoremap <Leader>gC :e ~/.config/nvim/coc-settings.json<CR> " Edit colorscheme file.
 nnoremap <Leader>gd :w !git diff --no-index % - <CR>|     " Diff between saved file and current.
@@ -265,6 +268,7 @@ nnoremap <Leader>Id :r !date +\%Y-\%m-\%d<CR>| " Insert readable    date on new 
 nnoremap <Leader>ID :r !date +\%d-\%b-\%y<CR>| " ↳      `:sort`able date on new line.
 nnoremap <Leader>It ITODO(gib): <ESC>:Commentary<CR>$| " Insert a TODO, (Write todo, then `<Space>it`).
 nnoremap <Leader>Ix IXXX(gib): <ESC>:Commentary<CR>$| " Insert an XXX, (Write todo, then `<Space>it`).
+nnoremap <leader>j :AnyJump<CR>|           " Jump to definition under cursore
 nnoremap <Leader>m :!mkdir -p "%:p:h"<CR>
 nnoremap <Leader>n :sp<CR><C-w>k:bp<CR>|   " Open horizontal split,
 nnoremap <Leader>o :set operatorfunc=OpenUrl<CR>g@| " Open the selected text with the appropriate program (like netrw-gx).
@@ -615,6 +619,7 @@ if filereadable('/usr/local/bin/python3')
   let g:python3_host_prog = "/usr/local/bin/python3"  " Speed up startup by not looking for python3 every time.
 endif
 
+let g:any_jump_disable_default_keybindings = 1      " Conflicts with other useful bindings.
 let g:buftabline_indicators = 1                     " Show a + if the buffer has been modified.
 let g:buftabline_numbers = 2                        " Show buftabline's count (use <Leader>1-9 to switch.
 let g:colorizer_use_virtual_text = 1                " Use virtual text
