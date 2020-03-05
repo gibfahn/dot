@@ -20,6 +20,7 @@ following:
     picture of selected area to the clipboard`.
   - `Input Sources` -> tick `Select the previous input source`
   - `Services` -> remove mappings from `man Page` shortcuts
+- `Sharing` -> `Computer Name` -> new hostname (e.g. `GibWrkMBP2019`, `EveMBP2018`)
 
 ### CopyQ
 
