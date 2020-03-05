@@ -7,16 +7,17 @@ set -e
 
 . "$(dirname "$0")/../helpers/setup.sh" # Load helper script from dot/helpers.
 
-if ! grep -q gib ~/Library/Preferences/com.apple.Terminal.plist; then
-  log_get "gib Terminal profile."
-  # Install my terminal profile.
-  open "$(dirname "$0")/config/gib.terminal"
+# TODO(gib): Either re-add this or remove it.
+# if ! grep -q gib ~/Library/Preferences/com.apple.Terminal.plist; then
+#   log_get "gib Terminal profile."
+#   # Install my terminal profile.
+#   open "$(dirname "$0")/config/gib.terminal"
 
-  # Change the default to my profile (swap it back in settings if you want).
-  updateMacOSDefault com.apple.Terminal "Default Window Settings" "gib"
-else
-  log_skip "gib Terminal profile (already installed)."
-fi
+#   # Change the default to my profile (swap it back in settings if you want).
+#   updateMacOSDefault com.apple.Terminal "Default Window Settings" "gib"
+# else
+#   log_skip "gib Terminal profile (already installed)."
+# fi
 
 # Install xcode command line tools
 # If these are messed up run `xcode-select -p`. It will normally print one of:
