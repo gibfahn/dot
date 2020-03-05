@@ -4,20 +4,14 @@ Contains everything I use to setup a new machine (except ssh and gpg keys).
 
 ## How to run
 
-Run either the full or the manual setup, then go to the [Post Install Setup][].
-
-### Requirements
-
-- Git:
-
-### Standard full setup
-
-```bash
-# Make a directory to put it in (any path is fine):
-mkdir -p ~/code
-git clone https://github.com/gibfahn/dot ~/code/dot && cd ~/code/dot
-HARDCORE="" ./up
+```shell
+curl -L -o ~/up https://github.com/gibfahn/up-rs/releases/latest/download/up-darwin
+chmod +x ~/up
+~/up link --git-url https://github.com/gibfahn/dot --git-path ~/code/dot --from ~/code/dot/dotfiles
+~/code/dot/up
 ```
+
+Then see [manual.md][].
 
 ### Lite (non-root) setup
 
@@ -74,10 +68,6 @@ If you just want to update your dotfile symlinks, you can just run:
 Dotfiles are pretty personal, so feel free to adapt this repo as you wish. If
 you make a change feel free to send a Pull Request, you might fix something for
 me!
-
-## Post install setup
-
-There are some manual setup steps, see [manual.md][] for more info
 
 ## Adding a new file to your dotfiles
 
