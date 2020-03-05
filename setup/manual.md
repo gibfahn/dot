@@ -13,14 +13,17 @@ following:
 
 ### System Preferences:
 
+- `View` (menu bar) -> `Organise Alphabetically`
 - `Touch ID` -> Add other fingerprints
 - `Software Update` -> `Automatically keep my mac up to date`
-- `Keyboard` -> `Shortcuts`:
-  - `Screen Shots`: Swap `Save picture of selected area as file` and `Copy
-    picture of selected area to the clipboard`.
-  - `Input Sources` -> tick `Select the previous input source`
-  - `Services` -> remove mappings from `man Page` shortcuts
-- `Sharing` -> `Computer Name` -> new hostname (e.g. `GibWrkMBP2019`, `EveMBP2018`)
+- `Keyboard`:
+  - `Shortcuts`
+    - `Services` -> remove mappings from `man Page` shortcuts
+  - `Input Sources` -> add `Colemak`
+- `Sharing`:
+  - Tick the `Screen Sharing` checkbox.
+  - `Computer Name` -> new hostname (e.g. `GibWrkMBP2019`, `EveMBP2018`)
+- `Users & Groups` -> `Login Options` -> `Show Input menu in login window`
 
 ### CopyQ
 
