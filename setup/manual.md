@@ -25,6 +25,15 @@ following:
   - `Computer Name` -> new hostname (e.g. `GibWrkMBP2019`, `EveMBP2018`)
 - `Users & Groups` -> `Login Options` -> `Show Input menu in login window`
 
+### Keyboard Layout on boot
+
+If it doesn't boot to Colemak, run:
+
+```shell
+sudo cp ~/Library/Preferences/com.apple.HIToolbox.plist /Library/Preferences/
+sudo chmod 644 /Library/Preferences/com.apple.HIToolbox.plist
+```
+
 ### CopyQ
 
 - `General`
