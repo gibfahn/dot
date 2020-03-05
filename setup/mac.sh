@@ -61,12 +61,14 @@ updateMacOSKeyboardShortcut com.apple.mail "Archive" '@\\b'
 updateMacOSKeyboardShortcut com.apple.mail "Send" '@\\U21a9'
 
 # Unnatural scrolling direction (swipe down to scroll down).
-old_swipescrolldirection_value=$(readMacOSDefault NSGlobalDomain com.apple.swipescrolldirection bool)
-updateMacOSDefault NSGlobalDomain com.apple.swipescrolldirection bool FALSE
-if [[ $old_swipescrolldirection_value != FALSE ]]; then
-  log_debug "Applying scroll direction changes with '/System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u' as previous value was '$old_swipescrolldirection_value' not FALSE"
+changed=$(updateMacOSDefault NSGlobalDomain com.apple.swipescrolldirection bool FALSE)
+if [[ -n "$changed" ]]; then
+  log_debug "Applying scroll direction changes with '/System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u' as previous value was '$changed' not FALSE"
   /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
 fi
+
+# Keyboard -> Input Sources -> Show Input menu in menu bar.
+updateMacOSDefault com.apple.TextInputMenu visible bool TRUE
 
 # Expand save panel by default
 updateMacOSDefault NSGlobalDomain NSNavPanelExpandedStateForSaveMode bool TRUE
@@ -94,7 +96,7 @@ updateMacOSDefault com.apple.spaces spans-displays bool TRUE
 # Greys out hidden apps in the dock (so you can see which are hidden).
 changed=$(updateMacOSDefault com.apple.Dock showhidden int 1)
 if [[ -n "$changed" ]]; then
-  log_debug "Applying showhidden changes with 'killall Dock' as previous value was '$old_showhidden_value' not 1"
+  log_debug "Applying showhidden changes with 'killall Dock' as previous value was '$changed' not 1"
   killall Dock
 fi
 
@@ -112,7 +114,7 @@ updateMacOSDefault NSGlobalDomain AppleKeyboardUIMode int 2
 # Show hidden files in the finder.
 changed=$(updateMacOSDefault com.apple.finder AppleShowAllFiles int 1)
 if [[ -n "$changed" ]]; then
-  log_debug "Applying AppleShowAllFiles changes with 'killall Finder' as previous value was '$old_AppleShowAllFiles_value' not 1"
+  log_debug "Applying AppleShowAllFiles changes with 'killall Finder' as previous value was '$changed' not 1"
   killall Finder
   open ~
 fi
@@ -141,7 +143,7 @@ updateMacOSDefault NSGlobalDomain com.apple.trackpad.forceClick bool FALSE
 # Show battery percentage in menu bar.
 changed=$(updateMacOSDefault com.apple.menuextra.battery ShowPercent string YES)
 if [[ -n "$changed" ]]; then
-  log_debug "Applying ShowPercent changes with 'killall SystemUIServer' as previous value was '$old_percent_value' not YES"
+  log_debug "Applying ShowPercent changes with 'killall SystemUIServer' as previous value was '$changed' not YES"
   killall SystemUIServer
 fi
 
@@ -181,7 +183,7 @@ if [[ -n "$HARDCORE" ]]; then # Set keyboard preferences.
   # Allow Finder to be quit (hides Desktop files).
   changed=$(updateMacOSDefault com.apple.finder QuitMenuItem int 1)
   if [[ -n "$changed" ]]; then
-    log_debug "Applying QuitMenuItem changes with 'killall Finder' as previous value was '$old_QuitMenuItem_value' not 1"
+    log_debug "Applying QuitMenuItem changes with 'killall Finder' as previous value was '$changed' not 1"
     killall Finder
     open ~
   fi
