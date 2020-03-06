@@ -10,6 +10,7 @@
   check-pr-branch = "! [[ $(git head-branch) != $(git up-branch) ]] || { printf \"\\033[0;31m  ERROR\\033[0m: Create a new branch before raising PR.\\n\" >&2 && exit 1; } #"
   # Removes all branches and tags except "$1" (default: oldmaster).
   clean-fork = "!git ls-remote --heads --tags fork | awk '!/\\^\\{\\}/ && !/refs\\/heads\\/'\"${1:-oldmaster}\"'/ {print $NF}' | xargs -n ${2:-10} git push --delete fork && git remote prune fork #"
+  code-changes = "!git log --format=format: --name-only | egrep -v '^$' | sort | uniq -c | sort -rg | head -${1:-10} #" # Show $1 most changed files.
   default-branch = "!(git symbolic-ref --short refs/remotes/$1/HEAD || { git remote set-head --auto $1 && git symbolic-ref --short refs/remotes/$1/HEAD; }) | sed \"s|^$1/||\" #" # Default branch for remote. `g default-branch up` -> master
   # Show diff of a binary plist file $1 between current working tree and $2 (defaults to HEAD).
   diff-plist = "!bash -c \"diff <(git show ${2:-HEAD}:$1 | plutil -p -) <(plutil -p $1)\" #"
