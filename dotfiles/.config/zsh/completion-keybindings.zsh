@@ -3,27 +3,30 @@
 _gib_git_f() {
   git -c color.status=always status --short |
   fzf "$@" --border -m --ansi --nth 2..,.. \
-    --preview '(git diff --color=always -- {-1} | sed 1,4d; cat {-1}) | head -500' | cut -c4- | sed 's/.* -> //'
+    --preview 'git diff -- {-1} | delta'
 }
 # Fzf git branches.
 _gib_git_b() {
-  git branch -a --color=always --sort=committerdate --sort=-refname:rstrip=2 | grep -v '/HEAD\s' |
-  fzf "$@" --border --ansi --multi --tac --preview-window right:70% \
-    --preview 'git log --oneline --color=always --graph --decorate --date=short $(sed s/^..// <<< {} | cut -d" " -f1) | head -'$LINES \
-  | sed 's/^..//' | cut -d' ' -f1 | sed 's#^remotes/##'
+  git branch -a --color=always --sort=committerdate --sort=-refname:rstrip=2 \
+  | fzf "$@" --border --ansi --multi --tac --preview-window right:70% \
+  --preview "git l --color=always \$(awk '{if (\$1 == \"*\") { print \$2 } else { print \$1 } }' <<< {})" \
+  --bind "ctrl-o:execute: git li \$(awk '{if (\$1 == \"*\") { print \$2 } else { print \$1 } }' <<< {})" \
+  | awk '{if ($1 == "*") { print $2 } else { print $1 } }' | sed 's#^remotes/##'
 }
 # Fzf git tags.
 _gib_git_t() {
   git tag --color=always --sort -version:refname |
   fzf "$@" --border --multi --preview-window right:70% \
-    --preview 'git show --color=always {} | head -'$LINES
+    --preview "git l --color=always {}" \
+    --bind "ctrl-o:execute: git li {}"
 }
 # Fzf git hashes.
 _gib_git_h() {
   git log --all --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --graph --color=always |
   fzf "$@" --border --ansi --no-sort --reverse --multi --header 'Press CTRL-S to toggle sort' \
+    --preview 'git show --color=always $(grep -oE "[a-f0-9]{7,}" <<< {}) | delta' \
     --bind 'ctrl-s:toggle-sort' \
-    --preview 'git show --color=always $(grep -oE "[a-f0-9]{7,}" <<< {})' \
+    --bind "ctrl-o:execute: git shi \$(grep -oE '[a-f0-9]{7,}' <<< {} | head -1)" \
   | grep -oE "[a-f0-9]{7,}"
 }
 
@@ -31,8 +34,9 @@ _gib_git_h() {
 _gib_git_r() {
   git reflog --date=short --pretty=oneline --color=always --decorate |
   fzf "$@" --border --ansi --no-sort --reverse --multi --header 'Press CTRL-S to toggle sort' \
+    --preview 'git show --color=always $(grep -oE "[a-f0-9]{7,}" <<< {}) | delta' \
     --bind 'ctrl-s:toggle-sort' \
-    --preview 'grep -o "[a-f0-9]{7,}" <<< {} | xargs git show --color=always' \
+    --bind "ctrl-o:execute: git shi \$(grep -oE '[a-f0-9]{7,}' <<< {} | head -1)" \
   | grep -oE '[a-f0-9]{7,}'
 }
 # More fzf helpers.
