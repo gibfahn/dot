@@ -306,7 +306,7 @@ if exists brew; then
   log_skip "brew (already installed)."
 else
   log_get "brew."
-  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 fi
 
 sogou_dir_old="$(ls -a /usr/local/Caskroom/sogouinput 2>/dev/null || true)"
