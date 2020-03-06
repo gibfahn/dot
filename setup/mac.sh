@@ -277,7 +277,7 @@ if [ ! -L "$specConfig" ]; then
   log_get "Overwriting Spectacle shortcuts with link to dot ones."
   mkdir -p "$HOME/.backup"
   [ -e "$specConfig" ] && mv "$specConfig" "$HOME/.backup/Shortcuts.json"
-  mkdir -p "$XDG_CONFIG_HOME"/Spectacle
+  mkdir -p "$(dirname "$specConfig")"
   ln -s "$XDG_CONFIG_HOME/Spectacle/Shortcuts.json" "$specConfig"
 fi
 
