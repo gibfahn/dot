@@ -141,7 +141,7 @@ gitUpdate() {
   fi
 
   { [[ -n "$work_done" ]] && log_update "$@"; } || log_skip "$@"
-  printf "%s" "$work_done" # If we did work print to stdout.
+  printf "%s\n" "$work_done" # If we did work print to stdout.
   popd >/dev/null || return 1
   return "$return_code"
 }
@@ -241,18 +241,21 @@ updateMacOSKeyboardShortcut() {
   if ! defaults read com.apple.universalaccess com.apple.custommenu.apps | grep -qF "$1"; then
     log_update  "macOS default shortcut $1 is not in com.apple.universalaccess com.apple.custommenu.apps, adding it."
     log_debug "defaults write com.apple.universalaccess com.apple.custommenu.apps -array-add \"$1\""
-    defaults write com.apple.universalaccess com.apple.custommenu.apps -array-add "$1" \
-      || echo "Add the current Terminal app to System Preferences -> Privacy -> Full Disk Access."
+    defaults write com.apple.universalaccess com.apple.custommenu.apps -array-add "$1" || {
+      return_code=$?
+      log_error "Add the current Terminal app to System Preferences -> Security & Privacy -> Full Disk Access."
+      return "$return_code"
+    }
   fi
 }
 
 # Read a macOS default with the correct type.
 # Errors:
-#   1: Value not set
+#   1: Incorrect args passed.
 #   2: type mismatch
 #   3: defaults returned an unexpected type.
-#   3: user provided an unexpected type.
-#   4: defaults returned an unexpected value.
+#   4: user provided an unexpected type.
+#   5: defaults returned an unexpected value.
 # Examples:
 #  readMacOSDefault NSGlobalDomain com.apple.swipescrolldirection bool
 readMacOSDefault() {
@@ -262,10 +265,11 @@ readMacOSDefault() {
   domain="$1"; shift
   key="$1"; shift
   expected_type="$1"; shift
-  [[ "$#" != 0 ]] && printf "Wrong number of args" && return 1
+  [[ "$#" != 0 ]] && log_error "Wrong number of args" && return 1
 
+  # If the read fails it's probably because the key wasn't in the dict.
+  parsed_value=$(defaults read "$domain" "$key") || return 0
   parsed_type=$(defaults read-type "$domain" "$key")
-  parsed_value=$(defaults read "$domain" "$key")
 
   if grep -q "Type is " <<<"$parsed_type"; then
     parsed_type=$(sed 's/^Type is //' <<<"$parsed_type")
@@ -319,7 +323,7 @@ updateMacOSDefault() {
   val_type="$1"; shift
   val="$1"; shift
 
-  [[ "$#" != 0 ]] && printf "Wrong number of args" && return 1
+  [[ "$#" != 0 ]] && log_error "Wrong number of args" && return 1
   current_val=$(readMacOSDefault "$domain" "$key" "$val_type") || return "$?"
 
   if [[ "$current_val" == "$val" ]]; then
