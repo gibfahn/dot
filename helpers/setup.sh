@@ -289,6 +289,7 @@ readMacOSDefault() {
     boolean) expected_type=bool ;;
     integer) expected_type=int ;;
     dictionary) expected_type=dict ;;
+    array-add) expected_type=array ;;
     float|string|array|bool|int|dict) ;;
     *) log_error "Unexpected expected_type $expected_type"; return 4 ;;
   esac
@@ -327,9 +328,16 @@ updateMacOSDefault() {
   [[ "$#" != 0 ]] && log_error "Wrong number of args" && return 1
   current_val=$(readMacOSDefault "$domain" "$key" "$val_type" "$host") || return "$?"
 
-  if [[ "$current_val" == "$val" ]]; then
-    log_skip "macOS default $host $domain $key is already set to $val"
-    return 0
+  if [[ "$val_type" == array-add ]]; then
+    if grep -q "$val" <<<"$current_val"; then
+      log_skip "macOS default $host $domain $key already contains $val"
+      return 0
+    fi
+  else
+    if [[ "$current_val" == "$val" ]]; then
+      log_skip "macOS default $host $domain $key is already set to $val"
+      return 0
+    fi
   fi
 
   echo "$current_val"

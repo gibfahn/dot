@@ -134,6 +134,17 @@ if [[ -n "$changed" ]]; then
   killall SystemUIServer
 fi
 
+# Add the bluetooth settings to the Menu Bar.
+if [[ ! -e "/System/Library/CoreServices/Menu Extras/Bluetooth.menu" ]]; then
+  # Make sure the menu item exists before adding it so we don't trash the machine.
+  log_error "Can no longer find the bluetooth menu item."
+fi
+changed=$(updateMacOSDefault com.apple.systemuiserver menuExtras array-add "/System/Library/CoreServices/Menu Extras/Bluetooth.menu")
+if [[ -n "$changed" ]]; then
+  log_debug "Killing SystemUIServer to add bluetooth menu item."
+  killall SystemUIServer
+fi
+
 if [[ -n "$HARDCORE" ]]; then # Set keyboard preferences.
   log_section "Setting Hardcore macOS defaults."
 
