@@ -160,16 +160,18 @@ else
   log_skip "Lesskey"
 fi
 
-gitCloneOrUpdate zdharma/zplugin "$XDG_DATA_HOME/zsh/zplugin/bin" # Zsh plugin manager.
-# Update zsh plugins, a bit slow, see https://github.com/zdharma/zplugin/issues/184.
+# Update zsh plugins.
+# Broken by https://github.com/zdharma/zinit/issues/1
+# gitCloneOrUpdate zdharma/zinit "$XDG_DATA_HOME/zsh/zplugin/bin" # Zsh plugin manager.
 zsh -c '
 declare -A ZPLGM
 ZPLGM[HOME_DIR]=$XDG_DATA_HOME/zsh/zplugin
 ZPLGM[BIN_DIR]=$XDG_DATA_HOME/zsh/zplugin/bin # Where zplugin is installed.
 ZPLGM[ZCOMPDUMP_PATH]=$XDG_CACHE_HOME/zsh/.zcompdump$(hostname)
 source "$XDG_DATA_HOME/zsh/zplugin/bin/zplugin.zsh" # Source plugin manager.
-
-zplugin self-update; zplugin update --all'
+# Broken by https://github.com/zdharma/zinit/issues/1
+# zplugin self-update
+zplugin update --all'
 
 # Install or update pip modules.
 export PATH=/usr/local/bin:$PATH # Make sure brew pip/ruby are the first pip/ruby in the PATH.
