@@ -7,17 +7,6 @@ set -e
 
 . "$(dirname "$0")/../helpers/setup.sh" # Load helper script from dot/helpers.
 
-# Install xcode command line tools
-# If these are messed up run `xcode-select -p`. It will normally print one of:
-# - /Library/Developer/CommandLineTools
-# - /Applications/Xcode.app/Contents/Developer
-if ! xcode-select -p &>/dev/null; then
-  log_skip "Xcode Command Line Tools."
-  xcode-select --install
-else
-  log_skip "Xcode Command Line Tools (already installed)."
-fi
-
 # Link VS Code preferences into the macOS specific folder.
 if [[ -n $HARDCORE && -d "$HOME/Library/Application Support/Code/" ]]; then
   for file in "$HOME"/.config/code/*.json; do
@@ -299,12 +288,23 @@ else
   sudo curl -sL http://entrproject.org/etc/limit.maxfiles.plist -o /Library/LaunchDaemons/limit.maxfiles.plist
 fi
 
-# Install brew
+# Install brew and Xcode Command Line Tools.
 if exists brew; then
   log_skip "brew (already installed)."
 else
   log_get "brew."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+fi
+
+# Install xcode command line tools (should have already been brew installed).
+# If these are messed up run `xcode-select -p`. It will normally print one of:
+# - /Library/Developer/CommandLineTools
+# - /Applications/Xcode.app/Contents/Developer
+if ! xcode-select -p &>/dev/null; then
+  log_skip "Xcode Command Line Tools."
+  xcode-select --install
+else
+  log_skip "Xcode Command Line Tools (already installed)."
 fi
 
 sogou_dir_old="$(ls -a /usr/local/Caskroom/sogouinput 2>/dev/null || true)"
