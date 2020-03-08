@@ -58,13 +58,6 @@ sudo chmod 644 /Library/Preferences/com.apple.HIToolbox.plist
 
 ### Safari
 
-- Set up [sVim][] for Safari:
-  - Install sVim
-  - Click the `sVim` icon by the address bar, then `Show sVimrc`
-  - Paste gist ids, `Sync`, `Save`
-    - `sVimrc`: `22c17d0059340e2c90c3c316b746ba8b`
-    - `sVimcss`: `3cf4e6a17c85ff67d29fea37ed31963d`
-
 - `General`
   - `Safari opens with` -> `All windows from last session`
   - `New windows open with` -> `Empty page`
