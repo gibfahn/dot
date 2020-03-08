@@ -25,7 +25,6 @@ These need to be done manually until I automate them.
 - Accessibility -> Zoom:
   - Use scroll gesture with modifier keys to zoom
 
-
 ### Lite (non-root) setup
 
 Useful for remote machines you don't own (you still want some niceties, but you
