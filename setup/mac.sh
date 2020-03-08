@@ -362,6 +362,16 @@ fi
 softwareupdate --install --all || log_skip "To autorestart run:
 sudo softwareupdate --install --all --restart"
 
+export PATH=/usr/local/bin:$PATH
+# Install broot symlink.
+if [[ ! -e "$XDG_CONFIG_HOME"/.config/zsh/broot.zsh ]]; then
+  log_get "broot shell function."
+  mkdir -p "$XDG_CONFIG_HOME"/.config/zsh
+  broot --print-shell-function zsh >"$XDG_CONFIG_HOME"/zsh/broot.zsh
+else
+  log_get "broot shell function."
+fi
+
 # Swift LanguageServer.
 sourcekit_lsp_path="$XDG_DATA_HOME"/sourcekit-lsp
 changed=$(gitCloneOrUpdate apple/sourcekit-lsp "$sourcekit_lsp_path")
