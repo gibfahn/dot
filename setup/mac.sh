@@ -81,7 +81,14 @@ updateMacOSDefault com.apple.dock show-recents bool FALSE
 updateMacOSDefault com.apple.spaces spans-displays bool TRUE
 
 # Greys out hidden apps in the dock (so you can see which are hidden).
-changed=$(updateMacOSDefault com.apple.Dock showhidden int 1)
+changed=$(updateMacOSDefault com.apple.dock showAppExposeGestureEnabled bool TRUE)
+if [[ -n "$changed" ]]; then
+  log_debug "Applying expose changes with 'killall Dock' as previous value was '$changed' not 1"
+  killall Dock
+fi
+
+# Greys out hidden apps in the dock (so you can see which are hidden).
+changed=$(updateMacOSDefault com.apple.Dock showhidden bool TRUE)
 if [[ -n "$changed" ]]; then
   log_debug "Applying showhidden changes with 'killall Dock' as previous value was '$changed' not 1"
   killall Dock
@@ -376,7 +383,7 @@ if [[ -n "$HARDCORE" && -n $(dockutil --list) ]]; then
   log_get "Cleaning Dock"
   dockutil --remove all
 else
-  log_get "Cleaning Dock"
+  log_skip "Cleaning Dock"
 fi
 
 # Swift LanguageServer.
