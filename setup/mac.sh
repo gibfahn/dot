@@ -30,6 +30,8 @@ fi
 
 log_section "Setting macOS defaults."
 
+dock_changed="" menu_changed="" finder_changed=""
+
 # -> Kitty:
 updateMacOSKeyboardShortcut net.kovidgoyal.kitty "Hide kitty" '~^$\\U00a7'
 # -> Mail: ⌘-backspace moves to Archive.
@@ -75,24 +77,16 @@ updateMacOSDefault NSGlobalDomain AppleWindowTabbingMode string always
 updateMacOSDefault NSGlobalDomain AppleActionOnDoubleClick string Maximize
 
 # Don't show recents in dock.
-updateMacOSDefault com.apple.dock show-recents bool FALSE
+dock_changed+=$(updateMacOSDefault com.apple.dock show-recents bool FALSE)
 
 # Uncheck "Displays have separate spaces" to allow multi-screen windows.
 updateMacOSDefault com.apple.spaces spans-displays bool TRUE
 
 # Greys out hidden apps in the dock (so you can see which are hidden).
-changed=$(updateMacOSDefault com.apple.dock showAppExposeGestureEnabled bool TRUE)
-if [[ -n "$changed" ]]; then
-  log_debug "Applying expose changes with 'killall Dock' as previous value was '$changed' not 1"
-  killall Dock
-fi
+dock_changed+=$(updateMacOSDefault com.apple.dock showAppExposeGestureEnabled bool TRUE)
 
 # Greys out hidden apps in the dock (so you can see which are hidden).
-changed=$(updateMacOSDefault com.apple.Dock showhidden bool TRUE)
-if [[ -n "$changed" ]]; then
-  log_debug "Applying showhidden changes with 'killall Dock' as previous value was '$changed' not 1"
-  killall Dock
-fi
+dock_changed+=$(updateMacOSDefault com.apple.Dock showhidden bool TRUE)
 
 # System Preferences -> Keyboard -> Shortcuts -> Full Keyboard Access
 # Full Keyboard Access: In Windows and Dialogs, press Tab to move keyboard
@@ -106,12 +100,7 @@ fi
 updateMacOSDefault NSGlobalDomain AppleKeyboardUIMode int 2
 
 # Show hidden files in the finder.
-changed=$(updateMacOSDefault com.apple.finder AppleShowAllFiles int 1)
-if [[ -n "$changed" ]]; then
-  log_debug "Applying AppleShowAllFiles changes with 'killall Finder' as previous value was '$changed' not 1"
-  killall Finder
-  open ~
-fi
+finder_changed+=$(updateMacOSDefault com.apple.finder AppleShowAllFiles int 1)
 
 # Finder: show all filename extensions
 updateMacOSDefault NSGlobalDomain AppleShowAllExtensions bool TRUE
@@ -135,22 +124,15 @@ updateMacOSDefault NSGlobalDomain com.apple.trackpad.scaling float 5
 updateMacOSDefault NSGlobalDomain com.apple.trackpad.forceClick bool FALSE
 
 # Show battery percentage in menu bar.
-changed=$(updateMacOSDefault com.apple.menuextra.battery ShowPercent string YES)
-if [[ -n "$changed" ]]; then
-  log_debug "Applying ShowPercent changes with 'killall SystemUIServer' as previous value was '$changed' not YES"
-  killall SystemUIServer
-fi
+menu_changed=$(updateMacOSDefault com.apple.menuextra.battery ShowPercent string YES)
 
 # Add the bluetooth settings to the Menu Bar.
 if [[ ! -e "/System/Library/CoreServices/Menu Extras/Bluetooth.menu" ]]; then
   # Make sure the menu item exists before adding it so we don't trash the machine.
   log_error "Can no longer find the bluetooth menu item."
+  exit 1
 fi
-changed=$(updateMacOSDefault com.apple.systemuiserver menuExtras array-add "/System/Library/CoreServices/Menu Extras/Bluetooth.menu")
-if [[ -n "$changed" ]]; then
-  log_debug "Killing SystemUIServer to add bluetooth menu item."
-  killall SystemUIServer
-fi
+menu_changed+=$(updateMacOSDefault com.apple.systemuiserver menuExtras array-add "/System/Library/CoreServices/Menu Extras/Bluetooth.menu")
 
 if [[ -n "$HARDCORE" ]]; then # Set keyboard preferences.
   log_section "Setting Hardcore macOS defaults."
@@ -183,15 +165,10 @@ if [[ -n "$HARDCORE" ]]; then # Set keyboard preferences.
   # Auto-hide menu bar.
   updateMacOSDefault NSGlobalDomain _HIHideMenuBar bool TRUE
   # Auto-hide dock.
-  updateMacOSDefault com.apple.dock autohide bool TRUE
+  dock_changed+=$(updateMacOSDefault com.apple.dock autohide bool TRUE)
 
   # Allow Finder to be quit (hides Desktop files).
-  changed=$(updateMacOSDefault com.apple.finder QuitMenuItem int 1)
-  if [[ -n "$changed" ]]; then
-    log_debug "Applying QuitMenuItem changes with 'killall Finder' as previous value was '$changed' not 1"
-    killall Finder
-    open ~
-  fi
+  finder_changed+=$(updateMacOSDefault com.apple.finder QuitMenuItem int 1)
 
   # Disable the animations for opening Quick Look windows
   updateMacOSDefault NSGlobalDomain QLPanelAnimationDuration float 0
@@ -274,6 +251,24 @@ if [[ -n "$HARDCORE" ]]; then # Set keyboard preferences.
 
 else
   log_skip "Not setting Hardcore macOS defaults (HARDCORE not set)."
+fi
+
+# Apply any changes made above:
+
+if [[ -n "$dock_changed" ]]; then
+  log_debug "Applying expose changes with 'killall Dock' as dock values changed: '$dock_changed'"
+  killall Dock
+fi
+
+if [[ -n "$finder_changed" ]]; then
+  log_debug "Applying AppleShowAllFiles changes with 'killall Finder' as finder values changed '$finder_changed'"
+  killall Finder
+  open ~
+fi
+
+if [[ -n "$menu_changed" ]]; then
+  log_debug "Applying menu changes with 'killall SystemUIServer' as menu values changed '$menu_changed'"
+  killall SystemUIServer
 fi
 
 # Setup spectacle config.

@@ -340,7 +340,7 @@ updateMacOSDefault() {
     fi
   fi
 
-  echo "$current_val"
+  echo "$host $domain $key $current_val -> $val; "
   if [[ -n "$current_val" ]]; then
     log_update  "macOS default $host $domain $key is currently set to $current_val, changing to $val"
   else
