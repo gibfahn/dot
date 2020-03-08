@@ -82,7 +82,7 @@ else
 fi
 
 # Change git user.name and user.email
-if exists git && [[ $(whoami) != gib && $(id -u) != 0 ]] && [[ ! -f "$XDG_CONFIG_HOME/git/my-config" ]]; then
+if [[ ! -f "$XDG_CONFIG_HOME/git/my-config" ]]; then
   # Allow manual override with `GIT_NAME` and `GIT_EMAIL`.
   # shellcheck disable=SC2153
   [[ -n "$GIT_NAME" ]] && git_name="$GIT_NAME"
