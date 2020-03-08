@@ -24,6 +24,8 @@ following:
   - Tick the `Screen Sharing` checkbox.
   - `Computer Name` -> new hostname (e.g. `GibWrkMBP2019`, `EveMBP2018`)
 - `Users & Groups` -> `Login Options` -> `Show Input menu in login window`
+Add the current Terminal app to System Preferences -> Privacy -> Full Disk Access.
+
 
 ### Keyboard Layout on boot
 
