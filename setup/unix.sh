@@ -50,6 +50,14 @@ if [[ -n $HARDCORE && $(uname) == Linux ]]; then
   )
 fi
 
+if [[ -e "$XDG_CACHE_HOME"/z ]]; then
+  log_skip "z cache file"
+else
+  log_get "z cache file"
+  mkdir -p "$XDG_CACHE_HOME"
+  touch "$XDG_CACHE_HOME"/z
+fi
+
 # Set default shell to zsh (or $NEWSHELL if set).
 
 # $SHELL isn't updated until we logout, so check whether chsh was already run.
