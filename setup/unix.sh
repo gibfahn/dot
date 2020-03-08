@@ -194,7 +194,7 @@ ZPLGM[ZCOMPDUMP_PATH]=$XDG_CACHE_HOME/zsh/.zcompdump$(hostname)
 source "$XDG_DATA_HOME/zsh/zplugin/bin/zplugin.zsh" # Source plugin manager.
 # Broken by https://github.com/zdharma/zinit/issues/1
 # zplugin self-update
-zplugin update --all'
+zplugin update --all -p 20'
 
 # Install or update pip modules.
 export PATH=/usr/local/bin:$PATH # Make sure brew pip/ruby are the first pip/ruby in the PATH.
