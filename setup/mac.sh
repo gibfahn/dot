@@ -67,6 +67,16 @@ if [[ -n "$changed" ]]; then
   /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
 fi
 
+# Enable Tap to Click
+updateMacOSDefault NSGlobalDomain com.apple.mouse.tapBehavior int 1 -currentHost
+
+# Click strength: Haptic feedback 0: Light 1: Medium 2: Firm
+updateMacOSDefault com.apple.AppleMultitouchTrackpad FirstClickThreshold int 0
+updateMacOSDefault com.apple.AppleMultitouchTrackpad SecondClickThreshold int 0
+
+# Silent clicking
+updateMacOSDefault com.apple.AppleMultitouchTrackpad ActuationStrength int 0
+
 # Keyboard -> Input Sources -> Show Input menu in menu bar.
 updateMacOSDefault com.apple.TextInputMenu visible bool TRUE
 
@@ -135,7 +145,7 @@ updateMacOSDefault NSGlobalDomain QLEnableTextSelection int 1
 # System Preferences > General > Click in the scrollbar to: Jump to the spot that's clicked
 updateMacOSDefault NSGlobalDomain AppleScrollerPagingBehavior int 1
 
-# Increases trackpad sensitivity (SysPref max 3.0).
+# Increases trackpad tracking speed / sensitivity (SysPref max 3.0).
 updateMacOSDefault NSGlobalDomain com.apple.trackpad.scaling float 5
 # Disable force clicking.
 updateMacOSDefault NSGlobalDomain com.apple.trackpad.forceClick bool FALSE

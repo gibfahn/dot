@@ -259,17 +259,17 @@ updateMacOSKeyboardShortcut() {
 # Examples:
 #  readMacOSDefault NSGlobalDomain com.apple.swipescrolldirection bool
 readMacOSDefault() {
-  local domain key expected_type # args to function.
+  local domain key expected_type host # args to function.
   local parsed_type actual_type
 
   domain="$1"; shift
   key="$1"; shift
   expected_type="$1"; shift
+  host="$1"; shift
   [[ "$#" != 0 ]] && log_error "Wrong number of args" && return 1
 
-  # If the read fails it's probably because the key wasn't in the dict.
-  parsed_value=$(defaults read "$domain" "$key") || return 0
-  parsed_type=$(defaults read-type "$domain" "$key")
+  parsed_value=$(defaults $host read "$domain" "$key") || return 0
+  parsed_type=$(defaults $host read-type "$domain" "$key")
 
   if grep -q "Type is " <<<"$parsed_type"; then
     parsed_type=$(sed 's/^Type is //' <<<"$parsed_type")
@@ -313,31 +313,32 @@ readMacOSDefault() {
 #   defaults read foo bar -> 1
 #   defaults read-type foo bar -> Type is integer
 # Then you should set with:
-#   updateMacOSDefault foo bar int 1
+#   updateMacOSDefault foo bar int 1 -currentHost
 # Prints nothing to stdout if there were no changes.
 updateMacOSDefault() {
-  local domain key val_type val # Args.
+  local domain key val_type val host # Args.
   local current_val
   domain="$1"; shift
   key="$1"; shift
   val_type="$1"; shift
   val="$1"; shift
+  [[ -n ${1+x} ]] && host="$1" && shift
 
   [[ "$#" != 0 ]] && log_error "Wrong number of args" && return 1
-  current_val=$(readMacOSDefault "$domain" "$key" "$val_type") || return "$?"
+  current_val=$(readMacOSDefault "$domain" "$key" "$val_type" "$host") || return "$?"
 
   if [[ "$current_val" == "$val" ]]; then
-    log_skip "macOS default $domain $key is already set to $val"
+    log_skip "macOS default $host $domain $key is already set to $val"
     return 0
   fi
 
   echo "$current_val"
   if [[ -n "$current_val" ]]; then
-    log_update  "macOS default $domain $key is currently set to $current_val, changing to $val"
+    log_update  "macOS default $host $domain $key is currently set to $current_val, changing to $val"
   else
-    log_update  "macOS default $domain $key is unset, setting it to $val"
+    log_update  "macOS default $host $domain $key is unset, setting it to $val"
   fi
 
-  log_debug "defaults write \"$domain\" \"$key\" \"-$val_type\" \"$val\""
-  defaults write "$domain" "$key" "-$val_type" "$val" 1>&2
+  log_debug "defaults $host write \"$domain\" \"$key\" \"-$val_type\" \"$val\""
+  defaults $host write "$domain" "$key" "-$val_type" "$val" 1>&2
 }
