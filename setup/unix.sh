@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # shellcheck shell=bash disable=SC1090,SC2016
 
 # Installs things that I use on all Unix systems (e.g. macOS and Linux).
@@ -166,6 +166,21 @@ EOF
   )
 else
   log_skip "Lesskey"
+fi
+
+# Cleanup any zsh completion dirs with bad permissions.
+insecure_dirs=()
+readarray -t insecure_dirs <<<"$(zsh -c 'autoload -U compaudit; compaudit')"
+if [[ -n ${insecure_dirs[*]} ]]; then
+  log_get "compinit (zsh completion dir permissions)"
+
+  user="$(id -un)" group="$(id -gn)"
+  for insecure_dir in "${insecure_dirs[@]}"; do
+    sudo chown "$user:$group" "$insecure_dir"
+    sudo chmod -R 755 "$insecure_dir"
+  done
+else
+  log_skip "compinit (zsh completion dir permissions)"
 fi
 
 # Update zsh plugins.
