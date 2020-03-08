@@ -371,6 +371,14 @@ else
   log_get "broot shell function."
 fi
 
+# Remove the default set of things that are in the dock.
+if [[ -n "$HARDCORE" && -n $(dockutil --list) ]]; then
+  log_get "Cleaning Dock"
+  dockutil --remove all
+else
+  log_get "Cleaning Dock"
+fi
+
 # Swift LanguageServer.
 sourcekit_lsp_path="$XDG_DATA_HOME"/sourcekit-lsp
 if [[ -n "$HARDCORE" ]]; then
