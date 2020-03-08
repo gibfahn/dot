@@ -36,22 +36,6 @@ sudo cp ~/Library/Preferences/com.apple.HIToolbox.plist /Library/Preferences/
 sudo chmod 644 /Library/Preferences/com.apple.HIToolbox.plist
 ```
 
-### CopyQ
-
-- `General`
-  - `Vi style navigation`
-  - `Autostart`
-- `History` -> `Maximum number of items in history` -> `9999`
-- `Notifications`:
-  - `Notification position` -> `Top Right`
-  - `Interval in seconds to display notifications` -> `2`
-  - `Number of lines for clipboard notification` -> `5`
-  - `Maximum height` -> `300`
-- `Shortcuts`:
-  - `Show/Hide Main Window` -> <kbd>⌘</kbd><kbd>Shift</kbd><kbd>v</kbd>
-  - `Paste as Plain Text` -> <kbd>Shift</kbd><kbd>Enter</kbd>
-- `Appearance` -> `Theme` -> `Dark`
-
 ### Spectacle
 
 - <kbd>⌘</kbd><kbd>Space</kbd>`Spectacle`<kbd>Enter</kbd>
