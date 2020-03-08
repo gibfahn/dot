@@ -7,6 +7,10 @@ tap "homebrew/cask-fonts"                # Let's you `brew cask install` fonts.
 tap "homebrew/bundle"                    # Allows you to use Brewfiles.
 tap "homebrew/cask-versions"             # Allows installing other versions of casks.
 
+# Bootstrapping.
+
+cask "1password"                         # Password manager, installed first so I can log into things.
+
 # Brew formulae
 
 brew "bash"                              # macOS Bash is very old.
@@ -35,7 +39,6 @@ brew "zsh"                               # Nicer interactive shell.
 # Brew casks (GUI Applications):
 
 # cask "rectangle"                         # Window manager that's easy to get used to.
-cask "1password"                         # Password manager.
 cask "copyq"                             # Clipboard manager with history (needs manual setup).
 cask "font-hasklig-nerd-font"            # Nice programming font Hasklig (Source Code Pro + Ligatures) + Nerd Font extensions.
 cask "google-chrome"                     # You probably want/have Chrome.
