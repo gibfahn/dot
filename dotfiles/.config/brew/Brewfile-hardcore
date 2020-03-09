@@ -65,6 +65,7 @@ brew "pv"                                # Show data flow through bash pipes.
 brew "redis"                             # In-memory key-object store.
 brew "ruby-build"                        # Helper to install ruby versions.
 brew "shellcheck"                        # Linter for bash.
+brew "speedtest-cli"                     # Check network speed from the command-line.
 brew "tokei"                             # Counts lines of code in a project.
 brew "watch"                             # Rerun a command every n seconds.
 brew "watchexec"                         # Like entr (evaluating which one is better).
