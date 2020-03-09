@@ -40,12 +40,12 @@ up link \
   --backup ~/backup
 # Platform specific setup:
 if [ "$(uname)" = Darwin ]; then # macOS
-  $(dirname $0)/setup/mac.sh
+  "$(dirname "$0")"/setup/mac.sh
 elif [ "$(uname)" = Linux ]; then # Linux specific stuff.
   distro="$(cat /etc/*-release | grep '^ID=' | sed -E 's/^ID="?(.*)"?/\1/' | head -1)"
   case "$distro" in
-    *[Uu]buntu*) "$(dirname $0)"/setup/ubuntu.sh ;;
-    *[Aa]lpine*) "$(dirname $0)"/setup/alpine.sh || exit 1;;
+    *[Uu]buntu*) "$(dirname "$0")"/setup/ubuntu.sh ;;
+    *[Aa]lpine*) "$(dirname "$0")"/setup/alpine.sh || exit 1;;
     *) echo "No specific setup files for $distro yet" ;;
   esac
 fi
