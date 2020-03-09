@@ -5,9 +5,9 @@ Contains everything I use to setup a new machine (except ssh and gpg keys).
 ## How to run
 
 ```shell
-curl -L -o ~/up https://github.com/gibfahn/up-rs/releases/latest/download/up-darwin
-chmod +x ~/up
-~/up link --git-url https://github.com/gibfahn/dot --git-path ~/code/dot --from ~/code/dot/dotfiles
+curl --create-dirs -Lo ~/bin/up https://github.com/gibfahn/up-rs/releases/latest/download/up-darwin
+chmod +x ~/bin/up
+~/bin/up link --git-url https://github.com/gibfahn/dot --git-path ~/code/dot --from ~/code/dot/dotfiles
 ~/code/dot/up
 ```
 
