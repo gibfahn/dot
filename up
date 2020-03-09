@@ -30,6 +30,14 @@ fi
 [ -z "$XDG_CACHE_HOME" ] && export XDG_CACHE_HOME="$HOME/.cache"
 [ -z "$XDG_DATA_HOME" ] && export XDG_DATA_HOME="$HOME/.local/share"
 
+if ! exists up; then
+  log_get "Installing up-rs"
+  curl --create-dirs -Lo ~/bin/up https://github.com/gibfahn/up-rs/releases/latest/download/up-darwin
+  chmod +x ~/bin/up
+else
+  log_skip "Installing up-rs"
+fi
+
 # Setup dotfile symlinks.
 # TODO(gib): enable these once up supports updating.
 # --git-url https://github.com/gibfahn/dot \
