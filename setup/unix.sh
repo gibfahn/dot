@@ -13,6 +13,7 @@ npm_modules=(
   dockerfile-language-server-nodejs # Language server for Dockerfiles.
   markdownlint-cli                  # Markdown linter.
   diagnostic-languageserver         # Generic language server (see linters).
+  yarn                              # Alternative to npm.
 )
 
 pip3_modules=(
