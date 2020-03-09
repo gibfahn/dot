@@ -134,6 +134,12 @@ if [[ ! -e "/System/Library/CoreServices/Menu Extras/Bluetooth.menu" ]]; then
 fi
 menu_changed+=$(updateMacOSDefault com.apple.systemuiserver menuExtras array-add "/System/Library/CoreServices/Menu Extras/Bluetooth.menu")
 
+# System Preferences > General > Accent Colour > Purple
+updateMacOSDefault NSGlobalDomain AppleAccentColor int 5
+
+# System Preferences > General > Highlight Colour > Blue
+updateMacOSDefault NSGlobalDomain AppleAquaColorVariant int 1
+
 if [[ -n "$HARDCORE" ]]; then # Set keyboard preferences.
   log_section "Setting Hardcore macOS defaults."
 
