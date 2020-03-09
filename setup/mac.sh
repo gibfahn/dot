@@ -376,7 +376,7 @@ if [[ ! -e "$XDG_CONFIG_HOME"/.config/zsh/broot.zsh ]]; then
   mkdir -p "$XDG_CONFIG_HOME"/.config/zsh
   broot --print-shell-function zsh >"$XDG_CONFIG_HOME"/zsh/broot.zsh
 else
-  log_get "broot shell function."
+  log_skip "broot shell function."
 fi
 
 # Remove the default set of things that are in the dock.
