@@ -31,8 +31,13 @@ fi
 [ -z "$XDG_DATA_HOME" ] && export XDG_DATA_HOME="$HOME/.local/share"
 
 # Setup dotfile symlinks.
-./link
-
+# TODO(gib): enable these once up supports updating.
+# --git-url https://github.com/gibfahn/dot \
+# --git-path $PWD/dot \
+up link \
+  --from "$PWD"/dotfiles \
+  --to ~ \
+  --backup ~/backup
 # Platform specific setup:
 if [ "$(uname)" = Darwin ]; then # macOS
   $(dirname $0)/setup/mac.sh
