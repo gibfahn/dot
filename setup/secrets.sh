@@ -29,6 +29,7 @@ encrypt() {
   done
 
   cp ~/.netrc ~/.ssh/tmp/
+  cp ~/.config/hub ~/.ssh/tmp/
 
   date=$(date "+%Y-%m-%d")
 
@@ -56,6 +57,7 @@ decrypt() {
   done
 
   cp ~/.ssh/tmp/.netrc ~/
+  cp ~/.ssh/tmp/hub ~/.config/
   rm -r ~/.ssh/tmp
 }
 
