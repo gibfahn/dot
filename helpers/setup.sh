@@ -4,7 +4,7 @@
 # my gibrc, but that's not necessarily installed yet.
 
 # Include (source) with this line (assuming you're in dot):
-# . $(dirname $0)/helpers/setup.sh # Load helper script from dot/helpers.
+# . "$(dirname "$0")"/helpers/setup.sh # Load helper script from dot/helpers.
 
 set -e
 
