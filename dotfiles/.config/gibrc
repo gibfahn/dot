@@ -337,7 +337,7 @@ case $shell in
     setopt pushd_minus # Make `cd -2` be two dirs ago rather than `cd +2`.
     setopt pushd_silent # Don't print pushd stack after pushd or cd (unless in CDPATH).
 
-    chpwd() { ls -A; } # Auto ls after changing directory.
+    chpwd() { ls -A; [[ -d .git ]] && git fetch --all & } # Auto ls after changing directory.
     CDPATH=~ # Check ~ for directories after checking . (`c/d/` matches `./c*/d*/`, then tries `~/c*/d*/`).
 
     fpath=( # ZSH Completion definitions. If you update this run `exec zsh`.
