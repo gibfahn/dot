@@ -13,6 +13,8 @@ set -e
 [ "$ZSH_VERSION" ] && thisDir="$(dirname "$0")"
 [ -z "$thisDir" ] && thisDir="./helpers"
 
+[[ -z "$dotDir" ]] && dotDir="$(cd "$thisDir"/.. && pwd)"
+
 # Get colour aliases.
 . "$thisDir"/colours.sh
 
@@ -58,6 +60,11 @@ log_debug() {
 
 log_error() {
     printf "    ${RED}ERROR:${NC} %s\n" "$1" 1>&2
+}
+
+# Just normal logging things.
+log_info() {
+  printf "    %s\n" "$1"
 }
 
 # `if no foo` then foo isn't in $XDG_DATA_HOME and we should install it.

@@ -387,6 +387,27 @@ else
   log_skip "Cleaning Dock"
 fi
 
+if [[ ! -e ~/Library/Containers/com.sindresorhus.Dato/Data/Library/Preferences/com.sindresorhus.Dato.plist ]]; then
+  log_get "Setting up dato preferences."
+  mkdir -p ~/Library/Containers/com.sindresorhus.Dato/Data/Library/Preferences/
+  cp "$dotDir"/config/dato/com.sindresorhus.Dato.plist ~/Library/Containers/com.sindresorhus.Dato/Data/Library/Preferences/com.sindresorhus.Dato.plist
+else
+  log_skip "Setting up dato preferences."
+fi
+
+if [[ $(sha256sum ~/Library/Containers/com.sindresorhus.Dato/Data/Library/Preferences/com.sindresorhus.Dato.plist | awk '{print $1}') \
+   == $(sha256sum "$dotDir"/config/dato/com.sindresorhus.Dato.plist | awk '{print $1}') ]]; then
+  log_skip "Pulling dato preferences into repo"
+else
+  log_get "Pulling dato preferences into repo"
+  cp ~/Library/Containers/com.sindresorhus.Dato/Data/Library/Preferences/com.sindresorhus.Dato.plist "$dotDir"/config/dato/com.sindresorhus.Dato.plist
+  log_info "Changes were:"
+  git -C "$dotDir" diff-plist config/dato/com.sindresorhus.Dato.plist
+  git -C "$dotDir" reset
+  git -C "$dotDir" add config/dato/com.sindresorhus.Dato.plist
+  git -C "$dotDir" commit -m 'fix(dato): update preferences file'
+fi
+
 # Swift LanguageServer.
 sourcekit_lsp_path="$XDG_DATA_HOME"/sourcekit-lsp
 if [[ -n "$HARDCORE" ]]; then
