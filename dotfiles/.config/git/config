@@ -79,7 +79,7 @@
   # Interactively show files in $@, one line per file.
   di = "!git diff --color=always --stat --format=\"\" \"${@:-@}\" \
     | fzf --ansi -m --no-sort --reverse --tiebreak=index \
-    --preview \"git diff ${@:-@} -- \\$(sed -E -e 's/^\\s*([^\\|]*)\\s*\\|.*/\\1/' -e 's/(.*)\\{(.*) => (.*)\\}(.*)/\\1\\2\\4 \\1\\3\\4/' <<< {}) | delta \" \
+    --preview \"git diff ${@:-@} -- \\$(sed -E -e 's/^\\s*([^\\|]*)\\s*\\|.*/\\1/' -e 's/(.*)\\{(.*) => (.*)\\}(.*)/\\1\\2\\4 \\1\\3\\4/' <<< {}) | delta --width=variable \" \
     | awk '{print $1}' #"
   dn  = diff HEAD --name-only                          # diff of staged and unstaged file names.
   dp  = diff @{push}                                   # diff between working tree and upstream branch.
@@ -115,7 +115,7 @@
   # Interactive log of $@.
   li = "!git log --graph --color=always --format=\"%C(auto)%h%d %s %C(black)%C(bold)<%an> %cr%C(auto)\" \"$@\" \
     | fzf --ansi -m --no-sort --reverse --tiebreak=index \
-    --preview \"git show --color=always \\$(grep -oE '[a-f0-9]{7,}' <<< {} | head -1) | delta\" \
+    --preview \"git show --color=always \\$(grep -oE '[a-f0-9]{7,}' <<< {} | head -1) | delta --width=variable\" \
     --bind \"ctrl-o:execute: git shi \\$(grep -oE '[a-f0-9]{7,}' <<< {} | head -1)\" \
     | grep -oE '[a-f0-9]{7,}' #"
   # Escape < and > for github markdown, (useful for generating changelogs).
@@ -166,7 +166,7 @@
   # Interactively show files in $@, one line per file.
   shi = "!git show --color=always --stat=1000 --format=\"\" \"${@:-@}\" \
     | fzf --ansi -m --no-sort --reverse --tiebreak=index \
-    --preview \"git show ${@:-@} -- \\$(sed -E -e 's/^\\s*([^\\|]*)\\s*\\|.*/\\1/' -e 's/(.*)\\{(.*) => (.*)\\}(.*)/\\1\\2\\4 \\1\\3\\4/' <<< {}) | delta\" \
+    --preview \"git show ${@:-@} -- \\$(sed -E -e 's/^\\s*([^\\|]*)\\s*\\|.*/\\1/' -e 's/(.*)\\{(.*) => (.*)\\}(.*)/\\1\\2\\4 \\1\\3\\4/' <<< {}) | delta --width=variable\" \
     | awk '{print $1}' #"
   st  = stash
   stp = stash pop
@@ -214,7 +214,7 @@
   gpgsign = true # Always sign commits, available since Git 2.0.
 
 [core]
-  pager = delta # Uses the theme from the BAT_THEME env var.
+  pager = delta --width=variable # Uses the theme from the BAT_THEME env var.
   hooksPath = "~/.config/git/hooks" # Put global git hooks here.
 
 [credential]
