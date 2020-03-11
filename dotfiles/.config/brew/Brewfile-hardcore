@@ -78,7 +78,7 @@ brew "bazelbuild/tap/buildozer"          # Automatically apply fixes to bazel fi
 
 # Brew casks
 
-cask "adoptopenjdk8"                     # Java 8 that is still supported.
+# cask "adoptopenjdk8"                     # Java 8 that is still supported.
 cask "caprine"                           # Facebook Messenger native app.
 cask "chrysalis"                         # Used to flash my KeyboardIO Model 01.
 cask "docker"                            # Build and run docker images.
