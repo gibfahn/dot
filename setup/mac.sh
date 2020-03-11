@@ -76,6 +76,10 @@ updateMacOSDefault NSGlobalDomain AppleWindowTabbingMode string always
 # Maximise window when you double-click on the title bar.
 updateMacOSDefault NSGlobalDomain AppleActionOnDoubleClick string Maximize
 
+# System Preferences > Keyboard > Text > Use smart quotes and dashes -> disable.
+updateMacOSDefault NSGlobalDomain NSAutomaticDashSubstitutionEnabled bool false
+updateMacOSDefault NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled bool false
+
 # Don't show recents in dock.
 dock_changed+=$(updateMacOSDefault com.apple.dock show-recents bool false)
 
