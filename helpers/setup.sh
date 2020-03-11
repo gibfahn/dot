@@ -308,8 +308,8 @@ readMacOSDefault() {
 
   if [[ $expected_type == bool ]]; then
     case $parsed_value in
-      1) echo "TRUE" ;;
-      0) echo "FALSE" ;;
+      1) echo "true" ;;
+      0) echo "false" ;;
       *) log_error "Unexpected parsed value $parsed_value"; return 5 ;;
     esac
   else

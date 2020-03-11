@@ -21,7 +21,7 @@ fi
 # Use the existing and the help output of `defaults` to work it out.
 #   @command, ~option, ^ctrl, $shift
 # The global domain NSGlobalDomain NSGlobalDomain is the same as -g or -globalDomain.
-# -bool YES/TRUE or FALSE/NO correspond to -int 1 or 0.
+# -bool yes/true or no/false correspond to -int 1 or 0.
 # You can view plist files with /usr/libexec/PlistBuddy
 
 # Make user keyboard layout the default layout on login (maybe dangerous):
@@ -40,9 +40,9 @@ updateMacOSKeyboardShortcut com.apple.mail "Archive" '@\\b'
 updateMacOSKeyboardShortcut com.apple.mail "Send" '@\\U21a9'
 
 # Unnatural scrolling direction (swipe down to scroll down).
-changed=$(updateMacOSDefault NSGlobalDomain com.apple.swipescrolldirection bool FALSE)
+changed=$(updateMacOSDefault NSGlobalDomain com.apple.swipescrolldirection bool false)
 if [[ -n "$changed" ]]; then
-  log_debug "Applying scroll direction changes with '/System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u' as previous value was '$changed' not FALSE"
+  log_debug "Applying scroll direction changes with '/System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u' as previous value was '$changed' not false"
   /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
 fi
 
@@ -57,18 +57,18 @@ updateMacOSDefault com.apple.AppleMultitouchTrackpad SecondClickThreshold int 0
 updateMacOSDefault com.apple.AppleMultitouchTrackpad ActuationStrength int 0
 
 # Keyboard -> Input Sources -> Show Input menu in menu bar.
-updateMacOSDefault com.apple.TextInputMenu visible bool TRUE
+updateMacOSDefault com.apple.TextInputMenu visible bool true
 
 # Expand save panel by default
-updateMacOSDefault NSGlobalDomain NSNavPanelExpandedStateForSaveMode bool TRUE
-updateMacOSDefault NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 bool TRUE
+updateMacOSDefault NSGlobalDomain NSNavPanelExpandedStateForSaveMode bool true
+updateMacOSDefault NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 bool true
 
 # Expand print panel by default
-updateMacOSDefault NSGlobalDomain PMPrintingExpandedStateForPrint bool TRUE
-updateMacOSDefault NSGlobalDomain PMPrintingExpandedStateForPrint2 bool TRUE
+updateMacOSDefault NSGlobalDomain PMPrintingExpandedStateForPrint bool true
+updateMacOSDefault NSGlobalDomain PMPrintingExpandedStateForPrint2 bool true
 
 # Disable the “Are you sure you want to open this application?” dialog
-updateMacOSDefault com.apple.LaunchServices LSQuarantine bool FALSE
+updateMacOSDefault com.apple.LaunchServices LSQuarantine bool false
 
 # Always open new things in tabs (not new windows) for document based apps.
 updateMacOSDefault NSGlobalDomain AppleWindowTabbingMode string always
@@ -77,16 +77,16 @@ updateMacOSDefault NSGlobalDomain AppleWindowTabbingMode string always
 updateMacOSDefault NSGlobalDomain AppleActionOnDoubleClick string Maximize
 
 # Don't show recents in dock.
-dock_changed+=$(updateMacOSDefault com.apple.dock show-recents bool FALSE)
+dock_changed+=$(updateMacOSDefault com.apple.dock show-recents bool false)
 
 # Uncheck "Displays have separate spaces" to allow multi-screen windows.
-updateMacOSDefault com.apple.spaces spans-displays bool TRUE
+updateMacOSDefault com.apple.spaces spans-displays bool true
 
 # Greys out hidden apps in the dock (so you can see which are hidden).
-dock_changed+=$(updateMacOSDefault com.apple.dock showAppExposeGestureEnabled bool TRUE)
+dock_changed+=$(updateMacOSDefault com.apple.dock showAppExposeGestureEnabled bool true)
 
 # Greys out hidden apps in the dock (so you can see which are hidden).
-dock_changed+=$(updateMacOSDefault com.apple.Dock showhidden bool TRUE)
+dock_changed+=$(updateMacOSDefault com.apple.Dock showhidden bool true)
 
 # System Preferences -> Keyboard -> Shortcuts -> Full Keyboard Access
 # Full Keyboard Access: In Windows and Dialogs, press Tab to move keyboard
@@ -103,7 +103,7 @@ updateMacOSDefault NSGlobalDomain AppleKeyboardUIMode int 2
 finder_changed+=$(updateMacOSDefault com.apple.finder AppleShowAllFiles int 1)
 
 # Finder: show all filename extensions
-updateMacOSDefault NSGlobalDomain AppleShowAllExtensions bool TRUE
+updateMacOSDefault NSGlobalDomain AppleShowAllExtensions bool true
 
 # Display full POSIX path as Finder window title
 updateMacOSDefault com.apple.finder _FXShowPosixPathInTitle int 1
@@ -121,7 +121,7 @@ updateMacOSDefault NSGlobalDomain AppleScrollerPagingBehavior int 1
 # Increases trackpad tracking speed / sensitivity (SysPref max 3.0).
 updateMacOSDefault NSGlobalDomain com.apple.trackpad.scaling float 5
 # Disable force clicking.
-updateMacOSDefault NSGlobalDomain com.apple.trackpad.forceClick bool FALSE
+updateMacOSDefault NSGlobalDomain com.apple.trackpad.forceClick bool false
 
 # Show battery percentage in menu bar.
 menu_changed=$(updateMacOSDefault com.apple.menuextra.battery ShowPercent string YES)
@@ -169,9 +169,9 @@ if [[ -n "$HARDCORE" ]]; then # Set keyboard preferences.
   updateMacOSDefault NSGlobalDomain AppleInterfaceStyle string Dark
 
   # Auto-hide menu bar.
-  updateMacOSDefault NSGlobalDomain _HIHideMenuBar bool TRUE
+  updateMacOSDefault NSGlobalDomain _HIHideMenuBar bool true
   # Auto-hide dock.
-  dock_changed+=$(updateMacOSDefault com.apple.dock autohide bool TRUE)
+  dock_changed+=$(updateMacOSDefault com.apple.dock autohide bool true)
 
   # Allow Finder to be quit (hides Desktop files).
   finder_changed+=$(updateMacOSDefault com.apple.finder QuitMenuItem int 1)
