@@ -89,6 +89,12 @@ After installing:
 - `NTFS for Mac Menu` -> `OFF`
 - Untick `Launch on System Startup`
 
+### Sogou Pinyin
+
+- Change Sogou keyboard layout to Colemak:
+  - Change to Sogou with <kbd>Ctrl</kbd><kbd>Space</kbd>.
+  - ⚙ -> 偏好号设置 -> 按键 -> 键盘布局 -> 其他键盘 -> Colemak
+
 ### Autostart
 
 Remove things that shouldn't need to auto-start.
