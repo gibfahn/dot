@@ -131,6 +131,9 @@ updateMacOSDefault NSGlobalDomain com.apple.trackpad.forceClick bool false
 # System Preferences > Accessibility > Zoom > Use scroll gesture with modifer keys to zoom > Enabled
 updateMacOSDefault com.apple.universalaccess closeViewScrollWheelToggle bool true
 
+# System Preferences > Keyboard > Dictation > On
+updateMacOSDefault com.apple.assistant.support "Dictation Enabled" bool true
+
 # Show battery percentage in menu bar.
 menu_changed=$(updateMacOSDefault com.apple.menuextra.battery ShowPercent string YES)
 
