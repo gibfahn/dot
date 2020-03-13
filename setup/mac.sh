@@ -86,7 +86,8 @@ dock_changed+=$(updateMacOSDefault com.apple.dock show-recents bool false)
 # Uncheck "Displays have separate spaces" to allow multi-screen windows.
 updateMacOSDefault com.apple.spaces spans-displays bool true
 
-# Greys out hidden apps in the dock (so you can see which are hidden).
+# System Preferences > Trackpad > More Gestures > App Expose > Enable
+# Swipe down with 3 fingers to see windows for current app.
 dock_changed+=$(updateMacOSDefault com.apple.dock showAppExposeGestureEnabled bool true)
 
 # Greys out hidden apps in the dock (so you can see which are hidden).
@@ -126,6 +127,9 @@ updateMacOSDefault NSGlobalDomain AppleScrollerPagingBehavior int 1
 updateMacOSDefault NSGlobalDomain com.apple.trackpad.scaling float 5
 # Disable force clicking.
 updateMacOSDefault NSGlobalDomain com.apple.trackpad.forceClick bool false
+
+# System Preferences > Accessibility > Zoom > Use scroll gesture with modifer keys to zoom > Enabled
+updateMacOSDefault com.apple.universalaccess closeViewScrollWheelToggle bool true
 
 # Show battery percentage in menu bar.
 menu_changed=$(updateMacOSDefault com.apple.menuextra.battery ShowPercent string YES)

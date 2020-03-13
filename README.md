@@ -13,18 +13,6 @@ chmod +x ~/bin/up
 
 Then see [manual.md][].
 
-## TODOs
-
-These need to be done manually until I automate them.
-
-- Debug power etc not showing up.
-- Trackpad:
-  - Tap to click
-  - Click -> Light
-  - Swipe down for App Expose
-- Accessibility -> Zoom:
-  - Use scroll gesture with modifier keys to zoom
-
 ### Lite (non-root) setup
 
 Useful for remote machines you don't own (you still want some niceties, but you
