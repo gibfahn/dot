@@ -34,6 +34,7 @@ rust_crates=(
   # find_unicode                  # Find unicode.
   # TODO(gib): Add proximity-sort and update their readme with `cargo install proximity-sort` instructions.
   # https://github.com/jonhoo/proximity-sort
+  cargo-edit
 )
 
 go_packages=(
