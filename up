@@ -1,9 +1,19 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Runs the setup to "install" my dotfiles on your machine. Runs scripts in
 # config/ and then runs ./link.
 
 set -e
+
+LOG_FILE=$HOME/tmp/dot-tmp.log
+rm -f "$LOG_FILE"
+touch "$LOG_FILE"
+
+exec > >(tee -a "$LOG_FILE") 2>&1
+
+echo -e "Running up script at $(date --iso-8601=seconds)"
+
+env
 
 cd "$(dirname "$0")"
 
@@ -42,10 +52,10 @@ fi
 # TODO(gib): enable these once up supports updating.
 # --git-url https://github.com/gibfahn/dot \
 # --git-path $PWD/dot \
-up link \
-  --from "$PWD"/dotfiles \
-  --to ~ \
-  --backup ~/backup
+# up link \
+#   --from "$PWD"/dotfiles \
+#   --to ~ \
+#   --backup ~/backup
 # Platform specific setup:
 if [ "$(uname)" = Darwin ]; then # macOS
   "$(dirname "$0")"/setup/mac.sh
