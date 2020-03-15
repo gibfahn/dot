@@ -143,7 +143,14 @@ if [[ ! -e "/System/Library/CoreServices/Menu Extras/Bluetooth.menu" ]]; then
   log_error "Can no longer find the bluetooth menu item."
   exit 1
 fi
+# Add the bluetooth settings to the Menu Bar.
+if [[ ! -e "/System/Library/CoreServices/Menu Extras/Volume.menu" ]]; then
+  # Make sure the menu item exists before adding it so we don't trash the machine.
+  log_error "Can no longer find the Volume menu item."
+  exit 1
+fi
 menu_changed+=$(updateMacOSDefault com.apple.systemuiserver menuExtras array-add "/System/Library/CoreServices/Menu Extras/Bluetooth.menu")
+menu_changed+=$(updateMacOSDefault com.apple.systemuiserver menuExtras array-add "/System/Library/CoreServices/Menu Extras/Volume.menu")
 
 # System Preferences > General > Accent Colour > Purple
 updateMacOSDefault NSGlobalDomain AppleAccentColor int 5
