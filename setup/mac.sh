@@ -211,7 +211,7 @@ if [[ -n "$HARDCORE" ]]; then # Set keyboard preferences.
     '{"enabled" = 1;"name" = "APPLICATIONS";}'
     '{"enabled" = 1;"name" = "MENU_EXPRESSION";}'
     '{"enabled" = 1;"name" = "MENU_DEFINITION";}'
-    '{"enabled" = 0;"name" = "SYSTEM_PREFS";}'
+    '{"enabled" = 1;"name" = "SYSTEM_PREFS";}'
     '{"enabled" = 0;"name" = "DIRECTORIES";}'
     '{"enabled" = 0;"name" = "PDF";}'
     '{"enabled" = 0;"name" = "FONTS";}'
