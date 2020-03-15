@@ -58,6 +58,10 @@ log_debug() {
     printf "%s\n" "$1" >> "$HOME"/tmp/dot.log
 }
 
+log_debug_pipe() {
+    cat >> "$HOME"/tmp/dot.log
+}
+
 log_error() {
     printf "    ${RED}ERROR:${NC} %s\n" "$1" 1>&2
 }

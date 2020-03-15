@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # shellcheck shell=bash disable=SC1090,SC2016
 
 # Things I like to have on a Mac.
@@ -245,11 +245,11 @@ if [[ -n "$HARDCORE" ]]; then # Set keyboard preferences.
     defaults write com.apple.Spotlight orderedItems -array "${spotlight_preferences[@]}"
 
     # Load new settings before rebuilding the index
-    killall mds > /dev/null 2>&1
+    killall mds 2>&1 | log_debug_pipe
     # Make sure indexing is enabled for the main volume
-    sudo mdutil -i on / > /dev/null
+    sudo mdutil -i on / 2>&1 | log_debug_pipe
     # Rebuild the index from scratch
-    sudo mdutil -E / > /dev/null
+    sudo mdutil -E / 2>&1 | log_debug_pipe
   fi
 
   # TODO(gib): Add more shortcuts:
