@@ -1,0 +1,10 @@
+constraints = {OS = "macOS"}
+
+run_lib = "defaults"
+
+[[data.default]]
+domain = "com.apple.menuextra.battery"
+key = "ShowPercent"
+type = "string"
+value = "YES"
+if_changed = "restart_SystemUIServer"

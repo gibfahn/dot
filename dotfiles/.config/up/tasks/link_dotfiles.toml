@@ -1,0 +1,10 @@
+constraints = {OS = "macOS"}
+
+requires = ["dotfile_repo"]
+
+run_lib = "link"
+
+[data]
+from_dir = "$dotfile_dir"
+to_dir = "~"
+backup_dir = "$backup_dir"

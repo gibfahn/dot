@@ -1,0 +1,4 @@
+constraints = {OS = "macOS"}
+
+auto_run = false
+run_cmd = ["killall", "SystemUIServer"]
