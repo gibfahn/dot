@@ -58,12 +58,12 @@ decrypt() {
     gpg --edit-key "$email"
   done
 
-  cp ~/.ssh/tmp/.netrc ~/
+  cp --backup --verbose ~/.ssh/tmp/.netrc ~/
   mkdir -p ~/.config
-  cp ~/.ssh/tmp/hub ~/.config/
+  cp --backup --verbose ~/.ssh/tmp/hub ~/.config/
   mkdir -p ~/.kube/
-  cp ~/.ssh/tmp/kube/* ~/.kube/
-  rm -r ~/.ssh/tmp
+  cp --backup --verbose ~/.ssh/tmp/kube/* ~/.kube/
+  rm --recursive --verbose ~/.ssh/tmp
 }
 
 main "$@"
