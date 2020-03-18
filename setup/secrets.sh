@@ -30,6 +30,8 @@ encrypt() {
 
   cp ~/.netrc ~/.ssh/tmp/
   cp ~/.config/hub ~/.ssh/tmp/
+  mkdir -p ~/.ssh/tmp/kube/
+  cp ~/.kube/*.conf ~/.ssh/tmp/kube/
 
   date=$(date "+%Y-%m-%d")
 
@@ -57,7 +59,10 @@ decrypt() {
   done
 
   cp ~/.ssh/tmp/.netrc ~/
+  mkdir -p ~/.config
   cp ~/.ssh/tmp/hub ~/.config/
+  mkdir -p ~/.kube/
+  cp ~/.ssh/tmp/kube/* ~/.kube/
   rm -r ~/.ssh/tmp
 }
 
