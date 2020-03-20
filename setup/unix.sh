@@ -32,8 +32,7 @@ rust_crates=(
   # svgcleaner                    # Remove unnecessary info from svgs.
   # oxipng                        # Compress png images.
   # find_unicode                  # Find unicode.
-  # TODO(gib): Add proximity-sort and update their readme with `cargo install proximity-sort` instructions.
-  # https://github.com/jonhoo/proximity-sort
+  proximity-sort
   cargo-edit
 )
 

@@ -116,6 +116,9 @@ c="$XDG_CONFIG_HOME" # Shortcut to the config directory (`v $c/gibrc` to edit th
 
 # {{{ Functions
 
+# Edit a file on the system.
+e() { "$=VISUAL" $(locate -i "$@" | proximity-sort "$PWD" | fzf --tiebreak=index); }
+
 mdc() { command mkdir -p "$@"; { [[ $# == 1 ]] && cd "$1"; } || true; } # Mkdir then cd to dir (`mdc foo` = `mkdir foo && cd foo`).
 cpm() { command mkdir -p "$(dirname "${@: -1}")" && cp "$@"; } # Mkdir then cp to dir (`cpm foo bar/baz` = `md bar/baz && cp foo bar/baz`).
 mvm() { command mkdir -p "$(dirname "${@: -1}")" && mv "$@"; } # Mkdir then mv to dir (`mvm foo bar/baz` = `md bar/baz && mv foo bar/baz`).
