@@ -336,10 +336,11 @@ case $shell in
     setopt pushd_ignore_dups # Don't push multiple copies onto the directory stack.
     setopt pushd_minus # Make `cd -2` be two dirs ago rather than `cd +2`.
     setopt pushd_silent # Don't print pushd stack after pushd or cd (unless in CDPATH).
+    setopt no_notify # Print job updates just before a prompt (not mid-execution).
 
     chpwd() { # Commands to run after changing directory.
-      setopt local_options no_notify no_monitor # Don't print job status.
       ls -A # Show dir contents.
+      # Uses eval as otherwise bash-language-server chokes on the '&!'.
       [[ -d .git ]] && git fetch --all --quiet & # Fetch git remotes.
     }
     CDPATH=~ # Check ~ for directories after checking . (`c/d/` matches `./c*/d*/`, then tries `~/c*/d*/`).
