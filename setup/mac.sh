@@ -425,6 +425,23 @@ else
   log_skip "Pulling dato preferences into repo"
 fi
 
+# Allows you to do `locate <name>` to find anywhere in your system.
+if [[ -e /var/db/locate.database ]]; then
+  log_skip "Enabling updatedb"
+else
+  log_get "Enabling updatedb"
+  sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.locate.plist
+fi
+
+if [[ ! -e /Library/LaunchDaemons/co.fahn.glocate.plist && $(brew --prefix) == /usr/local ]]; then
+  log_get "Enabling gupdatedb"
+  sudo cp "$dotDir"/setup/co.fahn.glocate.plist /Library/LaunchDaemons/
+  sudo launchctl load -w /Library/LaunchDaemons/co.fahn.glocate.plist
+else
+  log_skip "Enabling gupdatedb"
+fi
+
+
 # Swift LanguageServer.
 sourcekit_lsp_path="$XDG_DATA_HOME"/sourcekit-lsp
 if [[ -n "$HARDCORE" ]]; then
