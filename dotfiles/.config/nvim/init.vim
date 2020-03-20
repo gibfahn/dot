@@ -270,6 +270,7 @@ nnoremap <Leader>ID :r !date +\%d-\%b-\%y<CR>| " ↳      `:sort`able date on ne
 nnoremap <Leader>It ITODO(gib): <ESC>:Commentary<CR>$| " Insert a TODO, (Write todo, then `<Space>it`).
 nnoremap <Leader>Ix IXXX(gib): <ESC>:Commentary<CR>$| " Insert an XXX, (Write todo, then `<Space>it`).
 nnoremap <leader>j :AnyJump<CR>|           " Jump to definition under cursore
+nnoremap <Leader>l :Locate |               " Search filesystem for files.
 nnoremap <Leader>m :!mkdir -p "%:p:h"<CR>
 nnoremap <Leader>n :sp<CR><C-w>k:bp<CR>|   " Open horizontal split,
 nnoremap <Leader>o :set operatorfunc=OpenUrl<CR>g@| " Open the selected text with the appropriate program (like netrw-gx).
