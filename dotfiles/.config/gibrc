@@ -342,6 +342,7 @@ case $shell in
     setopt no_notify # Print job updates just before a prompt (not mid-execution).
 
     chpwd() { # Commands to run after changing directory.
+      setopt local_options no_monitor # This only disables the "job start", not the "job complete".
       ls -A # Show dir contents.
       # Uses eval as otherwise bash-language-server chokes on the '&!'.
       [[ -d .git ]] && git fetch --all --quiet & # Fetch git remotes.
