@@ -39,7 +39,7 @@
   ba  = branch -a # Show all local and remote branches.
   bb  = bisect bad
   bd  = branch -D # Delete branch.
-  bdd = "!:; lastBranch=$(git head-branch); git checkout - || git checkout $(git default-branch up); git branch -D $lastBranch #" # Delete current branch.
+  bdd = "!lastBranch=$(git head-branch); git checkout - && [[ $(git head-branch) != $lastBranch ]] || git checkout $(git default-branch up); git branch -D $lastBranch #" # Delete current branch.
   bg  = bisect good
   # Sorted list of branches.
   # TODO(gib): Fix this to make it look nice (can also use git branch directly).
