@@ -3,7 +3,7 @@
 _gib_git_f() {
   git -c color.status=always status --short |
   fzf "$@" --border -m --ansi --nth 2..,.. \
-    --preview 'git diff -- {-1} | delta'
+    --preview 'git diff -- {-1} | delta' | cut -c4- | sed 's/.* -> //'
 }
 # Fzf git branches.
 _gib_git_b() {
