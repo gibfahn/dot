@@ -158,6 +158,12 @@ inoremap <silent><expr> <TAB>
 " Shift-Tab is previous entry if completion menu open.
 inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
+" Use <Alt><TAB> for selections ranges (visually select increasingly large ranges).
+" NOTE: Requires 'textDocument/selectionRange' support from the language server.
+" coc-tsserver, coc-python are the examples of servers that support it.
+nmap <silent> <A-TAB> <Plug>(coc-range-select)
+xmap <silent> <A-TAB> <Plug>(coc-range-select)
+
 " Use <C-n> for both expand and jump (make expand higher priority.)
 " Use <C-j> for jump to next placeholder, it's default of coc.nvim
 let g:coc_snippet_next = '<a-u>'
@@ -220,9 +226,9 @@ nmap <Leader>cF  <Plug>(coc-fix-current)
 
 " Using CocList
 " Show all diagnostics
-nnoremap <silent> <Leader>ca  :<C-u>CocList diagnostics<cr>
+nnoremap <silent> <Leader>cA  :<C-u>CocList diagnostics<cr>
 " Manage extensions
-nnoremap <silent> <Leader>ce  :<C-u>CocList extensions<cr>
+nnoremap <silent> <Leader>cE  :<C-u>CocList extensions<cr>
 " Show commands
 nnoremap <silent> <Leader>cc  :<C-u>CocList commands<cr>
 " Find symbol of current document
@@ -230,9 +236,9 @@ nnoremap <silent> <Leader>co  :<C-u>CocList outline<cr>
 " Search workspace symbols
 nnoremap <silent> <space>cs  :<C-u>CocList -I symbols<cr>
 " Do default action for next item.
-nnoremap <silent> <space>cj  :<C-u>CocNext<CR>
+nnoremap <silent> <space>cn  :<C-u>CocNext<CR>
 " Do default action for previous item.
-nnoremap <silent> <space>ck  :<C-u>CocPrev<CR>
+nnoremap <silent> <space>ce  :<C-u>CocPrev<CR>
 " Resume latest coc list
 nnoremap <silent> <space>cp  :<C-u>CocListResume<CR>
 
@@ -363,11 +369,18 @@ vnoremap          <Leader>o :<c-u>call OpenUrl(visualmode())<CR>| " Open the sel
 vnoremap // y/\V<C-r>=escape(@",'/\')<CR><CR>|      " Search for selected text with // (very no-magic mode, searches for exactly what you select).
 vnoremap g// y/\V<C-R>=&ic?'\c':'\C'<CR><C-r>=escape(@",'/\')<CR><CR>| " Search for selected text case-insensitively.
 
-" Adds operator-pending mappings for folds, e.g. vif and vaf like vip and vap.
-vnoremap if :<C-U>silent!normal![zjV]zk<CR>
-onoremap if :normal Vif<CR>
-vnoremap af :<C-U>silent!normal![zV]z<CR>
-onoremap af :normal Vaf<CR>
+" Introduce function text object, e.g. vaf to visually select current function.
+" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+xmap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap if <Plug>(coc-funcobj-i)
+omap af <Plug>(coc-funcobj-a)
+
+" Adds operator-pending mappings for folds, e.g. viz and vaz like vip and vap.
+vnoremap iz :<C-U>silent!normal![zjV]zk<CR>
+onoremap iz :normal Vif<CR>
+vnoremap az :<C-U>silent!normal![zV]z<CR>
+onoremap az :normal Vaf<CR>
 
 " See SurroundOp() function.
 omap <expr> s '<esc>'.SurroundOp('s')
@@ -769,9 +782,9 @@ augroup gibAutoGroup                                " Group of automatic functio
   autocmd FocusGained,BufEnter,CursorHold,CursorHoldI * if getcmdwintype() == '' | checktime | endif
   " Setup formatexpr specified filetype(s).
   autocmd FileType typescript,json,rust setl formatexpr=CocAction('formatSelected')
-  " Update signature help on jump placeholder
+  " Update signature help on jump placeholder (show function signature when you jump to it).
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-  " Highlight symbol under cursor on CursorHold
+  " Highlight symbol under cursor on CursorHold (show other instances of current word).
   autocmd CursorHold * silent call CocActionAsync('highlight')
   " Allow comments in json.
   autocmd FileType json syntax match Comment +\/\/.\+$+
