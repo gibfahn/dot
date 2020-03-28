@@ -168,6 +168,12 @@
     --preview \"git show ${@:-@} -- \\$(sed -E -e 's/^\\s*([^\\|]*)\\s*\\|.*/\\1/' -e 's/(.*)\\{(.*) => (.*)\\}(.*)/\\1\\2\\4 \\1\\3\\4/' <<< {}) | delta --width=variable\" \
     | awk '{print $1}' #"
   st  = stash
+  # Interactive log of $@.
+  sti = "!git stash list --color=always \"$@\" \
+    | fzf --ansi -m --no-sort --reverse --tiebreak=index \
+    --preview \"git stash show --patch --color=always \\$(cut -d : -f 1 <<< {}) | delta --width=variable\" \
+    --bind \"ctrl-o:execute: git shi \\$(cut -d : -f 1 <<< {})\" \
+    | cut -d : -f 1 #"
   stp = stash pop
   std = stash drop
 
