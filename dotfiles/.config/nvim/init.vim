@@ -609,22 +609,22 @@ command! PU PlugClean | PlugUpdate | PlugUpgrade|   " :PU updates/cleans plugins
 
 " TODO(gib): Also start using proximity-sort in vimrc.
 
-" :Locate will search entire filesystem for file.
-" command! -nargs=1 -bang Locate call fzf#run(fzf#wrap({'source': 'locate <q-args>', 'options': '-m'}, <bang>0))
-
-" See https://github.com/jonhoo/proximity-sort , makes closer paths to cwd
-" higher priority.
-function! s:list_cmd()
-  let base = fnamemodify(expand('%'), ':h:.:S')
-  return base == '.' ? 'fd -t f' : printf('fd -t f | proximity-sort %s', expand('%'))
+" See https://github.com/jonhoo/proximity-sort , makes closer paths to cwd higher priority.
+function! s:list_cmd(kind, query)
+  if a:kind == 'find'
+    let base = fnamemodify(expand('%'), ':h:.:S')
+    return base == '.' ? 'fd --hidden --type file' : printf('fd --hidden --type file | proximity-sort %s', expand('%'))
+  elseif a:kind == 'locate'
+    return 'locate -i ' . a:query . ' | proximity-sort ' . getcwd()
+  endif
 endfunction
 
 command! -bang -nargs=? -complete=dir Files
-  \ call fzf#vim#files(<q-args>, {'source': s:list_cmd(),
+  \ call fzf#vim#files(<q-args>, {'source': s:list_cmd('find'),
   \                               'options': '--tiebreak=index'}, <bang>0)
 
 command! -bang -nargs=? -complete=dir Locate
-  \ call fzf#vim#locate(<q-args>, {'source': s:list_cmd(),
+  \ call fzf#vim#locate(<q-args>, {'source': s:list_cmd('locate', <q-args>),
   \                               'options': '--tiebreak=index'}, <bang>0)
 
 " Use Rg to specify the string to search for (can be regex).
