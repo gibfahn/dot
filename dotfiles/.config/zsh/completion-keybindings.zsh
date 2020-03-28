@@ -1,10 +1,12 @@
-# Fzf git files (unstaged).
 # shellcheck shell=bash disable=SC2016
+
+# Fzf git files (unstaged).
 _gib_git_f() {
   git -c color.status=always status --short |
   fzf "$@" --border -m --ansi --nth 2..,.. \
     --preview 'git diff -- {-1} | delta' | cut -c4- | sed 's/.* -> //'
 }
+
 # Fzf git branches.
 _gib_git_b() {
   git branch -a --color=always --sort=committerdate --sort=-refname:rstrip=2 \
@@ -13,6 +15,7 @@ _gib_git_b() {
   --bind "ctrl-o:execute: git li \$(awk '{if (\$1 == \"*\") { print \$2 } else { print \$1 } }' <<< {})" \
   | awk '{if ($1 == "*") { print $2 } else { print $1 } }' | sed 's#^remotes/##'
 }
+
 # Fzf git tags.
 _gib_git_t() {
   git tag --color=always --sort -version:refname |
@@ -20,6 +23,7 @@ _gib_git_t() {
     --preview "git l --color=always {}" \
     --bind "ctrl-o:execute: git li {}"
 }
+
 # Fzf git hashes.
 _gib_git_h() {
   git log --all --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --graph --color=always |
