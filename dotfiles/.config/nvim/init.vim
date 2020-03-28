@@ -39,6 +39,7 @@ try
   Plug 'airblade/vim-gitgutter'                     " Show git diffs in the gutter (left of line numbers) (:h gitgutter).
   Plug 'ap/vim-buftabline'                          " Show buffers in the tab bar.
   Plug 'ap/vim-readdir'                             " Nicer file browser plugin that works with buftabline.
+  Plug 'aymericbeaumet/vim-symlink'                 " Resolve symlinks when opening files.
   Plug 'cespare/vim-toml'                           " Toml syntax highlighting.
   Plug 'chrisbra/Colorizer'                         " Color ansi escape codes (:h Colorizer).
   Plug 'coderifous/textobj-word-column.vim'         " Adds ic/ac and iC/aC motions to block select word column in paragraph.
@@ -225,7 +226,7 @@ nmap <Leader>ca  <Plug>(coc-codeaction)
 nmap <Leader>cF  <Plug>(coc-fix-current)
 
 " Using CocList
-" Show all diagnostics
+" Show all diagnostics (<C-a><C-q> to open all in quickfix).
 nnoremap <silent> <Leader>cA  :<C-u>CocList diagnostics<cr>
 " Manage extensions
 nnoremap <silent> <Leader>cE  :<C-u>CocList extensions<cr>
@@ -257,6 +258,7 @@ nnoremap <Leader>gC :e ~/.config/nvim/coc-settings.json<CR> " Edit colorscheme f
 nnoremap <Leader>gd :w !git diff --no-index % - <CR>|     " Diff between saved file and current.
 nnoremap <Leader>gf :call DupBuffer()<CR>gF| " Open file path:row:col under cursor in last window.
 nnoremap <Leader>gg :tab G<CR>| " Open fugitive Gstatus in a new tab.
+nnoremap <Leader>gG :Gcd<CR>| " Cd to root of git directory current file is in.
 nnoremap <Leader>gh :call <SID>SynStack()<CR>| " Show which syntax is set for current cursor location.
 nnoremap <Leader>gH :e $colorscheme_path<CR> " Edit colorscheme file.
 nnoremap <Leader>gl :source <C-r>=SessionFile()<CR><CR>| " Load saved session for vim cwd to a default session path.
