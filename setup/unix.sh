@@ -345,6 +345,11 @@ if exists npm; then
   npm completion --loglevel=error > "$XDG_DATA_HOME/zfunc/source/_npm"
 fi
 
+if exists kitty; then
+  # Completion for kitty
+  kitty + complete setup zsh > "$XDG_DATA_HOME/zfunc/source/_kitty"
+fi
+
 # TODO(gib): Does this actually work?
 # Run the source
 # zplugin creinstall "$XDG_DATA_HOME"/zfunc/
