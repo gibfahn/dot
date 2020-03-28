@@ -101,6 +101,7 @@ cask "visual-studio-code"                # IDE that supports debugging Rust code
 # mas "Logic Pro X", id: 634148309
 # mas "Xcode", id: 497799835               # Needed to compile llvm (among other things).
 # mas "iMovie", id: 408981434
+mas "Be Focused", id: 973134470          # Pomodoro Timer.
 mas "Dark Reader for Safari", id: 1438243180 # Dark mode in every website.
 mas "Dato", id: 1470584107
 mas "Keynote", id: 409183694
