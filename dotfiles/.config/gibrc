@@ -266,6 +266,7 @@ if exists kitty; then
   alias icat="kitty +kitten icat" # Kitty terminal specific: https://sw.kovidgoyal.net/kitty/kittens/icat.html
 fi
 alias idea="/Applications/IntelliJ\ IDEA\ CE.app/Contents/MacOS/idea" # IntelliJ CE
+alias curl="noglob curl" # Don't match on ? [] etc in curl URLs, avoids needing to quote URL args.
 
 exists ggrep && alias grep='ggrep --color=auto'
 
