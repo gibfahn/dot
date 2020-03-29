@@ -34,6 +34,17 @@ _gib_git_h() {
   | grep -oE "[a-f0-9]{7,}"
 }
 
+# Fzf git stashes.
+# Can't use ^G^S because it doesn't trigger for some reason.
+_gib_git_a() {
+  git stash list --color=always |
+  fzf "$@" --border --ansi --no-sort --reverse --multi --header 'Press CTRL-S to toggle sort' \
+    --preview 'git stash show --patch --color=always $(cut -d : -f 1 <<< {}) | delta' \
+    --bind 'ctrl-s:toggle-sort' \
+    --bind "ctrl-o:execute: git shi \$(cut -d : -f 1 <<< {} | head -1)" \
+  | cut -d : -f 1
+}
+
 # Fzf git reflog history.
 _gib_git_r() {
   git reflog --date=short --pretty=oneline --color=always --decorate |
@@ -43,6 +54,7 @@ _gib_git_r() {
     --bind "ctrl-o:execute: git shi \$(grep -oE '[a-f0-9]{7,}' <<< {} | head -1)" \
   | grep -oE '[a-f0-9]{7,}'
 }
+
 # More fzf helpers.
 # shellcheck disable=2034,SC2154
 _gib_join-lines() { local item; while read -r item; do echo -n "${(q)item} "; done; }
@@ -121,7 +133,7 @@ bindkey -M vicmd ' ' edit-command-line # <Space> in cmd mode opens editor.
 
 # Bind git shortcuts to <c-g><c-$@> (see above functions for more info).
 bindkey -r -M viins "^G" # Remove list-expand binding so we can use <C-g> for git.
-bind-git-helper f b t r h # Bind <C-g><C-{f,b,t,r,h}> to fuzzy-find show {files,branches,tags,reflog,hashes}.
+bind-git-helper f b t r h a # Bind <C-g><C-{f,b,t,r,h,s}> to fuzzy-find show {files,branches,tags,reflog,hashes,stashes}.
 unset -f bind-git-helper
 
 # Run before the prompt is displayed.
