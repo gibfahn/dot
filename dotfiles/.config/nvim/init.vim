@@ -620,7 +620,7 @@ function! s:list_cmd(kind, query)
 endfunction
 
 command! -bang -nargs=? -complete=dir Files
-  \ call fzf#vim#files(<q-args>, {'source': s:list_cmd('find'),
+  \ call fzf#vim#files(<q-args>, {'source': s:list_cmd('find', ''),
   \                               'options': '--tiebreak=index'}, <bang>0)
 
 command! -bang -nargs=? -complete=dir Locate
