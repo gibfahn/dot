@@ -28,12 +28,13 @@ ruby_gems=(
 )
 
 rust_crates=(
-  # tally                         # Nicer time (shows memory, page faults etc), I'm using hyperfine instead.
-  # svgcleaner                    # Remove unnecessary info from svgs.
-  # oxipng                        # Compress png images.
   # find_unicode                  # Find unicode.
-  proximity-sort
-  cargo-edit
+  # oxipng                        # Compress png images.
+  # svgcleaner                    # Remove unnecessary info from svgs.
+  # tally                         # Nicer time (shows memory, page faults etc), I'm using hyperfine instead.
+  cargo-edit                      # Gives `cargo {add,rm,upgrade}` commands.
+  cobalt-bin                      # Static site generator (https://cobalt-org.github.io/).
+  proximity-sort                  # Sort paths by proximity to a directory.
 )
 
 go_packages=(
