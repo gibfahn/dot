@@ -6,3 +6,9 @@
 
 # Use italic text on the terminal (not supported on all terminals)
 --italic-text=always
+
+# TODO(gib): upstream these to bat.
+# Use Python highlighting for Bazel files.
+--map-syntax "*.bazel:py"
+--map-syntax "WORKSPACE:py"
+--map-syntax ".bazelrc:bash"
