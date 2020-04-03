@@ -196,7 +196,6 @@ pathadd "$XDG_DATA_HOME/rbenv/bin" # rbenv ruby version manager.
 pathadd "$XDG_CACHE_HOME/rbenv/shims" # rbenv installed versions.
 # pathadd /usr/lib/ccache # Add ccache to the path if installed (Linux).
 # pathadd /usr/local/opt/ccache/libexec # Add ccache to the path if installed (macOS).
-pathadd /usr/local/opt/coreutils/libexec/gnubin # Coreutils from brew on macOS, don't replace mac ls.
 pathadd "$CARGO_HOME/bin" # Rust packages.
 pathadd "$HOME/.local/bin"
 pathadd "$HOME/bin" # Put random binaries you want to run in here.
