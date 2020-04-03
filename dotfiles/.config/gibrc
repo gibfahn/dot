@@ -251,7 +251,7 @@ esac
 alias clc="fc -ln -1 | sed -e 's/\\\\n/\\n/g' -e 's/\\\\t/\\t/g' | cpy"
 
 # fda is find all (don't ignore anything).
-{ exists fd && alias fd='fd' fda='fd --no-ignore --hidden'; } \
+{ exists fd && alias fda='fd --no-ignore --hidden'; } \
   || fd() { find . -iname "*$**"; } # Find by filename (case insensitive).
 exists rg && alias rg='rg' rga='rg --hidden --no-ignore' # rga is grep all (don't ignore anything).
 
