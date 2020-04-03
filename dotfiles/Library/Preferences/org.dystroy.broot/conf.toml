@@ -17,7 +17,7 @@
 # if you don't want the hidden files you can launch `br -H`)
 # A popular flag is the `g` one which displays git related info.
 #
-default_flags = "gh"
+default_flags = "g"
 
 ###############################################################
 # Verbs and shortcuts
