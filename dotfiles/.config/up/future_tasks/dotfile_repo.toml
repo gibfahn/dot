@@ -1,6 +1,6 @@
 constraints = {OS = "macOS"}
 
-run_lib = "git_dir"
+run_lib = "git"
 
 [data]
 path = "$dotfile_dir"
