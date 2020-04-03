@@ -413,9 +413,6 @@ fi
 # Set up volta (nvm Node.js version management alternative), disabled as adds to startup time.
 # [ -s "$VOLTA_HOME/load.sh" ] && time (\. "$VOLTA_HOME/load.sh")
 
-# Build node with ninja.
-alias bn='export CPPFLAGS=-fdiagnostics-color && ./configure && tools/gyp_node.py -f ninja && ninja -C out/Release && ln -fs out/Release/node node'
-
 ## Set prompt for SSH windows.
 if [[ "$ssh" ]]; then
   case $shell in
