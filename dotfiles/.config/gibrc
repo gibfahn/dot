@@ -97,6 +97,7 @@ export RUSTUP_HOME="$XDG_DATA_HOME/rustup" # Rustup goes here.
 export SCCACHE_DIR="$XDG_CACHE_HOME/sccache" # sccache cache dir.
 export VIRTUAL_ENV_DISABLE_PROMPT=1 # Add the virtualenv prompt myself.
 export VOLTA_HOME="$XDG_CACHE_HOME/volta" # Set directory to use for volta install.
+export ZDOTDIR="${XDG_CONFIG_HOME}/zsh" # Path to zsh config files.
 export _Z_DATA=$XDG_CACHE_HOME/z # Z Cache Directory.
 
 # Less options: Tab is 4 spaces, search ignores case, enable colours, cat if less than one screen.
@@ -275,41 +276,39 @@ exists ggrep && alias grep='ggrep --color=auto'
 
 case $shell in
   zsh) # zsh specific options.
-    # Zsh Plugins (managed with zplugin).
-    # Profile plugin loading by changing `zplugin light` to `zplugin load`.
-    declare -A ZPLGM
-    ZPLGM[HOME_DIR]=$XDG_DATA_HOME/zsh/zplugin
-    ZPLGM[BIN_DIR]=$XDG_DATA_HOME/zsh/zplugin/bin # Where zplugin is installed.
-    ZPLGM[ZCOMPDUMP_PATH]=$XDG_CACHE_HOME/zsh/.zcompdump$(hostname)
+    # Zsh Plugins (managed with zinit, previously zplugin).
+    # Profile plugin loading by changing `zinit light` to `zinit load`.
+    declare -A ZINIT
+    ZINIT[HOME_DIR]=$XDG_DATA_HOME/zsh/zinit
+    ZINIT[BIN_DIR]=$XDG_DATA_HOME/zsh/zinit/bin # Where zinit is installed.
+    ZINIT[ZCOMPDUMP_PATH]=$XDG_CACHE_HOME/zsh/.zcompdump$(hostname)
 
-    source "$XDG_DATA_HOME/zsh/zplugin/bin/zplugin.zsh" # Source plugin manager.
+    source "$XDG_DATA_HOME/zsh/zinit/bin/zinit.zsh" # Source plugin manager.
 
-    zplugin ice blockf atpull'zplugin creinstall -q .'
-    zplugin light zsh-users/zsh-completions # Auto-complete for common commands.
+    zinit ice blockf atpull'zinit creinstall .'
+    zinit light zsh-users/zsh-completions # Auto-complete for common commands.
 
     # If you get a compinit error, run:
     #   autoload -Uz compinit && compaudit | xargs chmod g-w
-    zplugin ice atinit"zpcompinit; zpcdreplay" atload"unset 'FAST_HIGHLIGHT[chroma-whatis]' 'FAST_HIGHLIGHT[chroma-man]'"
-    zplugin light zdharma/fast-syntax-highlighting # Syntax highlighting.
+    zinit ice atinit"zpcompinit; zpcdreplay" atload"unset 'FAST_HIGHLIGHT[chroma-whatis]' 'FAST_HIGHLIGHT[chroma-man]'"
+    zinit light zdharma/fast-syntax-highlighting # Syntax highlighting.
 
-    zplugin ice atclone"dircolors -b LS_COLORS > c.zsh" atpull'%atclone' pick"c.zsh" nocompile'!'
-    zplugin light trapd00r/LS_COLORS # Nicer terminal colours.
+    zinit ice atclone"dircolors -b LS_COLORS > c.zsh" atpull'%atclone' pick"c.zsh" nocompile'!'
+    zinit light trapd00r/LS_COLORS # Nicer terminal colours.
 
-    zplugin ice atload"_zsh_autosuggest_start"
-    zplugin light zsh-users/zsh-autosuggestions # Autosuggest completion (accept with -> arrow).
+    zinit ice atload"_zsh_autosuggest_start"
+    zinit light zsh-users/zsh-autosuggestions # Autosuggest completion (accept with -> arrow).
 
-    zplugin ice depth=1
-    zplugin light romkatv/powerlevel10k
+    zinit ice depth=1
+    zinit light romkatv/powerlevel10k
 
-    zplugin light rupa/z               # Autojump command
-    zplugin light changyuheng/fz       # Fzf tab completion for z.
-    zplugin light gibfahn/fzf-z        # Use <Ctrl>-n instead of `z <Tab>`.
+    zinit light rupa/z               # Autojump command
+    zinit light gibfahn/fzf-z        # Use <Ctrl>-n instead of `z <Tab>`.
 
     # Don't crash shell if "$XDG_DATA_HOME"/zfunc/source/* matches nothing.
     setopt | grep -qxF nullglob || { _gib_changed=true && setopt nullglob; }
-    export ZDOTDIR="${XDG_CONFIG_HOME}/zsh" # Path to zsh config files.
     _gib_source_files=( # Files to source.
-      "$XDG_DATA_HOME"/zfunc/source/* # Put completion files that need to be sourced here.
+      # "$XDG_DATA_HOME"/zfunc/source/* # Put completion files that need to be sourced here.
       "$ZDOTDIR"/*.zsh
       "$XDG_DATA_HOME"/fzf/shell/key-bindings.zsh
     )
@@ -317,9 +316,20 @@ case $shell in
     [[ -n $_gib_changed ]] && { setopt nonullglob; unset _gib_changed; }
 
     for _gib_file in "${_gib_source_files[@]}"; do
-      zplugin snippet "$_gib_file"
+      zinit snippet "$_gib_file"
     done
-    unset _gib_file _gib_source_files
+
+    _gib_completion_files=( # Files to source as completions.
+      "$XDG_DATA_HOME"/zsh/completions/* # Put completion files that need to be sourced here.
+      https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker
+    )
+
+    for _gib_file in "${_gib_completion_files[@]}"; do
+      zinit ice as"completion"
+      zinit snippet "$_gib_file"
+    done
+
+    unset _gib_file _gib_source_files _gib_completion_files
 
     setopt always_to_end # Move to end of word after completing that word from the middle of it.
     setopt auto_cd # Typing a path that isn't a command will cd to it.

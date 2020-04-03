@@ -186,17 +186,18 @@ else
 fi
 
 # Update zsh plugins.
-# Broken by https://github.com/zdharma/zinit/issues/1
-# gitCloneOrUpdate zdharma/zinit "$XDG_DATA_HOME/zsh/zplugin/bin" # Zsh plugin manager.
+gitCloneOrUpdate zdharma/zinit "$XDG_DATA_HOME/zsh/zinit/bin" # Zsh plugin manager.
 zsh -c '
-declare -A ZPLGM
-ZPLGM[HOME_DIR]=$XDG_DATA_HOME/zsh/zplugin
-ZPLGM[BIN_DIR]=$XDG_DATA_HOME/zsh/zplugin/bin # Where zplugin is installed.
-ZPLGM[ZCOMPDUMP_PATH]=$XDG_CACHE_HOME/zsh/.zcompdump$(hostname)
-source "$XDG_DATA_HOME/zsh/zplugin/bin/zplugin.zsh" # Source plugin manager.
-# Broken by https://github.com/zdharma/zinit/issues/1
-# zplugin self-update
-zplugin update --all -p 20'
+declare -A ZINIT
+ZINIT[HOME_DIR]=$XDG_DATA_HOME/zsh/zinit
+ZINIT[BIN_DIR]=$XDG_DATA_HOME/zsh/zinit/bin # Where zinit is installed.
+ZINIT[ZCOMPDUMP_PATH]=$XDG_CACHE_HOME/zsh/.zcompdump$(hostname)
+source "$XDG_DATA_HOME/zsh/zinit/bin/zinit.zsh" # Source plugin manager.
+zinit self-update
+zinit update --all -p 20
+# zinit delete --clean -y # Remove no-longer-used plugins and snippets.
+# zinit cclear # Remove outdated completion entries.
+'
 
 # Install or update pip modules.
 export PATH=/usr/local/bin:$PATH # Make sure brew pip/ruby are the first pip/ruby in the PATH.
@@ -331,26 +332,18 @@ fi
 [[ -n "$HARDCORE" ]] && go get -u "${go_packages[@]}"
 
 log_get "Updating ZSH Completions"
-# There are two types of completion files. One is an actual zsh completion file (e.g. rustup). The
-# other is a file you source that generates the relevant functions (e.g. npm). Put the latter in
-# zfunc/source.
-mkdir -p "$XDG_DATA_HOME/zfunc/source"
+# Put completion files into this dir so they get picked up by zinit in gibrc.
+# Anything that pulls directly from a URL can be added directly to _gib_completion_files in gibrc.
+mkdir -p "$XDG_DATA_HOME/zsh/completions"
 
 exists rustup && {
-  rustup completions zsh > "$XDG_DATA_HOME/zfunc/_rustup"
-  ln -sf "$(realpath "$(dirname "$(rustup which cargo)")"/../share/zsh/site-functions)"/* "$XDG_DATA_HOME/zfunc/"
+  rustup completions zsh > "$XDG_DATA_HOME/zsh/completions/_rustup"
+  # Creates "$XDG_DATA_HOME/zsh/completions/_cargo"
+  ln -sf "$(realpath "$(dirname "$(rustup which cargo)")"/../share/zsh/site-functions)"/* "$XDG_DATA_HOME/zsh/completions/"
 }
-exists rbenv && ln -sf "$XDG_DATA_HOME/rbenv/completions/rbenv.zsh" "$XDG_DATA_HOME/zfunc/source/_rbenv"
-ln -sf "$XDG_DATA_HOME"/fzf/shell/completion.zsh "$XDG_DATA_HOME/zfunc/source/_fzf"
-if exists npm; then
-  npm completion --loglevel=error > "$XDG_DATA_HOME/zfunc/source/_npm"
-fi
+exists rbenv && ln -sf "$XDG_DATA_HOME/rbenv/completions/rbenv.zsh" "$XDG_DATA_HOME/zsh/completions/_rbenv"
 
 if exists kitty; then
   # Completion for kitty
-  kitty + complete setup zsh > "$XDG_DATA_HOME/zfunc/source/_kitty"
+  kitty + complete setup zsh > "$XDG_DATA_HOME/zsh/completions/_kitty"
 fi
-
-# TODO(gib): Does this actually work?
-# Run the source
-# zplugin creinstall "$XDG_DATA_HOME"/zfunc/
