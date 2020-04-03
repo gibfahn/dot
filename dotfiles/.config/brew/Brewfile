@@ -57,3 +57,4 @@ cask "workflowy"                         # Infinitely nested bullet point list a
 
 mas "Pages", id: 409201541               # Edit docx and pages files.
 mas "Runcat", id: 1429033973             # Show CPU usage in menu bar.
+mas "Shush", id: 496437906               # Mute except when Fn key held.
