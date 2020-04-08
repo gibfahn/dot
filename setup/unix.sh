@@ -329,6 +329,7 @@ if [[ -n $HARDCORE ]]; then
 fi
 
 # Install or update any go packages we need.
+[[ -z $GOPATH ]] && export GOPATH="$HOME/code/go"
 [[ -n "$HARDCORE" ]] && go get -u "${go_packages[@]}"
 
 log_get "Updating ZSH Completions"
