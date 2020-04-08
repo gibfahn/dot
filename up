@@ -71,4 +71,7 @@ fi
 # Cross-platform setup:
 ./setup/unix.sh
 
+# Check for unpushed git changes.
+./setup/unpushed_git.sh
+
 finalOutput INSTALL
