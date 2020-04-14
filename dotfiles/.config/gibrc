@@ -293,8 +293,10 @@ case $shell in
     zinit ice atinit"zpcompinit; zpcdreplay" atload"unset 'FAST_HIGHLIGHT[chroma-whatis]' 'FAST_HIGHLIGHT[chroma-man]'"
     zinit light zdharma/fast-syntax-highlighting # Syntax highlighting.
 
-    zinit ice atclone"dircolors -b LS_COLORS > c.zsh" atpull'%atclone' pick"c.zsh" nocompile'!'
+    exists dircolors && _gib_dircolors=dircolors || _gib_dircolors=gdircolors # On macOS it's gdircolors.
+    zinit ice atclone"$_gib_dircolors -b LS_COLORS > c.zsh" atpull'%atclone' pick"c.zsh" nocompile'!'
     zinit light trapd00r/LS_COLORS # Nicer terminal colours.
+    unset _gib_dircolors
 
     zinit ice atload"_zsh_autosuggest_start"
     zinit light zsh-users/zsh-autosuggestions # Autosuggest completion (accept with -> arrow).
