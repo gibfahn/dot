@@ -1,11 +1,18 @@
 [env]
-dot_dir = "~/code/dot"
-dotfile_dir = "~/code/dot/dotfiles"
-backup_dir = "~/backup"
-HOME = "$HOME"
-USER = "$USER"
-PATH = "$PATH"
-TERM = "$TERM"
-RUSTUP_HOME="$RUSTUP_HOME"
-CARGO_HOME="$CARGO_HOME"
-GOPATH="$GOPATH"
+dot_dir = "~/code/dot" # Directory to clone dotfiles to.
+dotfile_dir = "~/code/dot/dotfiles" # Directory to link dotfiles from.
+backup_dir = "~/backup" # Directory to move files overwritten by linking.
+
+HOME = "$HOME" # Current user's homedir (~), should be set by OS.
+USER = "$USER" # Current user, should be set by OS.
+PATH = "$PATH" # TODO: don't pass this through.
+TERM = "$TERM" # Set by terminal.
+TERMINFO = "$TERMINFO" # Set by terminal.
+
+XDG_DATA_HOME = "~/.local/share" # Use default XDG values.
+XDG_CACHE_HOME = "~/.cache" # Use default XDG values.
+XDG_CONFIG_HOME = "~/.config" # Use default XDG values.
+
+RUSTUP_HOME="$XDG_DATA_HOME/rustup" # Rustup install dir.
+CARGO_HOME="$XDG_DATA_HOME/cargo" # Cargo install dir.
+GOPATH="~/code/go" # Go install dir.
