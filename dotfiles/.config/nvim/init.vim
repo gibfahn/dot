@@ -46,6 +46,7 @@ try
   Plug 'fweep/vim-zsh-path-completion'              " Nicer file browser plugin.
   Plug 'gibfahn/vim-gib'                            " Use vim colorscheme.
   Plug 'godlygeek/tabular'                          " Make tables easier (:help Tabular).
+  Plug 'honza/vim-snippets'                         " Work around https://github.com/neoclide/coc-snippets/issues/126 .
   Plug 'itchyny/lightline.vim'                      " Customize statusline and tabline.
   Plug 'junegunn/fzf', { 'dir': '~/.local/share/fzf', 'do': './install --bin' } " :h fzf
   Plug 'junegunn/fzf.vim'                           " Try :Files, :GFiles? :Buffers :Lines :History :Commits :BCommits
