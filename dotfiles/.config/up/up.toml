@@ -8,6 +8,7 @@ USER = "$USER" # Current user, should be set by OS.
 PATH = "$PATH" # TODO: don't pass this through.
 TERM = "$TERM" # Set by terminal.
 TERMINFO = "$TERMINFO" # Set by terminal.
+SSH_AUTH_SOCK = "$SSH_AUTH_SOCK" # Set by ssh agent.
 
 XDG_DATA_HOME = "~/.local/share" # Use default XDG values.
 XDG_CACHE_HOME = "~/.cache" # Use default XDG values.
