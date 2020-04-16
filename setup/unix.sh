@@ -267,7 +267,7 @@ if no nvim/site/autoload/plug.vim; then
 else
   log_update "Vim Plugins"
   { exists nvim && VIM=nvim; } || { exists vim && VIM=vim; } # Take what you can get.
-  exists $VIM && $VIM -N -u "$XDG_CONFIG_HOME"/nvim/init.vim -c 'PlugUpgrade | PlugClean | PlugUpdate' -c quitall -e -s -V1
+  exists $VIM && $VIM -N -u "$XDG_CONFIG_HOME"/nvim/init.vim -c 'PlugUpgrade | PlugClean | PlugUpdate' -c quitall -e -s
 fi
 
 # Symlink fzf
