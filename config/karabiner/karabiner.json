@@ -730,7 +730,7 @@
                 "type": "basic",
                 "from": { "key_code": "v" },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
-                "to": { "shell_command": "$HOME/bin/vpn london" }
+                "to": { "shell_command": "$HOME/bin/vpn corporate" }
               }, {
                 "description": "Ж+⇧+v = Disconnect from VPN",
                 "type": "basic",
