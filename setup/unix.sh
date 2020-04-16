@@ -337,13 +337,16 @@ log_get "Updating ZSH Completions"
 # Anything that pulls directly from a URL can be added directly to _gib_completion_files in gibrc.
 mkdir -p "$XDG_DATA_HOME/zsh/completions"
 
+# _rustup and _cargo
 exists rustup && {
   rustup completions zsh > "$XDG_DATA_HOME/zsh/completions/_rustup"
   # Creates "$XDG_DATA_HOME/zsh/completions/_cargo"
   ln -sf "$(realpath "$(dirname "$(rustup which cargo)")"/../share/zsh/site-functions)"/* "$XDG_DATA_HOME/zsh/completions/"
 }
+# _rbenv
 exists rbenv && ln -sf "$XDG_DATA_HOME/rbenv/completions/rbenv.zsh" "$XDG_DATA_HOME/zsh/completions/_rbenv"
 
+# _kitty
 if exists kitty; then
   # Completion for kitty
   kitty + complete setup zsh > "$XDG_DATA_HOME/zsh/completions/_kitty"
