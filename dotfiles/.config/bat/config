@@ -9,6 +9,6 @@
 
 # TODO(gib): upstream these to bat.
 # Use Python highlighting for Bazel files.
---map-syntax "*.bazel:py"
---map-syntax "WORKSPACE:py"
+--map-syntax "*.bazel:Python"
+--map-syntax "WORKSPACE:Python"
 --map-syntax ".bazelrc:bash"
