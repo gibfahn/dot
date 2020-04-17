@@ -12,8 +12,6 @@
   clean-fork = "!git ls-remote --heads --tags fork | awk '!/\\^\\{\\}/ && !/refs\\/heads\\/'\"${1:-oldmaster}\"'/ {print $NF}' | xargs -n ${2:-10} git push --delete fork && git remote prune fork #"
   code-changes = "!git log --format=format: --name-only | egrep -v '^$' | sort | uniq -c | sort -rg | head -${1:-10} #" # Show $1 most changed files.
   default-branch = "!(git symbolic-ref --short refs/remotes/$1/HEAD || { git remote set-head --auto $1 && git symbolic-ref --short refs/remotes/$1/HEAD; }) | sed \"s|^$1/||\" #" # Default branch for remote. `g default-branch up` -> master
-  # Show diff of a binary plist file $1 between current working tree and $2 (defaults to HEAD).
-  diff-plist = "!bash -c \"diff <(git show ${2:-HEAD}:$1 | plutil -p -) <(plutil -p $1)\" #"
   head-branch = symbolic-ref --short HEAD # e.g. master.
   up-remote = "!git rev-parse --abbrev-ref --symbolic-full-name @{u} | cut -d '/' -f 1" # e.g. origin.
   up-branch = "!git rev-parse --abbrev-ref --symbolic-full-name @{u} | cut -d '/' -f 2-" # e.g. master.
@@ -231,9 +229,15 @@
   submodule = log        # Show information about submodules in diffs and logs.
   colorMoved = zebra     # Highlight moved lines as oldMoved -> newMoved.
   tool = vimdiff         # Use nvim vimdiff to view diffs (`git difftool`).
-[diff-so-fancy]
-  markEmptyLines = false      # The red blobs are very distracting when only a newline has been added.
-  stripLeadingSymbols = false # Without `markEmptyLines` you need the +/- to show newline changes.
+
+# Allows you to use tools to generate readable diffs for binary formats.
+# These are just for humans to read, and shouldn't be used to send diffs for others to apply.
+# See also changes in git attrbutes file (./attributes).
+[diff "wasm"]
+  textconv = wasm2wat --enable-all --generate-names # Use wasm2wat to generate readable wasm diffs.
+[diff "plist"]
+  textconv = plutil -p # Use plutil to generate readable plist diffs.
+
 [fetch]
   prune = true             # Delete local tracking branches if remote is gone.
 [format]

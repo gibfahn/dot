@@ -1,0 +1,5 @@
+# Use [diff "wasm"] to show wasm diffs.
+*.wasm diff=wasm
+
+# Use [diff "plist"] to show plist diffs.
+*.plist diff=plist
