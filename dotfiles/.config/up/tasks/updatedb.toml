@@ -1,0 +1,2 @@
+check_cmd = ["true"]
+run_cmd = ["sudo", "-n", "/usr/libexec/locate.updatedb"]
