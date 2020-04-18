@@ -325,11 +325,6 @@ else
   sudo curl -sL http://entrproject.org/etc/limit.maxfiles.plist -o /Library/LaunchDaemons/limit.maxfiles.plist
 fi
 
-if [[ -f ~/bin/fix-brew ]]; then
-  log_update "Fixing brew permissions."
-  ~/bin/fix-brew
-fi
-
 # Install brew and Xcode Command Line Tools.
 if exists brew; then
   log_skip "brew (already installed)."

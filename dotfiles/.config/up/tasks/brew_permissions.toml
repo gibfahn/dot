@@ -1,0 +1,4 @@
+description = """Fix permissions issues in brew."""
+
+# TODO(gib): The brew script should block waiting for this.
+run_cmd = ["~/bin/fix-brew"]
