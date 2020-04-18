@@ -1,3 +1,5 @@
+needs_sudo = true # TODO(gib): do this on a more granular basis.
+
 [env]
 dot_dir = "~/code/dot" # Directory to clone dotfiles to.
 dotfile_dir = "~/code/dot/dotfiles" # Directory to link dotfiles from.
