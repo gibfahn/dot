@@ -388,10 +388,6 @@ if [[ "$sogou_dir_old" != "$sogou_dir_new" ]]; then
   [[ -n "$sogou_dir" ]] && open "$sogou_dir"/sogou*.app
 fi
 
-# Update Mac App Store apps.
-softwareupdate --install --all || log_skip "To autorestart run:
-sudo softwareupdate --install --all --restart"
-
 export PATH=/usr/local/bin:$PATH
 # Install broot symlink.
 if [[ ! -e "$XDG_CONFIG_HOME"/zsh/broot.zsh ]]; then

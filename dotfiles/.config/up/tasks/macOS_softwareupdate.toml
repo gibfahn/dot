@@ -1,0 +1,6 @@
+description = """Update Mac App Store apps.
+To autorestart run:
+  sudo softwareupdate --install --all --restart
+"""
+
+run_cmd = ["softwareupdate", "--install", "--all"]
