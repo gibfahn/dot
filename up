@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# TODO(gib): Remove everything here.
+
 # Runs the setup to "install" my dotfiles on your machine. Runs scripts in
 # config/ and then runs ./link.
 
@@ -13,32 +15,9 @@ exec > >(tee -a "$LOG_FILE") 2>&1
 
 echo -e "Running up script at $(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 
-env
-
 cd "$(dirname "$0")"
 
 . ./helpers/setup.sh # Load helper script from dot/helpers.
-
-# TODO(gib): Need a better way to opt-in or out of different things than
-# HARDCORE and NO_SUDO options. Ideally there should be a config that remembers
-# your choices too.
-if [[ "$USER" == gib ]]; then
-  # - not :- because set to "" means explicitly disabled.
-  export HARDCORE=${HARDCORE-1}
-else
-  export HARDCORE=${HARDCORE-""}
-fi
-
-if [[ "$HARDCORE" ]]; then
-  log_get "HARDCORE mode"
-else
-  log_skip "HARDCORE skipping"
-fi
-
-# Good defaults:
-[ -z "$XDG_CONFIG_HOME" ] && export XDG_CONFIG_HOME="$HOME/.config"
-[ -z "$XDG_CACHE_HOME" ] && export XDG_CACHE_HOME="$HOME/.cache"
-[ -z "$XDG_DATA_HOME" ] && export XDG_DATA_HOME="$HOME/.local/share"
 
 if ! exists up; then
   log_get "Installing up-rs"
@@ -52,13 +31,9 @@ fi
 # TODO(gib): enable these once up supports updating.
 # --git-url https://github.com/gibfahn/dot \
 # --git-path $PWD/dot \
-# up link \
-#   --from "$PWD"/dotfiles \
-#   --to ~ \
-#   --backup ~/backup
 # Platform specific setup:
 if [ "$(uname)" = Darwin ]; then # macOS
-  "$(dirname "$0")"/setup/mac.sh
+  echo "$(dirname "$0")"/setup/mac.sh
 elif [ "$(uname)" = Linux ]; then # Linux specific stuff.
   distro="$(cat /etc/*-release | grep '^ID=' | sed -E 's/^ID="?(.*)"?/\1/' | head -1)"
   case "$distro" in
@@ -67,11 +42,3 @@ elif [ "$(uname)" = Linux ]; then # Linux specific stuff.
     *) echo "No specific setup files for $distro yet" ;;
   esac
 fi
-
-# Cross-platform setup:
-./setup/unix.sh
-
-# Check for unpushed git changes.
-./setup/unpushed_git.sh
-
-finalOutput INSTALL

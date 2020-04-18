@@ -42,7 +42,7 @@ go_packages=(
 )
 
 # These are installed and updated through brew on Darwin.
-if [[ -n $HARDCORE && $(uname) == Linux ]]; then
+if [[ $USER == gib && $(uname) == Linux ]]; then
   rust_crates+=(
     # exa
     # watchexec                   # Like entr (evaluating which one is better).
@@ -131,8 +131,7 @@ fi
 # Only run make if there were changes.
 changed1=$(gitCloneOrUpdate rbenv/rbenv "$XDG_DATA_HOME/rbenv")
 changed2=$(gitCloneOrUpdate rbenv/rbenv-default-gems "$XDG_DATA_HOME/rbenv"/plugins/rbenv-default-gems)
-if [[ -n $HARDCORE ]] && [[ -n "$changed1" ]] \
-  || [[ -n "$changed2" ]]; then
+if [[ $USER == gib && -n "$changed1" || -n "$changed2" ]]; then
   (pushd "$XDG_DATA_HOME/rbenv" && src/configure && make -C src)
 fi
 
@@ -219,7 +218,7 @@ done
 # Install nvm:
 unamem="$(uname -m)"
 nvm_prefix="${unamem/x86_64/}"
-if [[ -n $HARDCORE ]] && no "$nvm_prefix"/nvm; then
+if [[ $USER == gib ]] && no "$nvm_prefix"/nvm; then
   # No install scripts as path update isn't required, it's done in gibrc.
   gitClone creationix/nvm "$XDG_DATA_HOME/${nvm_prefix}/nvm"
   . "$XDG_DATA_HOME/${nvm_prefix}"/nvm/nvm.sh # Load nvm so we can use it below.
@@ -227,21 +226,21 @@ if [[ -n $HARDCORE ]] && no "$nvm_prefix"/nvm; then
 fi
 
 # Add rbenv to path in case it was only just installed.
-if [[ -n $HARDCORE ]] && not rbenv; then
+if [[ $USER == gib ]] && not rbenv; then
   export PATH="$XDG_DATA_HOME/rbenv/bin:$PATH"
   export PATH="$XDG_CACHE_HOME/rbenv/shims:$PATH"
   export RBENV_ROOT="${RBENV_ROOT:-"$XDG_CACHE_HOME/rbenv"}" # Set rbenv location.
 fi
 
 # Install latest version of ruby if changed.
-[[ -n $HARDCORE ]] && {
+[[ $USER == gib ]] && {
   latest_ruby_version=$(rbenv install --list | awk '/^\s*[0-9]+\.[0-9]+\.[0-9]+\s*$/ {a=$1} END { print a }')
   rbenv install --skip-existing "$latest_ruby_version"
   rbenv global "$latest_ruby_version"
 }
 
 # Install ruby gems
-if [[ -n $HARDCORE ]]; then
+if [[ $USER == gib ]]; then
   for gem in "${ruby_gems[@]}"; do
     if gem list -I "$gem" >/dev/null; then
       log_get "gem: $gem"
@@ -276,7 +275,7 @@ if not fzf && [[ -d "$XDG_DATA_HOME"/fzf/bin/ ]]; then
 fi
 
 # Install npm modules.
-if [[ -n "$HARDCORE" ]]; then
+if [[ $USER == gib ]]; then
   not npm && . "$XDG_DATA_HOME/${nvm_prefix}"/nvm/nvm.sh # Load nvm so we can use npm.
   installed_npm_module_versions="$(npm ls -g --depth=0 --loglevel=error | grep -Ex '.* [-_A-Za-z0-9]+@([0-9]+\.){2}[0-9]+' | sed -E 's/^.+ //' | sed 's/@/ /')"
   for module in "${npm_modules[@]}"; do
@@ -291,7 +290,7 @@ if [[ -n "$HARDCORE" ]]; then
 fi
 
 changed=$(gitCloneOrUpdate fwcd/KotlinLanguageServer "$XDG_DATA_HOME/KotlinLanguageServer")
-if [[ -n "$HARDCORE" && -n "$changed" ]]; then
+if [[ $USER == gib && -n "$changed" ]]; then
     (
       cd "$XDG_DATA_HOME/KotlinLanguageServer" || { echo "Failed to cd"; exit 1; }
       ./gradlew installDist # If tests passed we could use `./gradlew build`
@@ -299,7 +298,7 @@ if [[ -n "$HARDCORE" && -n "$changed" ]]; then
     )
 fi
 
-if [[ -n $HARDCORE ]]; then
+if [[ $USER == gib ]]; then
   if no rustup || no cargo; then # Install/set up rust.
     # Install rustup. Don't modify path as that's already in gibrc.
     RUSTUP_HOME="$XDG_DATA_HOME"/rustup CARGO_HOME="$XDG_DATA_HOME"/cargo curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
@@ -330,7 +329,7 @@ fi
 
 # Install or update any go packages we need.
 [[ -z $GOPATH ]] && export GOPATH="$HOME/code/go"
-[[ -n "$HARDCORE" ]] && go get -u "${go_packages[@]}"
+[[ $USER == gib ]] && go get -u "${go_packages[@]}"
 
 log_get "Updating ZSH Completions"
 # Put completion files into this dir so they get picked up by zinit in gibrc.

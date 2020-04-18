@@ -8,7 +8,7 @@ set -e
 . "$(dirname "$0")/../helpers/setup.sh" # Load helper script from dot/helpers.
 
 # Link VS Code preferences into the macOS specific folder.
-if [[ -n $HARDCORE && -d "$HOME/Library/Application Support/Code/" ]]; then
+if [[ $USER == gib && -d "$HOME/Library/Application Support/Code/" ]]; then
   for file in "$HOME"/.config/code/*.json; do
     ln -sf "$file" "$HOME/Library/Application Support/Code/User/$(basename "$file")"
   done
@@ -158,8 +158,8 @@ updateMacOSDefault NSGlobalDomain AppleAccentColor int 5
 # System Preferences > General > Highlight Colour > Blue
 updateMacOSDefault NSGlobalDomain AppleAquaColorVariant int 1
 
-if [[ -n "$HARDCORE" ]]; then # Set keyboard preferences.
-  log_section "Setting Hardcore macOS defaults."
+if [[ $USER == gib ]]; then # Set keyboard preferences.
+  log_section "Setting gib extra macOS defaults."
 
   # Create global shortcut "Merge all windows" ⌘-M
   updateMacOSKeyboardShortcut NSGlobalDomain "Merge All Windows" '@$m'
@@ -274,7 +274,7 @@ if [[ -n "$HARDCORE" ]]; then # Set keyboard preferences.
   # Cmd-Enter sends email in Mail.
 
 else
-  log_skip "Not setting Hardcore macOS defaults (HARDCORE not set)."
+  log_skip "Not setting gib macOS defaults."
 fi
 
 # Apply any changes made above:
@@ -359,7 +359,7 @@ brew cask upgrade # You may occasionally want to run `brew cask upgrade --greedy
 
 # brew install things. Edit config/Brewfile to adjust.
 brew tap Homebrew/bundle
-if [[ -n "$HARDCORE" ]]; then
+if [[ $USER == gib ]]; then
   brewfiles=$(ls "$XDG_CONFIG_HOME"/brew/*)
 else
   brewfiles=$(ls "$XDG_CONFIG_HOME"/brew/* | grep -v hardcore)
@@ -403,7 +403,7 @@ else
 fi
 
 # Remove the default set of things that are in the dock.
-if [[ -n "$HARDCORE" && -n $(dockutil --list) ]]; then
+if [[ $USER == gib && -n $(dockutil --list) ]]; then
   log_get "Cleaning Dock"
   dockutil --remove all
 else
@@ -440,7 +440,7 @@ fi
 
 # Swift LanguageServer.
 sourcekit_lsp_path="$XDG_DATA_HOME"/sourcekit-lsp
-if [[ -n "$HARDCORE" ]]; then
+if [[ $USER == gib ]]; then
   changed=$(gitCloneOrUpdate apple/sourcekit-lsp "$sourcekit_lsp_path")
   if [[ -n "$changed" ]]; then
     (cd "$XDG_DATA_HOME"/sourcekit-lsp || error "Failed to cd to the langserver directory"; swift package update && swift build -c release)

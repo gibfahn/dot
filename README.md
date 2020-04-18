@@ -20,7 +20,7 @@ can't install a bunch of packages). Just copy and paste this one-line command:
 
 ```bash
 git clone https://github.com/gibfahn/dot -o up && cd dot &&
-  GIT_NAME=$(git config --global user.name) GIT_EMAIL=$(git config --global user.email) NO_SUDO=true HARDCORE="" ./up
+  GIT_NAME=$(git config --global user.name) GIT_EMAIL=$(git config --global user.email) NO_SUDO=true ./up
 ```
 
 ### How to update to the latest master
@@ -47,16 +47,6 @@ change shell). Make sure the shell you choose is in `/etc/shells`.
 
 ```bash
 export NEWSHELL=/usr/local/bin/fish # Or NEWSHELL="" to keep current shell.
-```
-
-If you want hardcore modifications enter anything at the prompt.
-
-If you want to enable HARDCORE mode for a single script, just pass it as an env
-var, e.g.
-
-```bash
-export HARDCORE=true
-./setup/unix.sh
 ```
 
 If you just want to update your dotfile symlinks, you can just run:

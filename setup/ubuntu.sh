@@ -57,7 +57,7 @@ apt_list=(                        # List of things to install.
 log_get "apt installing/updating: ${apt_list[*]}"
 sudo apt install -y "${apt_list[@]}"
 
-if [[ -n "$HARDCORE" ]] && not bspwm; then
+if [[ $USER == gib ]] && not bspwm; then
   # Install bspwm dependencies.
   sudo apt install -y xcb libxcb-util0-dev libxcb-ewmh-dev libxcb-randr0-dev libxcb-icccm4-dev \
     libxcb-keysyms1-dev libxcb-xinerama0-dev libasound2-dev libxcb-xtest0-dev
@@ -76,7 +76,7 @@ if [[ -n "$HARDCORE" ]] && not bspwm; then
 fi
 
 # Build j4-dmenu-desktop (used in bspwm).
-if [[ -n "$HARDCORE" ]] && not j4-dmenu-desktop; then
+if [[ $USER == gib ]] && not j4-dmenu-desktop; then
   # This is an extension for dmenu, so make sure we have that.
   sudo apt install -y dmenu
   mkdir -p "$BUILD_DIR"
@@ -108,7 +108,7 @@ if not google-chrome; then
   rm google-chrome-stable_current_amd64.deb
 fi
 
-if [[ -n "$HARDCORE" ]] && not slack; then
+if [[ $USER == gib ]] && not slack; then
   echo "deb https://packagecloud.io/slacktechnologies/slack/debian/ jessie main" | sudo tee /etc/apt/sources.list.d/slack.list >/dev/null
   sudo apt install -y slack
 fi
@@ -123,7 +123,7 @@ gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/k
 # TODO(gib): Add setting to make gnome-terminal use the FiraCode font (installed above).
 
 XKB=/usr/share/X11/xkb/
-if [[ -n "$HARDCORE" && ! -d "$XKB".git ]]; then # Set up xkb key remapping.
+if [[ $USER == gib && ! -d "$XKB".git ]]; then # Set up xkb key remapping.
   log_get "Setting up personal xkb shortcuts at $XKB."
   sudo chown -R "$USER:$(id -gn)" "$XKB"
   pushd /usr/share/X11/xkb || { echo "Failed to cd"; exit 1; }
@@ -139,5 +139,5 @@ if [[ -n "$HARDCORE" && ! -d "$XKB".git ]]; then # Set up xkb key remapping.
   git checkout gibLayout
   sudo dpkg-reconfigure xkb-data
 else
-  log_skip "Not setting up personal xkb shortcuts (not HARDCORE or non-standard xkb dir)."
+  log_skip "Not setting up personal xkb shortcuts (user != gib or non-standard xkb dir)."
 fi
