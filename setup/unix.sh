@@ -35,6 +35,7 @@ rust_crates=(
   cargo-edit                      # Gives `cargo {add,rm,upgrade}` commands.
   cobalt-bin                      # Static site generator (https://cobalt-org.github.io/).
   proximity-sort                  # Sort paths by proximity to a directory.
+  clog-cli                        # Changelog generator.
 )
 
 go_packages=(
