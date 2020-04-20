@@ -27,10 +27,6 @@ ruby_gems=(
   solargraph                    # Ruby LanguageServer Client.
 )
 
-go_packages=(
-  github.com/sourcegraph/go-langserver # Go language server (used in nvim).
-)
-
 if [[ -e "$XDG_CACHE_HOME"/z ]]; then
   log_skip "z cache file"
 else
@@ -254,10 +250,6 @@ if [[ $USER == gib && -n "$changed" ]]; then
       ln -sf "$XDG_DATA_HOME/KotlinLanguageServer/server/build/install/server/bin/kotlin-language-server" "$HOME/bin/kotlin-language-server"
     )
 fi
-
-# Install or update any go packages we need.
-[[ -z $GOPATH ]] && export GOPATH="$HOME/code/go"
-[[ $USER == gib ]] && go get -u "${go_packages[@]}"
 
 log_get "Updating ZSH Completions"
 # Put completion files into this dir so they get picked up by zinit in gibrc.
