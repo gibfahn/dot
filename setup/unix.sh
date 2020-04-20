@@ -90,15 +90,6 @@ else
   log_skip "Git Config as already set to $(git config user.name) <$(git config user.email)>"
 fi
 
-# Set up rbenv for ruby version management.
-
-# Only run make if there were changes.
-changed1=$(gitCloneOrUpdate rbenv/rbenv "$XDG_DATA_HOME/rbenv")
-changed2=$(gitCloneOrUpdate rbenv/rbenv-default-gems "$XDG_DATA_HOME/rbenv"/plugins/rbenv-default-gems)
-if [[ $USER == gib && -n "$changed1" || -n "$changed2" ]]; then
-  (pushd "$XDG_DATA_HOME/rbenv" && src/configure && make -C src)
-fi
-
 # Set up a default ssh config
 if [[ ! -e ~/.ssh/config ]]; then
   log_get "SSH Config (copying default)."
