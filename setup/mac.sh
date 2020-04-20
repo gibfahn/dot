@@ -428,13 +428,3 @@ else
   log_get "Enabling updatedb"
   sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.locate.plist
 fi
-
-# Swift LanguageServer.
-sourcekit_lsp_path="$XDG_DATA_HOME"/sourcekit-lsp
-if [[ $USER == gib ]]; then
-  changed=$(gitCloneOrUpdate apple/sourcekit-lsp "$sourcekit_lsp_path")
-  if [[ -n "$changed" ]]; then
-    (cd "$XDG_DATA_HOME"/sourcekit-lsp || error "Failed to cd to the langserver directory"; swift package update && swift build -c release)
-    ln -sf "$sourcekit_lsp_path"/.build/release/sourcekit-lsp "$HOME"/bin/sourcekit-lsp
-  fi
-fi
