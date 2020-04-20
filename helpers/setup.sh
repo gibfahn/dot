@@ -27,8 +27,8 @@ mkdir -p "$BUILD_DIR"
 : "${BIN_DIR:="$HOME/bin"}" # Directory to copy binaries to.
 mkdir -p "$BIN_DIR"
 
-mkdir -p "$HOME/tmp"
-[[ ! -e "$HOME"/tmp/dot.log ]] || mv "$HOME"/tmp/dot.log{,.old}
+mkdir -p "$HOME/tmp/dot_log"
+[[ ! -e "$HOME"/tmp/dot_log/dot_$$.log ]] || mv "$HOME"/tmp/dot_log/dot_$$.log{,.old}
 
 exists() { type "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
 
