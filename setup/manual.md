@@ -38,12 +38,6 @@ sudo cp ~/Library/Preferences/com.apple.HIToolbox.plist /Library/Preferences/
 sudo chmod 644 /Library/Preferences/com.apple.HIToolbox.plist
 ```
 
-### Spectacle
-
-- <kbd>⌘</kbd><kbd>Space</kbd>`Spectacle`<kbd>Enter</kbd>
-- Click on the spectacles in the Menu Bar, click Preferences
-- Check the box at the bottom: `Launch Spectacle at login`
-
 ### HyperSwitch
 
 - General:

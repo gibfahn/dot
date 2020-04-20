@@ -295,16 +295,6 @@ if [[ -n "$menu_changed" ]]; then
   killall SystemUIServer
 fi
 
-# Setup spectacle config.
-specConfig="$HOME/Library/Application Support/Spectacle/Shortcuts.json"
-if [ ! -L "$specConfig" ]; then
-  log_get "Overwriting Spectacle shortcuts with link to dot ones."
-  mkdir -p "$HOME/.backup"
-  [ -e "$specConfig" ] && mv "$specConfig" "$HOME/.backup/Shortcuts.json"
-  mkdir -p "$(dirname "$specConfig")"
-  ln -s "$XDG_CONFIG_HOME/Spectacle/Shortcuts.json" "$specConfig"
-fi
-
 # Set up gpg agent Keychain integration.
 # https://stackoverflow.com/questions/39494631/gpg-failed-to-sign-the-data-fatal-failed-to-write-commit-object-git-2-10-0
 mkdir -p "${GNUPGHOME:="$XDG_DATA_HOME"/gnupg}"
