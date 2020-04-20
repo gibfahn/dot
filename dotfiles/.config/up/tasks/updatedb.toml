@@ -1,2 +1,2 @@
-check_cmd = ["true"]
+check_cmd = ["true"] # TODO(gib): Unskip this.
 run_cmd = ["sudo", "-n", "/usr/libexec/locate.updatedb"]

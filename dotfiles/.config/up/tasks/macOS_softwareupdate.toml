@@ -3,4 +3,5 @@ To autorestart run:
   sudo softwareupdate --install --all --restart
 """
 
+check_cmd = ["true"] # TODO(gib): Unskip this.
 run_cmd = ["softwareupdate", "--install", "--all"]
