@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+. "$(dirname "$0")"/../helpers/setup.sh # Load helper script from dot/helpers.
+
+set -ex
+
 rust_crates=(
   # find_unicode                  # Find unicode.
   # oxipng                        # Compress png images.
