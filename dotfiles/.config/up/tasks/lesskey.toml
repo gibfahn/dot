@@ -1,3 +1,3 @@
 # TODO(gib): Warn if skipped.
-check_cmd = ["bash", "-c", "'! type lesskey'"]
+check_cmd = ["bash", "-c", "! type lesskey"]
 run_cmd = ["${dot_dir}/setup/run_less.sh"]
