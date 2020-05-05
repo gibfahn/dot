@@ -3,12 +3,18 @@
 set -e
 
 main() {
-  action="$1"; shift
+  action="$1"
+  shift || { usage; exit 4; }
   case "$action" in
     encrypt) encrypt ;;
     decrypt) decrypt ;;
-    *) exit 2;
+    --help|-h) usage; exit 0 ;;
+    *) usage; exit 2;
   esac
+}
+
+usage() {
+  echo -e "Usage:\n  $0 encrypt|decrypt"
 }
 
 encrypt() {
@@ -42,8 +48,8 @@ encrypt() {
 }
 
 decrypt() {
-  cd || exit 1
-  [[ -e ~/.ssh || -e ~/.netrc ]] && exit 1
+  cd || exit 5
+  [[ -e ~/.ssh || -e ~/.netrc ]] && exit 6
 
   gpg -d ssh_*.tar.xz.gpg >ssh.tar.xz
   tar -xf ssh.tar.xz
