@@ -8,7 +8,9 @@ set -eu
 
 # Usage: exit message [rc]
 error() {
-  printf "Error: %s\n" "$1"
+  NC='\033[0m' # No Colour.
+  RED='\033[0;31m' # Red.
+  printf "${RED}Error:${NC} %s\n" "$1"
   exit "${2:-1}"
 }
 
@@ -53,12 +55,13 @@ if [[ -n ${1:-} ]]; then
 
   if [[ -n $unpushed ]]; then
     echo -e "=> $repo_path:\n$(echo -e "$unpushed" | sed 's/^/    /')\n"
+    exit 1
   fi
 else
   # Call self with each dir.
   fd --no-ignore --hidden --type directory '^\.git$' ~/wrk ~/code -x "$0" '{//}' && true
   rc=$?
   if [[ $rc != 0 ]]; then
-    error "Unpushed changes, see above." "$rc"
+    error "Unpushed changes, see above ⬆⬆⬆." "$rc"
   fi
 fi
