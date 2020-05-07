@@ -6,43 +6,20 @@
 
 set -eu
 
+# Usage: exit message [rc]
 error() {
   printf "Error: %s\n" "$1"
-  exit 1
+  exit "${2:-1}"
 }
 
-# Unpushed changes.
-unpushed_all=""
-
-# Note this doesn't support being run multiple times concurrently very well.
-cache_file=${XDG_CACHE_HOME:-~/.cache}/git-unpushed.cache
-new_cache_file=${XDG_CACHE_HOME:-~/.cache}/git-unpushed-tmp-$$.cache
-
-find_git_dirs() {
-  fd --no-ignore --hidden --type directory '^\.git$' ~/wrk ~/code | grep -v '/go/' | sort >"$new_cache_file"
-}
-
-if [[ -e $cache_file ]]; then
-  # Update cache in background.
-  (
-    find_git_dirs
-    if ! cmp --silent "$cache_file" "$new_cache_file"; then
-      printf "Error: %s\n" "Directories have changed, rerun for updated results:\n$(diff "$cache_file" "$new_cache_file")"
-      mv "$new_cache_file" "$cache_file"
-      exit 1
-    fi
-  )&
-else
-  # Create new cache synchronously.
-  find_git_dirs
-  mv "$new_cache_file" "$cache_file"
-fi
-readarray -t git_dirs < "$cache_file"
-
-for git_path in "${git_dirs[@]}"; do
-  repo_path=$(cd "$(dirname "$git_path")" && pwd)
-
+if [[ -n ${1:-} ]]; then
+  # Check status for $1 dir.
+  repo_path="$1"
   unpushed=""
+
+  if [[ $repo_path == */go/* ]]; then
+    exit 0 # Skip go directories.
+  fi
 
   cd "$repo_path" || error "Couldn't cd to $repo_path"
 
@@ -75,11 +52,13 @@ for git_path in "${git_dirs[@]}"; do
   done
 
   if [[ -n $unpushed ]]; then
-    unpushed_all+="=> $repo_path:\n$(echo -e "$unpushed" | sed 's/^/    /')\n"
+    echo -e "=> $repo_path:\n$(echo -e "$unpushed" | sed 's/^/    /')\n"
   fi
-done
-
-if [[ -n $unpushed_all ]]; then
-  echo -e "$unpushed_all"
-  error "Unpushed changes, see above."
+else
+  # Call self with each dir.
+  fd --no-ignore --hidden --type directory '^\.git$' ~/wrk ~/code -x "$0" '{//}' && true
+  rc=$?
+  if [[ $rc != 0 ]]; then
+    error "Unpushed changes, see above." "$rc"
+  fi
 fi
