@@ -1,1 +1,1 @@
-run_cmd = ["${dot_dir}/setup/unpushed_git.sh"]
+run_cmd = ["${dot_dir}/dotfiles/bin/git-unpushed"]
