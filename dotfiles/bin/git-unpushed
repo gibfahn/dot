@@ -1,4 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+# Checks ~/wrk and ~/code for git repos (things with .git subdirs) and checks
+# for unsaved changes. If this passes all your repos are backed up to their git
+# remotes.
 
 set -eu
 
@@ -7,9 +11,35 @@ error() {
   exit 1
 }
 
+# Unpushed changes.
 unpushed_all=""
 
-while read -r git_path; do
+# Note this doesn't support being run multiple times concurrently very well.
+cache_file=${XDG_CACHE_HOME:-~/.cache}/git-unpushed.cache
+new_cache_file=${XDG_CACHE_HOME:-~/.cache}/git-unpushed-tmp-$$.cache
+
+find_git_dirs() {
+  fd --no-ignore --hidden --type directory '^\.git$' ~/wrk ~/code | grep -v '/go/' | sort >"$new_cache_file"
+}
+
+if [[ -e $cache_file ]]; then
+  # Update cache in background.
+  (
+    find_git_dirs
+    if ! cmp --silent "$cache_file" "$new_cache_file"; then
+      printf "Error: %s\n" "Directories have changed, rerun for updated results:\n$(diff "$cache_file" "$new_cache_file")"
+      mv "$new_cache_file" "$cache_file"
+      exit 1
+    fi
+  )&
+else
+  # Create new cache synchronously.
+  find_git_dirs
+  mv "$new_cache_file" "$cache_file"
+fi
+readarray -t git_dirs < "$cache_file"
+
+for git_path in "${git_dirs[@]}"; do
   repo_path=$(cd "$(dirname "$git_path")" && pwd)
 
   unpushed=""
@@ -47,8 +77,7 @@ while read -r git_path; do
   if [[ -n $unpushed ]]; then
     unpushed_all+="=> $repo_path:\n$(echo -e "$unpushed" | sed 's/^/    /')\n"
   fi
-
-done <<<"$(fd --no-ignore --hidden --type directory '^\.git$' ~/wrk ~/code | grep -v '/go/')"
+done
 
 if [[ -n $unpushed_all ]]; then
   echo -e "$unpushed_all"
