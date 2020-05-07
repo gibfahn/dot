@@ -180,9 +180,6 @@ if [[ $USER == gib ]]; then # Set keyboard preferences.
   # Sets a low time before key starts repeating.
   updateMacOSDefault NSGlobalDomain InitialKeyRepeat int 8
 
-  # Disables window minimizing animations.
-  updateMacOSDefault NSGlobalDomain NSAutomaticWindowAnimationsEnabled int 0
-
   # Use Dark mode.
   updateMacOSDefault NSGlobalDomain AppleInterfaceStyle string Dark
 
