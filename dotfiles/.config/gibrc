@@ -250,6 +250,9 @@ case $uname in
 esac
 # Copy last command.
 alias clc="fc -ln -1 | sed -e 's/\\\\n/\\n/g' -e 's/\\\\t/\\t/g' | cpy"
+# Run last command and copy the command and its output.
+# shellcheck disable=SC2155 # `r` won't work if we do `local a` as a separate command.
+cr() { local a=$(r 2>&1); cpy <<<"$a"; }
 
 # fda is find all (don't ignore anything).
 { exists fd && alias fda='fd --no-ignore --hidden'; } \
