@@ -22,7 +22,7 @@ for module in "${pip3_modules[@]}"; do
   if ! echo "$pip_installed" | grep -qx "${module%[*}" \
       || echo "$pip_outdated" | grep -qx "${module%[*}"; then
     # log_get "$pip: $module"
-    $pip install -Uq "$module"
+    $pip install --user --upgrade "$module"
   else
     :
     # TODO(gib): add skipping in the check command.
