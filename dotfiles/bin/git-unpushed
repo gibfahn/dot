@@ -6,12 +6,20 @@
 
 set -eu
 
+MAGENTA='\033[0;35m'    # Magenta (purple).
+RED='\033[0;31m' # Red.
+CYAN='\033[0;36m'       # Light blue.
+NC='\033[0m' # No Colour.
+
 # Usage: exit message [rc]
 error() {
-  NC='\033[0m' # No Colour.
-  RED='\033[0;31m' # Red.
   printf "${RED}Error:${NC} %s\n" "$1"
   exit "${2:-1}"
+}
+
+# Usage: indented_text=$(indent <<<"$text")
+indent() {
+  sed -e "s/^/        /" -e "s/\\\\n/        /"
 }
 
 if [[ -n ${1:-} ]]; then
@@ -25,8 +33,18 @@ if [[ -n ${1:-} ]]; then
 
   cd "$repo_path" || error "Couldn't cd to $repo_path"
 
-  unpushed+=$(git stash list --color=always)
-  unpushed+=$(git diff --color=always)
+  stash+=$(git stash list --color=always)
+  if [[ -n $stash ]]; then
+    unpushed+="    ${CYAN}-> Repo has stashed changes:${NC}\n"
+    unpushed+=$(indent <<<"$stash\n")
+  fi
+
+  diff+=$(git diff --color=always)
+  if [[ -n $diff ]]; then
+    unpushed+="    ${CYAN}-> Repo has uncommitted diffs:${NC}\n"
+    unpushed+=$(indent <<<"$diff\n")
+  fi
+
   # Plumbing version of 'git branch'.
   for branch in $(git for-each-ref refs/heads/ --format='%(refname:short)'); do
     branch_hash=$(git rev-parse "$branch")
@@ -39,22 +57,24 @@ if [[ -n ${1:-} ]]; then
     if [[ $has_push == 0 ]]; then
       # What's not in push branch that is in local branch?
       push_delta=$(git cherry -v "$push_hash" "$branch_hash")
-      if [[ $push_delta ]]; then
-        unpushed+="$branch has commits not in @{push}:\n$push_delta\n"
+      if [[ -n $push_delta ]]; then
+        unpushed+="    ${CYAN}-> $branch has commits not in @{push}:${NC}\n"
+        unpushed+=$(indent <<<"$push_delta\n")
       fi
     elif [[ $has_upstream == 0 ]]; then
       # What's not in upstream branch that is in local branch?
       upstream_delta=$(git cherry -v "$upstream_hash" "$branch_hash")
-      if [[ $upstream_delta ]]; then
-        unpushed+="$branch has commits not in @{upstream}:\n$upstream_delta\n"
+      if [[ -n $upstream_delta ]]; then
+        unpushed+="${CYAN}-> $branch has commits not in @{upstream}:${NC}\n"
+        unpushed+=$(indent <<<"$upstream_delta\n")
       fi
     else
-      unpushed+="$branch has no @{upstream} or @{push}\n"
+      unpushed+="${CYAN}-> $branch has no @{upstream} or @{push}${NC}\n"
     fi
   done
 
   if [[ -n $unpushed ]]; then
-    echo -e "=> $repo_path\n$(echo -e "$unpushed" | sed 's/^/    /')\n"
+    echo -e "${MAGENTA}=> $repo_path${NC}\n$(echo -e "$unpushed" | sed 's/^/    /')\n"
     exit 1
   fi
 else
