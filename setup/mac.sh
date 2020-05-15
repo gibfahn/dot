@@ -295,13 +295,12 @@ fi
 # Set up gpg agent Keychain integration.
 # https://stackoverflow.com/questions/39494631/gpg-failed-to-sign-the-data-fatal-failed-to-write-commit-object-git-2-10-0
 mkdir -p "${GNUPGHOME:="$XDG_DATA_HOME"/gnupg}"
-if grep -q 'pinentry-program /usr/local/bin/pinentry-mac' "$GNUPGHOME"/gpg-agent.conf; then
+if grep -q 'pinentry-program .*/pinentry-mac' "$GNUPGHOME"/gpg-agent.conf; then
   log_skip "Pinentry gpg config"
 else
   log_get "Pinentry gpg config"
-  echo "pinentry-program /usr/local/bin/pinentry-mac" >> "$GNUPGHOME"/gpg-agent.conf
-  # Disabling this as it breaks tty use-cases, not sure if needed.
-  # grep no-tty "$GNUPGHOME"/gpg.conf || echo "no-tty" >> "$GNUPGHOME"/gpg.conf
+  pinentry_mac_path=$(which pinentry-mac) # Expect it to be in the PATH.
+  echo "pinentry-program $pinentry_mac_path" >> "$GNUPGHOME"/gpg-agent.conf
 fi
 
 # Increase max file watch limit. See http://entrproject.org/limits.html
