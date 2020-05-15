@@ -39,7 +39,7 @@ brew "zsh"                               # Nicer interactive shell.
 # Brew casks (GUI Applications):
 
 cask "copyq"                             # Clipboard manager with history (needs manual setup).
-cask "font-hasklig-nerd-font"            # Nice programming font Hasklig (Source Code Pro + Ligatures) + Nerd Font extensions.
+cask "font-hasklug-nerd-font"            # Nice programming font Hasklig (Source Code Pro + Ligatures) + Nerd Font extensions.
 cask "google-chrome"                     # You probably want/have Chrome.
 cask "karabiner-elements"                # Key remapper (see $c/karabiner/karabiner.json for my settings).
 cask "keyboard-cleaner"                  # Block all keystrokes except ⌘-q so you can wipe your keyboard.
