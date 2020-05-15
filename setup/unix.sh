@@ -95,7 +95,9 @@ mkdir -p "$XDG_DATA_HOME/zsh"
 
 # Cleanup any zsh completion dirs with bad permissions.
 insecure_dirs=()
-readarray -t insecure_dirs <<<"$(zsh -c 'autoload -U compaudit; compaudit')"
+while read -r val; do
+    insecure_dirs+=("$val")
+done <<<"$(zsh -c 'autoload -U compaudit; compaudit')"
 if [[ -n ${insecure_dirs[*]} ]]; then
   log_get "compinit (zsh completion dir permissions)"
 
