@@ -193,6 +193,7 @@ pathadd "$GOPATH/bin" # Go binaries.
 pathadd /usr/bin # Should be after /usr/local/bin.
 pathadd /usr/local/bin # Missed in some shells.
 pathadd /usr/local/sbin # Missed in some shells.
+pathadd /opt/brew/bin # Alternate brew install location.
 pathadd "$XDG_DATA_HOME/rbenv/bin" # rbenv ruby version manager.
 pathadd "$XDG_CACHE_HOME/rbenv/shims" # rbenv installed versions.
 # pathadd /usr/lib/ccache # Add ccache to the path if installed (Linux).
