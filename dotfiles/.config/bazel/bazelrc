@@ -4,6 +4,9 @@ build --symlink_prefix=.bazel/
 # Use a persistent disk cache.
 build --disk_cache=~/.cache/bazel/
 
+# Use a cross-workspace shared repository download cache.
+build --repository_cache=~/.cache/bazel-repositories/
+
 # Print command to run to reproduce a test failure.
 test --verbose_failures
 # Sends combined stdout/stderr output from failed tests only into the stdout immediately after test is completed
