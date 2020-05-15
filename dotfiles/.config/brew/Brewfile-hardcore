@@ -2,17 +2,20 @@
 # previously used but don't currently.
 
 tap "bazelbuild/tap"                      # Provides bazelisk and other bazel tools.
-tap "github/gh"
 
 # Brew formulae
 
+# brew "certbot"                           # LetsEncrypt.
 # brew "cmake"                             # Commonly-used meta build system.
 # brew "ctags"                             # Used for autocomplete in Vim (etc).
 # brew "exa"                               # Nicer ls replacement.
 # brew "groovy"                            # Helpful for testing Jenkins scripts.
 # brew "kakoune"                           # Nicer but WIP alternative to neovim.
 # brew "kubernetes-helm"                   # Package manager for Docker.
+# brew "ninja"                             # Google meta build system (used in V8).
+# brew "redis"                             # In-memory key-object store.
 # brew "tmux"                              # Terminal multiplexer.
+# brew "watchexec"                         # Like entr (evaluating which one is better).
 # brew "xsv"                               # csv manipulator.
 # cask "balenaetcher"                      # Flash disk images (e.g. Linux bootable USB sticks).
 # cask "disk-inventory-x"                  # Graphical view of what's taking up disk space.
@@ -30,7 +33,6 @@ brew "binutils"                          # GNU versions of tools for interacting
 brew "broot"                             # Interactive version of "tree".
 brew "buildifier"                        # Bazel code formatter.
 brew "ccache"                            # Speeds up C/C++ recompilation.
-brew "certbot"                           # LetsEncrypt.
 brew "dfu-programmer"                    # QMK dependency used for flashing my Ergodox Infinity.
 brew "dfu-util"                          # QMK dependency used for flashing my Ergodox Infinity.
 brew "diffutils"                         # GNU versions of diff and related tools.
@@ -39,8 +41,8 @@ brew "findutils"                         # GNU versions of find, locate, updated
 brew "fswatch"                           # See which files are opened on the system (`fswatch /`).
 brew "gawk"                              # GNU versions of awk.
 brew "gdub"                              # Wrapper around ./gradlew for gradle projects (gw).
+brew "gh"                                # New GitHub CLI (will eventually replace hub).
 brew "git-lfs"                           # Git Large File Storage. Use with `git lfs`.
-brew "github/gh/gh"                      # New GitHub CLI (will eventually replace hub).
 brew "gnu-tar"                           # GNU version of tar.
 brew "gnu-time"                          # GNU version of time.
 brew "gnu-which"                         # GNU version of which.
@@ -57,18 +59,15 @@ brew "kubectx"                           # Easily change Kubernetes context or n
 brew "kubernetes-cli"                    # Manage your docker clusters with kube.
 brew "llvm"                              # Gives clangd (clang language server).
 brew "make"                              # GNU version of make.
-brew "ninja"                             # Google meta build system (used in V8).
 brew "postgresql"                        # Solid database.
 brew "protobuf"                          # Serialization format.
 brew "pstree"                            # Hierarchical tree of processes, `pstree -g 3`.
 brew "pv"                                # Show data flow through bash pipes.
-brew "redis"                             # In-memory key-object store.
 brew "ruby-build"                        # Helper to install ruby versions.
 brew "shellcheck"                        # Linter for bash.
 brew "speedtest-cli"                     # Check network speed from the command-line.
 brew "tokei"                             # Counts lines of code in a project.
 brew "watch"                             # Rerun a command every n seconds.
-brew "watchexec"                         # Like entr (evaluating which one is better).
 brew "wget"                              # Alternative to curl for downloading files.
 
 # Brew formulae from taps.
@@ -79,20 +78,20 @@ brew "bazelbuild/tap/buildozer"          # Automatically apply fixes to bazel fi
 # Brew casks
 
 # cask "adoptopenjdk8"                     # Java 8 that is still supported.
+# cask "hyperswitch"                       # Better Cmd-Tab (only windows on a screen).
+# cask "trailer"                           # GitHub push notifications.
+# cask "visual-studio-code"                # IDE that supports debugging Rust code.
 cask "caprine"                           # Facebook Messenger native app.
 cask "chrysalis"                         # Used to flash my KeyboardIO Model 01.
 cask "docker"                            # Build and run docker images.
 cask "firefox-nightly"                   # For those sweet Rust-based improvements.
 cask "gimp"                              # Heavyweight photo editor.
-cask "hyperswitch"                       # Better Cmd-Tab (only windows on a screen).
 cask "intellij-idea-ce"                  # Java-oriented IDE (good for debugging).
 cask "keycastr"                          # Shows keystrokes in corner of screen (great for casting/demos).
 cask "meld"                              # Visual file diffing tool.
 cask "slack-beta"                        # Everyone uses Slack right?
 cask "stay"                              # Save and restore window positions, invaluable with multi-monitor setups.
-cask "trailer"                           # GitHub push notifications.
 cask "vimr"                              # GUI neovim.
-cask "visual-studio-code"                # IDE that supports debugging Rust code.
 
 # Mac App Store Apps (some paid). `mas list` to see what you've already installed.
 
