@@ -54,7 +54,7 @@ if [[ -n ${1:-} ]]; then
   done
 
   if [[ -n $unpushed ]]; then
-    echo -e "=> $repo_path:\n$(echo -e "$unpushed" | sed 's/^/    /')\n"
+    echo -e "=> $repo_path\n$(echo -e "$unpushed" | sed 's/^/    /')\n"
     exit 1
   fi
 else
