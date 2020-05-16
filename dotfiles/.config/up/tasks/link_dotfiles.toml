@@ -1,5 +1,3 @@
-constraints = {OS = "macOS"}
-
 requires = ["dotfile_repo"]
 
 run_lib = "link"

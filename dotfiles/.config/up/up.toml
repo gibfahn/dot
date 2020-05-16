@@ -3,6 +3,7 @@ needs_sudo = true # TODO(gib): do this on a more granular basis.
 [env]
 dot_dir = "~/code/dot" # Directory to clone dotfiles to.
 dotfile_dir = "~/code/dot/dotfiles" # Directory to link dotfiles from.
+wrk_dotfile_dir = "~/wrk/me/dotfiles-apple/dotfiles" # Directory to link work dotfiles from.
 backup_dir = "~/backup" # Directory to move files overwritten by linking.
 
 HOME = "$HOME" # Current user's homedir (~), should be set by OS.
