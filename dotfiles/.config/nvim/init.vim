@@ -723,7 +723,7 @@ let g:coc_global_extensions = [
   \ 'coc-dictionary',
   \ 'coc-emoji',
   \ 'coc-eslint',
-  \ 'coc-gocode',
+  \ 'coc-go',
   \ 'coc-highlight',
   \ 'coc-html',
   \ 'coc-java',
