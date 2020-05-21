@@ -28,7 +28,7 @@ _gib_git_t() {
 _gib_git_h() {
   git log --all --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --graph --color=always |
   fzf "$@" --border --ansi --no-sort --reverse --multi --header 'Press CTRL-S to toggle sort' \
-    --preview 'git show --color=always $(grep -oE "[a-f0-9]{7,}" <<< {}) | delta' \
+    --preview 'git show --color=always $(grep -oE "[a-f0-9]{7,}" <<< {}) | delta ' \
     --bind 'ctrl-s:toggle-sort' \
     --bind "ctrl-o:execute: git shi \$(grep -oE '[a-f0-9]{7,}' <<< {} | head -1)" \
   | grep -oE "[a-f0-9]{7,}"
@@ -39,7 +39,7 @@ _gib_git_h() {
 _gib_git_a() {
   git stash list --color=always |
   fzf "$@" --border --ansi --no-sort --reverse --multi --header 'Press CTRL-S to toggle sort' \
-    --preview 'git stash show --patch --color=always $(cut -d : -f 1 <<< {}) | delta' \
+    --preview 'git stash show --patch --color=always $(cut -d : -f 1 <<< {}) | delta ' \
     --bind 'ctrl-s:toggle-sort' \
     --bind "ctrl-o:execute: git shi \$(cut -d : -f 1 <<< {} | head -1)" \
   | cut -d : -f 1
@@ -49,7 +49,7 @@ _gib_git_a() {
 _gib_git_r() {
   git reflog --date=short --pretty=oneline --color=always --decorate |
   fzf "$@" --border --ansi --no-sort --reverse --multi --header 'Press CTRL-S to toggle sort' \
-    --preview 'git show --color=always $(grep -oE "[a-f0-9]{7,}" <<< {}) | delta' \
+    --preview 'git show --color=always $(grep -oE "[a-f0-9]{7,}" <<< {}) | delta ' \
     --bind 'ctrl-s:toggle-sort' \
     --bind "ctrl-o:execute: git shi \$(grep -oE '[a-f0-9]{7,}' <<< {} | head -1)" \
   | grep -oE '[a-f0-9]{7,}'
