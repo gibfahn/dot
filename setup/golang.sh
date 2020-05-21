@@ -7,5 +7,6 @@ go_packages=(
 )
 
 # Install or update any go packages we need.
-[[ $USER == gib ]] && go get -u "${go_packages[@]}"
-
+if [[ $USER == gib && ${#go_packages} != 0 ]]; then
+  go get -u "${go_packages[@]}"
+fi
