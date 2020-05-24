@@ -48,7 +48,7 @@
         --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset)|%(objectname:short)|%(color:green)%(committerdate:relative)%(color:reset)' \
         | column -ts '|'
   bs  = bisect start
-  btu = "!git branch -u ${2:-up/$(git default-branch up)} #" # g btu remote/branch (defaults to up/HEAD).
+  btu = "!git branch -u ${1:-up/$(git default-branch up)} #" # g btu remote/branch (defaults to up/HEAD).
   btp = "!git config branch.$(git head-branch).pushRemote ${1:-fork} #" # `g btp up` sets push remote for this branch to up, useful when pushing directly to 'up'.
 
   # I manually specify -S because gpgsign only works with Git 2.x. Also it
