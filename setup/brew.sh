@@ -25,6 +25,8 @@ fi
 
 sogou_dir_old="$(ls -a /usr/local/Caskroom/sogouinput 2>/dev/null || true)"
 
+copyq_version_old=$(copyq --version)
+
 log_update "Brew update && upgrade"
 # Upgrade everything, even things that weren't in your Brewfile.
 brew update
@@ -53,6 +55,13 @@ fi
 log_get "Brew packages that would be cleaned up, run this to actually clean:
   brew bundle cleanup --force --file=<(cat $brewfiles)"
 brew bundle cleanup --file=<(cat $brewfiles)
+
+copyq_version_new=$(copyq --version)
+
+if [[ $copyq_version_old != "$copyq_version_new" ]]; then
+  log_error "CopyQ version changed, you need to manually untick and retick System Preferences -> Security & Privacy -> Accessibility -> CopyQ.app"
+  open /System/Library/PreferencePanes/Security.prefPane
+fi
 
 sogou_dir_new="$(ls -a /usr/local/Caskroom/sogouinput 2>/dev/null || true)"
 # If sogouinput was updated
