@@ -2,8 +2,6 @@
 # previously used but don't currently.
 
 tap "bazelbuild/tap"                      # Provides bazelisk and other bazel tools.
-# Remove once https://github.com/bazelbuild/homebrew-tap/pull/89 lands.
-tap "gibfahn/tap"                         # gibfahn/homebrew-tap, my fork of bazelbuild/homebrew-tap.
 
 # Brew formulae
 
@@ -74,7 +72,7 @@ brew "wget"                              # Alternative to curl for downloading f
 
 # Brew formulae from taps.
 
-brew "gibfahn/tap/bazelisk"           # Easily use the latest version of bazel.
+brew "bazelbuild/tap/bazelisk"           # Easily use the latest version of bazel.
 brew "bazelbuild/tap/buildozer"          # Automatically apply fixes to bazel files.
 
 # Brew casks
