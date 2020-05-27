@@ -128,6 +128,9 @@
   mfp = mf @{push} # Merge changes from the @{push} branch (useful when GitHub suggestions have been merged).
   mt  = mergetool # Alternative to `g mc`, `:h vimdiff` in nvim for more info (try `:dif[fupdate]`, `]c`, `do`, `dp`).
 
+  # Checkout next commit towards $1 (defaults to `master`). Opposite of `git checkout @~`. Skips "skipme" commits.
+  next = "!git -c advice.detachedHead=false checkout $(git log --reverse --ancestry-path @^..${1:-master} --oneline | grep -v skipme | head -2 | tail -1 | cut -d ' ' -f 1)"
+
   p   = push                                                    # Push commits to a remote.
   pf  = push --force-with-lease                                 # Better version of push -f.
   pa  = "!curl -L ${1%.patch}.patch | git am -S --whitespace=fix # "     # Patch Github PR.

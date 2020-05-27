@@ -234,6 +234,7 @@ alias ..="$cd .." ...="$cd ../.." ....="$cd ../../.." .....="$cd ../../../.." ..
 # shellcheck disable=SC2139 # We want this to expand when defined.
 alias -- -="$cd -"
 unset cd
+alias next='git next && git show' # Useful for demos.
 
 { works nvim && VIM="nvim"; } || { works vim && VIM="vim"; } || VIM="vi" # Take what you can get.
 export VISUAL=${VISUAL:-$VIM} EDITOR=${EDITOR:-$VIM} # Set vim/nvim as the default editor.
