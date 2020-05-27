@@ -227,13 +227,11 @@ alias s="TERM=xterm-256color ssh" # Reset cursor to block and ssh.
 alias l='ls -lAh' la='ls -A' ll='ls -l' md="mkdir -p"
 alias c=cargo ru=rustup  # Rust commands (try `c b`, `c r`, `c t`).
 rs() { for i in "$@"; do rustc "${i%.rs}.rs"; ./"${i%.rs}"; done; } # Compile/run (rs a.rs b).
-[[ -z "$cd" ]] && cd="cd" # We only want cd=cs in bash.
 # .. = up 1 dir, ... = up 2 dirs, .... = up 3 dirs (etc.). - = go to last dir.
 # shellcheck disable=SC2139 # We want this to expand when defined.
-alias ..="$cd .." ...="$cd ../.." ....="$cd ../../.." .....="$cd ../../../.." ......="$cd ../../../../.."
+alias ..="cd .." ...="cd ../.." ....="cd ../../.." .....="cd ../../../.." ......="cd ../../../../.."
 # shellcheck disable=SC2139 # We want this to expand when defined.
-alias -- -="$cd -"
-unset cd
+alias -- -="cd -"
 alias next='git next && git show' # Useful for demos.
 
 { works nvim && VIM="nvim"; } || { works vim && VIM="vim"; } || VIM="vi" # Take what you can get.
@@ -377,7 +375,6 @@ case $shell in
     set -o vi # Vim mode in bash.
     shopt -s autocd 2>/dev/null # type directory name to cd.
     cs() { cd "$@" && ls; } # cs => cd and ls.
-    cd=cs # Used in .. commands below (so .. does `cs ..`).
     CDPATH=:~ # Check ~ for directories after checking .
     bind Space:magic-space 2>/dev/null # !31 autoexpands on space.
     bind 'set completion-ignore-case on' 2>/dev/null # case-insensitive tab completion.
