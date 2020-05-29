@@ -42,7 +42,7 @@ plug "andreyorst/plug.kak" noload config %{
 
 # Fzf integration.
 plug "andreyorst/fzf.kak" config %{
-  map global user <f> ': fzf-mode<ret>'
+  map global user <f> ': fzf-mode<ret>' -docstring 'Enter fzf-mode'
 }
 
 # LanguageServer Protocol Client (LSP Client).
@@ -62,9 +62,9 @@ plug "ul/kak-lsp" do %{
 
 plug "occivink/kakoune-vertical-selection" config %{
   # <Leader>v,<a-v>,V to select selected columns below, above, and below+above.
-  map global user v     ': select-down<ret>'
-  map global user <a-v> ': select-up<ret>'
-  map global user V     ': select-vertically<ret>'
+  map global user v     ': vertical-selection-up<ret>'          -docstring 'Extend matching selection up'
+  map global user <a-v> ': vertical-selection-down<ret>'        -docstring 'Extend matching selection down'
+  map global user V     ': vertical-selection-up-and-down<ret>' -docstring 'Extend matching selection up and down'
 }
 
 plug "Delapouite/kakoune-buffers" config %{
@@ -77,20 +77,42 @@ plug "Delapouite/kakoune-buffers" config %{
 }
 
 # TODO(gib): Currently broken by https://github.com/danr/kakoune-easymotion/issues/16
+# Not yet a label mode, see: https://github.com/danr/kakoune-easymotion/issues/28
 plug "danr/kakoune-easymotion" config %{
   # <Leader>s to trigger a single easymotion command.
-  map global user s ': enter-user-mode easymotion<ret>'      -docstring 'buffers…'
-  set-option global em_jumpchars abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ
+  map global user s ': enter-user-mode easymotion<ret>'
+  set-option global em_jumpchars 'abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 }
+
+########################
+# Normal mode mappings #
+########################
+
+# Space is my leader key.
+map global normal '<space>'       '<,>'       -docstring 'leader'
+# Space is normally used for removing selections, so use backspace for that instead.
+map global normal '<backspace>'   '<space>'   -docstring 'remove all sels except main'
+map global normal '<a-backspace>' '<a-space>' -docstring 'remove main sel'
+
+map global normal <tab>   ':buffer-next<ret>'                   -docstring 'Change to next buffer.'
+map global normal <s-tab> ':buffer-previous<ret>'               -docstring 'Change to next buffer.'
+
+map global normal '#'     :comment-line<ret>  -docstring 'comment line'
+map global normal '<a-#>' :comment-block<ret> -docstring 'comment block'
+
+######################
+# Goto mode mappings #
+######################
+
+# I use Colemak, so the gh,gj,gk,gl mappings aren't so useful for me.
+map global goto '<left>'  '<h>' -docstring 'beginning of line'
+map global goto '<down>'  '<j>' -docstring 'end of file'
+map global goto '<up>'    '<k>' -docstring 'beginning of file'
+map global goto '<right>' '<l>' -docstring 'end of line'
 
 ###########################################
 # User mode mappings (<Leader> mappings). #
 ###########################################
-
-# Space is my leader key.
-map global normal '<space>'       '<,>'       -docstring 'leader'
-map global normal '<backspace>'   '<space>'   -docstring 'remove all sels except main'
-map global normal '<a-backspace>' '<a-space>' -docstring 'remove main sel'
 
 # Leader key combinations:
 map global user   <w>     ':write<ret>'                         -docstring 'Save file'
@@ -102,9 +124,8 @@ map global user   <X>     ':write-all-quit<ret>'                -docstring 'Save
 map global user   <d>     ': delete-buffer<ret>'                -docstring 'Close current buffer.'
 map global user   <l>     ': enter-user-mode lsp<ret>'          -docstring 'Enter LanguageServer mode.'
 map global user   <s>     ': enter-user-mode easymotion<ret>'   -docstring 'Enter EasyMotion mode.'
-
-map global normal <tab>   ':buffer-next<ret>'                   -docstring 'Change to next buffer.'
-map global normal <s-tab> ':buffer-previous<ret>'               -docstring 'Change to next buffer.'
+map global user   <a>     '*%s<ret>'                            -docstring 'select all'
+map global user   </>     '*/<ret>'                             -docstring 'search for current selection'
 
 # Copy and paste to the system clipboard with <Leader>y/p/R
 evaluate-commands %sh{
@@ -120,14 +141,68 @@ evaluate-commands %sh{
     printf "map global user '<R>' '|%s<ret>'                            -docstring 'replace from clipboard'\n"        "$paste"                                                          
 }
 
-map global normal '#'     :comment-line<ret>  -docstring 'comment line'
-map global normal '<a-#>' :comment-block<ret> -docstring 'comment block'
+##########
+# Hooks. #
+##########
+
+# Make sure you add all hooks to the gib group so they can be unloaded when the kakrc is re-sourced.
 
 # Reload rc file when it's written.
 hook global -group gib BufWritePost .*kakrc %{ source ~/.config/kak/kakrc }
+# https://github.com/mawww/kakoune/issues/1856
+hook global -group gib BufOpenFile .* editorconfig-load
+hook global -group gib BufNewFile .* editorconfig-load
+
+# Tab and Shift-Tab select completions when the completion menu is open.
+# https://www.reddit.com/r/kakoune/comments/8jllac/how_can_i_navigate_the_completion_menu_with_tab/
+# https://github.com/mawww/kakoune/wiki/Indentation-and-Tabulation#use-tab-for-both-indenting-and-completion
+hook global -group gib InsertCompletionShow .* %{
+    try %{
+        exec -draft 'h<a-K>\h<ret>'
+        map window insert <s-tab> <c-p>
+        map window insert <tab> <c-n>
+    }
+}
+hook global -group gib InsertCompletionHide .* %{
+    unmap window insert <tab> <c-n>
+    unmap window insert <s-tab> <c-p>
+}
 
 # Set "has been sourced" bool to true.
 set-option global gib_kakrc_sourced true
 
 # Useful resources:
 # - https://github.com/mawww/config/blob/master/kakrc
+
+###################
+# Vim Equivalents #
+###################
+
+# Visual Selection
+
+# vip          -> <a-i>p
+# vap          -> <a-a>p
+# vi"          -> <a-i>"
+# vil          -> x
+# V            -> X
+# v$           -> <a-l>
+# f            -> f
+# F            -> <a-f>
+# t            -> t
+# T            -> <a-t>
+# o            -> <a-;>
+
+# Search
+
+# *            -> <A-i>w, *, <Enter> -> <Leader>/
+
+# Move screen
+
+# zz           -> vv
+# zt           -> vt
+# zb           -> vb
+
+# Plugins
+
+# :Tab /<char> -> Select range, s<char><Enter>, & to align
+# Git          -> https://github.com/mawww/kakoune/blob/master/rc/tools/git.kak
