@@ -4,6 +4,9 @@
 # for unsaved changes. If this passes all your repos are backed up to their git
 # remotes.
 
+# Requires: fd CLI (https://github.com/sharkdp/fd).
+#   brew install fd
+
 set -eu
 
 MAGENTA='\033[0;35m'    # Magenta (purple).
