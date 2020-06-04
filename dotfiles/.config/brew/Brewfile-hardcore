@@ -78,7 +78,6 @@ brew "bazelbuild/tap/buildozer"          # Automatically apply fixes to bazel fi
 # Brew casks
 
 # cask "adoptopenjdk8"                     # Java 8 that is still supported.
-# cask "hyperswitch"                       # Better Cmd-Tab (only windows on a screen).
 # cask "trailer"                           # GitHub push notifications.
 # cask "visual-studio-code"                # IDE that supports debugging Rust code.
 cask "caprine"                           # Facebook Messenger native app.
@@ -86,6 +85,7 @@ cask "chrysalis"                         # Used to flash my KeyboardIO Model 01.
 cask "docker"                            # Build and run docker images.
 cask "firefox-nightly"                   # For those sweet Rust-based improvements.
 cask "gimp"                              # Heavyweight photo editor.
+cask "hyperswitch"                       # Better Cmd-Tab (only windows on a screen).
 cask "intellij-idea-ce"                  # Java-oriented IDE (good for debugging).
 cask "keycastr"                          # Shows keystrokes in corner of screen (great for casting/demos).
 cask "meld"                              # Visual file diffing tool.
