@@ -9,7 +9,12 @@ if exists brew; then
   log_skip "brew (already installed)."
 else
   log_get "brew."
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+  # Should only exist if we're on a work machine.
+  if [[ -d $wrk_dotfile_dir ]]; then
+    "$wrk_dotfile_dir"/setup/brew.sh
+  else
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+  fi
 fi
 
 # Install xcode command line tools (should have already been brew installed).

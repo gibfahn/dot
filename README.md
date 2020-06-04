@@ -4,6 +4,9 @@ Contains everything I use to setup a new machine (except ssh and gpg keys).
 
 ## How to run
 
+N.B. until I add better control over ordering, on the first run it is
+necessary to clone the `wrk_dotfile_dir` before running `up` for the first time.
+
 ```shell
 curl --create-dirs -Lo ~/bin/up https://github.com/gibfahn/up-rs/releases/latest/download/up-darwin
 chmod +x ~/bin/up
