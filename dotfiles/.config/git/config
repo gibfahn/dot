@@ -221,6 +221,7 @@
 
 [core]
   pager = delta # Uses the theme from the BAT_THEME env var.
+  # To use local hooks, run: `git config core.hooksPath .git/hooks`
   hooksPath = "~/.config/git/hooks" # Put global git hooks here.
 
 [credential]
@@ -312,3 +313,11 @@
 # Work config for work repos.
 [includeIf "gitdir:~/wrk/**"]
   path = ~/.config/git/wrk-config
+
+# To use hooks in a repo, run:
+# `git config core.hooksPath .git/hooks; git lfs install --local`
+[filter "lfs"]
+  required = true
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
