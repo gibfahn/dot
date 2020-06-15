@@ -769,17 +769,20 @@ augroup gibAutoGroup                                " Group of automatic functio
     \ if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") |
     \   execute "normal g`\"" |
     \ endif
-  autocmd BufRead,BufNewFile *.md set filetype=markdown  " Use markdown for md files.
-  autocmd FileType help wincmd L                    " Open new help windows on the right,
+
   " autocmd FileType qf wincmd L                       "  ↳       build windows on the right.
-  autocmd FileType yaml setlocal foldmethod=indent  " YAML files should be folded by indent.
-  autocmd FileType json setlocal foldmethod=indent  " JSON files should be folded by indent.
-  autocmd FileType python setlocal foldmethod=indent textwidth=100  " Python files should be folded by indent.
   autocmd BufNewFile,BufRead *.bats set filetype=sh " Bats is a shell test file type.
+  autocmd BufNewFile,BufRead *.pcl set syntax=groovy " Pretend pcl is groovy.
+  autocmd BufRead,BufNewFile *.md set filetype=markdown  " Use markdown for md files.
   autocmd BufWritePost $MYVIMRC nested source $MYVIMRC " Reload vimrc on save.
   autocmd BufWritePost $colorscheme_path nested source $colorscheme_path " Reload colorscheme on save:
+  autocmd FileType help wincmd L                    " Open new help windows on the right,
+  autocmd FileType json setlocal foldmethod=indent  " JSON files should be folded by indent.
+  autocmd FileType python setlocal foldmethod=indent textwidth=100  " Python files should be folded by indent.
+  autocmd FileType yaml setlocal foldmethod=indent  " YAML files should be folded by indent.
   autocmd QuickFixCmdPost *grep* cwindow|           " Open the quickfix window on grep.
   autocmd VimEnter * silent! tabonly|               " Don't allow starting Vim with multiple tabs.
+
   " Check if files modified when you open a new window, switch back to vim, or if you don't move the cursor for 100ms.
   " Use getcmdwintype() to avoid running in the q: window (otherwise you get lots of errors).
   autocmd FocusGained,BufEnter,CursorHold,CursorHoldI * if getcmdwintype() == '' | checktime | endif
