@@ -36,16 +36,25 @@ if [[ -n ${1:-} ]]; then
 
   cd "$repo_path" || error "Couldn't cd to $repo_path"
 
+  # Check stash.
   stash+=$(git stash list --color=always)
   if [[ -n $stash ]]; then
     unpushed+="    ${CYAN}-> Repo has stashed changes:${NC}\n"
     unpushed+=$(indent <<<"$stash\n")
   fi
 
+  # Check uncommitted diffs.
   diff+=$(git diff --color=always)
   if [[ -n $diff ]]; then
     unpushed+="    ${CYAN}-> Repo has uncommitted diffs:${NC}\n"
     unpushed+=$(indent <<<"$diff\n")
+  fi
+
+  # Check untracked files.
+  untracked+=$(git ls-files . --exclude-standard --others)
+  if [[ -n $untracked ]]; then
+    unpushed+="    ${CYAN}-> Repo has untracked files:${NC}\n"
+    unpushed+=$(indent <<<"$untracked\n")
   fi
 
   # Plumbing version of 'git branch'.
