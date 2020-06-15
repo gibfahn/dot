@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+# Checks ~/wrk and ~/code for git repos (things with .git subdirs) and checks
+# for unsaved changes. If this passes all your repos are backed up to their git
+# remotes.
+
+# Requires: fd CLI (https://github.com/sharkdp/fd).
+#   brew install fd
+
+set -eu
+
+MAGENTA='\033[0;35m'    # Magenta (purple).
+RED='\033[0;31m' # Red.
+NC='\033[0m' # No Colour.
+LF=$'\n'
+
+# Usage: exit message [rc]
+error() {
+  # printf "${RED}Error:${NC} %s\n" "$1"
+  echo -e "${RED}Error:${NC} $1"
+  exit "${2:-1}"
+}
+
+# Usage: indented_text=$(indent <<<"$text")
+indent() {
+  # Replace \ with \\ so e.g. literal \n in the output doesn't get read as an escape code.
+  # Indent each line by 8 spaces.
+  sed -e 's/\\/\\\\/g' -e "s/^/    /"
+}
+
+if [[ ${1:-} == --each-dir* ]]; then
+  # Run command on `--each-dir`.
+  if [[ $1 == --each-dir=* ]]; then
+    repo_path=${1#--each-dir=}
+    shift 1
+  else
+    repo_path=${2}
+    shift 2
+  fi
+
+  if [[ $repo_path == */go/* ]]; then
+    exit 0 # Skip go directories.
+  fi
+
+  output=$(git -C "$repo_path" -c color.ui=always "$@") && true
+  rc=$?
+  if [[ -n ${output:-} ]]; then
+    printf "${MAGENTA}=> git-each: git $* in $repo_path${NC}$LF"
+    printf "%s\n" "$(indent <<<"$output")"
+  fi
+  exit $rc
+else
+  # Call self with each dir.
+  fd --no-ignore --hidden --type directory '^\.git$' ~/wrk ~/code -x "$0" '--each-dir={//}' "$@" && true
+  rc=$?
+  if [[ $rc != 0 ]]; then
+    error "${MAGENTA}One or more git-each commands failed ($rc) ⬆⬆⬆.${NC}" "$rc"
+  fi
+fi
