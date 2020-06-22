@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
-# Checks ~/wrk and ~/code for git repos (things with .git subdirs) and checks
-# for unsaved changes. If this passes all your repos are backed up to their git
-# remotes.
+# Checks ~/wrk and ~/code for git repos (things with .git subdirs) and executes the command passed in each dir.
+# e.g. `git each git unpushed` to check status of each remote.
 
 # Requires: fd CLI (https://github.com/sharkdp/fd).
 #   brew install fd
@@ -42,7 +41,7 @@ if [[ ${1:-} == --each-dir* ]]; then
     exit 0 # Skip go directories.
   fi
 
-  output=$(git -C "$repo_path" -c color.ui=always "$@") && true
+  output=$(cd "$repo_path" && "$@") && true
   rc=$?
   if [[ -n ${output:-} ]]; then
     printf "${MAGENTA}=> git-each: git $* in $repo_path${NC}$LF"
