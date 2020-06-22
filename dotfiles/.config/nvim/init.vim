@@ -765,44 +765,44 @@ endif
 
 augroup gibAutoGroup                                " Group of automatic functions.
   autocmd!|                                         " Remove existing autocmds.
+
+  autocmd BufEnter    * let b:swapchoice_likely = (&l:ro ? 'o' : 'e')
+  autocmd BufNewFile,BufRead *.bats set filetype=sh " Bats is a shell test file type.
+  autocmd BufNewFile,BufRead *.pcl set syntax=groovy " Pretend pcl is groovy.
+  autocmd BufRead,BufNewFile *.md set filetype=markdown  " Use markdown for md files.
+  autocmd BufReadPost * let b:swapchoice_likely = (&l:ro ? 'o' : 'r')
   autocmd BufReadPost *|                            " On open jump to last cursor position if possible.
     \ if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") |
     \   execute "normal g`\"" |
     \ endif
-
-  " autocmd FileType qf wincmd L                       "  ↳       build windows on the right.
-  autocmd BufNewFile,BufRead *.bats set filetype=sh " Bats is a shell test file type.
-  autocmd BufNewFile,BufRead *.pcl set syntax=groovy " Pretend pcl is groovy.
-  autocmd BufRead,BufNewFile *.md set filetype=markdown  " Use markdown for md files.
+  autocmd BufWinEnter * if exists('b:swapchoice') && b:swapchoice == 'r' | call s:HandleRecover() | endif
+  autocmd BufWinEnter * if exists('b:swapchoice') && exists('b:swapchoice_likely') | let b:swapchoice = b:swapchoice_likely | unlet b:swapchoice_likely | endif
   autocmd BufWritePost $MYVIMRC nested source $MYVIMRC " Reload vimrc on save.
   autocmd BufWritePost $colorscheme_path nested source $colorscheme_path " Reload colorscheme on save:
+  autocmd BufWritePre * call mkdir(expand("<afile>:p:h"), "p") " Create dir if it doesn't already exist on save.
+  " Highlight symbol under cursor on CursorHold (show other instances of current word).
+  autocmd CursorHold * silent call CocActionAsync('highlight')
+  autocmd FileType go set listchars=tab:\ \ ,trail:·,nbsp:☠ " Don't highlight tabs in Go.
   autocmd FileType help wincmd L                    " Open new help windows on the right,
+  " autocmd FileType qf wincmd L                       "  ↳       build windows on the right.
   autocmd FileType json setlocal foldmethod=indent  " JSON files should be folded by indent.
+  " Allow comments in json.
+  autocmd FileType json syntax match Comment +\/\/.\+$+
   autocmd FileType python setlocal foldmethod=indent textwidth=100  " Python files should be folded by indent.
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json,rust setl formatexpr=CocAction('formatSelected')
   autocmd FileType yaml setlocal foldmethod=indent  " YAML files should be folded by indent.
-  autocmd QuickFixCmdPost *grep* cwindow|           " Open the quickfix window on grep.
-  autocmd VimEnter * silent! tabonly|               " Don't allow starting Vim with multiple tabs.
-
   " Check if files modified when you open a new window, switch back to vim, or if you don't move the cursor for 100ms.
   " Use getcmdwintype() to avoid running in the q: window (otherwise you get lots of errors).
   autocmd FocusGained,BufEnter,CursorHold,CursorHoldI * if getcmdwintype() == '' | checktime | endif
-  " Setup formatexpr specified filetype(s).
-  autocmd FileType typescript,json,rust setl formatexpr=CocAction('formatSelected')
-  " Update signature help on jump placeholder (show function signature when you jump to it).
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-  " Highlight symbol under cursor on CursorHold (show other instances of current word).
-  autocmd CursorHold * silent call CocActionAsync('highlight')
-  " Allow comments in json.
-  autocmd FileType json syntax match Comment +\/\/.\+$+
-  autocmd FileType go set listchars=tab:\ \ ,trail:·,nbsp:☠ " Don't highlight tabs in Go.
-
+  autocmd QuickFixCmdPost *grep* cwindow|           " Open the quickfix window on grep.
   " Recover deletes swapfile if no difference, or shows diff if different.
   autocmd SwapExists  * let b:swapchoice = '?' | let b:swapname = v:swapname
-  autocmd BufReadPost * let b:swapchoice_likely = (&l:ro ? 'o' : 'r')
-  autocmd BufEnter    * let b:swapchoice_likely = (&l:ro ? 'o' : 'e')
-  autocmd BufWinEnter * if exists('b:swapchoice') && exists('b:swapchoice_likely') | let b:swapchoice = b:swapchoice_likely | unlet b:swapchoice_likely | endif
-  autocmd BufWinEnter * if exists('b:swapchoice') && b:swapchoice == 'r' | call s:HandleRecover() | endif
   autocmd User CocDiagnosticChange call lightline#update()
+  " Update signature help on jump placeholder (show function signature when you jump to it).
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+  autocmd VimEnter * silent! tabonly|               " Don't allow starting Vim with multiple tabs.
+
 augroup END
 
 " }}} Autocommands
