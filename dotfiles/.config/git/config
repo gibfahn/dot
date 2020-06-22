@@ -316,8 +316,8 @@
 
 # To use hooks in a repo, run:
 # `git config core.hooksPath .git/hooks; git lfs install --local`
-[filter "lfs"]
-  required = true
-  clean = git-lfs clean -- %f
-  smudge = git-lfs smudge -- %f
-  process = git-lfs filter-process
+# [filter "lfs"]
+#   required = true
+#   clean = git-lfs clean -- %f
+#   smudge = git-lfs smudge -- %f
+#   process = git-lfs filter-process
