@@ -1,13 +1,4 @@
-###############################################################
-# This configuration file lets you
-# - define new commands
-# - change the shortcut or triggering keys of built-in verbs
-# - change the colors
-# - set default values for flags
-#
-# Configuration documentation is available at
-#     https://dystroy.org/broot
-###############################################################
+# Configuration documentation: https://dystroy.org/broot
 
 ###############################################################
 # Default flags
@@ -16,21 +7,26 @@
 # to see hidden and gitignored files and the permissions (then
 # if you don't want the hidden files you can launch `br -H`)
 # A popular flag is the `g` one which displays git related info.
-#
 default_flags = "g"
+capture_mouse = true # Allows clicking on things.
 
 ###############################################################
 # Verbs and shortcuts
 
+# :s -> show sizes (see what is taking space).
+# :h -> show hidden files
+
 [[verbs]]
+# Open current file with `open` or `xdg-open`, don't leave broot.
 key = "ctrl-o"
 execution = ":open_stay"
 leave_broot = false
 
 [[verbs]]
+# Open current file with $VISUAL.
 invocation = "edit"
 key = "enter"
-execution = "$EDITOR {file}"
+execution = "$VISUAL {file}"
 leave_broot = false
 
 [[verbs]]
@@ -54,7 +50,7 @@ execution = "git diff {file}"
 [[verbs]]
 name = "view"
 invocation = "view"
-execution = "$PAGER {file}"
+execution = "bat {file}"
 leave_broot = false
 
 # If you uncomment the two next shortcuts, the left
@@ -69,15 +65,11 @@ execution = ":parent"
 key = "right"
 execution = ":focus"
 
-# Another popular set of shorctuts for going up and down:
 
 [[verbs]]
-key = "ctrl-j"
-execution = ":line_down"
+key = "ctrl-right"
+execution = ":focus"
 
-# [[verbs]]
-# key = "ctrl-k"
-# execution = ":line_up"
 
 [[verbs]]
 key = "ctrl-d"
