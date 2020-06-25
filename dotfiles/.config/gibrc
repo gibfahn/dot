@@ -141,6 +141,7 @@ pth() { # Returns absolute path to each file or dir arg.
     fi
   done
 }
+
 # Clone repo and cd into path (can't be in git config as we cd).
 gcl() {
   local clone_dir ret

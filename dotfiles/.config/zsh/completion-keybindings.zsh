@@ -55,6 +55,16 @@ _gib_git_r() {
   | grep -oE '[a-f0-9]{7,}'
 }
 
+# Fzf run command in path: interactively decide what command to run.
+_gib_path_run() {
+  (
+    # Zsh populates $path array with $PATH directory paths.
+    for p in "${path[@]}"; do
+      [[ -d $p ]] && ls "$p"
+    done
+  ) | fzf
+}
+
 # More fzf helpers.
 # shellcheck disable=2034,SC2154
 _gib_join-lines() { local item; while read -r item; do echo -n "${(q)item} "; done; }
@@ -149,6 +159,11 @@ bindkey -M vicmd ' ' edit-command-line # <Space> in cmd mode opens editor.
 bindkey -r -M viins "^G" # Remove list-expand binding so we can use <C-g> for git.
 bind-git-helper f b t r h a # Bind <C-g><C-{f,b,t,r,h,s}> to fuzzy-find show {files,branches,tags,reflog,hashes,stashes}.
 unset -f bind-git-helper
+
+# Bind ^g^p to "interactively choose which binary from the $PATH to run".
+_gib_fzf-gp-widget() { local result=$(_gib_path_run); zle reset-prompt; LBUFFER+="$result " }
+zle -N _gib_fzf-gp-widget
+bindkey -M viins '^g^p' _gib_fzf-gp-widget
 
 # Run before the prompt is displayed.
 _gib_prompt_precmd() {
