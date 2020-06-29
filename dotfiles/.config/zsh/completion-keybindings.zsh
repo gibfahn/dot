@@ -138,15 +138,16 @@ KEYTIMEOUT=10 # Key delay of 0.1s (Esc in vim mode is quicker).
 
 bindkey -v # Enable vim mode in zsh.
 
-bindkey -M viins 'kj' vi-cmd-mode # Map kj -> Esc in vim mode.
 bindkey -M viins "^?" backward-delete-char # Make backspace work properly.
-bindkey -M viins "^H" backward-delete-char # <Ctrl>-H = Backspace (Emacs default).
-bindkey -M viins "^W" backward-kill-word # <Ctrl>-W = Delete word (Emacs default).
-bindkey -M viins "^U" backward-kill-line # <Ctrl>-U = Delete line (Emacs default).
 bindkey -M viins "^A" beginning-of-line # <Ctrl>-A = Go to beginning of line (Emacs default).
 bindkey -M viins "^E" end-of-line       # <Ctrl>-E = Go to end of line (Emacs default).
+bindkey -M viins "^H" backward-delete-char # <Ctrl>-H = Backspace (Emacs default).
 bindkey -M viins "^R" history-incremental-search-backward # Restore <Ctrl>-R search.
 bindkey -M viins "^S" history-incremental-search-forward  # Restore <Ctrl>-S forward search.
+bindkey -M viins "^U" backward-kill-line # <Ctrl>-U = Delete line (Emacs default).
+bindkey -M viins "^W" backward-kill-word # <Ctrl>-W = Delete word (Emacs default).
+bindkey -M viins '^[^M' self-insert-unmeta # <Alt>-Enter Insert a literal enter (newline char).
+bindkey -M viins 'kj' vi-cmd-mode # Map kj -> Esc in vim mode.
 bindkey -M main "^[[A" history-beginning-search-backward-end # Re-enable up   for history search.
 bindkey -M main "^[[B" history-beginning-search-forward-end  # Re-enable down for history search.
 bindkey -M main '\e.' insert-last-word
