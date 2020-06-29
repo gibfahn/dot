@@ -29,6 +29,15 @@ following:
   - FileVault -> Turn on FileVault
 
 
+### Sudo with TouchID
+
+To use TouchID for auth you simply need to add a single line to `/etc/pam.d/sudo`:
+
+```shell
+# Inserts `auth       sufficient     pam_tid.so` on line 2 of /etc/pam.d/sudo
+sudo gsed -i "2iauth       sufficient     pam_tid.so" /etc/pam.d/sudo
+```
+
 ### Keyboard Layout on boot
 
 If it doesn't boot to Colemak, run:
