@@ -1,7 +1,14 @@
 #!/bin/sh
 
-# Shortcut command to run the Java language server.
-# See: https://github.com/autozimu/LanguageClient-neovim/wiki/Java
+usage() {
+echo "$(tput bold; tput setaf 74)$0 [-h|--help]$(tput sgr0)
+
+Shortcut command to run the Java language server.
+See: https://github.com/autozimu/LanguageClient-neovim/wiki/Java
+"
+}
+
+[[ $1 =~ ^(--help|-h)$ ]] && { usage; exit; }
 
 case "$(uname)" in
   Darwin) os=mac ;;

@@ -1,12 +1,19 @@
 #!/usr/bin/env bash
 
-# Checks ~/wrk and ~/code for git repos (things with .git subdirs) and executes the command passed in each dir.
-# e.g. `git each git unpushed` to check status of each remote.
-
-# Requires: fd CLI (https://github.com/sharkdp/fd).
-#   brew install fd
-
 set -eu
+
+usage() {
+echo "$(tput bold; tput setaf 74)$0 [-h|--help]$(tput sgr0)
+
+Checks ~/wrk and ~/code for git repos (things with .git subdirs) and executes the command passed in each dir.
+e.g. 'git each git unpushed' to check status of each remote.
+
+Requires: fd CLI (https://github.com/sharkdp/fd).
+  brew install fd
+"
+}
+
+[[ ${1:-} =~ ^(--help|-h)$ ]] && { usage; exit; }
 
 MAGENTA='\033[0;35m'    # Magenta (purple).
 RED='\033[0;31m' # Red.

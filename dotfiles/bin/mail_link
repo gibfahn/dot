@@ -1,9 +1,16 @@
 #!/bin/bash
 
-# Creates a clickable link from an email.
-# Copy "Message-id" header from Mail App.
-# - In Mail.app: Preferences -> Viewing -> Show message headers: Custom: Message-ID
-# Script reads from Clipboard (or $1) and writes to clipboard (and stdout).
+usage() {
+echo "$(tput bold; tput setaf 74)$0 [-h|--help]$(tput sgr0)
+
+Creates a clickable link from an email.
+Copy 'Message-id' header from Mail App.
+- In Mail.app: Preferences -> Viewing -> Show message headers: Custom: Message-ID
+Script reads from Clipboard (or \$1) and writes to clipboard (and stdout).
+"
+}
+
+[[ $1 =~ ^(--help|-h)$ ]] && { usage; exit; }
 
 # In the C locale paste includes U+2068 chars.
 export LC_ALL=en_US.UTF-8

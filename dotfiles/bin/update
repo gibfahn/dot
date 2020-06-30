@@ -1,9 +1,16 @@
 #!/bin/bash
 
-# Updates everything on your system, starting with the dotfiles themselves. If
-# you add your own things that need updating, add to this script.
-
 set -e
+
+usage() {
+echo "$(tput bold; tput setaf 74)$0 [-h|--help]$(tput sgr0)
+
+Updates everything on your system, starting with the dotfiles themselves. If
+you add your own things that need updating, add to this script.
+"
+}
+
+[[ $1 =~ ^(--help|-h)$ ]] && { usage; exit; }
 
 # Get path to dotfiles.
 dotDir="$(cd "$(dirname "$(readlink $0)")"/../..; pwd)"

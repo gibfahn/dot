@@ -1,6 +1,16 @@
 #!/bin/bash
 
-# `git branch prune`: delete local branches whose commits have already been merged.
+usage() {
+echo "$(tput bold; tput setaf 74)$0 [-h|--help]$(tput sgr0)
+
+git branch prune: delete local branches whose commits have already been merged.
+
+Note that it defaults to deleting on enter, hit n to avoid.
+"
+}
+
+[[ $1 =~ ^(--help|-h)$ ]] && { usage; exit; }
+
 
 branches_to_prune=()
 

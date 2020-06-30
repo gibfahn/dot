@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
 
-# Checks ~/wrk and ~/code for git repos (things with .git subdirs) and checks
-# for unsaved changes. If this passes all your repos are backed up to their git
-# remotes.
-
-# Requires: fd CLI (https://github.com/sharkdp/fd).
-#   brew install fd
-
 set -eu
+
+usage() {
+echo "$(tput bold; tput setaf 74)$0 [-h|--help]$(tput sgr0)
+
+Checks for unsaved changes. If this passes the repo is backed up to its git remotes.
+"
+}
+
+[[ ${1:-} =~ ^(--help|-h)$ ]] && { usage; exit; }
 
 CYAN='\033[0;36m'       # Light blue.
 NC='\033[0m' # No Colour.
