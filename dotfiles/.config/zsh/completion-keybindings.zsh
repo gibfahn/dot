@@ -62,7 +62,7 @@ _gib_path_run() {
     for p in "${path[@]}"; do
       [[ -d $p ]] && ls "$p"
     done
-  ) | fzf
+  ) | fzf --preview 'unbuffer man {} || unbuffer {} --help'
 }
 
 # More fzf helpers.

@@ -17,6 +17,7 @@ brew "bash"                              # macOS Bash is very old.
 brew "coreutils"                         # GNU versions of utils that are out-of-date or FreeBSD on macOS (inc dircolors).
 brew "dockutil"                          # Add and remove things from the dock.
 brew "entr"                              # Command line file watching.
+brew "expect"                            # Includes `unbuffer` for making programs think stdout/stderr is a tty.
 brew "fd"                                # Super-fast find replacement.
 brew "fzf"                               # Fuzzy file finder.
 brew "git"                               # Bleeding-edge git.

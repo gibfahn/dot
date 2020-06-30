@@ -17,6 +17,7 @@ LESS_TERMCAP_ZW = $(tput rsupm)
 LESS_TERMCAP_mb = $(tput bold; tput setaf 2)
 # Blue.
 LESS_TERMCAP_md = $(tput bold; tput setaf 74)
+# Reset (turn everything off).
 LESS_TERMCAP_me = $(tput sgr0)
 # Dim (half-bright) mode.
 LESS_TERMCAP_mh = $(tput dim)
