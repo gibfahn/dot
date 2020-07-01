@@ -166,6 +166,11 @@ _gib_fzf-gp-widget() { local result=$(_gib_path_run); zle reset-prompt; LBUFFER+
 zle -N _gib_fzf-gp-widget
 bindkey -M viins '^g^p' _gib_fzf-gp-widget
 
+# ^D with contents clears the buffer, without contents exits (hit it twice to exit.).
+_gib_clear_exit() { [[ -n $BUFFER ]] && zle kill-buffer || exit; }
+zle -N _gib_clear_exit
+bindkey -M viins '^d' _gib_clear_exit
+
 # Run before the prompt is displayed.
 _gib_prompt_precmd() {
   # Set window title to current directory.
