@@ -354,6 +354,7 @@ nmap          <A-C> <Plug>(coc-diagnostic-prev)| " Prev changed Coc message (e.g
 nnoremap          <A-t> :tabnext<CR>|               " Next tab.
 nnoremap          <A-T> :tabprev<CR>|               " Prev tab.
 nnoremap          <A-d> :tabclose<CR>|              " Close current tab.
+nnoremap          <A-x> :call BufferClose('')<CR>|  " Close current buffer.
 
 nmap              <C-W>>     <C-W>><SID>ws|         " Adds mappings to make Ctrl-W -/+/</>
 nmap              <C-W><     <C-W><<SID>ws|         " ↳ repeatable, so you can press Ctrl-W
