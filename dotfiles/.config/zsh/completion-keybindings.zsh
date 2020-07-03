@@ -153,7 +153,11 @@ bindkey -M main "^[[B" history-beginning-search-forward-end  # Re-enable down fo
 bindkey -M main '\e.' insert-last-word
 bindkey ' ' magic-space # <Space> = do history expansion
 # shellcheck disable=SC2154
-bindkey "${terminfo[kcbt]}" reverse-menu-complete   # <Shift>-<Tab> - move backwards through the completion menu.
+if [[ -n "${terminfo[kcbt]}" ]]; then
+  bindkey "${terminfo[kcbt]}" reverse-menu-complete   # <Shift>-<Tab> - move backwards through the completion menu.
+else
+  echo "Warning: Variable terminfo[kcbt] wasn't set."
+fi
 bindkey -M vicmd ' ' edit-command-line # <Space> in cmd mode opens editor.
 
 # Bind git shortcuts to <c-g><c-$@> (see above functions for more info).
