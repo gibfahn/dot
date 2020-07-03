@@ -83,8 +83,8 @@ updateMacOSDefault NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled bool false
 # Don't show recents in dock.
 dock_changed+=$(updateMacOSDefault com.apple.dock show-recents bool false)
 
-# Uncheck "Displays have separate spaces" to allow multi-screen windows.
-updateMacOSDefault com.apple.spaces spans-displays bool true
+# Check "Displays have separate spaces" (uncheck to allow multi-screen windows).
+updateMacOSDefault com.apple.spaces spans-displays bool false
 
 # System Preferences > Trackpad > More Gestures > App Expose > Enable
 # Swipe down with 3 fingers to see windows for current app.
