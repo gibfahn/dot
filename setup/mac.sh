@@ -276,7 +276,13 @@ if [[ $USER == gib ]]; then # Set keyboard preferences.
   # Cmd-Enter sends email in Mail.
 
 else
-  log_skip "Not setting gib macOS defaults."
+  log_section "Setting macOS defaults for not gib."
+
+  # Set up a faster key repeat rate (needs relogin).
+  updateMacOSDefault NSGlobalDomain KeyRepeat int 2
+
+  # Sets a low time before key starts repeating.
+  updateMacOSDefault NSGlobalDomain InitialKeyRepeat int 15
 fi
 
 # Apply any changes made above:
