@@ -67,6 +67,7 @@ try
   Plug 'tpope/vim-markdown'                         " Better markdown highlight including support for code block highlighting.
   Plug 'tpope/vim-repeat'                           " Allows you to use . with plugin mappings.
   Plug 'tpope/vim-rhubarb'                          " GitHub support.
+  Plug 'tpope/vim-rsi'                              " Insert/commandline readline-style mappings, e.g. C-a for beginning of line.
   Plug 'tpope/vim-surround'                         " Add/mod/remove surrounding chars.
   Plug 'tpope/vim-unimpaired'                       " [ and ] mappings (help unimpaired).
 
