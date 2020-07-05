@@ -76,6 +76,11 @@ updateMacOSDefault NSGlobalDomain AppleWindowTabbingMode string always
 # Maximise window when you double-click on the title bar.
 updateMacOSDefault NSGlobalDomain AppleActionOnDoubleClick string Maximize
 
+# System Preferences -> View ->
+#   "Organise by Category" => false (default)
+#   "Organise Alphabetically" => true
+updateMacOSDefault com.apple.systempreferences.plist ShowAllMode bool true
+
 # System Preferences > Keyboard > Text > Use smart quotes and dashes -> disable.
 updateMacOSDefault NSGlobalDomain NSAutomaticDashSubstitutionEnabled bool false
 updateMacOSDefault NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled bool false
