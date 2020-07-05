@@ -243,6 +243,20 @@ alias vim='VIMINIT=":source $XDG_CONFIG_HOME/nvim/init.vim" vim' # Make vim use 
 alias xv="xargs \$${ZSH_VERSION:+=}VISUAL" v="\$${ZSH_VERSION:+=}VISUAL" # Work around zsh's "helpful" autoquoting.
 alias k=kubectl # Build tools.
 exists vimr && alias vm=vimr # Use `vm` for GUI vim, need to add a Linux equivalent.
+# Find-replace everything in the current directory. Use `--` to pass args to fd.
+# e.g. 'sda foo bar', 'sda --hidden -- foo bar'
+sda() {
+  local arg fd_args=() sd_args=()
+  for arg in "$@"; do
+    if [[ $arg == -- ]]; then
+      fd_args=("${sd_args[@]}")
+      sd_args=()
+    else
+      sd_args+=("$arg")
+    fi
+  done
+  fd --type file ${fd_args:+"${fd_args[@]}"} | xargs sd ${sd_args:+"${sd_args[@]}"}
+}
 
 # ulimit -c unlimited # Uncomment to allow saving of coredumps.
 # Cross-platform copy/paste/open/ldd/delete terminal commands.
