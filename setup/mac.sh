@@ -163,6 +163,13 @@ updateMacOSDefault NSGlobalDomain AppleAccentColor int 5
 # System Preferences > General > Highlight Colour > Blue
 updateMacOSDefault NSGlobalDomain AppleAquaColorVariant int 1
 
+# Write hammerspoon config to alternate location.
+updateMacOSDefault org.hammerspoon.Hammerspoon MJConfigFile "~/.config/hammerspoon/init.lua"
+
+# Enable key repeat.
+# XXX(gib): Not sure if needed for Hammerspoon key repeat.
+updateMacOSDefault write NSGlobalDomain ApplePressAndHoldEnabled bool false
+
 if [[ $USER == gib ]]; then # Set keyboard preferences.
   log_section "Setting gib extra macOS defaults."
 

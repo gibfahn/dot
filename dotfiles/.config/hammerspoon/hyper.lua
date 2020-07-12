@@ -1,13 +1,23 @@
+-- Keyboard Mappings for Hyper mode
+
 -- A global variable for Hyper Mode
 hyperMode = hs.hotkey.modal.new({}, 'F18')
 
 
 -- Keybindings for launching apps in Hyper Mode
 hyperModeAppMappings = {
-  { 'g', 'Google Chrome' },         -- "B" for "Browser"
-  { 't', 'Terminal' },              -- "T" for "Terminal"
-  { 'f', 'Firefox' },               -- "T" for "Terminal"
-  { 's', 'Slack' },                 -- "T" for "Terminal"
+
+  { '/', 'Finder' },
+  { 'f', 'Firefox Nightly' },
+  { 'g', 'Google Chrome' },
+  { 'm', 'Mail' },
+  { 'n', 'Calendar' },
+  { 'r', 'Radar 8' },
+  { 's', 'Slack' },
+  { 't', 'Kitty' },
+  { 'w', 'Workflowy' },
+  { 'x', 'Messages' },
+
 }
 for i, mapping in ipairs(hyperModeAppMappings) do
   hyperMode:bind({}, mapping[1], function()
@@ -17,7 +27,7 @@ end
 
 -- Print running apps in console:
 -- for k, v in pairs(hs.application.runningApplications()) do print(k, v) end
-hyperMode:bind({}, 'e', function()
+hyperMode:bind({}, '8', function()
   if (hs.application.get('Karabiner-Menu') ~= nil) then
     hs.application.get('Karabiner-Menu'):kill()
   end
@@ -43,19 +53,22 @@ end
 hs.fnutils.each({
   -- Movement
   { key='h', modIn={},  modOut={}, direction='left'},
-  { key='j', modIn={},  modOut={}, direction='down'},
-  { key='k', modIn={},  modOut={}, direction='up'},
-  { key='l', modIn={},  modOut={}, direction='right'},
+  { key='n', modIn={},  modOut={}, direction='down'},
+  { key='e', modIn={},  modOut={}, direction='up'},
+  { key='i', modIn={},  modOut={}, direction='right'},
   { key='h', modIn={'cmd'},  modOut={'cmd'}, direction='left'},
-  { key='j', modIn={'cmd'},  modOut={'cmd'}, direction='down'},
-  { key='k', modIn={'cmd'},  modOut={'cmd'}, direction='up'},
-  { key='l', modIn={'cmd'},  modOut={'cmd'}, direction='right'},
+  { key='n', modIn={'cmd'},  modOut={'cmd'}, direction='down'},
+  { key='e', modIn={'cmd'},  modOut={'cmd'}, direction='up'},
+  { key='i', modIn={'cmd'},  modOut={'cmd'}, direction='right'},
   { key='h', modIn={'alt'},  modOut={'alt'}, direction='left'},
-  { key='j', modIn={'alt'},  modOut={'alt'}, direction='down'},
-  { key='k', modIn={'alt'},  modOut={'alt'}, direction='up'},
-  { key='l', modIn={'alt'},  modOut={'alt'}, direction='right'},
+  { key='n', modIn={'alt'},  modOut={'alt'}, direction='down'},
+  { key='e', modIn={'alt'},  modOut={'alt'}, direction='up'},
+  { key='i', modIn={'alt'},  modOut={'alt'}, direction='right'},
 }, function(hotkey)
-  hyperMode:bind(hotkey.modIn, hotkey.key,
+  -- hs.hotkey.bind(mods, key, message, pressedfn, releasedfn, repeatfn) -> hs.hotkey object
+  hyperMode:bind(
+      hotkey.modIn,
+      hotkey.key,
       function() fastKeyStroke(hotkey.modOut, hotkey.direction) end,
       nil,
       function() fastKeyStroke(hotkey.modOut, hotkey.direction) end
@@ -63,3 +76,39 @@ hs.fnutils.each({
   end
 )
 
+-- {{{ Left Ctrl -> Escape if alone
+-- Sends "escape" if "Left Control" is held for less than .2 seconds, and no other keys are pressed.
+-- https://stackoverflow.com/questions/41094098/hammerspoon-remap-control-key-sends-esc-when-pressed-alone-send-control-when-p
+local send_escape = false
+local last_mods = {}
+local control_key_timer = hs.timer.delayed.new(0.2, function()
+    send_escape = false
+end)
+
+hs.eventtap.new({hs.eventtap.event.types.flagsChanged}, function(evt)
+    local new_mods = evt:getFlags()
+    if last_mods["ctrl"] == new_mods["ctrl"] then
+        return false
+    end
+    if not last_mods["ctrl"] then
+        last_mods = new_mods
+        send_escape = true
+        control_key_timer:start()
+    else
+        if send_escape then
+            hs.eventtap.keyStroke({}, "escape")
+        end
+        last_mods = new_mods
+        control_key_timer:stop()
+    end
+    return false
+end):start()
+
+
+hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(evt)
+    send_escape = false
+    return false
+end):start()
+-- }}} Left Ctrl -> Escape if alone
+
+-- vim: foldmethod=marker

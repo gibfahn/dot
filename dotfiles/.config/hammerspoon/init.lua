@@ -6,7 +6,6 @@ keyUpDown = function(modifiers, key)
   hs.eventtap.event.newKeyEvent(modifiers, key, false):post()
 end
 
-
 require('hyper')
 
-hs.notify.new({title='Hammerspoon', informativeText='Ready to rock 🤘'}):send()
+hs.notify.new({title='Hammerspoon', informativeText='Gib config restored 🤘'}):send()
