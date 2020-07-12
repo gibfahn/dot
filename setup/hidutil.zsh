@@ -153,8 +153,8 @@ MEDIA_EJECT="0xC000000B8"
 # {$FROM: $ISO_BACKSLASH, $TO: $GRAVE_TILDE}
 # ]}"
 
-# Contour Receiver
-hidutil property --set "{\"UserKeyMapping\":[
+# Settings for Apple Keyboards.
+hidutil property --matching '{"VendorID":0xa5c}' --set "{\"UserKeyMapping\":[
 {$FROM: $CAPS_LOCK,             $TO: $LEFT_SHIFT},
 {$FROM: $LEFT_SHIFT,             $TO: $LEFT_CTRL},
 {$FROM: $GRAVE_TILDE,             $TO: $F17},
