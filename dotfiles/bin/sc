@@ -1,5 +1,4 @@
-#!/bin/sh
-
+#!/usr/bin/env bash
 
 usage() {
 echo "$(tput bold; tput setaf 74)$0 [-h|--help]$(tput sgr0)
@@ -10,5 +9,7 @@ but I can't get it to work.
 }
 
 [[ $1 =~ ^(--help|-h)$ ]] && { usage; exit; }
+
+[[ $1 =~ ^(--version|-v)$ ]] && { echo "master"; exit; }
 
 scrot -s /tmp/screenshot-$(date +%F_%T).png -e 'xclip -selection c -t image/png < $f' && notify-send 'Screenshot captured'

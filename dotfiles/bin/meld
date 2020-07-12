@@ -1,5 +1,4 @@
-#!/bin/sh
-
+#!/usr/bin/env bash
 
 usage() {
 echo "$(tput bold; tput setaf 74)$0 [-h|--help]$(tput sgr0)
@@ -9,6 +8,8 @@ Workaround for: https://github.com/yousseb/meld/issues/70
 }
 
 [[ $1 =~ ^(--help|-h)$ ]] && { usage; exit; }
+
+[[ $1 =~ ^(--version|-v)$ ]] && { echo "master"; exit; }
 
 [ -e "$HOME/Library/Saved Application State/org.gnome.meld.savedState" ] && rm -rf ~/Library/Saved\ Application\ State/org.gnome.meld.savedState
 

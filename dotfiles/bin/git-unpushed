@@ -11,6 +11,8 @@ Checks for unsaved changes. If this passes the repo is backed up to its git remo
 
 [[ ${1:-} =~ ^(--help|-h)$ ]] && { usage; exit; }
 
+[[ ${1:-} =~ ^(--version|-v)$ ]] && { echo "master"; exit; }
+
 CYAN='\033[0;36m'       # Light blue.
 NC='\033[0m' # No Colour.
 LF=$'\n'

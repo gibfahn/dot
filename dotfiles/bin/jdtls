@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 usage() {
 echo "$(tput bold; tput setaf 74)$0 [-h|--help]$(tput sgr0)
@@ -9,6 +9,8 @@ See: https://github.com/autozimu/LanguageClient-neovim/wiki/Java
 }
 
 [[ $1 =~ ^(--help|-h)$ ]] && { usage; exit; }
+
+[[ $1 =~ ^(--version|-v)$ ]] && { echo "master"; exit; }
 
 case "$(uname)" in
   Darwin) os=mac ;;
