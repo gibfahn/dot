@@ -24,7 +24,7 @@ ctrlHandler = function(evt)
     ctrlKeyTimer:start()
   else
     if sendEscape then
-      keyUpDown({}, 'escape')
+      keyDownUp({}, 'escape')
     end
     lastMods = newMods
     ctrlKeyTimer:stop()

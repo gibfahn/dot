@@ -5,7 +5,8 @@ hs.hotkey.bind({'ctrl'}, '`', nil, function()
   hs.reload()
 end)
 
-keyUpDown = function(modifiers, key)
+-- Function to simulate pressing then releasing a key.
+keyDownUp = function(modifiers, key)
   -- log.d('Sending keystroke:', hs.inspect(modifiers), key)
   hs.eventtap.event.newKeyEvent(modifiers, key, true):post()
   hs.eventtap.event.newKeyEvent(modifiers, key, false):post()
@@ -14,4 +15,4 @@ end
 require('hyper')
 require('control-escape')
 
-hs.notify.new({title='Hammerspoon', informativeText='Gib config restored 🤘'}):send()
+hs.notify.new({title='Hammerspoon', informativeText='Gib config restored 🤘', withdrawAfter=3}):send()
