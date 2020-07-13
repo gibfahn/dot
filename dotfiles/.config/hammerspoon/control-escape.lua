@@ -4,6 +4,11 @@
 --   https://gist.github.com/arbelt/b91e1f38a0880afb316dd5b5732759f1
 --   https://github.com/jasoncodes/dotfiles/blob/ac9f3ac/hammerspoon/control_escape.lua
 
+-- Skip this if running Karabiner-Elements.
+if (hs.application.get('Karabiner-Menu') ~= nil) then
+  return
+end
+
 sendEscape = false
 lastMods = {}
 
