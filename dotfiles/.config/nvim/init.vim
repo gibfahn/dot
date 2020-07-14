@@ -672,6 +672,7 @@ let g:sneak#label = 1                               " Make sneak like easymotion
 let g:sneak#target_labels = ";sftunqm/`'-+SFGHLTUNRMQZ?0123456789!()\\[]:|<>WEYIOPADJKXCVB.\"\,:weryiopadghjklzxcvb" " Labels sneak uses to show words.
 let g:sneak#use_ic_scs = 1                          " Sneak: respect smartcase setting.
 let g:surround_no_mappings = 1                      " Manually map surround, see SurroundOp() function.
+let g:surround_97 = "\1before: \1\r\2after: \2"     " yswa surrounds with specified text (prompts for before/after).
 
 " Settings for custom statusline.
 let g:lightline = {
