@@ -106,6 +106,8 @@ hyperMode:bind({'shift'}, 'm', function()
   hs.timer.doAfter(0.2, function()
     -- '<messageID>' -> 'message://%3CmessageID%3E'
     local messageID = hs.pasteboard.getContents()
+    -- Remove non-printable and whitespace characters.
+    local messageID = messageID:gsub("[%s%G]", "")
     local messageID = messageID:gsub("^<?", "message://%%3C", 1)
     local messageID = messageID:gsub(">?$", "%%3E", 1)
     hs.pasteboard.setContents(messageID)
