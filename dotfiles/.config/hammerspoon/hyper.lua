@@ -44,11 +44,11 @@ for i, mapping in ipairs(hyperModeAppMappings) do
 end
 -- }}} Hyper-<key> -> Launch apps
 
--- {{{ Hyper-, -> hold to enable mic, Hyper-. -> toggle microphone muting.
+-- {{{ Global microphone muting hotkeys.
 local messageMuting = message.new('muted 🎤')
 local messageHot = message.new('hot 🎤')
 
--- Hyper-, -> hold to enable mic
+-- Hyper-, -> hold to enable mic (while held), tap to mute.
 hyperMode:bind({}, ',', function()
     local device = hs.audiodevice.defaultInputDevice()
     device:setMuted(false)
@@ -63,20 +63,15 @@ hyperMode:bind({}, ',', function()
   end
 )
 
--- Hyper-. -> tap to toggle mic.
+-- Hyper-. -> tap to unmute mic.
 hyperMode:bind({}, '.', function()
   local device = hs.audiodevice.defaultInputDevice()
-  if device:muted() then
-    device:setMuted(false)
-    messageHot:notify()
-  else
-    device:setMuted(true)
-    messageMuting:notify()
-  end
+  device:setMuted(false)
+  messageHot:notify()
   displayStatus()
 end
 )
--- }}} Hyper-, -> hold to enable mic, Hyper-. -> toggle microphone muting.
+-- }}} Global microphone muting hotkeys.
 
 -- {{{ Hyper-; -> lock screen
 hyperMode:bind({}, ';', hs.caffeinate.lockScreen)
