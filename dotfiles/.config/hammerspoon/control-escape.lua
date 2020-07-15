@@ -29,7 +29,7 @@ ctrlHandler = function(evt)
     ctrlKeyTimer:start()
   else
     if sendEscape then
-      keyDownUp({}, 'escape')
+      hs.eventtap.keyStroke({}, 'escape')
     end
     lastMods = newMods
     ctrlKeyTimer:stop()

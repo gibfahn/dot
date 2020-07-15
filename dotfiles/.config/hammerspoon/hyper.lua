@@ -100,7 +100,7 @@ end)
 
 -- {{{ Hyper-⌥-m -> Format selected Message ID as link and copy to clipboard.
 hyperMode:bind({'shift'}, 'm', function()
-  keyDownUp({'cmd'}, 'c') -- Copy selected message ID.
+  hs.eventtap.keyStroke({'cmd'}, 'c') -- Copy selected message ID.
   -- Allow some time for the command+c keystroke to fire asynchronously before
   -- we try to read from the clipboard
   hs.timer.doAfter(0.2, function()
@@ -124,7 +124,7 @@ end)
 
 -- {{{ Hyper-p -> Screenshot of selected area to clipboard.
 hyperMode:bind({}, 'p', function()
-  keyDownUp({'cmd', 'ctrl', 'shift'}, '4')
+  hs.eventtap.keyStroke({'cmd', 'ctrl', 'shift'}, '4')
 end)
 -- }}} Hyper-p -> Screenshot of selected area to clipboard.
 

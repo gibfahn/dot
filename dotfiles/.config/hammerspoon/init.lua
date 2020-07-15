@@ -5,12 +5,6 @@ hs.hotkey.bind({'ctrl'}, '`', nil, function()
   hs.reload()
 end)
 
-keyDownUp = function(modifiers, key)
-  -- log.d('Sending keystroke:', hs.inspect(modifiers), key)
-  hs.eventtap.event.newKeyEvent(modifiers, key, true):post()
-  hs.eventtap.event.newKeyEvent(modifiers, key, false):post()
-end
-
 -- {{{ § -> Run hidutil script to re-apply key mappings.
 -- This key is one I don't use, that only exists pre-mapping.
 -- TODO: actually use the plist functionality to make the mappings persistent.
