@@ -650,8 +650,8 @@ command! -nargs=+ -complete=file Lr lexpr system(<q-args>)
 
 " {{{ Global Variables
 
-if filereadable('/usr/local/bin/python3')
-  let g:python3_host_prog = "/usr/local/bin/python3"  " Speed up startup by not looking for python3 every time.
+if filereadable('/opt/brew/bin/python3')
+  let g:python3_host_prog = "/opt/brew/bin/python3"  " Speed up startup by not looking for python3 every time.
 endif
 
 let g:any_jump_disable_default_keybindings = 1      " Conflicts with other useful bindings.
