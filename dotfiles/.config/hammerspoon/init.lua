@@ -5,12 +5,21 @@ hs.hotkey.bind({'ctrl'}, '`', nil, function()
   hs.reload()
 end)
 
--- Function to simulate pressing then releasing a key.
 keyDownUp = function(modifiers, key)
   -- log.d('Sending keystroke:', hs.inspect(modifiers), key)
   hs.eventtap.event.newKeyEvent(modifiers, key, true):post()
   hs.eventtap.event.newKeyEvent(modifiers, key, false):post()
 end
+
+-- {{{ § -> Run hidutil script to re-apply key mappings.
+-- This key is one I don't use, that only exists pre-mapping.
+-- TODO: actually use the plist functionality to make the mappings persistent.
+hs.hotkey.bind({}, '§', function()
+  local cmd = os.getenv("HOME").."/bin/hid"
+  local output, status, _, rc = hs.execute(cmd)
+  hs.notify.new({title='Running Hidutil...', informativeText=rc.." "..output, withdrawAfter=3}):send()
+end)
+-- }}} § -> Run hidutil script to re-apply key mappings.
 
 require('hyper')
 require('control-escape')
