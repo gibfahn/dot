@@ -95,7 +95,7 @@ end)
 
 -- {{{ Hyper-⌥-m -> Format selected Message ID as link and copy to clipboard.
 hyperMode:bind({'shift'}, 'm', function()
-  hs.eventtap.keyStroke({'cmd'}, 'c') -- Copy selected message ID.
+  hs.eventtap.keyStroke({'cmd'}, 'c') -- Copy selected email message ID (e.g. from Mail.app).
   -- Allow some time for the command+c keystroke to fire asynchronously before
   -- we try to read from the clipboard
   hs.timer.doAfter(0.2, function()

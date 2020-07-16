@@ -35,7 +35,7 @@
 
   b   = branch
   ba  = branch -a # Show all local and remote branches.
-  bb  = bisect bad
+  bb  = bisect bad # Start a bisect by finding a good and bad commit and using `g bg` and `g bb` respectively to mark the starting points.
   bd  = branch -D # Delete branch.
   bdd = "!lastBranch=$(git head-branch); git checkout - && [[ $(git head-branch) != $lastBranch ]] || git checkout $(git default-branch up); git branch -D $lastBranch #" # Delete current branch.
   bg  = bisect good
