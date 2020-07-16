@@ -8,8 +8,6 @@ ruby_gems=(
   solargraph                    # Ruby LanguageServer Client.
 )
 
-export PATH=/usr/local/bin:$PATH # Make sure brew pip/ruby are the first pip/ruby in the PATH.
-
 # Install ruby gems
 if [[ $USER == gib ]]; then
   for gem in "${ruby_gems[@]}"; do

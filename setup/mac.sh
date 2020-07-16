@@ -330,7 +330,6 @@ else
 fi
 
 
-export PATH=/usr/local/bin:$PATH
 # Install broot symlink.
 if [[ ! -e "$XDG_CONFIG_HOME"/zsh/broot.zsh ]]; then
   log_get "broot shell function."

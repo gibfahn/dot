@@ -189,7 +189,7 @@ rv() {
 
 # Beginning of path:
 pathadd "$VULKAN_SDK/bin" # VulkanSDK packages.
-pathadd "/usr/local/opt/llvm/bin" # Homebrew clangd tools.
+pathadd "/opt/brew/opt/llvm/bin" # Homebrew clangd tools.
 pathadd "$GOPATH/bin" # Go binaries.
 pathadd /usr/bin # Should be after /usr/local/bin.
 pathadd /usr/local/bin # Missed in some shells.

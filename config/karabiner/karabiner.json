@@ -772,7 +772,7 @@
                   "modifiers": { "mandatory": [ "command" ] }
                 },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
-                "to": { "shell_command": "networksetup -setairportpower en0 on 2>&1 | /usr/local/bin/terminal-notifier -title 'Starting Wifi' -group Karabiner-Elements" }
+                "to": { "shell_command": "networksetup -setairportpower en0 on 2>&1 | /opt/brew/bin/terminal-notifier -title 'Starting Wifi' -group Karabiner-Elements" }
               }, {
                 "description": "Ж+⇧+w = disable wifi",
                 "type": "basic",
@@ -781,7 +781,7 @@
                   "modifiers": { "mandatory": [ "shift" ] }
                 },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
-                "to": { "shell_command": "networksetup -setairportpower en0 off 2>&1 | /usr/local/bin/terminal-notifier -title 'Stopping Wifi' -group Karabiner-Elements" }
+                "to": { "shell_command": "networksetup -setairportpower en0 off 2>&1 | /opt/brew/bin/terminal-notifier -title 'Stopping Wifi' -group Karabiner-Elements" }
               }, {
                 "description": "Ж+x = Open iMessage",
                 "type": "basic",
@@ -805,7 +805,7 @@
                   "modifiers": { "mandatory": [ "shift" ] }
                 },
                 "conditions": [ { "name": "hyper", "type": "variable_if", "value": 1 } ],
-                "to": { "shell_command": "pkill ControlStrip 1>&2 | /usr/local/bin/terminal-notifier -title 'Touch Strip Restarting' -group Karabiner-Elements" }
+                "to": { "shell_command": "pkill ControlStrip 1>&2 | /opt/brew/bin/terminal-notifier -title 'Touch Strip Restarting' -group Karabiner-Elements" }
               }
             ]
           }, {

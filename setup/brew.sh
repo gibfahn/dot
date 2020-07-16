@@ -28,7 +28,7 @@ else
   log_skip "Xcode Command Line Tools (already installed)."
 fi
 
-sogou_dir_old="$(ls -a /usr/local/Caskroom/sogouinput 2>/dev/null || true)"
+sogou_dir_old="$(ls -a "$(brew --prefix)"/Caskroom/sogouinput 2>/dev/null || true)"
 
 copyq_version_old=$(copyq --version)
 
@@ -68,11 +68,11 @@ if [[ $copyq_version_old != "$copyq_version_new" ]]; then
   open /System/Library/PreferencePanes/Security.prefPane
 fi
 
-sogou_dir_new="$(ls -a /usr/local/Caskroom/sogouinput 2>/dev/null || true)"
+sogou_dir_new="$(ls -a "$(brew --prefix)"/Caskroom/sogouinput 2>/dev/null || true)"
 # If sogouinput was updated
 if [[ "$sogou_dir_old" != "$sogou_dir_new" ]]; then
   log_update  "Sogou Input"
-  sogou_dir="$(brew cask info sogouinput | awk '/^\/usr\/local\/Caskroom\/sogouinput\// { print $1 }')"
+  sogou_dir="$(brew cask info sogouinput | awk '/\/Caskroom\/sogouinput\// { print $1 }')"
   [[ -n "$sogou_dir" ]] && open "$sogou_dir"/sogou*.app
 fi
 

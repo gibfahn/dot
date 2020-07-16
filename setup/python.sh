@@ -12,7 +12,6 @@ pip3_modules=(
 )
 
 # Install or update pip modules.
-export PATH=/usr/local/bin:$PATH # Make sure brew pip/ruby are the first pip/ruby in the PATH.
 pip=pip
 exists pip3 && pip=pip3
 pip_installed="$($pip list | awk '{print $1}')"

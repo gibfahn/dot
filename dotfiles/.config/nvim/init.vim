@@ -10,6 +10,7 @@ if empty($XDG_DATA_HOME)| let $XDG_DATA_HOME = $HOME . '/.local/share'| endif
 
 " Sometimes vim runs before my dotfiles.
 if $PATH !~ '/usr/local/bin'| let $PATH = '/usr/local/bin/:' . $PATH| endif
+if $PATH !~ '/opt/brew/bin'| let $PATH = '/opt/brew/bin/:' . $PATH| endif
 
 " Plugins are installed here.
 let s:plugin_path = $XDG_DATA_HOME . '/nvim/plugged'
