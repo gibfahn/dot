@@ -136,6 +136,12 @@ zle -N zle-line-init     # Bind zle-line-init() above to be called when the line
 # shellcheck disable=SC2034
 KEYTIMEOUT=10 # Key delay of 0.1s (Esc in vim mode is quicker).
 
+# Modes:
+# - main -> 'viins' for vim, 'emacs' for emacs mode.
+# - viins -> insert mode
+# - vicmd -> normal mode
+# - visual -> visual mode
+
 bindkey -v # Enable vim mode in zsh.
 
 bindkey -M viins "^?" backward-delete-char # Make backspace work properly.
@@ -148,9 +154,9 @@ bindkey -M viins "^U" backward-kill-line # <Ctrl>-U = Delete line (Emacs default
 bindkey -M viins "^W" backward-kill-word # <Ctrl>-W = Delete word (Emacs default).
 bindkey -M viins '^[^M' self-insert-unmeta # <Alt>-Enter Insert a literal enter (newline char).
 bindkey -M viins 'kj' vi-cmd-mode # Map kj -> Esc in vim mode.
-bindkey -M main "^[[A" history-beginning-search-backward-end # Re-enable up   for history search.
-bindkey -M main "^[[B" history-beginning-search-forward-end  # Re-enable down for history search.
-bindkey -M main '\e.' insert-last-word
+bindkey -M viins "^[[A" history-beginning-search-backward-end # Re-enable up   for history search.
+bindkey -M viins "^[[B" history-beginning-search-forward-end  # Re-enable down for history search.
+bindkey -M viins '\e.' insert-last-word
 bindkey ' ' magic-space # <Space> = do history expansion
 # shellcheck disable=SC2154
 if [[ -n "${terminfo[kcbt]}" ]]; then
@@ -174,6 +180,7 @@ bindkey -M viins '^g^p' _gib_fzf-gp-widget
 _gib_clear_exit() { [[ -n $BUFFER ]] && zle kill-buffer || zle self-insert-unmeta; }
 zle -N _gib_clear_exit
 bindkey -M viins '^d' _gib_clear_exit
+bindkey -M vicmd '^d' _gib_clear_exit
 
 # Run before the prompt is displayed.
 _gib_prompt_precmd() {
