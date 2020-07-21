@@ -30,7 +30,7 @@ fi
 
 sogou_dir_old="$(ls -a "$(brew --prefix)"/Caskroom/sogouinput 2>/dev/null || true)"
 
-copyq_version_old=$(copyq --version)
+copyq_version_old=$(copyq--version || true)
 
 log_update "Brew update && upgrade"
 # Upgrade everything, even things that weren't in your Brewfile.
