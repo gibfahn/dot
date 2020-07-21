@@ -266,6 +266,7 @@ nnoremap <Leader>gh :call <SID>SynStack()<CR>| " Show which syntax is set for cu
 nnoremap <Leader>gH :e $colorscheme_path<CR> " Edit colorscheme file.
 nnoremap <Leader>gl :source <C-r>=SessionFile()<CR><CR>| " Load saved session for vim cwd to a default session path.
 nnoremap <Leader>gL :source <C-r>=SessionFile()<CR>| " Load saved session for vim cwd to a custom path.
+nnoremap <Leader>gn :set number!<CR>| " <Space>gn toggles line numbers.
 nnoremap <Leader>gp `[v`]| " Visual selection of the last thing you copied or pasted.
 nnoremap <Leader>gs :mksession! <C-r>=SessionFile()<CR><CR>| " Save current session for vim cwd from a default session path.
 nnoremap <Leader>gS :mksession! <C-r>=SessionFile()<CR>| " Save current session for vim cwd from a custom path.
