@@ -5,12 +5,16 @@ tap "bazelbuild/tap"                      # Provides bazelisk and other bazel to
 
 # Brew formulae
 
+# brew "bash-completion"                   # Generally useful bash completions.
+# brew "ccache"                            # Speeds up C/C++ recompilation.
 # brew "certbot"                           # LetsEncrypt.
 # brew "cmake"                             # Commonly-used meta build system.
 # brew "ctags"                             # Used for autocomplete in Vim (etc).
 # brew "exa"                               # Nicer ls replacement.
+# brew "exercism"                          # Learn coding languages.
 # brew "groovy"                            # Helpful for testing Jenkins scripts.
 # brew "hexyl"                             # Hex viewer in Rust.
+# brew "ipython"                           # Interactive python shell.
 # brew "kakoune"                           # Nicer but WIP alternative to neovim.
 # brew "kubernetes-helm"                   # Package manager for Docker.
 # brew "ninja"                             # Google meta build system (used in V8).
@@ -29,16 +33,13 @@ tap "bazelbuild/tap"                      # Provides bazelisk and other bazel to
 # cask "vulkan-sdk"                        # Use the vulkan graphics APIs on macOS.
 brew "asciinema"                         # Screen recorder for the terminal.
 brew "bandwhich"                         # See what's using bandwidth on your machine.
-brew "bash-completion"                   # Generally useful bash completions.
 brew "bat"                               # Nicer cat with syntax highlighting etc.
 brew "binutils"                          # GNU versions of tools for interacting with binaries (nm, strings etc).
 brew "broot"                             # Interactive version of "tree".
 brew "buildifier"                        # Bazel code formatter.
-brew "ccache"                            # Speeds up C/C++ recompilation.
 brew "dfu-programmer"                    # QMK dependency used for flashing my Ergodox Infinity.
 brew "dfu-util"                          # QMK dependency used for flashing my Ergodox Infinity.
 brew "diffutils"                         # GNU versions of diff and related tools.
-brew "exercism"                          # Learn coding languages.
 brew "findutils"                         # GNU versions of find, locate, updatedb, xargs.
 brew "fswatch"                           # See which files are opened on the system (`fswatch /`).
 brew "gawk"                              # GNU versions of awk.
@@ -55,7 +56,6 @@ brew "grep"                              # GNU version of grep.
 brew "httpie"                            # Alternative to curl, `http` binary.
 brew "hub"                               # GitHub CLI tool.
 brew "hyperfine"                         # Benchmark commands (time but a benchmarking suite).
-brew "ipython"                           # Interactive python shell.
 brew "jq"                                # Makes it easy to deal with JSON on the command line.
 brew "kubectx"                           # Easily change Kubernetes context or namespace.
 brew "kubernetes-cli"                    # Manage your docker clusters with kube.
