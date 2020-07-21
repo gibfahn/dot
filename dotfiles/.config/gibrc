@@ -180,7 +180,7 @@ rv() {
     print out; exit
   }')"
   [[ -z "$cmd" ]] && { echo "No rg in the last 100 history commands."; return 1; }
-  $VIM -q <(eval "$cmd")
+  "$=VISUAL" -q <(eval "$cmd")
 }
 
 # }}} Functions
@@ -236,8 +236,9 @@ alias -- -="cd -"
 alias next='git next && git show' # Useful for demos.
 alias gm='wait; git mf' # After cd'ing into a repo, fetch will run as a background job. Use this to wait for it to finish then mf.
 
-{ works nvim && VIM="nvim"; } || { works vim && VIM="vim"; } || VIM="vi" # Take what you can get.
-export VISUAL=${VISUAL:-$VIM} EDITOR=${EDITOR:-$VIM} # Set vim/nvim as the default editor.
+{ works nvim && _gib_vim="nvim"; } || { works vim && _gib_vim="vim"; } || _gib_vim="vi" # Take what you can get.
+export VISUAL=$_gib_vim EDITOR=$_gib_vim # Set vim/nvim as the default editor.
+unset _gib_vim
 alias vim='VIMINIT=":source $XDG_CONFIG_HOME/nvim/init.vim" vim' # Make vim use nvim config file.
 # shellcheck disable=SC2139 # We want this to expand when defined.
 alias xv="xargs \$${ZSH_VERSION:+=}VISUAL" v="\$${ZSH_VERSION:+=}VISUAL" # Work around zsh's "helpful" autoquoting.
