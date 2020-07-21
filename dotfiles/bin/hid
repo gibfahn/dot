@@ -141,27 +141,27 @@ MEDIA_EJECT="0xC000000B8"
 # List all available Services & Devices with:
 #   hidutil list
 
-# Convertible 2 TKL
-# hidutil property --matching '{"ProductID":0x8502, "VendorID":0xa5c}' --set "{\"UserKeyMapping\":[
-# {$FROM: $F6,            $TO: $MEDIA_PREV},
-# {$FROM: $F7,            $TO: $MEDIA_PLAY},
-# {$FROM: $F8,            $TO: $MEDIA_NEXT},
-# {$FROM: $F10,           $TO: $VOLUME_MUTE},
-# {$FROM: $F11,           $TO: $VOLUME_DOWN},
-# {$FROM: $F12,           $TO: $VOLUME_UP},
-# {$FROM: $GRAVE_TILDE,   $TO: $ISO_BACKSLASH},
-# {$FROM: $ISO_BACKSLASH, $TO: $GRAVE_TILDE}
-# ]}"
-
 # Settings for Apple Keyboards.
 # Vendors:
 # - 0x5ac = Apple
 # - 0x2516 = Cooler Master
 # - 0x43e = LG
 # - 0x1209 = Keyboardio
-hidutil property --matching '[{"VendorID":0x5ac},{"VendorID":0x2516}]' --set "{\"UserKeyMapping\":[
+
+# Apple Keyboards.
+hidutil property --matching '{"VendorID":0x5ac}' --set "{\"UserKeyMapping\":[
 {$FROM: $CAPS_LOCK,             $TO: $LEFT_SHIFT},
 {$FROM: $LEFT_SHIFT,             $TO: $LEFT_CTRL},
 {$FROM: $GRAVE_TILDE,             $TO: $F17},
 {$FROM: $ISO_BACKSLASH, $TO: $GRAVE_TILDE}
+]}"
+
+# Cooler Master Keyboards.
+hidutil property --matching '{"VendorID":0x2516}' --set "{\"UserKeyMapping\":[
+{$FROM: $CAPS_LOCK,             $TO: $LEFT_SHIFT},
+{$FROM: $LEFT_SHIFT,             $TO: $LEFT_CTRL},
+{$FROM: $LEFT_GUI,             $TO: $LEFT_ALT},
+{$FROM: $LEFT_ALT,             $TO: $LEFT_GUI},
+{$FROM: $ISO_BACKSLASH,             $TO: $F17},
+{$FROM: $GRAVE_TILDE, $TO: $ISO_BACKSLASH}
 ]}"
