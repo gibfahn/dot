@@ -11,6 +11,7 @@ end)
 hs.hotkey.bind({}, '§', function()
   local cmd = os.getenv("HOME").."/bin/hid"
   local output, status, _, rc = hs.execute(cmd)
+  hs.hid.capslock.set(false) -- Turn off Caps Lock.
   hs.notify.new({title='Running Hidutil...', informativeText=rc.." "..output, withdrawAfter=3}):send()
 end)
 -- }}} § -> Run hidutil script to re-apply key mappings.
