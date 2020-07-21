@@ -154,7 +154,12 @@ MEDIA_EJECT="0xC000000B8"
 # ]}"
 
 # Settings for Apple Keyboards.
-hidutil property --matching '{"VendorID":0x5ac}' --set "{\"UserKeyMapping\":[
+# Vendors:
+# - 0x5ac = Apple
+# - 0x2516 = Cooler Master
+# - 0x43e = LG
+# - 0x1209 = Keyboardio
+hidutil property --matching '[{"VendorID":0x5ac},{"VendorID":0x2516}]' --set "{\"UserKeyMapping\":[
 {$FROM: $CAPS_LOCK,             $TO: $LEFT_SHIFT},
 {$FROM: $LEFT_SHIFT,             $TO: $LEFT_CTRL},
 {$FROM: $GRAVE_TILDE,             $TO: $F17},
