@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-set -eu
-
-set -x
+set -eux
 
 # Set up gpg agent Keychain integration.
 # https://stackoverflow.com/questions/39494631/gpg-failed-to-sign-the-data-fatal-failed-to-write-commit-object-git-2-10-0

@@ -317,16 +317,6 @@ else
   sudo curl -sL http://entrproject.org/etc/limit.maxfiles.plist -o /Library/LaunchDaemons/limit.maxfiles.plist
 fi
 
-
-# Install broot symlink.
-if [[ ! -e "$XDG_CONFIG_HOME"/zsh/broot.zsh ]]; then
-  log_get "broot shell function."
-  mkdir -p "$XDG_CONFIG_HOME"/.config/zsh
-  broot --print-shell-function zsh >"$XDG_CONFIG_HOME"/zsh/broot.zsh
-else
-  log_skip "broot shell function."
-fi
-
 if [[ ! -e ~/Library/Containers/com.sindresorhus.Dato/Data/Library/Preferences/com.sindresorhus.Dato.plist ]]; then
   log_get "Setting up dato preferences."
   mkdir -p ~/Library/Containers/com.sindresorhus.Dato/Data/Library/Preferences/
