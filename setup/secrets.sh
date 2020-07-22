@@ -1,32 +1,51 @@
 #!/usr/bin/env bash
 
-set -e
+set -eu
 
 main() {
-  action="$1"
-  shift || { usage; exit 4; }
+  action="${1:-}"
+  shift || { usage; error "Must specify encrypt or decrypt." 4; }
   case "$action" in
     encrypt) encrypt ;;
     decrypt) decrypt ;;
-    --help|-h) usage; exit 0 ;;
-    *) usage; exit 2;
+    --help|-h) usage ;;
+    --version|-v) echo "master" ;;
+    *) usage; error "Unrecognized arguments: '$action'" 2 ;;
   esac
 }
 
 usage() {
-  echo -e "Usage:\n  $0 encrypt|decrypt"
+  echo -e "Usage:\n  $0 encrypt|decrypt
+
+  encrypt: tars up secret files on disk and gpg encrypts the tarball. Saves file to ~.
+  decrypt: takes file encrypted by this script in ~ and decrypts and extracts it.
+
+  Dependencies:
+  - GNU coreutils and gpg:
+    brew install coreutils gnupg
+  "
+}
+
+CYAN='\033[0;36m'       # Light blue.
+RED='\033[0;31m' # Red.
+NC='\033[0m' # No Colour.
+
+# Usage: exit message [rc]
+error() {
+  # printf "${RED}Error:${NC} %s\n" "$1"
+  echo -e "${RED}Error:${NC} $1"
+  exit "${2:-1}"
 }
 
 encrypt() {
-  cd || exit 1
+  cd || error "Failed to cd home." 1
 
   mkdir -p ~/.ssh/tmp
 
   # TODO(gib): There must be a better way to get the list of emails.
   readarray -t emails <<<"$(gpg --list-secret-keys | grep ultimate | sed -E 's/.*<(.*)>.*/\1/')"
   if (( ${#emails[@]} != 2 )); then
-    echo "Expected two private key emails, found: ${emails[*]}"
-    exit 3
+    error "Expected two private key emails, found: ${emails[*]}" 3
   fi
 
   for email in "${emails[@]}"; do
@@ -48,28 +67,31 @@ encrypt() {
 }
 
 decrypt() {
-  cd || exit 5
-  [[ -e ~/.ssh || -e ~/.netrc ]] && exit 6
+  cd || error "Failed to cd home." 1
+  [[ -e ~/.ssh || -e ~/.netrc ]] && error "~/.ssh or ~/.netrc already exists." 6
+
+  hash gcp || error "Missing 'gcp' dependency" 7
+  hash grm || error "Missing 'grm' dependency" 8
+  hash gpg || error "Missing 'gpg' dependency" 8
 
   gpg -d ssh_*.tar.xz.gpg >ssh.tar.xz
   tar -xf ssh.tar.xz
   rm ssh_*
-  mv .ssh ~
   cd ~/.ssh
   for file in "$HOME/.ssh/tmp/privkey-"*; do
     email="${file#$HOME/.ssh/tmp/privkey-}"
     email="${email%.asc}"
     gpg --import "$file"
-    echo "Type 'trust', 5 (ultimate), y, quit"
+    echo "${CYAN}Gib Do: Type 'trust', 5 (ultimate), y, quit${NC}"
     gpg --edit-key "$email"
   done
 
-  cp --backup --verbose ~/.ssh/tmp/.netrc ~/
+  gcp --backup --verbose ~/.ssh/tmp/.netrc ~/
   mkdir -p ~/.config
-  cp --backup --verbose ~/.ssh/tmp/hub ~/.config/
+  gcp --backup --verbose ~/.ssh/tmp/hub ~/.config/
   mkdir -p ~/.kube/
-  cp --backup --verbose ~/.ssh/tmp/kube/* ~/.kube/
-  rm --recursive --verbose ~/.ssh/tmp
+  gcp --backup --verbose ~/.ssh/tmp/kube/* ~/.kube/
+  grm --recursive --verbose ~/.ssh/tmp
 }
 
 main "$@"
