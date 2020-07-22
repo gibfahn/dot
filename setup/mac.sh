@@ -309,17 +309,6 @@ if [[ -n "$menu_changed" ]]; then
   killall SystemUIServer
 fi
 
-# Set up gpg agent Keychain integration.
-# https://stackoverflow.com/questions/39494631/gpg-failed-to-sign-the-data-fatal-failed-to-write-commit-object-git-2-10-0
-mkdir -p "${GNUPGHOME:="$XDG_DATA_HOME"/gnupg}"
-if grep -q 'pinentry-program .*/pinentry-mac' "$GNUPGHOME"/gpg-agent.conf; then
-  log_skip "Pinentry gpg config"
-else
-  log_get "Pinentry gpg config"
-  pinentry_mac_path=$(which pinentry-mac) # Expect it to be in the PATH.
-  echo "pinentry-program $pinentry_mac_path" >> "$GNUPGHOME"/gpg-agent.conf
-fi
-
 # Increase max file watch limit. See http://entrproject.org/limits.html
 if [[ -e /Library/LaunchDaemons/limit.maxfiles.plist ]]; then
   log_skip "File watcher limit (already increased)."
