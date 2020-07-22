@@ -338,14 +338,6 @@ else
   log_skip "broot shell function."
 fi
 
-# Remove the default set of things that are in the dock.
-if [[ $USER == gib && -n $(dockutil --list) ]]; then
-  log_get "Cleaning Dock"
-  dockutil --remove all
-else
-  log_skip "Cleaning Dock"
-fi
-
 if [[ ! -e ~/Library/Containers/com.sindresorhus.Dato/Data/Library/Preferences/com.sindresorhus.Dato.plist ]]; then
   log_get "Setting up dato preferences."
   mkdir -p ~/Library/Containers/com.sindresorhus.Dato/Data/Library/Preferences/
