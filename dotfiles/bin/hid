@@ -149,6 +149,8 @@ MEDIA_EJECT="0xC000000B8"
 # - 0x1209 = Keyboardio
 
 # Apple Keyboards.
+# ISO_BACKSLASH becomes GRAVE_TILDE
+# GRAVE_TILDE becomees hyper
 hidutil property --matching '{"VendorID":0x5ac}' --set "{\"UserKeyMapping\":[
 {$FROM: $CAPS_LOCK,             $TO: $LEFT_SHIFT},
 {$FROM: $LEFT_SHIFT,             $TO: $LEFT_CTRL},
@@ -157,11 +159,12 @@ hidutil property --matching '{"VendorID":0x5ac}' --set "{\"UserKeyMapping\":[
 ]}"
 
 # Cooler Master Keyboards.
+# Convert windows keyboard to macOS (swap cmd and alt).
+# GRAVE_TILDE (`) is already in the right place, ISO_BACKSLASH (§) becomes Hyper.
 hidutil property --matching '{"VendorID":0x2516}' --set "{\"UserKeyMapping\":[
 {$FROM: $CAPS_LOCK,             $TO: $LEFT_SHIFT},
 {$FROM: $LEFT_SHIFT,             $TO: $LEFT_CTRL},
 {$FROM: $LEFT_GUI,             $TO: $LEFT_ALT},
 {$FROM: $LEFT_ALT,             $TO: $LEFT_GUI},
-{$FROM: $ISO_BACKSLASH,             $TO: $F17},
-{$FROM: $GRAVE_TILDE, $TO: $ISO_BACKSLASH}
+{$FROM: $ISO_BACKSLASH,             $TO: $F17}
 ]}"
