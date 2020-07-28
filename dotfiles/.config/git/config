@@ -69,7 +69,7 @@
   com = checkout --recurse-submodules  # Checkout and update submodules.
   cop = checkout -p                    # Selectively undo some of the changes you made.
   cot = checkout -t                    # g cot up/master means checkout master tracking the one in up.
-  cu  = "!git checkout -b $1 && git btu ${2:-up/$(git default-branch up)} #" # Create new PR branch $1, pulls from upstream, pushes to fork (due to remote.pushDefault).
+  cu  = "!git checkout -b $1 --track ${2:-up/$(git default-branch up)} #" # Create new PR branch $1, pulls from upstream, pushes to fork (due to remote.pushDefault).
   cod = "!git checkout $(git default-branch ${1:-up}) #" # Checkout default branch for remote $1 (default: up).
   d   = "!git diff \"${@:-HEAD}\" #"                   # diff of staged and unstaged..
   de  = "!git diff HEAD --name-only $@ | xargs $VISUAL # " # Open files changed since last commit in editor.
