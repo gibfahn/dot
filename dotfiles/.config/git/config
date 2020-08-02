@@ -186,6 +186,10 @@
   smi  = submodule update --init --recursive   # Update to main repo upstream branch's submodule versions (make submodules match parent's HEADs).
   smu  = submodule update --remote             # Update submodules to submodule repos latest versions (make submodules match submodule upstream HEADs).
 
+  # git wa </new/path/> <branch_to_checkout>; <do work in /new/path>; git wr </new/path>
+  wa   = worktree add
+  wr   = worktree remove
+
   # z is fuzzy log (fuzzy search through `git log $*`, za is the same with la (try g sh `g z`).
   z   = "!git l --color=always $* | grep -v '^\\.\\.\\.\\s\\+$' | fzf +s -m --ansi | sed 's/^\\W\\+\\(\\w\\+\\)\\s\\+.*/\\1/' #"
   za  = "!git la --color=always $* | grep -v '^\\.\\.\\.\\s\\+$' | fzf +s -m --ansi | sed 's/^\\W\\+\\(\\w\\+\\)\\s\\+.*/\\1/' #"
