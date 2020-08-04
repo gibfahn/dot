@@ -256,9 +256,13 @@ sda() {
       sd_args+=("$arg")
     fi
   done
-  set -x
-  fd --type file --print0 ${fd_args:+"${fd_args[@]}"} | xargs -0 sed ${sd_args:+"${sd_args[@]}"}
-  set +x
+  fd_args=(fd --type file --hidden --exclude .git --print0 "${fd_args[@]}")
+  sd_args=(xargs -0 gsed -i "${sd_args[@]}")
+  echo "Now running:"
+  # Painful hack to nicely print the args including the | and any quoted args with spaces in them:
+  (set -x; : "${fd_args[@]}" \| "${sd_args[@]}") 2>&1 | sed -e "s/'|'/|/" -e 's/^+.*:/ /'
+  # Actually run the command:
+  "${fd_args[@]}" | "${sd_args[@]}"
 }
 
 # ulimit -c unlimited # Uncomment to allow saving of coredumps.
