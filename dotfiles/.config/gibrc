@@ -256,7 +256,7 @@ sda() {
       sd_args+=("$arg")
     fi
   done
-  fd --type file ${fd_args:+"${fd_args[@]}"} | xargs sd ${sd_args:+"${sd_args[@]}"}
+  fd --type file --print0 ${fd_args:+"${fd_args[@]}"} | xargs -0 sd ${sd_args:+"${sd_args[@]}"}
 }
 
 # ulimit -c unlimited # Uncomment to allow saving of coredumps.
