@@ -278,9 +278,9 @@ alias clc="fc -ln -1 | sed -e 's/\\\\n/\\n/g' -e 's/\\\\t/\\t/g' | cpy"
 cr() { local a=$(r 2>&1); cpy <<<"❯ $a"; }
 
 # fda is find all (don't ignore anything).
-{ exists fd && alias fda='fd --no-ignore --hidden'; } \
+{ exists fd && alias fda='fd --no-ignore --hidden --exclude=.git'; } \
   || fd() { find . -iname "*$**"; } # Find by filename (case insensitive).
-exists rg && alias rg='rg' rga='rg --hidden --no-ignore' # rga is grep all (don't ignore anything).
+exists rg && alias rg='rg' rga='rg --hidden --no-ignore --glob=!.git' # rga is grep all (don't ignore anything).
 
 # Start using volta (Node version manager).
 alias vlt='pathadd "$VOLTA_HOME"; pathadd "$VOLTA_HOME"/bin'
