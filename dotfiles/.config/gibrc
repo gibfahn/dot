@@ -142,6 +142,14 @@ pth() { # Returns absolute path to each file or dir arg.
   done
 }
 
+add_trailing_newline() {
+  fd --no-ignore --hidden --exclude=.git --type f -x gsed -i -e '$a\' '{}'
+}
+
+remove_trailing_whitespace() {
+  fd --no-ignore --hidden --exclude=.git --type f -x gsed -i -e 's/\s\+$//' '{}'
+}
+
 # Clone repo and cd into path (can't be in git config as we cd).
 gcl() {
   local clone_dir ret
