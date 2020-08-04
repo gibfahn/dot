@@ -247,22 +247,22 @@ exists vimr && alias vm=vimr # Use `vm` for GUI vim, need to add a Linux equival
 # Find-replace everything in the current directory. Use `--` to pass args to fd.
 # e.g. 'sda s/foo/bar/g', 'sda --hidden -- s/foo/bar/g'
 sda() {
-  local arg fd_args=() sd_args=()
+  local arg find=() replace=()
   for arg in "$@"; do
     if [[ $arg == -- ]]; then
-      fd_args=("${sd_args[@]}")
-      sd_args=()
+      find=("${replace[@]}")
+      replace=()
     else
-      sd_args+=("$arg")
+      replace+=("$arg")
     fi
   done
-  fd_args=(fd --type file --hidden --exclude .git --print0 "${fd_args[@]}")
-  sd_args=(xargs -0 gsed -i "${sd_args[@]}")
+  find=(fd --type file --hidden --exclude .git --print0 "${find[@]}")
+  replace=(xargs -0 gsed -i "${replace[@]}")
   echo "Now running:"
   # Painful hack to nicely print the args including the | and any quoted args with spaces in them:
-  (set -x; : "${fd_args[@]}" \| "${sd_args[@]}") 2>&1 | sed -e "s/'|'/|/" -e 's/^+.*:/ /'
+  (set -x; : "${find[@]}" \| "${replace[@]}") 2>&1 | sed -e "s/'|'/|/" -e 's/^+.*:/ /'
   # Actually run the command:
-  "${fd_args[@]}" | "${sd_args[@]}"
+  "${find[@]}" | "${replace[@]}"
 }
 
 # ulimit -c unlimited # Uncomment to allow saving of coredumps.
