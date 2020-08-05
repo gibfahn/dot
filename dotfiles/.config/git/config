@@ -25,6 +25,7 @@
   quote-string = "!read -r l; sed -E -e 's/([\\\"])/\\\\\\1/g' -e 's/(.*)/\"!\\1 #\"/' <<<\"$l\" #"
   remote-org = "!git remote get-url $1 | awk -F ':|/' '{if ($NF) {print $(NF-1)} else {print $(NF-2)}}' #" # Github org for remote. `g remote-org up` -> gibfahn.
   remote-repo = "!git remote get-url $1 | sed -e 's|.*/||' -e 's/.git$//' #" # Github repo for remote. `g remote-repo up` -> dot.
+  pr-message = "!printf \"$(git show --format='%s' -s)\"$'\\n\\n---\\n#### Commits _(oldest to newest)_\\n\\n'\"$(git lpr)\" #" # Generates a default PR message.
 
   a   = add           # Add files to index.
   ap  = add -p        # Adds files in hunks (only add some of the changes you made).
@@ -138,7 +139,7 @@
   pap = "!curl -L ${1%.patch}.patch | git am -3 -S --whitespace=fix  # " # Please patch it.
   paw = "!curl -L ${1%.patch}.patch | git am -3 -S --whitespace=warn # " # Patch but don't fix whitespace.
   ppr = "!git check-pr-branch && git push && git pr #"          # Push and raise PR at the same time.
-  pr  = "!hub pull-request --base $(git remote-org ${1:-$(git up-remote)}):${2:-$(git up-branch)} -oc -e -m \"$(git show --format='%s' -s)\"$'\\n\\n---\\n#### Commits _(oldest to newest)_\\n\\n'\"$(git lpr)\" #" # Raise PR against upstream remote/branch (or $1/$2).
+  pr  = "!hub pull-request --base $(git remote-org ${1:-$(git up-remote)}):${2:-$(git up-branch)} -oc -e -m \"$(git pr-message)\" #" # Raise PR against upstream remote/branch (or $1/$2).
   pt  = "!git push -u $1 $(git head-branch) #"                  # g pt origin sets branch to track up + pushes.
   pl  = pull
 
