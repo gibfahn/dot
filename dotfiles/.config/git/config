@@ -75,7 +75,7 @@
   de  = "!git diff HEAD --name-only $@ | xargs $VISUAL # " # Open files changed since last commit in editor.
   dni  = diff --no-index
   # Interactively show files in $@, one line per file.
-  di = "!git diff --color=always --stat --format=\"\" \"${@:-@}\" \
+  di = "!git diff --color=always --stat=1000 --format=\"\" \"${@:-@}\" \
     | fzf --ansi -m --no-sort --reverse --tiebreak=index \
     --preview \"git diff ${@:-@} -- \\$(sed -E -e 's/^\\s*([^\\|]*)\\s*\\|.*/\\1/' -e 's/(.*)\\{(.*) => (.*)\\}(.*)/\\1\\2\\4 \\1\\3\\4/' <<< {}) | delta \" \
     | awk '{print $1}' #"
