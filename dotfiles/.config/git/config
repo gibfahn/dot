@@ -4,12 +4,12 @@
 
   # Helper functions where a full name is easier:
   # Set up a fork the way I like it:
-  fork = "! hub fork --remote-name=fork && git remote -v && git push fork master:refs/heads/oldmaster && git change-branch && git default-branch fork && git clean-fork #"
-  # Change the remote default branch to "$1" (default: "oldmaster"), for remote $2 (default: "fork").
-  change-branch = "!hub api -XPATCH repos/$(git remote-org ${2:-fork})/$(git remote-repo ${2:-fork}) -f name=$(git remote-repo ${2:-fork}) -f default_branch=${1:-oldmaster} && git remote set-head --auto ${2:-fork} #"
+  fork = "! hub fork --remote-name=${1:-fork} && git remote -v && git push ${1:-fork} master:refs/heads/oldmaster && git change-branch ${1:-fork} && git default-branch ${1:-fork} && git clean-fork ${1:-fork} #"
+  # Change the remote default branch to "$2" (default: "oldmaster"), for remote $1 (default: "fork").
+  change-branch = "!hub api -XPATCH repos/$(git remote-org ${1:-fork})/$(git remote-repo ${1:-fork}) -f name=$(git remote-repo ${1:-fork}) -f default_branch=${2:-oldmaster} && git remote set-head --auto ${1:-fork} #"
   check-pr-branch = "! [[ $(git head-branch) != $(git up-branch) ]] || { printf \"\\033[0;31m  ERROR\\033[0m: Create a new branch before raising PR.\\n\" >&2 && exit 1; } #"
   # Removes all branches and tags except "$1" (default: oldmaster).
-  clean-fork = "!git ls-remote --heads --tags fork | awk '!/\\^\\{\\}/ && !/refs\\/heads\\/'\"${1:-oldmaster}\"'/ {print $NF}' | xargs -n ${2:-10} git push --delete fork && git remote prune fork #"
+  clean-fork = "!git ls-remote --heads --tags ${1:-fork} | awk '!/\\^\\{\\}/ && !/refs\\/heads\\/'\"${2:-oldmaster}\"'/ {print $NF}' | xargs -n ${3:-10} git push --delete ${1:-fork} && git remote prune ${1:-fork} #"
   code-changes = "!git log --format=format: --name-only | egrep -v '^$' | sort | uniq -c | sort -rg | head -${1:-10} #" # Show $1 most changed files.
   default-branch = "!(git symbolic-ref --short refs/remotes/$1/HEAD || { git remote set-head --auto $1 && git symbolic-ref --short refs/remotes/$1/HEAD; }) | sed \"s|^$1/||\" #" # Default branch for remote. `g default-branch up` -> master
   head-branch = symbolic-ref --short HEAD # e.g. master.
