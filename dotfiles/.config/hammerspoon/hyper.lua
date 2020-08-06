@@ -31,10 +31,11 @@ hyperModeAppMappings = {
   { key='k', app='Calendar' },
   { key='m', app='Mail' },
   { key='r', app='Radar 8' },
+  { key='s', app='Spotify' },
   { key='t', app='Kitty' },
   { key='w', app='Workflowy' },
-  { key='x', app='Messages' },
   { key='x', app='Caprine', mods={'alt'} },
+  { key='x', app='Messages' },
 
 }
 for i, mapping in ipairs(hyperModeAppMappings) do
