@@ -28,7 +28,6 @@ hyperModeAppMappings = {
   { key='b', app='Safari' },
   { key='c', app='Slack' },
   { key='f', app='Firefox Nightly' },
-  { key='g', app='Google Chrome' },
   { key='k', app='Calendar' },
   { key='m', app='Mail' },
   { key='r', app='Radar 8' },
