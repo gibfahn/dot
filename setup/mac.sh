@@ -157,8 +157,9 @@ fi
 menu_changed+=$(updateMacOSDefault com.apple.systemuiserver menuExtras array-add "/System/Library/CoreServices/Menu Extras/Bluetooth.menu")
 menu_changed+=$(updateMacOSDefault com.apple.systemuiserver menuExtras array-add "/System/Library/CoreServices/Menu Extras/Volume.menu")
 
+# Disabled to use the multicolour accent colour.
 # System Preferences > General > Accent Colour > Purple
-updateMacOSDefault NSGlobalDomain AppleAccentColor int 5
+# updateMacOSDefault NSGlobalDomain AppleAccentColor int 5
 
 # System Preferences > General > Highlight Colour > Blue
 updateMacOSDefault NSGlobalDomain AppleAquaColorVariant int 1
