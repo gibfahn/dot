@@ -25,6 +25,7 @@ f17 = hs.hotkey.bind({}, 'F17', pressedF17, releasedF17)
 hyperModeAppMappings = {
 
   { key='/', app='Finder' },
+  { key='b', app='Safari' },
   { key='c', app='Slack' },
   { key='f', app='Firefox Nightly' },
   { key='g', app='Google Chrome' },
