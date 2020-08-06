@@ -12,6 +12,7 @@ tap "bazelbuild/tap"                      # Provides bazelisk and other bazel to
 # brew "ctags"                             # Used for autocomplete in Vim (etc).
 # brew "exa"                               # Nicer ls replacement.
 # brew "exercism"                          # Learn coding languages.
+# brew "graphviz"                          # Gives you the `dot` tool for generating diagrams.
 # brew "groovy"                            # Helpful for testing Jenkins scripts.
 # brew "hexyl"                             # Hex viewer in Rust.
 # brew "ipython"                           # Interactive python shell.
@@ -51,7 +52,6 @@ brew "gnu-time"                          # GNU version of time.
 brew "gnu-which"                         # GNU version of which.
 brew "gnutls"                            # Provides gnutls-cli for setting up TLS connections.
 brew "go"                                # Go progamming language.
-brew "graphviz"                          # Gives you the `dot` tool for generating diagrams.
 brew "grep"                              # GNU version of grep.
 brew "httpie"                            # Alternative to curl, `http` binary.
 brew "hub"                               # GitHub CLI tool.
