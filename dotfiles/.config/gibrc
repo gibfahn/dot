@@ -268,7 +268,7 @@ sda() {
   replace=(xargs -0 gsed -i "${replace[@]}")
   echo "Now running:"
   # Painful hack to nicely print the args including the | and any quoted args with spaces in them:
-  (set -x; : "${find[@]}" \| "${replace[@]}") 2>&1 | sed -e "s/'|'/|/" -e 's/^+.*:/ /'
+  (set -x; : "${find[@]}" \| "${replace[@]}") 2>&1 | sed -e "s/'|'/|/" -e 's/.*fd/  fd/'
   # Actually run the command:
   "${find[@]}" | "${replace[@]}"
 }
