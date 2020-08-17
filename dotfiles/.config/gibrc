@@ -150,6 +150,11 @@ remove_trailing_whitespace() {
   fd --no-ignore --hidden --exclude=.git --type f -x gsed -i -e 's/\s\+$//' '{}'
 }
 
+tabs_to_spaces() {
+  spaces_per_tab=${1:-4}
+  fd --no-ignore --hidden --exclude=.git --type f -x bash -c "gexpand -i -t $spaces_per_tab {} | sponge {}"
+}
+
 # Clone repo and cd into path (can't be in git config as we cd).
 gcl() {
   local clone_dir ret

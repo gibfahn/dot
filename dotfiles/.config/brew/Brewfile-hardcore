@@ -61,6 +61,7 @@ brew "kubectx"                           # Easily change Kubernetes context or n
 brew "kubernetes-cli"                    # Manage your docker clusters with kube.
 brew "llvm"                              # Gives clangd (clang language server).
 brew "make"                              # GNU version of make.
+brew "moreutils"                         # GNU tools like parallel and sponge.
 brew "postgresql"                        # Solid database.
 brew "protobuf"                          # Serialization format.
 brew "pstree"                            # Hierarchical tree of processes, `pstree -g 3`.
