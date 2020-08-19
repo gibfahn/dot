@@ -53,6 +53,8 @@ sudo chmod 644 /Library/Preferences/com.apple.HIToolbox.plist
   - Viewing
     - Show Message Headers -> Custom -> List-ID, Message-ID, X-Member-Count
     - Show most recent messages at the top
+  - Composing
+    - When quoting text in replies or forwards: Include all the original message text.
 
 ### HyperSwitch
 
