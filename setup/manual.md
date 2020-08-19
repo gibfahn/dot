@@ -47,6 +47,13 @@ sudo cp ~/Library/Preferences/com.apple.HIToolbox.plist /Library/Preferences/
 sudo chmod 644 /Library/Preferences/com.apple.HIToolbox.plist
 ```
 
+### Mail
+
+- Preferences
+  - Viewing
+    - Show Message Headers -> Custom -> List-ID, Message-ID, X-Member-Count
+    - Show most recent messages at the top
+
 ### HyperSwitch
 
 - General:
