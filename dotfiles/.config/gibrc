@@ -143,11 +143,11 @@ pth() { # Returns absolute path to each file or dir arg.
 }
 
 add_trailing_newline() {
-  fd --no-ignore --hidden --exclude=.git --type f -x gsed -i -e '$a\' '{}'
+  fd --no-ignore --hidden --exclude=.git --type f "$@" -x gsed -i -e '$a\' '{}'
 }
 
 remove_trailing_whitespace() {
-  fd --no-ignore --hidden --exclude=.git --type f -x gsed -i -e 's/\s\+$//' '{}'
+  fd --no-ignore --hidden --exclude=.git --type f "$@" -x gsed -i -e 's/\s\+$//' '{}'
 }
 
 tabs_to_spaces() {
