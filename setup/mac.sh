@@ -142,7 +142,8 @@ updateMacOSDefault com.apple.assistant.support "Dictation Enabled" bool true
 # Show battery percentage in menu bar.
 menu_changed+=$(updateMacOSDefault com.apple.menuextra.battery ShowPercent string YES)
 
-# Show Day of the week, date, and seconds.
+# Set Menu Bar date format: https://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table
+# Note that only some formats are allowed. This shows: day of the week, date, time with seconds.
 menu_changed+=$(updateMacOSDefault com.apple.menuextra.clock DateFormat string "EEE d MMM  HH:mm:ss")
 
 # Add the bluetooth settings to the Menu Bar.
