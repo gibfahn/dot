@@ -146,20 +146,11 @@ menu_changed+=$(updateMacOSDefault com.apple.menuextra.battery ShowPercent strin
 # Note that only some formats are allowed. This shows: day of the week, date, time with seconds.
 menu_changed+=$(updateMacOSDefault com.apple.menuextra.clock DateFormat string "EEE d MMM  HH:mm:ss")
 
-# Add the bluetooth settings to the Menu Bar.
-if [[ ! -e "/System/Library/CoreServices/Menu Extras/Bluetooth.menu" ]]; then
-  # Make sure the menu item exists before adding it so we don't trash the machine.
-  log_error "Can no longer find the bluetooth menu item."
-  exit 1
-fi
-# Add the bluetooth settings to the Menu Bar.
-if [[ ! -e "/System/Library/CoreServices/Menu Extras/Volume.menu" ]]; then
-  # Make sure the menu item exists before adding it so we don't trash the machine.
-  log_error "Can no longer find the Volume menu item."
-  exit 1
-fi
-menu_changed+=$(updateMacOSDefault com.apple.systemuiserver menuExtras array-add "/System/Library/CoreServices/Menu Extras/Bluetooth.menu")
-menu_changed+=$(updateMacOSDefault com.apple.systemuiserver menuExtras array-add "/System/Library/CoreServices/Menu Extras/Volume.menu")
+# Make sure the relevant items from the Control Center are visible.
+menu_changed+=$(updateMacOSDefault com.apple.controlcenter "NSStatusItem Visible WiFi" bool true)
+menu_changed+=$(updateMacOSDefault com.apple.controlcenter "NSStatusItem Visible Battery" bool true)
+menu_changed+=$(updateMacOSDefault com.apple.controlcenter "NSStatusItem Visible Bluetooth" bool true)
+menu_changed+=$(updateMacOSDefault com.apple.controlcenter "NSStatusItem Visible Clock" bool true)
 
 # Disabled to use the multicolour accent colour.
 # System Preferences > General > Accent Colour > Purple
