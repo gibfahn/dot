@@ -91,6 +91,7 @@ end)
 hyperMode:bind({}, 'd', function()
   local date = os.date("%Y-%m-%d")
   hs.pasteboard.setContents(date)
+  hyperMode:exit()
   hs.eventtap.keyStrokes(date)
 end)
 -- }}} Hyper-d -> Paste today's date.
