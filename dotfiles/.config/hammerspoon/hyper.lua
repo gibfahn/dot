@@ -96,6 +96,20 @@ hyperMode:bind({}, 'd', function()
 end)
 -- }}} Hyper-d -> Paste today's date.
 
+-- {{{ Hyper-⌥-d -> Paste build number.
+hyperMode:bind({'alt'}, 'd', function()
+  local output, status, _, rc = hs.execute("sw_vers -buildVersion")
+  if rc ~= 0 then
+    hs.notify.new({title='sw_vers failed!', informativeText=rc.." "..output, withdrawAfter=3}):send()
+  end
+  output = output:match( "(.-)%s*$" )
+  -- Copy build version with trailing newline removed.
+  hs.pasteboard.setContents(output)
+  hyperMode:exit()
+  hs.eventtap.keyStrokes(output)
+end)
+-- }}} Hyper-⌥-d -> Paste build number.
+
 -- {{{ Hyper-⌥-m -> Format selected Message ID as link and copy to clipboard.
 hyperMode:bind({'shift'}, 'm', function()
   hs.eventtap.keyStroke({'cmd'}, 'c') -- Copy selected email message ID (e.g. from Mail.app).
