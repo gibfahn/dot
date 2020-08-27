@@ -1,5 +1,5 @@
 # shellcheck shell=bash disable=SC1090
-# My shell configuation file. Must be sourced. I include this from .profile, .bashrc, and .zshrc like so:
+# My shell configuration file. Must be sourced. I include this from .profile, .bashrc, and .zshrc like so:
 #   . "$HOME/.config/gibrc"
 
 # {{{ Initial setup
