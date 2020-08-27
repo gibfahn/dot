@@ -9,10 +9,11 @@ rust_crates=(
   # oxipng                        # Compress png images.
   # svgcleaner                    # Remove unnecessary info from svgs.
   # tally                         # Nicer time (shows memory, page faults etc), I'm using hyperfine instead.
+  bingrep                         # Grep binary packages.
   cargo-edit                      # Gives `cargo {add,rm,upgrade}` commands.
+  clog-cli                        # Changelog generator.
   cobalt-bin                      # Static site generator (https://cobalt-org.github.io/).
   proximity-sort                  # Sort paths by proximity to a directory.
-  clog-cli                        # Changelog generator.
 )
 
 # These are installed and updated through brew on Darwin.
