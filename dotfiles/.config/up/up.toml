@@ -30,3 +30,4 @@ RUSTUP_HOME = "$XDG_DATA_HOME/rustup" # Rustup install dir.
 CARGO_HOME = "$XDG_DATA_HOME/cargo" # Cargo install dir.
 GOPATH = "~/code/go" # Go install dir.
 GNUPGHOME = "$XDG_DATA_HOME/gnupg" # Gpg install dir.
+RBENV_ROOT = "$XDG_CACHE_HOME/rbenv" # Set rbenv location.
