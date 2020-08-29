@@ -340,3 +340,14 @@ else
   log_get "Enabling updatedb"
   sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.locate.plist
 fi
+
+# Use iCloud backup of HISTFILE if available.
+export HISTFILE=$HOME/.cache/zsh/history
+export ICLOUD="$HOME/Library/Mobile Documents/com~apple~CloudDocs/Fahns/Gib/zsh/history"
+
+if [[ -e "$ICLOUD" && ! -L "$HISTFILE" ]]; then
+  log_get "Using iCloud zsh history file."
+  ln -sf "$ICLOUD" "$HISTFILE"
+else
+  log_skip "Using iCloud zsh history file."
+fi
