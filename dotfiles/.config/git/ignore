@@ -15,3 +15,6 @@
 # Bazel build dependencies (no leading slash as you can multiple bazel projects in one repo).
 .bazel/
 bazel-out
+
+# Any dotdir in the root that has a secrets subdir.
+/.*/secrets/
