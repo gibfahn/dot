@@ -61,13 +61,12 @@
   cmn = commit -S --amend --no-edit    # Amend the previous commit but don't change the message.
   can = commit -S --amend --no-edit -a # Add changed files and commit with the same message.
   cn  = clean -ffdx                    # Remove anything that's untracked (DANGER).
-  cl  = clone --recursive --origin up  # Always include submodules, set default remote to "up".
+  cl  = clone --recurse-submodules --origin up # Always include submodules, set default remote to "up".
   cp  = cherry-pick                    # Apply commit hash(es) to current branch.
   cpa = cherry-pick --abort            # Bail out of cherry-pick.
   cpc = cherry-pick --continue         # Accept current changes and continue to next commit.
   cpq = cherry-pick --quit             # Only undo last commit (that failed) not all of them.
   co  = checkout                       # Change to a different commit or reset a file to a commit (e.g. `g co new-feature`).
-  com = checkout --recurse-submodules  # Checkout and update submodules.
   cop = checkout -p                    # Selectively undo some of the changes you made.
   cot = checkout -t                    # g cot up/master means checkout master tracking the one in up.
   cu  = "!git checkout -b $1 && git btu ${2:-up/$(git default-branch up)} #" # Create new PR branch $1, pulls from upstream, pushes to fork (due to remote.pushDefault).
@@ -280,6 +279,7 @@
   enabled = true           # Remember how I resolved the same merge conflict last time.
 [submodule]
   fetchJobs = 8            # Number of jobs to fetch when I submodule clone/update.
+  recurse = true           # Make everything except clone recurse into submodules.
 [stash]
   showPatch = true         # Show the actual diffs in `git stash show`.
 [status]
