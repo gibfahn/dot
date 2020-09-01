@@ -14,6 +14,7 @@ inherit_env = [
   "TERM", # Tells logger what terminal this is.
   "TERMINFO", # If set by terminal, enables nice colouring.
   "SSH_AUTH_SOCK", # Set by ssh agent.
+  "HISTFILE", # Used to backup zsh history.
 ]
 
 [env]
