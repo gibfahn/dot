@@ -1,0 +1,2 @@
+check_cmd = ["${dot_dir}/setup/zsh_history_check.sh"]
+run_cmd = ["${dot_dir}/setup/zsh_history.sh"]

@@ -31,3 +31,5 @@ CARGO_HOME = "$XDG_DATA_HOME/cargo" # Cargo install dir.
 GOPATH = "~/code/go" # Go install dir.
 GNUPGHOME = "$XDG_DATA_HOME/gnupg" # Gpg install dir.
 RBENV_ROOT = "$XDG_CACHE_HOME/rbenv" # Set rbenv location.
+# Used to backup zsh history.
+ZSH_CLOUD_HISTFILE = "$HOME/Library/Mobile Documents/com~apple~CloudDocs/Fahns/Gib/zsh/history"

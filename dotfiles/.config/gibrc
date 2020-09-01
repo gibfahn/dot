@@ -107,7 +107,7 @@ export _Z_DATA=$XDG_CACHE_HOME/z # Z Cache Directory.
 export LESS='--tabs=4 --ignore-case --RAW-CONTROL-CHARS --quit-if-one-screen --status-column --LONG-PROMPT --HILITE-UNREAD --window=-4' # See less options comment below.
 export BAT_PAGER="less $LESS" # Make bat use less pager options.
 
-HISTSIZE=100000 SAVEHIST=100000 HISTFILE="$XDG_CACHE_HOME/$shell/history" # Set history file location and size.
+export HISTSIZE=100000 SAVEHIST=100000 HISTFILE="$XDG_CACHE_HOME/$shell/history" # Set history file location and size.
 c="$XDG_CONFIG_HOME" # Shortcut to the config directory (`v $c/gibrc` to edit this file).
 
 [[ -d "$XDG_CONFIG_HOME/terminfo" ]] && export TERMINFO="$XDG_CONFIG_HOME/terminfo" # Put terminal info in here.
