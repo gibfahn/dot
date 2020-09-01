@@ -388,6 +388,7 @@ case $shell in
     setopt auto_pushd # cd pushes onto pushd stack (Try `cd -<Tab>`)
     setopt complete_in_word # Allow completing words when you're in the middle of them.
     setopt extended_history # Save timestamps in history.
+    setopt hist_expire_dups_first # Delete duplicates when history is full.
     setopt hist_ignore_all_dups # Remove older dups in HISTFILE when adding newer ones.
     setopt hist_ignore_space # Don't save history lines if they start with ' ' (use for secret values).
     setopt inc_append_history # Show local history before remote.
@@ -395,13 +396,13 @@ case $shell in
     setopt long_list_jobs # Show more info on background jobs.
     setopt no_list_ambiguous # Show menu on first tab if multiple matches (don't wait for second tab).
     setopt no_list_beep # Don't beep if tab-complete has multiple choices, only if no such file.
-    setopt no_share_history # Don't show history from other open tabs.
+    setopt no_notify # Print job updates just before a prompt (not mid-execution).
     setopt prompt_percent # Allow variables and functions to be used in the prompt.
     setopt prompt_subst # Perform expansion and subsitution on PROMPT and RPROMPT.
     setopt pushd_ignore_dups # Don't push multiple copies onto the directory stack.
     setopt pushd_minus # Make `cd -2` be two dirs ago rather than `cd +2`.
     setopt pushd_silent # Don't print pushd stack after pushd or cd (unless in CDPATH).
-    setopt no_notify # Print job updates just before a prompt (not mid-execution).
+    setopt share_history # Do show history from other open tabs.
 
     chpwd() { # Commands to run after changing directory.
       setopt local_options no_monitor # This only disables the "job start", not the "job complete".

@@ -109,7 +109,17 @@ autoload -Uz edit-command-line # Load command to open current line in $VISUAL.
 zle -N edit-command-line
 zle -N history-beginning-search-backward-end history-search-end # Add it to existing widgets.
 zle -N history-beginning-search-forward-end history-search-end  # Add it to existing widgets.
-accept-line() { [ -z "$BUFFER" ] && zle up-history; zle ".$WIDGET"; }
+accept-line() {
+  [ -z "$BUFFER" ] && {
+    # Only use local items (don't use share_history items).
+    # Doesn't seem to be needed as fetching shared history is only triggered
+    # when you run a command, so a local command is always the most recent one.
+    # zle set-local-history 1
+    zle up-history
+  }
+# Run original accept-line builtin command.
+zle ".$WIDGET"
+}
 
 # Changes the cursor shape. KEYMAP is set when called by zsh keymap change.
 # If normal mode then 'vicmd', if insert mode then 'main' or 'viins'.
