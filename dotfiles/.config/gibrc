@@ -449,7 +449,7 @@ if [[ $shell == bash || $shell == zsh ]] && exists fzf && exists fd; then
   export FZF_DEFAULT_SORT=10000
   export FZF_PREVIEW_COMMAND="bat --style=numbers,changes --wrap=never --color=always {} || cat {} || tree -C {}"
   export FZF_CTRL_T_OPTS="--height=100% --preview-window=right:60%:noborder --preview '($FZF_PREVIEW_COMMAND) 2> /dev/null'"
-  export FZF_CTRL_R_OPTS="--height=100% --preview-window=down:30%:noborder --preview 'bat --language=zsh --plain --terminal-width=\$FZF_PREVIEW_COLUMNS --wrap=character --color=always <<<{2..}'"
+  export FZF_CTRL_R_OPTS="--height=100% --preview-window=down:30%:noborder --preview 'bat --language=zsh --plain --terminal-width=\$FZF_PREVIEW_COLUMNS --wrap=character --color=always <<<\$(echo {2..})'"
   export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow' # Use fd for fuzzy finding if available.
   export FZF_CTRL_T_COMMAND='fd --type f --hidden --follow'
   export FZF_ALT_C_COMMAND='fd --type d --hidden --no-ignore --follow --exclude .git'
