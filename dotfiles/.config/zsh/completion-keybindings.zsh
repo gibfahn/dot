@@ -112,9 +112,7 @@ zle -N history-beginning-search-forward-end history-search-end  # Add it to exis
 accept-line() {
   [ -z "$BUFFER" ] && {
     # Only use local items (don't use share_history items).
-    # Doesn't seem to be needed as fetching shared history is only triggered
-    # when you run a command, so a local command is always the most recent one.
-    # zle set-local-history 1
+    zle set-local-history 1
     zle up-history
   }
 # Run original accept-line builtin command.
