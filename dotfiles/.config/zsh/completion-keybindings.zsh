@@ -114,6 +114,7 @@ accept-line() {
     # Only use local items (don't use share_history items).
     zle set-local-history 1
     zle up-history
+    zle set-local-history 0
   }
 # Run original accept-line builtin command.
 zle ".$WIDGET"
