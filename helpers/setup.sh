@@ -246,7 +246,6 @@ updateMacOSDefaultDict() {
 #   }
 # Call to use:
 #   updateKeyboardShortcuts "com.foo.bar" "baz" "bat"
-# Set sudo=sudo for commands that need root access.
 updateMacOSKeyboardShortcut() {
   updateMacOSDefaultDict "$1" NSUserKeyEquivalents "$2" "$3"
   if ! defaults read com.apple.universalaccess com.apple.custommenu.apps | grep -qF "$1"; then
@@ -327,6 +326,7 @@ readMacOSDefault() {
 # Then you should set with:
 #   updateMacOSDefault foo bar int 1 -currentHost
 # Prints nothing to stdout if there were no changes.
+# Set sudo=sudo if you need to write with sudo.
 updateMacOSDefault() {
   local domain key val_type val host # Args.
   local current_val
@@ -358,6 +358,6 @@ updateMacOSDefault() {
   fi
   echo "$host $domain $key $current_val -> $val; "
 
-  log_debug "defaults $host write \"$domain\" \"$key\" \"-$val_type\" \"$val\""
-  defaults $host write "$domain" "$key" "-$val_type" "$val" 1>&2
+  log_debug "$sudo defaults $host write \"$domain\" \"$key\" \"-$val_type\" \"$val\""
+  $sudo defaults $host write "$domain" "$key" "-$val_type" "$val" 1>&2
 }

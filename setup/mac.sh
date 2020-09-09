@@ -287,6 +287,12 @@ else
   updateMacOSDefault NSGlobalDomain InitialKeyRepeat int 15
 fi
 
+# System Preferences -> Users & Groups -> Login Options -> Show Input menu in login window
+sudo=sudo updateMacOSDefault /Library/Preferences/com.apple.loginwindow showInputMenu bool true
+
+# System Preferences -> Software Update -> Automatically keep my mac up to date
+sudo=sudo updateMacOSDefault /Library/Preferences/com.apple.SoftwareUpdate AutomaticDownload bool true
+
 # Apply any changes made above:
 
 if [[ -n "$dock_changed" ]]; then

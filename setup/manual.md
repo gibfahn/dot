@@ -13,17 +13,21 @@ following:
 
 ### System Preferences:
 
+Set the computer name (needs restart to take effect):
+
+```shell
+# e.g. scutil --set LocalHostName "$USER-MBP-$year"
+scutil --set LocalHostName
+```
+
 - `View` (menu bar) -> `Organise Alphabetically`
 - `Touch ID` -> Add other fingerprints
-- `Software Update` -> `Automatically keep my mac up to date`
 - `Keyboard`:
   - `Shortcuts`
     - `Services` -> remove mappings from `man Page` shortcuts
   - `Input Sources` -> add `Colemak`
 - `Sharing`:
   - Tick the `Screen Sharing` checkbox.
-  - `Computer Name` -> new hostname (e.g. `GibWrkMBP2019`, `EveMBP2018`)
-- `Users & Groups` -> `Login Options` -> `Show Input menu in login window`
 - Security & Privacy:
   - Privacy -> Full Disk Access -> Add Terminal.app and Kitty
   - FileVault -> Turn on FileVault
@@ -55,20 +59,6 @@ sudo chmod 644 /Library/Preferences/com.apple.HIToolbox.plist
     - Show most recent messages at the top
   - Composing
     - When quoting text in replies or forwards: Include all the original message text.
-
-### HyperSwitch
-
-- General:
-  - Check `Run HyperSwitch in the background.`
-  - Active the window switcher for `all windows` -> <kbd>⌘</kbd><kbd>Tab</kbd>
-  - Check `Include windows from other screens`
-- `App Switcher`
-  - `App Switcher` -> `Delay activation for` -> `0` ms for both.
-- `Appearance`
-  - `Hide animation:` -> `None`
-  - `Show HyperSwitch in` -> `the menu bar`
-- `About:`
-  - `Download and install updates in the background`
 
 ### Safari
 
