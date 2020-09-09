@@ -1,0 +1,2 @@
+check_cmd = ["${dot_dir}/setup/touchid_sudo_check.sh"]
+run_cmd = ["${dot_dir}/setup/touchid_sudo.sh"]
