@@ -26,7 +26,7 @@
   quote-string = "!read -r l; sed -E -e 's/([\\\"])/\\\\\\1/g' -e 's/(.*)/\"!\\1 #\"/' <<<\"$l\" #"
   remote-org = "!git remote get-url $1 | awk -F ':|/' '{if ($NF) {print $(NF-1)} else {print $(NF-2)}}' #" # Github org for remote. `g remote-org up` -> gibfahn.
   remote-repo = "!git remote get-url $1 | sed -e 's|.*/||' -e 's/.git$//' #" # Github repo for remote. `g remote-repo up` -> dot.
-  pr-message = "!printf \"$(git show --format='%s' -s)\"$'\\n\\n---\\n#### Commits _(oldest to newest)_\\n\\n'\"$(git lpr)\" #" # Generates a default PR message.
+  pr-message = "!printf $'\\n\\n---\\n#### Commits _(oldest to newest)_\\n\\n'\"$(git lpr)\" #" # Generates a default PR message.
 
   a   = add           # Add files to index.
   ap  = add -p        # Adds files in hunks (only add some of the changes you made).
@@ -140,7 +140,7 @@
   paw = "!curl -L ${1%.patch}.patch | git am -3 -S --whitespace=warn # " # Patch but don't fix whitespace.
   ppr = "!git check-pr-branch && git push && git pr #"          # Push and raise PR at the same time.
   # TODO(gib): remove opr and clean up once https://github.com/cli/cli/issues/1645 is resolved.
-  opr = "!set -x; hub pull-request --base $(git remote-org ${1:-$(git up-remote)}):${2:-$(git up-branch)} -oc -e -m \"$(git pr-message)\" #" # Raise PR against upstream remote/branch (or $1/$2).
+  opr = "!set -x; hub pull-request --base $(git remote-org ${1:-$(git up-remote)}):${2:-$(git up-branch)} -oc -e -m \"$(git show --format='%s' -s)$(git pr-message)\" #" # Raise PR against upstream remote/branch (or $1/$2).
   pr  = "!set -x; GH_REPO=$(git remote get-url $(git up-remote)) gh pr create --base $(git up-branch) --body \"$(git pr-message | vipe)\"#" # Raise PR against upstream remote/branch (or $1/$2).
   ;pr  = "!set -x; gh pr create --base $(git up-branch) --title \"$(git show --format='%s' -s | vipe)\" --body \"$(git pr-message | vipe)\" #" # Raise PR against upstream remote/branch (or $1/$2).
   ;pr  = "!set -x; remote-branch=${1:-$(git up-remote-branch)}; remote=${remote-branch%/*} branch=${remote-branch##*/} ; gh pr create --repo $(git remote get-url $remote) --base $branch --title \"$(git show --format='%s' -s | vipe)\" --body \"$(git pr-message | vipe)\" #" # Raise PR against upstream remote/branch (or $1/$2).
