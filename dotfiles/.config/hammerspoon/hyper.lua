@@ -151,6 +151,7 @@ end)
 -- {{{ Hyper-<mods>-v -> Connect to VPN
 local callVpn = function(arg)
   local cmd = os.getenv("HOME").."/bin/vpn "..arg
+  hyperMode:exit()
   local output, status, _, rc = hs.execute(cmd)
   hs.notify.new({title='VPN '..arg..'...', informativeText=rc.." "..output, withdrawAfter=3}):send()
 end
