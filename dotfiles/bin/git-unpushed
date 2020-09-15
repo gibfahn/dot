@@ -13,6 +13,9 @@ Checks for unsaved changes. If this passes the repo is backed up to its git remo
 
 [[ ${1:-} =~ ^(--version|-v)$ ]] && { echo "master"; exit; }
 
+SHORT=
+[[ ${1:-} =~ ^(--short)$ ]] && { SHORT=true; }
+
 CYAN='\033[0;36m'       # Light blue.
 NC='\033[0m' # No Colour.
 LF=$'\n'
@@ -77,6 +80,10 @@ for branch in $(git for-each-ref refs/heads/ --format='%(refname:short)'); do
 done
 
 if [[ -n "$unpushed" ]]; then
-  echo -e "$unpushed$LF"
+  if [[ -n "$SHORT" ]]; then
+    echo -e "$unpushed$LF" | head
+  else
+    echo -e "$unpushed$LF"
+  fi
   exit 1
 fi

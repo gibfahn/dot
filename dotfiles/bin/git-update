@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+set -eu
+
+# Fetch everything.
+git fetch --all --quiet
+
+# Show unpushed changes (but only the first bit, otherwise it can be extremely long).
+git unpushed --short
+
+# Take the first up or pub remote we find.
+up_remote=$(git remote | grep -x 'up\|pub' | sort -r | head -1)
+default_branch=$(git default-branch "$up_remote" 2>/dev/null)
+
+# Go back to up HEAD branch.
+git update-index --refresh
+# If there are no uncommitted changes:
+if git diff-index --quiet HEAD --; then
+  if git rev-parse "$default_branch" &>/dev/null; then
+    git checkout --quiet "$default_branch"
+  else
+    git checkout --quiet -b "$default_branch" "$up_remote/$default_branch"
+  fi
+  git merge --quiet --ff-only
+fi
+
+# Clean up stale PR branches.
+git bp --force --quiet
+
+# List in-progress branches.
+git branch --remotes --list '*fork/*' | grep -v 'fork/old'
