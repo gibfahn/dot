@@ -49,6 +49,9 @@ fi
 brewfiles=${brewfiles//
 / }
 
+# Disable quarantine for casks.
+export HOMEBREW_CASK_OPTS=--no-quarantine
+
 if brew bundle --file=<(cat $brewfiles) check >/dev/null; then
   log_skip "brew packages."
 else
