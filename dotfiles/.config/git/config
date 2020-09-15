@@ -138,10 +138,10 @@
   pa  = "!curl -L ${1%.patch}.patch | git am -S --whitespace=fix # "     # Patch Github PR.
   pap = "!curl -L ${1%.patch}.patch | git am -3 -S --whitespace=fix  # " # Please patch it.
   paw = "!curl -L ${1%.patch}.patch | git am -3 -S --whitespace=warn # " # Patch but don't fix whitespace.
-  ppr = "!git check-pr-branch && git push && git pr #"          # Push and raise PR at the same time.
+  ppr = "!git check-pr-branch && git push && git pr # "          # Push and raise PR at the same time.
   # TODO(gib): remove opr and clean up once https://github.com/cli/cli/issues/1645 is resolved.
   opr = "!set -x; hub pull-request --base $(git remote-org ${1:-$(git up-remote)}):${2:-$(git up-branch)} -oc -e -m \"$(git show --format='%s' -s)$(git pr-message)\" #" # Raise PR against upstream remote/branch (or $1/$2).
-  pr  = "!set -x; GH_REPO=$(git remote get-url $(git up-remote)) gh pr create --base $(git up-branch) --body \"$(git pr-message | vipe)\"#" # Raise PR against upstream remote/branch (or $1/$2).
+  pr  = "!set -x; GH_REPO=$(git remote get-url $(git up-remote)) gh pr create --base $(git up-branch) --body \"$(git pr-message | vipe)\" #" # Raise PR against upstream remote/branch (or $1/$2).
   ;pr  = "!set -x; gh pr create --base $(git up-branch) --title \"$(git show --format='%s' -s | vipe)\" --body \"$(git pr-message | vipe)\" #" # Raise PR against upstream remote/branch (or $1/$2).
   ;pr  = "!set -x; remote-branch=${1:-$(git up-remote-branch)}; remote=${remote-branch%/*} branch=${remote-branch##*/} ; gh pr create --repo $(git remote get-url $remote) --base $branch --title \"$(git show --format='%s' -s | vipe)\" --body \"$(git pr-message | vipe)\" #" # Raise PR against upstream remote/branch (or $1/$2).
   pt  = "!git push -u $1 $(git head-branch) #"                  # g pt origin sets branch to track up + pushes.
