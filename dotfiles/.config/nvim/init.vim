@@ -222,17 +222,12 @@ nmap <Leader>cr <Plug>(coc-rename)
 vmap <Leader>cf  <Plug>(coc-format-selected)
 nmap <Leader>cf  <Plug>(coc-format-selected)
 
-" Remap for do codeAction of selected region
-function! s:cocActionsOpenFromSelected(type) abort
-  execute 'CocCommand actions.open ' . a:type
-endfunction
-xmap <silent> <leader>ca :<C-u>execute 'CocCommand actions.open ' . visualmode()<CR>
-nmap <silent> <leader>ca :<C-u>set operatorfunc=<SID>cocActionsOpenFromSelected<CR>g@
 " Fix autofix problem of current line
 nmap <Leader>cF  <Plug>(coc-fix-current)
 
 " Run available LSP actions.
-nmap <Leader><Leader> :CocCommand actions.open<cr>
+nmap <A-Space> :CocCommand actions.open<cr>
+imap <A-Space> <Esc>:CocCommand actions.open<cr>
 " Using CocList
 " Show all diagnostics (<C-a><C-q> to open all in quickfix).
 nnoremap <silent> <Leader>cA  :<C-u>CocList diagnostics<cr>
