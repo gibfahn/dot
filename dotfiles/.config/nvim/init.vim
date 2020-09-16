@@ -154,7 +154,33 @@ endtry
 " {{{ Key mappings
 
 " (see http://vim.wikia.com/wiki/Unused_keys for unused keys)
-" Available (normal): <C-Space>, +, _, <C-q/s/[/_>, <leader>e/m/n/v
+" Available (normal): Q, +, _, <C-q/s/[/_>, <leader>e/m/n/v
+
+" Normal Mappings:
+
+nmap     f <Plug>Sneak_f| " Use sneak for f (multiline+highlight).
+nmap     F <Plug>Sneak_F| " ↳             F
+nnoremap <silent> K :call <SID>show_documentation()<CR>| " Use K for show documentation in preview window
+nnoremap Q <nop>| " Disable Q to avoid accidental triggering.
+nmap     t <Plug>Sneak_t| " Use sneak for f (multiline+highlight).
+nmap     T <Plug>Sneak_T| " ↳             T
+nnoremap Y y$| " Make Y work like C and D (yank to end of line, not whole line).
+nnoremap - :e %:h<CR>|  " Use - to open the current buffer directory in the file browser (repeat for `cd ..`).
+
+nmap gr <Plug>(operator-ripgrep-root)| " Ripgrep search for operator.
+vmap gr <Plug>(operator-ripgrep-root)| " Ripgrep search for selection.
+
+vnoremap // y/\V<C-r>=escape(@",'/\')<CR><CR>| " Search for selected text with // (very no-magic mode, searches for exactly what you select).
+vnoremap g// y/\V<C-R>=&ic?'\c':'\C'<CR><C-r>=escape(@",'/\')<CR><CR>| " Search for selected text case-insensitively.
+
+nmap <silent> [g <Plug>(coc-diagnostic-prev)| " Previous diagnostic message.
+nmap <silent> ]g <Plug>(coc-diagnostic-next)| " Next diagnostic message.
+
+" Use `[h` and `]h` for next and previous changed git hunk.
+nmap [h <Plug>(GitGutterPrevHunk)
+nmap ]h <Plug>(GitGutterNextHunk)
+
+" Insert Mappings:
 
 " In insert mode, if completion dropdown open, Tab/Shift-Tab switch between entries. Otherwise if
 " the previous character was a space they indent, else Tab will trigger the completion manually.
@@ -164,6 +190,17 @@ inoremap <silent><expr> <TAB>
       \ coc#refresh()
 " Shift-Tab is previous entry if completion menu open.
 inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+" Use <cr> for confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+" Enables formatting on enter.
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+      \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+nnoremap <Tab> :bn<CR>|   " Tab to switch to next buffer,
+nnoremap <S-Tab> :bp<CR>| "  ↳ Shift-Tab to switch to previous buffer.
+nnoremap <C-p> <C-i>|     " <C-o> = go to previous jump, <C-p> is go to next (normally <C-i>, but that == Tab, used above).
+
+" Ctrl Alt Mappings:
 
 " Use <Alt><TAB> for selections ranges (visually select increasingly large ranges).
 " NOTE: Requires 'textDocument/selectionRange' support from the language server.
@@ -171,193 +208,36 @@ inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 nmap <silent> <A-TAB> <Plug>(coc-range-select)
 xmap <silent> <A-TAB> <Plug>(coc-range-select)
 
-" Use <C-n> for both expand and jump (make expand higher priority.)
-" Use <C-j> for jump to next placeholder, it's default of coc.nvim
-let g:coc_snippet_next = '<a-u>'
+let g:coc_snippet_prev = '<a-l>' " Use <Alt-l> for jump to previous placeholder.
+let g:coc_snippet_next = '<a-u>' " Use <Alt-u> for jump to next placeholder.
 
-" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
-let g:coc_snippet_prev = '<a-l>'
-imap <C-n> <Plug>(coc-snippets-expand-jump)
-imap <A-n> <Plug>(coc-snippets-expand-jump)
-" Use <C-n> for select text for visual placeholder of snippet.
-vmap <C-n> <Plug>(coc-snippets-select)
+imap <C-n> <Plug>(coc-snippets-expand-jump)| " Both expand and jump (make expand higher priority.)
+imap <A-n> <Plug>(coc-snippets-expand-jump)| " Both expand and jump (make expand higher priority.)
+vmap <C-n> <Plug>(coc-snippets-select)| " Select text for visual placeholder of snippet.
 
-" Use <cr> for confirm completion, `<C-g>u` means break undo chain at current position.
-" Coc only does snippet and additional edit on confirm.
-" Enables formatting on enter.
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-      \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+nmap <A-Space> <Cmd>CocCommand actions.open<cr>| " Run available LSP actions.
+imap <A-Space> <Esc><Cmd>CocCommand actions.open<CR>| " Run available LSP actions.
 
-" Use K for show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-nnoremap          Q <nop>|                          " Avoid accidental triggering.
-nnoremap          Y y$|                             " Make Y work like C and D (yank to end of line, not whole line).
-" To open vim's current directory, use `:e .`.
-nnoremap - :e %:h<CR>|    " - open current buffer directory in file browser (repeat for `cd ..`).
-nmap     f <Plug>Sneak_f| " Use sneak for f (multiline+highlight).
-nmap     F <Plug>Sneak_F| " ↳             F
-nmap     t <Plug>Sneak_t| " ↳             t
-nmap     T <Plug>Sneak_T| " ↳             T
-
-""""""""""""""""""
-" CoC Remappings "
-""""""""""""""""""
-
-" Remap keys for gotos
-nmap <silent> <Leader>cd <Plug>(coc-definition)
-nmap <silent> <Leader>cD :call DupBuffer()<CR><Plug>(coc-definition)
-nmap <silent> <Leader>cy <Plug>(coc-type-definition)
-nmap <silent> <Leader>cY :call DupBuffer()<CR><Plug>(coc-type-definition)
-nmap <silent> <Leader>ci <Plug>(coc-implementation)
-nmap <silent> <Leader>cI :call DupBuffer()<CR><Plug>(coc-implementation)
-nmap <silent> <Leader>cu <Plug>(coc-references)
-nmap <silent> <Leader>cU :call DupBuffer()<CR><Plug>(coc-references)
-
-" Remap for rename current word
-nmap <Leader>cr <Plug>(coc-rename)
-
-" Remap for format selected region
-vmap <Leader>cf  <Plug>(coc-format-selected)
-nmap <Leader>cf  <Plug>(coc-format-selected)
-
-" Fix autofix problem of current line
-nmap <Leader>cF  <Plug>(coc-fix-current)
-
-" Run available LSP actions.
-nmap <A-Space> :CocCommand actions.open<cr>
-imap <A-Space> <Esc>:CocCommand actions.open<cr>
-" Using CocList
-" Show all diagnostics (<C-a><C-q> to open all in quickfix).
-nnoremap <silent> <Leader>cA  :<C-u>CocList diagnostics<cr>
-" Manage extensions
-nnoremap <silent> <Leader>cE  :<C-u>CocList extensions<cr>
-" Show commands
-nnoremap <silent> <Leader>cc  :<C-u>CocList commands<cr>
-" Find symbol of current document
-nnoremap <silent> <Leader>co  :<C-u>CocList outline<cr>
-" Search workspace symbols
-nnoremap <silent> <space>cs  :<C-u>CocList -I symbols<cr>
-" Do default action for next item.
-nnoremap <silent> <space>cn  :<C-u>CocNext<CR>
-" Do default action for previous item.
-nnoremap <silent> <space>ce  :<C-u>CocPrev<CR>
-" Resume latest coc list
-nnoremap <silent> <space>cp  :<C-u>CocListResume<CR>
-
-nnoremap <Leader>a @a|       " Apply macro a (add with qa or yank to a reg with "ay).
-nnoremap <Leader>b :Buffers<CR>| " Search buffer list for file.
-nnoremap <Leader>d :call BufferClose('')<CR>| " Close buffer without closing split,
-nnoremap <Leader>D :%d<CR>|                " Delete all text in buffer.
-nnoremap <Leader>e <C-w>q|                 " Close current split (keeps buffer).
-nnoremap <Leader>E :cclose<CR>:lclose<CR>:helpclose<CR><C-W>z| " Close open preview windows (e.g. language server definitions).
-nnoremap <Leader>f :Files<CR>|             " Search file names    for file,
-nnoremap <Leader>F :grep |                 "  ↳          contents for file.
-nnoremap <leader>ga :AnyJumpLastResults<CR>| " open last closed search window again
-nnoremap <leader>gb :AnyJumpBack<CR>|      " open previous opened file (after jump)
-nnoremap <Leader>gc :cd %:p:h<CR>|         " Change vim directory (:pwd) to current file's dirname (e.g. for <space>f, :e).
-nnoremap <Leader>gC :e ~/.config/nvim/coc-settings.json<CR> " Edit colorscheme file.
-nnoremap <Leader>gd :w !git diff --no-index % - <CR>|     " Diff between saved file and current.
-nnoremap <Leader>gf :call DupBuffer()<CR>gF| " Open file path:row:col under cursor in last window.
-nnoremap <Leader>gg :tab G<CR>| " Open fugitive Gstatus in a new tab.
-nnoremap <Leader>gG :Gcd<CR>| " Cd to root of git directory current file is in.
-nnoremap <Leader>gh :call <SID>SynStack()<CR>| " Show which syntax is set for current cursor location.
-nnoremap <Leader>gH :e $colorscheme_path<CR> " Edit colorscheme file.
-nnoremap <Leader>gl :source <C-r>=SessionFile()<CR><CR>| " Load saved session for vim cwd to a default session path.
-nnoremap <Leader>gL :source <C-r>=SessionFile()<CR>| " Load saved session for vim cwd to a custom path.
-nnoremap <Leader>gn :set number!<CR>| " <Space>gn toggles line numbers.
-nnoremap <Leader>gp `[v`]| " Visual selection of the last thing you copied or pasted.
-nnoremap <Leader>gs :mksession! <C-r>=SessionFile()<CR><CR>| " Save current session for vim cwd from a default session path.
-nnoremap <Leader>gS :mksession! <C-r>=SessionFile()<CR>| " Save current session for vim cwd from a custom path.
-nnoremap <Leader>gt :set et!<CR>:set et?<CR>|   " Toggle tabs/spaces.
-nnoremap <Leader>gq :set fo-=t<CR>:set fo?<CR>| " Turn off line wrapping (auto-inserting newlines when you go over the textwidth).
-nnoremap <Leader>gQ :set fo+=t<CR>:set fo?<CR>| " ↳    on
-nnoremap <Leader>gv :e $MYVIMRC<CR>|  " <Space>gv opens vimrc in the editor (autoreloaded on save).
-nnoremap <Leader>gw :setlocal wrap!<CR>| " <Space>gw toggles the soft-wrapping of text (whether text runs off the screen).
-nnoremap <Leader>gx :grep -F 'XXX(gib)'<CR>" <Space>gx searches for XXX comments.
-nnoremap <Leader>i :vsp<CR><C-w>h:bp<CR>|  " Open vertical split.
-nnoremap <Leader>Id :r !date +\%Y-\%m-\%d<CR>| " Insert readable    date on new line.
-nnoremap <Leader>ID :r !date +\%d-\%b-\%y<CR>| " ↳      `:sort`able date on new line.
-nnoremap <Leader>It ITODO(gib): <ESC>:Commentary<CR>$| " Insert a TODO, (Write todo, then `<Space>it`).
-nnoremap <Leader>Ix IXXX(gib): <ESC>:Commentary<CR>$| " Insert an XXX, (Write todo, then `<Space>it`).
-nnoremap <leader>j :AnyJump<CR>|           " Jump to definition under cursore
-nnoremap <Leader>l :Locate |               " Search filesystem for files.
-nnoremap <Leader>m :!mkdir -p "%:p:h"<CR>
-nnoremap <Leader>n :sp<CR><C-w>k:bp<CR>|   " Open horizontal split,
-nnoremap <Leader>o :set operatorfunc=OpenUrl<CR>g@| " Open the selected text with the appropriate program (like netrw-gx).
-nnoremap <Leader>p "+p|                    "  Paste from clipboard after cursor.
-nnoremap <Leader>P "+P|                    "                    ↳  before cursor.
-nnoremap <Leader>q :qa<CR>|                " Quit if no    unsaved changes (for single file use <Space>d instead).
-nnoremap <Leader>r :%s/|                   " Replace in current doc.
-nnoremap <Leader>R :cfdo %s//ce <bar> up<S-Left><S-Left><Left><Left><Left><Left>| " Replace in all quickfix files (use after gr).
-nnoremap <Leader>S :<C-u>set operatorfunc=<SID>SortLinesOpFunc<CR>g@| " Sort lines in <motion>.
-nnoremap <Leader>u :MundoToggle<CR>|       " Toggle Undo tree visualisation.
-nnoremap <Leader>w :up<CR>|                " Write if there were changes.
-nnoremap <Leader>W :w<CR>|                 " Write whether or not there were changes.
-nnoremap <Leader>x :x<CR>|                 " Save (if changes) and quit.
-nnoremap <Leader>X :xa<CR>|                " Quit all windows.
-nnoremap <Leader>y "+y|                    " Copy to clipboard (normal mode).
-nnoremap <Leader>Y :%y+<CR>|               "  ↳  file to clipboard (normal mode).
-nnoremap <Leader>z  za|                    " Toggle folding on current line.
-nnoremap <expr> <Leader>Z &foldlevel ? 'zM' :'zR'| " Toggle folding everywhere (see also "zi).
-nnoremap <Leader>; @:|                     " Repeat the last executed command.
-nnoremap <Leader>/ :noh<CR>|               " Turn off find highlighting.
-nnoremap <Leader>? /<Up><CR>|              " Search for last searched thing.
-
-" Grep for operator or visual selection, uses fixed string ripgrep search.
-nmap gr <Plug>(operator-ripgrep-root)
-vmap gr <Plug>(operator-ripgrep-root)
-
-nmap <leader>1 <Plug>BufTabLine.Go(1)|         " <leader>1 goes to buffer 1 (see numbers in tab bar).
-nmap <leader>2 <Plug>BufTabLine.Go(2)|         " <leader>1 goes to buffer 2 (see numbers in tab bar).
-nmap <leader>3 <Plug>BufTabLine.Go(3)|         " <leader>1 goes to buffer 3 (see numbers in tab bar).
-nmap <leader>4 <Plug>BufTabLine.Go(4)|         " <leader>1 goes to buffer 4 (see numbers in tab bar).
-nmap <leader>5 <Plug>BufTabLine.Go(5)|         " <leader>1 goes to buffer 5 (see numbers in tab bar).
-nmap <leader>6 <Plug>BufTabLine.Go(6)|         " <leader>1 goes to buffer 6 (see numbers in tab bar).
-nmap <leader>7 <Plug>BufTabLine.Go(7)|         " <leader>1 goes to buffer 7 (see numbers in tab bar).
-nmap <leader>8 <Plug>BufTabLine.Go(8)|         " <leader>1 goes to buffer 8 (see numbers in tab bar).
-nmap <leader>9 <Plug>BufTabLine.Go(-1)|        " <leader>1 goes to last buffer (see numbers in tab bar).
-
-" Use `[g` and `]g` for next/previous diagnostic message.
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
-
-" Use `[h` and `]h` for next and previous changed git hunk.
-nmap [h <Plug>(GitGutterPrevHunk)
-nmap ]h <Plug>(GitGutterNextHunk)
-
-" Leader + window size keys increases/decreases height/width by 3/2.
-nnoremap <silent> <Leader>+ :exe "resize " . (winheight(0) * 3/2)<CR>
-nnoremap <silent> <Leader>- :exe "resize " . (winheight(0) * 2/3)<CR>
-nnoremap <silent> <Leader>> :exe "vertical resize " . (winwidth(0) * 3/2)<CR>
-nnoremap <silent> <Leader>< :exe "vertical resize " . (winwidth(0) * 2/3)<CR>
-
-vnoremap          <Leader>y "+y|                    "  ↳                (visual mode).
-vnoremap          <Leader>d "+d|                    " Cut from clipboard (visual mode).
-vnoremap          <Leader>p "+p|                    " Paste from clipboard (visual mode).
-
-nnoremap          <A-h> <C-w>h|                     " Switch left  a window,
-nnoremap          <A-n> <C-w>j|                     " Switch down  a window,
-nnoremap          <A-e> <C-w>k|                     " Switch up    a window,
-nnoremap          <A-i> <C-w>l|                     " Switch right a window.
-nnoremap          <A-H> 100<C-w>h|                  " Switch to the far left window,
-nnoremap          <A-N> 100<C-w>j|                  " Switch to the far down  window,
-nnoremap          <A-E> 100<C-w>k|                  " Switch to the far up    window,
-nnoremap          <A-I> 100<C-w>l|                  " Switch to the far right window.
-
-nnoremap          <A-q> :cnext<CR>|                 " Next item in the quickfix list.
-nnoremap          <A-Q> :cprev<CR>|                 " Prev item in the quickfix list.
-nnoremap          <A-l> :lnext<CR>|                 " Next item in the location list.
-nnoremap          <A-L> :lprev<CR>|                 " Prev item in the location list.
-nmap          <A-g> <Plug>(GitGutterNextHunk)|  " Next changed git hunk.
-nmap          <A-G> <Plug>(GitGutterPrevHunk)|  " Prev changed git hunk.
-nmap          <A-c> <Plug>(coc-diagnostic-next)| " Next changed Coc message (e.g. compile error).
-nmap          <A-C> <Plug>(coc-diagnostic-prev)| " Prev changed Coc message (e.g. compile error).
-nnoremap          <A-t> :tabnext<CR>|               " Next tab.
-nnoremap          <A-T> :tabprev<CR>|               " Prev tab.
-nnoremap          <A-d> :tabclose<CR>|              " Close current tab.
-nnoremap          <A-x> :call BufferClose('')<CR>|  " Close current buffer.
+nmap     <A-c> <Plug>(coc-diagnostic-next)| " Next changed Coc message (e.g. compile error).
+nmap     <A-C> <Plug>(coc-diagnostic-prev)| " Prev changed Coc message (e.g. compile error).
+nnoremap <A-d> :tabclose<CR>|              " Close current tab.
+nnoremap <A-e> <C-w>k|    " Switch up    a window,
+nnoremap <A-E> 100<C-w>k| " Switch to the far up    window,
+nmap     <A-g> <Plug>(GitGutterNextHunk)|  " Next changed git hunk.
+nmap     <A-G> <Plug>(GitGutterPrevHunk)|  " Prev changed git hunk.
+nnoremap <A-h> <C-w>h|    " Switch left  a window,
+nnoremap <A-H> 100<C-w>h| " Switch to the far left window,
+nnoremap <A-i> <C-w>l|    " Switch right a window.
+nnoremap <A-I> 100<C-w>l| " Switch to the far right window.
+nnoremap <A-n> <C-w>j|    " Switch down  a window,
+nnoremap <A-N> 100<C-w>j| " Switch to the far down  window,
+nnoremap <A-l> :lnext<CR>| " Next item in the location list.
+nnoremap <A-L> :lprev<CR>| " Prev item in the location list.
+nnoremap <A-q> :cnext<CR>| " Next item in the quickfix list.
+nnoremap <A-Q> :cprev<CR>| " Prev item in the quickfix list.
+nnoremap <A-t> :tabnext<CR>|               " Next tab.
+nnoremap <A-T> :tabprev<CR>|               " Prev tab.
+nnoremap <A-x> :call BufferClose('')<CR>|  " Close current buffer.
 
 nmap              <C-W>>     <C-W>><SID>ws|         " Adds mappings to make Ctrl-W -/+/</>
 nmap              <C-W><     <C-W><<SID>ws|         " ↳ repeatable, so you can press Ctrl-W
@@ -369,15 +249,110 @@ nnoremap <script> <SID>ws+   <C-W>+<SID>ws|         " ↳ modifications, and thi
 nnoremap <script> <SID>ws-   <C-W>-<SID>ws|         " ↳ tweaks.
 nmap              <SID>ws    <Nop>
 
-nnoremap          <Tab> :bn<CR>|                    " Tab to switch to next buffer,
-nnoremap          <S-Tab> :bp<CR>|                  "  ↳ Shift-Tab to switch to previous buffer.
-nnoremap          <C-p> <C-i>|                      " <C-o> = go to previous jump, <C-p> is go to next (normally <C-i>, but that == Tab, used above).
-vnoremap          <Leader>o :<c-u>call OpenUrl(visualmode())<CR>| " Open the selected text with the appropriate program (like netrw-gx).
-vnoremap // y/\V<C-r>=escape(@",'/\')<CR><CR>|      " Search for selected text with // (very no-magic mode, searches for exactly what you select).
-vnoremap g// y/\V<C-R>=&ic?'\c':'\C'<CR><C-r>=escape(@",'/\')<CR><CR>| " Search for selected text case-insensitively.
+" Normal Mode Leader Mappings:
+
+nnoremap <Leader>a @a|                                                     " Apply macro a (add with qa or yank to a reg with "ay).
+nnoremap <Leader>b :Buffers<CR>|                                           " Search buffer list for file.
+nmap     <Leader>cr <Plug>(coc-rename)|                                    " Remap for rename current word
+vmap     <Leader>cf  <Plug>(coc-format-selected)|                          " Format selected region
+nmap <silent> <Leader>cd <Plug>(coc-definition)|                           " Go to definition.
+nmap <silent> <Leader>cD :call DupBuffer()<CR><Plug>(coc-definition)|      " Go to definition in other slit.
+nmap <silent> <Leader>cy <Plug>(coc-type-definition)|                      " Go to type definition.
+nmap <silent> <Leader>cY :call DupBuffer()<CR><Plug>(coc-type-definition)| " Go to type definition in other split.
+nmap <silent> <Leader>ci <Plug>(coc-implementation)|                       " Go to implementation.
+nmap <silent> <Leader>cI :call DupBuffer()<CR><Plug>(coc-implementation)|  " Go to implementation in other split.
+nmap <silent> <Leader>cu <Plug>(coc-references)|                           " Go to usages.
+nmap <silent> <Leader>cU :call DupBuffer()<CR><Plug>(coc-references)|      " Go to usages in other split.
+nnoremap <silent> <Leader>cA :<C-u>CocList diagnostics<cr>|                " Show all diagnostics (<C-a><C-q> to open all in quickfix).
+nnoremap <silent> <Leader>cE :<C-u>CocList extensions<cr>|                 " Manage extensions
+nnoremap <silent> <Leader>cc :<C-u>CocList commands<cr>|                   " Show commands
+nnoremap <silent> <Leader>co :<C-u>CocList outline<cr>|                    " Find symbol of current document
+nnoremap <silent> <Leader>cs :<C-u>CocList -I symbols<cr>|                 " Search workspace symbols
+nnoremap <silent> <Leader>cn :<C-u>CocNext<CR>|                            " Do default action for next item.
+nnoremap <silent> <Leader>ce :<C-u>CocPrev<CR>|                            " Do default action for previous item.
+nnoremap <silent> <Leader>cp :<C-u>CocListResume<CR>|                      " Resume latest coc list
+nnoremap <Leader>d :call BufferClose('')<CR>|                              " Close buffer without closing split,
+nnoremap <Leader>D :%d<CR>|                                                " Delete all text in buffer.
+vnoremap <Leader>d "+d|                                                    " Cut from clipboard (visual mode).
+nnoremap <Leader>e <C-w>q|                                                 " Close current split (keeps buffer).
+nnoremap <Leader>E :cclose<CR>:lclose<CR>:helpclose<CR><C-W>z|             " Close open preview windows (e.g. language server definitions).
+nnoremap <Leader>f :Files<CR>|                                             " Search file names    for file,
+nnoremap <Leader>F :grep |                                                 " Search file contents for file.
+nnoremap <leader>ga :AnyJumpLastResults<CR>|                               " open last closed search window again
+nnoremap <leader>gb :AnyJumpBack<CR>|                                      " open previous opened file (after jump)
+nnoremap <Leader>gc :cd %:p:h<CR>|                                         " Change vim directory (:pwd) to current file's dirname (e.g. for <space>f, :e).
+nnoremap <Leader>gC :e ~/.config/nvim/coc-settings.json<CR>                " Edit colorscheme file.
+nnoremap <Leader>gd :w !git diff --no-index % - <CR>|                      " Diff between saved file and current.
+nnoremap <Leader>gf :call DupBuffer()<CR>gF|                               " Open file path:row:col under cursor in last window.
+nnoremap <Leader>gg :tab G<CR>|                                            " Open fugitive Gstatus in a new tab.
+nnoremap <Leader>gG :Gcd<CR>|                                              " Cd to root of git directory current file is in.
+nnoremap <Leader>gh :call <SID>SynStack()<CR>|                             " Show which syntax is set for current cursor location.
+nnoremap <Leader>gH :e $colorscheme_path<CR>                               " Edit colorscheme file.
+nnoremap <Leader>gl :source <C-r>=SessionFile()<CR><CR>|                   " Load saved session for vim cwd to a default session path.
+nnoremap <Leader>gL :source <C-r>=SessionFile()<CR>|                       " Load saved session for vim cwd to a custom path.
+nnoremap <Leader>gn :set number!<CR>|                                      " Toggle line numbers.
+nnoremap <Leader>gp `[v`]|                                                 " Visual selection of the last thing you copied or pasted.
+nnoremap <Leader>gs :mksession! <C-r>=SessionFile()<CR><CR>|               " Save current session for vim cwd from a default session path.
+nnoremap <Leader>gS :mksession! <C-r>=SessionFile()<CR>|                   " Save current session for vim cwd from a custom path.
+nnoremap <Leader>gt :set et!<CR>:set et?<CR>|                              " Toggle tabs/spaces.
+nnoremap <Leader>gq :set fo-=t<CR>:set fo?<CR>|                            " Turn off line wrapping (auto-inserting newlines when you go over the textwidth).
+nnoremap <Leader>gQ :set fo+=t<CR>:set fo?<CR>|                            " ↳    on
+nnoremap <Leader>gv :e $MYVIMRC<CR>|                                       " <Space>gv opens vimrc in the editor (autoreloaded on save).
+nnoremap <Leader>gw :setlocal wrap!<CR>|                                   " <Space>gw toggles the soft-wrapping of text (whether text runs off the screen).
+nnoremap <Leader>gx :grep -F 'XXX(gib)'<CR>                                " <Space>gx searches for XXX comments.
+nnoremap <Leader>hd :r !date +\%d-\%b-\%y<CR>|                             " ↳      `:sort`able date on new line.
+nnoremap <Leader>hD :r !date +\%Y-\%m-\%d<CR>|                             " Insert readable    date on new line.
+nnoremap <Leader>ht ITODO(gib): <ESC>:Commentary<CR>$|                     " Insert a TODO, (Write todo, then `<Space>ht`).
+nnoremap <Leader>hx IXXX(gib): <ESC>:Commentary<CR>$|                      " Insert an XXX, (Write todo, then `<Space>hx`).
+"        <Leader>H unused.
+nnoremap <Leader>i :vsp<CR><C-w>h:bp<CR>|                                  " Open vertical split.
+nnoremap <leader>j :AnyJump<CR>|                                           " Jump to definition under cursore
+"        <Leader>k and K unused.
+nnoremap <Leader>l :Locate |                                               " Search filesystem for files.
+"        <Leader>m and M unused.
+nnoremap <Leader>n :sp<CR><C-w>k:bp<CR>|                                   " Open horizontal split,
+nnoremap <Leader>o :set operatorfunc=OpenUrl<CR>g@|                        " Open the selected text with the appropriate program (like netrw-gx).
+vnoremap <Leader>o :<c-u>call OpenUrl(visualmode())<CR>|                   " Open the selected text with the appropriate program (like netrw-gx).
+nnoremap <Leader>p "+p|                                                    " Paste from clipboard after cursor.
+nnoremap <Leader>P "+P|                                                    " ↳  before cursor.
+vnoremap <Leader>p "+p|                                                    " Paste from clipboard (visual mode).
+nnoremap <Leader>q :qa<CR>|                                                " Quit if no    unsaved changes (for single file use <Space>d instead).
+nnoremap <Leader>r :%s/|                                                   " Replace in current doc.
+nnoremap <Leader>R :/ce <bar> up<Home>cfdo %s/|                            " Replace in all quickfix files (use after gr).
+nnoremap <Leader>S :<C-u>set operatorfunc=<SID>SortLinesOpFunc<CR>g@|      " Sort lines in <motion>.
+"        <Leader>t and T used for terminal splits.
+nnoremap <Leader>u :MundoToggle<CR>|                                       " Toggle Undo tree visualisation.
+"        <Leader>v and V unused.
+nnoremap <Leader>w :up<CR>|                                                " Write if there were changes.
+nnoremap <Leader>W :w<CR>|                                                 " Write whether or not there were changes.
+nnoremap <Leader>x :x<CR>|                                                 " Save (if changes) and quit.
+nnoremap <Leader>X :xa<CR>|                                                " Quit all windows.
+nnoremap <Leader>y "+y|                                                    " Copy to clipboard (normal mode).
+vnoremap <Leader>y "+y|                                                    " ↳                (visual mode).
+nnoremap <Leader>Y :%y+<CR>|                                               " ↳  file to clipboard (normal mode).
+nnoremap <Leader>z  za|                                                    " Toggle folding on current line.
+nnoremap <expr> <Leader>Z &foldlevel ? 'zM' :'zR'|                         " Toggle folding everywhere (see also "zi).
+nmap     <leader>1 <Plug>BufTabLine.Go(1)|                                 " <leader>1 goes to buffer 1 (see numbers in tab bar).
+nmap     <leader>2 <Plug>BufTabLine.Go(2)|                                 " <leader>1 goes to buffer 2 (see numbers in tab bar).
+nmap     <leader>3 <Plug>BufTabLine.Go(3)|                                 " <leader>1 goes to buffer 3 (see numbers in tab bar).
+nmap     <leader>4 <Plug>BufTabLine.Go(4)|                                 " <leader>1 goes to buffer 4 (see numbers in tab bar).
+nmap     <leader>5 <Plug>BufTabLine.Go(5)|                                 " <leader>1 goes to buffer 5 (see numbers in tab bar).
+nmap     <leader>6 <Plug>BufTabLine.Go(6)|                                 " <leader>1 goes to buffer 6 (see numbers in tab bar).
+nmap     <leader>7 <Plug>BufTabLine.Go(7)|                                 " <leader>1 goes to buffer 7 (see numbers in tab bar).
+nmap     <leader>8 <Plug>BufTabLine.Go(8)|                                 " <leader>1 goes to buffer 8 (see numbers in tab bar).
+nmap     <leader>9 <Plug>BufTabLine.Go(-1)|                                " <leader>1 goes to last buffer (see numbers in tab bar).
+nnoremap <Leader>; @:|                                                     " Repeat the last executed command.
+nnoremap <Leader>/ :noh<CR>|                                               " Turn off find highlighting.
+nnoremap <Leader>? /<Up><CR>|                                              " Search for last searched thing.
+nnoremap <silent> <Leader>+ :exe "resize ".(winheight(0) * 3/2)<CR>|       " Increase window height to 3/2.
+nnoremap <silent> <Leader>- :exe "resize ".(winheight(0) * 2/3)<CR>|       " Reduce window height to 3/2.
+nnoremap <silent> <Leader>> :exe "vertical resize ".(winwidth(0) * 3/2)<CR>| " Increase window width to 3/2.
+nnoremap <silent> <Leader>< :exe "vertical resize ".(winwidth(0) * 2/3)<CR>| " Decrease window width to 2/3.
+
+" Other Mappings:
 
 " Introduce function text object, e.g. vaf to visually select current function.
-" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+" Requires 'textDocument.documentSymbol' support from the language server.
 xmap if <Plug>(coc-funcobj-i)
 xmap af <Plug>(coc-funcobj-a)
 omap if <Plug>(coc-funcobj-i)
