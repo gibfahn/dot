@@ -17,6 +17,9 @@ let s:plugin_path = $XDG_DATA_HOME . '/nvim/plugged'
 " Path to colorscheme, change if you use a different color scheme.
 let $colorscheme_path = s:plugin_path . '/vim-gib/colors/gib.vim'
 
+" Don't use polyglot markdown so we can use vim-markdown and get highlighted blocks.
+let g:polyglot_disabled = ['markdown', 'pug']
+
 try
   " Add vim-plug dir to vim runtimepath (already there for nvim).
   exe 'set rtp+=' . $XDG_DATA_HOME . '/nvim/site'
@@ -751,9 +754,6 @@ let g:coc_global_extensions = [
 " Block names: https://github.com/github/linguist/blob/master/lib/linguist/languages.yml
 let g:markdown_fenced_languages = ['bash=sh', 'c', 'console=sh', 'shell=sh', 'diff', 'dockerfile', 'go', 'java',
   \ 'javascript', 'js=javascript', 'json', 'kotlin', 'python', 'rust', 'sh', 'toml', 'vim', 'yaml']
-
-" Don't use polyglot markdown so we can use vim-markdown and get highlighted blocks.
-let g:polyglot_disabled = ['markdown', 'pug']
 
 " }}} Global Variables
 
