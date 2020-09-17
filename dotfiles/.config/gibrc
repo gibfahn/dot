@@ -327,6 +327,7 @@ case $shell in
 
     # Zsh Plugins (managed with zinit, previously zplugin).
     # Profile plugin loading by changing `zinit light` to `zinit load`.
+    # NOTE: If you change this, change the hermetic_zinit script.
     declare -A ZINIT
     ZINIT[HOME_DIR]=$XDG_DATA_HOME/zsh/zinit
     ZINIT[BIN_DIR]=$XDG_DATA_HOME/zsh/zinit/bin # Where zinit is installed.

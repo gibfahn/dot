@@ -1,0 +1,20 @@
+#!/usr/bin/env zsh
+
+# Zinit plus all its bootstrapping code. Allows you to do things that need to run in subshells like:
+#   entr hermetic_zinit update Users/gib--.local--share--fzf--shell/key-bindings.zsh <<<"./key-bindings.zsh"
+
+# For making things adhere to XDG see: https://wiki.archlinux.org/index.php/XDG_Base_Directory
+export XDG_CACHE_HOME=${XDG_CACHE_HOME:-"$HOME/.cache"} # Cache stuff should go here.
+export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-"$HOME/.config"} # Config stuff should go here.
+export XDG_DATA_HOME=${XDG_DATA_HOME:-"$HOME/.local/share"} # Data should go here.
+
+# Zsh Plugins (managed with zinit, previously zplugin).
+# Profile plugin loading by changing `zinit light` to `zinit load`.
+declare -A ZINIT
+ZINIT[HOME_DIR]=$XDG_DATA_HOME/zsh/zinit
+ZINIT[BIN_DIR]=$XDG_DATA_HOME/zsh/zinit/bin # Where zinit is installed.
+ZINIT[ZCOMPDUMP_PATH]=$XDG_CACHE_HOME/zsh/.zcompdump$(hostname)
+
+source "$XDG_DATA_HOME/zsh/zinit/bin/zinit.zsh" # Source plugin manager.
+
+zinit "$@"
