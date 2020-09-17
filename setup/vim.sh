@@ -19,3 +19,10 @@ else
   exists $VIM && $VIM -N -u "$XDG_CONFIG_HOME"/nvim/init.vim -c 'PlugUpgrade | PlugClean | PlugUpdate' -c quitall -e -s
 fi
 
+# Work around https://github.com/Maxattax97/coc-ccls/issues/2
+existing=~/.config/coc/extensions/node_modules/coc-ccls/node_modules/ws/lib/extension.js
+missing=~/.config/coc/extensions/node_modules/coc-ccls/lib/extension.js
+if [[ -e "$existing" && ! -e "$missing" ]]; then
+  mkdir -p "$(dirname "$missing")"
+  ln -s "$existing" "$missing"
+fi
