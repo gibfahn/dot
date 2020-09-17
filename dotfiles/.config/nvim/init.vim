@@ -2,7 +2,7 @@
 " - s is now sneak (use `cl` for `s`) function (:h sneak).
 " - <C-i> is now :bn (<C-i>==Tab for vim), use <C-p> for <C-i> function.
 
-" {{{ Load plugins
+" {{{ Global Variables
 
 if empty($XDG_CONFIG_HOME)| let $XDG_CONFIG_HOME = $HOME . '/.config'| endif
 if empty($XDG_CACHE_HOME)| let $XDG_CACHE_HOME = $HOME . '/.cache'| endif
@@ -12,13 +12,116 @@ if empty($XDG_DATA_HOME)| let $XDG_DATA_HOME = $HOME . '/.local/share'| endif
 if $PATH !~ '/usr/local/bin'| let $PATH = '/usr/local/bin/:' . $PATH| endif
 if $PATH !~ '/opt/brew/bin'| let $PATH = '/opt/brew/bin/:' . $PATH| endif
 
+if filereadable('/opt/brew/bin/python3')
+  let g:python3_host_prog = "/opt/brew/bin/python3"  " Speed up startup by not looking for python3 every time.
+endif
+
+let g:any_jump_disable_default_keybindings = 1      " Conflicts with other useful bindings.
+let g:buftabline_indicators = 1                     " Show a + if the buffer has been modified.
+let g:buftabline_numbers = 2                        " Show buftabline's count (use <Leader>1-9 to switch.
+let g:colorizer_use_virtual_text = 1                " Use virtual text
+let g:echodoc#type = 'virtual' " Needs nvim 0.3.2 (`brew unlink neovim && brew install --HEAD neovim` for now).
+let g:fzf_history_dir = $XDG_CACHE_HOME . '/fzf-history' " Save history of fzf vim commands.
+let g:ghost_darwin_app = 'kitty'                    " Tell vim-ghost which terminal to open.
+let g:github_enterprise_urls = ['https://github.pie.apple.com'] " Add your GHE repo so vim-fugitive's :Gbrowse! can use it (try with visual mode).
+let g:is_posix = 1                                  " Assume shell for syntax highlighting.
+let g:loaded_netrw = 1                              " Skip loading netrw file browser (use vim-readdir instead).
+let g:loaded_netrwPlugin = 1                        " Don't use the built-in file browser (use vim-readdir instead).
+let g:mundo_preview_bottom = 1                      " Undo diff preview on bottom.
+let g:mundo_right = 1                               " Undo window on right.
+let g:peekaboo_window = "vert bo 50new"             " Increase peekaboo window width to 50.
+let g:polyglot_disabled = ['markdown', 'pug'] " Don't use polyglot markdown so we can use vim-markdown and get highlighted blocks.
+let g:sneak#label = 1                               " Make sneak like easymotion (but nicer).
+let g:sneak#target_labels = ";sftunqm/`'-+SFGHLTUNRMQZ?0123456789!()\\[]:|<>WEYIOPADJKXCVB.\"\,:weryiopadghjklzxcvb" " Labels sneak uses to show words.
+let g:sneak#use_ic_scs = 1                          " Sneak: respect smartcase setting.
+let g:surround_97 = "\1before: \1\r\2after: \2"     " yswa surrounds with specified text (prompts for before/after).
+let g:surround_no_mappings = 1                      " Manually map surround, see SurroundOp() function.
+
+" Parsed by vim-markdown plugin to render code blocks properly.
+" Block names: https://github.com/github/linguist/blob/master/lib/linguist/languages.yml
+let g:markdown_fenced_languages = ['bash=sh', 'c', 'console=sh', 'shell=sh', 'diff', 'dockerfile', 'go', 'java',
+  \ 'javascript', 'js=javascript', 'json', 'kotlin', 'python', 'rust', 'sh', 'toml', 'vim', 'yaml']
+
+" Settings for custom statusline.
+let g:lightline = {
+  \ 'colorscheme': 'wombat',
+  \ 'active': {
+    \ 'left': [ [ 'mode', 'paste' ],
+    \           [ 'readonly', 'relativepath', 'modified' ],
+    \           [ 'gitbranch' ],
+    \           [ 'truncate_here' ],
+    \           [ 'coc_error', 'coc_warning', 'coc_info', 'coc_hint' ], ],
+    \ 'right': [ [ 'lineinfo' ],
+    \            [ 'percent' ],
+    \            [ 'fileformat', 'fileencoding', 'filetype' ],
+    \            [ 'currentfunction' ], ] },
+  \ 'inactive': {
+    \ 'left': [ [ 'relativepath' ] ],
+    \ 'right': [ [ 'lineinfo' ],
+    \            [ 'percent' ] ] },
+  \ 'tabline': {
+    \ 'left': [ [ 'tabs' ] ],
+    \ 'right': [ [ 'close' ] ] },
+  \ 'component': {
+    \ 'truncate_here': '%<',
+    \ 'fileformat': '%{&ff=="unix"?"":&ff}',
+    \ 'fileencoding': '%{&fenc=="utf-8"?"":&fenc}' },
+  \ 'component_expand': {
+    \ 'coc_error': 'LightlineCocErrors',
+    \ 'coc_warning': 'LightlineCocWarnings',
+    \ 'coc_info': 'LightlineCocInfos',
+    \ 'coc_hint': 'LightlineCocHints', },
+  \ 'component_visible_condition': {
+    \ 'truncate_here': 0,
+    \ 'fileformat': '&ff&&&ff!="unix"',
+    \ 'fileencoding': '&fenc&&&fenc!="utf-8"' },
+  \ 'component_type': {
+    \ 'coc_error': 'error',
+    \ 'coc_warning': 'warning',
+    \ 'coc_info': 'tabsel',
+    \ 'coc_hint': 'middle',
+    \ 'coc_fix': 'middle',
+    \ 'truncate_here': 'raw' },
+  \ 'component_function': {
+    \ 'currentfunction': 'CocCurrentFunction',
+    \ 'gitbranch': 'fugitive#head', },
+  \ }
+
+" Extensions (plugins) for CoC language client.
+let g:coc_global_extensions = [
+  \ 'coc-actions',
+  \ 'coc-ccls',
+  \ 'coc-css',
+  \ 'coc-dictionary',
+  \ 'coc-emoji',
+  \ 'coc-eslint',
+  \ 'coc-go',
+  \ 'coc-highlight',
+  \ 'coc-html',
+  \ 'coc-java',
+  \ 'coc-json',
+  \ 'coc-prettier',
+  \ 'coc-python',
+  \ 'coc-rust-analyzer',
+  \ 'coc-snippets',
+  \ 'coc-solargraph',
+  \ 'coc-svg',
+  \ 'coc-syntax',
+  \ 'coc-tabnine',
+  \ 'coc-tsserver',
+  \ 'coc-vetur',
+  \ 'coc-word',
+  \ 'coc-yaml',
+  \ ]
+
+" }}} Global Variables
+
+" {{{ Load plugins
+
 " Plugins are installed here.
 let s:plugin_path = $XDG_DATA_HOME . '/nvim/plugged'
 " Path to colorscheme, change if you use a different color scheme.
 let $colorscheme_path = s:plugin_path . '/vim-gib/colors/gib.vim'
-
-" Don't use polyglot markdown so we can use vim-markdown and get highlighted blocks.
-let g:polyglot_disabled = ['markdown', 'pug']
 
 try
   " Add vim-plug dir to vim runtimepath (already there for nvim).
@@ -624,111 +727,6 @@ command! -nargs=+ -complete=file Cr cexpr system(<q-args>)
 command! -nargs=+ -complete=file Lr lexpr system(<q-args>)
 
 " }}} Commands
-
-" {{{ Global Variables
-
-if filereadable('/opt/brew/bin/python3')
-  let g:python3_host_prog = "/opt/brew/bin/python3"  " Speed up startup by not looking for python3 every time.
-endif
-
-let g:any_jump_disable_default_keybindings = 1      " Conflicts with other useful bindings.
-let g:buftabline_indicators = 1                     " Show a + if the buffer has been modified.
-let g:buftabline_numbers = 2                        " Show buftabline's count (use <Leader>1-9 to switch.
-let g:colorizer_use_virtual_text = 1                " Use virtual text
-let g:echodoc#type = 'virtual' " Needs nvim 0.3.2 (`brew unlink neovim && brew install --HEAD neovim` for now).
-let g:fzf_history_dir = $XDG_CACHE_HOME . '/fzf-history' " Save history of fzf vim commands.
-let g:ghost_darwin_app = 'kitty'                    " Tell vim-ghost which terminal to open.
-let g:github_enterprise_urls = ['https://github.pie.apple.com'] " Add your GHE repo so vim-fugitive's :Gbrowse! can use it (try with visual mode).
-let g:is_posix = 1                                  " Assume shell for syntax highlighting.
-let g:loaded_netrw = 1                              " Skip loading netrw file browser (use vim-readdir instead).
-let g:loaded_netrwPlugin = 1                        " Don't use the built-in file browser (use vim-readdir instead).
-let g:mundo_preview_bottom = 1                      " Undo diff preview on bottom.
-let g:mundo_right = 1                               " Undo window on right.
-let g:peekaboo_window = "vert bo 50new"             " Increase peekaboo window width to 50.
-let g:sneak#label = 1                               " Make sneak like easymotion (but nicer).
-let g:sneak#target_labels = ";sftunqm/`'-+SFGHLTUNRMQZ?0123456789!()\\[]:|<>WEYIOPADJKXCVB.\"\,:weryiopadghjklzxcvb" " Labels sneak uses to show words.
-let g:sneak#use_ic_scs = 1                          " Sneak: respect smartcase setting.
-let g:surround_no_mappings = 1                      " Manually map surround, see SurroundOp() function.
-let g:surround_97 = "\1before: \1\r\2after: \2"     " yswa surrounds with specified text (prompts for before/after).
-
-" Settings for custom statusline.
-let g:lightline = {
-  \ 'colorscheme': 'wombat',
-  \ 'active': {
-    \ 'left': [ [ 'mode', 'paste' ],
-    \           [ 'readonly', 'relativepath', 'modified' ],
-    \           [ 'gitbranch' ],
-    \           [ 'truncate_here' ],
-    \           [ 'coc_error', 'coc_warning', 'coc_info', 'coc_hint' ], ],
-    \ 'right': [ [ 'lineinfo' ],
-    \            [ 'percent' ],
-    \            [ 'fileformat', 'fileencoding', 'filetype' ],
-    \            [ 'currentfunction' ], ] },
-  \ 'inactive': {
-    \ 'left': [ [ 'relativepath' ] ],
-    \ 'right': [ [ 'lineinfo' ],
-    \            [ 'percent' ] ] },
-  \ 'tabline': {
-    \ 'left': [ [ 'tabs' ] ],
-    \ 'right': [ [ 'close' ] ] },
-  \ 'component': {
-    \ 'truncate_here': '%<',
-    \ 'fileformat': '%{&ff=="unix"?"":&ff}',
-    \ 'fileencoding': '%{&fenc=="utf-8"?"":&fenc}' },
-  \ 'component_expand': {
-    \ 'coc_error': 'LightlineCocErrors',
-    \ 'coc_warning': 'LightlineCocWarnings',
-    \ 'coc_info': 'LightlineCocInfos',
-    \ 'coc_hint': 'LightlineCocHints', },
-  \ 'component_visible_condition': {
-    \ 'truncate_here': 0,
-    \ 'fileformat': '&ff&&&ff!="unix"',
-    \ 'fileencoding': '&fenc&&&fenc!="utf-8"' },
-  \ 'component_type': {
-    \ 'coc_error': 'error',
-    \ 'coc_warning': 'warning',
-    \ 'coc_info': 'tabsel',
-    \ 'coc_hint': 'middle',
-    \ 'coc_fix': 'middle',
-    \ 'truncate_here': 'raw' },
-  \ 'component_function': {
-    \ 'currentfunction': 'CocCurrentFunction',
-    \ 'gitbranch': 'fugitive#head', },
-  \ }
-
-" Extensions (plugins) for CoC language client.
-let g:coc_global_extensions = [
-  \ 'coc-actions',
-  \ 'coc-ccls',
-  \ 'coc-css',
-  \ 'coc-dictionary',
-  \ 'coc-emoji',
-  \ 'coc-eslint',
-  \ 'coc-go',
-  \ 'coc-highlight',
-  \ 'coc-html',
-  \ 'coc-java',
-  \ 'coc-json',
-  \ 'coc-prettier',
-  \ 'coc-python',
-  \ 'coc-rust-analyzer',
-  \ 'coc-snippets',
-  \ 'coc-solargraph',
-  \ 'coc-svg',
-  \ 'coc-syntax',
-  \ 'coc-tabnine',
-  \ 'coc-tsserver',
-  \ 'coc-vetur',
-  \ 'coc-word',
-  \ 'coc-yaml',
-  \ ]
-
-" Should be parsed by vim-markdown plugin to render code blocks properly, doesn't seem to work.
-" Block names: https://github.com/github/linguist/blob/master/lib/linguist/languages.yml
-let g:markdown_fenced_languages = ['bash=sh', 'c', 'console=sh', 'shell=sh', 'diff', 'dockerfile', 'go', 'java',
-  \ 'javascript', 'js=javascript', 'json', 'kotlin', 'python', 'rust', 'sh', 'toml', 'vim', 'yaml']
-
-" }}} Global Variables
 
 " {{{ Autocommands
 
