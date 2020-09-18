@@ -31,21 +31,21 @@ indent() {
 unpushed=""
 
 # Check stash.
-stash+=$(git stash list --color=always)
+stash+=$(git stash list --color=always | head)
 if [[ -n $stash ]]; then
   unpushed+="${CYAN}-> Repo has stashed changes:${NC}$LF"
   unpushed+=$(indent <<<"$stash")$'\n'
 fi
 
 # Check uncommitted diffs.
-diff+=$(git diff --color=always)
+diff+=$(git diff --color=always | head)
 if [[ -n $diff ]]; then
   unpushed+="${CYAN}-> Repo has uncommitted diffs:${NC}$LF"
   unpushed+=$(indent <<<"$diff")$LF
 fi
 
 # Check untracked files.
-untracked+=$(git ls-files . --exclude-standard --others)
+untracked+=$(git ls-files . --exclude-standard --others | head)
 if [[ -n $untracked ]]; then
   unpushed+="${CYAN}-> Repo has untracked files:${NC}$LF"
   unpushed+=$(indent <<<"$untracked")$LF
@@ -62,7 +62,7 @@ for branch in $(git for-each-ref refs/heads/ --format='%(refname:short)'); do
 
   if [[ $has_push == 0 ]]; then
     # What's not in push branch that is in local branch?
-    push_delta=$(git cherry -v "$push_hash" "$branch_hash")
+    push_delta=$(git cherry -v "$push_hash" "$branch_hash" | head)
     if [[ -n $push_delta ]]; then
       unpushed+="${CYAN}-> $branch has commits not in @{push}:${NC}$LF"
       unpushed+=$(indent <<<"$push_delta")$LF
@@ -80,10 +80,6 @@ for branch in $(git for-each-ref refs/heads/ --format='%(refname:short)'); do
 done
 
 if [[ -n "$unpushed" ]]; then
-  if [[ -n "$SHORT" ]]; then
-    echo -e "$unpushed$LF" | head
-  else
-    echo -e "$unpushed$LF"
-  fi
+  echo -e "$unpushed$LF"
   exit 1
 fi

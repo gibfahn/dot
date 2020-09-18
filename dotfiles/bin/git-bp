@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
 usage() {
 echo "$(tput bold; tput setaf 74)$0 [-h|--help] [-v|--version] [-f|--force] [-q|--quiet]$(tput sgr0)
@@ -53,6 +53,25 @@ else
   case $choice in
     N|n|no|No|NO) echo "Exiting..."; exit 1 ;;
   esac
+fi
+
+current_branch=$(git branch --show-current)
+if (( ${branches_to_prune[(I)$current_branch]} )); then
+  # Go back to up HEAD branch.
+  git update-index --refresh
+  # If there are no uncommitted changes:
+  if git diff-index --quiet HEAD --; then
+    # Take the first up or pub remote we find.
+    up_remote=$(git remote | grep -x 'up\|pub' | sort -r | head -1)
+    default_branch=$(git default-branch "$up_remote" 2>/dev/null)
+    if git rev-parse "$default_branch" &>/dev/null; then
+      git checkout --quiet "$default_branch"
+    else
+      git checkout --quiet -b "$default_branch" "$up_remote/$default_branch"
+    fi
+  else
+    log "Can't delete current branch '$current_branch' as it has uncommitted changes."
+  fi
 fi
 
 git branch -D "${branches_to_prune[@]}"
