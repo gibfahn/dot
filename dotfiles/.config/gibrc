@@ -361,9 +361,9 @@ case $shell in
     setopt | grep -qxF nullglob || { _gib_changed=true && setopt nullglob; }
     _gib_source_files=( # Files to source.
       # "$XDG_DATA_HOME"/zfunc/source/* # Put completion files that need to be sourced here.
-      "$ZDOTDIR"/*.zsh
       "$XDG_DATA_HOME"/fzf/shell/key-bindings.zsh
       "$XDG_DATA_HOME"/fzf/shell/completion.zsh
+      "$ZDOTDIR"/*.zsh # Needs to come after fzf as it overrides the Ctrl-R binding.
     )
     # Unset nullglob if we set it.
     [[ -n $_gib_changed ]] && { setopt nonullglob; unset _gib_changed; }

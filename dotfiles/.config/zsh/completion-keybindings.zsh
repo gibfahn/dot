@@ -77,6 +77,44 @@ bind-git-helper() {
   done
 }
 
+# Fzf with multi-select from https://github.com/junegunn/fzf/pull/2098
+# CTRL-R - Paste the selected command from history into the command line
+gib-fzf-history-widget() {
+  local selected num selected_lines selected_line selected_line_arr
+  setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
+
+  # Read history lines (split on newline) into selected_lines array.
+  selected_lines=(
+    "${(@f)$(fc -rl 1 | perl -ne 'print if !$seen{(/^\s*[0-9]+\**\s+(.*)/, $1)}++' |
+    FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} -m" $(__fzfcmd))}"
+  )
+  local ret=$?
+
+  # Remove empty elements, converting ('') to ().
+  selected_lines=($selected_lines)
+  if [[ "${#selected_lines[@]}" -ne 0 ]]; then
+    local -a history_lines=()
+    for selected_line in "${selected_lines[@]}"; do
+      # Split each history line on spaces, and take the 1st value (history line number).
+      selected_line_arr=($=selected_line)
+      num=$selected_line_arr[1]
+      if [[ -n "$num" ]]; then
+        # Add history at line $num to history_lines array.
+        history_lines+=( "$(fc -ln $num $num)" )
+      fi
+    done
+    # Set input buffer to newline-separated list of history lines.
+    # Use echo to unescape, e.g. \n to newline, \t to tab.
+    BUFFER="$(echo ${(F)history_lines})"
+    # Move cursor to end of buffer.
+    CURSOR=$#BUFFER
+  fi
+
+  zle reset-prompt
+  return $ret
+}
+zle     -N   gib-fzf-history-widget
+
 zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} r:|[.,_-]=*'
 # shellcheck disable=SC2154
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}" # Use LS_COLORS in file completion menu.
@@ -166,6 +204,7 @@ bindkey -M viins 'kj' vi-cmd-mode # Map kj -> Esc in vim mode.
 bindkey -M viins "^[[A" history-beginning-search-backward-end # Re-enable up   for history search.
 bindkey -M viins "^[[B" history-beginning-search-forward-end  # Re-enable down for history search.
 bindkey -M viins '\e.' insert-last-word
+bindkey -M viins '^R' gib-fzf-history-widget # Multi-select for history search.
 bindkey ' ' magic-space # <Space> = do history expansion
 # shellcheck disable=SC2154
 if [[ -n "${terminfo[kcbt]}" ]]; then
