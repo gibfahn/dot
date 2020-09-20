@@ -149,7 +149,6 @@ menu_changed+=$(updateMacOSDefault com.apple.menuextra.clock DateFormat string "
 # Make sure the relevant items from the Control Center are visible.
 menu_changed+=$(updateMacOSDefault com.apple.controlcenter "NSStatusItem Visible WiFi" bool true)
 menu_changed+=$(updateMacOSDefault com.apple.controlcenter "NSStatusItem Visible Battery" bool true)
-menu_changed+=$(updateMacOSDefault com.apple.controlcenter "NSStatusItem Visible Bluetooth" bool true)
 menu_changed+=$(updateMacOSDefault com.apple.controlcenter "NSStatusItem Visible Clock" bool true)
 
 # Disabled to use the multicolour accent colour.
