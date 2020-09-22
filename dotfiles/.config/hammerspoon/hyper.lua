@@ -53,13 +53,7 @@ local messageHot = message.new('hot 🎤')
 -- Hyper-, -> hold to enable mic (while held), tap to mute.
 hyperMode:bind({}, ',', function()
     local device = hs.audiodevice.defaultInputDevice()
-    device:setMuted(false)
-    messageHot:notify()
-    displayStatus()
-  end,
-  function()
-    local device = hs.audiodevice.defaultInputDevice()
-    device:setMuted(true)
+    device:setInputMuted(true)
     messageMuting:notify()
     displayStatus()
   end
@@ -68,7 +62,8 @@ hyperMode:bind({}, ',', function()
 -- Hyper-. -> tap to unmute mic.
 hyperMode:bind({}, '.', function()
   local device = hs.audiodevice.defaultInputDevice()
-  device:setMuted(false)
+  device:setInputMuted(false)
+  device:setInputVolume(100)
   messageHot:notify()
   displayStatus()
 end
