@@ -53,7 +53,9 @@ local messageHot = message.new('hot 🎤')
 -- Hyper-, -> hold to enable mic (while held), tap to mute.
 hyperMode:bind({}, ',', function()
     local device = hs.audiodevice.defaultInputDevice()
-    device:setInputMuted(true)
+    -- TODO(gib): stop changing volume and go back to muting when Webex works.
+    -- device:setInputMuted(true)
+    device:setInputVolume(0)
     messageMuting:notify()
     displayStatus()
   end
@@ -61,12 +63,13 @@ hyperMode:bind({}, ',', function()
 
 -- Hyper-. -> tap to unmute mic.
 hyperMode:bind({}, '.', function()
-  local device = hs.audiodevice.defaultInputDevice()
-  device:setInputMuted(false)
-  device:setInputVolume(100)
-  messageHot:notify()
-  displayStatus()
-end
+    local device = hs.audiodevice.defaultInputDevice()
+    -- TODO(gib): stop changing volume and go back to muting when Webex works.
+    -- device:setInputMuted(false)
+    device:setInputVolume(100)
+    messageHot:notify()
+    displayStatus()
+  end
 )
 -- }}} Global microphone muting hotkeys.
 
