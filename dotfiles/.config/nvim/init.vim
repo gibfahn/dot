@@ -696,7 +696,7 @@ command! PU PlugClean | PlugUpdate | PlugUpgrade|   " :PU updates/cleans plugins
 function! s:list_cmd(kind, query)
   if a:kind == 'find'
     let base = fnamemodify(expand('%'), ':h:.:S')
-    return base == '.' ? 'fd --hidden --type file' : printf('fd --hidden --type file | proximity-sort %s', expand('%'))
+    return base == '.' ? 'fd --hidden --type file --exclude=.git' : printf('fd --hidden --type file --exclude=.git | proximity-sort %s', expand('%'))
   elseif a:kind == 'locate'
     return 'locate -i ' . a:query . ' | proximity-sort ' . getcwd()
   endif
@@ -743,9 +743,10 @@ augroup gibAutoGroup                                " Group of automatic functio
   autocmd!|                                         " Remove existing autocmds.
 
   autocmd BufEnter    * let b:swapchoice_likely = (&l:ro ? 'o' : 'e')
-  autocmd BufNewFile,BufRead *.bats set filetype=sh " Bats is a shell test file type.
-  autocmd BufNewFile,BufRead *.pcl set syntax=groovy " Pretend pcl is groovy.
-  autocmd BufRead,BufNewFile *.md set filetype=markdown  " Use markdown for md files.
+  autocmd BufNewFile,BufRead *.bats  set filetype=sh       " Bats is a shell test file type.
+  autocmd BufNewFile,BufRead *.bazel set filetype=bzl      " bazel files are Bazel files.
+  autocmd BufNewFile,BufRead *.pcl   set syntax=groovy     " Pretend pcl is groovy.
+  autocmd BufNewFile,BufRead *.md    set filetype=markdown " Use markdown for md files.
   autocmd BufReadPost * let b:swapchoice_likely = (&l:ro ? 'o' : 'r')
   autocmd BufReadPost *|                            " On open jump to last cursor position if possible.
     \ if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") |
