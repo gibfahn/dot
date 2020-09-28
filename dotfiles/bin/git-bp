@@ -27,7 +27,7 @@ log() {
   [[ -z $QUIET ]] && echo "$1" >&2
 }
 
-while read -r branch up_branch; do
+while read branch up_branch; do
   # If no remote-tracking branch with the same name in any remote,
   if [[ -z $(for remote in $(git remote); do git rev-parse --verify --quiet "$remote/$branch" ; done) ]] &&
     # and upstream branch exists,
@@ -49,7 +49,7 @@ if [[ -n $FORCE_PRUNE ]]; then
 else
   # Prompt before deleting.
   echo "Branches to delete: ${branches_to_prune[*]}" >&2
-  read -rp "Continue? [Y/n] " choice
+  read "choice?Continue? [Y/n] "
   case $choice in
     N|n|no|No|NO) echo "Exiting..."; exit 1 ;;
   esac
