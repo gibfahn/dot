@@ -55,7 +55,8 @@ encrypt() {
 
   cp ~/.netrc ~/.ssh/tmp/
   cp ~/.config/hub ~/.ssh/tmp/
-  mkdir -p ~/.ssh/tmp/kube/
+  mkdir -p ~/.ssh/tmp/kube/ ~/.ssh/tmp/gh/
+  cp ~/.config/gh/hosts.yml ~/.ssh/tmp/gh/hosts.yml
   cp ~/.kube/*.conf ~/.ssh/tmp/kube/
 
   date=$(date "+%Y-%m-%d")
@@ -89,6 +90,8 @@ decrypt() {
   gcp --backup --verbose ~/.ssh/tmp/.netrc ~/
   mkdir -p ~/.config
   gcp --backup --verbose ~/.ssh/tmp/hub ~/.config/
+  mkdir -p ~/.config/gh
+  gcp --backup --verbose ~/.ssh/tmp/gh/hosts.yml ~/.config/gh/hosts.yml
   mkdir -p ~/.kube/
   gcp --backup --verbose ~/.ssh/tmp/kube/* ~/.kube/
   grm --recursive --verbose ~/.ssh/tmp
