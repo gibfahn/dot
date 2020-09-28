@@ -318,26 +318,6 @@ else
   sudo curl -sL http://entrproject.org/etc/limit.maxfiles.plist -o /Library/LaunchDaemons/limit.maxfiles.plist
 fi
 
-if [[ ! -e ~/Library/Containers/com.sindresorhus.Dato/Data/Library/Preferences/com.sindresorhus.Dato.plist ]]; then
-  log_get "Setting up dato preferences."
-  mkdir -p ~/Library/Containers/com.sindresorhus.Dato/Data/Library/Preferences/
-  cp "$dotDir"/config/dato/com.sindresorhus.Dato.plist ~/Library/Containers/com.sindresorhus.Dato/Data/Library/Preferences/com.sindresorhus.Dato.plist
-else
-  log_skip "Setting up dato preferences."
-fi
-
-if [[ -n "$(diff <(plutil -p ~/Library/Containers/com.sindresorhus.Dato/Data/Library/Preferences/com.sindresorhus.Dato.plist | grep -v SS_launchCount) <(plutil -p "$dotDir"/config/dato/com.sindresorhus.Dato.plist | grep -v SS_launchCount))" ]]; then
-  log_get "Pulling dato preferences into repo"
-  cp ~/Library/Containers/com.sindresorhus.Dato/Data/Library/Preferences/com.sindresorhus.Dato.plist "$dotDir"/config/dato/com.sindresorhus.Dato.plist
-  log_info "Changes were:"
-  git -C "$dotDir" diff config/dato/com.sindresorhus.Dato.plist
-  git -C "$dotDir" reset
-  git -C "$dotDir" add config/dato/com.sindresorhus.Dato.plist
-  git -C "$dotDir" commit -m 'fix(dato): update preferences file'
-else
-  log_skip "Pulling dato preferences into repo"
-fi
-
 # Allows you to do `locate <name>` to find anywhere in your system.
 if [[ -e /var/db/locate.database ]]; then
   log_skip "Enabling updatedb"
