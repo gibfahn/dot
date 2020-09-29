@@ -6,6 +6,10 @@
 #  - MAC_DESKTOP_BACKGROUND: local path to png to use as background.
 #  - MAC_CLOUD_DESKTOP_BACKGROUND: cloud file to copy to local path before using.
 
+set -e
+
+. "$(dirname "$0")/../helpers/setup.sh" # Load helper script from dot/helpers.
+
 if [[ ! -e ${MAC_CLOUD_DESKTOP_BACKGROUND?} ]]; then
   brctl download "$MAC_CLOUD_DESKTOP_BACKGROUND"
 fi
