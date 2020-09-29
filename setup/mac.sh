@@ -178,9 +178,6 @@ if [[ $USER == gib ]]; then # Set keyboard preferences.
   # -> IntelliJ:
   updateMacOSKeyboardShortcut com.jetbrains.intellij "Hide IntelliJ IDEA" '~^$\\U00a7'
 
-  # Radar: Ctrl-Alt-C copies as Markdown:
-  updateMacOSKeyboardShortcut com.apple.ist.Radar7 "Copy as Markdown" "~^c"
-
   # Set up fastest key repeat rate (needs relogin).
   updateMacOSDefault NSGlobalDomain KeyRepeat int 1
 
@@ -208,7 +205,9 @@ if [[ $USER == gib ]]; then # Set keyboard preferences.
   updateMacOSDefault NSGlobalDomain NSTableViewDefaultSizeMode int 2
 
   # Show developer options in Radar 8.
-  updateMacOSDefault com.apple.radar.gm shouldShowDeveloperOptions int 1
+  updateMacOSDefault com.apple.radar.gm shouldShowDeveloperOptions bool true
+  # Keep all tabs in same window.
+  updateMacOSDefault com.apple.radar.gm RDARWindowTabbingAllowMixedDocumentTypes bool true
 
   # Show all processes in Activity Monitor
   updateMacOSDefault com.apple.ActivityMonitor ShowCategory int 0
