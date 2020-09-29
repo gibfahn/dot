@@ -41,7 +41,6 @@ brew "zsh"                               # Nicer interactive shell.
 
 # cask "google-chrome"                     # You probably want/have Chrome.
 # cask "karabiner-elements"                # Key remapper (see $c/karabiner/karabiner.json for my settings).
-# cask "spotify"                           # Music.
 # cask "steam"                             # Play games on macOS.
 cask "copyq"                             # Clipboard manager with history (needs manual setup).
 cask "font-hasklug-nerd-font"            # Nice programming font Hasklig (Source Code Pro + Ligatures) + Nerd Font extensions.
@@ -50,6 +49,7 @@ cask "keyboard-cleaner"                  # Block all keystrokes except ⌘-q so 
 cask "kitty"                             # GPU Accelerated cross-platform Terminal Emulator.
 cask "rectangle"                         # Window manager that's easy to get used to.
 cask "sogouinput"                        # Nicer Chinese input experience.
+cask "spotify"                           # Music.
 cask "time-out"                          # Reminds you to take breaks.
 cask "vlc"                               # Nice video player.
 cask "wechat"                            # Chinese chat client.
