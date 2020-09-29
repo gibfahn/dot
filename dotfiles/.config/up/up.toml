@@ -18,19 +18,23 @@ inherit_env = [
 ]
 
 [env]
-dot_dir = "~/code/dot" # Directory to clone dotfiles to.
-dotfile_dir = "~/code/dot/dotfiles" # Directory to link dotfiles from.
-wrk_dotfile_dir = "~/wrk/me/dotfiles-apple/dotfiles" # Directory to link work dotfiles from.
-backup_dir = "~/backup" # Directory to move files overwritten by linking.
+dot_dir="~/code/dot" # Directory to clone dotfiles to.
+dotfile_dir="~/code/dot/dotfiles" # Directory to link dotfiles from.
+wrk_dotfile_dir="~/wrk/me/dotfiles-apple/dotfiles" # Directory to link work dotfiles from.
+backup_dir="~/backup" # Directory to move files overwritten by linking.
 
-XDG_DATA_HOME = "~/.local/share" # Use default XDG values.
-XDG_CACHE_HOME = "~/.cache" # Use default XDG values.
-XDG_CONFIG_HOME = "~/.config" # Use default XDG values.
+XDG_DATA_HOME="~/.local/share" # Use default XDG values.
+XDG_CACHE_HOME="~/.cache" # Use default XDG values.
+XDG_CONFIG_HOME="~/.config" # Use default XDG values.
 
-RUSTUP_HOME = "$XDG_DATA_HOME/rustup" # Rustup install dir.
-CARGO_HOME = "$XDG_DATA_HOME/cargo" # Cargo install dir.
-GOPATH = "~/code/go" # Go install dir.
-GNUPGHOME = "$XDG_DATA_HOME/gnupg" # Gpg install dir.
-RBENV_ROOT = "$XDG_CACHE_HOME/rbenv" # Set rbenv location.
+RUSTUP_HOME="$XDG_DATA_HOME/rustup" # Rustup install dir.
+CARGO_HOME="$XDG_DATA_HOME/cargo" # Cargo install dir.
+GOPATH="$HOME/code/go" # Go install dir.
+GNUPGHOME="$XDG_DATA_HOME/gnupg" # Gpg install dir.
+RBENV_ROOT="$XDG_CACHE_HOME/rbenv" # Set rbenv location.
 # Used to backup zsh history.
-ZSH_CLOUD_HISTFILE = "$HOME/Library/Mobile Documents/com~apple~CloudDocs/Fahns/Gib/zsh/history"
+ZSH_CLOUD_HISTFILE="$HOME/Library/Mobile Documents/com~apple~CloudDocs/Fahns/Gib/zsh/history"
+# Desktop and Lockscreen background.
+MAC_DESKTOP_BACKGROUND="$HOME/Pictures/desktop.png"
+# If local file not present, download from this iCloud path.
+MAC_CLOUD_DESKTOP_BACKGROUND="$HOME/Library/Mobile Documents/com~apple~CloudDocs/Fahns/Pictures/desktop.png"
