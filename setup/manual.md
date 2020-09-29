@@ -20,7 +20,6 @@ Set the computer name (needs restart to take effect):
 scutil --set LocalHostName
 ```
 
-- `View` (menu bar) -> `Organise Alphabetically`
 - `Touch ID` -> Add other fingerprints
 - `Keyboard`:
   - `Shortcuts`
@@ -49,6 +48,7 @@ sudo chmod 644 /Library/Preferences/com.apple.HIToolbox.plist
     - Show most recent messages at the top
   - Composing
     - When quoting text in replies or forwards: Include all the original message text.
+    - Automatically CC myself.
 
 ### Safari
 
@@ -57,7 +57,6 @@ sudo chmod 644 /Library/Preferences/com.apple.HIToolbox.plist
   - `New windows open with` -> `Empty page`
   - `New tabs open with` -> `Empty page`
   - `Remove history items` -> `Manually`
-- `Tabs` -> `Show website icons in tabs`
 - `Advanced`
   - `Show full website address` -> Tick
   - `Press Tab to highlight each item on a webpage`
