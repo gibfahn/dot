@@ -57,6 +57,8 @@ sudo chmod 644 /Library/Preferences/com.apple.HIToolbox.plist
   - `New windows open with` -> `Empty page`
   - `New tabs open with` -> `Empty page`
   - `Remove history items` -> `Manually`
+- `Tabs`
+  - `Open pages in tabs instead of windows` -> `Always`
 - `Advanced`
   - `Show full website address` -> Tick
   - `Press Tab to highlight each item on a webpage`
