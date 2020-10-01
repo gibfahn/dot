@@ -3,7 +3,7 @@
 set -e
 
 # Login Items that should be added to System Preferences -> Users & Groups -> Login Items
-required_login_items=(Rectangle CopyQ Hammerspoon)
+required_login_items=(Rectangle CopyQ Hammerspoon "Time Out")
 
 # Set up login items.
 IFS=$'\n' current_login_items=($(osascript -e 'tell application "System Events" to get login items' | sed -e 's/login item //g' -e 's/, /\n/g'))
