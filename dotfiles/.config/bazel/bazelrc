@@ -7,10 +7,12 @@ build --disk_cache=~/.cache/bazel/
 # Use a cross-workspace shared repository download cache.
 build --repository_cache=~/.cache/bazel-repositories/
 
-# Print command to run to reproduce a test failure.
-test --verbose_failures
-# Sends combined stdout/stderr output from failed tests only into the stdout immediately after test is completed
-test --test_output=errors
+# # Print command to run to reproduce a test failure.
+# test --verbose_failures
+# # Sends combined stdout/stderr output from failed tests only into the stdout immediately after test is completed
+# test --test_output=errors
 
 # If on a work Mac, use the work bazelrc.
 try-import /Users/gib/.config/bazel/wrk.bazelrc
+
+# vim: filetype=conf
