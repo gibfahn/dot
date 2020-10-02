@@ -1,1 +1,7 @@
-run_cmd = ["${dot_dir}/setup/login_items.sh"]
+run_cmd = [
+  "${dot_dir}/setup/login_items.sh",
+  "/Applications/Rectangle.app",
+  "/Applications/CopyQ.app",
+  "/Applications/Hammerspoon.app",
+  "/Applications/Time Out.app",
+]
