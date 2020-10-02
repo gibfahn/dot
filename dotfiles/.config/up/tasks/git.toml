@@ -1,1 +1,1 @@
-run_cmd = ["${dot_dir}/dotfiles/bin/git-each", "${dot_dir}/dotfiles/bin/git-update"]
+run_cmd = ["${dot_dir}/dotfiles/bin/git-each", "${dot_dir}/setup/git.sh"]
