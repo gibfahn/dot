@@ -352,7 +352,7 @@ case $shell in
     zinit light zdharma/fast-syntax-highlighting # Syntax highlighting.
 
     exists dircolors && _gib_dircolors=dircolors || _gib_dircolors=gdircolors # On macOS it's gdircolors.
-    zinit ice atclone"$_gib_dircolors -b LS_COLORS > c.zsh" atpull'%atclone' pick"c.zsh" nocompile'!'
+    zinit ice atclone"$_gib_dircolors -b LS_COLORS > c.zsh" atpull'%atclone' run-atpull pick"c.zsh" nocompile'!'
     zinit light trapd00r/LS_COLORS # Nicer terminal colours.
     unset _gib_dircolors
 
