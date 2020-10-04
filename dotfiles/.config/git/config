@@ -140,8 +140,8 @@
   paw = "!curl -L ${1%.patch}.patch | git am -3 -S --whitespace=warn # " # Patch but don't fix whitespace.
   ppr = "!git check-pr-branch && git push && git pr # "          # Push and raise PR at the same time.
   # Write the PR message based on the PR Template (if defined) and the git commit log.
-  prm = "!set -x; file=\"$TMPDIR/$(git rev-parse --show-toplevel | sed 's;/;_;g') $(git branch --show-current).md\"; [[ ! -s $file ]] && git lpr > \"$file\" && cat $(git rev-parse --show-toplevel)/{.github/,,docs/}PULL_REQUEST_TEMPLATE 2>/dev/null >> \"$file\"; $VISUAL \"$file\" >$(tty) <$(tty); echo \"$file\" #"
-  pr = "!file=$(git prm); GH_REPO=$(git remote get-url $(git up-remote)) gh pr create --title \"$(head -1 \"$file\")\" --body \"$(tail +3 \"$file\")\" && rm \"$file\"# " # Raise PR against upstream remote/branch (or $1/$2).
+  prm = "!set -x; file=\"$TMPDIR/$(git rev-parse --show-toplevel | sed 's;/;_;g') $(git branch --show-current).md\"; [[ ! -s $file ]] && git pr-message > \"$file\" && cat $(git rev-parse --show-toplevel)/{.github/,,docs/}PULL_REQUEST_TEMPLATE 2>/dev/null >> \"$file\"; $VISUAL \"$file\" >$(tty) <$(tty); echo \"$file\" #"
+  pr = "!file=$(git prm); GH_REPO=$(git remote get-url $(git up-remote)) gh pr create --title \"$(head -1 \"$file\")\" --body \"$(tail +3 \"$file\")\" && rm \"$file\" # " # Raise PR against upstream remote/branch (or $1/$2).
   pt  = "!git push -u $1 $(git head-branch) #"                  # g pt origin sets branch to track up + pushes.
   pl  = pull
 
