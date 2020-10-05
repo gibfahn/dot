@@ -140,7 +140,7 @@ updateMacOSDefault com.apple.universalaccess closeViewScrollWheelToggle bool tru
 updateMacOSDefault com.apple.assistant.support "Dictation Enabled" bool true
 
 # Show battery percentage in menu bar.
-menu_changed+=$(updateMacOSDefault com.apple.menuextra.battery ShowPercent string YES)
+menu_changed+=$(updateMacOSDefault com.apple.controlcenter BatteryShowPercentage bool true)
 
 # Set Menu Bar date format: https://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table
 # Note that only some formats are allowed. This shows: day of the week, date, time with seconds.
