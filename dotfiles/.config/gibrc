@@ -199,7 +199,6 @@ rv() {
     print out; exit
   }')"
   [[ -z "$cmd" ]] && { echo "No rg in the last 100 history commands."; return 1; }
-  set -x
   "$=VISUAL" -q <(eval "$cmd") ${jump_to:+"${jump_to[@]}"}
 }
 
