@@ -186,6 +186,9 @@ if [[ $USER == gib ]]; then # Set keyboard preferences.
 
   # Use Dark mode.
   updateMacOSDefault NSGlobalDomain AppleInterfaceStyle string Dark
+  # Don't brighten window contents (better contrast in Dark Mode).
+  # System Preferences > General > Allow wallpaper tinting in windows (true here means uncheck the tickbox).
+  updateMacOSDefault NSGlobalDomain AppleReduceDesktopTinting bool true
 
   # Auto-hide menu bar.
   updateMacOSDefault NSGlobalDomain _HIHideMenuBar bool true
