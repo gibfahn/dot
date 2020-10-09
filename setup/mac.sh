@@ -109,6 +109,10 @@ dock_changed+=$(updateMacOSDefault com.apple.Dock showhidden bool true)
 # Option and press the letter to choose that option.
 updateMacOSDefault NSGlobalDomain AppleKeyboardUIMode int 2
 
+# Remove delay in showing the draggable icon in window bars.
+# https://mjtsai.com/blog/2020/10/05/big-surs-hidden-document-proxy-icon/
+updateMacOSDefault NSGlobalDomain NSToolbarTitleViewRolloverDelay float 0
+
 # Show hidden files in the finder.
 finder_changed+=$(updateMacOSDefault com.apple.finder AppleShowAllFiles int 1)
 
