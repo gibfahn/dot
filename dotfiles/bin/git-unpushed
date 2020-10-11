@@ -69,7 +69,7 @@ for branch in $(git for-each-ref refs/heads/ --format='%(refname:short)'); do
     fi
   elif [[ $has_upstream == 0 ]]; then
     # What's not in upstream branch that is in local branch?
-    upstream_delta=$(git cherry -v "$upstream_hash" "$branch_hash")
+    upstream_delta=$(git cherry -v "$upstream_hash" "$branch_hash" | head)
     if [[ -n $upstream_delta ]]; then
       unpushed+="${CYAN}-> $branch has commits not in @{upstream}:${NC}$LF"
       unpushed+=$(indent <<<"$upstream_delta")$LF
