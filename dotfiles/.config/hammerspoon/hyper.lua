@@ -94,6 +94,15 @@ hyperMode:bind({}, 'd', function()
 end)
 -- }}} Hyper-d -> Paste today's date.
 
+-- {{{ Hyper-⇧-d -> Paste today's date and time.
+hyperMode:bind({'shift'}, 'd', function()
+  local date = os.date("%Y-%m-%d %H:%M:%S")
+  hs.pasteboard.setContents(date)
+  hyperMode:exit()
+  hs.eventtap.keyStrokes(date)
+end)
+-- }}} Hyper-⇧-d -> Paste today's date and time.
+
 -- {{{ Hyper-⌥-d -> Paste build number.
 hyperMode:bind({'alt'}, 'd', function()
   local output, status, _, rc = hs.execute("sw_vers -buildVersion")
