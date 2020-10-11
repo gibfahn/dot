@@ -756,7 +756,7 @@ augroup gibAutoGroup                                " Group of automatic functio
   autocmd BufWinEnter * if exists('b:swapchoice') && exists('b:swapchoice_likely') | let b:swapchoice = b:swapchoice_likely | unlet b:swapchoice_likely | endif
   autocmd BufWritePost $MYVIMRC nested source $MYVIMRC " Reload vimrc on save.
   autocmd BufWritePost $colorscheme_path nested source $colorscheme_path " Reload colorscheme on save:
-  autocmd BufWritePre * call mkdir(expand("<afile>:p:h"), "p") " Create dir if it doesn't already exist on save.
+  autocmd BufWritePre * if expand("<afile>:p:h") !~ "fugitive:" | call mkdir(expand("<afile>:p:h"), "p") | endif " Create dir if it doesn't already exist on save.
   " Highlight symbol under cursor on CursorHold (show other instances of current word).
   autocmd CursorHold * silent call CocActionAsync('highlight')
   autocmd FileType go set listchars=tab:\ \ ,trail:·,nbsp:☠ " Don't highlight tabs in Go.
