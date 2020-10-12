@@ -20,7 +20,7 @@
 --   |---|---|---|---|---|   |---|---|---|---|---|---|
 --   | ✓ | ✓ | ✓ | ✓ | ✓ |   | ✓ | ✓ | ✓ | ✓ | o | ' |
 --   |---|---|---|---|---|   |---|---|---|---|---|---|
---   | z | ✓ | ✓ | ✓ | ✓ |   | ✓ | ✓ | ✓ | ✓ | ✓ | \ |
+--   | z | ✓ | ✓ | ✓ | ✓ |   | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 --   '---'---'---'---'---'   '---'---'---'---'---'---'
 
 local log = hs.logger.new('init.lua', 'debug')
@@ -176,6 +176,23 @@ hyperMode:bind({}, 'return', function()
   hs.notify.new({title='Opening Clipboard Contents...', subTitle=clipboard, informativeText=rc.." "..output, withdrawAfter=3}):send()
 end)
 -- }}} Hyper-Enter -> Open clipboard contents.
+
+-- {{{ Hyper-<mods>-\ -> Quit things.
+local killAll = function(arg)
+  local cmd = "killall "..arg
+  hyperMode:exit()
+  local output, status, _, rc = hs.execute(cmd)
+  hs.notify.new({title='Killed all '..arg..'...', informativeText=rc.." "..output, withdrawAfter=3}):send()
+end
+hyperMode:bind({}, '\\', function()
+  killAll("Dock")
+end)
+hyperMode:bind({'shift'}, '\\', function()
+  killAll("Finder")
+end)
+hyperMode:bind({'cmd'}, '\\', function()
+  killAll("SystemUIServer")
+end)
 
 -- {{{ Hyper-<mods>-v -> Connect to VPN
 local callVpn = function(arg)
