@@ -35,14 +35,3 @@ if osascript -e '
 else
   log_skip "Setting desktop background to $MAC_DESKTOP_BACKGROUND"
 fi
-
-# Set login picture.
-lockscreen_picture=$(ls "/Library/Caches/Desktop Pictures/"*/lockscreen.png)
-[[ -e $lockscreen_picture ]] || { echo "Lockscreen picture missing: $lockscreen_picture" >&2; exit 1; }
-if [[ $(md5 -q "$lockscreen_picture") == $(md5 -q "$MAC_DESKTOP_BACKGROUND") ]]; then
-  log_skip "Setting lockscreen picture to $MAC_DESKTOP_BACKGROUND"
-else
-  log_get "Setting lockscreen picture to $MAC_DESKTOP_BACKGROUND"
-  cp "$MAC_DESKTOP_BACKGROUND" "$lockscreen_picture"
-fi
-
