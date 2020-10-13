@@ -88,6 +88,7 @@ brew "bazelbuild/tap/buildozer"          # Automatically apply fixes to bazel fi
 # cask "visual-studio-code"                # IDE that supports debugging Rust code.
 cask "caprine"                           # Facebook Messenger native app.
 cask "chrysalis"                         # Used to flash my KeyboardIO Model 01.
+cask "daisydisk"                         # See what's using disk space and easily clean it up.
 cask "docker"                            # Build and run docker images.
 cask "firefox-nightly"                   # For those sweet Rust-based improvements.
 cask "hyperswitch"                       # Better Cmd-Tab (only windows on a screen).
