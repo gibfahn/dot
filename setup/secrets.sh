@@ -58,6 +58,7 @@ encrypt() {
   mkdir -p ~/.ssh/tmp/kube/ ~/.ssh/tmp/gh/
   cp ~/.config/gh/hosts.yml ~/.ssh/tmp/gh/hosts.yml
   cp ~/.kube/*.conf ~/.ssh/tmp/kube/
+  cp ~/.local/share/gradle/gradle.properties ~/.ssh/tmp/gradle.properties
 
   date=$(date "+%Y-%m-%d")
 
@@ -92,6 +93,9 @@ decrypt() {
   cp  -v ~/.ssh/tmp/gh/hosts.yml ~/.config/gh/hosts.yml
   mkdir -p ~/.kube/
   cp  -v ~/.ssh/tmp/kube/* ~/.kube/
+  mkdir -p ~/.local/share/gradle/
+  cp -v ~/.ssh/tmp/gradle.properties ~/.local/share/gradle/gradle.properties
+
   rm -rv ~/.ssh/tmp
 }
 
