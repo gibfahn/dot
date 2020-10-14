@@ -1,8 +1,6 @@
 # Things I use on my development machine. Commented lines are things I have
 # previously used but don't currently.
 
-tap "bazelbuild/tap"                      # Provides bazelisk and other bazel tools.
-
 # Brew formulae
 
 # brew "bash-completion"                   # Generally useful bash completions.
@@ -76,8 +74,8 @@ brew "wget"                              # Alternative to curl for downloading f
 
 # Brew formulae from taps.
 
-brew "bazelbuild/tap/bazelisk"           # Easily use the latest version of bazel.
-brew "bazelbuild/tap/buildozer"          # Automatically apply fixes to bazel files.
+brew "bazelisk"                          # Easily use the latest version of bazel.
+brew "buildozer"                         # Automatically apply fixes to bazel files.
 
 # Brew casks
 
