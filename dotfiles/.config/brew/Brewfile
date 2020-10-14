@@ -10,6 +10,12 @@ tap "homebrew/cask-versions"             # Allows installing other versions of c
 # Bootstrapping.
 
 cask "1password"                         # Password manager, installed first so I can log into things.
+brew "gnupg"                             # gpg command line.
+cask "kitty"                             # GPU Accelerated cross-platform Terminal Emulator.
+cask "font-hasklug-nerd-font"            # Nice programming font Hasklig (Source Code Pro + Ligatures) + Nerd Font extensions.
+cask "rectangle"                         # Window manager that's easy to get used to.
+cask "copyq"                             # Clipboard manager with history (needs manual setup).
+brew "neovim"                            # New and improved vim.
 
 # Brew formulae
 
@@ -23,11 +29,9 @@ brew "fzf"                               # Fuzzy file finder.
 brew "git"                               # Bleeding-edge git.
 brew "git-delta"                         # Nicer git diff viewer.
 brew "gnu-sed"                           # A sed that actually supports `sed -i`.
-brew "gnupg"                             # gpg command line.
 brew "htop"                              # Terminal activity monitor.
 brew "less"                              # Fixes -RX issue.
 brew "mas"                               # Mac App Store third-party cli.
-brew "neovim"                            # New and improved vim.
 brew "node"                              # Node.js programming language.
 brew "pinentry-mac"                      # Gpg password Keychain integration.
 brew "python"                            # Python 3
@@ -42,12 +46,8 @@ brew "zsh"                               # Nicer interactive shell.
 # cask "google-chrome"                     # You probably want/have Chrome.
 # cask "karabiner-elements"                # Key remapper (see $c/karabiner/karabiner.json for my settings).
 # cask "steam"                             # Play games on macOS.
-cask "copyq"                             # Clipboard manager with history (needs manual setup).
-cask "font-hasklug-nerd-font"            # Nice programming font Hasklig (Source Code Pro + Ligatures) + Nerd Font extensions.
 cask "hammerspoon"                       # Scriptable automator for macOS.
 cask "keyboard-cleaner"                  # Block all keystrokes except ⌘-q so you can wipe your keyboard.
-cask "kitty"                             # GPU Accelerated cross-platform Terminal Emulator.
-cask "rectangle"                         # Window manager that's easy to get used to.
 cask "sogouinput"                        # Nicer Chinese input experience.
 cask "spotify"                           # Music.
 cask "time-out"                          # Reminds you to take breaks.
