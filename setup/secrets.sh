@@ -71,13 +71,11 @@ decrypt() {
   cd || error "Failed to cd home." 1
   [[ -e ~/.ssh || -e ~/.netrc ]] && error "~/.ssh or ~/.netrc already exists." 6
 
-  hash gcp || error "Missing 'gcp' dependency" 7
-  hash grm || error "Missing 'grm' dependency" 8
   hash gpg || error "Missing 'gpg' dependency" 8
 
   gpg -d ssh_*.tar.xz.gpg >ssh.tar.xz
   tar -xf ssh.tar.xz
-  rm ssh_*
+  rm ssh_* ssh.tar.xz
   cd ~/.ssh
   for file in "$HOME/.ssh/tmp/privkey-"*; do
     email="${file#$HOME/.ssh/tmp/privkey-}"
@@ -87,14 +85,14 @@ decrypt() {
     gpg --edit-key "$email"
   done
 
-  gcp --backup --verbose ~/.ssh/tmp/.netrc ~/
+  cp -v ~/.ssh/tmp/.netrc ~/
   mkdir -p ~/.config
-  gcp --backup --verbose ~/.ssh/tmp/hub ~/.config/
+  cp  -v ~/.ssh/tmp/hub ~/.config/
   mkdir -p ~/.config/gh
-  gcp --backup --verbose ~/.ssh/tmp/gh/hosts.yml ~/.config/gh/hosts.yml
+  cp  -v ~/.ssh/tmp/gh/hosts.yml ~/.config/gh/hosts.yml
   mkdir -p ~/.kube/
-  gcp --backup --verbose ~/.ssh/tmp/kube/* ~/.kube/
-  grm --recursive --verbose ~/.ssh/tmp
+  cp  -v ~/.ssh/tmp/kube/* ~/.kube/
+  rm -rv ~/.ssh/tmp
 }
 
 main "$@"
