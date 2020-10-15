@@ -62,14 +62,12 @@ brew "make"                              # GNU version of make.
 brew "moreutils"                         # GNU tools like parallel and sponge.
 brew "postgresql"                        # Solid database.
 brew "protobuf"                          # Serialization format.
-brew "pstree"                            # Hierarchical tree of processes, `pstree -g 3`.
 brew "pv"                                # Show data flow through bash pipes.
 brew "ruby-build"                        # Helper to install ruby versions.
 brew "sd"                                # Nicer sed.
 brew "shellcheck"                        # Linter for bash.
 brew "speedtest-cli"                     # Check network speed from the command-line.
 brew "tokei"                             # Counts lines of code in a project.
-brew "watch"                             # Rerun a command every n seconds.
 brew "wget"                              # Alternative to curl for downloading files.
 
 # Brew formulae from taps.

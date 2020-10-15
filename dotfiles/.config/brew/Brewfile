@@ -16,6 +16,8 @@ cask "font-hasklug-nerd-font"            # Nice programming font Hasklig (Source
 cask "rectangle"                         # Window manager that's easy to get used to.
 cask "copyq"                             # Clipboard manager with history (needs manual setup).
 brew "neovim"                            # New and improved vim.
+brew "watch"                             # Rerun a command every n seconds.
+brew "pstree"                            # Hierarchical tree of processes, `pstree -g 3`.
 
 # Brew formulae
 
