@@ -31,15 +31,6 @@ scutil --set LocalHostName
   - Privacy -> Full Disk Access -> Add Terminal.app and Kitty
   - FileVault -> Turn on FileVault
 
-### Keyboard Layout on boot
-
-If it doesn't boot to Colemak, run:
-
-```shell
-sudo cp ~/Library/Preferences/com.apple.HIToolbox.plist /Library/Preferences/
-sudo chmod 644 /Library/Preferences/com.apple.HIToolbox.plist
-```
-
 ### Mail
 
 - Preferences
