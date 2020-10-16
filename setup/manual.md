@@ -31,33 +31,17 @@ scutil --set LocalHostName
   - Privacy -> Full Disk Access -> Add Terminal.app and Kitty
   - FileVault -> Turn on FileVault
 
-### Mail
+### Sogou Pinyin
 
-- Preferences
-  - Viewing
-    - Show Message Headers -> Custom -> List-ID, Message-ID, X-Member-Count
-    - Show most recent messages at the top
-  - Composing
-    - When quoting text in replies or forwards: Include all the original message text.
-    - Automatically CC myself.
+- Change Sogou keyboard layout to Colemak:
+  - Change to Sogou with <kbd>Ctrl</kbd><kbd>Space</kbd>.
+  - ⚙ -> 偏好号设置 -> 按键 -> 键盘布局 -> 其他键盘 -> Colemak
 
-### Safari
+### Autostart
 
-- `General`
-  - `Safari opens with` -> `All windows from last session`
-  - `New windows open with` -> `Empty page`
-  - `New tabs open with` -> `Empty page`
-  - `Remove history items` -> `Manually`
-- `Tabs`
-  - `Open pages in tabs instead of windows` -> `Always`
-- `Advanced`
-  - `Show full website address` -> Tick
-  - `Press Tab to highlight each item on a webpage`
-  - `Show Develop menu in menu bar`
+Remove things that shouldn't need to auto-start.
 
-### Kitty
-
-- Give Kitty full disk access: `System Preferences` -> `Privacy` -> `Full Disk Access`.
+- `System Preferences` -> `Users & Groups` -> `Login Items`
 
 ### NTFS
 
@@ -72,18 +56,6 @@ After installing:
 - Open Preferences
 - `NTFS for Mac Menu` -> `OFF`
 - Untick `Launch on System Startup`
-
-### Sogou Pinyin
-
-- Change Sogou keyboard layout to Colemak:
-  - Change to Sogou with <kbd>Ctrl</kbd><kbd>Space</kbd>.
-  - ⚙ -> 偏好号设置 -> 按键 -> 键盘布局 -> 其他键盘 -> Colemak
-
-### Autostart
-
-Remove things that shouldn't need to auto-start.
-
-- `System Preferences` -> `Users & Groups` -> `Login Items`
 
 [Paragon for NTFS]: https://www.seagate.com/gb/en/support/software/paragon/
 [`paragon-ntfs`]: https://formulae.brew.sh/cask/paragon-ntfs

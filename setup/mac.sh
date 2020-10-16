@@ -30,7 +30,7 @@ fi
 
 log_section "Setting macOS defaults."
 
-dock_changed="" menu_changed="" finder_changed=""
+dock_changed="" menu_changed="" finder_changed="" mail_changed="" safari_changed=""
 
 # -> Kitty:
 updateMacOSKeyboardShortcut net.kovidgoyal.kitty "Hide kitty" '~^$\\U00a7'
@@ -47,7 +47,7 @@ if [[ -n "$changed" ]]; then
 fi
 
 # Enable Tap to Click
-updateMacOSDefault NSGlobalDomain com.apple.mouse.tapBehavior int 1 -currentHost
+updateMacOSDefault -currentHost NSGlobalDomain com.apple.mouse.tapBehavior int 1
 
 # Click strength: Haptic feedback 0: Light 1: Medium 2: Firm
 updateMacOSDefault com.apple.AppleMultitouchTrackpad FirstClickThreshold int 0
@@ -168,6 +168,33 @@ updateMacOSDefault org.hammerspoon.Hammerspoon MJConfigFile string '~/.config/ha
 # Enable key repeat.
 # XXX(gib): Not sure if needed for Hammerspoon key repeat.
 updateMacOSDefault NSGlobalDomain ApplePressAndHoldEnabled bool false
+
+# Mail -> Preferences -> Viewing -> Show Message Headers -> Custom
+mail_changed+=$(updateMacOSDefault com.apple.mail CustomHeaders array List-ID Message-ID X-Member-Count)
+# Mail -> Preferences -> Viewing -> Show most recent message at the top
+mail_changed+=$(updateMacOSDefault com.apple.mail ConversationViewSortDescending bool true)
+# Mail -> Preferences -> Composing -> Automatically CC Myself.
+mail_changed+=$(updateMacOSDefault com.apple.mail ReplyToSelf bool true)
+# Mail -> Preferences -> Composing -> When quoting text in replies or forwards -> Include all the original message text.
+mail_changed+=$(updateMacOSDefault com.apple.mail AlwaysIncludeOriginalMessage bool true)
+
+# Safari -> General -> Safari opens with -> All non-private windows from last session
+safari_changed+=$(updateMacOSDefault com.apple.Safari AlwaysRestoreSessionAtLaunch bool true)
+safari_changed+=$(updateMacOSDefault com.apple.Safari ExcludePrivateWindowWhenRestoringSessionAtLaunch bool true)
+# Safari -> General -> New windows open with -> Empty page
+safari_changed+=$(updateMacOSDefault com.apple.Safari NewTabBehavior int 1)
+# Safari -> General -> New tabs open with -> Empty page
+safari_changed+=$(updateMacOSDefault com.apple.Safari NewWindowBehavior int 1)
+# Safari -> General -> Remove history items -> Manually
+safari_changed+=$(updateMacOSDefault com.apple.Safari HistoryAgeInDaysLimit int 36500)
+# Safari -> Tabs -> Open pages in tabs instead of windows -> Always
+safari_changed+=$(updateMacOSDefault com.apple.Safari TabCreationPolicy int 2)
+# Safari -> Advanced -> Show full website address
+safari_changed+=$(updateMacOSDefault com.apple.Safari ShowFullURLInSmartSearchField bool true)
+# Safari -> Advanced -> Show Develop menu in menu bar
+safari_changed+=$(updateMacOSDefault com.apple.Safari IncludeDevelopMenu bool true)
+safari_changed+=$(updateMacOSDefault com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey bool true)
+safari_changed+=$(updateMacOSDefault com.apple.Safari WebKitPreferences.developerExtrasEnabled bool true)
 
 if [[ $USER == gib ]]; then # Set keyboard preferences.
   log_section "Setting gib extra macOS defaults."
@@ -303,6 +330,16 @@ sudo=sudo updateMacOSDefault /Library/Preferences/com.apple.SoftwareUpdate Autom
 if [[ -n "$dock_changed" ]]; then
   log_debug "Applying expose changes with 'killall Dock' as dock values changed: '$dock_changed'"
   killall Dock
+fi
+
+if [[ -n "$mail_changed" ]]; then
+  log_debug "Applying Mail.app changes with 'killall Mail' as Mail values changed: '$mail_changed'"
+  killall Mail
+fi
+
+if [[ -n "$safari_changed" ]]; then
+  log_debug "Applying Safari.app changes with 'killall Safari' as Safari values changed: '$safari_changed'"
+  killall Safari
 fi
 
 if [[ -n "$finder_changed" ]]; then

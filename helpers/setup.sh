@@ -328,13 +328,18 @@ readMacOSDefault() {
 # Prints nothing to stdout if there were no changes.
 # Set sudo=sudo if you need to write with sudo.
 updateMacOSDefault() {
-  local domain key val_type val host # Args.
+  local domain key val_type val vals host # Args.
   local current_val
+  [[ ${1:-} == "-currentHost" ]] && host="$1" && shift
   domain="$1"; shift
   key="$1"; shift
   val_type="$1"; shift
-  val="$1"; shift
-  [[ -n ${1+x} ]] && host="$1" && shift
+  if [[ $val_type = array ]]; then
+    vals=("$@")
+    shift $#
+  else
+    val="$1"; shift
+  fi
 
   [[ "$#" != 0 ]] && log_error "Wrong number of args" && return 1
   current_val=$(readMacOSDefault "$domain" "$key" "$val_type" "$host") || return "$?"
@@ -342,6 +347,12 @@ updateMacOSDefault() {
   if [[ "$val_type" == array-add ]]; then
     if grep -q "$val" <<<"$current_val"; then
       log_skip "macOS default $host $domain $key already contains $val"
+      return 0
+    fi
+  elif [[ "$val_type" == array ]]; then
+    current_vals=$(awk <<<"$current_val" -F '"' '{ if ($0 ~ /\s*"[^"]*".*/) {acc = acc " " $2} } END { print substr(acc,2) }')
+    if [[ $current_vals == "${vals[*]}" ]]; then
+      log_skip "macOS default $host $domain $key is already set to array '${vals[*]}'"
       return 0
     fi
   else
@@ -352,12 +363,21 @@ updateMacOSDefault() {
   fi
 
   if [[ -n "$current_val" ]]; then
-    log_update  "macOS default $host $domain $key is currently set to $current_val, changing to $val"
+    if [[ "$val_type" == array ]]; then
+      log_update  "macOS default $host $domain $key is currently set to '$current_vals', changing to '${vals[*]}'"
+    else
+      log_update  "macOS default $host $domain $key is currently set to $current_val, changing to $val"
+    fi
   else
     log_update  "macOS default $host $domain $key is unset, setting it to $val"
   fi
   echo "$host $domain $key $current_val -> $val; "
 
-  log_debug "$sudo defaults $host write \"$domain\" \"$key\" \"-$val_type\" \"$val\""
-  $sudo defaults $host write "$domain" "$key" "-$val_type" "$val" 1>&2
+  if [[ "$val_type" == array ]]; then
+    log_debug "$sudo defaults $host write \"$domain\" \"$key\" -$val_type ${vals[*]}"
+    $sudo defaults $host write "$domain" "$key" "-$val_type" "${vals[@]}" 1>&2
+  else
+    log_debug "$sudo defaults $host write \"$domain\" \"$key\" \"-$val_type\" \"$val\""
+    $sudo defaults $host write "$domain" "$key" "-$val_type" "$val" 1>&2
+  fi
 }
