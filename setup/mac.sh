@@ -285,11 +285,12 @@ if [[ $USER == gib ]]; then # Set keyboard preferences.
     defaults write com.apple.Spotlight orderedItems -array "${spotlight_preferences[@]}"
 
     # Load new settings before rebuilding the index
-    killall mds 2>&1 | log_debug_pipe
-    # Make sure indexing is enabled for the main volume
-    sudo mdutil -i on / 2>&1 | log_debug_pipe
-    # Rebuild the index from scratch
-    sudo mdutil -E / 2>&1 | log_debug_pipe
+    log_debug "Running 'killall mds'"
+    killall mds >&2
+    log_debug "Making sure indexing is enabled for the main volume"
+    sudo mdutil -i on / >&2
+    log_debug "Rebuilding the index from scratch"
+    sudo mdutil -E / >&2
   fi
 
   # TODO(gib): Add more shortcuts:
@@ -329,28 +330,28 @@ sudo=sudo updateMacOSDefault /Library/Preferences/com.apple.SoftwareUpdate Autom
 
 if [[ -n "$dock_changed" ]]; then
   log_debug "Applying expose changes with 'killall Dock' as dock values changed: '$dock_changed'"
-  killall Dock
+  killall Dock && true
 fi
 
 if [[ -n "$mail_changed" ]]; then
   log_debug "Applying Mail.app changes with 'killall Mail' as Mail values changed: '$mail_changed'"
-  killall Mail
+  killall Mail && true
 fi
 
 if [[ -n "$safari_changed" ]]; then
   log_debug "Applying Safari.app changes with 'killall Safari' as Safari values changed: '$safari_changed'"
-  killall Safari
+  killall Safari && true
 fi
 
 if [[ -n "$finder_changed" ]]; then
   log_debug "Applying AppleShowAllFiles changes with 'killall Finder' as finder values changed '$finder_changed'"
-  killall Finder
+  killall Finder && true
   open ~
 fi
 
 if [[ -n "$menu_changed" ]]; then
   log_debug "Applying menu changes with 'killall SystemUIServer' as menu values changed '$menu_changed'"
-  killall SystemUIServer
+  killall SystemUIServer && true
 fi
 
 # Increase max file watch limit. See http://entrproject.org/limits.html

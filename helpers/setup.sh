@@ -55,11 +55,7 @@ log_skip() {
 }
 
 log_debug() {
-    printf "%s\n" "$1" >> "$HOME"/tmp/dot.log
-}
-
-log_debug_pipe() {
-    cat >> "$HOME"/tmp/dot.log
+  printf "    ${BLUE}DEBUG:${NC} %s\n" "$1"
 }
 
 log_error() {
