@@ -1,0 +1,66 @@
+#!/usr/bin/env zsh
+
+set -eu
+
+usage() {
+  setopt local_options posix_argzero
+  echo "$(tput bold; tput setaf 74)$0 [-h|--help] [-v|--version] $(tput sgr0)
+
+$(tput bold)git pull request$(tput sgr0)
+
+Raise PR from @{push} against @{upstream}.
+"
+}
+
+while [[ $# != 0 ]]; do
+  [[ $1 =~ ^(--help|-h)$ ]] && { usage; exit; }
+
+  [[ $1 =~ ^(--version|-v)$ ]] && { echo "master"; exit; }
+done
+
+main() {
+  file=$(pr_file)
+  # TODO: stop setting this once `gh` gains decent up/push branch recognition.
+  export GH_REPO=$(git remote get-url $(up_remote))
+  gh pr create --title "$(head -1 "$file")" --body "$(tail +3 "$file")"
+  rm "$file"
+}
+
+up_remote() {
+  git rev-parse --abbrev-ref --symbolic-full-name @{upstream} | cut -d '/' -f 1
+}
+
+# Write the PR message file based on the PR Template (if defined) and the git commit log.
+pr_file() {
+  # /path/to/git/repo @ branch -> '/tmp/_path_to_git_repo branch.md'
+  file="$TMPDIR/$(git rev-parse --show-toplevel | sed 's;/;_;g') $(git branch --show-current).md"
+
+  # Don't write template file if already non-empty.
+  if [[ ! -s $file ]]; then
+    pr_message > "$file"
+    cat $(git rev-parse --show-toplevel)/{.github/,,docs/}PULL_REQUEST_TEMPLATE 2>/dev/null >> "$file"
+  fi
+  $VISUAL "$file" >$(tty) <$(tty)
+  echo "$file"
+}
+
+# Generates a default PR message.
+pr_message() {
+  cat <<EOF
+$(pr_title)
+
+---
+
+#### Commits _(oldest to newest)_
+
+$(git log -s --reverse --format='%h %s%n%n%b%n<br/>%n' @{upstream}..@)
+EOF
+}
+
+pr_title() {
+  if [[ $(git rev-list --count @{upstream}..@) == 1 ]]; then
+     git log -1 --format="%s"
+  fi
+}
+
+main "$@"
