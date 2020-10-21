@@ -82,7 +82,6 @@ brew "buildozer"                         # Automatically apply fixes to bazel fi
 # cask "intellij-idea-ce"                  # Java-oriented IDE (good for debugging).
 # cask "trailer"                           # GitHub push notifications.
 # cask "visual-studio-code"                # IDE that supports debugging Rust code.
-cask "caprine"                           # Facebook Messenger native app.
 cask "chrysalis"                         # Used to flash my KeyboardIO Model 01.
 cask "daisydisk"                         # See what's using disk space and easily clean it up.
 cask "docker"                            # Build and run docker images.
@@ -90,6 +89,7 @@ cask "firefox-nightly"                   # For those sweet Rust-based improvemen
 cask "hyperswitch"                       # Better Cmd-Tab (only windows on a screen).
 cask "keycastr"                          # Shows keystrokes in corner of screen (great for casting/demos).
 cask "meld"                              # Visual file diffing tool.
+cask "messenger"                           # Facebook Messenger native app.
 cask "slack-beta"                        # Everyone uses Slack right?
 cask "stay"                              # Save and restore window positions, invaluable with multi-monitor setups.
 cask "vimr"                              # GUI neovim.
