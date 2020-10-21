@@ -57,7 +57,7 @@ hyperModeAppMappings = {
   { key='s', app='Spotify' },
   { key='t', app='Kitty' },
   { key='w', app='Workflowy' },
-  { key='x', app='Caprine', mods={'alt'} },
+  { key='x', app='Messenger', mods={'alt'} },
   { key='x', app='Messages' },
 
 }
