@@ -8,15 +8,24 @@ set -euo pipefail
 # https://github.com/pqrs-org/Karabiner-Elements/issues/2331
 # https://github.com/jasonrudolph/keyboard
 
-# if ! [[ -f "${0:A:h}/xpc_set_event_stream_handler" ]]; then
-#     echo "Building xpc_set_event_stream_handler"
-#     # https://raw.githubusercontent.com/snosrap/xpc_set_event_stream_handler/master/xpc_set_event_stream_handler/main.m
-#     clang -fobjc-arc "${0:A:h}/xpc_set_event_stream_handler.m" -o xpc_set_event_stream_handler
-# fi
-
 if [ $# -eq 1 ]; then
-    PLIST_FILENAME="${HOME}/Library/LaunchAgents/co.fahn.remap.plist"
-    cat << EOF >! "${PLIST_FILENAME}"
+  base_dir=${XDG_DATA_HOME?}/hidutil
+  mkdir -p "$base_dir"
+  ln -sf "${0:A}" "$base_dir/"
+  cd "$base_dir"
+
+  if ! [[ -f xpc_set_event_stream_handler.m ]]; then
+    echo "Downloading xpc_set_event_stream_handler.m"
+    curl -L -o xpc_set_event_stream_handler.m https://raw.githubusercontent.com/snosrap/xpc_set_event_stream_handler/master/xpc_set_event_stream_handler/main.m
+  fi
+
+  if ! [[ -f xpc_set_event_stream_handler ]]; then
+    echo "Building xpc_set_event_stream_handler"
+    clang -fobjc-arc xpc_set_event_stream_handler.m -o xpc_set_event_stream_handler
+  fi
+
+  PLIST_FILENAME="${HOME}/Library/LaunchAgents/co.fahn.remap.plist"
+  cat << EOF >! "${PLIST_FILENAME}"
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -25,8 +34,8 @@ if [ $# -eq 1 ]; then
 	<string>co.fahn.remap</string>
 	<key>ProgramArguments</key>
 	<array>
-		<string>${0:A:h}/xpc_set_event_stream_handler</string>
-		<string>${0:A}</string>
+		<string>${base_dir}/xpc_set_event_stream_handler</string>
+		<string>${base_dir}/hid</string>
 	</array>
 	<key>LaunchEvents</key>
 	<dict>
@@ -59,23 +68,23 @@ if [ $# -eq 1 ]; then
 </dict>
 </plist>
 EOF
-    DOMAIN_TARGET="gui/$(id -u)"
-    SERVICE_TARGET="${DOMAIN_TARGET}/co.fahn.remap"
-    echo "Booting out existing service"
-    launchctl bootout "${SERVICE_TARGET}" || true
-    echo "Bootstrapping new service"
-    launchctl bootstrap "${DOMAIN_TARGET}" "${PLIST_FILENAME}"
-    echo "Kickstarting new service"
-    launchctl kickstart -k "${SERVICE_TARGET}"
-    exit 0
+  DOMAIN_TARGET="gui/$(id -u)"
+  SERVICE_TARGET="${DOMAIN_TARGET}/co.fahn.remap"
+  echo "Booting out existing service"
+  launchctl bootout "${SERVICE_TARGET}" || true
+  echo "Bootstrapping new service"
+  launchctl bootstrap "${DOMAIN_TARGET}" "${PLIST_FILENAME}"
+  echo "Kickstarting new service"
+  launchctl kickstart -k "${SERVICE_TARGET}"
+  exit 0
 fi
 
 date
 echo "Performing remap.  Install service with \"${ZSH_ARGZERO} install\""
 echo
 
-FROM="\"HIDKeyboardModifierMappingSrc\""
-TO="\"HIDKeyboardModifierMappingDst\""
+FROM='"HIDKeyboardModifierMappingSrc"'
+TO='"HIDKeyboardModifierMappingDst"'
 
 C="0x700000006"
 V="0x700000019"
