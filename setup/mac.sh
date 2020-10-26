@@ -177,6 +177,10 @@ mail_changed+=$(updateMacOSDefault com.apple.mail ConversationViewSortDescending
 mail_changed+=$(updateMacOSDefault com.apple.mail ReplyToSelf bool true)
 # Mail -> Preferences -> Composing -> When quoting text in replies or forwards -> Include all the original message text.
 mail_changed+=$(updateMacOSDefault com.apple.mail AlwaysIncludeOriginalMessage bool true)
+# Mail -> Preferences -> Composing -> Mark addresses not ending with (checkbox):
+mail_changed+=$(updateMacOSDefault com.apple.mail-shared AlertForNonmatchingDomains bool true)
+# Mail -> Preferences -> Composing -> Mark addresses not ending with (addresses not to mark):
+mail_changed+=$(updateMacOSDefault com.apple.mail-shared DomainForMatching array "@apple.com" "@group.apple.com")
 
 # Safari -> General -> Safari opens with -> All non-private windows from last session
 safari_changed+=$(updateMacOSDefault com.apple.Safari AlwaysRestoreSessionAtLaunch bool true)
