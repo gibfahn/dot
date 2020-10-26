@@ -11,4 +11,4 @@ if grep -q "^$PWD|" "$_Z_DATA"; then
 fi
 
 # Update the repo.
-"${dot_dir:-$HOME/code/dot}/dotfiles/bin/git-update"
+"${dot_dir:-$HOME/code/dot}/dotfiles/bin/git-update" --skip-fetch --skip-merge

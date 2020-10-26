@@ -1,13 +1,32 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
 set -eu
 
+usage() {
+echo "$(tput bold; tput setaf 74)$ZSH_ARGZERO [-h|--help] [-v|--version] [--skip-fetch] [--skip-merge]$(tput sgr0)
+
+git update: update a repo to the latest version.
+"
+}
+
+SKIP_FETCH= SKIP_MERGE=
+
+while [[ $# != 0 ]]; do
+  [[ $1 =~ ^(--help|-h)$ ]] && { usage; exit; }
+
+  [[ $1 =~ ^(--version|-v)$ ]] && { echo "master"; exit; }
+
+  [[ $1 =~ ^--skip-fetch$ ]] && { SKIP_FETCH=true; shift; }
+
+  [[ $1 =~ ^--skip-merge$ ]] && { SKIP_MERGE=true; shift; }
+done
+
 # Fetch everything.
-git fetch --all --quiet
+[[ -z $SKIP_FETCH ]] && git fetch --all --quiet
 
 # Try to update current branch, don't worry if there are uncommitted changes or it fails.
 # Mostly to placate `git unpushed`.
-git merge --quiet --ff-only && true
+[[ -z $SKIP_MERGE ]] && git merge --quiet --ff-only && true
 
 # Clean up stale PR branches.
 git bp --force --quiet
