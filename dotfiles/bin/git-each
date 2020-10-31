@@ -53,7 +53,7 @@ if [[ ${1:-} == --each-dir* ]]; then
   output=$(cd "$repo_path" && "$@" 2>&1) && true
   rc=$?
   if [[ -n ${output:-} ]]; then
-    printf "${MAGENTA}=> git-each: $* in $repo_path${NC}$LF"
+    printf "${MAGENTA}=> git-each: %s in $repo_path${NC}$LF" "$*"
     printf "%s\n" "$(indent <<<"$output")"
   fi
   exit $rc
