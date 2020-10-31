@@ -66,11 +66,6 @@
   cpa = cherry-pick --abort            # Bail out of cherry-pick.
   cpc = cherry-pick --continue         # Accept current changes and continue to next commit.
   cpq = cherry-pick --quit             # Only undo last commit (that failed) not all of them.
-  co  = checkout                       # Change to a different commit or reset a file to a commit (e.g. `g co new-feature`).
-  cop = checkout -p                    # Selectively undo some of the changes you made.
-  cot = checkout -t                    # g cot up/master means checkout master tracking the one in up.
-  cu  = "!git checkout -b $1 && git btu ${2:-up/$(git default-branch up)} #" # Create new PR branch $1, pulls from upstream, pushes to fork (due to remote.pushDefault).
-  cod = "!git checkout $(git default-branch ${1:-up}) #" # Checkout default branch for remote $1 (default: up).
   d   = "!git diff \"${@:-HEAD}\" #"                   # diff of staged and unstaged..
   de  = "!git diff HEAD --name-only $@ | xargs $VISUAL # " # Open files changed since last commit in editor.
   dni  = diff --no-index
@@ -154,6 +149,9 @@
   rr  = remote rename                                        # Change name of remote `g rr origin up`.
   rs  = remote set-url                                       # Change URL of remote `g rs up hsg:dot`.
   rsp = remote set-url --push                                # Change push URL of remote (`g rs up hhg:dot && g rsp up hsg:dot` to use https for fetch and ssh for push, which is faster).
+  rt  = restore                                              # Restore working tree from ref (git checkout was split into this).
+  rtp = checkout -p                                          # Selectively undo some of the changes you made.
+  rth = "!git checkout $(git default-branch ${1:-up}) #"     # Checkout default branch for remote $1 (default: up).
   rv  = remote -v                                            # Show remotes (with URLs).
 
   s   = "!git status && git push-status #" # Status including diff from @{push}.
@@ -176,6 +174,8 @@
     | cut -d : -f 1 #"
   stp = stash pop
   std = stash drop
+  sw  = switch # New way to checkout branches.
+  su  = "!git switch -b $1 && git btu ${2:-up/$(git default-branch up)} #" # Create new PR branch $1, pulls from upstream, pushes to fork (due to remote.pushDefault).
 
   sm   = submodule                             # For when you get bored of typing the word "submodule"
   sme  = submodule foreach                     # Run a command in all submodules, e.g. `g sme git status`, can be used recursively.
