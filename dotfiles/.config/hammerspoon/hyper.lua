@@ -191,7 +191,11 @@ hyperMode:bind({'shift'}, '\\', function()
   killAll("Finder")
 end)
 hyperMode:bind({'cmd'}, '\\', function()
-  killAll("SystemUIServer")
+  -- Restart WindowServer (logs you out).
+  local cmd = "sudo killall -HUP WindowServer"
+  hyperMode:exit()
+  local output, status, _, rc = hs.execute(cmd)
+  hs.notify.new({title='Restarting WindowServer...', informativeText=rc.." "..output, withdrawAfter=3}):send()
 end)
 
 -- {{{ Hyper-<mods>-v -> Connect to VPN
