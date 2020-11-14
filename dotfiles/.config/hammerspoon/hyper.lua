@@ -190,6 +190,9 @@ end)
 hyperMode:bind({'shift'}, '\\', function()
   killAll("Finder")
 end)
+hyperMode:bind({'alt'}, '\\', function()
+  killAll("entangled")
+end)
 hyperMode:bind({'cmd'}, '\\', function()
   -- Restart WindowServer (logs you out).
   local cmd = "sudo killall -HUP WindowServer"
