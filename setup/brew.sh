@@ -32,6 +32,9 @@ sogou_dir_old="$(ls -a "$(brew --prefix)"/Caskroom/sogouinput 2>/dev/null || tru
 
 copyq_version_old=$(copyq --version || true)
 
+# Disable quarantine for casks.
+export HOMEBREW_CASK_OPTS=--no-quarantine
+
 log_update "Brew update && upgrade"
 # Upgrade everything, even things that weren't in your Brewfile.
 brew update
@@ -48,9 +51,6 @@ fi
 # Replace '\n' with ' ':
 brewfiles=${brewfiles//
 / }
-
-# Disable quarantine for casks.
-export HOMEBREW_CASK_OPTS=--no-quarantine
 
 if brew bundle --file=<(cat $brewfiles) check >/dev/null; then
   log_skip "brew packages."

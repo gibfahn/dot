@@ -91,6 +91,7 @@ let g:lightline = {
 let g:coc_global_extensions = [
   \ 'coc-actions',
   \ 'coc-ccls',
+  \ 'coc-clangd',
   \ 'coc-css',
   \ 'coc-dictionary',
   \ 'coc-emoji',
