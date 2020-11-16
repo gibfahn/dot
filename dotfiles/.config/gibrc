@@ -477,7 +477,7 @@ if [[ "$ssh" ]]; then
     *) PS1="$(hostname) ❯ " ;;
   esac
 else # Things to only do if we're not in SSH mode.
-  # Set key repeat rate if available (Linux only). You probably want something less insane here, like rate 250 30.
+  # Set key repeat rate if available (Linux only). You probably want something less excessive here, like rate 250 30.
   if [[ "$uname" = Linux ]]; then
     exists xset && xset r rate 120 45
     export PANEL_FIFO="/tmp/panel-fifo" # Used by bspwm.
