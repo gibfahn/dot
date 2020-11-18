@@ -358,12 +358,13 @@ if [[ -n "$menu_changed" ]]; then
   killall SystemUIServer && true
 fi
 
-# Increase max file watch limit. See http://entrproject.org/limits.html
+# Increase max file watch limit. See https://eradman.com/entrproject/limits.html
+# File downloaded from: https://eradman.com/entrproject/etc/limit.maxfiles.plist
 if [[ -e /Library/LaunchDaemons/limit.maxfiles.plist ]]; then
   log_skip "File watcher limit (already increased)."
 else
   log_get "File watcher limit."
-  sudo curl -sL http://entrproject.org/etc/limit.maxfiles.plist -o /Library/LaunchDaemons/limit.maxfiles.plist
+  cp "$(dirname "$0")"/config/limit.maxfiles.plist /Library/LaunchDaemons/limit.maxfiles.plist
 fi
 
 # Allows you to do `locate <name>` to find anywhere in your system.
