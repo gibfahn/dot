@@ -413,6 +413,7 @@ case $shell in
     setopt share_history # Do show history from other open tabs.
 
     chpwd() { # Commands to run after changing directory.
+      [[ -t 1 ]] || return # Exit if stdout is not a tty.
       setopt local_options no_monitor # This only disables the "job start", not the "job complete".
       ls -A 1>&2 # Show dir contents.
       # Uses eval as otherwise bash-language-server chokes on the '&!'.
