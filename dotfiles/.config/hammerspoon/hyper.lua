@@ -127,15 +127,15 @@ end)
 
 -- {{{ Hyper-⌥-d -> Paste build number.
 hyperMode:bind({'alt'}, 'd', function()
-  local output, status, _, rc = hs.execute("sw_vers -buildVersion")
-  if rc ~= 0 then
-    hs.notify.new({title='sw_vers failed!', informativeText=rc.." "..output, withdrawAfter=3}):send()
+  hs.task.new("/usr/bin/sw_vers", function(exitCode, stdOut, stdErr)
+    hs.notify.new({title='Typing current build number', subTitle=output, informativeText=exitCode.." "..stdOut, stdErr, withdrawAfter=3}):send()
+    -- Copy and type build version with trailing newline removed.
+    stdOut = stdOut:gsub("%s*$", "")
+    hs.pasteboard.setContents(stdOut)
+    hyperMode:exit()
+    hs.eventtap.keyStrokes(stdOut)
   end
-  output = output:match( "(.-)%s*$" )
-  -- Copy build version with trailing newline removed.
-  hs.pasteboard.setContents(output)
-  hyperMode:exit()
-  hs.eventtap.keyStrokes(output)
+  , {"-buildVersion"}):start()
 end)
 -- }}} Hyper-⌥-d -> Paste build number.
 
@@ -156,13 +156,6 @@ hyperMode:bind({'shift'}, 'm', function()
 end)
 -- }}} Hyper-⌥-m -> Format selected Message ID as link and copy to clipboard.
 
--- {{{ Hyper-⇧-x -> Restart the touch strip.
-hyperMode:bind({'shift'}, 'x', function()
-  local output, status, _, rc = hs.execute("pkill ControlStrip 2>&1")
-  hs.notify.new({title='Restarting ControlStrip...', informativeText=rc.." "..output, withdrawAfter=3}):send()
-end)
--- }}} Hyper-⇧-x -> Restart the touch strip.
-
 -- {{{ Hyper-p -> Screenshot of selected area to clipboard.
 hyperMode:bind({}, 'p', function()
   hs.eventtap.keyStroke({'cmd', 'ctrl', 'shift'}, '4')
@@ -171,18 +164,21 @@ end)
 
 -- {{{ Hyper-Enter -> Open clipboard contents.
 hyperMode:bind({}, 'return', function()
-  local clipboard = hs.pasteboard.getContents()
-  local output, status, _, rc = hs.execute("open "..clipboard)
-  hs.notify.new({title='Opening Clipboard Contents...', subTitle=clipboard, informativeText=rc.." "..output, withdrawAfter=3}):send()
+  local clipboard = hs.pasteboard.getContents():gsub("%s*$", "")
+  hs.task.new("/usr/bin/open", function(exitCode, stdOut, stdErr)
+    hs.notify.new({title='Opening Clipboard Contents...', subTitle=clipboard, informativeText=exitCode.." "..stdOut, stdErr, withdrawAfter=3}):send()
+  end
+  , {clipboard}):start()
 end)
 -- }}} Hyper-Enter -> Open clipboard contents.
 
 -- {{{ Hyper-<mods>-\ -> Quit things.
 local killAll = function(arg)
-  local cmd = "killall "..arg
   hyperMode:exit()
-  local output, status, _, rc = hs.execute(cmd)
-  hs.notify.new({title='Killed all '..arg..'...', informativeText=rc.." "..output, withdrawAfter=3}):send()
+  hs.task.new("/usr/bin/killall", function(exitCode, stdOut, stdErr)
+    hs.notify.new({title='Killed all '..arg..'...', informativeText=exitCode.." "..stdOut.." "..stdErr, withdrawAfter=3}):send()
+  end
+  , {arg}):start()
 end
 hyperMode:bind({}, '\\', function()
   killAll("Dock")
@@ -201,12 +197,18 @@ hyperMode:bind({'cmd'}, '\\', function()
   hs.notify.new({title='Restarting WindowServer...', informativeText=rc.." "..output, withdrawAfter=3}):send()
 end)
 
+-- {{{ Hyper-⇧-x -> Restart the touch strip.
+hyperMode:bind({'shift'}, 'x', function()
+  killAll("ControlStrip")
+end)
+-- }}} Hyper-⇧-x -> Restart the touch strip.
+
 -- {{{ Hyper-<mods>-v -> Connect to VPN
 local callVpn = function(arg)
-  local cmd = os.getenv("HOME").."/bin/vpn "..arg
-  hyperMode:exit()
-  local output, status, _, rc = hs.execute(cmd)
-  hs.notify.new({title='VPN '..arg..'...', informativeText=rc.." "..output, withdrawAfter=3}):send()
+  hs.task.new(os.getenv("HOME").."/bin/vpn", function(exitCode, stdOut, stdErr)
+    hs.notify.new({title='VPN '..arg..'...', informativeText=exitCode.." "..stdOut.." "..stdErr, withdrawAfter=3}):send()
+  end
+  , {arg}):start()
 end
 hyperMode:bind({}, 'v', function()
   callVpn("corporate")
