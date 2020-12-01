@@ -194,7 +194,7 @@ rv() {
   esac
   cmd="$(fc -lnr -100 | awk '$1 == "rg" || $1 == "rga" {
     out="rg --vimgrep"
-    if ($1 == "rga") { out=out" --hidden --no-ignore" }
+    if ($1 == "rga") { out=out" --hidden --no-ignore --glob=!.git" }
     for (i=2; i<=NF; i++) { out=out" "$i }
     print out; exit
   }')"
