@@ -75,6 +75,7 @@ export BAT_THEME="TwoDark" # Set the default theme for bat and delta.
 export CARGO_HOME="$XDG_DATA_HOME/cargo" # Cargo goes here.
 export CCACHE_CONFIGPATH="$XDG_CONFIG_HOME"/ccache.config
 export CCACHE_DIR="$XDG_CACHE_HOME"/ccache # Ccache cache.
+export COURSIER_CREDENTIALS="$XDG_CONFIG_HOME/coursier/credentials.properties"
 export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
 export FZFZ_SUBDIR_LIMIT=0 # Don't show subdirs of current dir in Ctrl-N fzf-z shortcut.
 export GNUPGHOME="$XDG_DATA_HOME"/gnupg # Gpg data.
