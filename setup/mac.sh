@@ -177,6 +177,8 @@ mail_changed+=$(updateMacOSDefault com.apple.mail ConversationViewSortDescending
 mail_changed+=$(updateMacOSDefault com.apple.mail ReplyToSelf bool true)
 # Mail -> Preferences -> Composing -> When quoting text in replies or forwards -> Include all the original message text.
 mail_changed+=$(updateMacOSDefault com.apple.mail AlwaysIncludeOriginalMessage bool true)
+# Mail -> Edit -> Attachments -> Include Original Attachments in Reply
+mail_changed+=$(updateMacOSDefault com.apple.mail IncludeOriginalAttachments bool true)
 # Mail -> Preferences -> Composing -> Mark addresses not ending with (checkbox):
 mail_changed+=$(updateMacOSDefault com.apple.mail-shared AlertForNonmatchingDomains bool true)
 # Mail -> Preferences -> Composing -> Mark addresses not ending with (addresses not to mark):
