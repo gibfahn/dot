@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
 set -eu
 
@@ -37,13 +37,37 @@ error() {
   exit "${2:-1}"
 }
 
+copy_to_tmp() {
+  local to_path file
+  for file in "$@"; do
+    to_path=~/.ssh/tmp/"${file#~/}"
+    mkdir -p "$(dirname "$to_path")"
+    cp "$file" "$to_path"
+  done
+}
+
+copy_from_tmp() {
+  local from_dir file
+  from_dir=$1 # ~/.ssh/tmp/
+
+  local to_path file
+  files=(${(0)"$(find "$from_dir" -print0)"})
+  for file in "${files[@]}"; do
+    to_path=~/"${file#$from_dir}"
+    mkdir -p "$(dirname "$to_path")"
+    cp "$file" "$to_path"
+  done
+}
+
 encrypt() {
+  local files_to_backup
+
   cd || error "Failed to cd home." 1
 
   mkdir -p ~/.ssh/tmp
 
   # TODO(gib): There must be a better way to get the list of emails.
-  readarray -t emails <<<"$(gpg --list-secret-keys | grep ultimate | sed -E 's/.*<(.*)>.*/\1/')"
+  emails=("${(@f)$(gpg --list-secret-keys | grep ultimate | sed -E 's/.*<(.*)>.*/\1/')}")
   if (( ${#emails[@]} != 2 )); then
     error "Expected two private key emails, found: ${emails[*]}" 3
   fi
@@ -53,12 +77,16 @@ encrypt() {
     gpg --export-secret-keys -a "$email" > "$HOME/.ssh/tmp/privkey-$email.asc"
   done
 
-  cp ~/.netrc ~/.ssh/tmp/
-  cp ~/.config/hub ~/.ssh/tmp/
-  mkdir -p ~/.ssh/tmp/kube/ ~/.ssh/tmp/gh/
-  cp ~/.config/gh/hosts.yml ~/.ssh/tmp/gh/hosts.yml
-  cp ~/.kube/*.conf ~/.ssh/tmp/kube/
-  cp ~/.local/share/gradle/gradle.properties ~/.ssh/tmp/gradle.properties
+  files_to_backup=(
+    ~/.netrc
+    ~/.config/hub
+    ~/.config/gh/hosts.yml
+    ~/.kube/*.conf
+    ~/.local/share/gradle/gradle.properties
+    ~/.config/coursier/credentials.properties
+  )
+
+  copy_to_tmp "${files_to_backup[@]}"
 
   date=$(date "+%Y-%m-%d")
 
@@ -86,15 +114,7 @@ decrypt() {
     gpg --edit-key "$email"
   done
 
-  cp -v ~/.ssh/tmp/.netrc ~/
-  mkdir -p ~/.config
-  cp  -v ~/.ssh/tmp/hub ~/.config/
-  mkdir -p ~/.config/gh
-  cp  -v ~/.ssh/tmp/gh/hosts.yml ~/.config/gh/hosts.yml
-  mkdir -p ~/.kube/
-  cp  -v ~/.ssh/tmp/kube/* ~/.kube/
-  mkdir -p ~/.local/share/gradle/
-  cp -v ~/.ssh/tmp/gradle.properties ~/.local/share/gradle/gradle.properties
+  copy_from_tmp ~/.ssh/tmp/
 
   rm -rv ~/.ssh/tmp
 }
