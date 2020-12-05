@@ -6,6 +6,13 @@
   // Used to show a menu item is a snippet.
   "suggest.snippetIndicator": " ►",
   "suggest.enablePreview": true,
+  // Enable preselect feature on Neovim, automatically select first item.
+  // "suggest.enablePreselect": true,
+  // Input number to select completion, could be wrong when using '<up>' and '<down>' to select complete item.
+  "suggest.numberSelect": true,
+  // Trigger completion after InsertEnter.
+  "suggest.triggerAfterInsertEnter": true,
+
   // Used in the gutter for errors.
   "diagnostic.errorSign": "✖",
   // Used in the gutter for warnings.
@@ -14,8 +21,8 @@
   "diagnostic.infoSign": "ℹ",
   // Used in the gutter for Info messages.
   "diagnostic.hintSign": "ℹ",
-  // Write errors and warnings to location list.
-  "diagnostic.locationlist": true,
+
+  "dialog.confirmKey": "<cr>",
 
   // Used in diagnostics lists etc (:h coc-list-mappings).
   "list.insertMappings": {
@@ -123,7 +130,7 @@
                 "column": 2,
                 "message": [4, 3]
               }
-            ],
+            ]
           },
           "vint": {
               "command": "vint",
