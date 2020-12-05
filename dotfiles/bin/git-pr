@@ -9,6 +9,8 @@ usage() {
 $(tput bold)git pull request$(tput sgr0)
 
 Raise PR from @{push} against @{upstream}.
+See this post for the @{push} and @{upstream} workflow:
+https://fahn.co/posts/a-better-pull-request-workflow-with-git-push-branches.html
 "
 }
 
