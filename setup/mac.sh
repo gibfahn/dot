@@ -23,6 +23,9 @@ fi
 # The global domain NSGlobalDomain NSGlobalDomain is the same as -g or -globalDomain.
 # -bool yes/true or no/false correspond to -int 1 or 0.
 # You can view plist files with /usr/libexec/PlistBuddy
+# To log changing plist files try one of:
+#     sudo log stream --level debug --predicate "process == 'cfprefsd' AND eventMessage contains 'wrote the key'"
+#     sudo iosnoop -n cfprefsd
 
 # Make user keyboard layout the default layout on login (maybe dangerous):
 #   sudo cp ~/Library/Preferences/com.apple.HIToolbox.plist /Library/Preferences/com.apple.HIToolbox.plist
