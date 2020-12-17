@@ -22,14 +22,17 @@ done
 
 main() {
   file=$(pr_file)
+  up_ref=$(upstream_branch_ref) # e.g. up/main
+  up_remote=${up_ref%%/*} # e.g. up
+  up_branch=${up_ref#*/} # e.g. main
   # TODO: stop setting this once `gh` gains decent up/push branch recognition.
-  export GH_REPO=$(git remote get-url $(up_remote))
-  gh pr create --title "$(head -1 "$file")" --body "$(tail +3 "$file")"
+  export GH_REPO=$(git remote get-url "$up_remote")
+  gh pr create --title "$(head -1 "$file")" --body "$(tail +3 "$file")" --base "$up_branch"
   rm "$file"
 }
 
-up_remote() {
-  git rev-parse --abbrev-ref --symbolic-full-name @{upstream} | cut -d '/' -f 1
+upstream_branch_ref() {
+  git rev-parse --abbrev-ref --symbolic-full-name @{upstream}
 }
 
 # Write the PR message file based on the PR Template (if defined) and the git commit log.
