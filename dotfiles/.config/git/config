@@ -185,9 +185,10 @@
   smi  = submodule update --init --recursive   # Update to main repo upstream branch's submodule versions (make submodules match parent's HEADs).
   smu  = submodule update --remote             # Update submodules to submodule repos latest versions (make submodules match submodule upstream HEADs).
 
-  # git wa </new/path/> <branch_to_checkout>; <do work in /new/path>; git wr </new/path>
-  wa   = worktree add
-  wr   = worktree remove
+  # `git wa` to check out `main` to `~/tmp/worktrees/<repo name>`, `git wa dev` to check out the `dev` branch instead.
+  wa   = "! dir=${2:-~/tmp/worktrees/\"$(basename \"$(git rev-parse --show-toplevel)\")\"}; git worktree add \"$dir\" \"${1:-main}\" && cd \"$dir\" #"
+  # `git wr` to clean up a worktree created with `git wa`.
+  wr   = "! git worktree remove ${1:-~/tmp/worktrees/\"$(basename \"$(git rev-parse --show-toplevel)\")\"} #"
 
   # z is fuzzy log (fuzzy search through `git log $*`, za is the same with la (try g sh `g z`).
   z   = "!git l --color=always $* | grep -v '^\\.\\.\\.\\s\\+$' | fzf +s -m --ansi | sed 's/^\\W\\+\\(\\w\\+\\)\\s\\+.*/\\1/' #"
