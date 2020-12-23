@@ -38,8 +38,7 @@ export HOMEBREW_CASK_OPTS=--no-quarantine
 log_update "Brew update && upgrade"
 # Upgrade everything, even things that weren't in your Brewfile.
 brew update
-brew upgrade
-brew cask upgrade # You may occasionally want to run `brew cask upgrade --greedy` in case built-in updaters aren't working.
+brew upgrade # You may occasionally want to run `brew upgrade --greedy` in case built-in cask updaters aren't working.
 
 # brew install things. Edit config/Brewfile to adjust.
 brew tap Homebrew/bundle
