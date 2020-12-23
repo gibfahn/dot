@@ -198,6 +198,17 @@ fetch_url = 'https://github.com/Homebrew/homebrew-core'
 name = 'up'
 
 [[data]]
+path = '/Users/gib/code/utils/coc.nvim'
+
+[[data.remotes]]
+fetch_url = 'git@github.com:gibfahn/coc.nvim.git'
+name = 'fork'
+
+[[data.remotes]]
+fetch_url = 'https://github.com/neoclide/coc.nvim'
+name = 'up'
+
+[[data]]
 path = '/Users/gib/code/utils/gh-cli'
 
 [[data.remotes]]
@@ -205,17 +216,10 @@ fetch_url = 'https://github.com/cli/cli'
 name = 'up'
 
 [[data]]
-path = '/Users/gib/code/utils/gnt'
+path = '/Users/gib/code/utils/refined-github'
 
 [[data.remotes]]
-fetch_url = 'git@github.com:gibfahn/gnt'
-name = 'up'
-
-[[data]]
-path = '/Users/gib/code/utils/rust/git2-rs'
-
-[[data.remotes]]
-fetch_url = 'https://github.com/rust-lang/git2-rs/'
+fetch_url = 'https://github.com/sindresorhus/refined-github'
 name = 'up'
 
 [[data]]
