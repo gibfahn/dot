@@ -1,2 +1,0 @@
-check_cmd = ["${dot_dir}/setup/kotlin_check.sh"]
-run_cmd = ["${dot_dir}/setup/kotlin.sh"]

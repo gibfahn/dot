@@ -1,2 +1,0 @@
-check_cmd = ["${dot_dir}/setup/clangd_check.sh"]
-run_cmd = ["${dot_dir}/setup/clangd.sh"]

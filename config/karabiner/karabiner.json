@@ -10,7 +10,7 @@
     {
       "name": "Gib",
       "description": "Main profile that I use.",
-      "selected": true,
+      "selected": false,
       "devices": [
         {
           "description": "Infinity Ergodox",
@@ -845,7 +845,7 @@
       }
     }, {
       "name": "Eve",
-      "selected": false,
+      "selected": true,
       "devices": [],
       "parameters": {
         "delay_milliseconds_before_open_device": 1000

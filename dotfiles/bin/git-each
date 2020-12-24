@@ -59,7 +59,7 @@ if [[ ${1:-} == --each-dir* ]]; then
   exit $rc
 else
   # Call self with each dir.
-  fd --no-ignore --hidden --type directory '^\.git$' ~/wrk ~/code -x "$0" '--each-dir={//}' "$@" && true
+  fd --no-ignore --hidden --type directory '^\.git$' ~/code -x "$0" '--each-dir={//}' "$@" && true
   rc=$?
   if [[ $rc != 0 ]]; then
     error "${MAGENTA}One or more git-each commands failed ($rc) ⬆⬆⬆.${NC}" "$rc"

@@ -2,7 +2,6 @@ needs_sudo = true # TODO(gib): do this on a more granular basis.
 
 bootstrap_tasks = [
   "link_dotfiles",
-  "link_wrk_dotfiles",
   "mac",
   "brew",
 ]
