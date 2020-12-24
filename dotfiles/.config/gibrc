@@ -380,7 +380,7 @@ case $shell in
     done
 
     _gib_completion_files=( # Files to source as completions.
-      "$XDG_DATA_HOME"/zsh/completions/* # Put completion files that need to be sourced here.
+      "$XDG_DATA_HOME"/zsh/completions/*(N) # Put completion files that need to be sourced here.
       https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker
     )
 
