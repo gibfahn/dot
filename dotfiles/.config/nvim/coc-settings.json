@@ -9,7 +9,7 @@
   // Enable preselect feature on Neovim, automatically select first item.
   // "suggest.enablePreselect": true,
   // Input number to select completion, could be wrong when using '<up>' and '<down>' to select complete item.
-  "suggest.numberSelect": true,
+  "suggest.numberSelect": false,
   // Trigger completion after InsertEnter.
   "suggest.triggerAfterInsertEnter": true,
 
