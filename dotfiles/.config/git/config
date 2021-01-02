@@ -62,7 +62,7 @@
   cmn = commit -S --amend --no-edit    # Amend the previous commit but don't change the message.
   can = commit -S --amend --no-edit -a # Add changed files and commit with the same message.
   cn  = clean -ffdx                    # Remove anything that's untracked (DANGER).
-  cl  = clone --recurse-submodules --origin up # Always include submodules, set default remote to "up".
+  cl  = clone --recurse-submodules     # Always include submodules.
   cp  = cherry-pick                    # Apply commit hash(es) to current branch.
   cpa = cherry-pick --abort            # Bail out of cherry-pick.
   cpc = cherry-pick --continue         # Accept current changes and continue to next commit.
@@ -196,6 +196,9 @@
 
 [apply]
   whitespace = fix # Fix whitespace when applying patches.
+
+[clone]
+  defaultRemoteName = "up"
 
 # Color options: normal, black, red, green, yellow, blue, magenta, cyan, or white (or 0-255).
 # Highlight options: bold, dim, ul (underline), blink, and reverse (swap fg and bg).
