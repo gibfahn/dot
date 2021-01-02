@@ -4,12 +4,12 @@
 
   # Helper functions where a full name is easier:
   # Set up a fork the way I like it:
-  fork = "! set ${1:-fork} ${2:-oldmaster}; { git remote | grep -q fork || hub fork --remote-name=$1; } && git remote -v && git push $1 @:refs/heads/$2 && git change-branch $1 $2 && git default-branch $1 && git clean-fork $1 $2 #"
-  # Change the remote default branch to "$2" (default: "oldmain"), for remote $1 (default: "fork").
-  change-branch = "! set ${1:-fork} ${2:-oldmaster}; hub api -XPATCH repos/$(git remote-org $1)/$(git remote-repo $1) -f name=$(git remote-repo $1) -f default_branch=$2 && git remote set-head --auto $1 #"
+  fork = "! set -x; up=${1:-up} fork=${2:-fork} fork_branch=${3:-forkmain} && up_branch=${4:-$(git default-branch $up)} && { git remote | grep -qx $fork || hub fork --remote-name=$fork; } && git remote -v && git push $fork $up/${up_branch:?}:refs/heads/$fork_branch && git change-branch $fork $fork_branch && git default-branch $fork && git clean-fork $fork $fork_branch #"
+  # Change the remote default branch to "$2" (default: "forkmain"), for remote $1 (default: "fork").
+  change-branch = "! fork=${1:-fork} branch=${2:-forkmain} && hub api -XPATCH repos/$(git remote-org $fork)/$(git remote-repo $fork) -f name=$(git remote-repo $fork) -f default_branch=$branch --flat | grep '^\\.default_branch' && git remote set-head --auto $fork #"
   check-pr-branch = "! [[ $(git head-branch) != $(git up-branch) ]] || { printf \"\\033[0;31m  ERROR\\033[0m: Create a new branch before raising PR.\\n\" >&2 && exit 1; } #"
-  # Removes all branches and tags except "$2" (default: oldmain).
-  clean-fork = "! set ${1:-fork} ${2:-oldmaster}; git ls-remote --heads --tags $1 | awk '!/\\^\\{\\}/ && !/refs\\/heads\\/'\"$2\"'/ {print $NF}' | xargs -n ${3:-10} git push --delete $1 && git remote prune $1 #"
+  # Removes all branches and tags except "$2" (default: forkmain).
+  clean-fork = "! fork=${1:-fork} branch=${2:-forkmain}; git ls-remote --heads --tags $fork | awk '!/\\^\\{\\}/ && !/refs\\/heads\\/'\"$branch\"'/ {print $NF}' | xargs -n ${3:-10} git push --delete $fork && git remote prune $fork #"
   code-changes = "!git log --format=format: --name-only | egrep -v '^$' | sort | uniq -c | sort -rg | head -${1:-10} #" # Show $1 most changed files.
   default-branch = "!(git symbolic-ref --short refs/remotes/$1/HEAD || { git remote set-head --auto $1 && git symbolic-ref --short refs/remotes/$1/HEAD; }) | sed \"s|^$1/||\" #" # Default branch for remote. `g default-branch up` -> master
   head-branch = symbolic-ref --short HEAD # e.g. master.

@@ -35,4 +35,4 @@ git bp --force --quiet
 git unpushed
 
 # List in-progress branches.
-git branch --remotes --list '*fork/*' | grep -v 'fork/old'
+git branch --remotes --list '*fork/*' | grep -v 'fork/forkmain'
