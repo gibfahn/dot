@@ -1,12 +1,16 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
 set -eu
 
 usage() {
 echo "$(tput bold; tput setaf 74)$0 [-h|--help]$(tput sgr0)
 
-Checks ~/wrk and ~/code for git repos (things with .git subdirs) and executes the command passed in each dir.
+Checks code dirs for git repos (things with .git subdirs) and executes the command passed in each dir.
 e.g. 'git each git unpushed' to check status of each remote.
+
+To configure the code dirs set the env var GIT_EACH_DIRS to a newline-separated list, default:
+GIT_EACH_DIRS=\"\$HOME/wrk
+\$HOME/code\"
 
 Requires: fd CLI (https://github.com/sharkdp/fd).
   brew install fd
@@ -17,7 +21,7 @@ Requires: fd CLI (https://github.com/sharkdp/fd).
 
 [[ ${1:-} =~ ^(--version|-v)$ ]] && { echo "master"; exit; }
 
-MAGENTA='\033[0;35m'    # Magenta (purple).
+MAGENTA='\033[0;35m' # Magenta (purple).
 RED='\033[0;31m' # Red.
 NC='\033[0m' # No Colour.
 LF=$'\n'
@@ -58,8 +62,16 @@ if [[ ${1:-} == --each-dir* ]]; then
   fi
   exit $rc
 else
+  git_each_dirs_input=("${(@f)${GIT_EACH_DIRS:-"$HOME/wrk
+    $HOME/code"}}")
+  git_each_dirs=()
+  for dir in "${git_each_dirs_input[@]}"; do
+    if [[ -d $dir ]]; then
+      git_each_dirs+=("${dir}")
+    fi
+  done
   # Call self with each dir.
-  fd --no-ignore --hidden --type directory '^\.git$' ~/wrk ~/code -x "$0" '--each-dir={//}' "$@" && true
+  fd --no-ignore --hidden --type directory '^\.git$' "${git_each_dirs[@]}" -x "$0" '--each-dir={//}' "$@" && true
   rc=$?
   if [[ $rc != 0 ]]; then
     error "${MAGENTA}One or more git-each commands failed ($rc) ⬆⬆⬆.${NC}" "$rc"
