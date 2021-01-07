@@ -251,6 +251,8 @@ if [[ $USER == gib ]]; then # Set keyboard preferences.
   updateMacOSDefault com.apple.radar.gm shouldShowDeveloperOptions bool true
   # Keep all tabs in same window.
   updateMacOSDefault com.apple.radar.gm RDARWindowTabbingAllowMixedDocumentTypes bool true
+  # Show 100 items in File > Open Recent.
+  updateMacOSDefault com.apple.radar.gm NSRecentDocumentsLimit 100
 
   # Show all processes in Activity Monitor
   updateMacOSDefault com.apple.ActivityMonitor ShowCategory int 0
