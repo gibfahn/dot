@@ -301,7 +301,9 @@ inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 " inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
 "       \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
-" Alt-Enter to accept first result (otherwise Tab to result and select).
+" If in completion popup, select current, else run normal enter (with coc#on_enter hook).
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+" Alt-Enter to accept first result (otherwise Tab to result and Enter to select).
 inoremap <silent><expr> <A-CR> coc#_select_confirm()
 
 nnoremap <Tab> :bn<CR>|   " Tab to switch to next buffer,
@@ -323,8 +325,10 @@ imap <C-n> <Plug>(coc-snippets-expand-jump)| " Both expand and jump (make expand
 imap <A-n> <Plug>(coc-snippets-expand-jump)| " Both expand and jump (make expand higher priority.)
 vmap <C-n> <Plug>(coc-snippets-select)| " Select text for visual placeholder of snippet.
 
-nmap <A-Space> <Cmd>CocCommand actions.open<cr>| " Run available LSP actions.
-imap <A-Space> <Esc><Cmd>CocCommand actions.open<CR>| " Run available LSP actions.
+" Copied from https://github.com/neoclide/coc.nvim/issues/1981
+nmap <A-Space> v<Plug>(coc-codeaction-selected)<Esc>| " Run available LSP actions.
+vmap <A-Space> <Plug>(coc-codeaction-selected)| " Run available LSP actions.
+imap <A-Space> <C-o>v<Plug>(coc-codeaction-selected)<Esc>| " Run available LSP actions.
 
 nmap     <A-c> <Plug>(coc-diagnostic-next)| " Next changed Coc message (e.g. compile error).
 nmap     <A-C> <Plug>(coc-diagnostic-prev)| " Prev changed Coc message (e.g. compile error).
@@ -364,6 +368,7 @@ nmap              <SID>ws    <Nop>
 nnoremap <Leader>a @a|                                                     " Apply macro a (add with qa or yank to a reg with "ay).
 nnoremap <Leader>b :Buffers<CR>|                                           " Search buffer list for file.
 nmap     <Leader>cr <Plug>(coc-rename)|                                    " Remap for rename current word
+nmap     <Leader>cf  <Plug>(coc-format)|                                   " Format current buffer.
 vmap     <Leader>cf  <Plug>(coc-format-selected)|                          " Format selected region
 nmap <silent> <Leader>cd <Plug>(coc-definition)|                           " Go to definition.
 nmap <silent> <Leader>cD :call DupBuffer()<CR><Plug>(coc-definition)|      " Go to definition in other slit.
@@ -583,11 +588,14 @@ function! <SID>SynStack()
 endfunc
 
 " Used in K mapping above.
+" Copied from coc.nvim README.
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
     execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
   else
-    call CocAction('doHover')
+    execute '!' . &keywordprg . " " . expand('<cword>')
   endif
 endfunction
 

@@ -24,6 +24,10 @@
 
   "dialog.confirmKey": "<cr>",
 
+  // Improve handling of pressing enter inside brackets (`<> {} [] ()`) by
+  // adding a new empty line below and moving the cursor to it.
+  "coc.preferences.bracketEnterImprove": true,
+
   // Used in diagnostics lists etc (:h coc-list-mappings).
   "list.insertMappings": {
     // Select all options (use with an action).
@@ -35,6 +39,8 @@
   "coc.preferences.colorSupport": true,
   // Unset this as the python autoformat disagrees with flake8.
   "coc.preferences.formatOnType": true,
+  "coc.preferences.formatOnTypeFiletypes": ["rust", "json", "go"],
+  "coc.preferences.formatOnSaveFiletypes": ["rust", "json", "go"],
   "coc.preferences.currentFunctionSymbolAutoUpdate": true,
   // The symbol in the completion menu for words in the current file.
   "coc.source.around.shortcut": "↕",
