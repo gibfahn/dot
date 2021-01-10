@@ -119,7 +119,7 @@ c="$XDG_CONFIG_HOME" # Shortcut to the config directory (`v $c/gibrc` to edit th
 # {{{ Functions
 
 # Edit a file on the system.
-e() { locate -i0 "$@" | xargs -0 realpath | sort -u | proximity-sort "$PWD" | fzf --tiebreak=index --print0 | xargs -0 "$=VISUAL"}
+e() { locate -i0 "$@" | xargs -0 realpath | sort -u | proximity-sort "$PWD" | fzf --tiebreak=index --print0 | xargs -0 "$=VISUAL"; }
 
 mdc() { command mkdir -p "$@"; { [[ $# == 1 ]] && cd "$1"; } || true; } # Mkdir then cd to dir (`mdc foo` = `mkdir foo && cd foo`).
 cpm() { command mkdir -p "$(dirname "${@: -1}")" && cp "$@"; } # Mkdir then cp to dir (`cpm foo bar/baz` = `md bar/baz && cp foo bar/baz`).
@@ -215,8 +215,8 @@ pathadd /usr/bin # Should be after /usr/local/bin.
 pathadd /usr/local/bin # Missed in some shells.
 pathadd /usr/local/sbin # Missed in some shells.
 pathadd /opt/brew/bin # Alternate brew install location.
-pathadd "$XDG_DATA_HOME/rbenv/bin" # rbenv ruby version manager.
-pathadd "$XDG_CACHE_HOME/rbenv/shims" # rbenv installed versions.
+pathadd /opt/brew/opt/ruby/bin # Brew ruby.
+pathadd /opt/brew/lib/ruby/gems/*/bin(N) # Add ruby or skip.
 # pathadd /usr/lib/ccache # Add ccache to the path if installed (Linux).
 # pathadd /usr/local/opt/ccache/libexec # Add ccache to the path if installed (macOS).
 pathadd "$CARGO_HOME/bin" # Rust packages.
@@ -365,15 +365,12 @@ case $shell in
     zinit light gibfahn/fzf-z        # Use <Ctrl>-n instead of `z <Tab>`.
 
     # Don't crash shell if "$XDG_DATA_HOME"/zfunc/source/* matches nothing.
-    setopt | grep -qxF nullglob || { _gib_changed=true && setopt nullglob; }
     _gib_source_files=( # Files to source.
-      # "$XDG_DATA_HOME"/zfunc/source/* # Put completion files that need to be sourced here.
+      "$XDG_DATA_HOME"/zfunc/source/*(N) # Put completion files that need to be sourced here.
       "$XDG_DATA_HOME"/fzf/shell/key-bindings.zsh
       "$XDG_DATA_HOME"/fzf/shell/completion.zsh
-      "$ZDOTDIR"/*.zsh # Needs to come after fzf as it overrides the Ctrl-R binding.
+      "$ZDOTDIR"/*.zsh(N) # Needs to come after fzf as it overrides the Ctrl-R binding.
     )
-    # Unset nullglob if we set it.
-    [[ -n $_gib_changed ]] && { setopt nonullglob; unset _gib_changed; }
 
     for _gib_file in "${_gib_source_files[@]}"; do
       zinit snippet "$_gib_file"

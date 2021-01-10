@@ -13,18 +13,6 @@ if [[ $USER != gib ]]; then
   exit 0
 fi
 
-# Add rbenv to path in case it was only just installed.
-if not rbenv; then
-  export PATH="$XDG_DATA_HOME/rbenv/bin:$PATH"
-  export PATH="$XDG_CACHE_HOME/rbenv/shims:$PATH"
-  export RBENV_ROOT="${RBENV_ROOT:-"$XDG_CACHE_HOME/rbenv"}" # Set rbenv location.
-fi
-
-# Install latest version of ruby if changed.
-latest_ruby_version=$(rbenv install --list | awk '/^\s*[0-9]+\.[0-9]+\.[0-9]+\s*$/ {a=$1} END { print a }')
-rbenv install --skip-existing "$latest_ruby_version"
-rbenv global "$latest_ruby_version"
-
 # Install ruby gems
 for gem in "${ruby_gems[@]}"; do
   if gem list -I "$gem" >/dev/null; then
