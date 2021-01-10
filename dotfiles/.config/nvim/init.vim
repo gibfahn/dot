@@ -294,11 +294,15 @@ inoremap <silent><expr> <TAB>
       \ coc#refresh()
 " Shift-Tab is previous entry if completion menu open.
 inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-" Use <cr> for confirm completion, `<C-g>u` means break undo chain at current position.
+
+" Uncomment to use <cr> for confirm completion, `<C-g>u` means break undo chain at current position.
 " Coc only does snippet and additional edit on confirm.
 " Enables formatting on enter.
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-      \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+" inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+"       \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" Alt-Enter to accept first result (otherwise Tab to result and select).
+inoremap <silent><expr> <A-CR> coc#_select_confirm()
 
 nnoremap <Tab> :bn<CR>|   " Tab to switch to next buffer,
 nnoremap <S-Tab> :bp<CR>| "  ↳ Shift-Tab to switch to previous buffer.
@@ -339,6 +343,8 @@ nnoremap <A-l> :lnext<CR>| " Next item in the location list.
 nnoremap <A-L> :lprev<CR>| " Prev item in the location list.
 nnoremap <A-q> :cnext<CR>| " Next item in the quickfix list.
 nnoremap <A-Q> :cprev<CR>| " Prev item in the quickfix list.
+nnoremap <A-s> ]s|         " Next spelling mistake.
+nnoremap <A-S> [s|         " Prev spelling mistake.
 nnoremap <A-t> :tabnext<CR>|               " Next tab.
 nnoremap <A-T> :tabprev<CR>|               " Prev tab.
 nnoremap <A-x> :call BufferClose('')<CR>|  " Close current buffer.
