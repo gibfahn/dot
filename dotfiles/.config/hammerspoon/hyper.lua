@@ -16,7 +16,7 @@
 --   ,---,---,---,---,---,   ,---,---,---,---,---,
 --   | ✓ | ✓ | ✓ | ✓ | ✓ |   | ✓ | ✓ | ✓ | ✓ | ✓ |
 --   |---|---|---|---|---|   |---|---|---|---|---|---,
---   | q | ✓ | ✓ | ✓ | g |   | ✓ | ✓ | ✓ | ✓ | ✓ | - |
+--   | ✓ | ✓ | ✓ | ✓ | g |   | ✓ | ✓ | ✓ | ✓ | ✓ | - |
 --   |---|---|---|---|---|   |---|---|---|---|---|---|
 --   | ✓ | ✓ | ✓ | ✓ | ✓ |   | ✓ | ✓ | ✓ | ✓ | o | ' |
 --   |---|---|---|---|---|   |---|---|---|---|---|---|
@@ -98,6 +98,28 @@ hyperMode:bind({}, '.', function()
 -- {{{ Hyper-; -> lock screen
 hyperMode:bind({}, ';', hs.caffeinate.lockScreen)
 -- }}} Hyper-; -> lock screen
+
+-- {{{ Hyper-q -> Work setup
+-- Open work apps and turn on VPN.
+hyperMode:bind({}, 'q', function()
+  hs.notify.new({title='Work Setup', withdrawAfter=3}):send()
+  callVpn("corporate")
+  appsToOpen = {
+    'Activity Monitor',
+    'Safari',
+    'Slack',
+    'Firefox Nightly',
+    'Calendar',
+    'Mail',
+    'Radar 8',
+    'Kitty',
+    'Workflowy',
+  }
+  for _, app in ipairs(appsToOpen) do
+    hs.application.launchOrFocus(app)
+  end
+end)
+-- }}} Hyper-q -> Work setup
 
 -- {{{ Hyper-⇧-w -> Restart Wi-Fi
 hyperMode:bind({'shift'}, 'w', function()
@@ -204,7 +226,7 @@ end)
 -- }}} Hyper-⇧-x -> Restart the touch strip.
 
 -- {{{ Hyper-<mods>-v -> Connect to VPN
-local callVpn = function(arg)
+callVpn = function(arg)
   hs.task.new(os.getenv("HOME").."/bin/vpn", function(exitCode, stdOut, stdErr)
     hs.notify.new({title='VPN '..arg..'...', informativeText=exitCode.." "..stdOut.." "..stdErr, withdrawAfter=3}):send()
   end
