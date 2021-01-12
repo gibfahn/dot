@@ -247,13 +247,6 @@ if [[ $USER == gib ]]; then # Set keyboard preferences.
   # Set sidebar icon size to medium
   updateMacOSDefault NSGlobalDomain NSTableViewDefaultSizeMode int 2
 
-  # Show developer options in Radar 8.
-  updateMacOSDefault com.apple.radar.gm shouldShowDeveloperOptions bool true
-  # Keep all tabs in same window.
-  updateMacOSDefault com.apple.radar.gm RDARWindowTabbingAllowMixedDocumentTypes bool true
-  # Show 100 items in File > Open Recent.
-  updateMacOSDefault com.apple.radar.gm NSRecentDocumentsLimit 100
-
   # Show all processes in Activity Monitor
   updateMacOSDefault com.apple.ActivityMonitor ShowCategory int 0
 
