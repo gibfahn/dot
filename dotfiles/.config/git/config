@@ -244,7 +244,7 @@
 
 # Allows you to use tools to generate readable diffs for binary formats.
 # These are just for humans to read, and shouldn't be used to send diffs for others to apply.
-# See also changes in git attrbutes file (./attributes).
+# See also changes in git attributes file (./attributes).
 [diff "wasm"]
   textconv = wasm2wat --enable-all --generate-names # Use wasm2wat to generate readable wasm diffs.
 [diff "plist"]
