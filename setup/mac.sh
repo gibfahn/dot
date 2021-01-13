@@ -143,6 +143,24 @@ updateMacOSDefault NSGlobalDomain com.apple.trackpad.forceClick bool false
 # System Preferences > Accessibility > Zoom > Use scroll gesture with modifer keys to zoom > Enabled
 updateMacOSDefault com.apple.universalaccess closeViewScrollWheelToggle bool true
 
+# System Preferences > Keyboard > Text > Capitalize words automatically.
+updateMacOSDefault NSGlobalDomain NSAutomaticCapitalizationEnabled bool true
+
+# System Preferences > Keyboard > Text > Add full stop with double-space.
+updateMacOSDefault NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled bool true
+
+# Show a list when saving files.
+updateMacOSDefault NSGlobalDomain NavPanelFileListModeForSaveMode int 2
+
+# System Preferences > Sound Effects > Select and alert sound: Heroine.
+# Change the error sound to the drum.
+if [[ -e /System/Library/Sounds/Hero.aiff ]]; then
+  updateMacOSDefault NSGlobalDomain com.apple.sound.beep.sound string /System/Library/Sounds/Hero.aiff
+else
+  echo "Couldn't find file /System/Library/Sounds/Hero.aiff"
+  exit 15
+fi
+
 # System Preferences > Keyboard > Dictation > On
 updateMacOSDefault com.apple.assistant.support "Dictation Enabled" bool true
 
@@ -244,11 +262,39 @@ if [[ $USER == gib ]]; then # Set keyboard preferences.
   # Disable the animations for opening Quick Look windows
   updateMacOSDefault NSGlobalDomain QLPanelAnimationDuration float 0
 
+  # Set Date format to RFC 3339 formatting, e.g. 2000-12-25
+  updateMacOSDefault NSGlobalDomain AppleICUDateFormatStrings dict \
+'{
+    1 = "y-MM-dd";
+    2 = "y-MM-dd";
+    3 = "y-MM-dd";
+    4 = "EEEE, y-MM-d";
+}'
+
   # Set sidebar icon size to medium
   updateMacOSDefault NSGlobalDomain NSTableViewDefaultSizeMode int 2
 
   # Show all processes in Activity Monitor
   updateMacOSDefault com.apple.ActivityMonitor ShowCategory int 0
+
+  # Enable dictation with double-tap of Fn button.
+  updateMacOSDefault com.apple.HIToolbox AppleDictationAutoEnable int 1
+  # System Preferences > Keyboard > Press Function key to: Start Dictation.
+  #                               > Press and hold Fn key to: Show F1, F2, F3 Keys.
+  updateMacOSDefault com.apple.HIToolbox AppleFnUsageType int 3
+
+  # Avoid tolls by default.
+  updateMacOSDefault com.apple.Maps MapsDefaultAvoidTollsKey bool true
+
+  # Messages > Preferences > Keep messages: Forever.
+  updateMacOSDefault com.apple.MobileSMS KeepMessageForDays int 0
+
+  # Show Safari developer menu.
+  safari_changed+=$(updateMacOSDefault com.apple.Safari IncludeDevelopMenu bool true)
+  # Default to saving files in ~/tmp.
+  safari_changed+=$(updateMacOSDefault com.apple.Safari NSNavLastRootDirectory string '~/tmp')
+  # Safari > Preferences > General > Safari opens with: All non-private windows from last session.
+  safari_changed+=$(updateMacOSDefault com.apple.Safari OpenPrivateWindowWhenNotRestoringSessionAtLaunch bool false)
 
   # Order matters here for the "has it changed" comparison.
   spotlight_preferences=(
