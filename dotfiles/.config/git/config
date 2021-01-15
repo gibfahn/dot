@@ -6,7 +6,7 @@
   # Set up a fork the way I like it:
   fork = "! set -x; up=${1:-up} fork=${2:-fork} fork_branch=${3:-forkmain} && up_branch=${4:-$(git default-branch $up)} && { git remote | grep -qx $fork || hub fork --remote-name=$fork; } && git remote -v && git push $fork $up/${up_branch:?}:refs/heads/$fork_branch && git change-branch $fork $fork_branch && git default-branch $fork && git clean-fork $fork $fork_branch #"
   # Change the remote default branch to "$2" (default: "forkmain"), for remote $1 (default: "fork").
-  change-branch = "! fork=${1:-fork} branch=${2:-forkmain} && hub api -XPATCH repos/$(git remote-org $fork)/$(git remote-repo $fork) -f name=$(git remote-repo $fork) -f default_branch=$branch --flat | grep '^\\.default_branch' && git remote set-head --auto $fork #"
+  change-branch = "! set -x; fork=${1:-fork} branch=${2:-forkmain} && GH_HOST=$(git remote-host $fork) gh api -XPATCH repos/$(git remote-org $fork)/$(git remote-repo $fork) -f name=$(git remote-repo $fork) -f default_branch=$branch && git remote set-head --auto $fork #"
   check-pr-branch = "! [[ $(git head-branch) != $(git up-branch) ]] || { printf \"\\033[0;31m  ERROR\\033[0m: Create a new branch before raising PR.\\n\" >&2 && exit 1; } #"
   # Removes all branches and tags except "$2" (default: forkmain).
   clean-fork = "! fork=${1:-fork} branch=${2:-forkmain}; git ls-remote --heads --tags $fork | awk '!/\\^\\{\\}/ && !/refs\\/heads\\/'\"$branch\"'/ {print $NF}' | xargs -n ${3:-10} git push --delete $fork && git remote prune $fork #"
@@ -26,6 +26,7 @@
   quote-string = "!read -r l; sed -E -e 's/([\\\"])/\\\\\\1/g' -e 's/(.*)/\"!\\1 #\"/' <<<\"$l\" #"
   remote-org = "!git remote get-url $1 | awk -F ':|/' '{if ($NF) {print $(NF-1)} else {print $(NF-2)}}' #" # Github org for remote. `g remote-org up` -> gibfahn.
   remote-repo = "!git remote get-url $1 | sed -e 's|.*/||' -e 's/.git$//' #" # Github repo for remote. `g remote-repo up` -> dot.
+  remote-host = "!git remote get-url ${1:?} | sed -e 's/^git@//' -e 's|https://||' -e 's/:.*//' -e 's|/.*||' #" # Used for setting GH_HOST.
 
   a   = add           # Add files to index.
   ap  = add -p        # Adds files in hunks (only add some of the changes you made).
