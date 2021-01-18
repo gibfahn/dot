@@ -256,6 +256,11 @@ if [[ $USER == gib ]]; then # Set keyboard preferences.
   # Have the Dock only show apps currently running.
   dock_changed+=$(updateMacOSDefault com.apple.dock static-only bool true)
 
+  # Make the dock appear instantly.
+  # https://simcityltd.medium.com/how-to-get-the-perfect-macos-dock-b2593f9c0f0b
+  dock_changed+=$(updateMacOSDefault com.apple.dock autohide-delay float 0)
+  dock_changed+=$(updateMacOSDefault com.apple.dock autohide-time-modifier float 0.25)
+
   # Allow Finder to be quit (hides Desktop files).
   finder_changed+=$(updateMacOSDefault com.apple.finder QuitMenuItem int 1)
 
@@ -347,10 +352,6 @@ if [[ $USER == gib ]]; then # Set keyboard preferences.
   #
   # Make changing windows quicker with keyboard.
   #   defaults write com.apple.dock expose-animation-duration -float 0.1
-  # Don't wait to hide the dock.
-  #   defaults write com.apple.Dock autohide-delay -float 0
-  # Remove dock animation animation.
-  #   defaults write com.apple.dock autohide-time-modifier -float 1; killall Dock
   # Increase window resize speed for Cocoa animations
   #   defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
   # https://github.com/pawelgrzybek/dotfiles/blob/master/setup-macos.sh
