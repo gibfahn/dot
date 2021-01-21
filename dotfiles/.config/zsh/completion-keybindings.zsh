@@ -239,8 +239,8 @@ _gib_prompt_precmd() {
 # Run between user hitting Enter key, and command being run.
 _gib_prompt_preexec() {
   printf '\e[4 q' # Cursor is an underline (_) while command is running.
-  # Set window title to first 20 chars of command we're about to run.
-  [[ "$PWD" == "$HOME" ]] && printf "\e]2;%s\a" "${1:0:20}"
+  # Set window title to first 40 chars of command we're about to run.
+  [[ "$PWD" == "$HOME" ]] && printf "\e]2;%s\a" "${1:0:40}"
 }
 
 autoload -Uz add-zsh-hook
