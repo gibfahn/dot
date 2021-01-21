@@ -4,3 +4,4 @@ run_lib = 'generate_git'
 path = '${dotfile_dir}/.config/up/tasks/clone_repos.toml'
 search_paths = ["~/code"]
 excludes = ["/tmp/", "/go/"]
+prune = true

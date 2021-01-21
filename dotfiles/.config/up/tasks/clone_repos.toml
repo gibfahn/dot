@@ -3,6 +3,7 @@ run_lib = 'git'
 
 [[data]]
 path = '/Users/gib/code/bazel/bazel'
+prune = true
 
 [[data.remotes]]
 fetch_url = 'git@github.com:gibfahn/bazel.git'
@@ -14,6 +15,7 @@ name = 'up'
 
 [[data]]
 path = '/Users/gib/code/bazel/bazelisk'
+prune = true
 
 [[data.remotes]]
 fetch_url = 'https://github.com/bazelbuild/bazelisk'
@@ -21,6 +23,7 @@ name = 'up'
 
 [[data]]
 path = '/Users/gib/code/bazel/buildtools'
+prune = true
 
 [[data.remotes]]
 fetch_url = 'https://github.com/bazelbuild/buildtools'
@@ -28,6 +31,7 @@ name = 'up'
 
 [[data]]
 path = '/Users/gib/code/bazel/gazelle'
+prune = true
 
 [[data.remotes]]
 fetch_url = 'https://github.com/bazelbuild/bazel-gazelle'
@@ -35,6 +39,7 @@ name = 'up'
 
 [[data]]
 path = '/Users/gib/code/bazel/homebrew-tap'
+prune = true
 
 [[data.remotes]]
 fetch_url = 'git@github.com:gibfahn/homebrew-tap.git'
@@ -46,6 +51,7 @@ name = 'up'
 
 [[data]]
 path = '/Users/gib/code/bazel/platforms'
+prune = true
 
 [[data.remotes]]
 fetch_url = 'https://github.com/bazelbuild/platforms'
@@ -53,6 +59,7 @@ name = 'up'
 
 [[data]]
 path = '/Users/gib/code/bazel/rules_docker'
+prune = true
 
 [[data.remotes]]
 fetch_url = 'https://github.com/bazelbuild/rules_docker'
@@ -60,6 +67,7 @@ name = 'up'
 
 [[data]]
 path = '/Users/gib/code/buildbarn/bb-adrs'
+prune = true
 
 [[data.remotes]]
 fetch_url = 'https://github.com/buildbarn/bb-adrs'
@@ -67,6 +75,7 @@ name = 'up'
 
 [[data]]
 path = '/Users/gib/code/buildbarn/bb-autoscaler'
+prune = true
 
 [[data.remotes]]
 fetch_url = 'https://github.com/buildbarn/bb-autoscaler'
@@ -74,6 +83,7 @@ name = 'up'
 
 [[data]]
 path = '/Users/gib/code/buildbarn/bb-browser'
+prune = true
 
 [[data.remotes]]
 fetch_url = 'https://github.com/buildbarn/bb-browser'
@@ -81,6 +91,7 @@ name = 'up'
 
 [[data]]
 path = '/Users/gib/code/buildbarn/bb-deployments'
+prune = true
 
 [[data.remotes]]
 fetch_url = 'https://github.com/buildbarn/bb-deployments'
@@ -88,6 +99,7 @@ name = 'up'
 
 [[data]]
 path = '/Users/gib/code/buildbarn/bb-event-service'
+prune = true
 
 [[data.remotes]]
 fetch_url = 'https://github.com/buildbarn/bb-event-service'
@@ -95,6 +107,7 @@ name = 'up'
 
 [[data]]
 path = '/Users/gib/code/buildbarn/bb-remote-execution'
+prune = true
 
 [[data.remotes]]
 fetch_url = 'https://github.com/buildbarn/bb-remote-execution'
@@ -102,6 +115,7 @@ name = 'up'
 
 [[data]]
 path = '/Users/gib/code/buildbarn/bb-storage'
+prune = true
 
 [[data.remotes]]
 fetch_url = 'https://github.com/buildbarn/bb-storage'
@@ -109,6 +123,7 @@ name = 'up'
 
 [[data]]
 path = '/Users/gib/code/dot'
+prune = true
 
 [[data.remotes]]
 fetch_url = 'https://github.com/gibfahn/dot'
@@ -116,6 +131,7 @@ name = 'up'
 
 [[data]]
 path = '/Users/gib/code/me/codelets'
+prune = true
 
 [[data.remotes]]
 fetch_url = 'git@github.com:gibfahn/codelets'
@@ -123,6 +139,7 @@ name = 'up'
 
 [[data]]
 path = '/Users/gib/code/me/fahn.co'
+prune = true
 
 [[data.remotes]]
 fetch_url = 'git@gitlab.com:gib/fahn.co'
@@ -130,6 +147,7 @@ name = 'up'
 
 [[data]]
 path = '/Users/gib/code/me/gnt'
+prune = true
 
 [[data.remotes]]
 fetch_url = 'git@github.com:gibfahn/gnt'
@@ -137,6 +155,7 @@ name = 'up'
 
 [[data]]
 path = '/Users/gib/code/me/me'
+prune = true
 
 [[data.remotes]]
 fetch_url = 'git@gitlab.com:gib/me'
@@ -144,6 +163,7 @@ name = 'up'
 
 [[data]]
 path = '/Users/gib/code/me/up-rs'
+prune = true
 
 [[data.remotes]]
 fetch_url = 'https://github.com/gibfahn/up-rs'
@@ -152,6 +172,7 @@ push_url = 'git@github.com:gibfahn/up-rs'
 
 [[data]]
 path = '/Users/gib/code/me/vim-gib'
+prune = true
 
 [[data.remotes]]
 fetch_url = 'git@github.com:gibfahn/vim-gib'
@@ -159,72 +180,8 @@ name = 'up'
 
 [[data]]
 path = '/Users/gib/code/tunes'
+prune = true
 
 [[data.remotes]]
 fetch_url = 'git@gitlab.com:gib/tunes'
-name = 'up'
-
-[[data]]
-path = '/Users/gib/code/utils/brew/brew'
-
-[[data.remotes]]
-fetch_url = 'git@github.com:gibfahn/brew.git'
-name = 'fork'
-
-[[data.remotes]]
-fetch_url = 'https://github.com/homebrew/brew'
-name = 'up'
-
-[[data]]
-path = '/Users/gib/code/utils/brew/cask'
-
-[[data.remotes]]
-fetch_url = 'git@github.com:gibfahn/homebrew-cask.git'
-name = 'fork'
-
-[[data.remotes]]
-fetch_url = 'https://github.com/Homebrew/homebrew-cask/'
-name = 'up'
-
-[[data]]
-path = '/Users/gib/code/utils/brew/core'
-
-[[data.remotes]]
-fetch_url = 'git@github.com:gibfahn/homebrew-core.git'
-name = 'fork'
-
-[[data.remotes]]
-fetch_url = 'https://github.com/Homebrew/homebrew-core'
-name = 'up'
-
-[[data]]
-path = '/Users/gib/code/utils/coc.nvim'
-
-[[data.remotes]]
-fetch_url = 'git@github.com:gibfahn/coc.nvim.git'
-name = 'fork'
-
-[[data.remotes]]
-fetch_url = 'https://github.com/neoclide/coc.nvim'
-name = 'up'
-
-[[data]]
-path = '/Users/gib/code/utils/gh-cli'
-
-[[data.remotes]]
-fetch_url = 'https://github.com/cli/cli'
-name = 'up'
-
-[[data]]
-path = '/Users/gib/code/utils/refined-github'
-
-[[data.remotes]]
-fetch_url = 'https://github.com/sindresorhus/refined-github'
-name = 'up'
-
-[[data]]
-path = '/Users/gib/code/utils/rust/rust-clippy'
-
-[[data.remotes]]
-fetch_url = 'https://github.com/rust-lang/rust-clippy/'
 name = 'up'

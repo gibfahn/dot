@@ -28,9 +28,6 @@ done
 # Mostly to placate `git unpushed`.
 [[ -z $SKIP_MERGE ]] && git merge --quiet --ff-only && true
 
-# Clean up stale PR branches.
-git bp --force --quiet
-
 # Show unpushed changes (but trim the output, otherwise it can be extremely long).
 git unpushed
 
