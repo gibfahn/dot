@@ -258,7 +258,7 @@
 [help]
   autocorrect = 1          # Autocorrect nonexistant commands after 0.1s.
 [interactive]
-    singleKey = true       # Don't require Enter to confirm, e.g. for `git add -p` press y not y⏎.
+  singleKey = true       # Don't require Enter to confirm, e.g. for `git add -p` press y not y⏎.
 [log]
   follow = true            # Log tracks file move/rename.
 [merge]
