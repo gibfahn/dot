@@ -1,5 +1,7 @@
 #!/usr/bin/env zsh
 
+set -eu
+
 usage() {
 echo "$(tput bold; tput setaf 74)$ZSH_ARGZERO [-h|--help] [-v|--version] [-f|--force] [-q|--quiet]$(tput sgr0)
 
