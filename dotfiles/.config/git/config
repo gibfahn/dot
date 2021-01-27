@@ -250,6 +250,8 @@
   textconv = wasm2wat --enable-all --generate-names # Use wasm2wat to generate readable wasm diffs.
 [diff "plist"]
   textconv = plutil -p # Use plutil to generate readable plist diffs.
+[diff "jq"]
+  textconv = jq . # Use plutil to generate readable plist diffs.
 
 [fetch]
   prune = true             # Delete local tracking branches if remote is gone.
