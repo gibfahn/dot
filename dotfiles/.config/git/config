@@ -93,12 +93,6 @@
   fixup = "!  hash=$(git rev-parse "$1") \
            && git commit --fixup=$hash ${@:2} \
            && EDITOR=true git rebase -i --autostash --autosquash $hash^ #"
-  # Create/update branch from Github PR, `g fp 657 origin` or `g fp` (Defaults: $1=head-branch, $2=up-remote if $1 not set, else "up").
-  fp = "! a=${1:-$(git head-branch)} b=${2:-up}; [[ -z $@ ]] && b=$(git up-remote) \
-        ; [[ -z $1 ]] && git checkout --quiet @ \
-        ; git fetch --force --update-head-ok $b pull/$a/head:$a \
-        && git checkout --quiet $a \
-        && git branch --quiet --set-upstream-to=$(git symbolic-ref --short refs/remotes/$b/HEAD) #"
 
   h = help
 
@@ -134,6 +128,7 @@
   pap = "!curl -L ${1%.patch}.patch | git am -3 -S --whitespace=fix  # " # Please patch it.
   paw = "!curl -L ${1%.patch}.patch | git am -3 -S --whitespace=warn # " # Patch but don't fix whitespace.
   ppr = "!git check-pr-branch && git push && git pr # "          # Push and raise PR at the same time.
+  ptp = "!set -x; branch=$(git branch --show-current); git push $(git config branch.${branch}.pushRemote) @:${branch#*-} #"
   pt  = "!git push -u $1 $(git head-branch) #"                  # g pt origin sets branch to track up + pushes.
   pl  = pull
 

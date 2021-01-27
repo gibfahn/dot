@@ -1,0 +1,60 @@
+#!/usr/bin/env zsh
+
+set -eu
+
+usage() {
+echo "$(tput bold; tput setaf 74)$ZSH_ARGZERO [pr number] [up_remote] $(tput sgr0)
+
+git fetch pr: fetch and set up a PR branch.
+
+Given no args, force updates the current branch to the relevant PR.
+
+git fp 123 up -> Create a branch called '123-<PR branch name>' and set the push and upstream remotes accordingly.
+git fp        -> Update the current branch (assumed to be a PR branch created by this script).
+git ptp       -> push to the user's branch (in my git config as an alias).
+
+Creates and assumes local branches of the form <PR Number>-<PR Branch Name>, e.g. 123-myfeaturebranch.
+"
+}
+
+while [[ $# != 0 ]]; do
+  [[ $1 =~ ^(--help|-h)$ ]] && { usage; exit; }
+
+  [[ $1 =~ ^(--version|-v)$ ]] && { echo "master"; exit; }
+
+  [[ $1 =~ ^(--quiet|-q)$ ]] && { QUIET=true; shift; continue }
+
+  [[ $# != 0 ]] && { pr_number=$1; shift; }
+
+  [[ $# != 0 ]] && { up_remote=$1; shift; }
+
+  [[ $# != 0 ]] && { echo "Too many args"; usage; exit 1; }
+done
+
+if [[ -z ${up_remote:-} ]]; then
+  up_remote=$(git rev-parse --abbrev-ref --symbolic-full-name @{u})
+  up_remote=${up_remote%%/*}
+fi
+
+head_branch=$(git branch --show-current)
+
+if [[ -n ${pr_number:-} ]]; then
+  # Assuming new PR checkout.
+
+  # Checkout PR branch and save its name and remote.
+  gh pr checkout $pr_number
+  pr_branch=$(git branch --show-current)
+  push_remote=$(git config branch.$pr_branch.remote)
+
+  # Switch to better-named branch
+  head_branch=$pr_number-$pr_branch
+  git switch --quiet -c $head_branch
+  git branch --delete $pr_branch
+  git branch --quiet --set-upstream-to=$(git symbolic-ref --short refs/remotes/$up_remote/HEAD)
+  git config branch.$head_branch.pushRemote $push_remote
+else
+  # Update current branch to 
+  pr_number=${head_branch%%-*}
+  pr_branch=${head_branch#*-}
+  git fetch --force --update-head-ok $up_remote pull/$pr_number/head:$head_branch
+fi
