@@ -5,15 +5,17 @@ hs.hotkey.bind({'ctrl'}, '`', nil, function()
   hs.reload()
 end)
 
--- {{{ § -> Run hidutil script to re-apply key mappings.
--- This key is one I don't use, that only exists pre-mapping.
--- TODO: actually use the plist functionality to make the mappings persistent.
-hs.hotkey.bind({}, '§', function()
+remapKeys = function()
   local cmd = os.getenv("HOME").."/bin/hid"
   local output, status, _, rc = hs.execute(cmd)
   hs.hid.capslock.set(false) -- Turn off Caps Lock.
   hs.notify.new({title='Running Hidutil...', informativeText=rc.." "..output, withdrawAfter=3}):send()
-end)
+end
+
+-- {{{ § -> Run hidutil script to re-apply key mappings.
+-- This key is one I don't use, that only exists pre-mapping.
+-- TODO: actually use the plist functionality to make the mappings persistent.
+hs.hotkey.bind({}, '§', remapKeys)
 -- }}} § -> Run hidutil script to re-apply key mappings.
 
 require('hyper')

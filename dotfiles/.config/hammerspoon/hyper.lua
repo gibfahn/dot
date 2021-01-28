@@ -103,6 +103,7 @@ hyperMode:bind({}, ';', hs.caffeinate.lockScreen)
 -- Open work apps and turn on VPN.
 hyperMode:bind({}, 'q', function()
   hs.notify.new({title='Work Setup', withdrawAfter=3}):send()
+  remapKeys()
   callVpn("corporate")
   appsToOpen = {
     'Activity Monitor',
@@ -120,6 +121,23 @@ hyperMode:bind({}, 'q', function()
   end
 end)
 -- }}} Hyper-q -> Work setup
+
+-- {{{ Hyper-shift-q -> Minimal setup
+-- Open work apps I actually use and turn on VPN.
+hyperMode:bind({'shift'}, 'q', function()
+  hs.notify.new({title='Minimal Work Setup', withdrawAfter=3}):send()
+  remapKeys()
+  callVpn("corporate")
+  appsToOpen = {
+    'Activity Monitor',
+    'Safari',
+    'Kitty',
+  }
+  for _, app in ipairs(appsToOpen) do
+    hs.application.launchOrFocus(app)
+  end
+end)
+-- }}} Hyper-shift-q -> Minimal setup
 
 -- {{{ Hyper-⇧-w -> Restart Wi-Fi
 hyperMode:bind({'shift'}, 'w', function()
