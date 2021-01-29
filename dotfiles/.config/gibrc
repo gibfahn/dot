@@ -1,4 +1,3 @@
-# shellcheck shell=bash disable=SC1090
 # My shell configuration file. Must be sourced. I include this from .profile, .bashrc, and .zshrc like so:
 #   . "$HOME/.config/gibrc"
 
@@ -207,24 +206,32 @@ rv() {
 
 # {{{ Path additions
 
-# Beginning of path:
-pathadd "$VULKAN_SDK/bin" # VulkanSDK packages.
-pathadd "/opt/brew/opt/llvm/bin" # Homebrew clangd tools.
-pathadd "$GOPATH/bin" # Go binaries.
-pathadd /usr/bin # Should be after /usr/local/bin.
-pathadd /usr/local/bin # Missed in some shells.
-pathadd /usr/local/sbin # Missed in some shells.
-pathadd /opt/brew/bin # Alternate brew install location.
-pathadd /opt/brew/opt/ruby/bin # Brew ruby.
-pathadd /opt/brew/lib/ruby/gems/*/bin(N) # Add ruby or skip.
-# pathadd /usr/lib/ccache # Add ccache to the path if installed (Linux).
-# pathadd /usr/local/opt/ccache/libexec # Add ccache to the path if installed (macOS).
-pathadd "$CARGO_HOME/bin" # Rust packages.
-pathadd "$HOME/.local/bin"
-pathadd "$HOME/bin" # Put random binaries you want to run in here.
-[[ -n "$VIRTUAL_ENV" ]] && pathadd "$VIRTUAL_ENV/bin" # Virtual env needs to be in front of /usr/local/bin.
+typeset -U path # Don't allow duplicates in the path (keep left-most entry).
 
-# End of path:
+path=(
+  ${VIRTUAL_ENV:+$VIRTUAL_ENV/bin} # Virtual env needs to be in front of /usr/local/bin.
+
+  $HOME/bin # Put random binaries you want to run in here.
+  $HOME/.local/bin
+# /usr/local/opt/ccache/libexec # Add ccache to the path if installed (macOS).
+# /usr/lib/ccache # Add ccache to the path if installed (Linux).
+
+  /opt/brew/opt/llvm/bin # Homebrew clangd tools.
+  /opt/brew/opt/ruby/bin # Brew ruby.
+  /opt/brew/lib/ruby/gems/*/bin(N) # Add ruby or skip.
+  /opt/brew/bin # Alternate brew install location.
+
+  /usr/local/sbin # Missed in some shells.
+  /usr/local/bin # Missed in some shells.
+  /usr/bin # Should be after /usr/local/bin.
+
+  $HOME/Library/Python/*/bin(N) # macOS Python User Packages.
+  ${CARGO_HOME:+$CARGO_HOME/bin} # Rust packages.
+  ${GOPATH:+$GOPATH/bin} # Go binaries.
+  ${VULKAN_SDK:+$VULKAN_SDK/bin} # VulkanSDK packages.
+  $path
+)
+export PATH
 
 # }}} Path Additions
 
