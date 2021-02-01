@@ -216,6 +216,9 @@ path=(
 # /usr/local/opt/ccache/libexec # Add ccache to the path if installed (macOS).
 # /usr/lib/ccache # Add ccache to the path if installed (Linux).
 
+  # Overrides the version in /opt/brew/bin.
+  ${CARGO_HOME:+$CARGO_HOME/bin} # Rust packages.
+
   /opt/brew/opt/llvm/bin # Homebrew clangd tools.
   /opt/brew/opt/ruby/bin # Brew ruby.
   /opt/brew/lib/ruby/gems/*/bin(N) # Add ruby or skip.
@@ -226,7 +229,6 @@ path=(
   /usr/bin # Should be after /usr/local/bin.
 
   $HOME/Library/Python/*/bin(N) # macOS Python User Packages.
-  ${CARGO_HOME:+$CARGO_HOME/bin} # Rust packages.
   ${GOPATH:+$GOPATH/bin} # Go binaries.
   ${VULKAN_SDK:+$VULKAN_SDK/bin} # VulkanSDK packages.
   $path
