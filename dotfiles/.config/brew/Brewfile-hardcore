@@ -52,7 +52,6 @@ brew "gnutls"                            # Provides gnutls-cli for setting up TL
 brew "go"                                # Go progamming language.
 brew "grep"                              # GNU version of grep.
 brew "httpie"                            # Alternative to curl, `http` binary.
-brew "hub"                               # GitHub CLI tool.
 brew "hyperfine"                         # Benchmark commands (time but a benchmarking suite).
 brew "jq"                                # Makes it easy to deal with JSON on the command line.
 brew "kubectx"                           # Easily change Kubernetes context or namespace.
