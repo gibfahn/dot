@@ -10,6 +10,6 @@ but I can't get it to work.
 
 [[ $1 =~ ^(--help|-h)$ ]] && { usage; exit; }
 
-[[ $1 =~ ^(--version|-v)$ ]] && { echo "master"; exit; }
+[[ $1 =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
 
 scrot -s /tmp/screenshot-$(date +%F_%T).png -e 'xclip -selection c -t image/png < $f' && notify-send 'Screenshot captured'

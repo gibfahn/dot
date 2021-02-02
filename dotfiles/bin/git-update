@@ -14,7 +14,7 @@ SKIP_FETCH= SKIP_MERGE=
 while [[ $# != 0 ]]; do
   [[ $1 =~ ^(--help|-h)$ ]] && { usage; exit; }
 
-  [[ $1 =~ ^(--version|-v)$ ]] && { echo "master"; exit; }
+  [[ $1 =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
 
   [[ $1 =~ ^--skip-fetch$ ]] && { SKIP_FETCH=true; shift; }
 

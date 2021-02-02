@@ -16,7 +16,7 @@ FORCE_PRUNE= QUIET=
 while [[ $# != 0 ]]; do
   [[ $1 =~ ^(--help|-h)$ ]] && { usage; exit; }
 
-  [[ $1 =~ ^(--version|-v)$ ]] && { echo "master"; exit; }
+  [[ $1 =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
 
   [[ $1 =~ ^(--force|-f)$ ]] && { FORCE_PRUNE=true; shift; }
 

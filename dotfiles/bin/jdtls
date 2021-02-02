@@ -10,7 +10,7 @@ See: https://github.com/autozimu/LanguageClient-neovim/wiki/Java
 
 [[ $1 =~ ^(--help|-h)$ ]] && { usage; exit; }
 
-[[ $1 =~ ^(--version|-v)$ ]] && { echo "master"; exit; }
+[[ $1 =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
 
 case "$(uname)" in
   Darwin) os=mac ;;

@@ -20,7 +20,7 @@ Creates and assumes local branches of the form <PR Number>-<PR Branch Name>, e.g
 while [[ $# != 0 ]]; do
   [[ $1 =~ ^(--help|-h)$ ]] && { usage; exit; }
 
-  [[ $1 =~ ^(--version|-v)$ ]] && { echo "master"; exit; }
+  [[ $1 =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
 
   [[ $1 =~ ^(--quiet|-q)$ ]] && { QUIET=true; shift; continue }
 

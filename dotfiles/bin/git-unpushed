@@ -11,7 +11,7 @@ Checks for unsaved changes. If this passes the repo is backed up to its git remo
 
 [[ ${1:-} =~ ^(--help|-h)$ ]] && { usage; exit; }
 
-[[ ${1:-} =~ ^(--version|-v)$ ]] && { echo "master"; exit; }
+[[ ${1:-} =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
 
 SHORT=
 [[ ${1:-} =~ ^(--short)$ ]] && { SHORT=true; }

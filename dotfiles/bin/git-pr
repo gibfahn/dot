@@ -17,7 +17,7 @@ https://fahn.co/posts/a-better-pull-request-workflow-with-git-push-branches.html
 while [[ $# != 0 ]]; do
   [[ $1 =~ ^(--help|-h)$ ]] && { usage; exit; }
 
-  [[ $1 =~ ^(--version|-v)$ ]] && { echo "master"; exit; }
+  [[ $1 =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
 done
 
 main() {

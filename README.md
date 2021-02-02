@@ -25,7 +25,7 @@ git clone https://github.com/gibfahn/dot -o up && cd dot &&
   GIT_NAME=$(git config --global user.name) GIT_EMAIL=$(git config --global user.email) NO_SUDO=true ./up
 ```
 
-### How to update to the latest master
+### How to update to the latest main
 
 ```bash
 ./update

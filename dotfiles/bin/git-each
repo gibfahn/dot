@@ -19,7 +19,7 @@ Requires: fd CLI (https://github.com/sharkdp/fd).
 
 [[ ${1:-} =~ ^(--help|-h)$ ]] && { usage; exit; }
 
-[[ ${1:-} =~ ^(--version|-v)$ ]] && { echo "master"; exit; }
+[[ ${1:-} =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
 
 MAGENTA='\033[0;35m' # Magenta (purple).
 RED='\033[0;31m' # Red.

@@ -9,7 +9,7 @@ main() {
     encrypt) encrypt ;;
     decrypt) decrypt ;;
     --help|-h) usage ;;
-    --version|-v) echo "master" ;;
+    --version|-v) echo "main" ;;
     *) usage; error "Unrecognized arguments: '$action'" 2 ;;
   esac
 }

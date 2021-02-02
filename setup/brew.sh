@@ -13,7 +13,7 @@ else
   if [[ -d $wrk_dotfile_dir ]]; then
     "$wrk_dotfile_dir"/setup/brew.sh
   else
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   fi
 fi
 
