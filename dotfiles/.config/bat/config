@@ -12,3 +12,4 @@
 --map-syntax "*.bazel:Python"
 --map-syntax "WORKSPACE:Python"
 --map-syntax ".bazelrc:bash"
+--map-syntax "*.pcl:Groovy"
