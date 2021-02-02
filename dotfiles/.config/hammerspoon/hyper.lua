@@ -102,9 +102,7 @@ local messageHot = message.new('hot 🎤')
 -- Hyper-, -> hold to enable mic (while held), tap to mute.
 hyperMode:bind({}, ',', function()
     local device = hs.audiodevice.defaultInputDevice()
-    -- TODO(gib): stop changing volume and go back to muting when Webex works.
-    -- device:setInputMuted(true)
-    device:setInputVolume(0)
+    device:setInputMuted(true)
     messageMuting:notify()
     displayStatus()
   end
@@ -113,9 +111,33 @@ hyperMode:bind({}, ',', function()
 -- Hyper-. -> tap to unmute mic.
 hyperMode:bind({}, '.', function()
     local device = hs.audiodevice.defaultInputDevice()
-    -- TODO(gib): stop changing volume and go back to muting when Webex works.
-    -- device:setInputMuted(false)
+    device:setInputMuted(false)
+
+    -- TODO(gib): stop this workaround once Webex handles global unmuting properly.
+    -- Webex recognises that you've muted the microphone globally, and mutes
+    -- itself too. However when you unmute the microphone globally, Webex
+    -- doesn't notice, so you stay muted forever.
+    --
+    -- Work around this by doing the equivalent of Cmd-Tabbing to Webex and
+    -- clicking Participant > Unmute Me.
+    --
+    -- This solves the unmuting problem, but there's another issue. If you mute
+    -- and your mic volume is set to 100%, when you unmute Webex sets it to
+    -- aroudn 30%, even if you untick "Automatically adjust volume". Manually
+    -- setting it back up to 100% doesn't seem to work either, probably because
+    -- Webex hasn't processed the unmuting fully when I change the volume back.
+    --
+    -- What seems to work for me is hitting the unmute hotkey twice. Sad but it
+    -- seems to work.
+    local webex = hs.application.find("Cisco Webex Meetings")
+    if (webex ~= nil) then
+        webex:selectMenuItem("Unmute Me")
+    end
+    -- Webex turns the input volume down when you unmute for no obvious reason, turn it back up.
+    -- TODO(gib): work out why Webex doesn't always turn the volume back up when you
+    -- do this, so you have to hit the shortcut twice 😭.
     device:setInputVolume(100)
+
     messageHot:notify()
     displayStatus()
   end
