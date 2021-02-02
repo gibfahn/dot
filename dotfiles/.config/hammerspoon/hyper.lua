@@ -43,6 +43,33 @@ f17 = hs.hotkey.bind({}, 'F17', pressedF17, releasedF17)
 
 -- }}} F17 -> Hyper Key
 
+-- {{{ Generally useful functions
+
+-- Kill all instances of something.
+-- Args:
+--   killArgs: string value of thing to kill, or an array if multiple arguments needed.
+--     e.g. killAll('Dock'), killAll({'-9', 'docker'})
+--   sudo: optionally set to true to run with `sudo killall`
+--     e.g. killAll('Dock', {sudo=true})
+local killAll = function(killArgs, opts)
+  hyperMode:exit()
+  sudo = opts and opts.sudo or false
+  if (type(killArgs) ~= "table") then
+    killArgs = {killArgs}
+  end
+  command = "/usr/bin/killall"
+  if (sudo) then
+    table.insert(killArgs, 1, command)
+    command = "sudo"
+  end
+  hs.task.new(command, function(exitCode, stdOut, stdErr)
+    hs.notify.new({title='Killed all '..table.concat(killArgs, " ")..'...', informativeText=exitCode.." "..stdOut.." "..stdErr, withdrawAfter=3}):send()
+  end
+   , killArgs):start()
+end
+
+-- }}} Generally useful functions
+
 -- {{{ Hyper-<key> -> Launch apps
 hyperModeAppMappings = {
 
@@ -139,6 +166,13 @@ hyperMode:bind({'shift'}, 'q', function()
 end)
 -- }}} Hyper-shift-q -> Minimal setup
 
+-- {{{ Hyper-cmd-q -> Force Quit Webex
+-- Quit webex without spending an age trying to find the button.
+hyperMode:bind({'alt'}, 'q', function()
+  killAll({'-9', '-m', '.*Meeting Center.*'})
+end)
+-- }}} Hyper-cmd-q -> Force Quit Webex
+
 -- {{{ Hyper-⇧-w -> Restart Wi-Fi
 hyperMode:bind({'shift'}, 'w', function()
   hs.notify.new({title='Restarting Wi-Fi...', withdrawAfter=3}):send()
@@ -213,13 +247,6 @@ end)
 -- }}} Hyper-Enter -> Open clipboard contents.
 
 -- {{{ Hyper-<mods>-\ -> Quit things.
-local killAll = function(arg)
-  hyperMode:exit()
-  hs.task.new("/usr/bin/killall", function(exitCode, stdOut, stdErr)
-    hs.notify.new({title='Killed all '..arg..'...', informativeText=exitCode.." "..stdOut.." "..stdErr, withdrawAfter=3}):send()
-  end
-  , {arg}):start()
-end
 hyperMode:bind({}, '\\', function()
   killAll("Dock")
 end)
@@ -231,10 +258,7 @@ hyperMode:bind({'alt'}, '\\', function()
 end)
 hyperMode:bind({'cmd'}, '\\', function()
   -- Restart WindowServer (logs you out).
-  local cmd = "sudo killall -HUP WindowServer"
-  hyperMode:exit()
-  local output, status, _, rc = hs.execute(cmd)
-  hs.notify.new({title='Restarting WindowServer...', informativeText=rc.." "..output, withdrawAfter=3}):send()
+  killAll("-HUP", "WindowServer", {sudo=true})
 end)
 
 -- {{{ Hyper-⇧-x -> Restart the touch strip.
