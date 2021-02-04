@@ -61,6 +61,13 @@
   ca  = commit -S -a -v                # Commit all changed files with gpg.
   cm  = commit -S --amend -v           # Amend the previous commit.
   cmn = commit -S --amend --no-edit    # Amend the previous commit but don't change the message.
+  # Output Co-authored-by: lines for users who have committed to this repo before.
+  cab = "!git log --all --pretty='Co-authored-by: %an <%ae>' | sort -u | fzf # "
+  # Fallback that searches the GitHub API for specified username ($1). Useful
+  # if they haven't committed to this repo, but many users don't show their
+  # emails in their account.
+  cabb = "!user=${1?}; GH_HOST=$(git remote-host $(git up-remote)) gh api graphql -f query=\"query { search(type:USER, query: \\\"$user\\\", first: 10) { userCount edges { node { ... on User { name, email, } } } } }\" \
+    | jq -r '.data.search.edges[] | \"Co-authored-by: \\(.node.name) <\\(.node.email)>\"' | fzf #"
   can = commit -S --amend --no-edit -a # Add changed files and commit with the same message.
   cn  = clean -ffdx                    # Remove anything that's untracked (DANGER).
   cl  = clone --recurse-submodules     # Always include submodules.
