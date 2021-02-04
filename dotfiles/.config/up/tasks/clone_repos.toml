@@ -168,7 +168,6 @@ prune = true
 [[data.remotes]]
 fetch_url = 'https://github.com/gibfahn/up-rs'
 name = 'up'
-push_url = 'git@github.com:gibfahn/up-rs'
 
 [[data]]
 path = '/Users/gib/code/me/vim-gib'
