@@ -40,7 +40,7 @@ let g:surround_no_mappings = 1                      " Manually map surround, see
 " Parsed by vim-markdown plugin to render code blocks properly.
 " Block names: https://github.com/github/linguist/blob/master/lib/linguist/languages.yml
 let g:markdown_fenced_languages = ['bash=sh', 'c', 'console=sh', 'shell=sh', 'diff', 'dockerfile', 'go', 'java',
-  \ 'javascript', 'js=javascript', 'json', 'kotlin', 'python', 'rust', 'sh', 'toml', 'vim', 'yaml']
+  \ 'javascript', 'js=javascript', 'json', 'kotlin', 'starlark=python', 'python', 'rust', 'sh', 'toml', 'vim', 'yaml']
 
 " Settings for custom statusline.
 let g:lightline = {
