@@ -120,6 +120,13 @@ hyperMode:bind({}, '.', function()
     --
     -- Work around this by doing the equivalent of Cmd-Tabbing to Webex and
     -- clicking Participant > Unmute Me.
+    -- NOTE: this only works if you have already disabled the other Webex
+    -- window, as each window has a different Menu bar, and the other one
+    -- doesn't have a mute option. Fortunately I don't have a use for that
+    -- window anyway, so am happy to disable it by running:
+    -- ```
+    -- chmod -x "/Applications/Cisco Webex Meetings.app/Contents/MacOS/Cisco Webex Meetings"
+    -- ```
     --
     -- This solves the unmuting problem, but there's another issue. If you mute
     -- and your mic volume is set to 100%, when you unmute Webex sets it to
