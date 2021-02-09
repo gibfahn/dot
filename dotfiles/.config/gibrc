@@ -223,6 +223,7 @@ path=(
 
   # Overrides the version in ${brew_prefix}/bin.
   ${CARGO_HOME:+$CARGO_HOME/bin} # Rust packages.
+  ${VOLTA_HOME:+$VOLTA_HOME/bin} # Node.js and packages.
 
   ${brew_prefix:+$brew_prefix/opt/llvm/bin} # Homebrew clangd tools.
   ${brew_prefix:+$brew_prefix/opt/ruby/bin} # Brew ruby.
@@ -314,9 +315,6 @@ cr() { local a=$(r 2>&1); cpy <<<"❯ $a"; }
 { exists fd && alias fda='fd --no-ignore --hidden --exclude=.git'; } \
   || fd() { find . -iname "*$**"; } # Find by filename (case insensitive).
 exists rg && alias rg='rg' rga='rg --hidden --no-ignore --glob=!.git' # rga is grep all (don't ignore anything).
-
-# Start using volta (Node version manager).
-alias vlt='pathadd "$VOLTA_HOME"; pathadd "$VOLTA_HOME"/bin'
 
 # Yaml to json, e.g. "y2j <t.yml | jq .". Requires a `pip install pyyaml`.
 alias y2j="python -c 'import sys, yaml, json; json.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2)'"

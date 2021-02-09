@@ -129,6 +129,11 @@ exists rustup && {
 # _rbenv
 exists rbenv && ln -sf "$XDG_DATA_HOME/rbenv/completions/rbenv.zsh" "$XDG_DATA_HOME/zsh/completions/_rbenv"
 
+# _volta
+if exists volta; then
+  volta completions zsh --force --output "$XDG_DATA_HOME/zsh/completions/_volta"
+fi
+
 # _kitty
 if exists kitty; then
   # Completion for kitty

@@ -32,6 +32,7 @@ XDG_CONFIG_HOME="~/.config" # Use default XDG values.
 _Z_DATA="$XDG_CACHE_HOME/z" # z data file (https://github.com/rupa/z).
 RUSTUP_HOME="$XDG_DATA_HOME/rustup" # Rustup install dir.
 CARGO_HOME="$XDG_DATA_HOME/cargo" # Cargo install dir.
+VOLTA_HOME="$XDG_CACHE_HOME/volta" # Volta install dir.
 GOPATH="$HOME/code/go" # Go install dir.
 GNUPGHOME="$XDG_DATA_HOME/gnupg" # Gpg install dir.
 RBENV_ROOT="$XDG_CACHE_HOME/rbenv" # Set rbenv location.
