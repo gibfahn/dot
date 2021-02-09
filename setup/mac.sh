@@ -187,7 +187,7 @@ updateMacOSDefault NSGlobalDomain AppleAquaColorVariant int 1
 updateMacOSDefault org.hammerspoon.Hammerspoon MJConfigFile string '~/.config/hammerspoon/init.lua'
 
 # Enable key repeat.
-# XXX(gib): Not sure if needed for Hammerspoon key repeat.
+# TODO(gib): Not sure if needed for Hammerspoon key repeat.
 updateMacOSDefault NSGlobalDomain ApplePressAndHoldEnabled bool false
 
 # Mail -> Preferences -> Viewing -> Show Message Headers -> Custom
@@ -346,6 +346,15 @@ if [[ $USER == gib ]]; then # Set keyboard preferences.
     sudo mdutil -i on / >&2
     log_debug "Rebuilding the index from scratch"
     sudo mdutil -E / >&2
+  fi
+
+  # Disable the macOS chime sound when you power on the machine.
+  # On is %00, off is %01.
+  if startup_mute=$(nvram StartupMute | awk '{print $NF}') && [[ $startup_mute == %01 ]]; then
+    log_skip "macOS Startup Chime already disabled."
+  else
+    log_get "Disabling macOS Startup Chime"
+    sudo nvram StartupMute=%01
   fi
 
   # TODO(gib): Add more shortcuts:
