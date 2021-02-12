@@ -409,6 +409,7 @@ nnoremap <Leader>gn :set number!<CR>|                                      " Tog
 nnoremap <Leader>gp `[v`]|                                                 " Visual selection of the last thing you copied or pasted.
 nnoremap <Leader>gs :mksession! <C-r>=SessionFile()<CR><CR>|               " Save current session for vim cwd from a default session path.
 nnoremap <Leader>gS :mksession! <C-r>=SessionFile()<CR>|                   " Save current session for vim cwd from a custom path.
+vnoremap <leader>gs :<C-u>call SumVis()<CR>
 nnoremap <Leader>gt :set et!<CR>:set et?<CR>|                              " Toggle tabs/spaces.
 nnoremap <Leader>gq :set fo-=t<CR>:set fo?<CR>|                            " Turn off line wrapping (auto-inserting newlines when you go over the textwidth).
 nnoremap <Leader>gQ :set fo+=t<CR>:set fo?<CR>|                            " ↳    on
@@ -695,6 +696,19 @@ endfunction
 function! LightlineCocHints() abort
   return s:lightline_coc_diagnostic('hints', "ℹ")
 endfunction
+
+" Sums the selected numbers.
+function! SumVis()
+    try
+        let l:a_save = @a
+        norm! gv"ay
+        let @a = substitute(@a,'[^0-9. ]','+','g')
+        exec "norm! '>o"
+        exec "norm! iTotal \<c-r>=\<c-r>a\<cr>"
+     finally
+        let @a = l:a_save
+     endtry
+endfun
 
 " }}} Functions
 
