@@ -4,7 +4,7 @@
 /.vscode/
 
 # macOS Finder cached info.
-.DS_Store/
+.DS_Store
 
 # IntelliJ IDEA workspace.
 /.idea/
