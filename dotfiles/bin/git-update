@@ -28,7 +28,7 @@ done
 # Mostly to placate `git unpushed`.
 [[ -z $SKIP_MERGE ]] && git merge --quiet --ff-only && true
 
-# Show unpushed changes (but trim the output, otherwise it can be extremely long).
+# Show unpushed changes.
 git unpushed
 
 # List in-progress branches.
