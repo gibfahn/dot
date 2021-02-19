@@ -223,6 +223,9 @@ safari_changed+=$(updateMacOSDefault com.apple.Safari IncludeDevelopMenu bool tr
 safari_changed+=$(updateMacOSDefault com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey bool true)
 safari_changed+=$(updateMacOSDefault com.apple.Safari WebKitPreferences.developerExtrasEnabled bool true)
 
+# See: https://github.com/rxhanson/Rectangle/issues/190#issuecomment-780898717
+updateMacOSDefault com.knollsoft.Rectangle showExportImport bool true
+
 if [[ $USER == gib ]]; then # Set keyboard preferences.
   log_section "Setting gib extra macOS defaults."
 
