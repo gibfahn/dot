@@ -1,0 +1,126 @@
+constraints = {USER = "gib"}
+
+run_lib = "defaults"
+
+[data]
+
+[data."NSGlobalDomain"]
+
+# Expand save panel by default
+NSNavPanelExpandedStateForSaveMode = true
+NSNavPanelExpandedStateForSaveMode2 = true
+
+# Expand print panel by default
+PMPrintingExpandedStateForPrint = true
+PMPrintingExpandedStateForPrint2 = true
+
+# Always open new things in tabs (not new windows) for document based apps.
+AppleWindowTabbingMode = "always"
+
+# Maximise window when you double-click on the title bar.
+AppleActionOnDoubleClick = "Maximize"
+
+# System Preferences > Keyboard > Text > Use smart quotes and dashes -> disable.
+NSAutomaticDashSubstitutionEnabled = false
+NSAutomaticQuoteSubstitutionEnabled = false
+
+# System Preferences -> Keyboard -> Shortcuts -> Full Keyboard Access
+# Full Keyboard Access: In Windows and Dialogs, press Tab to move keyboard
+# focus between:
+#   0: Text Boxes and Lists only
+#   2: All controls
+# Set it to 2 because that's much nicer (you can close confirmation prompts
+# with the keyboard, Enter to press the blue one, tab to select between them,
+# space to press the Tab-selected one. If there are underlined letters, hold
+# Option and press the letter to choose that option.
+AppleKeyboardUIMode = 2
+
+# Remove delay in showing the draggable icon in window bars.
+# https://mjtsai.com/blog/2020/10/05/big-surs-hidden-document-proxy-icon/
+NSToolbarTitleViewRolloverDelay = 0
+
+# Finder: show all filename extensions
+AppleShowAllExtensions = true
+
+# Allow text selection in any QuickLook window.
+QLEnableTextSelection = 1
+
+# System Preferences > General > Click in the scrollbar to: Jump to the spot that's clicked
+AppleScrollerPagingBehavior = 1
+
+# Increases trackpad tracking speed / sensitivity (SysPref max 3.0).
+"com.apple.trackpad.scaling" = 5
+
+# Disable force clicking.
+"com.apple.trackpad.forceClick" = false
+
+# System Preferences > Keyboard > Text > Capitalize words automatically.
+NSAutomaticCapitalizationEnabled = true
+
+# System Preferences > Keyboard > Text > Add full stop with double-space.
+NSAutomaticPeriodSubstitutionEnabled = true
+
+# Show a list when saving files.
+NavPanelFileListModeForSaveMode = 2
+
+# Disabled to use the multicolour accent colour.
+# System Preferences > General > Accent Colour > Purple
+# AppleAccentColor = 5
+
+# Enable key repeat.
+# TODO(gib): Not sure if needed for Hammerspoon key repeat.
+ApplePressAndHoldEnabled = false
+
+# System Preferences > General > Highlight Colour > Blue
+AppleAquaColorVariant = 1
+
+[data."com.apple.AppleMultitouchTrackpad"]
+# Click strength: Haptic feedback 0: Light 1: Medium 2: Firm
+FirstClickThreshold = 0
+SecondClickThreshold = 0
+# Silent clicking
+ActuationStrength = 0
+
+[data."com.apple.TextInputMenu"]
+# Keyboard -> Input Sources -> Show Input menu in menu bar.
+visible = true
+
+# Disable the “Are you sure you want to open this application?” dialog
+[data."com.apple.LaunchServices"]
+LSQuarantine = false
+
+# System Preferences -> View ->
+#   "Organise by Category" => false (default)
+#   "Organise Alphabetically" => true
+[data."com.apple.systempreferences.plist"]
+ShowAllMode = true
+
+# Check "Displays have separate spaces" (uncheck to allow multi-screen windows).
+[data."com.apple.spaces"]
+spans-displays = false
+
+[data."com.apple.finder"]
+# Display full POSIX path as Finder window title
+_FXShowPosixPathInTitle = 1
+
+# Use list view in all Finder windows by default
+# Four-letter codes for the other view modes: `icnv`, `clmv`, `glyv`
+FXPreferredViewStyle = "Nlsv"
+
+# System Preferences > Accessibility > Zoom > Use scroll gesture with modifer keys to zoom > Enabled
+[data."com.apple.universalaccess"]
+closeViewScrollWheelToggle = true
+
+# Set default time for new events to 25 minutes not 60 minutes.
+[data."com.apple.iCal"]
+"Default duration in minutes for new event" = 25
+
+# See: https://github.com/rxhanson/Rectangle/issues/190#issuecomment-780898717
+[data."com.knollsoft.Rectangle"]
+showExportImport = true
+
+# Write hammerspoon config to alternate location.
+
+[data."org.hammerspoon.Hammerspoon"]
+# TODO(gib): make sure we're not escaping the ~ once it's allowed by up-rs.
+MJConfigFile = '~/.config/hammerspoon/init.lua'

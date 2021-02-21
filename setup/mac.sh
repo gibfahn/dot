@@ -52,47 +52,8 @@ fi
 # Enable Tap to Click
 updateMacOSDefault -currentHost NSGlobalDomain com.apple.mouse.tapBehavior int 1
 
-# Click strength: Haptic feedback 0: Light 1: Medium 2: Firm
-updateMacOSDefault com.apple.AppleMultitouchTrackpad FirstClickThreshold int 0
-updateMacOSDefault com.apple.AppleMultitouchTrackpad SecondClickThreshold int 0
-
-# Silent clicking
-updateMacOSDefault com.apple.AppleMultitouchTrackpad ActuationStrength int 0
-
-# Keyboard -> Input Sources -> Show Input menu in menu bar.
-updateMacOSDefault com.apple.TextInputMenu visible bool true
-
-# Expand save panel by default
-updateMacOSDefault NSGlobalDomain NSNavPanelExpandedStateForSaveMode bool true
-updateMacOSDefault NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 bool true
-
-# Expand print panel by default
-updateMacOSDefault NSGlobalDomain PMPrintingExpandedStateForPrint bool true
-updateMacOSDefault NSGlobalDomain PMPrintingExpandedStateForPrint2 bool true
-
-# Disable the “Are you sure you want to open this application?” dialog
-updateMacOSDefault com.apple.LaunchServices LSQuarantine bool false
-
-# Always open new things in tabs (not new windows) for document based apps.
-updateMacOSDefault NSGlobalDomain AppleWindowTabbingMode string always
-
-# Maximise window when you double-click on the title bar.
-updateMacOSDefault NSGlobalDomain AppleActionOnDoubleClick string Maximize
-
-# System Preferences -> View ->
-#   "Organise by Category" => false (default)
-#   "Organise Alphabetically" => true
-updateMacOSDefault com.apple.systempreferences.plist ShowAllMode bool true
-
-# System Preferences > Keyboard > Text > Use smart quotes and dashes -> disable.
-updateMacOSDefault NSGlobalDomain NSAutomaticDashSubstitutionEnabled bool false
-updateMacOSDefault NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled bool false
-
 # Don't show recents in dock.
 dock_changed+=$(updateMacOSDefault com.apple.dock show-recents bool false)
-
-# Check "Displays have separate spaces" (uncheck to allow multi-screen windows).
-updateMacOSDefault com.apple.spaces spans-displays bool false
 
 # System Preferences > Trackpad > More Gestures > App Expose > Enable
 # Swipe down with 3 fingers to see windows for current app.
@@ -101,56 +62,9 @@ dock_changed+=$(updateMacOSDefault com.apple.dock showAppExposeGestureEnabled bo
 # Greys out hidden apps in the dock (so you can see which are hidden).
 dock_changed+=$(updateMacOSDefault com.apple.Dock showhidden bool true)
 
-# System Preferences -> Keyboard -> Shortcuts -> Full Keyboard Access
-# Full Keyboard Access: In Windows and Dialogs, press Tab to move keyboard
-# focus between:
-#   0: Text Boxes and Lists only
-#   2: All controls
-# Set it to 2 because that's much nicer (you can close confirmation prompts
-# with the keyboard, Enter to press the blue one, tab to select between them,
-# space to press the Tab-selected one. If there are underlined letters, hold
-# Option and press the letter to choose that option.
-updateMacOSDefault NSGlobalDomain AppleKeyboardUIMode int 2
-
-# Remove delay in showing the draggable icon in window bars.
-# https://mjtsai.com/blog/2020/10/05/big-surs-hidden-document-proxy-icon/
-updateMacOSDefault NSGlobalDomain NSToolbarTitleViewRolloverDelay float 0
 
 # Show hidden files in the finder.
 finder_changed+=$(updateMacOSDefault com.apple.finder AppleShowAllFiles int 1)
-
-# Finder: show all filename extensions
-updateMacOSDefault NSGlobalDomain AppleShowAllExtensions bool true
-
-# Display full POSIX path as Finder window title
-updateMacOSDefault com.apple.finder _FXShowPosixPathInTitle int 1
-
-# Use list view in all Finder windows by default
-# Four-letter codes for the other view modes: `icnv`, `clmv`, `glyv`
-updateMacOSDefault com.apple.finder FXPreferredViewStyle string "Nlsv"
-
-# Allow text selection in any QuickLook window.
-updateMacOSDefault NSGlobalDomain QLEnableTextSelection int 1
-
-# System Preferences > General > Click in the scrollbar to: Jump to the spot that's clicked
-updateMacOSDefault NSGlobalDomain AppleScrollerPagingBehavior int 1
-
-# Increases trackpad tracking speed / sensitivity (SysPref max 3.0).
-updateMacOSDefault NSGlobalDomain com.apple.trackpad.scaling float 5
-# Disable force clicking.
-updateMacOSDefault NSGlobalDomain com.apple.trackpad.forceClick bool false
-
-# System Preferences > Accessibility > Zoom > Use scroll gesture with modifer keys to zoom > Enabled
-updateMacOSDefault com.apple.universalaccess closeViewScrollWheelToggle bool true
-
-# System Preferences > Keyboard > Text > Capitalize words automatically.
-updateMacOSDefault NSGlobalDomain NSAutomaticCapitalizationEnabled bool true
-
-# System Preferences > Keyboard > Text > Add full stop with double-space.
-updateMacOSDefault NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled bool true
-
-# Show a list when saving files.
-updateMacOSDefault NSGlobalDomain NavPanelFileListModeForSaveMode int 2
 
 # System Preferences > Sound Effects > Select and alert sound: Heroine.
 # Change the error sound to the drum.
@@ -175,20 +89,6 @@ menu_changed+=$(updateMacOSDefault com.apple.menuextra.clock DateFormat string "
 menu_changed+=$(updateMacOSDefault com.apple.controlcenter "NSStatusItem Visible WiFi" bool true)
 menu_changed+=$(updateMacOSDefault com.apple.controlcenter "NSStatusItem Visible Battery" bool true)
 menu_changed+=$(updateMacOSDefault com.apple.controlcenter "NSStatusItem Visible Clock" bool true)
-
-# Disabled to use the multicolour accent colour.
-# System Preferences > General > Accent Colour > Purple
-# updateMacOSDefault NSGlobalDomain AppleAccentColor int 5
-
-# System Preferences > General > Highlight Colour > Blue
-updateMacOSDefault NSGlobalDomain AppleAquaColorVariant int 1
-
-# Write hammerspoon config to alternate location.
-updateMacOSDefault org.hammerspoon.Hammerspoon MJConfigFile string '~/.config/hammerspoon/init.lua'
-
-# Enable key repeat.
-# TODO(gib): Not sure if needed for Hammerspoon key repeat.
-updateMacOSDefault NSGlobalDomain ApplePressAndHoldEnabled bool false
 
 # Mail -> Preferences -> Viewing -> Show Message Headers -> Custom
 mail_changed+=$(updateMacOSDefault com.apple.mail CustomHeaders array List-ID Message-ID X-Member-Count)
@@ -222,9 +122,6 @@ safari_changed+=$(updateMacOSDefault com.apple.Safari ShowFullURLInSmartSearchFi
 safari_changed+=$(updateMacOSDefault com.apple.Safari IncludeDevelopMenu bool true)
 safari_changed+=$(updateMacOSDefault com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey bool true)
 safari_changed+=$(updateMacOSDefault com.apple.Safari WebKitPreferences.developerExtrasEnabled bool true)
-
-# See: https://github.com/rxhanson/Rectangle/issues/190#issuecomment-780898717
-updateMacOSDefault com.knollsoft.Rectangle showExportImport bool true
 
 if [[ $USER == gib ]]; then # Set keyboard preferences.
   log_section "Setting gib extra macOS defaults."
