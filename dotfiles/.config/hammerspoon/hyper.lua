@@ -287,7 +287,7 @@ hyperMode:bind({'alt'}, '\\', function()
 end)
 hyperMode:bind({'cmd'}, '\\', function()
   -- Restart WindowServer (logs you out).
-  killAll("-HUP", "WindowServer", {sudo=true})
+  killAll({"-HUP", "WindowServer"}, {sudo=true})
 end)
 
 -- {{{ Hyper-⇧-x -> Restart the touch strip.
