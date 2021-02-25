@@ -98,12 +98,17 @@ end
 -- {{{ Global microphone muting hotkeys.
 local messageMuting = message.new('muted 🎤')
 local messageHot = message.new('hot 🎤')
+local messageUnmutable = message.new(' ⚠️  WARNING: 🎤 does not support muting! ⚠️')
 
--- Hyper-, -> hold to enable mic (while held), tap to mute.
+-- Hyper-, -> tap to mute.
 hyperMode:bind({}, ',', function()
     local device = hs.audiodevice.defaultInputDevice()
-    device:setInputMuted(true)
-    messageMuting:notify()
+    local unmuteSuccess = device:setInputMuted(true)
+    if (unmuteSuccess) then
+      messageMuting:notify()
+    else
+      messageUnmutable:notify()
+    end
     displayStatus()
   end
 )
@@ -111,7 +116,7 @@ hyperMode:bind({}, ',', function()
 -- Hyper-. -> tap to unmute mic.
 hyperMode:bind({}, '.', function()
     local device = hs.audiodevice.defaultInputDevice()
-    device:setInputMuted(false)
+    local muteSuccess = device:setInputMuted(false)
 
     -- TODO(gib): stop this workaround once Webex handles global unmuting properly.
     -- Webex recognises that you've muted the microphone globally, and mutes
@@ -145,7 +150,11 @@ hyperMode:bind({}, '.', function()
     -- do this, so you have to hit the shortcut twice 😭.
     device:setInputVolume(100)
 
-    messageHot:notify()
+    if (muteSuccess) then
+      messageHot:notify()
+    else
+      messageUnmutable:notify()
+    end
     displayStatus()
   end
 )
