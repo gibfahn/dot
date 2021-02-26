@@ -271,6 +271,7 @@ alias next='git next && git show' # Useful for demos.
 alias gm='wait; git mf' # After cd'ing into a repo, fetch will run as a background job. Use this to wait for it to finish then mf.
 
 { works nvim && _gib_vim="nvim"; } || { works vim && _gib_vim="vim"; } || _gib_vim="vi" # Take what you can get.
+[[ $VISUAL == 'nvr --remote-wait' ]] && _gib_vim=$VISUAL # Allow passing through the neovim init.vim value.
 export VISUAL=$_gib_vim EDITOR=$_gib_vim # Set vim/nvim as the default editor.
 unset _gib_vim
 alias vim='VIMINIT=":source $XDG_CONFIG_HOME/nvim/init.vim" vim' # Make vim use nvim config file.
