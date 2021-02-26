@@ -18,3 +18,6 @@ bazel-out
 
 # Any dotdir in the root that has a secrets subdir.
 /.*/secrets/
+
+# Temp cache of Bazel queries.
+.fzf-bazel-query-cache
