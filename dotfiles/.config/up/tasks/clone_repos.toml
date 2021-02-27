@@ -6,12 +6,12 @@ path = '/Users/gib/code/bazel/bazel'
 prune = true
 
 [[data.remotes]]
-fetch_url = 'git@github.com:gibfahn/bazel.git'
-name = 'fork'
-
-[[data.remotes]]
 fetch_url = 'https://github.com/bazelbuild/bazel'
 name = 'up'
+
+[[data.remotes]]
+fetch_url = 'git@github.com:gibfahn/bazel.git'
+name = 'fork'
 
 [[data]]
 path = '/Users/gib/code/bazel/bazelisk'
@@ -42,12 +42,12 @@ path = '/Users/gib/code/bazel/homebrew-tap'
 prune = true
 
 [[data.remotes]]
-fetch_url = 'git@github.com:gibfahn/homebrew-tap.git'
-name = 'fork'
-
-[[data.remotes]]
 fetch_url = 'https://github.com/bazelbuild/homebrew-tap'
 name = 'up'
+
+[[data.remotes]]
+fetch_url = 'git@github.com:gibfahn/homebrew-tap.git'
+name = 'fork'
 
 [[data]]
 path = '/Users/gib/code/bazel/platforms'
