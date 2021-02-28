@@ -134,12 +134,13 @@ hyperMode:bind({}, '.', function()
     --
     -- This solves the unmuting problem, but there's another issue. If you mute
     -- and your mic volume is set to 100%, when you unmute Webex sets it to
-    -- aroudn 30%, even if you untick "Automatically adjust volume". Manually
+    -- 25%, even if you untick "Automatically adjust volume". Manually
     -- setting it back up to 100% doesn't seem to work either, probably because
     -- Webex hasn't processed the unmuting fully when I change the volume back.
     --
-    -- What seems to work for me is hitting the unmute hotkey twice. Sad but it
+    -- What seems to work for me is hitting this unmute hotkey twice. Sad but it
     -- seems to work.
+    device:setInputVolume(100)
     local webex = hs.application.find("Cisco Webex Meetings")
     if (webex ~= nil) then
         webex:selectMenuItem("Unmute Me")
@@ -147,7 +148,8 @@ hyperMode:bind({}, '.', function()
     -- Webex turns the input volume down when you unmute for no obvious reason, turn it back up.
     -- TODO(gib): work out why Webex doesn't always turn the volume back up when you
     -- do this, so you have to hit the shortcut twice 😭.
-    device:setInputVolume(100)
+    log.d('Input volume:', device:inputVolume())
+    -- hs.timer.usleep(1000000)
 
     if (muteSuccess) then
       messageHot:notify()
