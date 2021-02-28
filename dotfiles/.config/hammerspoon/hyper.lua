@@ -126,7 +126,7 @@ hyperMode:bind({}, '.', function()
     -- clicking Participant > Unmute Me.
     -- NOTE: this only works if you have already disabled the other Webex
     -- window, as each window has a different Menu bar, and the other one
-    -- doesn't have a mute option. Fortunately I don't have a use for that
+    -- doesn't have an unmute option. Fortunately I don't have a use for that
     -- window anyway, so am happy to disable it by running:
     -- ```
     -- chmod -x "/Applications/Cisco Webex Meetings.app/Contents/MacOS/Cisco Webex Meetings"
@@ -138,23 +138,26 @@ hyperMode:bind({}, '.', function()
     -- setting it back up to 100% doesn't seem to work either, probably because
     -- Webex hasn't processed the unmuting fully when I change the volume back.
     --
-    -- What seems to work for me is hitting this unmute hotkey twice. Sad but it
-    -- seems to work.
-    device:setInputVolume(100)
+    -- The below 500ms sleep seems to work for me, but if not you can try
+    -- hitting this unmute hotkey twice. Sad but it seems to work.
+
     local webex = hs.application.find("Cisco Webex Meetings")
     if (webex ~= nil) then
         webex:selectMenuItem("Unmute Me")
     end
-    -- Webex turns the input volume down when you unmute for no obvious reason, turn it back up.
-    -- TODO(gib): work out why Webex doesn't always turn the volume back up when you
-    -- do this, so you have to hit the shortcut twice 😭.
-    log.d('Input volume:', device:inputVolume())
-    -- hs.timer.usleep(1000000)
-
     if (muteSuccess) then
       messageHot:notify()
     else
       messageUnmutable:notify()
+    end
+
+    -- Sleep 0.5s before setting the volume to full again.
+    hs.timer.usleep(500000)
+    device:setInputVolume(100)
+    local inputVolume = device:inputVolume()
+    -- Error if this failed (e.g. Webex didn't process the new volume).
+    if (inputVolume ~= 100) then
+      local messageHot = message.new(' ⚠️ at '..inputVolume..'% 🎤'):notify()
     end
   end
 )
