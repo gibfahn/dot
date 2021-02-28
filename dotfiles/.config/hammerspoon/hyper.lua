@@ -109,7 +109,6 @@ hyperMode:bind({}, ',', function()
     else
       messageUnmutable:notify()
     end
-    displayStatus()
   end
 )
 
@@ -155,7 +154,6 @@ hyperMode:bind({}, '.', function()
     else
       messageUnmutable:notify()
     end
-    displayStatus()
   end
 )
 -- }}} Global microphone muting hotkeys.
