@@ -41,6 +41,8 @@ let g:surround_no_mappings = 1                      " Manually map surround, see
 " Block names: https://github.com/github/linguist/blob/master/lib/linguist/languages.yml
 let g:markdown_fenced_languages = ['bash=sh', 'c', 'console=sh', 'shell=sh', 'diff', 'dockerfile', 'go', 'java',
   \ 'javascript', 'js=javascript', 'json', 'kotlin', 'starlark=python', 'python', 'rust', 'sh', 'toml', 'vim', 'yaml']
+" Enable Markdown folding.
+let g:markdown_folding = 1
 
 " Settings for custom statusline.
 let g:lightline = {
