@@ -118,6 +118,9 @@ safari_changed+=$(updateMacOSDefault com.apple.Safari HistoryAgeInDaysLimit int 
 safari_changed+=$(updateMacOSDefault com.apple.Safari TabCreationPolicy int 2)
 # Safari -> Advanced -> Show full website address
 safari_changed+=$(updateMacOSDefault com.apple.Safari ShowFullURLInSmartSearchField bool true)
+# Hides the toolbar when Safari is full-screen (hide everything but the page).
+# Safari -> View -> Always show toolbar in Full Screen -> Unchecked
+safari_changed+=$(updateMacOSDefault com.apple.Safari AutoShowToolbarInFullScreen bool true)
 # Safari -> Advanced -> Show Develop menu in menu bar
 safari_changed+=$(updateMacOSDefault com.apple.Safari IncludeDevelopMenu bool true)
 safari_changed+=$(updateMacOSDefault com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey bool true)
