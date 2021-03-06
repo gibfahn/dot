@@ -240,7 +240,8 @@ _gib_prompt_precmd() {
 _gib_prompt_preexec() {
   printf '\e[4 q' # Cursor is an underline (_) while command is running.
   # Set window title to first 40 chars of command we're about to run.
-  [[ "$PWD" == "$HOME" ]] && printf "\e]2;%s\a" "${1:0:40}"
+  title="$(print -Pn "%1~"): $1"
+  printf "\e]2;%s\a" "${title:0:40}"
 }
 
 autoload -Uz add-zsh-hook
