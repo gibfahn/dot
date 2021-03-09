@@ -4,35 +4,103 @@ set -eu
 
 usage() {
   setopt local_options posix_argzero
-  echo "$(tput bold; tput setaf 74)$ZSH_ARGZERO [-h|--help] [-v|--version] $(tput sgr0)
+  echo "$(tput bold; tput setaf 74)$ZSH_ARGZERO [-h|--help] [-v|--version] [-e|--edit] $(tput sgr0)
 
 $(tput bold)git pull request$(tput sgr0)
 
 Raise PR from @{push} against @{upstream}.
 See this post for the @{push} and @{upstream} workflow:
 https://fahn.co/posts/a-better-pull-request-workflow-with-git-push-branches.html
+
+To update an existing pull request body after force pushing (to add the new commit range) use:
+  git pr --edit
 "
 }
+
+action=create
 
 while [[ $# != 0 ]]; do
   [[ $1 =~ ^(--help|-h)$ ]] && { usage; exit; }
 
   [[ $1 =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
+
+  [[ $1 =~ ^(--edit|-e)$ ]] && { action=edit; shift; }
 done
 
 main() {
-  file=$(pr_file)
-  up_ref=$(upstream_branch_ref) # e.g. up/main
+  up_ref=$(branch_ref "@{upstream}") # e.g. up/main
   up_remote=${up_ref%%/*} # e.g. up
   up_branch=${up_ref#*/} # e.g. main
+  up_org=$(remote_org $up_remote)
+  up_repo=$(remote_repo $up_remote)
+
   # TODO: stop setting this once `gh` gains decent up/push branch recognition.
-  export GH_REPO=$(git remote get-url "$up_remote")
+  export GH_REPO=$(remote_url "$up_remote")
+  export GH_HOST=$(remote_host "$up_remote")
+
+  case $action in
+    create) pr_create ;;
+    edit) pr_edit ;;
+  esac
+}
+
+pr_create() {
+  file=$(pr_file)
   gh pr create --title "$(head -1 "$file")" --body "$(tail +3 "$file")" --base "$up_branch"
   rm "$file"
 }
 
-upstream_branch_ref() {
-  git rev-parse --abbrev-ref --symbolic-full-name @{upstream}
+pr_edit() {
+  push_ref=$(branch_ref "@{push}") # e.g. fork/my-pr-branch
+  push_remote=${push_ref%%/*} # e.g. push
+  push_branch=${push_ref#*/} # e.g. my-pr-branch
+  push_org=$(remote_org $push_remote)
+  current_branch=$(git branch --show-current)
+
+  pr_number_and_body=$(
+    gh api -X GET repos/$up_org/$up_repo/pulls -F head=":$push_org:$current_branch" -f state=open --jq '.[0] | "\(.number)\n\(.body)"')
+  pr_number=$(head -1 <<<"$pr_number_and_body")
+  old_pr_body=$(tail +2 <<<"$pr_number_and_body")
+
+  [[ $pr_number == null || $old_pr_body == null ]] && error "Failed to find PR branch."
+
+  new_pr_body=$(sed '/#### Commits /q' <<<"$old_pr_body" && echo && pr_log)
+
+  if [[ $new_pr_body == $old_pr_body ]]; then
+    echo "Nothing to do..."
+    return
+  fi
+
+  # Have to write to files due to https://stackoverflow.com/questions/61322297/
+  echo $new_pr_body > $TMPDIR/new_pr_body
+  echo $old_pr_body > $TMPDIR/old_pr_body
+  git diff --color=always --no-index $TMPDIR/old_pr_body $TMPDIR/new_pr_body && true
+  prompt_to_confirm "Does this change look correct?"
+
+  gh pr edit $pr_number --body "$new_pr_body"
+}
+
+branch_ref() {
+  git rev-parse --abbrev-ref --symbolic-full-name "$1"
+}
+
+remote_url() {
+  git remote get-url "$1"
+}
+
+# Remote hostname, used for setting GH_HOST.
+remote_host() {
+  git remote get-url ${1:?} | sed -e 's/^git@//' -e 's|https://||' -e 's/:.*//' -e 's|/.*||'
+}
+
+# Github org for remote. `remote_org up` -> gibfahn.
+remote_org() {
+  git remote get-url $1 | awk -F ':|/' '{if ($NF) {print $(NF-1)} else {print $(NF-2)}}'
+}
+
+# Github repo for remote. `remote_repo up` -> dot.
+remote_repo() {
+  git remote get-url $1 | sed -e 's|.*/||' -e 's/.git$//'
 }
 
 # Write the PR message file based on the PR Template (if defined) and the git commit log.
@@ -59,13 +127,37 @@ $(pr_title)
 
 #### Commits _(oldest to newest)_
 
-$(git log -s --reverse --format='%h %s%n%n%b%n<br/>%n' @{upstream}..@)
+$(pr_log)
 EOF
 }
 
 pr_title() {
   if [[ $(git rev-list --count @{upstream}..@) == 1 ]]; then
      git log -1 --format="%s"
+  fi
+}
+
+pr_log() {
+  git log -s --reverse --format='%h %s%n%n%b%n<br/>%n' @{upstream}..@
+}
+
+MAGENTA='\033[0;35m' # Magenta (purple).
+RED='\033[0;31m' # Red.
+NC='\033[0m' # No Colour.
+LF=$'\n'
+
+# Usage: exit message [rc]
+error() {
+  # printf "${RED}Error:${NC} %s\n" "$1"
+  echo -e "${RED}Error:${NC} $1"
+  exit "${2:-1}"
+}
+
+prompt_to_confirm() {
+  read "user_input?$1
+  Press Enter to continue, type anything or press Ctrl-C to cancel: "
+  if [[ -n ${user_input:-} ]]; then
+    error "User entered text."
   fi
 }
 
