@@ -115,6 +115,16 @@ gib-fzf-history-widget() {
 }
 zle -N gib-fzf-history-widget
 
+# Copy whole buffer to system clipboard.
+gib-yank-all() {
+  case $(uname) in
+    Darwin) copy=(pbcopy) ;;
+    Linux) copy=(xclip -selection clipboard) ;;
+  esac
+  printf "$BUFFER" | "${copy[@]}"
+}
+zle -N gib-yank-all
+
 zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} r:|[.,_-]=*'
 # shellcheck disable=SC2154
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}" # Use LS_COLORS in file completion menu.
@@ -205,6 +215,7 @@ bindkey -M viins "^[[A" history-beginning-search-backward-end # Re-enable up   f
 bindkey -M viins "^[[B" history-beginning-search-forward-end  # Re-enable down for history search.
 bindkey -M viins '\e.' insert-last-word
 bindkey -M viins '^R' gib-fzf-history-widget # Multi-select for history search.
+bindkey -M viins '^Y' gib-yank-all # Ctrl-y copies everything to the system clipboard.
 bindkey ' ' magic-space # <Space> = do history expansion
 # shellcheck disable=SC2154
 if [[ -n "${terminfo[kcbt]}" ]]; then
