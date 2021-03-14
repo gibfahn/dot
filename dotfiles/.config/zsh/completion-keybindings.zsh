@@ -113,7 +113,7 @@ gib-fzf-history-widget() {
   zle reset-prompt
   return $ret
 }
-zle     -N   gib-fzf-history-widget
+zle -N gib-fzf-history-widget
 
 zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} r:|[.,_-]=*'
 # shellcheck disable=SC2154
@@ -157,6 +157,7 @@ accept-line() {
 # Run original accept-line builtin command.
 zle ".$WIDGET"
 }
+zle -N accept-line # Redefine accept-line to insert last input if empty (Enter key).
 
 # Changes the cursor shape. KEYMAP is set when called by zsh keymap change.
 # If normal mode then 'vicmd', if insert mode then 'main' or 'viins'.
@@ -171,15 +172,14 @@ zle-keymap-select() {
     printf "\e[6 q"  # I-beam cursor 'I' or '|'.
   fi
 }
+zle -N zle-keymap-select # Bind zle-keymap-select() above to be called when the keymap is changed.
 
 zle-line-init() {
   zle -K viins  # Every line starts in insert mode.
   zle-keymap-select beam # Every line starts with I-beam cursor.
 }
-
-zle -N accept-line # Redefine accept-line to insert last input if empty (Enter key).
-zle -N zle-keymap-select # Bind zle-keymap-select() above to be called when the keymap is changed.
 zle -N zle-line-init     # Bind zle-line-init() above to be called when the line editor is initialized.
+
 # shellcheck disable=SC2034
 KEYTIMEOUT=10 # Key delay of 0.1s (Esc in vim mode is quicker).
 
