@@ -107,9 +107,11 @@ _FXShowPosixPathInTitle = 1
 # Four-letter codes for the other view modes: `icnv`, `clmv`, `glyv`
 FXPreferredViewStyle = "Nlsv"
 
-# System Preferences > Accessibility > Zoom > Use scroll gesture with modifer keys to zoom > Enabled
 [data."com.apple.universalaccess"]
+# System Preferences > Accessibility > Zoom > Use scroll gesture with modifer keys to zoom > Enabled
 closeViewScrollWheelToggle = true
+# Follow the keyboard focus while zoomed in
+closeViewZoomFollowsFocus = true
 
 # Set default time for new events to 25 minutes not 60 minutes.
 [data."com.apple.iCal"]
@@ -124,3 +126,45 @@ showExportImport = true
 [data."org.hammerspoon.Hammerspoon"]
 # TODO(gib): make sure we're not escaping the ~ once it's allowed by up-rs.
 MJConfigFile = '~/.config/hammerspoon/init.lua'
+
+[data."com.apple.ActivityMonitor"]
+# Show the main window when launching Activity Monitor
+OpenMainWindow = true
+# Visualize CPU usage in the Activity Monitor Dock icon
+IconType = 5
+# Show all processes in Activity Monitor
+ShowCategory = 0
+# Sort Activity Monitor results by CPU usage
+SortColumn = "CPUUsage"
+SortDirection = 0
+
+# Enable the debug menu in Address Book
+[data."com.apple.addressbook"]
+ABShowDebugMenu = true
+
+# Enable the debug menu in Disk Utility
+[data."com.apple.DiskUtility"]
+DUDebugMenuEnabled = true
+advanced-image-options = true
+
+# Auto-play videos when opened with QuickTime Player
+[data."com.apple.QuickTimePlayerX"]
+MGPlayMovieOnOpen = true
+
+[data."com.apple.SoftwareUpdate"]
+# Enable the automatic update check
+AutomaticCheckEnabled = true
+# Check for software updates daily, not just once per week
+ScheduleFrequency = 1
+# Download newly available updates in background
+AutomaticDownload = 1
+# Install System data files & security updates
+CriticalUpdateInstall = 1
+# Automatically download apps purchased on other Macs
+ConfigDataInstall = 1
+
+[data."com.apple.commerce"]
+# Turn on app auto-update
+AutoUpdate = true
+# Allow the App Store to reboot machine on macOS updates
+AutoUpdateRestartRequired = true

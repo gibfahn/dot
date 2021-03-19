@@ -49,8 +49,13 @@ if [[ -n "$changed" ]]; then
   /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
 fi
 
-# Enable Tap to Click
+# Enable Tap to Click for the current user.
 updateMacOSDefault -currentHost NSGlobalDomain com.apple.mouse.tapBehavior int 1
+# Enable Tap to Click for the login screen
+updateMacOSDefault NSGlobalDomain com.apple.mouse.tapBehavior int 1
+
+# Prevent Photos from opening automatically when devices are plugged in
+updateMacOSDefault -currentHost com.apple.ImageCapture disableHotPlug bool true
 
 # Don't show recents in dock.
 dock_changed+=$(updateMacOSDefault com.apple.dock show-recents bool false)
@@ -104,6 +109,8 @@ mail_changed+=$(updateMacOSDefault com.apple.mail IncludeOriginalAttachments boo
 mail_changed+=$(updateMacOSDefault com.apple.mail-shared AlertForNonmatchingDomains bool true)
 # Mail -> Preferences -> Composing -> Mark addresses not ending with (addresses not to mark):
 mail_changed+=$(updateMacOSDefault com.apple.mail-shared DomainForMatching array "@apple.com" "@group.apple.com")
+# Copy email addresses as `foo@example.com` instead of `Foo Bar <foo@example.com>` in Mail.app
+mail_changed+=$(updateMacOSDefault com.apple.mail AddressesIncludeNameOnPasteboard bool bool false)
 
 # Safari -> General -> Safari opens with -> All non-private windows from last session
 safari_changed+=$(updateMacOSDefault com.apple.Safari AlwaysRestoreSessionAtLaunch bool true)
@@ -125,6 +132,8 @@ safari_changed+=$(updateMacOSDefault com.apple.Safari AutoShowToolbarInFullScree
 safari_changed+=$(updateMacOSDefault com.apple.Safari IncludeDevelopMenu bool true)
 safari_changed+=$(updateMacOSDefault com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey bool true)
 safari_changed+=$(updateMacOSDefault com.apple.Safari WebKitPreferences.developerExtrasEnabled bool true)
+# Enable the Web Inspector in Safari
+safari_changed+=$(updateMacOSDefault com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled bool true)
 
 if [[ $USER == gib ]]; then # Set keyboard preferences.
   log_section "Setting gib extra macOS defaults."
@@ -197,12 +206,20 @@ if [[ $USER == gib ]]; then # Set keyboard preferences.
   # Messages > Preferences > Keep messages: Forever.
   updateMacOSDefault com.apple.MobileSMS KeepMessageForDays int 0
 
-  # Show Safari developer menu.
-  safari_changed+=$(updateMacOSDefault com.apple.Safari IncludeDevelopMenu bool true)
+  # Enable Safari’s debug menu
+  safari_changed+=$(updateMacOSDefault com.apple.Safari IncludeInternalDebugMenu bool true)
+  # Enable Safari’s debug menu
+  # Prevent Safari from opening ‘safe’ files automatically after downloading
+  safari_changed+=$(updateMacOSDefault com.apple.Safari AutoOpenSafeDownloads bool false)
   # Default to saving files in ~/tmp.
   safari_changed+=$(updateMacOSDefault com.apple.Safari NSNavLastRootDirectory string '~/tmp')
   # Safari > Preferences > General > Safari opens with: All non-private windows from last session.
   safari_changed+=$(updateMacOSDefault com.apple.Safari OpenPrivateWindowWhenNotRestoringSessionAtLaunch bool false)
+  # Make Safari’s search banners default to Contains instead of Starts With
+  safari_changed+=$(updateMacOSDefault com.apple.Safari FindOnPageMatchesWordStartsOnly bool false)
+
+  # Add a context menu item for showing the Web Inspector in web views
+  updateMacOSDefault NSGlobalDomain WebKitDeveloperExtras bool true
 
   # Order matters here for the "has it changed" comparison.
   spotlight_preferences=(
