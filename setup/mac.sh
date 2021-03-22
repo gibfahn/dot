@@ -110,7 +110,7 @@ mail_changed+=$(updateMacOSDefault com.apple.mail-shared AlertForNonmatchingDoma
 # Mail -> Preferences -> Composing -> Mark addresses not ending with (addresses not to mark):
 mail_changed+=$(updateMacOSDefault com.apple.mail-shared DomainForMatching array "@apple.com" "@group.apple.com")
 # Copy email addresses as `foo@example.com` instead of `Foo Bar <foo@example.com>` in Mail.app
-mail_changed+=$(updateMacOSDefault com.apple.mail AddressesIncludeNameOnPasteboard bool bool false)
+mail_changed+=$(updateMacOSDefault com.apple.mail AddressesIncludeNameOnPasteboard bool false)
 
 # Safari -> General -> Safari opens with -> All non-private windows from last session
 safari_changed+=$(updateMacOSDefault com.apple.Safari AlwaysRestoreSessionAtLaunch bool true)
