@@ -22,7 +22,6 @@ let g:buftabline_numbers = 2                        " Show buftabline's count (u
 let g:colorizer_use_virtual_text = 1                " Use virtual text
 let g:echodoc#type = 'virtual' " Needs nvim 0.3.2 (`brew unlink neovim && brew install --HEAD neovim` for now).
 let g:fzf_history_dir = $XDG_CACHE_HOME . '/fzf-history' " Save history of fzf vim commands.
-let g:ghost_darwin_app = 'kitty'                    " Tell vim-ghost which terminal to open.
 let g:github_enterprise_urls = ['https://github.pie.apple.com'] " Add your GHE repo so vim-fugitive's :Gbrowse! can use it (try with visual mode).
 let g:is_posix = 1                                  " Assume shell for syntax highlighting.
 let g:loaded_netrw = 1                              " Skip loading netrw file browser (use vim-readdir instead).
@@ -168,7 +167,7 @@ try
   Plug 'neoclide/coc.nvim', {'branch': 'release'}   " Language Server with VSCode Extensions.
   Plug 'pechorin/any-jump.nvim'                     " Go to definition that doesn't require a language server.
   Plug 'puremourning/vimspector'                    " Multi-language debugger using the VSCode Debug Adapter Protocol.
-  Plug 'raghur/vim-ghost', {'do': ':GhostInstall'}  " Edit browser text areas in Neovim (:h ghost).
+  Plug 'subnut/nvim-ghost.nvim', {'do': ':call nvim_ghost#installer#install()'} " Edit browser text areas in Neovim (:h ghost).
   Plug 'rust-lang/rust.vim'                         " Rust language bindings.
   Plug 'simnalamburt/vim-mundo'                     " Graphical undo tree (updated fork of Gundo).
   Plug 'tpope/vim-abolish'                          " Work with variants of words (replacing, capitalizing etc).
