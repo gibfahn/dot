@@ -183,6 +183,7 @@ hyperMode:bind({}, 'q', function()
     'Radar 8',
     'Kitty',
     'Workflowy',
+    'Docker',
   }
   for _, app in ipairs(appsToOpen) do
     hs.application.launchOrFocus(app)
