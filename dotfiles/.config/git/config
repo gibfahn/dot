@@ -230,11 +230,15 @@
 
 [commit]
   gpgsign = true # Always sign commits, available since Git 2.0.
+  # Use the >8 marker to delimit commit endings.
+  # Means '#' lines before the scissors will be included in your commit message.
+  cleanup = "scissors"
 
 [core]
   pager = delta # Uses the theme from the BAT_THEME env var.
   # To use local hooks, run: `git config core.hooksPath .git/hooks`
   hooksPath = "~/.config/git/hooks" # Put global git hooks here.
+  commentChar = auto # Allow editing commits that didn't use '#' as the comment character.
 
 [credential]
   helper = osxkeychain   # Store Git credentials in the macOS keychain.
