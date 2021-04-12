@@ -76,14 +76,14 @@
   cpc = cherry-pick --continue         # Accept current changes and continue to next commit.
   cpq = cherry-pick --quit             # Only undo last commit (that failed) not all of them.
   d   = "!git diff \"${@:-HEAD}\" #"                   # diff of staged and unstaged..
-  de  = "!git diff HEAD --name-only $@ | xargs $VISUAL # " # Open files changed since last commit in editor.
+  de  = "!git diff --name-only \"${@:-HEAD}\" | xargs $VISUAL # " # Open files changed since last commit in editor.
   dni  = diff --no-index
   # Interactively show files in $@, one line per file.
   di = "!set -x; git diff --color=always --stat=1000 --format=\"\" \"${@:-@}\" \
     | fzf --ansi -m --no-sort --reverse --tiebreak=index \
     --preview \"git diff ${*:-@} -- \\$(sed -E -e 's/^\\s*([^\\|]*)\\s*\\|.*/\\1/' -e 's/(.*)\\{(.*) => (.*)\\}(.*)/\\1\\2\\4 \\1\\3\\4/' <<< {}) | delta \" \
     | awk '{print $1}' #"
-  dn  = diff HEAD --name-only                          # diff of staged and unstaged file names.
+  dn  = "!git diff --name-only \"${@:-HEAD}\" #"                # diff of staged and unstaged file names.
   dp  = diff @{push}                                   # diff between working tree and upstream branch.
   dpn = diff --name-only @{push}                       # diff between working tree and upstream branch file names.
   dps = diff --staged @{push}                          # diff between working tree and upstream branch.
