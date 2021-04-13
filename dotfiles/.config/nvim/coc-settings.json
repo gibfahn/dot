@@ -96,10 +96,34 @@
     },
     "dls": {
       "command": "diagnostic-languageserver",
-      "args": ["--stdio"],
-      "filetypes": [ "sh", "email", "vim" ],
+      // Bump log-level to 4 for more verbose logging.
+      "args": ["--stdio", "--log-level", "2"],
+      "filetypes": [
+        "email",
+        "sh",
+        "sieve",
+        "vim"
+      ],
       "initializationOptions": {
         "linters": {
+          "check-sieve": {
+            "command": "check-sieve",
+            "debounce": 100,
+            "args": ["%tempfile"],
+            "isStderr": true,
+            "isStdout": false,
+            "offsetLine": 0,
+            "offsetColumn": 0,
+            "sourceName": "check-sieve",
+            "formatLines": 5, // Unsure how many lines sieve will output, seems to be about 5.
+            "formatPattern": [
+              "^Errors found in .+\n\n(.*)\nOn line (\\d+):\n.*",
+              {
+                "message": [1],
+                "line": 2
+              }
+            ]
+          },
           "shellcheck": {
             "command": "shellcheck",
             "debounce": 100,
@@ -172,9 +196,10 @@
           }
         },
         "filetypes": {
+          "email": "languagetool",
           "sh": "shellcheck",
-          "vim": "vint",
-          "email": "languagetool"
+          "sieve": "check-sieve",
+          "vim": "vint"
         }
       }
     }

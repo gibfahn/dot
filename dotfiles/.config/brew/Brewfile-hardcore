@@ -1,6 +1,10 @@
 # Things I use on my development machine. Commented lines are things I have
 # previously used but don't currently.
 
+# Brew taps
+
+tap "gibfahn/tap", "https://github.com/gibfahn/homebrew-tap" # My personal tap for misc things.
+
 # Brew formulae
 
 # brew "bash-completion"                   # Generally useful bash completions.
@@ -33,9 +37,11 @@
 brew "asciinema"                         # Screen recorder for the terminal.
 brew "bandwhich"                         # See what's using bandwidth on your machine.
 brew "bat"                               # Nicer cat with syntax highlighting etc.
+brew "bazelisk"                          # Easily use the latest version of bazel.
 brew "binutils"                          # GNU versions of tools for interacting with binaries (nm, strings etc).
 brew "broot"                             # Interactive version of "tree".
 brew "buildifier"                        # Bazel code formatter.
+brew "buildozer"                         # Automatically apply fixes to bazel files.
 brew "dfu-programmer"                    # QMK dependency used for flashing my Ergodox Infinity.
 brew "dfu-util"                          # QMK dependency used for flashing my Ergodox Infinity.
 brew "diffutils"                         # GNU versions of diff and related tools.
@@ -62,7 +68,6 @@ brew "postgresql"                        # Solid database.
 brew "protobuf"                          # Serialization format.
 brew "pv"                                # Show data flow through bash pipes.
 brew "ruby"                              # Newer version of Ruby.
-brew "sd"                                # Nicer sed.
 brew "shellcheck"                        # Linter for bash.
 brew "speedtest-cli"                     # Check network speed from the command-line.
 brew "tokei"                             # Counts lines of code in a project.
@@ -70,8 +75,7 @@ brew "wget"                              # Alternative to curl for downloading f
 
 # Brew formulae from taps.
 
-brew "bazelisk"                          # Easily use the latest version of bazel.
-brew "buildozer"                         # Automatically apply fixes to bazel files.
+brew "gibfahn/tap/check-sieve"           # Linter for sieve email filter files.
 
 # Brew casks
 
