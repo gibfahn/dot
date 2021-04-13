@@ -46,7 +46,7 @@ fetch_url = 'https://github.com/bazelbuild/homebrew-tap'
 name = 'up'
 
 [[data.remotes]]
-fetch_url = 'git@github.com:gibfahn/homebrew-tap.git'
+fetch_url = 'git@github.com:gibfahn/bazel-homebrew-tap.git'
 name = 'fork'
 
 [[data]]
@@ -151,6 +151,14 @@ prune = true
 
 [[data.remotes]]
 fetch_url = 'git@github.com:gibfahn/gnt'
+name = 'up'
+
+[[data]]
+path = '/Users/gib/code/me/homebrew-tap'
+prune = true
+
+[[data.remotes]]
+fetch_url = 'https://github.com/gibfahn/homebrew-tap'
 name = 'up'
 
 [[data]]
