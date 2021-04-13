@@ -33,12 +33,12 @@ brew "git-delta"                         # Nicer git diff viewer.
 brew "gnu-sed"                           # A sed that actually supports `sed -i`.
 brew "htop"                              # Terminal activity monitor.
 brew "less"                              # Fixes -RX issue.
+brew "macos-trash"                       # Move to Trash, aliased to `dl` in gibrc.
 brew "mas"                               # Mac App Store third-party cli.
 brew "node"                              # Node.js programming language.
 brew "pinentry-mac"                      # Gpg password Keychain integration.
 brew "python"                            # Python 3
 brew "ripgrep"                           # Super-fast version of grep.
-brew "rmtrash"                           # `rm` to Trash, aliased to `dl` in gibrc.
 brew "terminal-notifier"                 # Log notifications from the terminal.
 brew "tree"                              # Recursive ls.
 brew "zsh"                               # Nicer interactive shell.

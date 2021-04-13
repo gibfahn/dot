@@ -303,7 +303,7 @@ sda() {
 # ulimit -c unlimited # Uncomment to allow saving of coredumps.
 # Cross-platform copy/paste/open/ldd/delete terminal commands.
 case $uname in
-  Darwin) alias ldd="otool -L" cpy="pbcopy" pst="pbpaste" o=open dl=rmtrash ;;
+  Darwin) alias ldd="otool -L" cpy="pbcopy" pst="pbpaste" o=open dl=trash ;;
   Linux) alias cpy="xclip -selection clipboard" pst="xclip -selection clipboard -o" o=xdg-open dl="gio trash" ;;
 esac
 # Copy last command.
