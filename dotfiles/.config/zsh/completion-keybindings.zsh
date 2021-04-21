@@ -190,6 +190,14 @@ zle-line-init() {
 }
 zle -N zle-line-init     # Bind zle-line-init() above to be called when the line editor is initialized.
 
+# ^D with contents clears the buffer, without contents exits (sends an actual ^D).
+_gib_clear_exit() { [[ -n $BUFFER ]] && zle kill-buffer || zle self-insert-unmeta; }
+zle -N _gib_clear_exit
+
+# Bind ^g^p to "interactively choose which binary from the $PATH to run".
+_gib_fzf-gp-widget() { local result=$(_gib_path_run); zle reset-prompt; LBUFFER+="$result " }
+zle -N _gib_fzf-gp-widget
+
 # shellcheck disable=SC2034
 KEYTIMEOUT=10 # Key delay of 0.1s (Esc in vim mode is quicker).
 
@@ -201,45 +209,39 @@ KEYTIMEOUT=10 # Key delay of 0.1s (Esc in vim mode is quicker).
 
 bindkey -v # Enable vim mode in zsh.
 
-bindkey -M viins "^?" backward-delete-char # Make backspace work properly.
-bindkey -M viins "^A" beginning-of-line # <Ctrl>-A = Go to beginning of line (Emacs default).
-bindkey -M viins "^E" end-of-line       # <Ctrl>-E = Go to end of line (Emacs default).
-bindkey -M viins "^H" backward-delete-char # <Ctrl>-H = Backspace (Emacs default).
-bindkey -M viins "^R" history-incremental-search-backward # Restore <Ctrl>-R search.
-bindkey -M viins "^S" history-incremental-search-forward  # Restore <Ctrl>-S forward search.
-bindkey -M viins "^U" backward-kill-line # <Ctrl>-U = Delete line (Emacs default).
-bindkey -M viins "^W" backward-kill-word # <Ctrl>-W = Delete word (Emacs default).
-bindkey -M viins '^[^M' self-insert-unmeta # <Alt>-Enter Insert a literal enter (newline char).
-bindkey -M viins 'kj' vi-cmd-mode # Map kj -> Esc in vim mode.
-bindkey -M viins "^[[A" history-beginning-search-backward-end # Re-enable up   for history search.
-bindkey -M viins "^[[B" history-beginning-search-forward-end  # Re-enable down for history search.
-bindkey -M viins '\e.' insert-last-word
-bindkey -M viins '^R' gib-fzf-history-widget # Multi-select for history search.
-bindkey -M viins '^Y' gib-yank-all # Ctrl-y copies everything to the system clipboard.
 bindkey ' ' magic-space # <Space> = do history expansion
-# shellcheck disable=SC2154
-if [[ -n "${terminfo[kcbt]}" ]]; then
-  bindkey "${terminfo[kcbt]}" reverse-menu-complete   # <Shift>-<Tab> - move backwards through the completion menu.
-else
-  echo "Warning: Variable terminfo[kcbt] wasn't set."
-fi
-bindkey -M vicmd ' ' edit-command-line # <Space> in cmd mode opens editor.
 
 # Bind git shortcuts to <c-g><c-$@> (see above functions for more info).
 bindkey -r -M viins "^G" # Remove list-expand binding so we can use <C-g> for git.
 bind-git-helper f b t r h a # Bind <C-g><C-{f,b,t,r,h,s}> to fuzzy-find show {files,branches,tags,reflog,hashes,stashes}.
 unset -f bind-git-helper
 
-# Bind ^g^p to "interactively choose which binary from the $PATH to run".
-_gib_fzf-gp-widget() { local result=$(_gib_path_run); zle reset-prompt; LBUFFER+="$result " }
-zle -N _gib_fzf-gp-widget
-bindkey -M viins '^g^p' _gib_fzf-gp-widget
-
-# ^D with contents clears the buffer, without contents exits (sends an actual ^D).
-_gib_clear_exit() { [[ -n $BUFFER ]] && zle kill-buffer || zle self-insert-unmeta; }
-zle -N _gib_clear_exit
-bindkey -M viins '^d' _gib_clear_exit
+bindkey -M viins 'kj' vi-cmd-mode # Map kj -> Esc in vim mode.
+bindkey -M viins "^?" backward-delete-char # Make backspace work properly.
+bindkey -M viins "^A" beginning-of-line # Ctrl-A = Go to beginning of line (Emacs default).
+bindkey -M viins '^d' _gib_clear_exit # Ctrl-D = Clear or exit terminal on.
+bindkey -M viins "^E" end-of-line       # Ctrl-E = Go to end of line (Emacs default).
+bindkey -M viins '^G^P' _gib_fzf-gp-widget # Ctrl-G-P searches all binaries in the $PATH.
+bindkey -M viins "^H" backward-delete-char # Ctrl-H = Backspace (Emacs default).
+bindkey -M viins '^R' gib-fzf-history-widget # Ctrl-R = Multi-select for history search.
+bindkey -M viins '^T' fzf-file-widget # Ctrl-T = Preserve fzf file widget setting.
+bindkey -M viins "^U" backward-kill-line # Ctrl-U = Delete line (Emacs default).
+bindkey -M viins "^W" backward-kill-word # Ctrl-W = Delete word (Emacs default).
+bindkey -M viins '^Y' gib-yank-all # Ctrl-y copies everything to the system clipboard.
+bindkey -M viins "^[[A" history-beginning-search-backward-end # Re-enable up   for history search.
+bindkey -M viins "^[[B" history-beginning-search-forward-end  # Re-enable down for history search.
+bindkey -M viins '^[^M' self-insert-unmeta # <Alt>-Enter Insert a literal enter (newline char).
+bindkey -M viins '\e.' insert-last-word # Alt-. inserts last word from previous line.
+bindkey -M viins '\ec' fzf-cd-widget # Alt-c opens fzf cd into subdir.
+bindkey -M vicmd ' ' edit-command-line # <Space> in cmd mode opens editor.
 bindkey -M vicmd '^d' _gib_clear_exit
+
+# shellcheck disable=SC2154
+if [[ -n "${terminfo[kcbt]}" ]]; then
+  bindkey "${terminfo[kcbt]}" reverse-menu-complete   # <Shift>-<Tab> - move backwards through the completion menu.
+else
+  echo "Warning: Variable terminfo[kcbt] wasn't set."
+fi
 
 # Run before the prompt is displayed.
 _gib_prompt_precmd() {
