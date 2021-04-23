@@ -261,7 +261,7 @@ if [[ $USER == gib ]]; then # Set keyboard preferences.
 
     # Load new settings before rebuilding the index
     log_debug "Running 'killall mds'"
-    killall mds >&2
+    killall mds >&2 || true
     log_debug "Making sure indexing is enabled for the main volume"
     sudo mdutil -i on / >&2
     log_debug "Rebuilding the index from scratch"
