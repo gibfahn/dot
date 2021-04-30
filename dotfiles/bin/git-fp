@@ -31,30 +31,58 @@ while [[ $# != 0 ]]; do
   [[ $# != 0 ]] && { echo "Too many args"; usage; exit 1; }
 done
 
-if [[ -z ${up_remote:-} ]]; then
-  up_remote=$(git rev-parse --abbrev-ref --symbolic-full-name @{u})
-  up_remote=${up_remote%%/*}
-fi
+main() {
+  head_branch=$(git branch --show-current)
 
-head_branch=$(git branch --show-current)
+  if [[ -z ${up_remote:-} ]]; then
+    up_remote=$(git rev-parse --abbrev-ref --symbolic-full-name @{u})
+    up_remote=${up_remote%%/*}
+  fi
 
-if [[ -n ${pr_number:-} ]]; then
-  # Assuming new PR checkout.
+  if [[ -n ${pr_number:-} ]]; then
+    # Assuming new PR checkout.
 
-  # Checkout PR branch and save its name and remote.
-  gh pr checkout $pr_number
-  pr_branch=$(git branch --show-current)
-  push_remote=$(git config branch.$pr_branch.remote)
+    # TODO: stop setting this once `gh` gains decent up/push branch recognition.
+    export GH_REPO=$(remote_url "$up_remote")
+    export GH_HOST=$(remote_host "$up_remote")
 
-  # Switch to better-named branch
-  head_branch=$pr_number-$pr_branch
-  git switch --quiet -c $head_branch
-  git branch --delete $pr_branch
-  git branch --quiet --set-upstream-to=$(git symbolic-ref --short refs/remotes/$up_remote/HEAD)
-  git config branch.$head_branch.pushRemote $push_remote
-else
-  # Update current branch to 
-  pr_number=${head_branch%%-*}
-  pr_branch=${head_branch#*-}
-  git fetch --force --update-head-ok $up_remote pull/$pr_number/head:$head_branch
-fi
+    # Checkout PR branch and save its name and remote.
+    only_log_failure gh pr checkout $pr_number
+    pr_branch=$(git branch --show-current)
+    push_remote=$(git config branch.$pr_branch.remote)
+
+    # Switch to better-named branch
+    head_branch=$pr_number-$pr_branch
+    git switch --quiet -c $head_branch
+    git branch --quiet --delete $pr_branch
+    git branch --quiet --set-upstream-to=$(git symbolic-ref --short refs/remotes/$up_remote/HEAD)
+    git config branch.$head_branch.pushRemote $push_remote
+    echo "git-fp: Pull Request ${pr_number} fetched as branch ${head_branch}" >&2
+  else
+    # Update current branch to latest PR head commit.
+    pr_number=${head_branch%%-*}
+    pr_branch=${head_branch#*-}
+    git fetch --force --update-head-ok $up_remote pull/$pr_number/head:$head_branch
+    echo "git-fp: Branch ${head_branch} updated to latest Pull Request ${pr_number}" >&2
+  fi
+}
+
+only_log_failure() {
+  local output rc
+  output=$("$@" 2>&1) && true
+  rc=$?
+  [[ $rc != 0 ]] && echo "Command '$*' failed with exit code $rc, output:
+  $output" >&2
+  return $rc
+}
+
+remote_url() {
+  git remote get-url "$1"
+}
+
+# Remote hostname, used for setting GH_HOST.
+remote_host() {
+  git remote get-url ${1:?} | sed -e 's/^git@//' -e 's|https://||' -e 's/:.*//' -e 's|/.*||'
+}
+
+main "$@"
