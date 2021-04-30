@@ -164,12 +164,13 @@ try
   Plug 'kana/vim-operator-user'                     " Make it easier to define operators.
   Plug 'kana/vim-textobj-line'                      " Adds `il` and `al` text objects for current line.
   Plug 'kana/vim-textobj-user'                      " Allows you to create custom text objects (used in vim-textobj-line).
+  Plug 'mzlogin/vim-markdown-toc'                   " Markdown Table of Contents.
   Plug 'neoclide/coc.nvim', {'branch': 'release'}   " Language Server with VSCode Extensions.
   Plug 'pechorin/any-jump.nvim'                     " Go to definition that doesn't require a language server.
   Plug 'puremourning/vimspector'                    " Multi-language debugger using the VSCode Debug Adapter Protocol.
-  Plug 'subnut/nvim-ghost.nvim', {'do': ':call nvim_ghost#installer#install()'} " Edit browser text areas in Neovim (:h ghost).
   Plug 'rust-lang/rust.vim'                         " Rust language bindings.
   Plug 'simnalamburt/vim-mundo'                     " Graphical undo tree (updated fork of Gundo).
+  Plug 'subnut/nvim-ghost.nvim', {'do': ':call nvim_ghost#installer#install()'} " Edit browser text areas in Neovim (:h ghost).
   Plug 'tpope/vim-abolish'                          " Work with variants of words (replacing, capitalizing etc).
   Plug 'tpope/vim-commentary'                       " Autodetect comment type for lang.
   Plug 'tpope/vim-fugitive'                         " Git commands in vim.
