@@ -94,6 +94,7 @@ let g:coc_global_extensions = [
   \ 'coc-ccls',
   \ 'coc-clangd',
   \ 'coc-css',
+  \ 'coc-diagnostic',
   \ 'coc-dictionary',
   \ 'coc-emoji',
   \ 'coc-eslint',
@@ -775,9 +776,7 @@ augroup gibAutoGroup                                " Group of automatic functio
 
   autocmd BufEnter    * let b:swapchoice_likely = (&l:ro ? 'o' : 'e')
   autocmd BufNewFile,BufRead *.bats  set filetype=sh       " Bats is a shell test file type.
-  autocmd BufNewFile,BufRead *.bazel set filetype=bzl      " bazel files are Bazel files.
   autocmd BufNewFile,BufRead *.pcl   set syntax=groovy     " Pretend pcl is groovy.
-  autocmd BufNewFile,BufRead *.md    set filetype=markdown " Use markdown for md files.
   autocmd BufReadPost * let b:swapchoice_likely = (&l:ro ? 'o' : 'r')
   autocmd BufReadPost *|                            " On open jump to last cursor position if possible.
     \ if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") |

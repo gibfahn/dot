@@ -39,8 +39,8 @@
   "coc.preferences.colorSupport": true,
   // Unset this as the python autoformat disagrees with flake8.
   "coc.preferences.formatOnType": true,
-  "coc.preferences.formatOnTypeFiletypes": ["rust", "json", "go"],
-  "coc.preferences.formatOnSaveFiletypes": ["rust", "json", "go"],
+  "coc.preferences.formatOnTypeFiletypes": ["rust", "json", "go", "bzl"],
+  "coc.preferences.formatOnSaveFiletypes": ["rust", "json", "go", "bzl"],
   "coc.preferences.currentFunctionSymbolAutoUpdate": true,
   // The symbol in the completion menu for words in the current file.
   "coc.source.around.shortcut": "↕",
@@ -73,6 +73,66 @@
   "prettier.disableLanguages": ["markdown"],
   "prettier.trailingComma": "all",
 
+  "diagnostic-languageserver.mergeConfig": true,
+  "diagnostic-languageserver.debug": true,
+  "diagnostic-languageserver.trace.server": "off", // "verbose" or "off"
+
+  "diagnostic-languageserver.linters": {
+    "buildifier": {
+      "command": "buildifier",
+      "debounce": 100,
+      "args": [ "--mode=check", "-"],
+      "offsetLine": 0,
+      "offsetColumn": 0,
+      "sourceName": "buildifier",
+      "isStderr": true,
+      "isStdout": false,
+      "formatLines": 1,
+      "formatPattern": [
+        "[^:]+:(\\d+):(\\d+):(.*)",
+        {
+          "line": 1,
+          "column": 2,
+          "message": [3]
+        }
+      ]
+    },
+    "check-sieve": {
+      "command": "check-sieve",
+      "debounce": 100,
+      "args": ["%tempfile"],
+      "isStderr": true,
+      "isStdout": false,
+      "offsetLine": 0,
+      "offsetColumn": 0,
+      "sourceName": "check-sieve",
+      "formatLines": 5, // Unsure how many lines sieve will output, seems to be about 5.
+      "formatPattern": [
+        "^Errors found in .+\n\n(.*)\nOn line (\\d+):\n.*",
+        {
+          "message": [1],
+          "line": 2
+        }
+      ]
+    }
+  },
+  "diagnostic-languageserver.filetypes": {
+    "email": "languagetool",
+    "sh": "shellcheck",
+    "sieve": "check-sieve",
+    "vim": "vint",
+    "bzl": "buildifier"
+  },
+  "diagnostic-languageserver.formatters": {
+    "buildifierfmt": {
+      "command": "buildifier",
+      "args": ["--mode=fix"]
+    }
+  },
+  "diagnostic-languageserver.formatFiletypes": {
+    "bzl": "buildifierfmt"
+  },
+
   // CUSTOM LANGUAGE SERVERS
   // (for ones with coc extensions see g:coc_global_extensions in vimrc).
   "languageserver": {
@@ -94,115 +154,6 @@
       "command": "sourcekit-lsp",
       "filetypes": ["swift"]
     },
-    "dls": {
-      "command": "diagnostic-languageserver",
-      // Bump log-level to 4 for more verbose logging.
-      "args": ["--stdio", "--log-level", "2"],
-      "filetypes": [
-        "email",
-        "sh",
-        "sieve",
-        "vim"
-      ],
-      "initializationOptions": {
-        "linters": {
-          "check-sieve": {
-            "command": "check-sieve",
-            "debounce": 100,
-            "args": ["%tempfile"],
-            "isStderr": true,
-            "isStdout": false,
-            "offsetLine": 0,
-            "offsetColumn": 0,
-            "sourceName": "check-sieve",
-            "formatLines": 5, // Unsure how many lines sieve will output, seems to be about 5.
-            "formatPattern": [
-              "^Errors found in .+\n\n(.*)\nOn line (\\d+):\n.*",
-              {
-                "message": [1],
-                "line": 2
-              }
-            ]
-          },
-          "shellcheck": {
-            "command": "shellcheck",
-            "debounce": 100,
-            "args": [ "--format=gcc", "-"],
-            "offsetLine": 0,
-            "offsetColumn": 0,
-            "sourceName": "shellcheck",
-            "formatLines": 1,
-            "formatPattern": [
-              "^[^:]+:(\\d+):(\\d+):\\s+([^:]+):\\s+(.*)$",
-              {
-                "line": 1,
-                "column": 2,
-                "message": 4,
-                "security": 3
-              }
-            ],
-            "securities": {
-              "error": "error",
-              "warning": "warning",
-              "note": "info"
-            }
-          },
-          "languagetool": {
-            "command": "languagetool",
-            "debounce": 200,
-            "args": ["-"],
-            "offsetLine": 0,
-            "offsetColumn": 0,
-            "sourceName": "languagetool",
-            "formatLines": 2,
-            "formatPattern": [
-              "^\\d+?\\.\\)\\s+Line\\s+(\\d+),\\s+column\\s+(\\d+),\\s+([^\\n]+)\nMessage:\\s+(.*)$",
-              {
-                "line": 1,
-                "column": 2,
-                "message": [4, 3]
-              }
-            ]
-          },
-          "vint": {
-              "command": "vint",
-              "debounce": 100,
-              "args": [
-                  "--style-problem",
-                  "--no-color",
-                  "--enable-neovim",
-                  "-f",
-                  "'{file_path}:{line_number}:{column_number}: {severity}: {description} (see {reference})'",
-                  "-"
-              ],
-              "offsetLine": 0,
-              "offsetColumn": 0,
-              "sourceName": "vint",
-              "formatLines": 1,
-              "formatPattern": [
-                  "^[^:]+:(\\d+):(\\d+):\\s+([^:]+):\\s+(.*)$",
-                  {
-                      "line": 1,
-                      "column": 2,
-                      "message": 4,
-                      "security": 3
-                  }
-              ],
-              "securities": {
-                  "error": "error",
-                  "warning": "warning",
-                  "info": "style_problem"
-              }
-          }
-        },
-        "filetypes": {
-          "email": "languagetool",
-          "sh": "shellcheck",
-          "sieve": "check-sieve",
-          "vim": "vint"
-        }
-      }
-    }
   },
   "java.errors.incompleteClasspath.severity": "ignore"
 }
