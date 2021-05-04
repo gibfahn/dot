@@ -84,10 +84,8 @@ encrypt() {
 
   date=$(date "+%Y-%m-%d")
 
-  set -x
   tar -cJv -f "$temp_dir/s_$date.tar.xz" --directory $to_tar_dir .
   gpg -c "s_$date.tar.xz" # Creates $temp_dir/ssh_$date.tar.xz.gpg
-  { set +x; } 2>/dev/null
 
   open $temp_dir
   read "user_input?Now save the output file $temp_dir/s_$date.tar.xz.gpg
@@ -98,7 +96,8 @@ decrypt() {
   hash gpg || error "Missing 'gpg' dependency" 8
 
   gpg -d $encrypted_secrets_file >$temp_dir/s.tar.xz
-  tar -xvf $temp_dir/s.tar.xz
+  mkdir -p $to_tar_dir
+  tar -xvf $temp_dir/s.tar.xz --directory $to_tar_dir
   for file in "$gpg_dir/privkey-"*; do
     email="${file#$gpg_dir/privkey-}"
     email="${email%.asc}"
@@ -139,22 +138,26 @@ copy_from_tmp() {
   existing_files=()
 
   for file in "${files[@]}"; do
-    to_path=~/"${file#$from_dir}"
+    to_path=~/"${file#$from_dir/}"
+    [[ -d $to_path ]] && continue # Skip directories.
     if [[ -e $to_path ]]; then
-      existing_files+=($to_path)
+      from_sha=$(sha256sum $file | awk '{print $1}')
+      to_sha=$(sha256sum $to_path | awk '{print $1}')
+      if [[ $from_sha == $to_sha ]]; then
+        echo "Shasums match, $file -> $to_path = $to_sha"
+        continue
+      fi
+      set -x
+      $VISUAL -d $file $to_path
+      { set +x; } 2>/dev/null
       continue
     fi
+
     mkdir -p "$(dirname "$to_path")"
     set -x
     cp "$file" "$to_path"
     { set +x; } 2>/dev/null
   done
-
-  if [[ ${#existing_files[@]} != 0 ]]; then
-    echo "Some files already exist, bailing. Please merge manually and then delete $temp_dir:
-    Files: ${existing_files[*]}"
-  fi
-  return 1
 }
 
 main "$@"
