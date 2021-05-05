@@ -1,6 +1,5 @@
 -- Keyboard Mappings for Hyper mode
 -- Keycodes: https://www.hammerspoon.org/docs/hs.keycodes.html#map
-
 --   ## Colemak Layout
 --   ,---,---,---,---,---,   ,---,---,---,---,---,
 --   | 1 | 2 | 3 | 4 | 5 |   | 6 | 7 | 8 | 9 | 0 |
@@ -11,7 +10,6 @@
 --   |---|---|---|---|---|   |---|---|---|---|---|---|
 --   | z | x | c | v | b |   | k | m | , | . | / | \ |
 --   '---'---'---'---'---'   '---'---'---'---'---'---'
-
 --   ## Mapped
 --   ,---,---,---,---,---,   ,---,---,---,---,---,
 --   | ✓ | ✓ | ✓ | ✓ | ✓ |   | ✓ | ✓ | ✓ | ✓ | ✓ |
@@ -22,7 +20,6 @@
 --   |---|---|---|---|---|   |---|---|---|---|---|---|
 --   | z | ✓ | ✓ | ✓ | ✓ |   | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 --   '---'---'---'---'---'   '---'---'---'---'---'---'
-
 local log = hs.logger.new('init.lua', 'debug')
 
 local message = require('status-message')
@@ -52,20 +49,21 @@ f17 = hs.hotkey.bind({}, 'F17', pressedF17, releasedF17)
 --   sudo: optionally set to true to run with `sudo killall`
 --     e.g. killAll('Dock', {sudo=true})
 local killAll = function(killArgs, opts)
-  hyperMode:exit()
-  sudo = opts and opts.sudo or false
-  if (type(killArgs) ~= "table") then
-    killArgs = {killArgs}
-  end
-  command = "/usr/bin/killall"
-  if (sudo) then
-    table.insert(killArgs, 1, command)
-    command = "sudo"
-  end
-  hs.task.new(command, function(exitCode, stdOut, stdErr)
-    hs.notify.new({title='Killed all '..table.concat(killArgs, " ")..'...', informativeText=exitCode.." "..stdOut.." "..stdErr, withdrawAfter=3}):send()
-  end
-   , killArgs):start()
+    hyperMode:exit()
+    sudo = opts and opts.sudo or false
+    if (type(killArgs) ~= "table") then killArgs = {killArgs} end
+    command = "/usr/bin/killall"
+    if (sudo) then
+        table.insert(killArgs, 1, command)
+        command = "sudo"
+    end
+    hs.task.new(command, function(exitCode, stdOut, stdErr)
+        hs.notify.new({
+            title = 'Killed all ' .. table.concat(killArgs, " ") .. '...',
+            informativeText = exitCode .. " " .. stdOut .. " " .. stdErr,
+            withdrawAfter = 3
+        }):send()
+    end, killArgs):start()
 end
 
 -- }}} Generally useful functions
@@ -73,44 +71,38 @@ end
 -- {{{ Hyper-<key> -> Launch apps
 hyperModeAppMappings = {
 
-  { key='/', app='Finder' },
-  { key='a', app='Activity Monitor' },
-  { key='b', app='Safari' },
-  { key='c', app='Slack' },
-  { key='f', app='Firefox Nightly' },
-  { key='k', app='Calendar' },
-  { key='m', app='Mail' },
-  { key='r', app='Radar 8' },
-  { key='s', app='Spotify' },
-  { key='t', app='Kitty' },
-  { key='w', app='Workflowy' },
-  { key='x', app='Messenger', mods={'alt'} },
-  { key='x', app='Messages' },
+    {key = '/', app = 'Finder'}, {key = 'a', app = 'Activity Monitor'},
+    {key = 'b', app = 'Safari'}, {key = 'c', app = 'Slack'},
+    {key = 'f', app = 'Firefox Nightly'}, {key = 'k', app = 'Calendar'},
+    {key = 'm', app = 'Mail'}, {key = 'r', app = 'Radar 8'},
+    {key = 's', app = 'Spotify'}, {key = 't', app = 'Kitty'},
+    {key = 'w', app = 'Workflowy'},
+    {key = 'x', app = 'Messenger', mods = {'alt'}},
+    {key = 'x', app = 'Messages'}
 
 }
 for i, mapping in ipairs(hyperModeAppMappings) do
-  hyperMode:bind(mapping.mods, mapping.key, function()
-    hs.application.launchOrFocus(mapping.app)
-  end)
+    hyperMode:bind(mapping.mods, mapping.key,
+                   function() hs.application.launchOrFocus(mapping.app) end)
 end
 -- }}} Hyper-<key> -> Launch apps
 
 -- {{{ Global microphone muting hotkeys.
 local messageMuting = message.new('muted 🎤')
 local messageHot = message.new('hot 🎤')
-local messageUnmutable = message.new(' ⚠️  WARNING: 🎤 does not support muting! ⚠️')
+local messageUnmutable = message.new(
+                             ' ⚠️  WARNING: 🎤 does not support muting! ⚠️')
 
 -- Hyper-, -> tap to mute.
 hyperMode:bind({}, ',', function()
     local device = hs.audiodevice.defaultInputDevice()
     local unmuteSuccess = device:setInputMuted(true)
     if (unmuteSuccess) then
-      messageMuting:notify()
+        messageMuting:notify()
     else
-      messageUnmutable:notify()
+        messageUnmutable:notify()
     end
-  end
-)
+end)
 
 -- Hyper-. -> tap to unmute mic.
 hyperMode:bind({}, '.', function()
@@ -142,13 +134,11 @@ hyperMode:bind({}, '.', function()
     -- hitting this unmute hotkey twice. Sad but it seems to work.
 
     local webex = hs.application.find("Cisco Webex Meetings")
-    if (webex ~= nil) then
-        webex:selectMenuItem("Unmute Me")
-    end
+    if (webex ~= nil) then webex:selectMenuItem("Unmute Me") end
     if (muteSuccess) then
-      messageHot:notify()
+        messageHot:notify()
     else
-      messageUnmutable:notify()
+        messageUnmutable:notify()
     end
 
     -- Sleep 0.5s before setting the volume to full again.
@@ -157,10 +147,10 @@ hyperMode:bind({}, '.', function()
     local inputVolume = device:inputVolume()
     -- Error if this failed (e.g. Webex didn't process the new volume).
     if (inputVolume ~= 100) then
-      local messageHot = message.new(' ⚠️ at '..inputVolume..'% 🎤'):notify()
+        local messageHot =
+            message.new(' ⚠️ at ' .. inputVolume .. '% 🎤'):notify()
     end
-  end
-)
+end)
 -- }}} Global microphone muting hotkeys.
 
 -- {{{ Hyper-; -> lock screen
@@ -170,199 +160,171 @@ hyperMode:bind({}, ';', hs.caffeinate.lockScreen)
 -- {{{ Hyper-q -> Work setup
 -- Open work apps and turn on VPN.
 hyperMode:bind({}, 'q', function()
-  hs.notify.new({title='Work Setup', withdrawAfter=3}):send()
-  remapKeys()
-  callVpn("corporate")
-  appsToOpen = {
-    'Activity Monitor',
-    'Safari',
-    'Slack',
-    'Firefox Nightly',
-    'Calendar',
-    'Mail',
-    'Radar 8',
-    'Kitty',
-    'Workflowy',
-    'Docker',
-  }
-  for _, app in ipairs(appsToOpen) do
-    hs.application.launchOrFocus(app)
-  end
+    hs.notify.new({title = 'Work Setup', withdrawAfter = 3}):send()
+    remapKeys()
+    callVpn("corporate")
+    appsToOpen = {
+        'Activity Monitor', 'Safari', 'Slack', 'Firefox Nightly', 'Calendar',
+        'Mail', 'Radar 8', 'Kitty', 'Workflowy', 'Docker'
+    }
+    for _, app in ipairs(appsToOpen) do hs.application.launchOrFocus(app) end
 end)
 -- }}} Hyper-q -> Work setup
 
 -- {{{ Hyper-shift-q -> Minimal setup
 -- Open work apps I actually use and turn on VPN.
 hyperMode:bind({'shift'}, 'q', function()
-  hs.notify.new({title='Minimal Work Setup', withdrawAfter=3}):send()
-  remapKeys()
-  callVpn("corporate")
-  appsToOpen = {
-    'Activity Monitor',
-    'Safari',
-    'Kitty',
-  }
-  for _, app in ipairs(appsToOpen) do
-    hs.application.launchOrFocus(app)
-  end
+    hs.notify.new({title = 'Minimal Work Setup', withdrawAfter = 3}):send()
+    remapKeys()
+    callVpn("corporate")
+    appsToOpen = {'Activity Monitor', 'Safari', 'Kitty'}
+    for _, app in ipairs(appsToOpen) do hs.application.launchOrFocus(app) end
 end)
 -- }}} Hyper-shift-q -> Minimal setup
 
 -- {{{ Hyper-cmd-q -> Force Quit Webex
 -- Quit webex without spending an age trying to find the button.
-hyperMode:bind({'alt'}, 'q', function()
-  killAll({'-9', '-m', '.*Meeting Center.*'})
-end)
+hyperMode:bind({'alt'}, 'q',
+               function() killAll({'-9', '-m', '.*Meeting Center.*'}) end)
 -- }}} Hyper-cmd-q -> Force Quit Webex
 
 -- {{{ Hyper-⇧-w -> Restart Wi-Fi
 hyperMode:bind({'shift'}, 'w', function()
-  hs.notify.new({title='Restarting Wi-Fi...', withdrawAfter=3}):send()
-  hs.wifi.setPower(false)
-  hs.wifi.setPower(true)
+    hs.notify.new({title = 'Restarting Wi-Fi...', withdrawAfter = 3}):send()
+    hs.wifi.setPower(false)
+    hs.wifi.setPower(true)
 end)
 -- }}} Hyper-⇧-w -> Restart Wi-Fi
 
 -- {{{ Hyper-d -> Paste today's date.
 hyperMode:bind({}, 'd', function()
-  local date = os.date("%Y-%m-%d")
-  hs.pasteboard.setContents(date)
-  hyperMode:exit()
-  hs.eventtap.keyStrokes(date)
+    local date = os.date("%Y-%m-%d")
+    hs.pasteboard.setContents(date)
+    hyperMode:exit()
+    hs.eventtap.keyStrokes(date)
 end)
 -- }}} Hyper-d -> Paste today's date.
 
 -- {{{ Hyper-⇧-d -> Paste today's date and time.
 hyperMode:bind({'shift'}, 'd', function()
-  local date = os.date("%Y-%m-%d %H:%M:%S")
-  hs.pasteboard.setContents(date)
-  hyperMode:exit()
-  hs.eventtap.keyStrokes(date)
+    local date = os.date("%Y-%m-%d %H:%M:%S")
+    hs.pasteboard.setContents(date)
+    hyperMode:exit()
+    hs.eventtap.keyStrokes(date)
 end)
 -- }}} Hyper-⇧-d -> Paste today's date and time.
 
 -- {{{ Hyper-⌥-d -> Paste build number.
 hyperMode:bind({'alt'}, 'd', function()
-  hs.task.new("/usr/bin/sw_vers", function(exitCode, stdOut, stdErr)
-    hs.notify.new({title='Typing current build number', subTitle=output, informativeText=exitCode.." "..stdOut, stdErr, withdrawAfter=3}):send()
-    -- Copy and type build version with trailing newline removed.
-    stdOut = stdOut:gsub("%s*$", "")
-    hs.pasteboard.setContents(stdOut)
-    hyperMode:exit()
-    hs.eventtap.keyStrokes(stdOut)
-  end
-  , {"-buildVersion"}):start()
+    hs.task.new("/usr/bin/sw_vers", function(exitCode, stdOut, stdErr)
+        hs.notify.new({
+            title = 'Typing current build number',
+            subTitle = output,
+            informativeText = exitCode .. " " .. stdOut,
+            stdErr,
+            withdrawAfter = 3
+        }):send()
+        -- Copy and type build version with trailing newline removed.
+        stdOut = stdOut:gsub("%s*$", "")
+        hs.pasteboard.setContents(stdOut)
+        hyperMode:exit()
+        hs.eventtap.keyStrokes(stdOut)
+    end, {"-buildVersion"}):start()
 end)
 -- }}} Hyper-⌥-d -> Paste build number.
 
 -- {{{ Hyper-⌥-m -> Format selected Message ID as link and copy to clipboard.
 hyperMode:bind({'shift'}, 'm', function()
-  hs.eventtap.keyStroke({'cmd'}, 'c') -- Copy selected email message ID (e.g. from Mail.app).
-  -- Allow some time for the command+c keystroke to fire asynchronously before
-  -- we try to read from the clipboard
-  hs.timer.doAfter(0.2, function()
-    -- '<messageID>' -> 'message://%3CmessageID%3E'
-    local messageID = hs.pasteboard.getContents()
-    -- Remove non-printable and whitespace characters.
-    local messageID = messageID:gsub("[%s%G]", "")
-    local messageID = messageID:gsub("^<?", "message://%%3C", 1)
-    local messageID = messageID:gsub(">?$", "%%3E", 1)
-    hs.pasteboard.setContents(messageID)
-  end)
+    hs.eventtap.keyStroke({'cmd'}, 'c') -- Copy selected email message ID (e.g. from Mail.app).
+    -- Allow some time for the command+c keystroke to fire asynchronously before
+    -- we try to read from the clipboard
+    hs.timer.doAfter(0.2, function()
+        -- '<messageID>' -> 'message://%3CmessageID%3E'
+        local messageID = hs.pasteboard.getContents()
+        -- Remove non-printable and whitespace characters.
+        local messageID = messageID:gsub("[%s%G]", "")
+        local messageID = messageID:gsub("^<?", "message://%%3C", 1)
+        local messageID = messageID:gsub(">?$", "%%3E", 1)
+        hs.pasteboard.setContents(messageID)
+    end)
 end)
 -- }}} Hyper-⌥-m -> Format selected Message ID as link and copy to clipboard.
 
 -- {{{ Hyper-p -> Screenshot of selected area to clipboard.
 hyperMode:bind({}, 'p', function()
-  hs.eventtap.keyStroke({'cmd', 'ctrl', 'shift'}, '4')
+    hs.eventtap.keyStroke({'cmd', 'ctrl', 'shift'}, '4')
 end)
 -- }}} Hyper-p -> Screenshot of selected area to clipboard.
 
 -- {{{ Hyper-Enter -> Open clipboard contents.
 hyperMode:bind({}, 'return', function()
-  local clipboard = hs.pasteboard.getContents():gsub("%s*$", "")
-  hs.task.new("/usr/bin/open", function(exitCode, stdOut, stdErr)
-    hs.notify.new({title='Opening Clipboard Contents...', subTitle=clipboard, informativeText=exitCode.." "..stdOut, stdErr, withdrawAfter=3}):send()
-  end
-  , {clipboard}):start()
+    local clipboard = hs.pasteboard.getContents():gsub("%s*$", "")
+    hs.task.new("/usr/bin/open", function(exitCode, stdOut, stdErr)
+        hs.notify.new({
+            title = 'Opening Clipboard Contents...',
+            subTitle = clipboard,
+            informativeText = exitCode .. " " .. stdOut,
+            stdErr,
+            withdrawAfter = 3
+        }):send()
+    end, {clipboard}):start()
 end)
 -- }}} Hyper-Enter -> Open clipboard contents.
 
 -- {{{ Hyper-<mods>-\ -> Quit things.
-hyperMode:bind({}, '\\', function()
-  killAll("Dock")
-end)
-hyperMode:bind({'shift'}, '\\', function()
-  killAll("Finder")
-end)
-hyperMode:bind({'alt'}, '\\', function()
-  killAll("entangled")
-end)
+hyperMode:bind({}, '\\', function() killAll("Dock") end)
+hyperMode:bind({'shift'}, '\\', function() killAll("Finder") end)
+hyperMode:bind({'alt'}, '\\', function() killAll("entangled") end)
 hyperMode:bind({'cmd'}, '\\', function()
-  -- Restart WindowServer (logs you out).
-  killAll({"-HUP", "WindowServer"}, {sudo=true})
+    -- Restart WindowServer (logs you out).
+    killAll({"-HUP", "WindowServer"}, {sudo = true})
 end)
 
 -- {{{ Hyper-⇧-x -> Restart the touch strip.
-hyperMode:bind({'shift'}, 'x', function()
-  killAll("ControlStrip")
-end)
+hyperMode:bind({'shift'}, 'x', function() killAll("ControlStrip") end)
 -- }}} Hyper-⇧-x -> Restart the touch strip.
 
 -- {{{ Hyper-<mods>-v -> Connect to VPN
 callVpn = function(arg)
-  hs.task.new(os.getenv("HOME").."/bin/vpn", function(exitCode, stdOut, stdErr)
-    hs.notify.new({title='VPN '..arg..'...', informativeText=exitCode.." "..stdOut.." "..stdErr, withdrawAfter=3}):send()
-  end
-  , {arg}):start()
+    hs.task.new(os.getenv("HOME") .. "/bin/vpn",
+                function(exitCode, stdOut, stdErr)
+        hs.notify.new({
+            title = 'VPN ' .. arg .. '...',
+            informativeText = exitCode .. " " .. stdOut .. " " .. stdErr,
+            withdrawAfter = 3
+        }):send()
+    end, {arg}):start()
 end
-hyperMode:bind({}, 'v', function()
-  callVpn("corporate")
-end)
-hyperMode:bind({'shift'}, 'v', function()
-  callVpn("off")
-end)
-hyperMode:bind({'cmd'}, 'v', function()
-  callVpn("dc")
-end)
+hyperMode:bind({}, 'v', function() callVpn("corporate") end)
+hyperMode:bind({'shift'}, 'v', function() callVpn("off") end)
+hyperMode:bind({'cmd'}, 'v', function() callVpn("dc") end)
 -- }}} Hyper-<mods>-v -> Connect to VPN
 
 -- {{{ Hyper-{h,n,e,i} -> Arrow Keys, Hyper-{j,l,u,y} -> Home,PgDn,PgUp,End
 local fastKeyStroke = function(modifiers, character, isdown)
-  -- log.d('Sending:', modifiers, character, isdown)
-  local event = require("hs.eventtap").event
-  event.newKeyEvent(modifiers, character, isdown):post()
+    -- log.d('Sending:', modifiers, character, isdown)
+    local event = require("hs.eventtap").event
+    event.newKeyEvent(modifiers, character, isdown):post()
 end
 
 for i, hotkey in ipairs({
-  { key='h', direction='left'},
-  { key='n', direction='down'},
-  { key='e', direction='up'},
-  { key='i', direction='right'},
-  { key='j', direction='home'},
-  { key='l', direction='pagedown'},
-  { key='u', direction='pageup'},
-  { key='y', direction='end'},
+    {key = 'h', direction = 'left'}, {key = 'n', direction = 'down'},
+    {key = 'e', direction = 'up'}, {key = 'i', direction = 'right'},
+    {key = 'j', direction = 'home'}, {key = 'l', direction = 'pagedown'},
+    {key = 'u', direction = 'pageup'}, {key = 'y', direction = 'end'}
 }) do
-  for j, mods in ipairs({
-    {},
-    {'cmd'},
-    {'alt'},
-    {'ctrl'},
-    {'shift'},
-    {'cmd', 'shift'},
-    {'alt', 'shift'},
-    {'ctrl', 'shift'},
-  }) do
-    -- hs.hotkey.bind(mods, key, message, pressedfn, releasedfn, repeatfn) -> hs.hotkey object
-    hyperMode:bind(
-      mods,
-      hotkey.key,
-      function() fastKeyStroke(mods, hotkey.direction, true) end,
-      function() fastKeyStroke(mods, hotkey.direction, false) end,
-      function() fastKeyStroke(mods, hotkey.direction, true) end
-    )
-  end
+    for j, mods in ipairs({
+        {}, {'cmd'}, {'alt'}, {'ctrl'}, {'shift'}, {'cmd', 'shift'},
+        {'alt', 'shift'}, {'ctrl', 'shift'}
+    }) do
+        -- hs.hotkey.bind(mods, key, message, pressedfn, releasedfn, repeatfn) -> hs.hotkey object
+        hyperMode:bind(mods, hotkey.key, function()
+            fastKeyStroke(mods, hotkey.direction, true)
+        end, function() fastKeyStroke(mods, hotkey.direction, false) end,
+                       function()
+            fastKeyStroke(mods, hotkey.direction, true)
+        end)
+    end
 end
 
 -- }}} Hyper-{h,n,e,i} -> Arrow Keys
