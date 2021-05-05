@@ -20,23 +20,22 @@
 --   |---|---|---|---|---|   |---|---|---|---|---|---|
 --   | z | ✓ | ✓ | ✓ | ✓ |   | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 --   '---'---'---'---'---'   '---'---'---'---'---'---'
-local log = hs.logger.new('init.lua', 'debug')
-
 local message = require('status-message')
+-- local log = hs.logger.new('init.lua', 'debug')
 
 -- {{{ F17 -> Hyper Key
 
 -- A global variable for Hyper Mode
-hyperMode = hs.hotkey.modal.new({})
+local hyperMode = hs.hotkey.modal.new({})
 
 -- Enter Hyper Mode when F17 (right option key) is pressed
-pressedF17 = function() hyperMode:enter() end
+local pressedF17 = function() hyperMode:enter() end
 
 -- Leave Hyper Mode when F17 (right option key) is released.
-releasedF17 = function() hyperMode:exit() end
+local releasedF17 = function() hyperMode:exit() end
 
 -- Bind the Hyper key
-f17 = hs.hotkey.bind({}, 'F17', pressedF17, releasedF17)
+hs.hotkey.bind({}, 'F17', pressedF17, releasedF17)
 
 -- }}} F17 -> Hyper Key
 
@@ -50,9 +49,9 @@ f17 = hs.hotkey.bind({}, 'F17', pressedF17, releasedF17)
 --     e.g. killAll('Dock', {sudo=true})
 local killAll = function(killArgs, opts)
     hyperMode:exit()
-    sudo = opts and opts.sudo or false
+    local sudo = opts and opts.sudo or false
     if (type(killArgs) ~= "table") then killArgs = {killArgs} end
-    command = "/usr/bin/killall"
+    local command = "/usr/bin/killall"
     if (sudo) then
         table.insert(killArgs, 1, command)
         command = "sudo"
@@ -69,7 +68,7 @@ end
 -- }}} Generally useful functions
 
 -- {{{ Hyper-<key> -> Launch apps
-hyperModeAppMappings = {
+local hyperModeAppMappings = {
 
     {key = '/', app = 'Finder'}, {key = 'a', app = 'Activity Monitor'},
     {key = 'b', app = 'Safari'}, {key = 'c', app = 'Slack'},
@@ -81,7 +80,7 @@ hyperModeAppMappings = {
     {key = 'x', app = 'Messages'}
 
 }
-for i, mapping in ipairs(hyperModeAppMappings) do
+for _, mapping in ipairs(hyperModeAppMappings) do
     hyperMode:bind(mapping.mods, mapping.key,
                    function() hs.application.launchOrFocus(mapping.app) end)
 end
@@ -147,7 +146,7 @@ hyperMode:bind({}, '.', function()
     local inputVolume = device:inputVolume()
     -- Error if this failed (e.g. Webex didn't process the new volume).
     if (inputVolume ~= 100) then
-        local messageHot =
+        messageHot =
             message.new(' ⚠️ at ' .. inputVolume .. '% 🎤'):notify()
     end
 end)
@@ -161,9 +160,9 @@ hyperMode:bind({}, ';', hs.caffeinate.lockScreen)
 -- Open work apps and turn on VPN.
 hyperMode:bind({}, 'q', function()
     hs.notify.new({title = 'Work Setup', withdrawAfter = 3}):send()
-    remapKeys()
-    callVpn("corporate")
-    appsToOpen = {
+    RemapKeys()
+    CallVpn("corporate")
+    local appsToOpen = {
         'Activity Monitor', 'Safari', 'Slack', 'Firefox Nightly', 'Calendar',
         'Mail', 'Radar 8', 'Kitty', 'Workflowy', 'Docker'
     }
@@ -175,9 +174,9 @@ end)
 -- Open work apps I actually use and turn on VPN.
 hyperMode:bind({'shift'}, 'q', function()
     hs.notify.new({title = 'Minimal Work Setup', withdrawAfter = 3}):send()
-    remapKeys()
-    callVpn("corporate")
-    appsToOpen = {'Activity Monitor', 'Safari', 'Kitty'}
+    RemapKeys()
+    CallVpn("corporate")
+    local appsToOpen = {'Activity Monitor', 'Safari', 'Kitty'}
     for _, app in ipairs(appsToOpen) do hs.application.launchOrFocus(app) end
 end)
 -- }}} Hyper-shift-q -> Minimal setup
@@ -219,7 +218,6 @@ hyperMode:bind({'alt'}, 'd', function()
     hs.task.new("/usr/bin/sw_vers", function(exitCode, stdOut, stdErr)
         hs.notify.new({
             title = 'Typing current build number',
-            subTitle = output,
             informativeText = exitCode .. " " .. stdOut,
             stdErr,
             withdrawAfter = 3
@@ -242,9 +240,9 @@ hyperMode:bind({'shift'}, 'm', function()
         -- '<messageID>' -> 'message://%3CmessageID%3E'
         local messageID = hs.pasteboard.getContents()
         -- Remove non-printable and whitespace characters.
-        local messageID = messageID:gsub("[%s%G]", "")
-        local messageID = messageID:gsub("^<?", "message://%%3C", 1)
-        local messageID = messageID:gsub(">?$", "%%3E", 1)
+        messageID = messageID:gsub("[%s%G]", "")
+        messageID = messageID:gsub("^<?", "message://%%3C", 1)
+        messageID = messageID:gsub(">?$", "%%3E", 1)
         hs.pasteboard.setContents(messageID)
     end)
 end)
@@ -285,7 +283,7 @@ hyperMode:bind({'shift'}, 'x', function() killAll("ControlStrip") end)
 -- }}} Hyper-⇧-x -> Restart the touch strip.
 
 -- {{{ Hyper-<mods>-v -> Connect to VPN
-callVpn = function(arg)
+CallVpn = function(arg)
     hs.task.new(os.getenv("HOME") .. "/bin/vpn",
                 function(exitCode, stdOut, stdErr)
         hs.notify.new({
@@ -295,9 +293,9 @@ callVpn = function(arg)
         }):send()
     end, {arg}):start()
 end
-hyperMode:bind({}, 'v', function() callVpn("corporate") end)
-hyperMode:bind({'shift'}, 'v', function() callVpn("off") end)
-hyperMode:bind({'cmd'}, 'v', function() callVpn("dc") end)
+hyperMode:bind({}, 'v', function() CallVpn("corporate") end)
+hyperMode:bind({'shift'}, 'v', function() CallVpn("off") end)
+hyperMode:bind({'cmd'}, 'v', function() CallVpn("dc") end)
 -- }}} Hyper-<mods>-v -> Connect to VPN
 
 -- {{{ Hyper-{h,n,e,i} -> Arrow Keys, Hyper-{j,l,u,y} -> Home,PgDn,PgUp,End
@@ -307,13 +305,13 @@ local fastKeyStroke = function(modifiers, character, isdown)
     event.newKeyEvent(modifiers, character, isdown):post()
 end
 
-for i, hotkey in ipairs({
+for _, hotkey in ipairs({
     {key = 'h', direction = 'left'}, {key = 'n', direction = 'down'},
     {key = 'e', direction = 'up'}, {key = 'i', direction = 'right'},
     {key = 'j', direction = 'home'}, {key = 'l', direction = 'pagedown'},
     {key = 'u', direction = 'pageup'}, {key = 'y', direction = 'end'}
 }) do
-    for j, mods in ipairs({
+    for _, mods in ipairs({
         {}, {'cmd'}, {'alt'}, {'ctrl'}, {'shift'}, {'cmd', 'shift'},
         {'alt', 'shift'}, {'ctrl', 'shift'}
     }) do
