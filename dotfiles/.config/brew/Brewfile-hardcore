@@ -69,6 +69,7 @@ brew "protobuf"                          # Serialization format.
 brew "pv"                                # Show data flow through bash pipes.
 brew "ruby"                              # Newer version of Ruby.
 brew "shellcheck"                        # Linter for bash.
+brew "shfmt"                             # Shell script formatter.
 brew "speedtest-cli"                     # Check network speed from the command-line.
 brew "tokei"                             # Counts lines of code in a project.
 brew "wget"                              # Alternative to curl for downloading files.

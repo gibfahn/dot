@@ -5,7 +5,9 @@
 set -ex
 
 ruby_gems=(
-  solargraph                    # Ruby LanguageServer Client.
+  reek       # Ruby style checker for code smells.
+  rubocop    # Ruby style checker and formatter.
+  solargraph # Ruby LanguageServer Client.
 )
 
 # Not needed for other people.

@@ -1,0 +1,30 @@
+# EditorConfig is awesome: http://EditorConfig.org
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+max_line_length = 100
+indent_style = space
+trim_trailing_whitespace = true
+
+# Extra files are needed for shfmt until https://github.com/mvdan/sh/issues/664 is fixed.
+[{*.sh,gibrc,link,bspwmrc,git-*,pre-*,post-*}]
+indent_size = 2
+## Read by shfmt
+# Indent the options to case statements.
+switch_case_indent = true
+# Lines can start with && or ||
+binary_next_line = true
+
+# Rust files.
+[*.rs]
+indent_size = 4
+
+[*.md]
+indent_size = 2
+
+# File used for git commit message editing.
+[COMMIT_EDITMSG]
+max_line_length = 72

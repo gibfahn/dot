@@ -11,15 +11,16 @@ if [[ $USER == gib ]] && no "$nvm_prefix"/nvm; then
   # No install scripts as path update isn't required, it's done in gibrc.
   gitClone creationix/nvm "$XDG_DATA_HOME/${nvm_prefix}/nvm"
   . "$XDG_DATA_HOME/${nvm_prefix}"/nvm/nvm.sh # Load nvm so we can use it below.
-  nvm install --lts # Install the latest LTS version of node.
+  nvm install --lts                           # Install the latest LTS version of node.
 fi
 
 npm_modules=(
-  javascript-typescript-langserver  # Language server for JavaScript and Typescript files.
   bash-language-server              # Language server for bash and other shell script files.
-  dockerfile-language-server-nodejs # Language server for Dockerfiles.
-  markdownlint-cli                  # Markdown linter.
   diagnostic-languageserver         # Generic language server (see linters).
+  dockerfile-language-server-nodejs # Language server for Dockerfiles.
+  javascript-typescript-langserver  # Language server for JavaScript and Typescript files.
+  markdownlint-cli                  # Markdown linter.
+  write-good                        # English text linter.
   yarn                              # Alternative to npm.
 )
 
@@ -37,4 +38,3 @@ if [[ $USER == gib ]]; then
     fi
   done
 fi
-
