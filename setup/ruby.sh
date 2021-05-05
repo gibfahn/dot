@@ -1,8 +1,6 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
-. "$(dirname "$0")"/../helpers/setup.sh # Load helper script from dot/helpers.
-
-set -ex
+set -eux
 
 ruby_gems=(
   reek       # Ruby style checker for code smells.
@@ -17,13 +15,11 @@ fi
 
 # Install ruby gems
 for gem in "${ruby_gems[@]}"; do
-  if gem list -I "$gem" >/dev/null; then
-    log_get "gem: $gem"
+  if gem list --no-installed "$gem" >/dev/null; then
     gem install "$gem"
-  else
-    log_skip "gem: $gem"
   fi
 done
 
 # Update ruby gems.
-gem update "$(gem outdated | awk '{print $1}')"
+outdated_gems=("${(@f)$(gem outdated | awk '{print $1}')}")
+gem update "${outdated_gems[@]}"
