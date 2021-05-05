@@ -5,7 +5,10 @@ set -e
 
 # Update this repo to the latest upstream version, preserving your changes.
 
-cd "$(dirname "$0")" || { echo "Failed to cd"; exit 1; }
+cd "$(dirname "$0")" || {
+  echo "Failed to cd"
+  exit 1
+}
 
 git fetch --all
 

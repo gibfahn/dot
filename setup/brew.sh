@@ -73,8 +73,7 @@ fi
 sogou_dir_new="$(ls -a "$(brew --prefix)"/Caskroom/sogouinput 2>/dev/null || true)"
 # If sogouinput was updated
 if [[ "$sogou_dir_old" != "$sogou_dir_new" ]]; then
-  log_update  "Sogou Input"
+  log_update "Sogou Input"
   sogou_dir="$(brew info sogouinput | awk '/\/Caskroom\/sogouinput\// { print $1 }')"
   [[ -n "$sogou_dir" ]] && open -a "$sogou_dir"/sogou*.app
 fi
-

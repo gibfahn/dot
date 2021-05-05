@@ -9,11 +9,11 @@ rust_crates=(
   # oxipng                        # Compress png images.
   # svgcleaner                    # Remove unnecessary info from svgs.
   # tally                         # Nicer time (shows memory, page faults etc), I'm using hyperfine instead.
-  bingrep                         # Grep binary packages.
-  cargo-edit                      # Gives `cargo {add,rm,upgrade}` commands.
-  clog-cli                        # Changelog generator.
-  cobalt-bin                      # Static site generator (https://cobalt-org.github.io/).
-  proximity-sort                  # Sort paths by proximity to a directory.
+  bingrep        # Grep binary packages.
+  cargo-edit     # Gives `cargo {add,rm,upgrade}` commands.
+  clog-cli       # Changelog generator.
+  cobalt-bin     # Static site generator (https://cobalt-org.github.io/).
+  proximity-sort # Sort paths by proximity to a directory.
 )
 
 # These are installed and updated through brew on Darwin.
@@ -22,8 +22,8 @@ if [[ $(uname) == Linux ]]; then
     # exa
     # watchexec                   # Like entr (evaluating which one is better).
     # xsv                         # csv manipulator.
-    bat                         # Nicer cat with syntax highlighting etc.
-    hyperfine                   # Benchmark commands (time but a benchmarking suite).
+    bat       # Nicer cat with syntax highlighting etc.
+    hyperfine # Benchmark commands (time but a benchmarking suite).
   )
 fi
 

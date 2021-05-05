@@ -67,7 +67,6 @@ dock_changed+=$(updateMacOSDefault com.apple.dock showAppExposeGestureEnabled bo
 # Greys out hidden apps in the dock (so you can see which are hidden).
 dock_changed+=$(updateMacOSDefault com.apple.Dock showhidden bool true)
 
-
 # Show hidden files in the finder.
 finder_changed+=$(updateMacOSDefault com.apple.finder AppleShowAllFiles int 1)
 
@@ -181,7 +180,7 @@ if [[ $USER == gib ]]; then # Set keyboard preferences.
 
   # Set Date format to RFC 3339 formatting, e.g. 2000-12-25
   updateMacOSDefault NSGlobalDomain AppleICUDateFormatStrings dict \
-'{
+    '{
     1 = "y-MM-dd";
     2 = "y-MM-dd";
     3 = "y-MM-dd";
@@ -251,7 +250,7 @@ if [[ $USER == gib ]]; then # Set keyboard preferences.
   trimmed_expected_spotlight_preferences=$(printf "(${spotlight_preferences[*]})" | tr -d ' ' | tr -d '"')
   log_debug "Existing spotlight preferences: $existing_spotlight_preferences"
   log_debug "Expected spotlight preferences: $trimmed_expected_spotlight_preferences"
-  if  [[ $existing_spotlight_preferences == "$trimmed_expected_spotlight_preferences" ]]; then
+  if [[ $existing_spotlight_preferences == "$trimmed_expected_spotlight_preferences" ]]; then
     log_skip "macOS default Spotlight Preferences"
   else
     log_get "macOS default Spotlight Preferences"

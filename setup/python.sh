@@ -19,7 +19,7 @@ pip_outdated="$($pip list --outdated | awk '{print $1}')"
 
 for module in "${pip3_modules[@]}"; do
   if ! echo "$pip_installed" | grep -qx "${module%[*}" \
-      || echo "$pip_outdated" | grep -qx "${module%[*}"; then
+    || echo "$pip_outdated" | grep -qx "${module%[*}"; then
     # log_get "$pip: $module"
     $pip install --user --upgrade "$module"
   else

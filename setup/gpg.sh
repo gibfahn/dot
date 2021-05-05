@@ -7,7 +7,7 @@ set -eux
 
 mkdir -p "$GNUPGHOME"
 pinentry_mac_path=$(which pinentry-mac) # Expect it to be in the PATH.
-echo "pinentry-program $pinentry_mac_path" >> "$GNUPGHOME"/gpg-agent.conf
+echo "pinentry-program $pinentry_mac_path" >>"$GNUPGHOME"/gpg-agent.conf
 
 # Avoid gpg warning:
 # gpg: WARNING: unsafe permissions on homedir '~/.local/share/gnupg'

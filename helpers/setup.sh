@@ -18,8 +18,8 @@ set -e
 # Get colour aliases.
 . "$thisDir"/colours.sh
 
-export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-"$HOME/.config"} # Config stuff should go here.
-export XDG_CACHE_HOME=${XDG_CACHE_HOME:-"$HOME/.cache"} # Cache stuff should go here.
+export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-"$HOME/.config"}  # Config stuff should go here.
+export XDG_CACHE_HOME=${XDG_CACHE_HOME:-"$HOME/.cache"}     # Cache stuff should go here.
 export XDG_DATA_HOME=${XDG_DATA_HOME:-"$HOME/.local/share"} # Data should go here.
 
 : "${BUILD_DIR:="$HOME/code/build"}" # Directory to clone/build things in.
@@ -59,7 +59,7 @@ log_debug() {
 }
 
 log_error() {
-    printf "    ${RED}ERROR:${NC} %s\n" "$1" 1>&2
+  printf "    ${RED}ERROR:${NC} %s\n" "$1" 1>&2
 }
 
 # Just normal logging things.
@@ -92,9 +92,10 @@ not() { # Do we need to install $1?
 # Some machines can't understand GitHub's https certs for some reason.
 gitClone() {
   log_get "$@"
-  REPO=$1; shift # First arg is repo, rest are passed on to git clone.
-  git clone "git@github.com:$REPO.git" "$@" ||
-    git clone "https://github.com/$REPO.git" "$@"
+  REPO=$1
+  shift # First arg is repo, rest are passed on to git clone.
+  git clone "git@github.com:$REPO.git" "$@" \
+    || git clone "https://github.com/$REPO.git" "$@"
 }
 
 # TODO(gib): Should this update from the up remote?
@@ -111,9 +112,9 @@ gitUpdate() {
 
   git fetch --all >/dev/null || return 1
 
-  work_done="" # Work we did in this update (defaults to nothing).
-  return_code=0 # Return 0 unless something went wrong.
-  uncommitted_changes="$(git status --porcelain)" # Is there anything in the working tree.
+  work_done=""                                            # Work we did in this update (defaults to nothing).
+  return_code=0                                           # Return 0 unless something went wrong.
+  uncommitted_changes="$(git status --porcelain)"         # Is there anything in the working tree.
   upstream_commits="$(git rev-list -1 '@{u}' --not HEAD)" # Does upstream have something we don't.
   upstream_submodule_updates="$(git submodule status --recursive 2>/dev/null | grep -q '^+' || true)"
 
@@ -133,8 +134,8 @@ gitUpdate() {
     if [[ -n "$upstream_commits" ]]; then
       git rebase 1>&2
 
-      if [ -d "$(git rev-parse --git-path rebase-merge &>/dev/null)" ] ||
-         [ -d "$(git rev-parse --git-path rebase-apply &>/dev/null)" ]; then
+      if [ -d "$(git rev-parse --git-path rebase-merge &>/dev/null)" ] \
+        || [ -d "$(git rev-parse --git-path rebase-apply &>/dev/null)" ]; then
         addError "Git rebase failed for $1"
         return_code=1
         git rebase --abort 1>&2
@@ -199,13 +200,17 @@ addError() {
 
 # For usage see updateMacOSKeyboardShortcut
 updateMacOSDefaultDict() {
-  local domain subdomain key val val2 current_val;
-  domain="$1"; shift
-  subdomain="$1"; shift
-  key="$1"; shift
-  val="$1"; shift
+  local domain subdomain key val val2 current_val
+  domain="$1"
+  shift
+  subdomain="$1"
+  shift
+  key="$1"
+  shift
+  val="$1"
+  shift
   [[ "$#" != 0 ]] && printf "Wrong number of args" && return 1
-  val2="$(sed 's/\\/\\\\/g' <<<"$val")"  # `defaults` doubles the \ for no reason sometimes.
+  val2="$(sed 's/\\/\\\\/g' <<<"$val")" # `defaults` doubles the \ for no reason sometimes.
 
   # If the dict hasn't been initialised yet, create it.
   if ! defaults read "$domain" "$subdomain" >/dev/null; then
@@ -213,10 +218,11 @@ updateMacOSDefaultDict() {
   fi
 
   # Get the current value of the dict[key] (empty if unset).
-  current_val="$(defaults read "$domain" "$subdomain"                 \
-                | grep -F "$key"                                     \
-                | sed -E "s/ *\"?$key\"? *= *\"?([^\"]*)\"?;/\1/" \
-              )"
+  current_val="$(
+    defaults read "$domain" "$subdomain" \
+      | grep -F "$key" \
+      | sed -E "s/ *\"?$key\"? *= *\"?([^\"]*)\"?;/\1/"
+  )"
 
   if [[ "$current_val" == "$val" || "$current_val" == "$val2" ]]; then
     log_skip "macOS default shortcut $domain $key is already set to '$current_val'"
@@ -224,9 +230,9 @@ updateMacOSDefaultDict() {
   fi
 
   if [[ -n "$current_val" ]]; then
-    log_update  "macOS default shortcut $domain $key is currently set to '$current_val', changing to '$val'"
+    log_update "macOS default shortcut $domain $key is currently set to '$current_val', changing to '$val'"
   else
-    log_update  "macOS default shortcut $domain $key is unset, setting it to '$val'"
+    log_update "macOS default shortcut $domain $key is unset, setting it to '$val'"
   fi
 
   defaults write "$domain" "$subdomain" -dict-add "$key" "$val"
@@ -245,7 +251,7 @@ updateMacOSDefaultDict() {
 updateMacOSKeyboardShortcut() {
   updateMacOSDefaultDict "$1" NSUserKeyEquivalents "$2" "$3"
   if ! defaults read com.apple.universalaccess com.apple.custommenu.apps | grep -qF "$1"; then
-    log_update  "macOS default shortcut $1 is not in com.apple.universalaccess com.apple.custommenu.apps, adding it."
+    log_update "macOS default shortcut $1 is not in com.apple.universalaccess com.apple.custommenu.apps, adding it."
     log_debug "defaults write com.apple.universalaccess com.apple.custommenu.apps -array-add \"$1\""
     defaults write com.apple.universalaccess com.apple.custommenu.apps -array-add "$1" || {
       return_code=$?
@@ -268,10 +274,14 @@ readMacOSDefault() {
   local domain key expected_type host # args to function.
   local parsed_type actual_type
 
-  domain="$1"; shift
-  key="$1"; shift
-  expected_type="$1"; shift
-  host="$1"; shift
+  domain="$1"
+  shift
+  key="$1"
+  shift
+  expected_type="$1"
+  shift
+  host="$1"
+  shift
   [[ "$#" != 0 ]] && log_error "Wrong number of args" && return 1
 
   parsed_value=$(defaults $host read "$domain" "$key") || return 0
@@ -287,8 +297,11 @@ readMacOSDefault() {
     boolean) actual_type=bool ;;
     integer) actual_type=int ;;
     dictionary) actual_type=dict ;;
-    float|string|array) actual_type=$parsed_type ;;
-    *) log_error "Unexpected type $parsed_type"; return 3 ;;
+    float | string | array) actual_type=$parsed_type ;;
+    *)
+      log_error "Unexpected type $parsed_type"
+      return 3
+      ;;
   esac
 
   case $expected_type in
@@ -296,8 +309,11 @@ readMacOSDefault() {
     integer) expected_type=int ;;
     dictionary) expected_type=dict ;;
     array-add) expected_type=array ;;
-    float|string|array|bool|int|dict) ;;
-    *) log_error "Unexpected expected_type $expected_type"; return 4 ;;
+    float | string | array | bool | int | dict) ;;
+    *)
+      log_error "Unexpected expected_type $expected_type"
+      return 4
+      ;;
   esac
 
   if [[ $expected_type != "$actual_type" ]]; then
@@ -309,7 +325,10 @@ readMacOSDefault() {
     case $parsed_value in
       1) echo "true" ;;
       0) echo "false" ;;
-      *) log_error "Unexpected parsed value $parsed_value"; return 5 ;;
+      *)
+        log_error "Unexpected parsed value $parsed_value"
+        return 5
+        ;;
     esac
   else
     echo "$parsed_value"
@@ -327,14 +346,18 @@ updateMacOSDefault() {
   local domain key val_type val vals host # Args.
   local current_val
   [[ ${1:-} == "-currentHost" ]] && host="$1" && shift
-  domain="$1"; shift
-  key="$1"; shift
-  val_type="$1"; shift
+  domain="$1"
+  shift
+  key="$1"
+  shift
+  val_type="$1"
+  shift
   if [[ $val_type = array ]]; then
     vals=("$@")
     shift $#
   else
-    val="$1"; shift
+    val="$1"
+    shift
   fi
 
   [[ "$#" != 0 ]] && log_error "Wrong number of args" && return 1
@@ -360,12 +383,12 @@ updateMacOSDefault() {
 
   if [[ -n "$current_val" ]]; then
     if [[ "$val_type" == array ]]; then
-      log_update  "macOS default $host $domain $key is currently set to '$current_vals', changing to '${vals[*]}'"
+      log_update "macOS default $host $domain $key is currently set to '$current_vals', changing to '${vals[*]}'"
     else
-      log_update  "macOS default $host $domain $key is currently set to $current_val, changing to $val"
+      log_update "macOS default $host $domain $key is currently set to $current_val, changing to $val"
     fi
   else
-    log_update  "macOS default $host $domain $key is unset, setting it to $val"
+    log_update "macOS default $host $domain $key is unset, setting it to $val"
   fi
   echo "$host $domain $key $current_val -> $val; "
 

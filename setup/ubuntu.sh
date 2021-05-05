@@ -28,30 +28,30 @@ addPPA() {
 addPPA ppa:neovim-ppa/stable ppa:hluk/copyq ppa:git-core/ppa ppa:ubuntu-mozilla-daily/ppa universe
 
 # Apt install things. Added them individually so you can comment out lines to skip.
-apt_list=(                        # List of things to install.
-  git                             # Get an up-to-date git from the git-core ppa.
-  gcc g++                         # Should be there already, but make sure.
-  curl                            # Amazingly some installations don't come with curl.
-  zsh                             # I use zsh wherever possible.
-  tree                            # Recursive ls.
-  fd-find                         # Faster find (installed as fd-find, needs to be aliased).
-  ripgrep                         # Faster grep.
-  gcc make                        # Needed to build C/C++ apps from source (and run Makefiles).
-  gnome-terminal                  # Good basic terminal, used in my bspwm config.
-  neovim                          # Better vim (works well with my vim config.
-  copyq                           # Clipboard manager with history (needs a bit of manual setup).
-  meld                            # Graphical diff between folders.
-  entr                            # Run command on file change (Unixy file/folder watcher).
-  xclip                           # Copy/paste shell commands, used in gibrc.
-  i3                              # Window manager. Obsolete since I moved to bspwm.
-  dfu-util                        # Used for flashing my ergodox.
-  scrot                           # Take screenshots (works from the command line).
-  firefox-trunk                   # Nightly (superfast) version of Firefox.
-  ccache                          # Makes recompilations faster.
-  vagrant                         # Spin up VMs with the convenience of Docker.
-  python3-pip                     # pip3 (used for newer python installers). Remove once python3 is default.
-  fonts-firacode                  # Nicer font for your terminal.
-  golang-go                       # Go programming language.
+apt_list=(# List of things to install.
+  git            # Get an up-to-date git from the git-core ppa.
+  gcc g++        # Should be there already, but make sure.
+  curl           # Amazingly some installations don't come with curl.
+  zsh            # I use zsh wherever possible.
+  tree           # Recursive ls.
+  fd-find        # Faster find (installed as fd-find, needs to be aliased).
+  ripgrep        # Faster grep.
+  gcc make       # Needed to build C/C++ apps from source (and run Makefiles).
+  gnome-terminal # Good basic terminal, used in my bspwm config.
+  neovim         # Better vim (works well with my vim config.
+  copyq          # Clipboard manager with history (needs a bit of manual setup).
+  meld           # Graphical diff between folders.
+  entr           # Run command on file change (Unixy file/folder watcher).
+  xclip          # Copy/paste shell commands, used in gibrc.
+  i3             # Window manager. Obsolete since I moved to bspwm.
+  dfu-util       # Used for flashing my ergodox.
+  scrot          # Take screenshots (works from the command line).
+  firefox-trunk  # Nightly (superfast) version of Firefox.
+  ccache         # Makes recompilations faster.
+  vagrant        # Spin up VMs with the convenience of Docker.
+  python3-pip    # pip3 (used for newer python installers). Remove once python3 is default.
+  fonts-firacode # Nicer font for your terminal.
+  golang-go      # Go programming language.
 )
 
 log_get "apt installing/updating: ${apt_list[*]}"
@@ -66,10 +66,16 @@ if [[ $USER == gib ]] && not bspwm; then
   # Build bspwm:
   for i in baskerville/{bspwm,sxhkd,xdo,sutils,xtitle} LemonBoy/bar; do
     gitClone $i "$BUILD_DIR/$i"
-    pushd "$BUILD_DIR/$i" >/dev/null || { echo "Failed to cd"; exit 1; }
+    pushd "$BUILD_DIR/$i" >/dev/null || {
+      echo "Failed to cd"
+      exit 1
+    }
     make
     sudo make install
-    popd >/dev/null || { echo "Failed to cd"; exit 1; }
+    popd >/dev/null || {
+      echo "Failed to cd"
+      exit 1
+    }
   done
   sudo cp "$BUILD_DIR/baskerville/bspwm/contrib/freedesktop/bspwm.desktop" /usr/share/xsessions/
   cp "$BUILD_DIR"/baskerville/bspwm/examples/panel/panel{,_bar,_colors} "$BIN_DIR"
@@ -81,25 +87,30 @@ if [[ $USER == gib ]] && not j4-dmenu-desktop; then
   sudo apt install -y dmenu
   mkdir -p "$BUILD_DIR"
   gitClone enkore/j4-dmenu-desktop "$BUILD_DIR/j4-dmenu-desktop"
-  pushd "$BUILD_DIR/j4-dmenu-desktop" >/dev/null || { echo "Failed to cd"; exit 1; }
+  pushd "$BUILD_DIR/j4-dmenu-desktop" >/dev/null || {
+    echo "Failed to cd"
+    exit 1
+  }
   cmake .
   make
   sudo make install
-  popd >/dev/null || { echo "Failed to cd"; exit 1; }
+  popd >/dev/null || {
+    echo "Failed to cd"
+    exit 1
+  }
 fi
 
 # Change default version of gpg to gpg2 (which Ubuntu should be doing soon, it's
 # in Debian Stretch). Don't do anything unless we're sure.
 gpgVersion=$(gpg --version | head -1 | awk '{print $NF}')
-if [[ ${gpgVersion%%.*} == 1 ]] && exists gpg2 &&
-  [[ "$(command -v gpg)" = /usr/bin/gpg && "$(command -v gpg2)" = /usr/bin/gpg2 ]]; then
+if [[ ${gpgVersion%%.*} == 1 ]] && exists gpg2 \
+  && [[ "$(command -v gpg)" = /usr/bin/gpg && "$(command -v gpg2)" = /usr/bin/gpg2 ]]; then
   log_get "Setting default gpg to gpg2 not gpg1"
   sudo mv /usr/bin/gpg /usr/bin/gpg1
   sudo update-alternatives --verbose --install /usr/bin/gpg gnupg /usr/bin/gpg2 50
 else
   log_skip "Setting gpg2 as default (not messing with default)"
 fi
-
 
 if not google-chrome; then
   sudo apt install -y libxss1 libappindicator1 libindicator7
@@ -126,7 +137,10 @@ XKB=/usr/share/X11/xkb/
 if [[ $USER == gib && ! -d "$XKB".git ]]; then # Set up xkb key remapping.
   log_get "Setting up personal xkb shortcuts at $XKB."
   sudo chown -R "$USER:$(id -gn)" "$XKB"
-  pushd /usr/share/X11/xkb || { echo "Failed to cd"; exit 1; }
+  pushd /usr/share/X11/xkb || {
+    echo "Failed to cd"
+    exit 1
+  }
   git init
   git remote add up git@github.com:gibfahn/xkb.git
   git fetch --all

@@ -74,7 +74,7 @@ if [[ ! -f "$XDG_CONFIG_HOME/git/my-config" ]]; then
   email = $git_email
 "
 
-  printf "%s" "$my_git_config" > "$XDG_CONFIG_HOME/git/my-config"
+  printf "%s" "$my_git_config" >"$XDG_CONFIG_HOME/git/my-config"
 
   log_get "Git Config (git name set to $(git config user.name) and email set to $(git config user.email))"
 else
@@ -96,7 +96,7 @@ mkdir -p "$XDG_DATA_HOME/zsh"
 # Cleanup any zsh completion dirs with bad permissions.
 insecure_dirs=()
 while read -r val; do
-    insecure_dirs+=("$val")
+  insecure_dirs+=("$val")
 done <<<"$(zsh -c 'autoload -U compaudit; compaudit')"
 if [[ -n ${insecure_dirs[*]} ]]; then
   log_get "compinit (zsh completion dir permissions)"
@@ -122,7 +122,7 @@ mkdir -p "$XDG_DATA_HOME/zsh/completions"
 
 # _rustup and _cargo
 exists rustup && {
-  rustup completions zsh > "$XDG_DATA_HOME/zsh/completions/_rustup"
+  rustup completions zsh >"$XDG_DATA_HOME/zsh/completions/_rustup"
   # Creates "$XDG_DATA_HOME/zsh/completions/_cargo"
   ln -sf "$(realpath "$(dirname "$(rustup which cargo)")"/../share/zsh/site-functions)"/* "$XDG_DATA_HOME/zsh/completions/"
 }
@@ -137,5 +137,5 @@ fi
 # _kitty
 if exists kitty; then
   # Completion for kitty
-  kitty + complete setup zsh > "$XDG_DATA_HOME/zsh/completions/_kitty"
+  kitty + complete setup zsh >"$XDG_DATA_HOME/zsh/completions/_kitty"
 fi

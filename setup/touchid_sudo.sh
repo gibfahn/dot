@@ -3,7 +3,7 @@
 set -eu
 
 RED='\033[0;31m' # Red.
-NC='\033[0m' # No Colour.
+NC='\033[0m'     # No Colour.
 
 unchanged="# sudo: auth account password session
 auth       sufficient     pam_smartcard.so

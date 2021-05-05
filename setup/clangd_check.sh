@@ -2,4 +2,4 @@
 
 set -e
 
-builtin whence -p clangd &> /dev/null
+builtin whence -p clangd &>/dev/null
