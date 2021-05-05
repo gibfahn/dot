@@ -121,7 +121,7 @@ gib-yank-all() {
     Darwin) copy=(pbcopy) ;;
     Linux) copy=(xclip -selection clipboard) ;;
   esac
-  printf "$BUFFER" | "${copy[@]}"
+  printf "%s" "$BUFFER" | "${copy[@]}"
 }
 zle -N gib-yank-all
 
@@ -235,6 +235,7 @@ bindkey -M viins '\e.' insert-last-word # Alt-. inserts last word from previous 
 bindkey -M viins '\ec' fzf-cd-widget # Alt-c opens fzf cd into subdir.
 bindkey -M vicmd ' ' edit-command-line # <Space> in cmd mode opens editor.
 bindkey -M vicmd '^d' _gib_clear_exit
+bindkey -M vicmd '^Y' gib-yank-all # Ctrl-y copies everything to the system clipboard.
 
 # shellcheck disable=SC2154
 if [[ -n "${terminfo[kcbt]}" ]]; then
