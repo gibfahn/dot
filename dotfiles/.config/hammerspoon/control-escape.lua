@@ -6,14 +6,14 @@
 -- Skip this if running Karabiner-Elements.
 if (hs.application.get('Karabiner-Menu') ~= nil) then return end
 
-local sendEscape = false
-local lastMods = {}
+sendEscape = false
+lastMods = {}
 
-local ctrlKeyHandler = function() sendEscape = false end
+ctrlKeyHandler = function() sendEscape = false end
 
-local ctrlKeyTimer = hs.timer.delayed.new(0.15, ctrlKeyHandler)
+ctrlKeyTimer = hs.timer.delayed.new(0.15, ctrlKeyHandler)
 
-local ctrlHandler = function(evt)
+ctrlHandler = function(evt)
     local newMods = evt:getFlags()
     if lastMods["ctrl"] == newMods["ctrl"] then return false end
     if not lastMods["ctrl"] then
@@ -28,15 +28,13 @@ local ctrlHandler = function(evt)
     return false
 end
 
-local ctrlTap = hs.eventtap.new({hs.eventtap.event.types.flagsChanged},
-                                ctrlHandler)
+ctrlTap = hs.eventtap.new({hs.eventtap.event.types.flagsChanged}, ctrlHandler)
 ctrlTap:start()
 
-local otherHandler = function()
+otherHandler = function(evt)
     sendEscape = false
     return false
 end
 
-local otherTap = hs.eventtap
-                     .new({hs.eventtap.event.types.keyDown}, otherHandler)
+otherTap = hs.eventtap.new({hs.eventtap.event.types.keyDown}, otherHandler)
 otherTap:start()
