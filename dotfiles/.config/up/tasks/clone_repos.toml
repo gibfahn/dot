@@ -46,7 +46,7 @@ fetch_url = 'https://github.com/bazelbuild/homebrew-tap'
 name = 'up'
 
 [[data.remotes]]
-fetch_url = 'git@github.com:gibfahn/bazel-homebrew-tap.git'
+fetch_url = 'https://github.com/gibfahn/bazel-homebrew-tap'
 name = 'fork'
 
 [[data]]
