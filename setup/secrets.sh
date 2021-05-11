@@ -2,6 +2,7 @@
 
 set -eu
 
+MAGENTA='\033[0;35m' # Magenta (purple).
 CYAN='\033[0;36m'       # Light blue.
 RED='\033[0;31m' # Red.
 NC='\033[0m' # No Colour.
@@ -27,8 +28,10 @@ main() {
     shift ||  { usage; error "decrypt takes the file to decrypt as an argument." 5; }
   fi
 
-
-  [[ -d $temp_dir ]] && read "user_input?$temp_dir exists. Press Enter to remove the directory and continue."
+  if [[ -d $temp_dir ]]; then
+    log_info "$temp_dir exists. Press Enter to remove the directory and continue."
+    read "user_input"
+  fi
 
   mkdir -p $temp_dir
   cd $temp_dir
@@ -86,8 +89,9 @@ encrypt() {
   gpg -c "s_$date.tar.xz" # Creates $temp_dir/ssh_$date.tar.xz.gpg
 
   open $temp_dir
-  read "user_input?Now save the output file $temp_dir/s_$date.tar.xz.gpg
-  Then press Enter to cleanup"
+  log_info "Now save the output file $temp_dir/s_$date.tar.xz.gpg
+    Then press Enter to cleanup"
+  read "user_input"
 }
 
 decrypt() {
@@ -177,16 +181,25 @@ export_gpg_keys() {
 }
 
 read_git_tokens() {
+  mkdir -p $git_keychain_dir
   for url in $@; do
+    set -x
     git credential fill <<<"protocol=https
 host=$url" >$git_keychain_dir/$url
+    {set +x;} 2>/dev/null
   done
 }
 
 write_git_tokens() {
   for file in $git_keychain_dir/*; do
+    set -x
     git credential-osxkeychain store <$file
+    {set +x;} 2>/dev/null
   done
+}
+
+log_info() {
+    print >&2 "${MAGENTA}$1${NC}"
 }
 
 main "$@"
