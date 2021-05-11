@@ -10,6 +10,7 @@ temp_dir=$TMPDIR/s
 to_tar_dir=$temp_dir/to_tar
 gpg_dir=$to_tar_dir/gpg-keys
 dotfile_dir=$to_tar_dir/dotfiles
+git_keychain_dir=$to_tar_dir/keychain/git
 
 main() {
   local action user_input ret_code
@@ -59,17 +60,7 @@ usage() {
 encrypt() {
   local files_to_backup
 
-  # TODO(gib): There must be a better way to get the list of emails.
-  emails=("${(@f)$(gpg --list-secret-keys | grep ultimate | sed -E 's/.*<(.*)>.*/\1/')}")
-  if (( ${#emails[@]} != 2 )); then
-    error "Expected two private key emails, found: ${emails[*]}" 3
-  fi
-
-  mkdir -p $gpg_dir
-  for email in "${emails[@]}"; do
-    gpg --armor --export "$email" > "$gpg_dir/pubkey-$email.asc"
-    gpg --export-secret-keys -a "$email" > "$gpg_dir/privkey-$email.asc"
-  done
+  export_gpg_keys
 
   files_to_backup=(
     ~/.netrc
@@ -81,6 +72,13 @@ encrypt() {
   )
 
   copy_to_tmp "${files_to_backup[@]}"
+
+  git_urls=(
+    github.com
+    github.pie.apple.com
+  )
+
+  read_git_tokens "${git_urls[@]}"
 
   date=$(date "+%Y-%m-%d")
 
@@ -98,15 +96,9 @@ decrypt() {
   gpg -d $encrypted_secrets_file >$temp_dir/s.tar.xz
   mkdir -p $to_tar_dir
   tar -xvf $temp_dir/s.tar.xz --directory $to_tar_dir
-  for file in "$gpg_dir/privkey-"*; do
-    email="${file#$gpg_dir/privkey-}"
-    email="${email%.asc}"
-    gpg --import "$file"
-    echo "${CYAN}From @Gib, now do the following: Type 'trust', 5 (ultimate), y, quit${NC}"
-    gpg --edit-key "$email"
-  done
-
   copy_from_tmp
+  write_git_tokens
+  import_gpg_keys
 }
 
 cleanup() {
@@ -157,6 +149,43 @@ copy_from_tmp() {
     set -x
     cp "$file" "$to_path"
     { set +x; } 2>/dev/null
+  done
+}
+
+import_gpg_keys() {
+  for file in "$gpg_dir/privkey-"*; do
+    email="${file#$gpg_dir/privkey-}"
+    email="${email%.asc}"
+    gpg --import "$file"
+    echo "${CYAN}From @Gib, now do the following: Type 'trust', 5 (ultimate), y, quit${NC}"
+    gpg --edit-key "$email"
+  done
+}
+
+export_gpg_keys() {
+  # TODO(gib): There must be a better way to get the list of emails.
+  emails=("${(@f)$(gpg --list-secret-keys | grep ultimate | sed -E 's/.*<(.*)>.*/\1/')}")
+  if (( ${#emails[@]} != 2 )); then
+    error "Expected two private key emails, found: ${emails[*]}" 3
+  fi
+
+  mkdir -p $gpg_dir
+  for email in "${emails[@]}"; do
+    gpg --armor --export "$email" > "$gpg_dir/pubkey-$email.asc"
+    gpg --export-secret-keys -a "$email" > "$gpg_dir/privkey-$email.asc"
+  done
+}
+
+read_git_tokens() {
+  for url in $@; do
+    git credential fill <<<"protocol=https
+host=$url" >$git_keychain_dir/$url
+  done
+}
+
+write_git_tokens() {
+  for file in $git_keychain_dir/*; do
+    git credential-osxkeychain store <$file
   done
 }
 
