@@ -112,7 +112,7 @@ pr_file() {
   if [[ ! -s $file ]]; then
     pr_message > "$file"
     # The cat will fail if no template exists, that's okay.
-    cat $(git rev-parse --show-toplevel)/{.github/,,docs/}PULL_REQUEST_TEMPLATE 2>/dev/null >> "$file" && true
+    cat $(git rev-parse --show-toplevel)/{.github/,,docs/}PULL_REQUEST_TEMPLATE{,.md} 2>/dev/null >> "$file" && true
   fi
   $VISUAL "$file" >$(tty) <$(tty)
   echo "$file"
