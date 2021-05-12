@@ -153,7 +153,8 @@
   rip = rebase -i -S --autosquash @{push}                    # Interactive rebase on push branch.
   rim = "!git rebase -i -S --autosquash $(git merge-base ${1:-master} ${2:-HEAD} ${@:2}) # " # Rebase all commits since you forked the branch.
   rr  = remote rename                                        # Change name of remote `g rr origin up`.
-  rs  = remote set-url                                       # Change URL of remote `g rs up hsg:dot`.
+  rs = "!git remote set-url \"$@\" && git remote set-url --push \"$@\" #" # Set both push and fetch remotes.
+  rsf = remote set-url                                       # Change fetch URL of remote `g rs up hsg:dot`.
   rsp = remote set-url --push                                # Change push URL of remote (`g rs up hhg:dot && g rsp up hsg:dot` to use https for fetch and ssh for push, which is faster).
   rt  = restore                                              # Restore working tree from ref (git checkout was split into this).
   rtp = checkout -p                                          # Selectively undo some of the changes you made.
