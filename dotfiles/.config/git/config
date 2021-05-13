@@ -240,7 +240,8 @@
   pager = delta # Uses the theme from the BAT_THEME env var.
   # To use local hooks, run: `git config core.hooksPath .git/hooks`
   hooksPath = "~/.config/git/hooks" # Put global git hooks here.
-  commentChar = auto # Allow editing commits that didn't use '#' as the comment character.
+  # Below is disabled because it doesn't seem to work properly.
+  # commentChar = auto # Allow editing commits that didn't use '#' as the comment character.
 
 [credential]
   helper = osxkeychain   # Store Git credentials in the macOS keychain.
