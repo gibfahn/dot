@@ -86,7 +86,7 @@ gib-fzf-history-widget() {
   # Read history lines (split on newline) into selected_lines array.
   selected_lines=(
     "${(@f)$(fc -rl 1 | perl -ne 'print if !$seen{(/^\s*[0-9]+\**\s+(.*)/, $1)}++' |
-    FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} -m" $(__fzfcmd))}"
+    FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort,ctrl-z:ignore $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} -m" $(__fzfcmd))}"
   )
   local ret=$?
 
@@ -100,12 +100,14 @@ gib-fzf-history-widget() {
       num=$selected_line_arr[1]
       if [[ -n "$num" ]]; then
         # Add history at line $num to history_lines array.
-        history_lines+=( "$(fc -ln $num $num)" )
+        zle vi-fetch-history -n $num
+        history_lines+=("$BUFFER")
+        BUFFER=
       fi
     done
     # Set input buffer to newline-separated list of history lines.
     # Use echo to unescape, e.g. \n to newline, \t to tab.
-    BUFFER="$(echo ${(F)history_lines})"
+    BUFFER="${(F)history_lines}"
     # Move cursor to end of buffer.
     CURSOR=$#BUFFER
   fi
