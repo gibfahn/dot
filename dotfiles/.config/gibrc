@@ -381,8 +381,8 @@ case $shell in
     _gib_source_files=( # Files to source.
       "$XDG_DATA_HOME"/zfunc/source/*(N) # Put completion files that need to be sourced here.
       "$XDG_DATA_HOME"/fzf/shell/key-bindings.zsh
-      "$XDG_DATA_HOME"/fzf/shell/completion.zsh
       "$ZDOTDIR"/*.zsh(N) # Needs to come after fzf as it overrides the Ctrl-R binding.
+      "$XDG_DATA_HOME"/fzf/shell/completion.zsh
     )
 
     for _gib_file in "${_gib_source_files[@]}"; do
