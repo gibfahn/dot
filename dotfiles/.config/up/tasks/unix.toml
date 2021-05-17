@@ -1,1 +1,2 @@
+needs_sudo = true # Used for fixing insecure zsh dirs.
 run_cmd = ["${dot_dir}/setup/unix.sh"]
