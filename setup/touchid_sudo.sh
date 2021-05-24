@@ -1,9 +1,8 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
 set -eu
 
-RED='\033[0;31m' # Red.
-NC='\033[0m'     # No Colour.
+autoload -U colors && colors
 
 unchanged="# sudo: auth account password session
 auth       sufficient     pam_smartcard.so
@@ -15,7 +14,7 @@ session    required       pam_permit.so"
 current=$(</etc/pam.d/sudo)
 
 if [[ "$unchanged" != "$current" ]]; then
-  echo -e "${RED}Error:${NC} unexpected contents of /etc/pam.d/sudo:
+  echo -e "${fg[red]}Error:${reset_color} unexpected contents of /etc/pam.d/sudo:
 
 Actual:
 ---$current---

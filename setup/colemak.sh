@@ -1,15 +1,14 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
 set -eu
+
+autoload -U colors && colors
 
 current=$(sha256sum /Library/Preferences/com.apple.HIToolbox.plist | awk '{print $1}')
 original=$(sha256sum "$(dirname "$0")"/config/original_com.apple.HIToolbox.plist | awk '{print $1}')
 
-RED='\033[0;31m' # Red.
-NC='\033[0m'     # No Colour.
-
 if [[ "$original" != "$current" ]]; then
-  echo -e "${RED}Error:${NC} unexpected contents of /Library/Preferences/com.apple.HIToolbox.plist
+  echo -e "${fg[red]}Error:${reset_color} unexpected contents of /Library/Preferences/com.apple.HIToolbox.plist
 
 Actual: $current
 Expected: $original" >&2

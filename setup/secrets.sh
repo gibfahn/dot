@@ -2,10 +2,7 @@
 
 set -eu
 
-MAGENTA='\033[0;35m' # Magenta (purple).
-CYAN='\033[0;36m'       # Light blue.
-RED='\033[0;31m' # Red.
-NC='\033[0m' # No Colour.
+autoload -U colors && colors
 
 temp_dir=$TMPDIR/s
 to_tar_dir=$temp_dir/to_tar
@@ -111,8 +108,8 @@ cleanup() {
 
 # Usage: exit message [rc]
 error() {
-  # printf "${RED}Error:${NC} %s\n" "$1"
-  echo -e "${RED}Error:${NC} $1"
+  # printf "${fg[red]}Error:${reset_color} %s\n" "$1"
+  echo -e "${fg[red]}Error:${reset_color} $1"
   exit "${2:-1}"
 }
 
@@ -161,7 +158,7 @@ import_gpg_keys() {
     email="${file#$gpg_dir/privkey-}"
     email="${email%.asc}"
     gpg --import "$file"
-    echo "${CYAN}From @Gib, now do the following: Type 'trust', 5 (ultimate), y, quit${NC}"
+    echo "${fg[cyan]}From @Gib, now do the following: Type 'trust', 5 (ultimate), y, quit${reset_color}"
     gpg --edit-key "$email"
   done
 }
@@ -199,7 +196,7 @@ write_git_tokens() {
 }
 
 log_info() {
-    print >&2 "${MAGENTA}$1${NC}"
+    print >&2 "${fg[magenta]}$1${reset_color}"
 }
 
 main "$@"

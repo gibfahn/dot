@@ -2,6 +2,8 @@
 
 set -eu
 
+autoload -U colors && colors
+
 usage() {
   setopt local_options posix_argzero
   echo "$(tput bold; tput setaf 74)$ZSH_ARGZERO [-h|--help] [-v|--version] [-e|--edit] $(tput sgr0)
@@ -142,15 +144,10 @@ pr_log() {
   git log -s --reverse --format='%h %s%n%n%b%n<br/>%n' @{upstream}..@
 }
 
-MAGENTA='\033[0;35m' # Magenta (purple).
-RED='\033[0;31m' # Red.
-NC='\033[0m' # No Colour.
-LF=$'\n'
-
 # Usage: exit message [rc]
 error() {
-  # printf "${RED}Error:${NC} %s\n" "$1"
-  echo -e "${RED}Error:${NC} $1"
+  # printf "${fg[red]}Error:${reset_color} %s\n" "$1"
+  echo -e "${fg[red]}Error:${reset_color} $1"
   exit "${2:-1}"
 }
 

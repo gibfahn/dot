@@ -2,6 +2,8 @@
 
 set -eu
 
+autoload -U colors && colors
+
 usage() {
 echo "$(tput bold; tput setaf 74)$0 [-h|--help]$(tput sgr0)
 
@@ -21,15 +23,10 @@ Requires: fd CLI (https://github.com/sharkdp/fd).
 
 [[ ${1:-} =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
 
-MAGENTA='\033[0;35m' # Magenta (purple).
-RED='\033[0;31m' # Red.
-NC='\033[0m' # No Colour.
-LF=$'\n'
-
 # Usage: exit message [rc]
 error() {
-  # printf "${RED}Error:${NC} %s\n" "$1"
-  echo -e "${RED}Error:${NC} $1"
+  # printf "${fg[red]}Error:${reset_color} %s\n" "$1"
+  echo -e "${fg[red]}Error:${reset_color} $1"
   exit "${2:-1}"
 }
 
@@ -57,7 +54,7 @@ if [[ ${1:-} == --each-dir* ]]; then
   output=$(cd "$repo_path" && "$@" 2>&1) && true
   rc=$?
   if [[ -n ${output:-} ]]; then
-    printf "${MAGENTA}=> git-each: %s in $repo_path${NC}$LF" "$*"
+    printf "${fg[magenta]}=> git-each: %s in $repo_path${reset_color}"$'\n' "$*"
     printf "%s\n" "$(indent <<<"$output")"
   fi
   exit $rc
@@ -74,6 +71,6 @@ else
   fd --no-ignore --hidden --type directory '^\.git$' "${git_each_dirs[@]}" -x "$0" '--each-dir={//}' "$@" && true
   rc=$?
   if [[ $rc != 0 ]]; then
-    error "${MAGENTA}One or more git-each commands failed ($rc) ⬆⬆⬆.${NC}" "$rc"
+    error "${fg[magenta]}One or more git-each commands failed ($rc) ⬆⬆⬆.${reset_color}" "$rc"
   fi
 fi
