@@ -109,6 +109,7 @@ let g:coc_global_extensions = [
   \ 'coc-rust-analyzer',
   \ 'coc-snippets',
   \ 'coc-solargraph',
+  \ 'coc-sourcekit',
   \ 'coc-svg',
   \ 'coc-syntax',
   \ 'coc-tabnine',
