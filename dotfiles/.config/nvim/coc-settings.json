@@ -49,7 +49,6 @@
     "jsonc",
     "lua",
     "python",
-    "ruby",
     "rust",
     "sh"
   ],
