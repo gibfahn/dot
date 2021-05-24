@@ -108,7 +108,7 @@ remote_repo() {
 # Write the PR message file based on the PR Template (if defined) and the git commit log.
 pr_file() {
   # /path/to/git/repo @ branch -> '/tmp/_path_to_git_repo branch.md'
-  file="$TMPDIR/$(git rev-parse --show-toplevel | sed 's;/;_;g') $(git branch --show-current).md"
+  file="$TMPDIR/$(git rev-parse --show-toplevel | sed 's;/;_;g') $(git branch --show-current | sed 's;/;_;g').md"
 
   # Don't write template file if already non-empty.
   if [[ ! -s $file ]]; then
