@@ -8,81 +8,6 @@ set -euo pipefail
 # https://github.com/pqrs-org/Karabiner-Elements/issues/2331
 # https://github.com/jasonrudolph/keyboard
 
-if [ $# -eq 1 ]; then
-  base_dir=${XDG_DATA_HOME?}/hidutil
-  mkdir -p "$base_dir"
-  ln -sf "${0:A}" "$base_dir/"
-  cd "$base_dir"
-
-  if ! [[ -f xpc_set_event_stream_handler.m ]]; then
-    echo "Downloading xpc_set_event_stream_handler.m"
-    curl -L -o xpc_set_event_stream_handler.m https://raw.githubusercontent.com/snosrap/xpc_set_event_stream_handler/master/xpc_set_event_stream_handler/main.m
-  fi
-
-  if ! [[ -f xpc_set_event_stream_handler ]]; then
-    echo "Building xpc_set_event_stream_handler"
-    clang -fobjc-arc xpc_set_event_stream_handler.m -o xpc_set_event_stream_handler
-  fi
-
-  PLIST_FILENAME="${HOME}/Library/LaunchAgents/co.fahn.remap.plist"
-  cat << EOF >! "${PLIST_FILENAME}"
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>Label</key>
-	<string>co.fahn.remap</string>
-	<key>ProgramArguments</key>
-	<array>
-		<string>${base_dir}/xpc_set_event_stream_handler</string>
-		<string>${base_dir}/hid</string>
-	</array>
-	<key>LaunchEvents</key>
-	<dict>
-		<key>com.apple.iokit.matching</key>
-		<dict>
-			<key>Convertible 2 TKL</key>
-			<dict>
-				<key>IOProviderClass</key>
-				<string>IOHIDInterface</string>
-				<key>VendorID</key>
-				<integer>2652</integer>
-				<key>ProductID</key>
-				<integer>34050</integer>
-				<key>IOMatchLaunchStream</key>
-				<true/>
-			</dict>
-			<key>Contour Receiver</key>
-			<dict>
-				<key>IOProviderClass</key>
-				<string>IOHIDInterface</string>
-				<key>VendorID</key>
-				<integer>2867</integer>
-				<key>ProductID</key>
-				<integer>8192</integer>
-				<key>IOMatchLaunchStream</key>
-				<true/>
-			</dict>
-		</dict>
-	</dict>
-</dict>
-</plist>
-EOF
-  DOMAIN_TARGET="gui/$(id -u)"
-  SERVICE_TARGET="${DOMAIN_TARGET}/co.fahn.remap"
-  echo "Booting out existing service"
-  launchctl bootout "${SERVICE_TARGET}" || true
-  echo "Bootstrapping new service"
-  launchctl bootstrap "${DOMAIN_TARGET}" "${PLIST_FILENAME}"
-  echo "Kickstarting new service"
-  launchctl kickstart -k "${SERVICE_TARGET}"
-  exit 0
-fi
-
-date
-echo "Performing remap.  Install service with \"${ZSH_ARGZERO} install\""
-echo
-
 FROM='"HIDKeyboardModifierMappingSrc"'
 TO='"HIDKeyboardModifierMappingDst"'
 
@@ -165,7 +90,7 @@ hidutil property --matching '{"VendorID":0x5ac}' --set "{\"UserKeyMapping\":[
 {$FROM: $LEFT_SHIFT,             $TO: $LEFT_CTRL},
 {$FROM: $GRAVE_TILDE,             $TO: $F17},
 {$FROM: $ISO_BACKSLASH, $TO: $GRAVE_TILDE}
-]}"
+]}" >/dev/null
 
 # Cooler Master Keyboards.
 # Convert windows keyboard to macOS (swap cmd and alt).
@@ -176,4 +101,6 @@ hidutil property --matching '{"VendorID":0x2516}' --set "{\"UserKeyMapping\":[
 {$FROM: $LEFT_GUI,             $TO: $LEFT_ALT},
 {$FROM: $LEFT_ALT,             $TO: $LEFT_GUI},
 {$FROM: $ISO_BACKSLASH,             $TO: $F17}
-]}"
+]}" >/dev/null
+
+echo "Hidutil remap successful."
