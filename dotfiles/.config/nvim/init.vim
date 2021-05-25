@@ -723,6 +723,7 @@ endfun
 command! -nargs=1 Browse call Browse(<q-args>)|     " :Browse runs :call Browse() (defined above).
 command! Trim call TrimWhitespace()|                " :Trim runs :call Trim() (defined above).
 command! PU PlugClean | PlugUpdate | PlugUpgrade|   " :PU updates/cleans plugins and vim-plug.
+command W :execute ':silent w !sudo tee % > /dev/null' | :edit!| " :W writes as sudo.
 
 " TODO(gib): Also start using proximity-sort in vimrc.
 
