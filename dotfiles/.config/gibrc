@@ -318,9 +318,13 @@ cr() { local a=$(r 2>&1); cpy <<<"❯ $a"; }
 exists rg && alias rg='rg' rga='rg --hidden --no-ignore --glob=!.git' # rga is grep all (don't ignore anything).
 
 # Yaml to json, e.g. "y2j <t.yml | jq .". Requires a `pip install pyyaml`.
-alias y2j="python -c 'import sys, yaml, json; json.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2)'"
-alias y2y="python -c 'import sys, yaml; yaml.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2)'"
-alias t2j="python -c 'import sys, toml, json; json.dump(toml.load(sys.stdin), sys.stdout, indent=2)'"
+alias y2j="python3 -c 'import sys, yaml, json; json.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2)'"
+alias y2y="python3 -c 'import sys, yaml; yaml.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2)'"
+alias t2j="python3 -c 'import sys, toml, json; json.dump(toml.load(sys.stdin), sys.stdout, indent=2)'"
+# Url encode and decode stdin or first argument.
+alias url_encode='python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read()[0:-1]))"'
+alias url_decode='python3 -c "import urllib.parse, sys; print(urllib.parse.unquote(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read()[0:-1]))"'
+
 if exists kitty; then
   alias icat="kitty +kitten icat" # Kitty terminal specific: https://sw.kovidgoyal.net/kitty/kittens/icat.html
 fi
