@@ -21,7 +21,7 @@
 --   | z | ✓ | ✓ | ✓ | ✓ |   | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 --   '---'---'---'---'---'   '---'---'---'---'---'---'
 local message = require('status-message')
--- local log = hs.logger.new('init.lua', 'debug')
+-- local log = hs.logger.new('hyper.lua', 'debug')
 
 -- {{{ F17 -> Hyper Key
 
