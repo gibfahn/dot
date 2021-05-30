@@ -90,6 +90,7 @@ cask "daisydisk"                         # See what's using disk space and easil
 cask "docker"                            # Build and run docker images.
 cask "firefox-nightly"                   # For those sweet Rust-based improvements.
 cask "hyperswitch"                       # Better Cmd-Tab (only windows on a screen).
+cask "intel-power-gadget"                # See performance stats for your machine.
 cask "keycastr"                          # Shows keystrokes in corner of screen (great for casting/demos).
 cask "meld"                              # Visual file diffing tool.
 cask "messenger"                           # Facebook Messenger native app.
