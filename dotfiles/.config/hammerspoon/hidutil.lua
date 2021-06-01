@@ -4,8 +4,8 @@ local log = hs.logger.new('hidutil.lua', 'debug')
 RemapKeys()
 
 -- Always re-remap keys on some events.
-local remapKeyWatcher = hs.caffeinate.watcher.new(
-                            function(event)
+RemapKeyWatcher = hs.caffeinate.watcher.new(
+                      function(event)
         local eventsToMatch = {
             [hs.caffeinate.watcher.systemDidWake] = true, -- 0
             [hs.caffeinate.watcher.systemWillSleep] = false, -- 1
@@ -24,7 +24,7 @@ local remapKeyWatcher = hs.caffeinate.watcher.new(
         log.d('Event: ', event, ' matches: ', eventsToMatch[event])
         if eventsToMatch[event] then RemapKeys() end
     end)
-remapKeyWatcher:start()
+RemapKeyWatcher:start()
 
 -- {{{ §/CapsLock -> Run hidutil script to re-apply key mappings.
 -- These keys are both keys I don't use, that only exist pre-mapping.
