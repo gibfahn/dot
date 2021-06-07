@@ -114,7 +114,7 @@ pr_file() {
   if [[ ! -s $file ]]; then
     pr_message > "$file"
   fi
-  $VISUAL "$file" >$(tty) <$(tty)
+  ${VISUAL:-$EDITOR} "$file" >$(tty) <$(tty)
   echo "$file"
 }
 
