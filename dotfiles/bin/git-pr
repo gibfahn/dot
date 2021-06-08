@@ -36,6 +36,8 @@ main() {
   up_org=$(remote_org $up_remote)
   up_repo=$(remote_repo $up_remote)
 
+  commit_block_title="#### Commits _(oldest to newest)_"
+
   # TODO: stop setting this once `gh` gains decent up/push branch recognition.
   export GH_REPO=$(remote_url "$up_remote")
   export GH_HOST=$(remote_host "$up_remote")
@@ -66,7 +68,11 @@ pr_edit() {
 
   [[ $pr_number == null || $old_pr_body == null ]] && error "Failed to find PR branch."
 
-  new_pr_body=$(sed '/#### Commits /q' <<<"$old_pr_body" && echo && pr_log)
+  if [[ $old_pr_body != *"$commit_block_title"* ]]; then
+    new_pr_body=$(<<<"$old_pr_body" && echo && <<<"$commit_block_title" && echo && pr_log)
+  else
+    new_pr_body=$(sed "/$commit_block_title/q" <<<"$old_pr_body" && echo && pr_log)
+  fi
 
   if [[ $new_pr_body == $old_pr_body ]]; then
     echo "Nothing to do..."
@@ -128,7 +134,7 @@ $(cat $(git rev-parse --show-toplevel)/{.github/,,docs/}PULL_REQUEST_TEMPLATE{,.
 
 ---
 
-#### Commits _(oldest to newest)_
+$commit_block_title
 
 $(pr_log)
 EOF
