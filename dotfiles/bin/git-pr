@@ -102,7 +102,7 @@ remote_org() {
 
 # Github repo for remote. `remote_repo up` -> dot.
 remote_repo() {
-  git remote get-url $1 | sed -e 's|.*/||' -e 's/.git$//'
+  git remote get-url $1 | sed -e 's|/$||' -e 's|.*/||' -e 's/.git$//'
 }
 
 # Write the PR message file based on the PR Template (if defined) and the git commit log.
