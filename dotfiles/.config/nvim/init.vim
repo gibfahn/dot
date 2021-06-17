@@ -99,6 +99,7 @@ let g:coc_global_extensions = [
   \ 'coc-emoji',
   \ 'coc-eslint',
   \ 'coc-go',
+  \ 'coc-groovy',
   \ 'coc-highlight',
   \ 'coc-html',
   \ 'coc-java',
