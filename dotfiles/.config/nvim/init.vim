@@ -771,8 +771,8 @@ highlight ColorColumn guibg=#383734
 call matchadd('ColorColumn', '\%81v', 100)
 
 if executable("rg")
-  set grepprg=rg\ -S\ --vimgrep\ --no-heading       " Use ripgrep for file searching.
-  set grepformat=%f:%l:%c:%m,%f:%l:%m               " Teach vim how to parse the ripgrep output.
+  set grepprg=rg\ -S\ --vimgrep\ --no-heading\ --hidden\ --glob\ !.git " Use ripgrep for file searching.
+  set grepformat=%f:%l:%c:%m,%f:%l:%m " Teach vim how to parse the ripgrep output.
 endif
 
 augroup gibAutoGroup                                " Group of automatic functions.
