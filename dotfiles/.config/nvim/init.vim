@@ -274,6 +274,8 @@ nnoremap <silent> K :call <SID>show_documentation()<CR>| " Use K for show docume
 nnoremap Q <nop>| " Disable Q to avoid accidental triggering.
 nmap     t <Plug>Sneak_t| " Use sneak for f (multiline+highlight).
 nmap     T <Plug>Sneak_T| " ↳             T
+nnoremap <expr> n (v:searchforward ? 'n' : 'N')| " n is always "next one down" even if you hit #
+nnoremap <expr> N (v:searchforward ? 'N' : 'n')
 nnoremap Y y$| " Make Y work like C and D (yank to end of line, not whole line).
 nnoremap - :e %:h<CR>|  " Use - to open the current buffer directory in the file browser (repeat for `cd ..`).
 
