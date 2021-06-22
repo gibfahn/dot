@@ -37,10 +37,10 @@ dock_changed="" menu_changed="" finder_changed="" mail_changed="" safari_changed
 
 # -> Kitty:
 updateMacOSKeyboardShortcut net.kovidgoyal.kitty "Hide kitty" '~^$\\U00a7'
-# -> Mail: ⌘-backspace moves to Archive.
-updateMacOSKeyboardShortcut com.apple.mail "Archive" '@\\b'
-# -> Mail: ⌘-Enter sends the message.
-updateMacOSKeyboardShortcut com.apple.mail "Send" '@\\U21a9'
+# -> Mail: ⌘-b moves to Archive.
+updateMacOSKeyboardShortcut com.apple.mail "Archive" '@b'
+# -> Mail: ⌘-u sends the message.
+updateMacOSKeyboardShortcut com.apple.mail "Send" '@u'
 
 # Unnatural scrolling direction (swipe down to scroll down).
 changed=$(updateMacOSDefault NSGlobalDomain com.apple.swipescrolldirection bool false)
@@ -139,13 +139,6 @@ if [[ $USER == gib ]]; then # Set keyboard preferences.
 
   # Create global shortcut "Merge all windows" ⌘-M
   updateMacOSKeyboardShortcut NSGlobalDomain "Merge All Windows" '@$m'
-
-  # Remove ⌘-h as a Hide Window shortcut in relevant apps.
-  # -> IntelliJ Community Edition:
-  # Removed because I haven't installed it.
-  # updateMacOSKeyboardShortcut com.jetbrains.intellij.ce "Hide IntelliJ IDEA" '@~^\\U00a7'
-  # -> IntelliJ:
-  updateMacOSKeyboardShortcut com.jetbrains.intellij "Hide IntelliJ IDEA" '~^$\\U00a7'
 
   # Set up fastest key repeat rate (needs relogin).
   updateMacOSDefault NSGlobalDomain KeyRepeat int 1
