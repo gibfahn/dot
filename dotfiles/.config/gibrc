@@ -257,6 +257,9 @@ fi
 # x->close terminal, g->git, h->history, path->print $PATH,
 alias x=exit g=git path='echo $PATH | tr : "\n"' dt="date +%Y-%m-%d"
 alias s="TERM=xterm-256color ssh" # Reset cursor to block and ssh.
+# Footgun, make sure you only use this for a single command, after that exit the shell.
+# e.g. sudo_later; sleep 1000; sudo halt
+alias sudo_later="(while sudo -v; do sleep 60; done) &" # Preserve sudo for a command you'll run later (needs TouchID Sudo).
 
 # l->full detail + hidden, la->no detail + hidden, ll->full detail no hidden, md->create dir.
 alias l='ls -lAh' la='ls -A' ll='ls -l' md="mkdir -p"
