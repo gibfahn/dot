@@ -160,11 +160,9 @@ hyperMode:bind({}, ';', hs.caffeinate.lockScreen)
 -- Open work apps and turn on VPN.
 hyperMode:bind({}, 'q', function()
     hs.notify.new({title = 'Work Setup', withdrawAfter = 3}):send()
-    RemapKeys()
-    CallVpn("corporate")
     local appsToOpen = {
-        'Activity Monitor', 'Safari', 'Slack', 'Firefox Nightly', 'Calendar',
-        'Mail', 'Radar 8', 'Kitty', 'Workflowy', 'Docker'
+        'Activity Monitor', 'Safari', 'Slack', 'Calendar', 'Mail', 'Radar 8',
+        'Kitty', 'Workflowy'
     }
     for _, app in ipairs(appsToOpen) do hs.application.launchOrFocus(app) end
 end)
@@ -174,18 +172,16 @@ end)
 -- Open work apps I actually use and turn on VPN.
 hyperMode:bind({'shift'}, 'q', function()
     hs.notify.new({title = 'Minimal Work Setup', withdrawAfter = 3}):send()
-    RemapKeys()
-    CallVpn("corporate")
     local appsToOpen = {'Activity Monitor', 'Safari', 'Kitty'}
     for _, app in ipairs(appsToOpen) do hs.application.launchOrFocus(app) end
 end)
 -- }}} Hyper-shift-q -> Minimal setup
 
--- {{{ Hyper-cmd-q -> Force Quit Webex
+-- {{{ Hyper-⌥-q -> Force Quit Webex
 -- Quit webex without spending an age trying to find the button.
 hyperMode:bind({'alt'}, 'q',
                function() killAll({'-9', '-m', '.*Meeting Center.*'}) end)
--- }}} Hyper-cmd-q -> Force Quit Webex
+-- }}} Hyper-⌥-q -> Force Quit Webex
 
 -- {{{ Hyper-⇧-w -> Restart Wi-Fi
 hyperMode:bind({'shift'}, 'w', function()
