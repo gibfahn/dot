@@ -4,7 +4,7 @@
 
   # Helper functions where a full name is easier:
   # Set up a fork the way I like it:
-  fork = "! set -x; up=${1:-up} fork=${2:-fork} fork_branch=${3:-forkmain} && up_branch=${4:-$(git default-branch $up)} && { git remote | grep -qx $fork || gh repo fork --clone=false --remote=true --remote-name=$fork; } && git remote -v && git push $fork $up/${up_branch:?}:refs/heads/$fork_branch && git change-branch $fork $fork_branch && git default-branch $fork && git clean-fork $fork $fork_branch #"
+  fork = "! set -x; up=${1:-up} fork=${2:-fork} fork_branch=${3:-forkmain} && up_branch=${4:-$(git default-branch $up)} && { git remote | grep -qx $fork || GH_REPO=$(git remote-url $up) GH_HOST=$(git remote-host $up) gh repo fork --clone=false --remote=true --remote-name=$fork; } && git remote -v && git push $fork $up/${up_branch:?}:refs/heads/$fork_branch && git change-branch $fork $fork_branch && git default-branch $fork && git clean-fork $fork $fork_branch #"
   # Change the remote default branch to "$2" (default: "forkmain"), for remote $1 (default: "fork").
   change-branch = "! set -x; fork=${1:-fork} branch=${2:-forkmain} && GH_HOST=$(git remote-host $fork) gh api -XPATCH repos/$(git remote-org $fork)/$(git remote-repo $fork) -f name=$(git remote-repo $fork) -f default_branch=$branch --jq .default_branch && git remote set-head --auto $fork #"
   check-pr-branch = "! [[ $(git head-branch) != $(git up-branch) ]] || { printf \"\\033[0;31m  ERROR\\033[0m: Create a new branch before raising PR.\\n\" >&2 && exit 1; } #"
