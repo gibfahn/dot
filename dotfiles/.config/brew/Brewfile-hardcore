@@ -14,6 +14,7 @@ tap "gibfahn/tap", "https://github.com/gibfahn/homebrew-tap" # My personal tap f
 # brew "ctags"                             # Used for autocomplete in Vim (etc).
 # brew "exa"                               # Nicer ls replacement.
 # brew "exercism"                          # Learn coding languages.
+# brew "gng"                               # Wrapper around ./gradlew for gradle projects (gw and gng).
 # brew "graphviz"                          # Gives you the `dot` tool for generating diagrams.
 # brew "groovy"                            # Helpful for testing Jenkins scripts.
 # brew "hexyl"                             # Hex viewer in Rust.
@@ -50,7 +51,6 @@ brew "fswatch"                           # See which files are opened on the sys
 brew "gawk"                              # GNU versions of awk.
 brew "gh"                                # New GitHub CLI (will eventually replace hub).
 brew "git-lfs"                           # Git Large File Storage. Use with `git lfs`.
-brew "gng"                               # Wrapper around ./gradlew for gradle projects (gw and gng).
 brew "gnu-tar"                           # GNU version of tar.
 brew "gnu-time"                          # GNU version of time.
 brew "gnu-which"                         # GNU version of which.
