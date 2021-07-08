@@ -1,9 +1,0 @@
-constraints = {OS = "macOS"}
-
-run_lib = "git"
-
-[data]
-path = "$dotfile_dir"
-  [data.remotes.up]
-  fetch = "https://github.com/gibfahn/dot"
-  push = "git@github.com:gibfahn/dot"
