@@ -266,9 +266,24 @@ end)
 -- }}} Hyper-Enter -> Open clipboard contents.
 
 -- {{{ Hyper-<mods>-\ -> Quit things.
-hyperMode:bind({}, '\\', function() killAll("Dock") end)
+hyperMode:bind({}, '\\', function()
+    local frontmostApplicationName =
+        hs.application.frontmostApplication():name()
+    hs.task.new("/usr/bin/sudo", function(exitCode, stdOut, stdErr)
+        hs.notify.new({
+            title = 'Created spindump for frontmost app...',
+            subTitle = frontmostApplicationName,
+            informativeText = exitCode,
+            stdErr,
+            withdrawAfter = 3
+        }):send()
+    end, {
+        "/usr/sbin/spindump", '-reveal', '-o', '/Users/gib/tmp/nuke/',
+        frontmostApplicationName
+    }):start()
+end)
 hyperMode:bind({'shift'}, '\\', function() killAll("Finder") end)
-hyperMode:bind({'alt'}, '\\', function() killAll("entangled") end)
+hyperMode:bind({'alt'}, '\\', function() killAll("Dock") end)
 hyperMode:bind({'cmd'}, '\\', function()
     -- Restart WindowServer (logs you out).
     killAll({"-HUP", "WindowServer"}, {sudo = true})
