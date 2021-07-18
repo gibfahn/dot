@@ -265,6 +265,7 @@
 
 [fetch]
   prune = true             # Delete local tracking branches if remote is gone.
+  fsckObjects = true
 [format]
   pretty = fuller          # Shows author and committer.
 [help]
@@ -291,6 +292,8 @@
 [rebase]
   autosquash = true        # Squash/fixup commits starting with squash!/fixup! + commit subject.
   missingCommitsCheck = warn # Print a warning if a rebase removes commits.
+[receive]
+  fsckObjects = true
 [remote]
   pushDefault = fork       # Push to the fork remote unless a pushRemote is specified. Prevents pushing to wrong branch by mistake.
 [rerere]
@@ -304,6 +307,8 @@
   showStash = true         # Show the number of commits in the stash in `git status` output.
   relativePaths = true     # Always show relative paths from the repo root.
   submoduleSummary = true  # Show submodule status in `git status`.
+[transfer]
+  fsckObjects = true
 
 # Try `g cl hh:nodejs/node`.
 [url "https://bitbucket.org/"]
