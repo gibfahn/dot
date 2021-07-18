@@ -267,6 +267,7 @@ end)
 
 -- {{{ Hyper-<mods>-\ -> Quit things.
 hyperMode:bind({}, '\\', function()
+    local date = os.date("%Y-%m-%d %H-%M-%S")
     local frontmostApplicationName =
         hs.application.frontmostApplication():name()
     hs.task.new("/usr/bin/sudo", function(exitCode, stdOut, stdErr)
@@ -278,12 +279,21 @@ hyperMode:bind({}, '\\', function()
             withdrawAfter = 3
         }):send()
     end, {
-        "/usr/sbin/spindump", '-reveal', '-o', '/Users/gib/tmp/nuke/',
+        "/usr/sbin/spindump", '-reveal', '-o',
+        '/Users/gib/tmp/nuke/Safari ' .. date .. '.spindump.txt',
         frontmostApplicationName
     }):start()
 end)
 hyperMode:bind({'shift'}, '\\', function() killAll("Finder") end)
-hyperMode:bind({'alt'}, '\\', function() killAll("Dock") end)
+hyperMode:bind({'alt'}, '\\', function()
+    hs.task.new("/usr/bin/sudo", function(exitCode, stdOut, stdErr)
+        hs.notify.new({
+            title = 'Sudo refreshed ...',
+            informativeText = exitCode .. " " .. stdOut .. " " .. stdErr,
+            withdrawAfter = 3
+        }):send()
+    end, {'--validate'}):start()
+end)
 hyperMode:bind({'cmd'}, '\\', function()
     -- Restart WindowServer (logs you out).
     killAll({"-HUP", "WindowServer"}, {sudo = true})
