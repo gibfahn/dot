@@ -380,7 +380,10 @@ case $shell in
     zinit light zsh-users/zsh-autosuggestions # Autosuggest completion (accept with -> arrow).
 
     zinit ice depth=1
-    zinit light romkatv/powerlevel10k
+    zinit light romkatv/powerlevel10k # Terminal prompt + git status.
+
+    zinit ice depth=1
+    zinit light jeffreytse/zsh-vi-mode # Better zsh vim mode.
 
     zinit light rupa/z               # Autojump command
     zinit light gibfahn/fzf-z        # Use <Ctrl>-n instead of `z <Tab>`.

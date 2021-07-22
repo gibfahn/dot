@@ -218,17 +218,10 @@ bindkey -r -M viins "^G" # Remove list-expand binding so we can use <C-g> for gi
 bind-git-helper f b t r h a # Bind <C-g><C-{f,b,t,r,h,s}> to fuzzy-find show {files,branches,tags,reflog,hashes,stashes}.
 unset -f bind-git-helper
 
-bindkey -M viins 'kj' vi-cmd-mode # Map kj -> Esc in vim mode.
-bindkey -M viins "^?" backward-delete-char # Make backspace work properly.
-bindkey -M viins "^A" beginning-of-line # Ctrl-A = Go to beginning of line (Emacs default).
 bindkey -M viins '^d' _gib_clear_exit # Ctrl-D = Clear or exit terminal on.
-bindkey -M viins "^E" end-of-line       # Ctrl-E = Go to end of line (Emacs default).
 bindkey -M viins '^G^P' _gib_fzf-gp-widget # Ctrl-G-P searches all binaries in the $PATH.
-bindkey -M viins "^H" backward-delete-char # Ctrl-H = Backspace (Emacs default).
 bindkey -M viins '^R' gib-fzf-history-widget # Ctrl-R = Multi-select for history search.
 bindkey -M viins '^T' fzf-file-widget # Ctrl-T = Preserve fzf file widget setting.
-bindkey -M viins "^U" backward-kill-line # Ctrl-U = Delete line (Emacs default).
-bindkey -M viins "^W" backward-kill-word # Ctrl-W = Delete word (Emacs default).
 bindkey -M viins '^Y' gib-yank-all # Ctrl-y copies everything to the system clipboard.
 bindkey -M viins "^[[A" history-beginning-search-backward-end # Re-enable up   for history search.
 bindkey -M viins "^[[B" history-beginning-search-forward-end  # Re-enable down for history search.
