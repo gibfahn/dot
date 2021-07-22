@@ -1,9 +1,12 @@
-# My shell configuration file. Must be sourced. I include this from .profile, .bashrc, and .zshrc like so:
+# shellcheck shell=zsh
+# My shell configuration file. Must be sourced. I include this from .profile, .bashrc, and .zshrc
+# like so:
 #   . "$HOME/.config/gibrc"
 
 # {{{ Initial setup
 
 [ -n "$NORC" ] && return # Don't run if NORC set.
+[ "$ZSH_VERSION" ] || return # Only run if using zsh
 
 case $- in
   *i*) [ "$GIBRC" ] && echo "Reusing gibrc..." ;;
@@ -12,59 +15,40 @@ esac
 export GIBRC
 : "${GIBRC:=0}" # First time through this is 0, next time 1 (etc).
 
-# Note that which is a built-in in zsh, so no speed issues.
-exists() { command -v "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
-works() { "$1" --version >/dev/null 2>&1; } # Check if command actually works (can get its version).
-
-# Internal use variables (shell=current shell, ssh=whether we're sshed).
-{ [ "$SSH_CLIENT" ] || [ "$SSH_TTY" ]; } && ssh="true" || ssh=""
-# shellcheck disable=SC2154 # Zsh defines this variable.
-[ "$ZSH_VERSION" ] && shell=zsh && exists() { [[ -n "${commands[$1]}" ]]; }
-[ "$BASH_VERSION" ] && shell=bash
-case $0 in
-  -ksh|ksh) shell="ksh" ;;
-  -sh|sh) shell="sh" ;;
-esac
-: "${shell:="$(ps co command= "$$")"}" # Fallback shell name = name of current process.
-
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block, everything else may go below.
-if [[ $shell == zsh ]]; then
-  printf '\e[4 q' # Cursor is an underline (_) while shell setup is running.
-  if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${USER}.zsh" ]]; then
-    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${USER}.zsh"
-  fi
+printf '\e[4 q' # Cursor is an underline (_) while shell setup is running.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${USER}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${USER}.zsh"
 fi
-
-uname="$(uname)"
-# If we're sshed into a machine, and didn't manually run a different, try a better shell.
-if [ -n "$ssh" ] && [ "$GIBRC" = 0 ] && [ "$shell" != zsh ]; then
-  if exists zsh; then
-    echo "Upgrading to zsh"
-    GIBRC=1
-    zsh && exit || printf "\nERROR(gibrc): Zsh crashed with exit code: %s\n" "$?" # Replace existing shell with zsh.
-  elif [ "$shell" != bash ] && exists bash; then
-    echo "Upgrading to bash"
-    GIBRC=1
-    bash && exit || printf "\nERROR(gibrc): Bash crashed with exit code: %s\n" "$?" # Replace existing shell with bash.
-  fi
-fi
-
-# From here on out we can assume at least ksh (so [[]], $(), etc).
-case "$shell" in
-  ksh|bash|zsh|ksh93) ;;
-  *) echo "Skipping gibrc, unknown shell $shell"; return ;;
-esac
 
 # }}} Initial setup
 
-# {{{ Env var defaults
+# {{{ Used Later
+
+uname="$(uname)" # Used later to avoid repeatedly running uname.
+
+# Note that command -v is a built-in in zsh, so no speed issues.
+exists() { command -v "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
+
+# Cross-platform copy/paste aliases used later via ${aliases[cpy]}.
+case $uname in
+  Darwin) alias cpy="pbcopy" pst="pbpaste" ;;
+  Linux) alias cpy="xclip -selection clipboard" pst="xclip -selection clipboard -o" ;;
+esac
+
+# }}} Used Later
+
+# {{{ Environment Variables
 
 # For making things adhere to XDG see: https://wiki.archlinux.org/index.php/XDG_Base_Directory
 export XDG_CACHE_HOME=${XDG_CACHE_HOME:-"$HOME/.cache"} # Cache stuff should go here.
 export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-"$HOME/.config"} # Config stuff should go here.
 export XDG_DATA_HOME=${XDG_DATA_HOME:-"$HOME/.local/share"} # Data should go here.
+
+# Referred to in a later command, so order matters.
+export FZF_PREVIEW_COMMAND="bat --style=numbers,changes --wrap=never --color=always {} || cat {} || tree -C {}"
 
 export ATOM_HOME="$XDG_DATA_HOME"/atom # Atom data goes here.
 export AWS_CONFIG_FILE="$XDG_CONFIG_HOME/aws/config"
@@ -77,6 +61,14 @@ export CCACHE_DIR="$XDG_CACHE_HOME"/ccache # Ccache cache.
 export COURSIER_CREDENTIALS="$XDG_CONFIG_HOME/coursier/credentials.properties"
 export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
 export FZFZ_SUBDIR_LIMIT=0 # Don't show subdirs of current dir in Ctrl-N fzf-z shortcut.
+export FZF_ALT_C_COMMAND='fd --type d --hidden --no-ignore --follow --exclude .git'
+export FZF_CTRL_R_OPTS="--height=100% --preview-window=down:30%:noborder --preview 'bat --language=zsh --plain --terminal-width=\$FZF_PREVIEW_COLUMNS --wrap=character --color=always <<<\$(echo {2..})', --bind='ctrl-y:execute(${aliases[cpy]} <<< {2..})'"
+export FZF_CTRL_T_COMMAND='fd --type f --hidden --follow --exclude .git'
+export FZF_CTRL_T_OPTS="--height=100% --preview-window=right:60%:noborder --preview '($FZF_PREVIEW_COMMAND) 2> /dev/null'"
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git' # Use fd for fuzzy finding if available.
+# Ctrl-a -> select/deselect all, Ctrl-y -> copy line, Alt-s -> sneak to line, Alt-Shift-s -> sneak to line + enter, Ctrl-p is open/close preview window.
+export FZF_DEFAULT_OPTS="--select-1 --exit-0 --preview-window=right:50% --preview '[[ -d {} ]] && tree -aClF {} || { [[ -e {} ]] && $XDG_DATA_HOME/nvim/plugged/fzf.vim/bin/preview.sh {} } || printf {}' -m --bind='ctrl-o:execute(\$VISUAL {} </dev/tty >/dev/tty),ctrl-a:toggle-all,ctrl-s:toggle-sort,ctrl-w:toggle-preview-wrap,alt-s:jump,alt-S:jump-accept,ctrl-p:toggle-preview,ctrl-y:execute(${aliases[cpy]} <<< {})'"
+export FZF_DEFAULT_SORT=10000
 export GNUPGHOME="$XDG_DATA_HOME"/gnupg # Gpg data.
 export GOPATH="$HOME/code/go"
 export GRADLE_USER_HOME="$XDG_DATA_HOME"/gradle # Also contains gradle.properties (symlink from XDG_CONFIG_HOME).
@@ -107,104 +99,15 @@ export _Z_DATA=$XDG_CACHE_HOME/z # Z Cache Directory.
 export LESS='--tabs=4 --ignore-case --RAW-CONTROL-CHARS --quit-if-one-screen --status-column --LONG-PROMPT --HILITE-UNREAD --window=-4' # See less options comment below.
 export BAT_PAGER="less $LESS" # Make bat use less pager options.
 
-export HISTSIZE=100000 SAVEHIST=100000 HISTFILE="$XDG_CACHE_HOME/$shell/history" # Set history file location and size.
+export HISTSIZE=100000 SAVEHIST=100000 HISTFILE="$XDG_CACHE_HOME/zsh/history" # Set history file location and size.
 c="$XDG_CONFIG_HOME" # Shortcut to the config directory (`v $c/gibrc` to edit this file).
 
 [[ -d "$XDG_CONFIG_HOME/terminfo" ]] && export TERMINFO="$XDG_CONFIG_HOME/terminfo" # Put terminal info in here.
 [[ $TERM == xterm ]] && TERM=xterm-256color
 
-# }}} Env var defaults
+# }}} Environment Variables
 
-# {{{ Functions
-
-# Edit a file on the system.
-e() { locate -i0 "$@" | xargs -0 realpath | sort -u | proximity-sort "$PWD" | fzf --tiebreak=index --print0 | xargs -0 "$=VISUAL"; }
-
-mdc() { command mkdir -p "$@"; { [[ $# == 1 ]] && cd "$1"; } || true; } # Mkdir then cd to dir (`mdc foo` = `mkdir foo && cd foo`).
-cpm() { command mkdir -p "${@: -1}" && cp "$@"; } # Mkdir then cp to dir (`cpm foo bar` = `md bar && cp foo bar`).
-mvm() { command mkdir -p "${@: -1}" && mv "$@"; } # Mkdir then mv to dir (`mvm foo bar` = `md bar && mv foo bar`).
-
-# Add or move to beginning of path.
-pathadd() { [[ -d "$1" ]] && PATH="$1"$(echo ":$PATH:" | sed "s|:$1:|:|" | sed 's|:$||'); }
-# Add or move to end of path.
-pathapp() { [[ -d "$1" ]] && PATH=$(echo ":$PATH:" | sed "s|:$1:|:|" | sed 's|^:||')"$1"; }
-
-pth() { # Returns absolute path to each file or dir arg.
-  local i
-  for i in "$@"; do
-    if [[ -d "$i" ]]; then (pushd "$i" >/dev/null || return 1; pwd) # dir.
-    elif [[ -f "$i" ]]; then  # file.
-      case $i in
-        */*) echo "$(pushd "${i%/*}" >/dev/null || return 1; pwd)/${i##*/}" ;;
-          *) echo "$PWD/$i" ;;
-      esac
-    fi
-  done
-}
-
-add_trailing_newline() {
-  fd --hidden --exclude=.git --type f "$@" -x gsed -i -e '$a\' '{}'
-}
-
-remove_trailing_whitespace() {
-  fd --hidden --exclude=.git --type f "$@" -x gsed -i -e 's/\s\+$//' '{}'
-}
-
-tabs_to_spaces() {
-  spaces_per_tab=${1:-4}
-  fd --hidden --exclude=.git --type f -x bash -c "gexpand -i -t $spaces_per_tab {} | sponge {}"
-}
-
-# Clone repo and cd into path (can't be in git config as we cd).
-gcl() {
-  local clone_dir ret
-  clone_dir="$(set -o pipefail; git cl --progress "$@" 3>&1 1>&2 2>&3 3>&- | tee /dev/stderr | awk -F \' '/Cloning into/ {print $2}' | head -1)"
-  ret="$?"
-  [[ -d "$clone_dir" ]] && echo "cd $clone_dir" && cd "$clone_dir" || return 1
-  return $ret
-}
-# Change to the most vanilla prompt for copy/pasting into GitHub etc.
-nop() {
-  case $shell in
-    zsh)
-      _dot_old_prompt="$PROMPT"
-      # shellcheck disable=SC2034
-      PROMPT='$ ' NORPROMPT=true # Checked in gib-theme.zsh.
-      unset RPROMPT
-      ;;
-    bash) unset PROMPT_COMMAND; PS1='$ ' ;;
-  esac
-}
-# Restore the normal prompt, undoes the effects of nop.
-yep() {
-  case $shell in
-    zsh) PROMPT="$_dot_old_prompt"; unset _dot_old_prompt NORPROMPT ;;
-    bash) PROMPT_COMMAND=_gib_bash_prompt_command ;;
-  esac
-}
-
-# Open vim with the results of the last rg/rga command in the quickfix list.
-# $1: jump to nth match.
-rv() {
-  local cmd jump_to
-  case $1 in
-    "") jump_to=() ;;
-    0) jump_to=("-c" ":clast") ;;
-    *) jump_to=("-c" ":cc $1") ;;
-  esac
-  cmd="$(fc -lnr -100 | awk '$1 == "rg" || $1 == "rga" {
-    out="rg --vimgrep"
-    if ($1 == "rga") { out=out" --hidden --no-ignore --glob=!.git" }
-    for (i=2; i<=NF; i++) { out=out" "$i }
-    print out; exit
-  }')"
-  [[ -z "$cmd" ]] && { echo "No rg in the last 100 history commands."; return 1; }
-  "$=VISUAL" -q <(eval "$cmd") ${jump_to:+"${jump_to[@]}"}
-}
-
-# }}} Functions
-
-# {{{ Path additions
+# {{{ System Path Setup
 
 # Where brew is on the system if it's installed.
 # Script expects brew to be already in the path, e.g. by adding to /etc/paths.d with:
@@ -218,6 +121,7 @@ path=(
 
   $HOME/bin # Put random binaries you want to run in here.
   $HOME/.local/bin
+
 # /usr/local/opt/ccache/libexec # Add ccache to the path if installed (macOS).
 # /usr/lib/ccache # Add ccache to the path if installed (Linux).
 
@@ -241,272 +145,132 @@ path=(
 )
 export PATH
 
-# }}} Path Additions
+# }}} System Path Setup
 
-# {{{ Aliases
+# {{{ Zinit Plugins and Sourcing
 
-# Better ls commands (used below in zsh chpwd(), so needs to be above).
-exists gls && alias ls=gls
-exists gsed && alias sed=gsed
-if ls --color=auto >/dev/null 2>&1; then
-  { exists gls && alias ls='gls --color=auto'; } || alias ls='ls --color=auto'
-elif [[ "$uname" == Darwin ]]; then
-  alias ls='LSCOLORS="Gxfxcxdxbxegedabagacad" ls -G' # Colour ls on macOS.
-fi
+# Add completion dirs to function path.
+_gib_fpath_dirs=(
+  ${brew_prefix:+$brew_prefix/share/zsh/site-functions} # Brew shell completions if there.
+  $XDG_DATA_HOME/zfunc # Put (or symlink) autocomplete scripts in here.
+)
+for _gib_dir in "${_gib_fpath_dirs[@]}"; do
+  [[ -d $_gib_dir ]] && fpath+=("$_gib_dir")
+done
+unset _gib_dir _gib_fpath_dirs
 
-# x->close terminal, g->git, h->history, path->print $PATH,
-alias x=exit g=git path='echo $PATH | tr : "\n"' dt="date +%Y-%m-%d"
-alias s="TERM=xterm-256color ssh" # Reset cursor to block and ssh.
-# Footgun, make sure you only use this for a single command, after that exit the shell.
-# e.g. sudo_later; sleep 1000; sudo halt
-alias sudo_later="(while sudo -v; do sleep 60; done) &" # Preserve sudo for a command you'll run later (needs TouchID Sudo).
-alias bounce="echo -n '\a'" # Ring the terminal bell (bounce the dock icon in macOS).
+# NOTE: If you change this block, change the hermetic_zinit script.
+declare -A ZINIT
+ZINIT[HOME_DIR]=$XDG_DATA_HOME/zsh/zinit
+ZINIT[BIN_DIR]=$XDG_DATA_HOME/zsh/zinit/bin # Where zinit is installed.
+ZINIT[ZCOMPDUMP_PATH]=$XDG_CACHE_HOME/zsh/.zcompdump$(hostname)
+source "$XDG_DATA_HOME"/zsh/zinit/bin/zinit.zsh # Source plugin manager.
 
-# l->full detail + hidden, la->no detail + hidden, ll->full detail no hidden, md->create dir.
-alias l='ls -lAh' la='ls -A' ll='ls -l' md="mkdir -p"
-alias c=cargo ru=rustup  # Rust commands (try `c b`, `c r`, `c t`).
-rs() { for i in "$@"; do rustc "${i%.rs}.rs"; ./"${i%.rs}"; done; } # Compile/run (rs a.rs b).
-# .. = up 1 dir, ... = up 2 dirs, .... = up 3 dirs (etc.). - = go to last dir.
-# shellcheck disable=SC2139 # We want this to expand when defined.
-alias ..="cd .." ...="cd ../.." ....="cd ../../.." .....="cd ../../../.." ......="cd ../../../../.."
-# shellcheck disable=SC2139 # We want this to expand when defined.
-alias -- -="cd -"
-alias next='git next && git show' # Useful for demos.
-alias gm='wait; git mf' # After cd'ing into a repo, fetch will run as a background job. Use this to wait for it to finish then mf.
+# First load in a blocking way zsh things that want to happen early.
+zinit snippet $ZDOTDIR/early.zsh
 
-{ works nvim && _gib_vim="nvim"; } || { works vim && _gib_vim="vim"; } || _gib_vim="vi" # Take what you can get.
-[[ $VISUAL == 'nvr --remote-wait' ]] && _gib_vim=$VISUAL # Allow passing through the neovim init.vim value.
-export VISUAL=$_gib_vim EDITOR=$_gib_vim # Set vim/nvim as the default editor.
-unset _gib_vim
-alias vim='VIMINIT=":source $XDG_CONFIG_HOME/nvim/init.vim" vim' # Make vim use nvim config file.
-# shellcheck disable=SC2139 # We want this to expand when defined.
-alias xv="xargs $=VISUAL" v="$=VISUAL" # Work around zsh's "helpful" autoquoting.
-alias vt='v ~/tmp/drafts/t' # Edit a common scratch file (allows vim history preservation).
-alias k=kubectl kx=kubectx kn='kubectl config set-context --current --namespace' # Build tools.
-# Find-replace everything in the current directory. Use `--` to pass args to fd.
-# e.g. 'sda s/foo/bar/g', 'sda --hidden -- s/foo/bar/g'
-sda() {
-  local arg find=() replace=()
-  for arg in "$@"; do
-    if [[ $arg == -- ]]; then
-      find=("${replace[@]}")
-      replace=()
-    else
-      replace+=("$arg")
-    fi
-  done
-  find=(fd --type file --hidden --exclude .git --print0 "${find[@]}")
-  replace=(xargs -0 gsed -i "${replace[@]}")
-  echo "Now running:"
-  # Painful hack to nicely print the args including the | and any quoted args with spaces in them:
-  (set -x; : "${find[@]}" \| "${replace[@]}") 2>&1 | sed -e "s/'|'/|/" -e 's/.*fd/  fd/'
-  # Actually run the command:
-  "${find[@]}" | "${replace[@]}"
-}
+# Then load the prompt.
+zinit ice depth=1
+zinit load romkatv/powerlevel10k # Terminal prompt + git status.
+# Prompt needed immediately.
+zinit snippet $ZDOTDIR/p10k.zsh
 
-# ulimit -c unlimited # Uncomment to allow saving of coredumps.
-# Cross-platform copy/paste/open/ldd/delete terminal commands.
-case $uname in
-  Darwin) alias ldd="otool -L" cpy="pbcopy" pst="pbpaste" o=open dl=trash ;;
-  Linux) alias cpy="xclip -selection clipboard" pst="xclip -selection clipboard -o" o=xdg-open dl="gio trash" ;;
-esac
-# Copy last command.
-alias clc="fc -ln -1 | sed -e 's/\\\\n/\\n/g' -e 's/\\\\t/\\t/g' | cpy"
-# Run last command and copy the command and its output.
-# shellcheck disable=SC2155 # `r` won't work if we do `local a` as a separate command.
-cr() { local a=$(r 2>&1); cpy <<<"❯ $a"; }
+# Everything below here is loaded asynchronously after the initial prompt appears.
+# wait -> "Turbo mode" (load async)
+# lucid -> Don't print a message when async load finishes.
 
-# fda is find all (don't ignore anything).
-{ exists fd && alias fda='fd --no-ignore --hidden --exclude=.git'; } \
-  || fd() { find . -iname "*$**"; } # Find by filename (case insensitive).
-exists rg && alias rg='rg' rga='rg --hidden --no-ignore --glob=!.git' # rga is grep all (don't ignore anything).
+zinit ice wait lucid blockf atpull'zinit creinstall .'
+zinit load zsh-users/zsh-completions # Auto-complete for common commands.
 
-# Yaml to json, e.g. "y2j <t.yml | jq .". Requires a `pip install pyyaml`.
-alias y2j="python3 -c 'import sys, yaml, json; json.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2)'"
-alias y2y="python3 -c 'import sys, yaml; yaml.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2)'"
-alias t2j="python3 -c 'import sys, toml, json; json.dump(toml.load(sys.stdin), sys.stdout, indent=2)'"
-# Url encode and decode stdin or first argument.
-alias url_encode='python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read()[0:-1]))"'
-alias url_decode='python3 -c "import urllib.parse, sys; print(urllib.parse.unquote(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read()[0:-1]))"'
+# If you get a compinit error, run:
+#   autoload -Uz compinit && compaudit | xargs chmod g-w
+zinit ice wait lucid atinit"zicompinit; zicdreplay" atload"unset 'FAST_HIGHLIGHT[chroma-whatis]' 'FAST_HIGHLIGHT[chroma-man]'"
+zinit load zdharma/fast-syntax-highlighting # Syntax highlighting.
 
-if exists kitty; then
-  alias icat="kitty +kitten icat" # Kitty terminal specific: https://sw.kovidgoyal.net/kitty/kittens/icat.html
-fi
-alias idea="/Applications/IntelliJ\ IDEA\ CE.app/Contents/MacOS/idea" # IntelliJ CE
-alias curl="noglob curl" # Don't match on ? [] etc in curl URLs, avoids needing to quote URL args.
+exists dircolors && _gib_dircolors=dircolors || _gib_dircolors=gdircolors # On macOS it's gdircolors.
+zinit ice wait lucid atclone"$_gib_dircolors -b LS_COLORS > c.zsh" atpull'%atclone' run-atpull pick"c.zsh" nocompile'!'
+zinit load trapd00r/LS_COLORS # Nicer terminal colours.
+unset _gib_dircolors
 
-exists ggrep && alias grep='ggrep --color=auto'
+zinit ice wait lucid atload"_zsh_autosuggest_start"
+zinit load zsh-users/zsh-autosuggestions # Autosuggest completion (accept with -> arrow).
 
-# }}} Aliases
+zinit wait lucid depth=1 for \
+  jeffreytse/zsh-vi-mode \
+  rupa/z \
+  gibfahn/fzf-z
 
-# {{{ Shell specific
+_gib_source_files=( # Files to source.
+  $XDG_DATA_HOME/zfunc/source/*(N) # Put completion files that need to be sourced here.
+  $XDG_DATA_HOME/fzf/shell/key-bindings.zsh
+  $XDG_DATA_HOME/fzf/shell/completion.zsh
+  $ZDOTDIR/completion-keybindings.zsh
+  $ZDOTDIR/macos-setdir.zsh
+  $ZDOTDIR/functions-and-aliases.zsh
+)
 
-case $shell in
-  zsh) # zsh specific options.
-    # Add completion dirs to function path.
-    _gib_fpath_dirs=(
-      ${brew_prefix:+$brew_prefix/share/zsh/site-functions} # Brew shell completions if there.
-      "$XDG_DATA_HOME/zfunc" # Put (or symlink) autocomplete scripts in here.
-    )
-    for _gib_dir in "${_gib_fpath_dirs[@]}"; do
-      [[ -d $_gib_dir ]] && fpath+=("$_gib_dir")
-    done
-    unset _gib_dir _gib_fpath_dirs
+for _gib_file in "${_gib_source_files[@]}"; do
+  zinit ice wait lucid
+  zinit snippet $_gib_file
+done
 
-    # Zsh Plugins (managed with zinit, previously zplugin).
-    # Profile plugin loading by changing `zinit light` to `zinit load`.
-    # NOTE: If you change this, change the hermetic_zinit script.
-    declare -A ZINIT
-    ZINIT[HOME_DIR]=$XDG_DATA_HOME/zsh/zinit
-    ZINIT[BIN_DIR]=$XDG_DATA_HOME/zsh/zinit/bin # Where zinit is installed.
-    ZINIT[ZCOMPDUMP_PATH]=$XDG_CACHE_HOME/zsh/.zcompdump$(hostname)
+_gib_completion_files=( # Files to source as completions.
+  $XDG_DATA_HOME/zsh/completions/*(N) # Put completion files that need to be sourced here.
+  https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker
+)
 
-    source "$XDG_DATA_HOME/zsh/zinit/bin/zinit.zsh" # Source plugin manager.
+for _gib_file in "${_gib_completion_files[@]}"; do
+  zinit ice wait lucid as"completion"
+  zinit snippet $_gib_file
+done
 
-    zinit ice blockf atpull'zinit creinstall .'
-    zinit light zsh-users/zsh-completions # Auto-complete for common commands.
+unset _gib_file _gib_source_files _gib_completion_files
 
-    # If you get a compinit error, run:
-    #   autoload -Uz compinit && compaudit | xargs chmod g-w
-    zinit ice atinit"zicompinit; zicdreplay" atload"unset 'FAST_HIGHLIGHT[chroma-whatis]' 'FAST_HIGHLIGHT[chroma-man]'"
-    zinit light zdharma/fast-syntax-highlighting # Syntax highlighting.
+# Run this last by waiting 2 seconds before loading.
+zinit ice wait=2 lucid
+zinit snippet $ZDOTDIR/late.zsh
 
-    exists dircolors && _gib_dircolors=dircolors || _gib_dircolors=gdircolors # On macOS it's gdircolors.
-    zinit ice atclone"$_gib_dircolors -b LS_COLORS > c.zsh" atpull'%atclone' run-atpull pick"c.zsh" nocompile'!'
-    zinit light trapd00r/LS_COLORS # Nicer terminal colours.
-    unset _gib_dircolors
+# }}} Zinit Plugins and Sourcing
 
-    zinit ice atload"_zsh_autosuggest_start"
-    zinit light zsh-users/zsh-autosuggestions # Autosuggest completion (accept with -> arrow).
+# {{{ Zsh options
 
-    zinit ice depth=1
-    zinit light romkatv/powerlevel10k # Terminal prompt + git status.
+setopt always_to_end # Move to end of word after completing that word from the middle of it.
+setopt auto_cd # Typing a path that isn't a command will cd to it.
+setopt auto_pushd # cd pushes onto pushd stack (Try `cd -<Tab>`)
+setopt complete_in_word # Allow completing words when you're in the middle of them.
+setopt extended_history # Save timestamps in history.
+setopt hist_expire_dups_first # Delete duplicates when history is full.
+setopt hist_ignore_all_dups # Remove older dups in HISTFILE when adding newer ones.
+setopt hist_ignore_space # Don't save history lines if they start with ' ' (use for secret values).
+setopt inc_append_history # Show local history before remote.
+setopt interactive_comments # Allow comments in the terminal.
+setopt long_list_jobs # Show more info on background jobs.
+setopt no_list_ambiguous # Show menu on first tab if multiple matches (don't wait for second tab).
+setopt no_list_beep # Don't beep if tab-complete has multiple choices, only if no such file.
+setopt no_notify # Print job updates just before a prompt (not mid-execution).
+setopt prompt_percent # Allow variables and functions to be used in the prompt.
+setopt prompt_subst # Perform expansion and subsitution on PROMPT and RPROMPT.
+setopt pushd_ignore_dups # Don't push multiple copies onto the directory stack.
+setopt pushd_minus # Make `cd -2` be two dirs ago rather than `cd +2`.
+setopt pushd_silent # Don't print pushd stack after pushd or cd (unless in CDPATH).
+setopt share_history # Do show history from other open tabs.
 
-    zinit ice depth=1
-    zinit light jeffreytse/zsh-vi-mode # Better zsh vim mode.
+CDPATH=~ # Check ~ for directories after checking . (`c/d/` matches `./c*/d*/`, then tries `~/c*/d*/`).
 
-    zinit light rupa/z               # Autojump command
-    zinit light gibfahn/fzf-z        # Use <Ctrl>-n instead of `z <Tab>`.
+command mkdir -p $XDG_CACHE_HOME/$shell # Create HISTFILE dir if necessary.
 
-    # Don't crash shell if "$XDG_DATA_HOME"/zfunc/source/* matches nothing.
-    _gib_source_files=( # Files to source.
-      "$XDG_DATA_HOME"/zfunc/source/*(N) # Put completion files that need to be sourced here.
-      "$XDG_DATA_HOME"/fzf/shell/key-bindings.zsh
-      "$ZDOTDIR"/*.zsh(N) # Needs to come after fzf as it overrides the Ctrl-R binding.
-      "$XDG_DATA_HOME"/fzf/shell/completion.zsh
-    )
-
-    for _gib_file in "${_gib_source_files[@]}"; do
-      zinit snippet "$_gib_file"
-    done
-
-    _gib_completion_files=( # Files to source as completions.
-      "$XDG_DATA_HOME"/zsh/completions/*(N) # Put completion files that need to be sourced here.
-      https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker
-    )
-
-    for _gib_file in "${_gib_completion_files[@]}"; do
-      zinit ice as"completion"
-      zinit snippet "$_gib_file"
-    done
-
-    unset _gib_file _gib_source_files _gib_completion_files
-
-    setopt always_to_end # Move to end of word after completing that word from the middle of it.
-    setopt auto_cd # Typing a path that isn't a command will cd to it.
-    setopt auto_pushd # cd pushes onto pushd stack (Try `cd -<Tab>`)
-    setopt complete_in_word # Allow completing words when you're in the middle of them.
-    setopt extended_history # Save timestamps in history.
-    setopt hist_expire_dups_first # Delete duplicates when history is full.
-    setopt hist_ignore_all_dups # Remove older dups in HISTFILE when adding newer ones.
-    setopt hist_ignore_space # Don't save history lines if they start with ' ' (use for secret values).
-    setopt inc_append_history # Show local history before remote.
-    setopt interactive_comments # Allow comments in the terminal.
-    setopt long_list_jobs # Show more info on background jobs.
-    setopt no_list_ambiguous # Show menu on first tab if multiple matches (don't wait for second tab).
-    setopt no_list_beep # Don't beep if tab-complete has multiple choices, only if no such file.
-    setopt no_notify # Print job updates just before a prompt (not mid-execution).
-    setopt prompt_percent # Allow variables and functions to be used in the prompt.
-    setopt prompt_subst # Perform expansion and subsitution on PROMPT and RPROMPT.
-    setopt pushd_ignore_dups # Don't push multiple copies onto the directory stack.
-    setopt pushd_minus # Make `cd -2` be two dirs ago rather than `cd +2`.
-    setopt pushd_silent # Don't print pushd stack after pushd or cd (unless in CDPATH).
-    setopt share_history # Do show history from other open tabs.
-
-    chpwd() { # Commands to run after changing directory.
-      [[ -t 1 ]] || return # Exit if stdout is not a tty.
-      setopt local_options no_monitor # This only disables the "job start", not the "job complete".
-      ls -A 1>&2 # Show dir contents.
-      [[ -d .git ]] && git fetch --all --quiet & # Fetch git remotes.
-    }
-    CDPATH=~ # Check ~ for directories after checking . (`c/d/` matches `./c*/d*/`, then tries `~/c*/d*/`).
-
-  ;;
-  bash) # Bash specific options.
-    set -o vi # Vim mode in bash.
-    shopt -s autocd 2>/dev/null # type directory name to cd.
-    cs() { cd "$@" && ls; } # cs => cd and ls.
-    CDPATH=:~ # Check ~ for directories after checking .
-    bind Space:magic-space 2>/dev/null # !31 autoexpands on space.
-    bind 'set completion-ignore-case on' 2>/dev/null # case-insensitive tab completion.
-
-    _gib_bash_prompt_command() {
-      local ret_status="$?"
-      local no_col='\e[0m' ret_col='\e[38;5;46m'
-      [[ "$ret_status" != 0 ]] && ret_col='\e[38;5;196m'
-
-      PS1="\n"
-      [[ -n "$ssh" ]] && PS1+='\[\e[38;5;161m\]\h '"\[$no_col\] "
-      PS1+="\[${ret_col}\]\w\[${no_col}\] "
-      [[ -n "$VIRTUAL_ENV" ]] && PS1+="(${VIRTUAL_ENV##*/})"
-      PS1+="\n"
-      PS1+="\[${ret_col}\]·❯\[${no_col}\] "
-    }
-    PROMPT_COMMAND=_gib_bash_prompt_command # Use the above function to generate the prompt.
-  ;;
-  ksh|ksh93) set -o vi; PS1="❯ " ;;
-esac
-
-command mkdir -p "$XDG_CACHE_HOME/$shell"  # Create HISTFILE dir if necessary.
-
-# }}} Shell Specific
+# }}} Zsh options
 
 # {{{ Tool specific
 
-# Set up fzf.
-if [[ $shell == bash || $shell == zsh ]] && exists fzf && exists fd; then
-  export FZF_DEFAULT_SORT=10000
-  export FZF_PREVIEW_COMMAND="bat --style=numbers,changes --wrap=never --color=always {} || cat {} || tree -C {}"
-  export FZF_CTRL_T_OPTS="--height=100% --preview-window=right:60%:noborder --preview '($FZF_PREVIEW_COMMAND) 2> /dev/null'"
-  export FZF_CTRL_R_OPTS="--height=100% --preview-window=down:30%:noborder --preview 'bat --language=zsh --plain --terminal-width=\$FZF_PREVIEW_COLUMNS --wrap=character --color=always <<<\$(echo {2..})', --bind='ctrl-y:execute(${aliases[cpy]} <<< {2..})'"
-  export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git' # Use fd for fuzzy finding if available.
-  export FZF_CTRL_T_COMMAND='fd --type f --hidden --follow --exclude .git'
-  export FZF_ALT_C_COMMAND='fd --type d --hidden --no-ignore --follow --exclude .git'
-  # Ctrl-a -> select/deselect all, Alt-j -> sneak to line, Alt-k -> sneak to line + enter, Ctrl-p is open/close preview window.
-  export FZF_DEFAULT_OPTS="--select-1 --exit-0 --preview-window=right:50% --preview '[[ -d {} ]] && tree -aClF {} || { [[ -e {} ]] && $XDG_DATA_HOME/nvim/plugged/fzf.vim/bin/preview.sh {} } || printf {}' \
-  -m --bind='ctrl-o:execute(\$VISUAL {} </dev/tty >/dev/tty),ctrl-a:toggle-all,ctrl-s:toggle-sort,ctrl-w:toggle-preview-wrap,alt-j:jump,alt-k:jump-accept,ctrl-p:toggle-preview,ctrl-y:execute(${aliases[cpy]} <<< {})'"
+# Set key repeat rate if available (Linux only). You probably want something less excessive here, like rate 250 30.
+if [[ "$uname" = Linux ]]; then
+  exists xset && xset r rate 120 45
+  export PANEL_FIFO=/tmp/panel-fifo # Used by bspwm.
 fi
 
-# Set up volta (nvm Node.js version management alternative), disabled as adds to startup time.
-# [ -s "$VOLTA_HOME/load.sh" ] && time (\. "$VOLTA_HOME/load.sh")
-
-## Set prompt for SSH windows.
-if [[ "$ssh" ]]; then
-  case $shell in
-    zsh|fish|bash) ;; # These should be set elsewhere.
-    ksh93) PS1='\E[35;1m '"$(hostname)"' \n $PWD \E[0m ❯ ' ;;
-    *) PS1="$(hostname) ❯ " ;;
-  esac
-else # Things to only do if we're not in SSH mode.
-  # Set key repeat rate if available (Linux only). You probably want something less excessive here, like rate 250 30.
-  if [[ "$uname" = Linux ]]; then
-    exists xset && xset r rate 120 45
-    export PANEL_FIFO="/tmp/panel-fifo" # Used by bspwm.
-  fi
-fi
-
-GIBRC="$((GIBRC++))" # Increment GIBRC.
+GIBRC=$((GIBRC++)) # Increment GIBRC.
 
 # }}} Tool specific
 
-# vim: foldmethod=marker filetype=sh tw=100
+# vim: foldmethod=marker filetype=zsh tw=100

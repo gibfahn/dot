@@ -171,27 +171,6 @@ zle ".$WIDGET"
 }
 zle -N accept-line # Redefine accept-line to insert last input if empty (Enter key).
 
-# Changes the cursor shape. KEYMAP is set when called by zsh keymap change.
-# If normal mode then 'vicmd', if insert mode then 'main' or 'viins'.
-zle-keymap-select() {
-  if [[ $KEYMAP == vicmd || $1 = block ]]; then
-    printf "\e[2 q"  # Block cursor '█'
-  elif [[ $1 = underline ]]; then
-    printf "\e[4 q"  # Underline cursor '_'.
-  elif [[ $KEYMAP == main || $KEYMAP == viins || -z $KEYMAP || $1 = beam ]]; then
-    printf "\e[6 q"  # I-beam cursor 'I' or '|'.
-  else  # Default cursor is I-beam.
-    printf "\e[6 q"  # I-beam cursor 'I' or '|'.
-  fi
-}
-zle -N zle-keymap-select # Bind zle-keymap-select() above to be called when the keymap is changed.
-
-zle-line-init() {
-  zle -K viins  # Every line starts in insert mode.
-  zle-keymap-select beam # Every line starts with I-beam cursor.
-}
-zle -N zle-line-init     # Bind zle-line-init() above to be called when the line editor is initialized.
-
 # ^D with contents clears the buffer, without contents exits (sends an actual ^D).
 _gib_clear_exit() { [[ -n $BUFFER ]] && zle kill-buffer || zle self-insert-unmeta; }
 zle -N _gib_clear_exit
@@ -218,21 +197,21 @@ bindkey -r -M viins "^G" # Remove list-expand binding so we can use <C-g> for gi
 bind-git-helper f b t r h a # Bind <C-g><C-{f,b,t,r,h,s}> to fuzzy-find show {files,branches,tags,reflog,hashes,stashes}.
 unset -f bind-git-helper
 
-bindkey -M viins '^d' _gib_clear_exit # Ctrl-D = Clear or exit terminal on.
+bindkey -M vicmd ' ' edit-command-line # <Space> in cmd mode opens editor.
+bindkey -M vicmd '^Y' gib-yank-all # Ctrl-y copies everything to the system clipboard.
+bindkey -M vicmd '^d' _gib_clear_exit
+bindkey -M viins "^[[A" history-beginning-search-backward-end # Re-enable up   for history search.
+bindkey -M viins "^[[B" history-beginning-search-forward-end  # Re-enable down for history search.
+bindkey -M viins '\e.' insert-last-word # Alt-. inserts last word from previous line.
+bindkey -M viins '\ec' fzf-cd-widget # Alt-c opens fzf cd into subdir.
+bindkey -M viins '^D' _gib_clear_exit # Ctrl-D = Clear or exit terminal on.
 bindkey -M viins '^G^P' _gib_fzf-gp-widget # Ctrl-G-P searches all binaries in the $PATH.
+bindkey -M viins '^N' fzfz-file-widget # Override Ctrl-n binding from zsh vim plugin.
 bindkey -M viins '^R' gib-fzf-history-widget # Ctrl-R = Multi-select for history search.
 bindkey -M viins '^T' fzf-file-widget # Ctrl-T = Preserve fzf file widget setting.
 bindkey -M viins '^Y' gib-yank-all # Ctrl-y copies everything to the system clipboard.
-bindkey -M viins "^[[A" history-beginning-search-backward-end # Re-enable up   for history search.
-bindkey -M viins "^[[B" history-beginning-search-forward-end  # Re-enable down for history search.
 bindkey -M viins '^[^M' self-insert-unmeta # <Alt>-Enter Insert a literal enter (newline char).
-bindkey -M viins '\e.' insert-last-word # Alt-. inserts last word from previous line.
-bindkey -M viins '\ec' fzf-cd-widget # Alt-c opens fzf cd into subdir.
-bindkey -M vicmd ' ' edit-command-line # <Space> in cmd mode opens editor.
-bindkey -M vicmd '^d' _gib_clear_exit
-bindkey -M vicmd '^Y' gib-yank-all # Ctrl-y copies everything to the system clipboard.
 
-# shellcheck disable=SC2154
 if [[ -n "${terminfo[kcbt]}" ]]; then
   bindkey "${terminfo[kcbt]}" reverse-menu-complete   # <Shift>-<Tab> - move backwards through the completion menu.
 else
