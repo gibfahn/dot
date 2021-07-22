@@ -169,6 +169,11 @@ source "$XDG_DATA_HOME"/zsh/zinit/bin/zinit.zsh # Source plugin manager.
 # First load in a blocking way zsh things that want to happen early.
 zinit snippet $ZDOTDIR/early.zsh
 
+# Load fzf-z synchronously as I often run it immediately.
+zinit depth=1 for \
+  rupa/z \
+  gibfahn/fzf-z
+
 # Then load the prompt.
 zinit ice depth=1
 zinit load romkatv/powerlevel10k # Terminal prompt + git status.
@@ -195,18 +200,14 @@ unset _gib_dircolors
 zinit ice wait lucid atload"_zsh_autosuggest_start"
 zinit load zsh-users/zsh-autosuggestions # Autosuggest completion (accept with -> arrow).
 
-zinit wait lucid depth=1 for \
-  jeffreytse/zsh-vi-mode \
-  rupa/z \
-  gibfahn/fzf-z
+zinit ice wait lucid depth=1
+zinit load jeffreytse/zsh-vi-mode
 
 _gib_source_files=( # Files to source.
   $XDG_DATA_HOME/zfunc/source/*(N) # Put completion files that need to be sourced here.
   $XDG_DATA_HOME/fzf/shell/key-bindings.zsh
   $XDG_DATA_HOME/fzf/shell/completion.zsh
-  $ZDOTDIR/completion-keybindings.zsh
-  $ZDOTDIR/macos-setdir.zsh
-  $ZDOTDIR/functions-and-aliases.zsh
+  $ZDOTDIR/*.zsh(N)
 )
 
 for _gib_file in "${_gib_source_files[@]}"; do
@@ -225,10 +226,6 @@ for _gib_file in "${_gib_completion_files[@]}"; do
 done
 
 unset _gib_file _gib_source_files _gib_completion_files
-
-# Run this last by waiting 2 seconds before loading.
-zinit ice wait=2 lucid
-zinit snippet $ZDOTDIR/late.zsh
 
 # }}} Zinit Plugins and Sourcing
 

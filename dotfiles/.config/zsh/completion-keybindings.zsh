@@ -204,9 +204,9 @@ bindkey -M viins "^[[A" history-beginning-search-backward-end # Re-enable up   f
 bindkey -M viins "^[[B" history-beginning-search-forward-end  # Re-enable down for history search.
 bindkey -M viins '\e.' insert-last-word # Alt-. inserts last word from previous line.
 bindkey -M viins '\ec' fzf-cd-widget # Alt-c opens fzf cd into subdir.
+bindkey -M viins '\en' fzfz-file-widget # Override Ctrl-n binding from zsh vim plugin.
 bindkey -M viins '^D' _gib_clear_exit # Ctrl-D = Clear or exit terminal on.
 bindkey -M viins '^G^P' _gib_fzf-gp-widget # Ctrl-G-P searches all binaries in the $PATH.
-bindkey -M viins '^N' fzfz-file-widget # Override Ctrl-n binding from zsh vim plugin.
 bindkey -M viins '^R' gib-fzf-history-widget # Ctrl-R = Multi-select for history search.
 bindkey -M viins '^T' fzf-file-widget # Ctrl-T = Preserve fzf file widget setting.
 bindkey -M viins '^Y' gib-yank-all # Ctrl-y copies everything to the system clipboard.
