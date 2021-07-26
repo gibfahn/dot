@@ -202,6 +202,7 @@ bindkey -M vicmd '^Y' gib-yank-all # Ctrl-y copies everything to the system clip
 bindkey -M vicmd '^d' _gib_clear_exit
 bindkey -M viins "^[[A" history-beginning-search-backward-end # Re-enable up   for history search.
 bindkey -M viins "^[[B" history-beginning-search-forward-end  # Re-enable down for history search.
+bindkey -M viins '\e ' edit-command-line # <Alt><Space> in insert mode opens editor.
 bindkey -M viins '\e.' insert-last-word # Alt-. inserts last word from previous line.
 bindkey -M viins '\ec' fzf-cd-widget # Alt-c opens fzf cd into subdir.
 bindkey -M viins '\en' fzfz-file-widget # Override Ctrl-n binding from zsh vim plugin.
