@@ -100,7 +100,6 @@ export LESS='--tabs=4 --ignore-case --RAW-CONTROL-CHARS --quit-if-one-screen --s
 export BAT_PAGER="less $LESS" # Make bat use less pager options.
 
 export HISTSIZE=100000 SAVEHIST=100000 HISTFILE="$XDG_CACHE_HOME/zsh/history" # Set history file location and size.
-c="$XDG_CONFIG_HOME" # Shortcut to the config directory (`v $c/gibrc` to edit this file).
 
 [[ -d "$XDG_CONFIG_HOME/terminfo" ]] && export TERMINFO="$XDG_CONFIG_HOME/terminfo" # Put terminal info in here.
 [[ $TERM == xterm ]] && TERM=xterm-256color
