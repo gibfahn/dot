@@ -165,42 +165,17 @@ ZINIT[BIN_DIR]=$XDG_DATA_HOME/zsh/zinit/bin # Where zinit is installed.
 ZINIT[ZCOMPDUMP_PATH]=$XDG_CACHE_HOME/zsh/.zcompdump$(hostname)
 source "$XDG_DATA_HOME"/zsh/zinit/bin/zinit.zsh # Source plugin manager.
 
-# First load in a blocking way zsh things that want to happen early.
-zinit snippet $ZDOTDIR/early.zsh
-
-# Load fzf-z synchronously as I often run it immediately.
 zinit depth=1 for \
-  rupa/z \
-  gibfahn/fzf-z
+  light-mode rupa/z \
+  light-mode gibfahn/fzf-z \
+  light-mode romkatv/powerlevel10k
 
-# Then load the prompt.
-zinit ice depth=1
-zinit load romkatv/powerlevel10k # Terminal prompt + git status.
-# Prompt needed immediately.
-zinit snippet $ZDOTDIR/p10k.zsh
+# On macOS it's gdircolors, on Linux dircolors.
+zinit ice atclone"${commands[gdircolors]+g}dircolors -b LS_COLORS > c.zsh" atpull'%atclone' run-atpull pick"c.zsh" nocompile'!'
+zinit light trapd00r/LS_COLORS # Nicer terminal colours.
 
-# Everything below here is loaded asynchronously after the initial prompt appears.
-# wait -> "Turbo mode" (load async)
-# lucid -> Don't print a message when async load finishes.
-
-zinit ice wait lucid blockf atpull'zinit creinstall .'
-zinit load zsh-users/zsh-completions # Auto-complete for common commands.
-
-# If you get a compinit error, run:
-#   autoload -Uz compinit && compaudit | xargs chmod g-w
-zinit ice wait lucid atinit"zicompinit; zicdreplay" atload"unset 'FAST_HIGHLIGHT[chroma-whatis]' 'FAST_HIGHLIGHT[chroma-man]'"
-zinit load zdharma/fast-syntax-highlighting # Syntax highlighting.
-
-exists dircolors && _gib_dircolors=dircolors || _gib_dircolors=gdircolors # On macOS it's gdircolors.
-zinit ice wait lucid atclone"$_gib_dircolors -b LS_COLORS > c.zsh" atpull'%atclone' run-atpull pick"c.zsh" nocompile'!'
-zinit load trapd00r/LS_COLORS # Nicer terminal colours.
-unset _gib_dircolors
-
-zinit ice wait lucid atload"_zsh_autosuggest_start"
-zinit load zsh-users/zsh-autosuggestions # Autosuggest completion (accept with -> arrow).
-
-zinit ice wait lucid depth=1
-zinit load jeffreytse/zsh-vi-mode
+zinit ice blockf atpull'zinit creinstall .'
+zinit light zsh-users/zsh-completions # Auto-complete for common commands.
 
 _gib_source_files=( # Files to source.
   $XDG_DATA_HOME/zfunc/source/*(N) # Put completion files that need to be sourced here.
@@ -210,7 +185,6 @@ _gib_source_files=( # Files to source.
 )
 
 for _gib_file in "${_gib_source_files[@]}"; do
-  zinit ice wait lucid
   zinit snippet $_gib_file
 done
 
@@ -220,11 +194,28 @@ _gib_completion_files=( # Files to source as completions.
 )
 
 for _gib_file in "${_gib_completion_files[@]}"; do
-  zinit ice wait lucid as"completion"
+  zinit ice as"completion"
   zinit snippet $_gib_file
 done
 
 unset _gib_file _gib_source_files _gib_completion_files
+
+# Things below here are loaded asynchronously (delayed till after the shell has started).
+# `zi times -s | sort` to see slow loaders, make them delayed with:
+# wait -> "Turbo mode" (load async)
+# lucid -> Don't print a message when async load finishes.
+
+# Delayed so it can load the zvm_after_init() function from completion-keybindings.zsh
+zinit ice wait lucid depth=1 atload"ZVM_LAZY_KEYBINDINGS=false"
+zinit light jeffreytse/zsh-vi-mode
+
+# If you get a compinit error, run:
+#   autoload -Uz compinit && compaudit | xargs chmod g-w
+zinit ice wait lucid atinit"zicompinit; zicdreplay" atload"unset 'FAST_HIGHLIGHT[chroma-whatis]' 'FAST_HIGHLIGHT[chroma-man]'"
+zinit light zdharma/fast-syntax-highlighting # Syntax highlighting.
+
+zinit ice wait lucid atload"_zsh_autosuggest_start"
+zinit light zsh-users/zsh-autosuggestions # Autosuggest completion (accept with -> arrow).
 
 # }}} Zinit Plugins and Sourcing
 

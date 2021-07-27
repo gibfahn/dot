@@ -139,9 +139,9 @@ case $uname in
   Linux) alias o=xdg-open dl="gio trash" ;;
 esac
 # Copy last command.
-alias clc="fc -ln -1 | sed -e 's/\\\\n/\\n/g' -e 's/\\\\t/\\t/g' | cpy"
+alias clc="fc -ln -1 | sed -e 's/\\\\n/\\n/g' -e 's/\\\\t/\\t/g' | ${=aliases[cpy]}"
 # Run last command and copy the command and its output.
-cr() { local a=$(r 2>&1); cpy <<<"❯ $a"; }
+cr() { local a=$(r 2>&1); ${=aliases[cpy]} <<<"❯ $a"; }
 
 # fda is find all (don't ignore anything).
 { exists fd && alias fda='fd --no-ignore --hidden --exclude=.git'; } \
