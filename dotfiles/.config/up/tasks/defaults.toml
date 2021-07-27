@@ -74,6 +74,12 @@ ApplePressAndHoldEnabled = false
 # System Preferences > General > Highlight Colour > Blue
 AppleAquaColorVariant = 1
 
+# System Preferences > General > Ask to keep changes when closing documents.
+NSCloseAlwaysConfirmsChanges = true
+
+# System Preferences > General > Close windows when quitting an app (untick == true)
+NSQuitAlwaysKeepsWindows = true
+
 [data."com.apple.AppleMultitouchTrackpad"]
 # Click strength: Haptic feedback 0: Light 1: Medium 2: Firm
 FirstClickThreshold = 0
