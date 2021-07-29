@@ -212,7 +212,6 @@ zvm_after_init() {
       eval "bindkey -M viins '^g^$c' _gib_fzf-g$c-widget"
     done
   } f b t r h a # Bind <C-g><C-{f,b,t,r,h,s}> to fuzzy-find show {files,branches,tags,reflog,hashes,stashes}.
-  unset -f _gib_join_lines
 
   bindkey -M vicmd ' ' edit-command-line # <Space> in cmd mode opens editor.
   bindkey -M vicmd '^Y' gib-yank-all # Ctrl-y copies everything to the system clipboard.
