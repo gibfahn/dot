@@ -1,5 +1,7 @@
 #!/usr/bin/env zsh
 
+# Make Colemak work at EFI login, you may have to run this before enabling FileVault.
+
 set -eu
 
 autoload -U colors && colors
