@@ -91,6 +91,7 @@ alias s="TERM=xterm-256color ssh" # Reset cursor to block and ssh.
 # e.g. sudo_later; sleep 1000; sudo halt
 alias sudo_later="(while sudo -v; do sleep 60; done) &" # Preserve sudo for a command you'll run later (needs TouchID Sudo).
 alias bounce="echo -n '\a'" # Ring the terminal bell (bounce the dock icon in macOS).
+alias pstree="pstree -g 3" # Use the nicest pstree output (unicode).
 
 alias c=cargo ru=rustup  # Rust commands (try `c b`, `c r`, `c t`).
 rs() { for i in "$@"; do rustc "${i%.rs}.rs"; ./"${i%.rs}"; done; } # Compile/run (rs a.rs b).
