@@ -54,8 +54,8 @@
   btu = "!git branch -u ${1:-up/$(git default-branch up)} #" # g btu remote/branch (defaults to up/HEAD).
   btp = "!git config branch.$(git head-branch).pushRemote ${1:-fork} #" # `g btp up` sets push remote for this branch to up, useful when pushing directly to 'up'.
 
-  # I manually specify -S because gpgsign only works with Git 2.x. Also it
-  # means that test suites using `git commit` don't break.
+  # I manually specify -S because gpgsign only works with Git 2.x. Also it means that test suites
+  # using `git commit` don't break, and machines without gpg can commit using the full commands.
   ce  = config --global --edit         # Open this file with $VISUAL.
   c   = commit -S -v                   # Commit with gpg signing.
   ca  = commit -S -a -v                # Commit all changed files with gpg.
