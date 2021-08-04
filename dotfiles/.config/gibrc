@@ -177,17 +177,6 @@ zinit light trapd00r/LS_COLORS # Nicer terminal colours.
 zinit ice blockf atpull'zinit creinstall .'
 zinit light zsh-users/zsh-completions # Auto-complete for common commands.
 
-_gib_source_files=( # Files to source.
-  $XDG_DATA_HOME/zfunc/source/*(N) # Put completion files that need to be sourced here.
-  $XDG_DATA_HOME/fzf/shell/key-bindings.zsh
-  $XDG_DATA_HOME/fzf/shell/completion.zsh
-  $ZDOTDIR/*.zsh(N)
-)
-
-for _gib_file in "${_gib_source_files[@]}"; do
-  zinit snippet $_gib_file
-done
-
 _gib_completion_files=( # Files to source as completions.
   $XDG_DATA_HOME/zsh/completions/*(N) # Put completion files that need to be sourced here.
   https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker
@@ -195,6 +184,16 @@ _gib_completion_files=( # Files to source as completions.
 
 for _gib_file in "${_gib_completion_files[@]}"; do
   zinit ice as"completion"
+  zinit snippet $_gib_file
+done
+
+_gib_source_files=( # Files to source.
+  $XDG_DATA_HOME/zfunc/source/*(N) # Put completion files that need to be sourced here.
+  $XDG_DATA_HOME/fzf/shell/key-bindings.zsh
+  $ZDOTDIR/*.zsh(N)
+)
+
+for _gib_file in "${_gib_source_files[@]}"; do
   zinit snippet $_gib_file
 done
 
@@ -216,6 +215,10 @@ zinit light zdharma/fast-syntax-highlighting # Syntax highlighting.
 
 zinit ice wait lucid atload"_zsh_autosuggest_start"
 zinit light zsh-users/zsh-autosuggestions # Autosuggest completion (accept with -> arrow).
+
+# Run late so it overwrites the built-in kill etc auto-completion.
+zinit ice wait lucid
+zinit snippet $XDG_DATA_HOME/fzf/shell/completion.zsh
 
 # }}} Zinit Plugins and Sourcing
 
