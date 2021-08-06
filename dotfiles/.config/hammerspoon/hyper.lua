@@ -280,8 +280,8 @@ hyperMode:bind({}, '\\', function()
         }):send()
     end, {
         "/usr/sbin/spindump", '-reveal', '-o',
-        '/Users/gib/tmp/nuke/Safari ' .. date .. '.spindump.txt',
-        frontmostApplicationName
+        '/Users/gib/tmp/nuke/' .. frontmostApplicationName .. ' ' .. date ..
+            '.spindump.txt', frontmostApplicationName
     }):start()
 end)
 hyperMode:bind({'shift'}, '\\', function() killAll("Finder") end)
