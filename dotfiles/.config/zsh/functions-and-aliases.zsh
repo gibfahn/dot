@@ -48,14 +48,8 @@ gcl() {
 }
 
 # Open vim with the results of the last rg/rga command in the quickfix list.
-# $1: jump to nth match.
 rv() {
-  local cmd jump_to
-  case $1 in
-    "") jump_to=() ;;
-    0) jump_to=("-c" ":clast") ;;
-    *) jump_to=("-c" ":cc $1") ;;
-  esac
+  local cmd
   cmd="$(fc -lnr -100 | awk '$1 == "rg" || $1 == "rga" {
     out="rg --vimgrep"
     if ($1 == "rga") { out=out" --hidden --no-ignore --glob=!.git" }
@@ -63,7 +57,7 @@ rv() {
     print out; exit
   }')"
   [[ -z "$cmd" ]] && { echo "No rg in the last 100 history commands."; return 1; }
-  "$=VISUAL" -q <(eval "$cmd") ${jump_to:+"${jump_to[@]}"}
+  "$=VISUAL" -q <(eval "$cmd")
 }
 
 works() { "$1" --version >/dev/null 2>&1; } # Check if command actually works (can get its version).
