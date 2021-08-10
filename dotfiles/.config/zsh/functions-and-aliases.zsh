@@ -38,6 +38,22 @@ tabs_to_spaces() {
   fd --hidden --exclude=.git --type f -x bash -c "gexpand -i -t $spaces_per_tab {} | sponge {}"
 }
 
+# Get the App Bundle ID of a macOS/iOS/etc app, using an app store link, or an app on the system.
+# Useful for adding to 1Password: https://www.reddit.com/r/1Password/comments/hk02p7/suggestions_in_apps_for_1password_for_macos/.
+# Refs: StackOverflow (https://stackoverflow.com/questions/27509838/how-to-get-bundle-id-of-ios-app-either-using-ipa-file-or-app-installed-on-iph)
+apple_app_bundleid() {
+  case $1 in;
+    https://*) # Assume URL (Google for the app, copy URL).
+      id=${1##*id} # Assumes $1 is a URL like https://apps.apple.com/.../id0000000000
+      curl "https://itunes.apple.com/lookup?id=${id}" | jq -r '"app://\(.results[0].bundleId)"'
+      ;;
+    *) # Assume App Name / Path.
+      id=$1
+      echo "app://$(osascript -e "id of app \"$1\"")"
+      ;;
+  esac
+}
+
 # Clone repo and cd into path (can't be in git config as we cd).
 gcl() {
   local clone_dir ret
