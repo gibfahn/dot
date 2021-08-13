@@ -133,6 +133,14 @@ showExportImport = true
 # TODO(gib): make sure we're not escaping the ~ once it's allowed by up-rs.
 MJConfigFile = '~/.config/hammerspoon/init.lua'
 
+# https://github.com/dexterleng/vimac/
+[data."dexterleng.vimac.plist"]
+HintCharacters = "tnseriaodhplfuwyq;gjvmc,x.z/bk4738291056"
+ScrollSensitivity = 72
+holdSpaceHintModeActivationEnabled = false
+ScrollCharacters = "h,n,e,i,d,u,G,gg"
+# TODO: work out how to do HintModeShortcut and ScrollModeShortcut, which are of plist type 'data'.
+
 [data."com.apple.ActivityMonitor"]
 # Show the main window when launching Activity Monitor
 OpenMainWindow = true
