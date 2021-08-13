@@ -29,19 +29,11 @@ let g:loaded_netrwPlugin = 1                        " Don't use the built-in fil
 let g:mundo_preview_bottom = 1                      " Undo diff preview on bottom.
 let g:mundo_right = 1                               " Undo window on right.
 let g:peekaboo_window = "vert bo 50new"             " Increase peekaboo window width to 50.
-let g:polyglot_disabled = ['markdown', 'pug'] " Don't use polyglot markdown so we can use vim-markdown and get highlighted blocks.
 let g:sneak#label = 1                               " Make sneak like easymotion (but nicer).
 let g:sneak#target_labels = ";sftunqm/`'-+SFGHLTUNRMQZ?0123456789!()\\[]:|<>WEYIOPADJKXCVB.\"\,:weryiopadghjklzxcvb" " Labels sneak uses to show words.
 let g:sneak#use_ic_scs = 1                          " Sneak: respect smartcase setting.
 let g:surround_97 = "\1before: \1\r\2after: \2"     " yswa surrounds with specified text (prompts for before/after).
 let g:surround_no_mappings = 1                      " Manually map surround, see SurroundOp() function.
-
-" Parsed by vim-markdown plugin to render code blocks properly.
-" Block names: https://github.com/github/linguist/blob/master/lib/linguist/languages.yml
-let g:markdown_fenced_languages = ['bash=sh', 'c', 'console=sh', 'shell=sh', 'diff', 'dockerfile', 'go', 'java',
-  \ 'javascript', 'js=javascript', 'json', 'kotlin', 'starlark=python', 'python', 'rust', 'sh', 'toml', 'vim', 'yaml']
-" Enable Markdown folding.
-let g:markdown_folding = 1
 
 " Settings for custom statusline.
 let g:lightline = {
@@ -170,6 +162,7 @@ try
   Plug 'kana/vim-textobj-user'                      " Allows you to create custom text objects (used in vim-textobj-line).
   Plug 'mzlogin/vim-markdown-toc'                   " Markdown Table of Contents.
   Plug 'neoclide/coc.nvim', {'branch': 'release'}   " Language Server with VSCode Extensions.
+  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate', 'branch': '0.5-compat'} " Treesitter syntax highlighting.
   Plug 'pechorin/any-jump.nvim'                     " Go to definition that doesn't require a language server.
   Plug 'puremourning/vimspector'                    " Multi-language debugger using the VSCode Debug Adapter Protocol.
   Plug 'rust-lang/rust.vim'                         " Rust language bindings.
@@ -178,12 +171,16 @@ try
   Plug 'tpope/vim-abolish'                          " Work with variants of words (replacing, capitalizing etc).
   Plug 'tpope/vim-commentary'                       " Autodetect comment type for lang.
   Plug 'tpope/vim-fugitive'                         " Git commands in vim.
-  Plug 'tpope/vim-markdown'                         " Better markdown highlight including support for code block highlighting.
   Plug 'tpope/vim-repeat'                           " Allows you to use . with plugin mappings.
   Plug 'tpope/vim-rhubarb'                          " GitHub support.
   Plug 'tpope/vim-rsi'                              " Insert/commandline readline-style mappings, e.g. C-a for beginning of line.
   Plug 'tpope/vim-surround'                         " Add/mod/remove surrounding chars.
   Plug 'tpope/vim-unimpaired'                       " [ and ] mappings (help unimpaired).
+
+  let s:wrk_plugin_path = $XDG_CONFIG_HOME . '/nvim/wrk-plug.vim'
+  if !empty(glob(s:wrk_plugin_path))
+    execute('source ' . s:wrk_plugin_path)
+  endif
 
   " Plugins where order is important (last one wins).
   Plug 'sheerun/vim-polyglot'                       " Syntax files for a large number of different languages.
@@ -212,7 +209,8 @@ set confirm                                         " Ask if you want to save un
 set diffopt+=vertical                               " Always use vertical diffs.
 set expandtab                                       " Insert spaces when tab key pressed.
 set ffs=unix                                        " Force Unix line endings (\n) (always show \r (^M), never autoinsert them).
-set foldmethod=syntax foldlevel=99                  " Fold according to the syntax rules, expand all by default.
+set foldexpr=nvim_treesitter#foldexpr()             " Fold with treesitter.
+set foldmethod=expr foldlevel=99                    " Fold according to the syntax rules, expand all by default.
 set formatoptions-=t                                " Don't autowrap text at 80.
 set gdefault                                        " Global replace default (off: /g).
 set hidden                                          " Don't force saving buffers on switching.
@@ -225,9 +223,9 @@ set lazyredraw                                      " Don't redraw if you don't 
 set list listchars=tab:»·,trail:·,nbsp:☠            " Display extra whitespace.
 set mouse=a                                         " Mouse in all modes (mac: Fn+drag = copy).
 set nojoinspaces                                    " One space (not two) after punctuation..
+set nonumber                                        " Turn off line numbers.
 set noshowmode                                      " Don't show when in insert mode (set in lightline).
 set notildeop                                       " Keep tilde (~) as it's default. If you want the operator version use g~.
-set nonumber                                        " Turn off line numbers.
 set ruler                                           " Always show cursor position.
 set shiftwidth=2 tabstop=2 softtabstop=2            " Set tab width to 2.
 set showcmd                                         " Display incomplete commands.
@@ -782,7 +780,6 @@ augroup gibAutoGroup                                " Group of automatic functio
 
   autocmd BufEnter    * let b:swapchoice_likely = (&l:ro ? 'o' : 'e')
   autocmd BufNewFile,BufRead *.bats  set filetype=sh       " Bats is a shell test file type.
-  autocmd BufNewFile,BufRead *.pcl   set syntax=groovy     " Pretend pcl is groovy.
   autocmd BufReadPost * let b:swapchoice_likely = (&l:ro ? 'o' : 'r')
   autocmd BufReadPost *|                            " On open jump to last cursor position if possible.
     \ if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") |
@@ -817,6 +814,17 @@ augroup gibAutoGroup                                " Group of automatic functio
   autocmd VimEnter * silent! tabonly|               " Don't allow starting Vim with multiple tabs.
 
 augroup END
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = "maintained",
+  highlight = {
+    enable = true,
+  },
+  indent = {
+    enable = true
+  }
+}
+EOF
 
 " }}} Autocommands
 
