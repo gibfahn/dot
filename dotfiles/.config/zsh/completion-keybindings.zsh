@@ -1,5 +1,3 @@
-# shellcheck shell=bash disable=SC2016
-
 # Changes the cursor shape. KEYMAP is set when called by zsh keymap change.
 # If normal mode then 'vicmd', if insert mode then 'main' or 'viins'.
 zle-keymap-select() {
@@ -126,6 +124,8 @@ gib-fzf-history-widget() {
 }
 zle -N gib-fzf-history-widget
 
+# " Fake quote for syntax highlighting plugin issue.
+
 # Copy whole buffer to system clipboard.
 gib-yank-all() {
   case $(uname) in
@@ -137,7 +137,6 @@ gib-yank-all() {
 zle -N gib-yank-all
 
 zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} r:|[.,_-]=*'
-# shellcheck disable=SC2154
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}" # Use LS_COLORS in file completion menu.
 zstyle ':completion:*:*:*:*:*' menu "select" # Make the completion selection menu a proper menu.
 
@@ -213,6 +212,9 @@ zvm_after_init() {
     done
   } f b t r h a # Bind <C-g><C-{f,b,t,r,h,s}> to fuzzy-find show {files,branches,tags,reflog,hashes,stashes}.
 
+  autoload -Uz select-word-style
+  select-word-style shell # "Word" means a shell argument, so Ctrl-w will delete one shell arg.
+
   bindkey -M vicmd ' ' edit-command-line # <Space> in cmd mode opens editor.
   bindkey -M vicmd '^Y' gib-yank-all # Ctrl-y copies everything to the system clipboard.
   bindkey -M vicmd '^d' _gib_clear_exit
@@ -227,6 +229,8 @@ zvm_after_init() {
   bindkey -M viins '^G^P' _gib_fzf-gp-widget # Ctrl-G-P searches all binaries in the $PATH.
   bindkey -M viins '^R' gib-fzf-history-widget # Ctrl-R = Multi-select for history search.
   bindkey -M viins '^T' fzf-file-widget # Ctrl-T = Preserve fzf file widget setting.
+  bindkey -M viins '^U' vi-kill-line # Ctrl-u deletes the current line (not whole buffer).
+  bindkey -M viins '^W' backward-kill-word # Ctrl-w deletes the current line (not whole buffer).
   bindkey -M viins '^Y' gib-yank-all # Ctrl-y copies everything to the system clipboard.
   bindkey -M viins '^[^M' self-insert-unmeta # <Alt>-Enter Insert a literal enter (newline char).
 
