@@ -211,8 +211,8 @@
     "text": ["write-good", "languagetool"],
     "gitcommit": ["write-good", "languagetool"],
     "bzl": "buildifier",
-    "tex": "textidote",
-    "ruby": "reek"
+    "tex": "textidote"
+    // "ruby": "reek" // Disabled as it gives too many errors in projects I don't control.
   },
   "diagnostic-languageserver.formatters": {
     "black": {
