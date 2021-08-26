@@ -45,7 +45,7 @@ if [[ -n $stash ]]; then
 fi
 
 # Check uncommitted diffs.
-diff+=$(git diff --color=always | head)
+diff+=$(git diff --color=always @ | head)
 if [[ -n $diff ]]; then
   unpushed+="${fg[cyan]}-> Repo has uncommitted diffs:${reset_color}"$'\n'
   unpushed+=$(indent <<<"$diff")$'\n'
