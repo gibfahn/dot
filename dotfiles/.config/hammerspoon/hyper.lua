@@ -320,12 +320,6 @@ hyperMode:bind({'cmd'}, 'v', function() CallVpn("dc") end)
 -- }}} Hyper-<mods>-v -> Connect to VPN
 
 -- {{{ Hyper-{h,n,e,i} -> Arrow Keys, Hyper-{j,l,u,y} -> Home,PgDn,PgUp,End
-local fastKeyStroke = function(modifiers, character, isdown)
-    -- log.d('Sending:', modifiers, character, isdown)
-    local event = require("hs.eventtap").event
-    event.newKeyEvent(modifiers, character, isdown):post()
-end
-
 for _, hotkey in ipairs({
     {key = 'h', direction = 'left'}, {key = 'n', direction = 'down'},
     {key = 'e', direction = 'up'}, {key = 'i', direction = 'right'},
@@ -338,14 +332,14 @@ for _, hotkey in ipairs({
     }) do
         -- hs.hotkey.bind(mods, key, message, pressedfn, releasedfn, repeatfn) -> hs.hotkey object
         hyperMode:bind(mods, hotkey.key, function()
-            fastKeyStroke(mods, hotkey.direction, true)
-        end, function() fastKeyStroke(mods, hotkey.direction, false) end,
-                       function()
-            fastKeyStroke(mods, hotkey.direction, true)
+            hs.eventtap.event.newKeyEvent(mods, hotkey.direction, true):post()
+        end, function()
+            hs.eventtap.event.newKeyEvent(mods, hotkey.direction, false):post()
+        end, function()
+            hs.eventtap.event.newKeyEvent(mods, hotkey.direction, true):post()
         end)
     end
 end
-
 -- }}} Hyper-{h,n,e,i} -> Arrow Keys
 
 -- vim: foldmethod=marker
