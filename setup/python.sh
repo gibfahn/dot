@@ -1,8 +1,6 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
-. "$(dirname "$0")"/../helpers/setup.sh # Load helper script from dot/helpers.
-
-set -ex
+set -eux
 
 pip3_modules=(
   neovim-remote                 # Connect to existing nvim sessions (try `g cm` in a nvim terminal).
@@ -12,19 +10,19 @@ pip3_modules=(
 )
 
 # Install or update pip modules.
-pip=pip
-exists pip3 && pip=pip3
-pip_installed="$($pip list | awk '{print $1}')"
-pip_outdated="$($pip list --outdated | awk '{print $1}')"
+pip=(python3 -m pip)
+pip_installed="$(${pip[@]} list | awk '{print $1}')"
+pip_outdated="$(${pip[@]} list --outdated | awk '{print $1}')"
+
+# Update pip itself.
+${pip[@]} install --upgrade pip
 
 for module in "${pip3_modules[@]}"; do
-  if ! echo "$pip_installed" | grep -qx "${module%[*}" \
-    || echo "$pip_outdated" | grep -qx "${module%[*}"; then
-    # log_get "$pip: $module"
-    $pip install --user --upgrade "$module"
+  if ! echo $pip_installed | grep -qx "${module%\[*}" \
+    || echo $pip_outdated | grep -qx "${module%\[*}"; then
+    ${pip[@]} install --user --upgrade "$module"
   else
-    :
     # TODO(gib): add skipping in the check command.
-    # log_skip "$pip: $module"
+    :
   fi
 done
