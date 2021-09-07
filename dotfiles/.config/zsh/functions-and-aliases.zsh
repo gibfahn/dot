@@ -122,7 +122,8 @@ unset _gib_vim
 alias vim='VIMINIT=":source $XDG_CONFIG_HOME/nvim/init.vim" vim' # Make vim use nvim config file.
 # shellcheck disable=SC2139 # We want this to expand when defined.
 alias xv="xargs $=VISUAL" v="$=VISUAL" # Work around zsh's "helpful" autoquoting.
-alias vt='v ~/tmp/drafts/t' # Edit a common scratch file (allows vim history preservation).
+alias vt='v ~/tmp/drafts/t' # vim temp: Edit a common scratch file (allows vim history preservation).
+alias vs="v '+cexpr(getreg(\"+\"))'" # vim stacktrace: copy a stacktrace then run to populate the quickfix list.
 alias k=kubectl kx=kubectx kn='kubectl config set-context --current --namespace' # Build tools.
 # Find-replace everything in the current directory. Use `--` to pass args to fd.
 # e.g. 'sda s/foo/bar/g', 'sda --hidden -- s/foo/bar/g'
