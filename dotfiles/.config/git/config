@@ -13,6 +13,7 @@
   code-changes = "!git log --format=format: --name-only | egrep -v '^$' | sort | uniq -c | sort -rg | head -${1:-10} #" # Show $1 most changed files.
   default-branch = "!(git symbolic-ref --short refs/remotes/$1/HEAD || { git remote set-head --auto $1 && git symbolic-ref --short refs/remotes/$1/HEAD; }) | sed \"s|^$1/||\" #" # Default branch for remote. `g default-branch up` -> master
   head-branch = symbolic-ref --short HEAD # e.g. master.
+  lfs-setup = "! git config core.hooksPath .git/hooks && git lfs install --local && git lfs fetch && git lfs checkout #" # Set up local git-lfs.
   up-remote-branch = "!git rev-parse --abbrev-ref --symbolic-full-name @{u}" # e.g. origin/master.
   up-remote = "!git rev-parse --abbrev-ref --symbolic-full-name @{u} | cut -d '/' -f 1" # e.g. origin.
   up-branch = "!git rev-parse --abbrev-ref --symbolic-full-name @{u} | cut -d '/' -f 2-" # e.g. master.
@@ -342,11 +343,3 @@
 # Work config for work repos.
 [includeIf "gitdir:~/wrk/**"]
   path = ~/.config/git/wrk-config
-
-# To use hooks in a repo, run:
-# `git config core.hooksPath .git/hooks; git lfs install --local`
-# [filter "lfs"]
-#   required = true
-#   clean = git-lfs clean -- %f
-#   smudge = git-lfs smudge -- %f
-#   process = git-lfs filter-process
