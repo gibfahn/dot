@@ -2,7 +2,7 @@
 linker = "x86_64-linux-musl-gcc"
 
 # https://doc.rust-lang.org/cargo/reference/config.html
-# Alias cargo commands. `b`, `c`, `r`, and `t` are built-in (build, check, test, release).
+# Alias cargo commands. `b`, `c`, `d`, `r`, `t` are built-in (build, check, doc, test, release).
 [alias]
 ta = "test -- --ignored"  # Run all tests.
 tar = "test --release --ignored"  # Run all tests in --release mode.
