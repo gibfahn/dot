@@ -218,6 +218,8 @@ zvm_after_init() {
   bindkey -M vicmd ' ' edit-command-line # <Space> in cmd mode opens editor.
   bindkey -M vicmd '^Y' gib-yank-all # Ctrl-y copies everything to the system clipboard.
   bindkey -M vicmd '^d' _gib_clear_exit
+  bindkey -M viins "^A" beginning-of-line # Ctrl-A = Go to beginning of line (Emacs default).
+  bindkey -M viins "^E" end-of-line       # Ctrl-E = Go to end of line (Emacs default).
   bindkey -M viins "^[[A" history-beginning-search-backward-end # Re-enable up   for history search.
   bindkey -M viins "^[[B" history-beginning-search-forward-end  # Re-enable down for history search.
   bindkey -M viins ' ' magic-space # <Space> = do history expansion
