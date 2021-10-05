@@ -3,7 +3,7 @@
 
 # Installs things that I use on all Unix systems (e.g. macOS and Linux).
 
-set -e
+set -ex
 
 . "$(dirname "$0")"/../helpers/setup.sh # Load helper script from dot/helpers.
 
@@ -129,9 +129,10 @@ exists rustup && {
 # _rbenv
 exists rbenv && ln -sf "$XDG_DATA_HOME/rbenv/completions/rbenv.zsh" "$XDG_DATA_HOME/zsh/completions/_rbenv"
 
-# _volta
-if exists volta; then
-  volta completions zsh --force --output "$XDG_DATA_HOME/zsh/completions/_volta"
+# _up
+if exists up; then
+  # Completion for up-rs
+  up completions zsh >"$XDG_DATA_HOME/zsh/completions/_up"
 fi
 
 # _kitty
