@@ -112,6 +112,7 @@ rs() { for i in "$@"; do rustc "${i%.rs}.rs"; ./"${i%.rs}"; done; } # Compile/ru
 alias ..="cd .." ...="cd ../.." ....="cd ../../.." .....="cd ../../../.." ......="cd ../../../../.."
 # shellcheck disable=SC2139 # We want this to expand when defined.
 alias -- -="cd -"
+alias cg='cd $(git rev-parse --show-toplevel)' # Change to top level of git dir.
 alias next='git next && git show' # Useful for demos.
 alias gm='wait; git mf' # After cd'ing into a repo, fetch will run as a background job. Use this to wait for it to finish then mf.
 
