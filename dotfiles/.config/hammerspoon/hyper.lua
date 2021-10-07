@@ -21,7 +21,7 @@
 --   | z | ✓ | ✓ | ✓ | ✓ |   | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 --   '---'---'---'---'---'   '---'---'---'---'---'---'
 local message = require('status-message')
--- local log = hs.logger.new('hyper.lua', 'debug')
+local log = hs.logger.new('hyper.lua', 'debug')
 
 -- {{{ F17 -> Hyper Key
 
@@ -51,11 +51,15 @@ local killAll = function(killArgs, opts)
     hyperMode:exit()
     local sudo = opts and opts.sudo or false
     if (type(killArgs) ~= "table") then killArgs = {killArgs} end
+    -- -v means print what we kill, use -s in your command to print but not kill.
+    table.insert(killArgs, 1, "-v")
     local command = "/usr/bin/killall"
     if (sudo) then
         table.insert(killArgs, 1, command)
-        command = "sudo"
+        command = "/usr/bin/sudo"
     end
+    log.d("Running killAll command: " .. command .. " " ..
+              table.concat(killArgs, " "))
     hs.task.new(command, function(exitCode, stdOut, stdErr)
         hs.notify.new({
             title = 'Killed all ' .. table.concat(killArgs, " ") .. '...',
@@ -295,8 +299,8 @@ hyperMode:bind({'alt'}, '\\', function()
     end, {'--validate'}):start()
 end)
 hyperMode:bind({'cmd'}, '\\', function()
-    -- Restart WindowServer (logs you out).
-    killAll({"-HUP", "WindowServer"}, {sudo = true})
+    -- Quit Installer Progress (useful if it gets hung sometimes on boot).
+    killAll({"Installer Progress"}, {sudo = true})
 end)
 
 -- {{{ Hyper-⇧-x -> Restart the touch strip.
