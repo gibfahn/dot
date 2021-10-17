@@ -1,2 +1,0 @@
-check_cmd = ["${dot_dir}/setup/rbenv_check.sh"]
-run_cmd = ["${dot_dir}/setup/rbenv.sh"]

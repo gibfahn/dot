@@ -1,3 +1,0 @@
-needs_sudo = true # Used for overwriting default keyboard layout.
-check_cmd = ["${dot_dir}/setup/colemak_check.sh"]
-run_cmd = ["${dot_dir}/setup/colemak.sh"]

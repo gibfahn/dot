@@ -1,0 +1,182 @@
+constraints:
+  USER: gib
+run_lib: defaults
+data:
+  NSGlobalDomain:
+
+    # Expand save panel by default
+    NSNavPanelExpandedStateForSaveMode: true
+    NSNavPanelExpandedStateForSaveMode2: true
+
+    # Expand print panel by default
+    PMPrintingExpandedStateForPrint: true
+    PMPrintingExpandedStateForPrint2: true
+
+    # Always open new things in tabs (not new windows) for document based apps.
+    AppleWindowTabbingMode: always
+
+    # Maximise window when you double-click on the title bar.
+    AppleActionOnDoubleClick: Maximize
+
+    # System Preferences > Keyboard > Text > Use smart quotes and dashes -> disable.
+    NSAutomaticDashSubstitutionEnabled: false
+    NSAutomaticQuoteSubstitutionEnabled: false
+
+    # System Preferences -> Keyboard -> Shortcuts -> Full Keyboard Access
+    # Full Keyboard Access: In Windows and Dialogs, press Tab to move keyboard
+    # focus between:
+    #   0: Text Boxes and Lists only
+    #   2: All controls
+    # Set it to 2 because that's much nicer (you can close confirmation prompts
+    # with the keyboard, Enter to press the blue one, tab to select between them,
+    # space to press the Tab-selected one. If there are underlined letters, hold
+    # Option and press the letter to choose that option.
+    AppleKeyboardUIMode: 2
+
+    # Remove delay in showing the draggable icon in window bars.
+    # https://mjtsai.com/blog/2020/10/05/big-surs-hidden-document-proxy-icon/
+    NSToolbarTitleViewRolloverDelay: 0
+
+    # Finder: show all filename extensions
+    AppleShowAllExtensions: true
+
+    # Allow text selection in any QuickLook window.
+    QLEnableTextSelection: 1
+
+    # System Preferences > General > Click in the scrollbar to: Jump to the spot that's clicked
+    AppleScrollerPagingBehavior: 1
+
+    # Increases trackpad tracking speed / sensitivity (SysPref max 3.0).
+    com.apple.trackpad.scaling: 5
+
+    # Disable force clicking.
+    com.apple.trackpad.forceClick: false
+
+    # System Preferences > Keyboard > Text > Capitalize words automatically.
+    NSAutomaticCapitalizationEnabled: true
+
+    # System Preferences > Keyboard > Text > Add full stop with double-space.
+    NSAutomaticPeriodSubstitutionEnabled: true
+
+    # Show a list when saving files.
+    NavPanelFileListModeForSaveMode: 2
+
+    # Disabled to use the multicolour accent colour.
+    # System Preferences > General > Accent Colour > Purple
+    # AppleAccentColor = 5
+
+    # Enable key repeat.
+    # TODO(gib): Not sure if needed for Hammerspoon key repeat.
+    ApplePressAndHoldEnabled: false
+
+    # System Preferences > General > Highlight Colour > Blue
+    AppleAquaColorVariant: 1
+
+    # System Preferences > General > Ask to keep changes when closing documents.
+    NSCloseAlwaysConfirmsChanges: true
+
+    # System Preferences > General > Close windows when quitting an app (untick == true)
+    NSQuitAlwaysKeepsWindows: true
+
+  com.apple.AppleMultitouchTrackpad:
+
+    # Click strength: Haptic feedback 0: Light 1: Medium 2: Firm
+    FirstClickThreshold: 0
+    SecondClickThreshold: 0
+
+    # Silent clicking
+    ActuationStrength: 0
+
+  com.apple.TextInputMenu:
+    # Keyboard -> Input Sources -> Show Input menu in menu bar.
+    visible: true
+
+  com.apple.LaunchServices:
+    # Disable the “Are you sure you want to open this application?” dialog
+    LSQuarantine: false
+
+  com.apple.systempreferences.plist:
+    # System Preferences -> View ->
+    #   "Organise by Category" => false (default)
+    #   "Organise Alphabetically" => true
+    ShowAllMode: true
+
+  com.apple.spaces:
+    # Check "Displays have separate spaces" (uncheck to allow multi-screen windows).
+    spans-displays: false
+
+  com.apple.finder:
+    # Display full POSIX path as Finder window title
+    _FXShowPosixPathInTitle: 1
+    # Use list view in all Finder windows by default
+    # Four-letter codes for the other view modes: `icnv`, `clmv`, `glyv`
+    FXPreferredViewStyle: Nlsv
+
+  com.apple.universalaccess:
+    # System Preferences > Accessibility > Zoom > Use scroll gesture with modifer keys to zoom > Enabled
+    closeViewScrollWheelToggle: true
+    # Follow the keyboard focus while zoomed in
+    closeViewZoomFollowsFocus: true
+
+  com.apple.iCal:
+    # Set default time for new events to 25 minutes not 60 minutes.
+    Default duration in minutes for new event: 25
+
+  com.knollsoft.Rectangle:
+    # See: https://github.com/rxhanson/Rectangle/issues/190#issuecomment-780898717
+    showExportImport: true
+
+  org.hammerspoon.Hammerspoon:
+    # Write hammerspoon config to alternate location.
+    # TODO(gib): make sure we're not escaping the ~ once it's allowed by up-rs.
+    MJConfigFile: ~/.config/hammerspoon/init.lua
+
+  # https://github.com/dexterleng/vimac/
+  # TODO: work out how to do HintModeShortcut and ScrollModeShortcut, which are of plist type 'data'.
+  dexterleng.vimac.plist:
+    HintCharacters: tnseriaodhplfuwyq;gjvmc,x.z/bk4738291056
+    ScrollSensitivity: 72
+    holdSpaceHintModeActivationEnabled: false
+    ScrollCharacters: h,n,e,i,d,u,G,gg
+
+  com.apple.ActivityMonitor:
+    # Show the main window when launching Activity Monitor
+    OpenMainWindow: true
+    # Visualize CPU usage in the Activity Monitor Dock icon
+    IconType: 5
+    # Show all processes in Activity Monitor
+    ShowCategory: 0
+    # Sort Activity Monitor results by CPU usage
+    SortColumn: CPUUsage
+    SortDirection: 0
+
+  com.apple.addressbook:
+    # Enable the debug menu in Address Book
+    ABShowDebugMenu: true
+
+  com.apple.DiskUtility:
+    # Enable the debug menu in Disk Utility
+    DUDebugMenuEnabled: true
+    advanced-image-options: true
+
+  com.apple.QuickTimePlayerX:
+    # Auto-play videos when opened with QuickTime Player
+    MGPlayMovieOnOpen: true
+
+  com.apple.SoftwareUpdate:
+    # Enable the automatic update check
+    AutomaticCheckEnabled: true
+    # Check for software updates daily, not just once per week
+    ScheduleFrequency: 1
+    # Download newly available updates in background
+    AutomaticDownload: 1
+    # Install System data files & security updates
+    CriticalUpdateInstall: 1
+    # Automatically download apps purchased on other Macs
+    ConfigDataInstall: 1
+
+  com.apple.commerce:
+    # Turn on app auto-update
+    AutoUpdate: true
+    # Allow the App Store to reboot machine on macOS updates
+    AutoUpdateRestartRequired: true

@@ -1,9 +1,0 @@
-requires = ["wrk_dotfile_repo"]
-constraints = {USER = "gib"}
-
-run_lib = "link"
-
-[data]
-from_dir = "$wrk_dotfile_dir"
-to_dir = "~"
-backup_dir = "$backup_dir"

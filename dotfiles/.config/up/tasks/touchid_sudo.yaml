@@ -1,0 +1,3 @@
+needs_sudo: true # Used for modifying sudo config file.
+check_cmd: ["${dot_dir}/setup/touchid_sudo_check.sh"]
+run_cmd: ["${dot_dir}/setup/touchid_sudo.sh"]

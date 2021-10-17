@@ -1,0 +1,2 @@
+needs_sudo: true
+run_cmd: ["${dot_dir}/setup/mac.sh"]

@@ -1,0 +1,3 @@
+needs_sudo: true
+check_cmd: ["${dot_dir}/setup/colemak_check.sh"]
+run_cmd: ["${dot_dir}/setup/colemak.sh"]

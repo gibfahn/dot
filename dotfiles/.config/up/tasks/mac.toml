@@ -1,2 +1,0 @@
-needs_sudo = true # Used for root user system preference setting.
-run_cmd = ["${dot_dir}/setup/mac.sh"]
