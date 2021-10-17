@@ -177,7 +177,7 @@ if [[ $USER == gib ]]; then # Set keyboard preferences.
     1 = "y-MM-dd";
     2 = "y-MM-dd";
     3 = "y-MM-dd";
-    4 = "EEEE, y-MM-d";
+    4 = "EEEE, y-MM-dd";
 }'
 
   # Set sidebar icon size to medium
