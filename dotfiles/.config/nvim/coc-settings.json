@@ -67,6 +67,9 @@
   "python.linting.pydocstyleEnabled": false,
   "python.jediEnabled": false,
   "rust-analyzer.checkOnSave.command": "clippy",
+  // Use a global target dir for rust-analyzer so that `cargo-watch` doesn't have to wait for it.
+  // https://twitter.com/CecileTonglet/status/1362441476203032581
+  /* "rust-analyzer.checkOnSave.extraArgs": ["--target-dir", "/Users/gib/.cache/rust-analyzer-target"], */
   "rust-analyzer.cargo.loadOutDirsFromCheck": true,
   "rust-analyzer.procMacro.enable": true,
   "yaml.format.enable": true,
