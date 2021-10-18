@@ -1,5 +1,5 @@
 " BREAKING CHANGES:
-" - s is now sneak (use `cl` for `s`) function (:h sneak).
+" - s is now lightspeed jump (use `cl` for `s`) function (:h lightspeed).
 " - <C-i> is now :bn (<C-i>==Tab for vim), use <C-p> for <C-i> function.
 
 " {{{ Global Variables
@@ -29,9 +29,6 @@ let g:loaded_netrwPlugin = 1                        " Don't use the built-in fil
 let g:mundo_preview_bottom = 1                      " Undo diff preview on bottom.
 let g:mundo_right = 1                               " Undo window on right.
 let g:peekaboo_window = "vert bo 50new"             " Increase peekaboo window width to 50.
-let g:sneak#label = 1                               " Make sneak like easymotion (but nicer).
-let g:sneak#target_labels = ";sftunqm/`'-+SFGHLTUNRMQZ?0123456789!()\\[]:|<>WEYIOPADJKXCVB.\"\,:weryiopadghjklzxcvb" " Labels sneak uses to show words.
-let g:sneak#use_ic_scs = 1                          " Sneak: respect smartcase setting.
 let g:surround_97 = "\1before: \1\r\2after: \2"     " yswa surrounds with specified text (prompts for before/after).
 let g:surround_no_mappings = 1                      " Manually map surround, see SurroundOp() function.
 
@@ -156,7 +153,7 @@ try
   Plug 'junegunn/fzf', { 'dir': '~/.local/share/fzf', 'do': './install --bin' } " :h fzf
   Plug 'junegunn/fzf.vim'                           " Try :Files, :GFiles? :Buffers :Lines :History :Commits :BCommits
   Plug 'junegunn/vim-peekaboo'                      " Pop up register list when pasting/macroing.
-  Plug 'justinmk/vim-sneak'                         " sab -> go to next ab in code (:h sneak-mappings for default mappings).
+  Plug 'ggandor/lightspeed.nvim'                    " Quickest way to jump to any char on the screen (alternative to easymotion/sneak/hop).
   Plug 'kana/vim-operator-user'                     " Make it easier to define operators.
   Plug 'kana/vim-textobj-line'                      " Adds `il` and `al` text objects for current line.
   Plug 'kana/vim-textobj-user'                      " Allows you to create custom text objects (used in vim-textobj-line).
@@ -266,12 +263,8 @@ endtry
 
 " Normal Mappings:
 
-nmap     f <Plug>Sneak_f| " Use sneak for f (multiline+highlight).
-nmap     F <Plug>Sneak_F| " ↳             F
 nnoremap <silent> K :call <SID>show_documentation()<CR>| " Use K for show documentation in preview window
 nnoremap Q <nop>| " Disable Q to avoid accidental triggering.
-nmap     t <Plug>Sneak_t| " Use sneak for f (multiline+highlight).
-nmap     T <Plug>Sneak_T| " ↳             T
 nnoremap <expr> n (v:searchforward ? 'n' : 'N')| " n is always "next one down" even if you hit #
 nnoremap <expr> N (v:searchforward ? 'N' : 'n')
 nnoremap Y y$| " Make Y work like C and D (yank to end of line, not whole line).
@@ -814,18 +807,9 @@ augroup gibAutoGroup                                " Group of automatic functio
   autocmd VimEnter * silent! tabonly|               " Don't allow starting Vim with multiple tabs.
 
 augroup END
-lua <<EOF
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = "maintained",
-  highlight = {
-    enable = true,
-  },
-  indent = {
-    enable = true
-  }
-}
-EOF
 
 " }}} Autocommands
+
+lua require('init-nvim')
 
 " vim: foldmethod=marker
