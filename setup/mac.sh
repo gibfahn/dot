@@ -172,6 +172,8 @@ if [[ $USER == gib ]]; then # Set keyboard preferences.
   updateMacOSDefault NSGlobalDomain QLPanelAnimationDuration float 0
 
   # Set Date format to RFC 3339 formatting, e.g. 2000-12-25
+  # TODO(gib): this fails when you try to set, should be set as:
+  # defaults write NSGlobalDomain AppleICUDateFormatStrings -dict 1 y-MM-dd 2 y-MM-dd 3 y-MM-dd 4 "EEEE, y-MM-dd"
   updateMacOSDefault NSGlobalDomain AppleICUDateFormatStrings dict \
     '{
     1 = "y-MM-dd";
