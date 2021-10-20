@@ -41,6 +41,9 @@ tabs_to_spaces() {
 # Get the App Bundle ID of a macOS/iOS/etc app, using an app store link, or an app on the system.
 # Useful for adding to 1Password: https://www.reddit.com/r/1Password/comments/hk02p7/suggestions_in_apps_for_1password_for_macos/.
 # Refs: StackOverflow (https://stackoverflow.com/questions/27509838/how-to-get-bundle-id-of-ios-app-either-using-ipa-file-or-app-installed-on-iph)
+# Usage:
+#   apple_app_bundleid https://apps.apple.com/us/app/watch/id1069511734
+#   apple_app_bundleid /Applications/kitty.app
 apple_app_bundleid() {
   case $1 in;
     https://*) # Assume URL (Google for the app, copy URL).
