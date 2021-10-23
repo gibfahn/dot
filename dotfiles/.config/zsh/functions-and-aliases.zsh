@@ -47,7 +47,8 @@ tabs_to_spaces() {
 apple_app_bundleid() {
   case $1 in;
     https://*) # Assume URL (Google for the app, copy URL).
-      id=${1##*id} # Assumes $1 is a URL like https://apps.apple.com/.../id0000000000
+      # Assumes links like https://apps.apple.com/us/app/magic-the-gathering-arena/id1496227521#?platform=ipad
+      id=$(sed -E 's;.*/id([0-9]+).*;\1;' <<<"$1")
       curl "https://itunes.apple.com/lookup?id=${id}" | jq -r '"app://\(.results[0].bundleId)"'
       ;;
     *) # Assume App Name / Path.
