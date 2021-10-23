@@ -76,7 +76,7 @@ brew "wget"                              # Alternative to curl for downloading f
 
 # Brew formulae from taps.
 
-brew "gibfahn/tap/check-sieve"           # Linter for sieve email filter files.
+# brew "gibfahn/tap/check-sieve"           # Linter for sieve email filter files.
 
 # Brew casks
 
