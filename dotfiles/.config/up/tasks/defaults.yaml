@@ -78,6 +78,16 @@ data:
     # System Preferences > General > Close windows when quitting an app (untick == true)
     NSQuitAlwaysKeepsWindows: true
 
+    # Enable Tap to Click for the login screen
+    com.apple.mouse.tapBehavior: 1
+
+    # Set Date format to RFC 3339 formatting, e.g. 2000-12-25
+    AppleICUDateFormatStrings:
+      "1": "y-MM-dd"
+      "2": "y-MM-dd"
+      "3": "y-MM-dd"
+      "4": "EEEE, y-MM-dd"
+
   com.apple.AppleMultitouchTrackpad:
 
     # Click strength: Haptic feedback 0: Light 1: Medium 2: Firm
@@ -95,7 +105,7 @@ data:
     # Disable the “Are you sure you want to open this application?” dialog
     LSQuarantine: false
 
-  com.apple.systempreferences.plist:
+  com.apple.systempreferences:
     # System Preferences -> View ->
     #   "Organise by Category" => false (default)
     #   "Organise Alphabetically" => true
@@ -111,6 +121,9 @@ data:
     # Use list view in all Finder windows by default
     # Four-letter codes for the other view modes: `icnv`, `clmv`, `glyv`
     FXPreferredViewStyle: Nlsv
+    # Show hidden files in the finder.
+    AppleShowAllFiles: 1
+
 
   com.apple.universalaccess:
     # System Preferences > Accessibility > Zoom > Use scroll gesture with modifer keys to zoom > Enabled
@@ -133,7 +146,7 @@ data:
 
   # https://github.com/dexterleng/vimac/
   # TODO: work out how to do HintModeShortcut and ScrollModeShortcut, which are of plist type 'data'.
-  dexterleng.vimac.plist:
+  dexterleng.vimac:
     HintCharacters: tnseriaodhplfuwyq;gjvmc,x.z/bk4738291056
     ScrollSensitivity: 72
     holdSpaceHintModeActivationEnabled: false
@@ -161,7 +174,7 @@ data:
 
   com.apple.QuickTimePlayerX:
     # Auto-play videos when opened with QuickTime Player
-    MGPlayMovieOnOpen: true
+    MGPlayMovieOnOpen: false
 
   com.apple.SoftwareUpdate:
     # Enable the automatic update check
@@ -180,3 +193,99 @@ data:
     AutoUpdate: true
     # Allow the App Store to reboot machine on macOS updates
     AutoUpdateRestartRequired: true
+
+  com.apple.Dock:
+    # Greys out hidden apps in the dock (so you can see which are hidden).
+    showhidden: true
+    # Don't show recents in dock.
+    show-recents: false
+    # System Preferences > Trackpad > More Gestures > App Expose > Enable
+    # Swipe down with 3 fingers to see windows for current app.
+    showAppExposeGestureEnabled: true
+
+  com.apple.assistant.support:
+    # System Preferences > Keyboard > Dictation > On
+    "Dictation Enabled": true
+
+  com.apple.controlcenter:
+    # Show battery percentage in menu bar.
+    BatteryShowPercentage: true
+
+    # Make sure the relevant items from the Control Center are visible.
+    "NSStatusItem Visible WiFi": true
+    "NSStatusItem Visible Battery": true
+    "NSStatusItem Visible Clock": true
+
+
+  com.apple.Safari:
+    # Safari -> General -> Safari opens with -> All non-private windows from last session
+    AlwaysRestoreSessionAtLaunch: true
+
+    ExcludePrivateWindowWhenRestoringSessionAtLaunch: true
+
+    # Safari -> General -> New windows open with -> Empty page
+    NewTabBehavior: 1
+
+    # Safari -> General -> New tabs open with -> Empty page
+    NewWindowBehavior: 1
+
+    # Safari -> General -> Remove history items -> Manually
+    HistoryAgeInDaysLimit: 36500
+
+    # Safari -> Tabs -> Open pages in tabs instead of windows -> Always
+    TabCreationPolicy: 2
+
+    # Safari -> Advanced -> Show full website address
+    ShowFullURLInSmartSearchField: true
+
+    # Hides the toolbar when Safari is full-screen (hide everything but the page).
+    # Safari -> View -> Always show toolbar in Full Screen -> Unchecked
+    AutoShowToolbarInFullScreen: true
+
+    # Safari -> Advanced -> Show Develop menu in menu bar
+    IncludeDevelopMenu: true
+    WebKitDeveloperExtrasEnabledPreferenceKey: true
+    WebKitPreferences.developerExtrasEnabled: true
+
+    # Enable the Web Inspector in Safari
+    com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled: true
+
+  # Set Menu Bar date format: https://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table
+  # Note that only some formats are allowed. This shows: day of the week, date, time with seconds.
+  com.apple.menuextra.clock:
+    DateFormat: "EEE d MMM  HH:mm:ss"
+
+  com.apple.mail:
+
+    # Mail -> Preferences -> Viewing -> Show Message Headers -> Custom
+    CustomHeaders:
+    - List-ID
+    - Message-ID
+    - X-Member-Count
+
+    # Mail -> Preferences -> Viewing -> Show most recent message at the top
+    ConversationViewSortDescending: true
+
+    # Mail -> Preferences -> Composing -> Automatically CC Myself.
+    ReplyToSelf: true
+
+    # Mail -> Preferences -> Composing -> When quoting text in replies or forwards -> Include all the original message text.
+    AlwaysIncludeOriginalMessage: true
+    # Mail -> Edit -> Attachments -> Include Original Attachments in Reply
+    IncludeOriginalAttachments: true
+
+    # Copy email addresses as `foo@example.com` instead of `Foo Bar <foo@example.com>` in Mail.app
+    AddressesIncludeNameOnPasteboard: false
+
+  com.apple.mail-shared:
+    # Mail -> Preferences -> Composing -> Mark addresses not ending with (checkbox):
+    AlertForNonmatchingDomains: true
+
+    # Mail -> Preferences -> Composing -> Mark addresses not ending with (addresses not to mark):
+    DomainForMatching:
+    - "@apple.com"
+    - "@group.apple.com"
+
+  com.apple.Maps:
+    # Avoid tolls by default.
+    MapsDefaultAvoidTollsKey: true

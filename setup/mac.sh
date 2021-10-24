@@ -33,8 +33,6 @@ fi
 
 log_section "Setting macOS defaults."
 
-dock_changed="" menu_changed="" finder_changed="" mail_changed="" safari_changed=""
-
 # -> Kitty:
 updateMacOSKeyboardShortcut net.kovidgoyal.kitty "Hide kitty" '~^$\\U00a7'
 # -> Mail: ⌘-b moves to Archive.
@@ -51,24 +49,9 @@ fi
 
 # Enable Tap to Click for the current user.
 updateMacOSDefault -currentHost NSGlobalDomain com.apple.mouse.tapBehavior int 1
-# Enable Tap to Click for the login screen
-updateMacOSDefault NSGlobalDomain com.apple.mouse.tapBehavior int 1
 
 # Prevent Photos from opening automatically when devices are plugged in
 updateMacOSDefault -currentHost com.apple.ImageCapture disableHotPlug bool true
-
-# Don't show recents in dock.
-dock_changed+=$(updateMacOSDefault com.apple.dock show-recents bool false)
-
-# System Preferences > Trackpad > More Gestures > App Expose > Enable
-# Swipe down with 3 fingers to see windows for current app.
-dock_changed+=$(updateMacOSDefault com.apple.dock showAppExposeGestureEnabled bool true)
-
-# Greys out hidden apps in the dock (so you can see which are hidden).
-dock_changed+=$(updateMacOSDefault com.apple.Dock showhidden bool true)
-
-# Show hidden files in the finder.
-finder_changed+=$(updateMacOSDefault com.apple.finder AppleShowAllFiles int 1)
 
 # System Preferences > Sound Effects > Select and alert sound: Heroine.
 # Change the error sound to the drum.
@@ -78,61 +61,6 @@ else
   echo "Couldn't find file /System/Library/Sounds/Hero.aiff"
   exit 15
 fi
-
-# System Preferences > Keyboard > Dictation > On
-updateMacOSDefault com.apple.assistant.support "Dictation Enabled" bool true
-
-# Show battery percentage in menu bar.
-menu_changed+=$(updateMacOSDefault com.apple.controlcenter BatteryShowPercentage bool true)
-
-# Set Menu Bar date format: https://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table
-# Note that only some formats are allowed. This shows: day of the week, date, time with seconds.
-menu_changed+=$(updateMacOSDefault com.apple.menuextra.clock DateFormat string "EEE d MMM  HH:mm:ss")
-
-# Make sure the relevant items from the Control Center are visible.
-menu_changed+=$(updateMacOSDefault com.apple.controlcenter "NSStatusItem Visible WiFi" bool true)
-menu_changed+=$(updateMacOSDefault com.apple.controlcenter "NSStatusItem Visible Battery" bool true)
-menu_changed+=$(updateMacOSDefault com.apple.controlcenter "NSStatusItem Visible Clock" bool true)
-
-# Mail -> Preferences -> Viewing -> Show Message Headers -> Custom
-mail_changed+=$(updateMacOSDefault com.apple.mail CustomHeaders array List-ID Message-ID X-Member-Count)
-# Mail -> Preferences -> Viewing -> Show most recent message at the top
-mail_changed+=$(updateMacOSDefault com.apple.mail ConversationViewSortDescending bool true)
-# Mail -> Preferences -> Composing -> Automatically CC Myself.
-mail_changed+=$(updateMacOSDefault com.apple.mail ReplyToSelf bool true)
-# Mail -> Preferences -> Composing -> When quoting text in replies or forwards -> Include all the original message text.
-mail_changed+=$(updateMacOSDefault com.apple.mail AlwaysIncludeOriginalMessage bool true)
-# Mail -> Edit -> Attachments -> Include Original Attachments in Reply
-mail_changed+=$(updateMacOSDefault com.apple.mail IncludeOriginalAttachments bool true)
-# Mail -> Preferences -> Composing -> Mark addresses not ending with (checkbox):
-mail_changed+=$(updateMacOSDefault com.apple.mail-shared AlertForNonmatchingDomains bool true)
-# Mail -> Preferences -> Composing -> Mark addresses not ending with (addresses not to mark):
-mail_changed+=$(updateMacOSDefault com.apple.mail-shared DomainForMatching array "@apple.com" "@group.apple.com")
-# Copy email addresses as `foo@example.com` instead of `Foo Bar <foo@example.com>` in Mail.app
-mail_changed+=$(updateMacOSDefault com.apple.mail AddressesIncludeNameOnPasteboard bool false)
-
-# Safari -> General -> Safari opens with -> All non-private windows from last session
-safari_changed+=$(updateMacOSDefault com.apple.Safari AlwaysRestoreSessionAtLaunch bool true)
-safari_changed+=$(updateMacOSDefault com.apple.Safari ExcludePrivateWindowWhenRestoringSessionAtLaunch bool true)
-# Safari -> General -> New windows open with -> Empty page
-safari_changed+=$(updateMacOSDefault com.apple.Safari NewTabBehavior int 1)
-# Safari -> General -> New tabs open with -> Empty page
-safari_changed+=$(updateMacOSDefault com.apple.Safari NewWindowBehavior int 1)
-# Safari -> General -> Remove history items -> Manually
-safari_changed+=$(updateMacOSDefault com.apple.Safari HistoryAgeInDaysLimit int 36500)
-# Safari -> Tabs -> Open pages in tabs instead of windows -> Always
-safari_changed+=$(updateMacOSDefault com.apple.Safari TabCreationPolicy int 2)
-# Safari -> Advanced -> Show full website address
-safari_changed+=$(updateMacOSDefault com.apple.Safari ShowFullURLInSmartSearchField bool true)
-# Hides the toolbar when Safari is full-screen (hide everything but the page).
-# Safari -> View -> Always show toolbar in Full Screen -> Unchecked
-safari_changed+=$(updateMacOSDefault com.apple.Safari AutoShowToolbarInFullScreen bool true)
-# Safari -> Advanced -> Show Develop menu in menu bar
-safari_changed+=$(updateMacOSDefault com.apple.Safari IncludeDevelopMenu bool true)
-safari_changed+=$(updateMacOSDefault com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey bool true)
-safari_changed+=$(updateMacOSDefault com.apple.Safari WebKitPreferences.developerExtrasEnabled bool true)
-# Enable the Web Inspector in Safari
-safari_changed+=$(updateMacOSDefault com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled bool true)
 
 if [[ $USER == gib ]]; then # Set keyboard preferences.
   log_section "Setting gib extra macOS defaults."
@@ -155,32 +83,21 @@ if [[ $USER == gib ]]; then # Set keyboard preferences.
   # Auto-hide menu bar.
   updateMacOSDefault NSGlobalDomain _HIHideMenuBar bool true
   # Auto-hide dock.
-  dock_changed+=$(updateMacOSDefault com.apple.dock autohide bool true)
+  updateMacOSDefault com.apple.dock autohide bool true
 
   # Have the Dock only show apps currently running.
-  dock_changed+=$(updateMacOSDefault com.apple.dock static-only bool true)
+  updateMacOSDefault com.apple.dock static-only bool true
 
   # Make the dock appear instantly.
   # https://simcityltd.medium.com/how-to-get-the-perfect-macos-dock-b2593f9c0f0b
-  dock_changed+=$(updateMacOSDefault com.apple.dock autohide-delay float 0)
-  dock_changed+=$(updateMacOSDefault com.apple.dock autohide-time-modifier float 0.25)
+  updateMacOSDefault com.apple.dock autohide-delay float 0
+  updateMacOSDefault com.apple.dock autohide-time-modifier float 0.25
 
   # Allow Finder to be quit (hides Desktop files).
-  finder_changed+=$(updateMacOSDefault com.apple.finder QuitMenuItem int 1)
+  updateMacOSDefault com.apple.finder QuitMenuItem int 1
 
   # Disable the animations for opening Quick Look windows
   updateMacOSDefault NSGlobalDomain QLPanelAnimationDuration float 0
-
-  # Set Date format to RFC 3339 formatting, e.g. 2000-12-25
-  # TODO(gib): this fails when you try to set, should be set as:
-  # defaults write NSGlobalDomain AppleICUDateFormatStrings -dict 1 y-MM-dd 2 y-MM-dd 3 y-MM-dd 4 "EEEE, y-MM-dd"
-  updateMacOSDefault NSGlobalDomain AppleICUDateFormatStrings dict \
-    '{
-    1 = "y-MM-dd";
-    2 = "y-MM-dd";
-    3 = "y-MM-dd";
-    4 = "EEEE, y-MM-dd";
-}'
 
   # Set sidebar icon size to medium
   updateMacOSDefault NSGlobalDomain NSTableViewDefaultSizeMode int 2
@@ -194,23 +111,20 @@ if [[ $USER == gib ]]; then # Set keyboard preferences.
   #                               > Press and hold Fn key to: Show F1, F2, F3 Keys.
   updateMacOSDefault com.apple.HIToolbox AppleFnUsageType int 3
 
-  # Avoid tolls by default.
-  updateMacOSDefault com.apple.Maps MapsDefaultAvoidTollsKey bool true
-
   # Messages > Preferences > Keep messages: Forever.
   updateMacOSDefault com.apple.MobileSMS KeepMessageForDays int 0
 
   # Enable Safari’s debug menu
-  safari_changed+=$(updateMacOSDefault com.apple.Safari IncludeInternalDebugMenu bool true)
+  updateMacOSDefault com.apple.Safari IncludeInternalDebugMenu bool true
   # Enable Safari’s debug menu
   # Prevent Safari from opening ‘safe’ files automatically after downloading
-  safari_changed+=$(updateMacOSDefault com.apple.Safari AutoOpenSafeDownloads bool false)
+  updateMacOSDefault com.apple.Safari AutoOpenSafeDownloads bool false
   # Default to saving files in ~/tmp.
-  safari_changed+=$(updateMacOSDefault com.apple.Safari NSNavLastRootDirectory string '~/tmp')
+  updateMacOSDefault com.apple.Safari NSNavLastRootDirectory string '~/tmp'
   # Safari > Preferences > General > Safari opens with: All non-private windows from last session.
-  safari_changed+=$(updateMacOSDefault com.apple.Safari OpenPrivateWindowWhenNotRestoringSessionAtLaunch bool false)
+  updateMacOSDefault com.apple.Safari OpenPrivateWindowWhenNotRestoringSessionAtLaunch bool false
   # Make Safari’s search banners default to Contains instead of Starts With
-  safari_changed+=$(updateMacOSDefault com.apple.Safari FindOnPageMatchesWordStartsOnly bool false)
+  updateMacOSDefault com.apple.Safari FindOnPageMatchesWordStartsOnly bool false
 
   # Add a context menu item for showing the Web Inspector in web views
   updateMacOSDefault NSGlobalDomain WebKitDeveloperExtras bool true
@@ -301,32 +215,6 @@ sudo=sudo updateMacOSDefault /Library/Preferences/com.apple.loginwindow showInpu
 sudo=sudo updateMacOSDefault /Library/Preferences/com.apple.SoftwareUpdate AutomaticDownload bool true
 
 # Apply any changes made above:
-
-if [[ -n "$dock_changed" ]]; then
-  log_debug "Applying expose changes with 'killall Dock' as dock values changed: '$dock_changed'"
-  killall Dock && true
-fi
-
-if [[ -n "$mail_changed" ]]; then
-  log_debug "Applying Mail.app changes with 'killall Mail' as Mail values changed: '$mail_changed'"
-  killall Mail && true
-fi
-
-if [[ -n "$safari_changed" ]]; then
-  log_debug "Applying Safari.app changes with 'killall Safari' as Safari values changed: '$safari_changed'"
-  killall Safari && true
-fi
-
-if [[ -n "$finder_changed" ]]; then
-  log_debug "Applying AppleShowAllFiles changes with 'killall Finder' as finder values changed '$finder_changed'"
-  killall Finder && true
-  open ~
-fi
-
-if [[ -n "$menu_changed" ]]; then
-  log_debug "Applying menu changes with 'killall SystemUIServer' as menu values changed '$menu_changed'"
-  killall SystemUIServer && true
-fi
 
 # Increase max file watch limit. See https://eradman.com/entrproject/limits.html
 # File downloaded from: https://eradman.com/entrproject/etc/limit.maxfiles.plist
