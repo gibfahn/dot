@@ -1,5 +1,5 @@
 # Only run when /var/db/locate.database was modified less than an hour ago.
-check_cmd:
+skip_if_cmd:
 - /usr/bin/env
 - bash
 - -c

@@ -1,2 +1,2 @@
-check_cmd: ["${dot_dir}/setup/wallpaper_check.sh"]
+skip_if_cmd: ["${dot_dir}/setup/wallpaper_check.sh"]
 run_cmd: ["${dot_dir}/setup/wallpaper.sh"]
