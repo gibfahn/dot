@@ -1,2 +1,2 @@
-skip_if_cmd: ["${dot_dir}/setup/volta_check.sh"]
-run_cmd: ["${dot_dir}/setup/volta.sh"]
+run_if_cmd: ["/bin/bash", "-cex", "[[ ! -d $VOLTA_HOME/bin/volta ]]"]
+run_cmd: ["${dot_dir}/up/run/volta"]

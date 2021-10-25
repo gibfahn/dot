@@ -1,5 +1,4 @@
-constraints:
-  USER: gib
+run_if_cmd: ["/bin/bash", "-cex", '[[ $(uname) == Darwin ]]']
 run_lib: defaults
 data:
   NSGlobalDomain:

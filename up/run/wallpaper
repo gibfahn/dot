@@ -8,7 +8,7 @@
 
 set -e
 
-. "$(dirname "$0")/../helpers/setup.sh" # Load helper script from dot/helpers.
+. "$(dirname "$0")/../../helpers/setup.sh" # Load helper script from dot/helpers.
 
 if [[ ! -e ${MAC_CLOUD_DESKTOP_BACKGROUND?} ]]; then
   brctl download "$MAC_CLOUD_DESKTOP_BACKGROUND"

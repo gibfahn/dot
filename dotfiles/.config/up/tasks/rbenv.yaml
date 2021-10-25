@@ -1,2 +1,2 @@
-skip_if_cmd: ["${dot_dir}/setup/rbenv_check.sh"]
-run_cmd: ["${dot_dir}/setup/rbenv.sh"]
+run_if_cmd: ["${dot_dir}/up/run_if/rbenv"]
+run_cmd: ["${dot_dir}/up/run/rbenv"]

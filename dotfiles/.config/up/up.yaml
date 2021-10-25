@@ -16,7 +16,6 @@ inherit_env:
 env:
   dot_dir: "~/code/dot" # Directory to clone dotfiles to.
   wrk_dot_dir: "~/wrk/me/dotfiles-apple" # Directory to clone work dotfiles to.
-  backup_dir: "~/backup" # Directory to move files overwritten by linking.
 
   dotfile_dir: "${dot_dir}/dotfiles" # Directory to link dotfiles from.
   wrk_dotfile_dir: "${wrk_dot_dir}/dotfiles" # Directory to link work dotfiles from.

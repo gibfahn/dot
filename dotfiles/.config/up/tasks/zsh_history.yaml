@@ -1,2 +1,2 @@
-skip_if_cmd: ["${dot_dir}/setup/zsh_history_check.sh"]
-run_cmd: ["${dot_dir}/setup/zsh_history.sh"]
+run_if_cmd: ["/bin/bash", "-cex", "[[ $(uname) == Darwin && -n $HISTFILE && -e $ZSH_CLOUD_HISTFILE ]]"]
+run_cmd: ["${dot_dir}/up/run/zsh_history"]

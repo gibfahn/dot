@@ -2,6 +2,8 @@
 
 set -eu
 
+[[ $(uname) != Darwin ]] && exit 1 # Don't run if not Darwin.
+
 fixed="# sudo: auth account password session
 auth       sufficient     pam_tid.so
 auth       sufficient     pam_smartcard.so
@@ -12,8 +14,6 @@ session    required       pam_permit.so"
 
 current=$(</etc/pam.d/sudo)
 
-# Skip if we already fixed it.
-
 echo -e "Contents of /etc/pam.d/sudo:
 
 Actual:
@@ -22,5 +22,5 @@ Actual:
 Expected (if fixed already):
 +++$fixed+++" >&2
 
-# Skip (0 exit code) if /etc/pam.d/sudo is already the fixed version.
-[[ "$current" == "$fixed" ]]
+# Run if /etc/pam.d/sudo is not already the fixed version.
+[[ "$current" != "$fixed" ]]

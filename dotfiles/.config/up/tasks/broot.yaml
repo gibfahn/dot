@@ -1,2 +1,0 @@
-skip_if_cmd: ["${dot_dir}/setup/broot_check.sh"]
-run_cmd: ["${dot_dir}/setup/broot.sh"]

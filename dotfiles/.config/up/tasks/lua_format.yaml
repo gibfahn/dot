@@ -1,2 +1,2 @@
-skip_if_cmd: ["${dot_dir}/setup/lua_format_check.sh"]
-run_cmd: ["${dot_dir}/setup/lua_format.sh"]
+run_if_cmd: ["/bin/bash", "-cex", "which lua-format"]
+run_cmd: ["${dot_dir}/up/run/lua_format"]

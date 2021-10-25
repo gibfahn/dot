@@ -1,2 +1,3 @@
+run_if_cmd: ["/bin/bash", "-cex", '[[ $(uname) == Darwin ]]']
 needs_sudo: true
-run_cmd: ["${dot_dir}/setup/mac.sh"]
+run_cmd: ["${dot_dir}/up/run/mac"]

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+. "$(dirname "$0")"/../../../helpers/setup.sh # Load helper script from dot/helpers.
+
+set -eux
+
+changes=$(gitCloneOrUpdate fwcd/KotlinLanguageServer "$XDG_DATA_HOME/KotlinLanguageServer")
+
+log_info "$changes"
+
+[[ -n $changes ]] # Run if there were changes.

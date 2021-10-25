@@ -1,0 +1,9 @@
+# EditorConfig is awesome: http://EditorConfig.org
+
+[*]
+indent_size = 2
+## Read by shfmt
+# Indent the options to case statements.
+switch_case_indent = true
+# Lines can start with && or ||
+binary_next_line = true

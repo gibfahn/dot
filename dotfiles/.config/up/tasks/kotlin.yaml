@@ -1,2 +1,2 @@
-skip_if_cmd: ["${dot_dir}/setup/kotlin_check.sh"]
-run_cmd: ["${dot_dir}/setup/kotlin.sh"]
+run_if_cmd: ["${dot_dir}/up/run_if/kotlin"]
+run_cmd: ["${dot_dir}/up/run/kotlin"]

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-. "$(dirname "$0")"/../helpers/setup.sh # Load helper script from dot/helpers.
+. "$(dirname "$0")"/../../helpers/setup.sh # Load helper script from dot/helpers.
 
 set -ex
 

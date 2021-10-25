@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# Run if the desktop background is not already the one we set.
 ! osascript -e '
     tell application "System Events"
         tell every desktop

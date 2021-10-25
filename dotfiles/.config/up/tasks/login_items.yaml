@@ -1,5 +1,7 @@
+run_if_cmd: ["/bin/bash", "-cex", '[[ $(uname) == Darwin ]]']
+
 run_cmd:
-- ${dot_dir}/setup/login_items.sh
+- "${dot_dir}/up/run/login_items"
 - /Applications/Rectangle.app
 - /Applications/CopyQ.app
 - /Applications/Hammerspoon.app

@@ -1,2 +1,2 @@
-skip_if_cmd: ["${dot_dir}/setup/gpg_check.sh"]
-run_cmd: ["${dot_dir}/setup/gpg.sh"]
+run_if_cmd: ["${dot_dir}/up/run_if/gpg"]
+run_cmd: ["${dot_dir}/up/run/gpg"]

@@ -5,7 +5,7 @@
 
 set -e
 
-. "$(dirname "$0")/../helpers/setup.sh" # Load helper script from dot/helpers.
+. "$(dirname "$0")/../../helpers/setup.sh" # Load helper script from dot/helpers.
 
 # Link VS Code preferences into the macOS specific folder.
 if [[ $USER == gib && -d "$HOME/Library/Application Support/Code/" ]]; then

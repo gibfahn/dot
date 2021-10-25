@@ -6,7 +6,7 @@
 
 set -e
 
-. "$(dirname "$0")"/../helpers/setup.sh # Load helper script from dot/helpers.
+. "$(dirname "$0")"/../../helpers/setup.sh # Load helper script from dot/helpers.
 
 hasSudo || exit
 

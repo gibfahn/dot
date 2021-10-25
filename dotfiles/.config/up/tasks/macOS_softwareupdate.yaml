@@ -3,5 +3,6 @@ description: |
   To autorestart run:
     sudo softwareupdate --install --all --restart
 
-skip_if_cmd: ["true"] # TODO(gib): Unskip this.
+run_if_cmd: ["false"] # TODO(gib): Unskip this.
+# run_if_cmd: ["/bin/bash", "-cex", '[[ $(uname) == Darwin ]]']
 run_cmd: ["softwareupdate", "--install", "--all"]

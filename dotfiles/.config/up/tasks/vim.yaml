@@ -1,1 +1,1 @@
-run_cmd: ["${dot_dir}/setup/vim.sh"]
+run_cmd: ["${dot_dir}/up/run/vim"]

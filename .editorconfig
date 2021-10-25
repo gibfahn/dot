@@ -18,10 +18,6 @@ switch_case_indent = true
 # Lines can start with && or ||
 binary_next_line = true
 
-# Rust files.
-[*.rs]
-indent_size = 4
-
 [*.md]
 indent_size = 2
 

@@ -5,7 +5,7 @@
 
 set -ex
 
-. "$(dirname "$0")"/../helpers/setup.sh # Load helper script from dot/helpers.
+. "$(dirname "$0")"/../../helpers/setup.sh # Load helper script from dot/helpers.
 
 if [[ -e "$XDG_CACHE_HOME"/z ]]; then
   log_skip "z cache file"

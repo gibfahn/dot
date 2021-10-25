@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -eux
+
+[[ $USER != gib ]] && exit 1       # Don't run if not gib.
+[[ $(uname) != Darwin ]] && exit 1 # Don't run if not Darwin.
+
+current=$(sha256sum /Library/Preferences/com.apple.HIToolbox.plist | awk '{print $1}')
+fixed=$(sha256sum "$(dirname "$0")"/../config/colemak_com.apple.HIToolbox.plist | awk '{print $1}')
+
+[[ "$current" != "$fixed" ]] # Run if if /etc/pam.d/sudo is not already fixed.
