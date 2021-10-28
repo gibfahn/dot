@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-
-set -ex
-
-# Run if HISTFILE is set and the cloud histfile exists.
-[[ $(uname) == Darwin && -n "$HISTFILE" && -e "$ZSH_CLOUD_HISTFILE" ]]

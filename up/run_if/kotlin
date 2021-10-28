@@ -1,8 +1,11 @@
 #!/bin/bash
 
-. "$(dirname "$0")"/../../../helpers/setup.sh # Load helper script from dot/helpers.
+. "$(dirname "$0")"/../../helpers/setup.sh # Load helper script from dot/helpers.
 
 set -eux
+
+# Don't run if user is not gib.
+[[ ! $USER == gib ]] && exit 1
 
 changes=$(gitCloneOrUpdate fwcd/KotlinLanguageServer "$XDG_DATA_HOME/KotlinLanguageServer")
 

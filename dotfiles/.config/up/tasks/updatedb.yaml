@@ -1,7 +1,7 @@
-# Only run when /var/db/locate.database was modified less than an hour ago.
+# Only run when /var/db/locate.database was modified more than an hour ago.
 run_if_cmd:
 - /bin/bash
 - -cex
-- "[[ $(uname) == Darwin ]] && (( ($(date +%s) - $(stat -L -f '%m' /var/db/locate.database)) < (1*60*60) ))"
+- "[[ $(uname) == Darwin ]] && (( ($(date +%s) - $(stat -L -f '%m' /var/db/locate.database)) > (1*60*60) ))"
 
 run_cmd: ["sudo", "-n", "/usr/libexec/locate.updatedb"]

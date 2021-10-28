@@ -6,4 +6,4 @@
         tell every desktop
             get picture
         end tell
-    end tell' | tr ',' '\n' | grep -v "$MAC_DESKTOP_BACKGROUND"
+    end tell' | tr ',' '\n' | grep "$MAC_DESKTOP_BACKGROUND"
