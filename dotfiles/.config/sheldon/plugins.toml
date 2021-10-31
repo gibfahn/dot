@@ -1,0 +1,98 @@
+# `sheldon` configuration file
+# ----------------------------
+#
+# You can modify this file directly or you can use one of the following
+# `sheldon` commands which are provided to assist in editing the config file:
+#
+# - `sheldon add` to add a new plugin to the config file
+# - `sheldon edit` to open up the config file in the default editor
+# - `sheldon remove` to remove a plugin from the config file
+#
+# See the documentation for more https://github.com/rossmacarthur/sheldon#readme
+
+# To test shell startup time, run:
+#   hyperfine --warmup 3 "zsh -ic 'exit 0'"
+
+[templates]
+# Defer loading of plugins.
+defer = { value = 'zsh-defer source "{{ file }}"', each = true }
+# On macOS it's gdircolors, on Linux dircolors.
+dircolors = { value = '''
+_ls_colors=$XDG_CACHE_HOME/zsh/ls_colors.zsh
+[[ ! -e $_ls_colors ]] && ${commands[gdircolors]+g}dircolors -b {{ dir }}/LS_COLORS > $_ls_colors
+zsh-defer source $_ls_colors
+unset _ls_colors''', each = false }
+
+[plugins]
+
+# TODO(gib): consider switching to z.lua:
+#   https://github.com/skywind3000/z.lua
+[plugins.z]
+github = "rupa/z"
+
+[plugins.fzf-z]
+github = "gibfahn/fzf-z"
+
+[plugins.powerlevel10k]
+github = "romkatv/powerlevel10k"
+
+[plugins.compinit-load]
+inline = 'autoload -Uz compinit'
+
+####################
+# Deferred Plugins #
+####################
+
+# https://sheldon.cli.rs/Examples.html#deferred-loading-of-plugins-in-zsh
+[plugins.zsh-defer]
+github = "romkatv/zsh-defer"
+
+[plugins.zsh-syntax-highlighting]
+github = "zsh-users/zsh-syntax-highlighting"
+apply = ["defer"]
+
+[plugins.zsh-autosuggestions]
+github = "zsh-users/zsh-autosuggestions"
+use = ["{{ name }}.zsh"]
+apply = ["defer"]
+
+[plugins.zsh-completions]
+github = "zsh-users/zsh-completions"
+apply = ["defer"]
+
+[plugins.docker-completion]
+remote = "https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker"
+apply = ["defer"]
+
+[plugins.zdotdir]
+local = "~/.config/zsh"
+use = ["*.zsh"]
+# TODO(gib): run things in the background we can, saves 40ms on startup.
+# apply = ["defer"]
+
+[plugins.fzf-key-bindings]
+local = "~/.local/share/fzf/shell/"
+use = ["*.zsh"]
+apply = ["defer"]
+
+# # Put completion files that need to be sourced here.
+# [plugins.zfunc-source]
+# local = "~/.local/share/zfunc/source"
+# use = ["*.zsh"]
+# apply = ["defer"]
+
+
+# Put completion files that need to be sourced here.
+[plugins.local-completions]
+local = "~/.local/share/zsh/completions"
+use = ["_*"]
+apply = ["defer"]
+
+# Nicer terminal ls colours.
+[plugins.ls_colors]
+github = "trapd00r/LS_COLORS"
+use = ["install.sh"]
+apply = ["dircolors"]
+
+[plugins.compinit]
+inline = ''

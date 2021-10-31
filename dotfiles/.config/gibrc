@@ -146,7 +146,7 @@ export PATH
 
 # }}} System Path Setup
 
-# {{{ Zinit Plugins and Sourcing
+# {{{ Zsh Plugins and Sourcing
 
 # Add completion dirs to function path.
 _gib_fpath_dirs=(
@@ -158,69 +158,19 @@ for _gib_dir in "${_gib_fpath_dirs[@]}"; do
 done
 unset _gib_dir _gib_fpath_dirs
 
-# NOTE: If you change this block, change the hermetic_zinit script.
-declare -A ZINIT
-ZINIT[HOME_DIR]=$XDG_DATA_HOME/zsh/zinit
-ZINIT[BIN_DIR]=$XDG_DATA_HOME/zsh/zinit/bin # Where zinit is installed.
-ZINIT[ZCOMPDUMP_PATH]=$XDG_CACHE_HOME/zsh/.zcompdump$(hostname)
-source "$XDG_DATA_HOME"/zsh/zinit/bin/zinit.zsh # Source plugin manager.
-
-zinit depth=1 for \
-  light-mode rupa/z \
-  light-mode gibfahn/fzf-z \
-  light-mode romkatv/powerlevel10k
-
-# On macOS it's gdircolors, on Linux dircolors.
-zinit ice atclone"${commands[gdircolors]+g}dircolors -b LS_COLORS > c.zsh" atpull'%atclone' run-atpull pick"c.zsh" nocompile'!'
-zinit light trapd00r/LS_COLORS # Nicer terminal colours.
-
-zinit ice blockf atpull'zinit creinstall .'
-zinit light zsh-users/zsh-completions # Auto-complete for common commands.
-
-_gib_completion_files=( # Files to source as completions.
-  $XDG_DATA_HOME/zsh/completions/*(N) # Put completion files that need to be sourced here.
-  https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker
-)
-
-for _gib_file in "${_gib_completion_files[@]}"; do
-  zinit ice as"completion"
-  zinit snippet $_gib_file
-done
-
-_gib_source_files=( # Files to source.
-  $XDG_DATA_HOME/zfunc/source/*(N) # Put completion files that need to be sourced here.
-  $XDG_DATA_HOME/fzf/shell/key-bindings.zsh
-  $ZDOTDIR/*.zsh(N)
-)
-
-for _gib_file in "${_gib_source_files[@]}"; do
-  zinit snippet $_gib_file
-done
-
-unset _gib_file _gib_source_files _gib_completion_files
-
-# Things below here are loaded asynchronously (delayed till after the shell has started).
-# `zi times -s | sort` to see slow loaders, make them delayed with:
-# wait -> "Turbo mode" (load async)
-# lucid -> Don't print a message when async load finishes.
-
-# Delayed so it can load the zvm_after_init() function from completion-keybindings.zsh
-zinit ice wait lucid depth=1 atload"ZVM_LAZY_KEYBINDINGS=false"
-zinit light jeffreytse/zsh-vi-mode
+# Set up completion manager.
+autoload -Uz compinit
+compinit
 
 # If you get a compinit error, run:
 #   autoload -Uz compinit && compaudit | xargs chmod g-w
-zinit ice wait lucid atinit"zicompinit; zicdreplay" atload"unset 'FAST_HIGHLIGHT[chroma-whatis]' 'FAST_HIGHLIGHT[chroma-man]'"
-zinit light zdharma/fast-syntax-highlighting # Syntax highlighting.
 
-zinit ice wait lucid atload"_zsh_autosuggest_start"
-zinit light zsh-users/zsh-autosuggestions # Autosuggest completion (accept with -> arrow).
+# Run plugin manager.
+eval "$(sheldon source)"
 
-# Run late so it overwrites the built-in kill etc auto-completion.
-zinit ice wait lucid
-zinit snippet $XDG_DATA_HOME/fzf/shell/completion.zsh
+zsh-defer -c "autoload -Uz compinit && compinit -d $XDG_CACHE_HOME/zsh/.zcompdump$(hostname)"
 
-# }}} Zinit Plugins and Sourcing
+# }}} Zsh Plugins and Sourcing
 
 # {{{ Zsh options
 

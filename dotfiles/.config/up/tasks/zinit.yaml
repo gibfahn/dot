@@ -1,2 +1,0 @@
-run_if_cmd: ["/bin/bash", "-cex", "which zsh"]
-run_cmd: ["${dot_dir}/up/run/zinit"]

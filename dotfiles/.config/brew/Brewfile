@@ -39,6 +39,7 @@ brew "node"                              # Node.js programming language.
 brew "pinentry-mac"                      # Gpg password Keychain integration.
 brew "python"                            # Python 3
 brew "ripgrep"                           # Super-fast version of grep.
+brew "sheldon"                           # Shell package manager.
 brew "terminal-notifier"                 # Log notifications from the terminal.
 brew "tree"                              # Recursive ls.
 brew "zsh"                               # Nicer interactive shell.

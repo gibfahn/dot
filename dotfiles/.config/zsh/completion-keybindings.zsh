@@ -187,64 +187,58 @@ zle -N _gib_clear_exit
 _gib_fzf-gp-widget() { local result=$(_gib_path_run); zle reset-prompt; LBUFFER+="$result " }
 zle -N _gib_fzf-gp-widget
 
-# This function will be run after jeffreytse/zsh-vi-mode to overwrite config.
-zvm_after_init() {
-  # Modes:
-  # - main -> 'viins' for vim, 'emacs' for emacs mode.
-  # - viins -> insert mode
-  # - vicmd -> normal mode
-  # - visual -> visual mode
+# Modes:
+# - main -> 'viins' for vim, 'emacs' for emacs mode.
+# - viins -> insert mode
+# - vicmd -> normal mode
+# - visual -> visual mode
 
-  bindkey -v # Enable vi-mode.
+bindkey -v # Enable vi-mode.
 
 
-  # Bind git shortcuts to <c-g><c-$@> (see above functions for more info).
-  bindkey -r -M viins "^G" # Remove list-expand binding so we can use <C-g> for git.
+# Bind git shortcuts to <c-g><c-$@> (see above functions for more info).
+bindkey -r -M viins "^G" # Remove list-expand binding so we can use <C-g> for git.
 
-  # More fzf helpers.
-  _gib_join_lines() { local item; while read -r item; do echo -n "${(q)item} "; done; }
-  () {
-    local c
-    for c in "$@"; do
-      eval "_gib_fzf-g$c-widget() { git rev-parse HEAD > /dev/null 2>&1 || return; local result=\$(_gib_git_$c | _gib_join_lines); zle reset-prompt; LBUFFER+=\$result }"
-      eval "zle -N _gib_fzf-g$c-widget"
-      eval "bindkey -M viins '^g^$c' _gib_fzf-g$c-widget"
-    done
-  } f b t r h a # Bind <C-g><C-{f,b,t,r,h,s}> to fuzzy-find show {files,branches,tags,reflog,hashes,stashes}.
+# More fzf helpers.
+_gib_join_lines() { local item; while read -r item; do echo -n "${(q)item} "; done; }
+() {
+  local c
+  for c in "$@"; do
+    eval "_gib_fzf-g$c-widget() { git rev-parse HEAD > /dev/null 2>&1 || return; local result=\$(_gib_git_$c | _gib_join_lines); zle reset-prompt; LBUFFER+=\$result }"
+    eval "zle -N _gib_fzf-g$c-widget"
+    eval "bindkey -M viins '^g^$c' _gib_fzf-g$c-widget"
+  done
+} f b t r h a # Bind <C-g><C-{f,b,t,r,h,s}> to fuzzy-find show {files,branches,tags,reflog,hashes,stashes}.
 
-  autoload -Uz select-word-style
-  select-word-style shell # "Word" means a shell argument, so Ctrl-w will delete one shell arg.
+autoload -Uz select-word-style
+select-word-style shell # "Word" means a shell argument, so Ctrl-w will delete one shell arg.
 
-  bindkey -M vicmd ' ' edit-command-line # <Space> in cmd mode opens editor.
-  bindkey -M vicmd '^Y' gib-yank-all # Ctrl-y copies everything to the system clipboard.
-  bindkey -M vicmd '^d' _gib_clear_exit
-  bindkey -M viins "^A" beginning-of-line # Ctrl-A = Go to beginning of line (Emacs default).
-  bindkey -M viins "^E" end-of-line       # Ctrl-E = Go to end of line (Emacs default).
-  bindkey -M viins "^[[A" history-beginning-search-backward-end # Re-enable up   for history search.
-  bindkey -M viins "^[[B" history-beginning-search-forward-end  # Re-enable down for history search.
-  bindkey -M viins ' ' magic-space # <Space> = do history expansion
-  bindkey -M viins '\e ' edit-command-line # <Alt><Space> in insert mode opens editor.
-  bindkey -M viins '\e.' insert-last-word # Alt-. inserts last word from previous line.
-  bindkey -M viins '\ec' fzf-cd-widget # Alt-c opens fzf cd into subdir.
-  bindkey -M viins '\en' fzfz-file-widget # Override Ctrl-n binding from zsh vim plugin.
-  bindkey -M viins '^D' _gib_clear_exit # Ctrl-D = Clear or exit terminal on.
-  bindkey -M viins '^G^P' _gib_fzf-gp-widget # Ctrl-G-P searches all binaries in the $PATH.
-  bindkey -M viins '^R' gib-fzf-history-widget # Ctrl-R = Multi-select for history search.
-  bindkey -M viins '^T' fzf-file-widget # Ctrl-T = Preserve fzf file widget setting.
-  bindkey -M viins '^U' vi-kill-line # Ctrl-u deletes the current line (not whole buffer).
-  bindkey -M viins '^W' backward-kill-word # Ctrl-w deletes the current line (not whole buffer).
-  bindkey -M viins '^Y' gib-yank-all # Ctrl-y copies everything to the system clipboard.
-  bindkey -M viins '^[^M' self-insert-unmeta # <Alt>-Enter Insert a literal enter (newline char).
+bindkey -M vicmd ' ' edit-command-line # <Space> in cmd mode opens editor.
+bindkey -M vicmd '^Y' gib-yank-all # Ctrl-y copies everything to the system clipboard.
+bindkey -M vicmd '^d' _gib_clear_exit
+bindkey -M viins "^A" beginning-of-line # Ctrl-A = Go to beginning of line (Emacs default).
+bindkey -M viins "^E" end-of-line       # Ctrl-E = Go to end of line (Emacs default).
+bindkey -M viins "^[[A" history-beginning-search-backward-end # Re-enable up   for history search.
+bindkey -M viins "^[[B" history-beginning-search-forward-end  # Re-enable down for history search.
+bindkey -M viins ' ' magic-space # <Space> = do history expansion
+bindkey -M viins '\e ' edit-command-line # <Alt><Space> in insert mode opens editor.
+bindkey -M viins '\e.' insert-last-word # Alt-. inserts last word from previous line.
+bindkey -M viins '\ec' fzf-cd-widget # Alt-c opens fzf cd into subdir.
+bindkey -M viins '\en' fzfz-file-widget # Override Ctrl-n binding from zsh vim plugin.
+bindkey -M viins '^D' _gib_clear_exit # Ctrl-D = Clear or exit terminal on.
+bindkey -M viins '^G^P' _gib_fzf-gp-widget # Ctrl-G-P searches all binaries in the $PATH.
+bindkey -M viins '^R' gib-fzf-history-widget # Ctrl-R = Multi-select for history search.
+bindkey -M viins '^T' fzf-file-widget # Ctrl-T = Preserve fzf file widget setting.
+bindkey -M viins '^U' vi-kill-line # Ctrl-u deletes the current line (not whole buffer).
+bindkey -M viins '^W' backward-kill-word # Ctrl-w deletes the current line (not whole buffer).
+bindkey -M viins '^Y' gib-yank-all # Ctrl-y copies everything to the system clipboard.
+bindkey -M viins '^[^M' self-insert-unmeta # <Alt>-Enter Insert a literal enter (newline char).
 
-  if [[ -n "${terminfo[kcbt]}" ]]; then
-    bindkey "${terminfo[kcbt]}" reverse-menu-complete   # <Shift>-<Tab> - move backwards through the completion menu.
-  else
-    echo "Warning: Variable terminfo[kcbt] wasn't set."
-  fi
-}
-
-# Run this now so we get it immediately.
-zvm_after_init
+if [[ -n "${terminfo[kcbt]}" ]]; then
+  bindkey "${terminfo[kcbt]}" reverse-menu-complete   # <Shift>-<Tab> - move backwards through the completion menu.
+else
+  echo "Warning: Variable terminfo[kcbt] wasn't set."
+fi
 
 # Run before the prompt is displayed.
 _gib_prompt_precmd() {
