@@ -93,6 +93,3 @@ apply = ["defer"]
 github = "trapd00r/LS_COLORS"
 use = ["install.sh"]
 apply = ["dircolors"]
-
-[plugins.compinit]
-inline = ''
