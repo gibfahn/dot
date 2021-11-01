@@ -60,7 +60,7 @@ cask "workflowy"                         # Infinitely nested bullet point list a
 
 # Mac App Store Apps (some paid). `mas list` to see what you've already installed.
 
-# mas "Shush", id: 496437906               # Mute except when Fn key held.
-mas "Pages", id: 409201541               # Edit docx and pages files.
-mas "Runcat", id: 1429033973             # Show CPU usage in menu bar.
-mas "Refined GitHub", id: 1519867270     # Better GitHub interactions.
+# Disabled due to: https://github.com/mas-cli/mas/issues/417
+# mas "Pages", id: 409201541               # Edit docx and pages files.
+# mas "Runcat", id: 1429033973             # Show CPU usage in menu bar.
+# mas "Refined GitHub", id: 1519867270     # Better GitHub interactions.
