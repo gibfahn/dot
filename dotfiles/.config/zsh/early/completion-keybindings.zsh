@@ -183,6 +183,20 @@ zle -N accept-line # Redefine accept-line to insert last input if empty (Enter k
 _gib_clear_exit() { [[ -n $BUFFER ]] && zle kill-buffer || zle self-insert-unmeta; }
 zle -N _gib_clear_exit
 
+# ⌥-n with contents inserts, without contents cd's to matching directory.
+_gib_fzfz_cd() {
+  local orig_buffer_len=${#${(z)BUFFER}}
+  LBUFFER="${LBUFFER}$(${aliases[z]} -I -e .)"
+  local ret=$?
+  zle redisplay
+  typeset -f zle-line-init >/dev/null && zle zle-line-init
+  if [[ $ret -eq 0 && -n "$BUFFER" && $orig_buffer_len == 0 ]]; then
+    zle .accept-line
+  fi
+  return $ret
+}
+zle -N _gib_fzfz_cd
+
 # Bind ^g^p to "interactively choose which binary from the $PATH to run".
 _gib_fzf-gp-widget() { local result=$(_gib_path_run); zle reset-prompt; LBUFFER+="$result " }
 zle -N _gib_fzf-gp-widget
@@ -224,7 +238,7 @@ bindkey -M viins ' ' magic-space # <Space> = do history expansion
 bindkey -M viins '\e ' edit-command-line # <Alt><Space> in insert mode opens editor.
 bindkey -M viins '\e.' insert-last-word # Alt-. inserts last word from previous line.
 bindkey -M viins '\ec' fzf-cd-widget # Alt-c opens fzf cd into subdir.
-bindkey -M viins '\en' fzfz-file-widget # Override Ctrl-n binding from zsh vim plugin.
+bindkey -M viins '\en' _gib_fzfz_cd # Override Ctrl-n binding from zsh vim plugin.
 bindkey -M viins '^D' _gib_clear_exit # Ctrl-D = Clear or exit terminal on.
 bindkey -M viins '^G^P' _gib_fzf-gp-widget # Ctrl-G-P searches all binaries in the $PATH.
 bindkey -M viins '^R' gib-fzf-history-widget # Ctrl-R = Multi-select for history search.

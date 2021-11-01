@@ -25,20 +25,15 @@ unset _ls_colors''', each = false }
 
 [plugins]
 
-# TODO(gib): consider switching to z.lua:
-#   https://github.com/skywind3000/z.lua
-[plugins.z]
-github = "rupa/z"
-
-[plugins.fzf-z]
-github = "gibfahn/fzf-z"
-
 [plugins.powerlevel10k]
 github = "romkatv/powerlevel10k"
 
 [plugins.zdotdir]
 local = "~/.config/zsh/early"
 use = ["*.zsh"]
+
+[plugins.z]
+github = "skywind3000/z.lua"
 
 [plugins.compinit-load]
 inline = 'autoload -Uz compinit'
