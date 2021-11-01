@@ -42,6 +42,7 @@ brew "ripgrep"                           # Super-fast version of grep.
 brew "sheldon"                           # Shell package manager.
 brew "terminal-notifier"                 # Log notifications from the terminal.
 brew "tree"                              # Recursive ls.
+brew "zoxide"                            # Z (for changing directory) but in Rust.
 brew "zsh"                               # Nicer interactive shell.
 
 # Brew casks (GUI Applications):

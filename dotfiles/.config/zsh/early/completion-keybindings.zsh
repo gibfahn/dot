@@ -186,7 +186,7 @@ zle -N _gib_clear_exit
 # ⌥-n with contents inserts, without contents cd's to matching directory.
 _gib_fzfz_cd() {
   local orig_buffer_len=${#${(z)BUFFER}}
-  LBUFFER="${LBUFFER}$(${aliases[z]} -e | awk '{print $2}' | fzf --no-sort --reverse --tiebreak=end,index)"
+  LBUFFER="${LBUFFER}$(zoxide query --list | fzf --no-sort --reverse --tiebreak=end,index)"
   local ret=$?
   zle redisplay
   typeset -f zle-line-init >/dev/null && zle zle-line-init
