@@ -32,9 +32,6 @@ github = "romkatv/powerlevel10k"
 local = "~/.config/zsh/early"
 use = ["*.zsh"]
 
-[plugins.z]
-github = "skywind3000/z.lua"
-
 # Nicer terminal ls colours.
 [plugins.ls_colors]
 github = "trapd00r/LS_COLORS"
