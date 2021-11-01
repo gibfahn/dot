@@ -47,8 +47,7 @@ export XDG_CACHE_HOME=${XDG_CACHE_HOME:-"$HOME/.cache"} # Cache stuff should go 
 export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-"$HOME/.config"} # Config stuff should go here.
 export XDG_DATA_HOME=${XDG_DATA_HOME:-"$HOME/.local/share"} # Data should go here.
 
-# Referred to in a later command, so order matters.
-export FZF_PREVIEW_COMMAND="[[ -d {} ]] && tree -C -L 2 -x --noreport --dirsfirst {} || { [[ -e {} ]] && $XDG_DATA_HOME/nvim/plugged/fzf.vim/bin/preview.sh {} } || printf {}"
+_gib_bat_cmd='bat --style=numbers --color=always --pager=never --terminal-width=$FZF_PREVIEW_COLUMNS --wrap=character'
 
 export ATOM_HOME="$XDG_DATA_HOME"/atom # Atom data goes here.
 export AWS_CONFIG_FILE="$XDG_CONFIG_HOME/aws/config"
@@ -61,13 +60,12 @@ export CCACHE_DIR="$XDG_CACHE_HOME"/ccache # Ccache cache.
 export COURSIER_CREDENTIALS="$XDG_CONFIG_HOME/coursier/credentials.properties"
 export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
 export FZF_ALT_C_COMMAND='fd --type d --hidden --no-ignore --follow --exclude .git'
-export FZF_CTRL_R_OPTS="--height=100% --preview-window=down:30%:noborder --preview 'bat --language=zsh --plain --terminal-width=\$FZF_PREVIEW_COLUMNS --wrap=character --color=always <<<\$(echo {2..})', --bind='ctrl-y:execute(${aliases[cpy]} <<< {2..})'"
+export FZF_CTRL_R_OPTS="--height=100% --preview-window=down:30%:noborder --preview '$_gib_bat_cmd --language=zsh <<<\$(echo {2..})', --bind='ctrl-y:execute(${aliases[cpy]} <<< {2..})'"
 export FZF_CTRL_T_COMMAND='fd --type f --hidden --follow --exclude .git'
-export FZF_CTRL_T_OPTS="--height=100% --preview-window=right:60%:noborder --preview '($FZF_PREVIEW_COMMAND) 2> /dev/null'"
+export FZF_CTRL_T_OPTS="--height=100% --preview-window=right:60%:noborder"
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git' # Use fd for fuzzy finding if available.
 # Ctrl-a -> select/deselect all, Ctrl-y -> copy line, Alt-s -> sneak to line, Alt-Shift-s -> sneak to line + enter, Ctrl-p is open/close preview window.
-export FZF_DEFAULT_OPTS="--select-1 --exit-0 --preview-window=right:50% --preview '$FZF_PREVIEW_COMMAND' -m --bind='ctrl-o:execute(\$VISUAL {} </dev/tty >/dev/tty),ctrl-a:toggle-all,ctrl-s:toggle-sort,ctrl-w:toggle-preview-wrap,alt-s:jump,alt-S:jump-accept,ctrl-p:toggle-preview,ctrl-y:execute(${aliases[cpy]} <<< {})'"
-export FZF_DEFAULT_SORT=10000
+export FZF_DEFAULT_OPTS="--select-1 --exit-0 --preview-window=right:50% --preview '[[ -d {} ]] && tree -C -L 2 -x --noreport --dirsfirst {} || {{ [[ -e {} ]] && $_gib_bat_cmd -- {}; }} || printf {}' -m --bind='ctrl-o:execute(\$VISUAL {} </dev/tty >/dev/tty),ctrl-a:toggle-all,ctrl-s:toggle-sort,ctrl-w:toggle-preview-wrap,alt-s:jump,alt-S:jump-accept,ctrl-p:toggle-preview,ctrl-y:execute(${aliases[cpy]} <<< {})'"
 export GNUPGHOME="$XDG_DATA_HOME"/gnupg # Gpg data.
 export GOPATH="$HOME/code/go"
 export GRADLE_USER_HOME="$XDG_DATA_HOME"/gradle # Also contains gradle.properties (symlink from XDG_CONFIG_HOME).
@@ -76,6 +74,7 @@ export HTTPIE_CONFIG_DIR="$XDG_CONFIG_HOME/httpie" # https://github.com/jakubroz
 export IPYTHONDIR="$XDG_CACHE_HOME/ipython" # Move iPython dir from ~.
 export LESSHISTFILE="$XDG_CACHE_HOME/less/history" # Get less to put its history here.
 export LESSKEY="$XDG_CACHE_HOME/less" # Less color settings.
+export MANPAGER="sh -c 'col -bx | bat -l man -p'" # Use bat for man pages.
 export MINIKUBE_HOME="$XDG_CACHE_HOME/minikube" # https://github.com/kubernetes/minikube/issues/4109
 export NODE_REPL_HISTORY="$XDG_CACHE_HOME/node_repl_history" # Set node-gyp download location.
 export NPM_CONFIG_CACHE="$XDG_CACHE_HOME/npm" # Set npm cache location.
@@ -89,6 +88,8 @@ export SCCACHE_DIR="$XDG_CACHE_HOME/sccache" # sccache cache dir.
 export VIRTUAL_ENV_DISABLE_PROMPT=1 # Add the virtualenv prompt myself.
 export VOLTA_HOME="$XDG_CACHE_HOME/volta" # Set directory to use for volta install.
 export ZDOTDIR="${XDG_CONFIG_HOME}/zsh" # Path to zsh config files.
+
+unset _gib_bat_cmd
 
 # Less options: Tab is 4 spaces, search ignores case, enable colours, cat if less than one screen.
 # --status-column=>column to show lines matching current search or first unread line after moving
