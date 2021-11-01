@@ -52,7 +52,7 @@ inline = 'autoload -Uz compinit'
 github = "romkatv/zsh-defer"
 
 [plugins.zsh-syntax-highlighting]
-github = "zsh-users/zsh-syntax-highlighting"
+github = "zdharma-continuum/fast-syntax-highlighting"
 apply = ["defer"]
 
 [plugins.zsh-autosuggestions]
