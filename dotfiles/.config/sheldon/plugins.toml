@@ -36,6 +36,10 @@ github = "gibfahn/fzf-z"
 [plugins.powerlevel10k]
 github = "romkatv/powerlevel10k"
 
+[plugins.zdotdir]
+local = "~/.config/zsh/early"
+use = ["*.zsh"]
+
 [plugins.compinit-load]
 inline = 'autoload -Uz compinit'
 
@@ -64,11 +68,10 @@ apply = ["defer"]
 remote = "https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker"
 apply = ["defer"]
 
-[plugins.zdotdir]
-local = "~/.config/zsh"
+[plugins.zdotdir-deferred]
+local = "~/.config/zsh/deferred"
 use = ["*.zsh"]
-# TODO(gib): run things in the background we can, saves 40ms on startup.
-# apply = ["defer"]
+apply = ["defer"]
 
 [plugins.fzf-key-bindings]
 local = "~/.local/share/fzf/shell/"
