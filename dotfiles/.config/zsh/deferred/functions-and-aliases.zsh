@@ -191,6 +191,8 @@ chpwd() { # Commands to run after changing directory.
   # I know I set the ls alias earlier, so use that.
   ${=aliases[ls]} -A 1>&2 # Show dir contents.
   [[ -d .git ]] && git fetch --all --quiet & # Fetch git remotes.
+  # Add new entries to the zoxide database.
+  zoxide add -- "$PWD"
 }
 
 # Re-apply the Ctrl-R keybinding after fzf overwrites it.

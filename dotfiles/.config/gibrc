@@ -89,8 +89,6 @@ export SCCACHE_DIR="$XDG_CACHE_HOME/sccache" # sccache cache dir.
 export VIRTUAL_ENV_DISABLE_PROMPT=1 # Add the virtualenv prompt myself.
 export VOLTA_HOME="$XDG_CACHE_HOME/volta" # Set directory to use for volta install.
 export ZDOTDIR="${XDG_CONFIG_HOME}/zsh" # Path to zsh config files.
-export _ZL_DATA=$XDG_CACHE_HOME/z # z.lua Cache Directory.
-export _ZL_NO_ALIASES=1 # Don't set extra z.lua aliases.
 
 # Less options: Tab is 4 spaces, search ignores case, enable colours, cat if less than one screen.
 # --status-column=>column to show lines matching current search or first unread line after moving
