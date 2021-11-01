@@ -69,13 +69,13 @@ apply = ["defer"]
 remote = "https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker"
 apply = ["defer"]
 
-[plugins.zdotdir-deferred]
-local = "~/.config/zsh/deferred"
+[plugins.fzf-key-bindings]
+local = "~/.local/share/fzf/shell/"
 use = ["*.zsh"]
 apply = ["defer"]
 
-[plugins.fzf-key-bindings]
-local = "~/.local/share/fzf/shell/"
+[plugins.zdotdir-deferred]
+local = "~/.config/zsh/deferred"
 use = ["*.zsh"]
 apply = ["defer"]
 

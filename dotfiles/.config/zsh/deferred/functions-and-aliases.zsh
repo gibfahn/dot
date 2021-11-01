@@ -192,3 +192,6 @@ chpwd() { # Commands to run after changing directory.
   ${=aliases[ls]} -A 1>&2 # Show dir contents.
   [[ -d .git ]] && git fetch --all --quiet & # Fetch git remotes.
 }
+
+# Re-apply the Ctrl-R keybinding after fzf overwrites it.
+bindkey -M viins '^R' gib-fzf-history-widget # Ctrl-R = Multi-select for history search.
