@@ -11,7 +11,7 @@
 # See the documentation for more https://github.com/rossmacarthur/sheldon#readme
 
 # To test shell startup time, run:
-#   hyperfine --warmup 3 "zsh -ic 'exit 0'"
+#   hyperfine --warmup 3 "zsh -ic 'exit'"
 
 [templates]
 # Defer loading of plugins.
@@ -20,7 +20,7 @@ defer = { value = 'zsh-defer source "{{ file }}"', each = true }
 dircolors = { value = '''
 _ls_colors=$XDG_CACHE_HOME/zsh/ls_colors.zsh
 [[ ! -e $_ls_colors ]] && ${commands[gdircolors]+g}dircolors -b {{ dir }}/LS_COLORS > $_ls_colors
-zsh-defer source $_ls_colors
+source $_ls_colors
 unset _ls_colors''', each = false }
 
 [plugins]
@@ -34,6 +34,12 @@ use = ["*.zsh"]
 
 [plugins.z]
 github = "skywind3000/z.lua"
+
+# Nicer terminal ls colours.
+[plugins.ls_colors]
+github = "trapd00r/LS_COLORS"
+use = ["install.sh"]
+apply = ["dircolors"]
 
 [plugins.compinit-load]
 inline = 'autoload -Uz compinit'
@@ -85,9 +91,3 @@ apply = ["defer"]
 local = "~/.local/share/zsh/completions"
 use = ["_*"]
 apply = ["defer"]
-
-# Nicer terminal ls colours.
-[plugins.ls_colors]
-github = "trapd00r/LS_COLORS"
-use = ["install.sh"]
-apply = ["dircolors"]
