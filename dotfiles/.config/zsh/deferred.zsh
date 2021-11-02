@@ -1,10 +1,10 @@
-uname="$(uname)" # Used later to avoid repeatedly running uname.
-
-# Cross-platform copy/paste aliases used later via ${aliases[cpy]}.
-case $uname in
-  Darwin) alias cpy="pbcopy" pst="pbpaste" ;;
-  Linux) alias cpy="xclip -selection clipboard" pst="xclip -selection clipboard -o" ;;
+# Cross-platform copy/paste/open/ldd/delete terminal commands (used later via ${aliases[cpy]}.).
+# OSTYPE set by zsh: https://zsh.sourceforge.io/Doc/Release/Parameters.html#Parameters-Set-By-The-Shell
+case $OSTYPE in
+  darwin*) alias cpy="pbcopy" pst="pbpaste" ldd="otool -L" o=open dl=trash ;;
+  linux*) alias cpy="xclip -selection clipboard" pst="xclip -selection clipboard -o" o=xdg-open dl="gio trash" ;;
 esac
+# ulimit -c unlimited # Uncomment to allow saving of coredumps.
 
 # {{{ Environment Variables
 
@@ -17,7 +17,6 @@ export AWS_CONFIG_FILE="$XDG_CONFIG_HOME/aws/config"
 export AWS_SHARED_CREDENTIALS_FILE="$HOME/.ssh/tokens/aws/credentials"
 export BABEL_CACHE_PATH=${BABEL_CACHE_PATH="$XDG_CACHE_HOME/babel/cache.json"} # Set babel cache location.
 export BAT_THEME="TwoDark" # Set the default theme for bat and delta.
-export CARGO_HOME="$XDG_DATA_HOME/cargo" # Cargo goes here.
 export CCACHE_CONFIGPATH="$XDG_CONFIG_HOME"/ccache.config
 export CCACHE_DIR="$XDG_CACHE_HOME"/ccache # Ccache cache.
 export COURSIER_CREDENTIALS="$XDG_CONFIG_HOME/coursier/credentials.properties"
@@ -30,7 +29,6 @@ export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git' # Use 
 # Ctrl-a -> select/deselect all, Ctrl-y -> copy line, Alt-s -> sneak to line, Alt-Shift-s -> sneak to line + enter, Ctrl-p is open/close preview window.
 export FZF_DEFAULT_OPTS="--select-1 --exit-0 --preview-window=right:50% --preview '[[ -d {} ]] && tree -C -L 2 -x --noreport --dirsfirst {} || {{ [[ -e {} ]] && $_gib_bat_cmd -- {}; }} || printf {}' -m --bind='ctrl-o:execute(\$VISUAL {} </dev/tty >/dev/tty),ctrl-a:toggle-all,ctrl-s:toggle-sort,ctrl-w:toggle-preview-wrap,alt-s:jump,alt-S:jump-accept,ctrl-p:toggle-preview,ctrl-y:execute(${aliases[cpy]} <<< {})'"
 export GNUPGHOME="$XDG_DATA_HOME"/gnupg # Gpg data.
-export GOPATH="$HOME/code/go"
 export GRADLE_USER_HOME="$XDG_DATA_HOME"/gradle # Also contains gradle.properties (symlink from XDG_CONFIG_HOME).
 export HELM_HOME="$XDG_DATA_HOME/helm" # Move Helm data dir from ~.
 export HTTPIE_CONFIG_DIR="$XDG_CONFIG_HOME/httpie" # https://github.com/jakubroztocil/httpie/issues/145
@@ -49,7 +47,6 @@ export RBENV_ROOT="$XDG_CACHE_HOME/rbenv" # Set rbenv location.
 export RUSTUP_HOME="$XDG_DATA_HOME/rustup" # Rustup goes here.
 export SCCACHE_DIR="$XDG_CACHE_HOME/sccache" # sccache cache dir.
 export VIRTUAL_ENV_DISABLE_PROMPT=1 # Add the virtualenv prompt myself.
-export VOLTA_HOME="$XDG_CACHE_HOME/volta" # Set directory to use for volta install.
 export ZDOTDIR="${XDG_CONFIG_HOME}/zsh" # Path to zsh config files.
 
 unset _gib_bat_cmd
@@ -73,7 +70,7 @@ source $XDG_DATA_HOME/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 source $XDG_DATA_HOME/zsh/plugins/zsh-completions/zsh-completions.plugin.zsh
 
 autoload -Uz compinit
-compinit -d $XDG_CACHE_HOME/zsh/.zcompdump$(hostname)
+compinit -d $XDG_CACHE_HOME/zsh/.zcompdump$HOST # $HOST is set by zsh.
 
 source $XDG_CONFIG_HOME/zsh/deferred/macos-setdir.zsh
 [[ -e $XDG_CONFIG_HOME/zsh/deferred/apple.zsh ]] && source $XDG_CONFIG_HOME/zsh/deferred/apple.zsh
@@ -213,12 +210,6 @@ sda() {
   "${find[@]}" | "${replace[@]}"
 }
 
-# ulimit -c unlimited # Uncomment to allow saving of coredumps.
-# Cross-platform copy/paste/open/ldd/delete terminal commands.
-case $uname in
-  Darwin) alias ldd="otool -L" o=open dl=trash ;;
-  Linux) alias o=xdg-open dl="gio trash" ;;
-esac
 # Copy last command.
 alias clc="fc -ln -1 | sed -e 's/\\\\n/\\n/g' -e 's/\\\\t/\\t/g' | ${=aliases[cpy]}" # "
 # Run last command and copy the command and its output.
@@ -267,7 +258,7 @@ unset _gib_dir _gib_fpath_dirs
 # {{{ Tool specific
 
 # Set key repeat rate if available (Linux only). You probably want something less excessive here, like rate 250 30.
-if [[ "$uname" = Linux ]]; then
+if [[ $OSTYPE = linux* ]]; then
   (( $+commands[xset] )) && xset r rate 120 45
   export PANEL_FIFO=/tmp/panel-fifo # Used by bspwm.
 fi
