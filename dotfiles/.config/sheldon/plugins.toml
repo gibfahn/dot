@@ -38,9 +38,6 @@ github = "trapd00r/LS_COLORS"
 use = ["install.sh"]
 apply = ["dircolors"]
 
-[plugins.compinit-load]
-inline = 'autoload -Uz compinit'
-
 ####################
 # Deferred Plugins #
 ####################
@@ -71,17 +68,16 @@ local = "~/.local/share/fzf/shell/"
 use = ["*.zsh"]
 apply = ["defer"]
 
+# Set up completion manager.
+# If you get a compinit error, run:
+#   autoload -Uz compinit && compaudit | xargs chmod g-w
+[plugins.compinit]
+inline = 'zsh-defer -c "autoload -Uz compinit && compinit -d $XDG_CACHE_HOME/zsh/.zcompdump$(hostname)"'
+
 [plugins.zdotdir-deferred]
 local = "~/.config/zsh/deferred"
 use = ["*.zsh"]
 apply = ["defer"]
-
-# # Put completion files that need to be sourced here.
-# [plugins.zfunc-source]
-# local = "~/.local/share/zfunc/source"
-# use = ["*.zsh"]
-# apply = ["defer"]
-
 
 # Put completion files that need to be sourced here.
 [plugins.local-completions]

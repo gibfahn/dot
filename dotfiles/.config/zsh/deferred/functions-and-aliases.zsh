@@ -1,5 +1,8 @@
 # {{{ Functions
 
+# Re-apply the Ctrl-R keybinding after fzf overwrites it.
+bindkey -M viins '^R' gib-fzf-history-widget # Ctrl-R = Multi-select for history search.
+
 # Edit a file on the system.
 e() { locate -i0 "$@" | xargs -0 realpath | sort -u | proximity-sort "$PWD" | fzf --tiebreak=index --print0 | xargs -0 "$=VISUAL"; }
 
@@ -195,5 +198,19 @@ chpwd() { # Commands to run after changing directory.
   zoxide add -- "$PWD"
 }
 
-# Re-apply the Ctrl-R keybinding after fzf overwrites it.
-bindkey -M viins '^R' gib-fzf-history-widget # Ctrl-R = Multi-select for history search.
+# npm completion:
+(( $+commands[npm] )) && {
+  _npm_completion() {
+    local si=$IFS
+    compadd -- $(COMP_CWORD=$((CURRENT-1)) \
+                 COMP_LINE=$BUFFER \
+                 COMP_POINT=0 \
+                 npm completion --loglevel=error -- "${words[@]}" \
+                 2>/dev/null)
+    IFS=$si
+  }
+  compdef _npm_completion npm
+}
+
+command mkdir -p ${HISTFILE:h} # Create HISTFILE dir if necessary.
+

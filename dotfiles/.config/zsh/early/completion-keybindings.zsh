@@ -147,20 +147,6 @@ zstyle ':completion::complete:*' cache-path "$XDG_CACHE_HOME"/zsh
 # TODO(gib): Work out why this is slow on Darwin and fix it.
 zstyle ':bracketed-paste-magic' active-widgets '.self-*' # https://github.com/zsh-users/zsh-autosuggestions/issues/141
 
-# npm completion:
-(( $+commands[npm] )) && {
-  _npm_completion() {
-    local si=$IFS
-    compadd -- $(COMP_CWORD=$((CURRENT-1)) \
-                 COMP_LINE=$BUFFER \
-                 COMP_POINT=0 \
-                 npm completion --loglevel=error -- "${words[@]}" \
-                 2>/dev/null)
-    IFS=$si
-  }
-  compdef _npm_completion npm
-}
-
 # Vim mode and keybindings in zsh:
 autoload -U history-search-end # Not included by default so load (usually /usr/share/zsh/unctions/Zle/).
 autoload -Uz edit-command-line # Load command to open current line in $VISUAL.

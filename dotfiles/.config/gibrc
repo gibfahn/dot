@@ -5,6 +5,15 @@
 
 # {{{ Initial setup
 
+# # Enable logging 1/2, see helpers/sort_timings.zsh
+# zmodload zsh/datetime
+# setopt PROMPT_SUBST
+# PS4='+$EPOCHREALTIME %N:%i> '
+# logfile=$(mktemp -t zsh_profile.XXXXXXXX)
+# echo "Logging to $logfile"
+# exec 3>&2 2>$logfile
+# setopt XTRACE
+
 [ -n "$NORC" ] && return # Don't run if NORC set.
 [ "$ZSH_VERSION" ] || return # Only run if using zsh
 
@@ -110,7 +119,7 @@ export HISTSIZE=100000 SAVEHIST=100000 HISTFILE="$XDG_CACHE_HOME/zsh/history" # 
 # Where brew is on the system if it's installed.
 # Script expects brew to be already in the path, e.g. by adding to /etc/paths.d with:
 #   echo "$(brew --prefix)/bin" | sudo tee /etc/paths.d/10-brew
-exists brew && brew_prefix=$(brew --prefix)
+brew_prefix=${commands[brew]:+${commands[brew]:h:h}}
 
 typeset -U path # Don't allow duplicates in the path (keep left-most entry).
 
@@ -157,17 +166,8 @@ for _gib_dir in "${_gib_fpath_dirs[@]}"; do
 done
 unset _gib_dir _gib_fpath_dirs
 
-# Set up completion manager.
-autoload -Uz compinit
-compinit
-
-# If you get a compinit error, run:
-#   autoload -Uz compinit && compaudit | xargs chmod g-w
-
 # Run plugin manager.
 eval "$(sheldon source)"
-
-zsh-defer -c "autoload -Uz compinit && compinit -d $XDG_CACHE_HOME/zsh/.zcompdump$(hostname)"
 
 # }}} Zsh Plugins and Sourcing
 
@@ -196,8 +196,6 @@ setopt share_history # Do show history from other open tabs.
 
 CDPATH=~ # Check ~ for directories after checking . (`c/d/` matches `./c*/d*/`, then tries `~/c*/d*/`).
 
-command mkdir -p $XDG_CACHE_HOME/$shell # Create HISTFILE dir if necessary.
-
 # }}} Zsh options
 
 # {{{ Tool specific
@@ -211,5 +209,9 @@ fi
 GIBRC=$((GIBRC++)) # Increment GIBRC.
 
 # }}} Tool specific
+
+# # Enable logging 2/2, see helpers/sort_timings.zsh
+# unsetopt XTRACE
+# exec 2>&3 3>&-
 
 # vim: foldmethod=marker filetype=zsh tw=100
