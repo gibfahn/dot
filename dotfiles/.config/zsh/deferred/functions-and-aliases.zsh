@@ -214,3 +214,12 @@ chpwd() { # Commands to run after changing directory.
 
 command mkdir -p ${HISTFILE:h} # Create HISTFILE dir if necessary.
 
+# Add completion dirs to function path.
+_gib_fpath_dirs=(
+  ${brew_prefix:+$brew_prefix/share/zsh/site-functions} # Brew shell completions if there.
+  $XDG_DATA_HOME/zfunc # Put (or symlink) autocomplete scripts in here.
+)
+for _gib_dir in "${_gib_fpath_dirs[@]}"; do
+  [[ -d $_gib_dir ]] && fpath+=("$_gib_dir")
+done
+unset _gib_dir _gib_fpath_dirs

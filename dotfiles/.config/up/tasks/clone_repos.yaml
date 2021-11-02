@@ -13,6 +13,48 @@ run_cmd: ~
 description: ~
 needs_sudo: false
 data:
+  - path: /Users/gib/.local/share/zsh/plugins/LS_COLORS
+    remotes:
+      - name: up
+        fetch_url: "https://github.com/trapd00r/LS_COLORS"
+        push_url: ~
+    branch: ~
+    prune: true
+  - path: /Users/gib/.local/share/zsh/plugins/fast-syntax-highlighting
+    remotes:
+      - name: up
+        fetch_url: "https://github.com/zdharma-continuum/fast-syntax-highlighting"
+        push_url: ~
+    branch: ~
+    prune: true
+  - path: /Users/gib/.local/share/zsh/plugins/powerlevel10k
+    remotes:
+      - name: up
+        fetch_url: "https://github.com/romkatv/powerlevel10k"
+        push_url: ~
+    branch: ~
+    prune: true
+  - path: /Users/gib/.local/share/zsh/plugins/zsh-autosuggestions
+    remotes:
+      - name: up
+        fetch_url: "https://github.com/zsh-users/zsh-autosuggestions"
+        push_url: ~
+    branch: ~
+    prune: true
+  - path: /Users/gib/.local/share/zsh/plugins/zsh-completions
+    remotes:
+      - name: up
+        fetch_url: "https://github.com/zsh-users/zsh-completions"
+        push_url: ~
+    branch: ~
+    prune: true
+  - path: /Users/gib/.local/share/zsh/plugins/zsh-defer
+    remotes:
+      - name: up
+        fetch_url: "https://github.com/romkatv/zsh-defer"
+        push_url: ~
+    branch: ~
+    prune: true
   - path: /Users/gib/code/bazel/bazel
     remotes:
       - name: up

@@ -1,2 +1,2 @@
 run_if_cmd: ["/bin/bash", "-cex", "which zsh"]
-run_cmd: ["/bin/zsh", "-cex", "sheldon lock --update"]
+run_cmd: ["${dot_dir}/up/run/zsh_plugins"]
