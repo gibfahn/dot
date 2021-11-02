@@ -147,7 +147,6 @@ export VISUAL=$_gib_vim EDITOR=$_gib_vim # Set vim/nvim as the default editor.
 unset _gib_vim
 
 alias vq="v '+cexpr(getreg(\"+\"))'" # vim quickfix: copy a set of file:line lines then run to populate the quickfix list.
-alias vim='VIMINIT=":source $XDG_CONFIG_HOME/nvim/init.vim" vim' # Make vim use nvim config file.
 alias vt='v ~/tmp/drafts/t' # vim temp: Edit a common scratch file (allows vim history preservation).
 
 alias v="$=VISUAL" xv="xargs $=VISUAL"

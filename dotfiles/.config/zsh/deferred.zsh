@@ -166,8 +166,6 @@ rv() {
   "$=VISUAL" -q <(eval "$cmd")
 }
 
-works() { "$1" --version >/dev/null 2>&1; } # Check if command actually works (can get its version).
-
 # }}} Functions
 
 # {{{ Aliases
@@ -237,7 +235,7 @@ alias url_decode='python3 -c "import urllib.parse, sys; print(urllib.parse.unquo
 if (( $+commands[kitty] )); then
   alias icat="kitty +kitten icat" # Kitty terminal specific: https://sw.kovidgoyal.net/kitty/kittens/icat.html
 fi
-alias idea="/Applications/IntelliJ\ IDEA\ CE.app/Contents/MacOS/idea" # IntelliJ CE
+[[ -x "/Applications/IntelliJ IDEA CE.app/Contents/MacOS/idea" ]] && alias idea="/Applications/IntelliJ IDEA CE.app/Contents/MacOS/idea" # IntelliJ CE
 alias curl="noglob curl" # Don't match on ? [] etc in curl URLs, avoids needing to quote URL args.
 
 (( $+commands[ggrep] )) && alias grep='ggrep --color=auto'
