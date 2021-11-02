@@ -8,7 +8,7 @@
 # To test shell startup time, run:
 #   hyperfine --warmup 3 "zsh -ic 'exit'"
 
-# # Enable logging 1/2, see helpers/sort_timings.zsh
+# # Enable zsh startup profiling 1/2, see helpers/sort_timings.zsh
 # zmodload zsh/datetime
 # setopt PROMPT_SUBST
 # PS4='+$EPOCHREALTIME %N:%i> '
@@ -36,83 +36,13 @@ fi
 
 # }}} Initial setup
 
-# {{{ Used Later
-
-uname="$(uname)" # Used later to avoid repeatedly running uname.
-
-# Note that command -v is a built-in in zsh, so no speed issues.
-exists() { command -v "$1" >/dev/null 2>&1; } # Check if command exists (is in path).
-
-# Cross-platform copy/paste aliases used later via ${aliases[cpy]}.
-case $uname in
-  Darwin) alias cpy="pbcopy" pst="pbpaste" ;;
-  Linux) alias cpy="xclip -selection clipboard" pst="xclip -selection clipboard -o" ;;
-esac
-
-# }}} Used Later
-
 # {{{ Environment Variables
 
 # For making things adhere to XDG see: https://wiki.archlinux.org/index.php/XDG_Base_Directory
 export XDG_CACHE_HOME=${XDG_CACHE_HOME:-"$HOME/.cache"} # Cache stuff should go here.
 export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-"$HOME/.config"} # Config stuff should go here.
 export XDG_DATA_HOME=${XDG_DATA_HOME:-"$HOME/.local/share"} # Data should go here.
-
-_gib_bat_cmd='bat --style=numbers --color=always --pager=never --terminal-width=$FZF_PREVIEW_COLUMNS --wrap=character'
-
-export ATOM_HOME="$XDG_DATA_HOME"/atom # Atom data goes here.
-export AWS_CONFIG_FILE="$XDG_CONFIG_HOME/aws/config"
-export AWS_SHARED_CREDENTIALS_FILE="$HOME/.ssh/tokens/aws/credentials"
-export BABEL_CACHE_PATH=${BABEL_CACHE_PATH="$XDG_CACHE_HOME/babel/cache.json"} # Set babel cache location.
-export BAT_THEME="TwoDark" # Set the default theme for bat and delta.
-export CARGO_HOME="$XDG_DATA_HOME/cargo" # Cargo goes here.
-export CCACHE_CONFIGPATH="$XDG_CONFIG_HOME"/ccache.config
-export CCACHE_DIR="$XDG_CACHE_HOME"/ccache # Ccache cache.
-export COURSIER_CREDENTIALS="$XDG_CONFIG_HOME/coursier/credentials.properties"
-export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
-export FZF_ALT_C_COMMAND='fd --type d --hidden --no-ignore --follow --exclude .git'
-export FZF_CTRL_R_OPTS="--height=100% --preview-window=down:30%:noborder --preview '$_gib_bat_cmd --language=zsh <<<\$(echo {2..})', --bind='ctrl-y:execute(${aliases[cpy]} <<< {2..})'"
-export FZF_CTRL_T_COMMAND='fd --type f --hidden --follow --exclude .git'
-export FZF_CTRL_T_OPTS="--height=100% --preview-window=right:60%:noborder"
-export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git' # Use fd for fuzzy finding if available.
-# Ctrl-a -> select/deselect all, Ctrl-y -> copy line, Alt-s -> sneak to line, Alt-Shift-s -> sneak to line + enter, Ctrl-p is open/close preview window.
-export FZF_DEFAULT_OPTS="--select-1 --exit-0 --preview-window=right:50% --preview '[[ -d {} ]] && tree -C -L 2 -x --noreport --dirsfirst {} || {{ [[ -e {} ]] && $_gib_bat_cmd -- {}; }} || printf {}' -m --bind='ctrl-o:execute(\$VISUAL {} </dev/tty >/dev/tty),ctrl-a:toggle-all,ctrl-s:toggle-sort,ctrl-w:toggle-preview-wrap,alt-s:jump,alt-S:jump-accept,ctrl-p:toggle-preview,ctrl-y:execute(${aliases[cpy]} <<< {})'"
-export GNUPGHOME="$XDG_DATA_HOME"/gnupg # Gpg data.
-export GOPATH="$HOME/code/go"
-export GRADLE_USER_HOME="$XDG_DATA_HOME"/gradle # Also contains gradle.properties (symlink from XDG_CONFIG_HOME).
-export HELM_HOME="$XDG_DATA_HOME/helm" # Move Helm data dir from ~.
-export HTTPIE_CONFIG_DIR="$XDG_CONFIG_HOME/httpie" # https://github.com/jakubroztocil/httpie/issues/145
-export IPYTHONDIR="$XDG_CACHE_HOME/ipython" # Move iPython dir from ~.
-export LESSHISTFILE="$XDG_CACHE_HOME/less/history" # Get less to put its history here.
-export LESSKEY="$XDG_CACHE_HOME/less" # Less color settings.
-export MANPAGER="sh -c 'col -bx | bat -l man -p'" # Use bat for man pages.
-export MINIKUBE_HOME="$XDG_CACHE_HOME/minikube" # https://github.com/kubernetes/minikube/issues/4109
-export NODE_REPL_HISTORY="$XDG_CACHE_HOME/node_repl_history" # Set node-gyp download location.
-export NPM_CONFIG_CACHE="$XDG_CACHE_HOME/npm" # Set npm cache location.
-export NPM_CONFIG_DEVDIR="$XDG_CACHE_HOME/node-gyp" # Set node-gyp download location.
-export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/config" # Set up my npm config location.
-export PAGER=less
-export PEX_ROOT="$XDG_CACHE_HOME/pex" # Cache directory for https://github.com/pantsbuild/pex.
-export RBENV_ROOT="$XDG_CACHE_HOME/rbenv" # Set rbenv location.
-export RUSTUP_HOME="$XDG_DATA_HOME/rustup" # Rustup goes here.
-export SCCACHE_DIR="$XDG_CACHE_HOME/sccache" # sccache cache dir.
-export VIRTUAL_ENV_DISABLE_PROMPT=1 # Add the virtualenv prompt myself.
-export VOLTA_HOME="$XDG_CACHE_HOME/volta" # Set directory to use for volta install.
-export ZDOTDIR="${XDG_CONFIG_HOME}/zsh" # Path to zsh config files.
-
-unset _gib_bat_cmd
-
-# Less options: Tab is 4 spaces, search ignores case, enable colours, cat if less than one screen.
-# --status-column=>column to show lines matching current search or first unread line after moving
-# -quit-if-one-screen=>exit if file fits in one screen, --ignore-case=>smartcase search, --LONG-PROMPT=>verbose prompt, --RAW-CONTROL-CHARS=>show colors,
-# --HILITE-UNREAD=>highlight first unread line moving, --tabs=4=>tab is 4 spaces, --window=-4=>keep 4 lines overlapping when scrolling with the space key
-export LESS='--tabs=4 --ignore-case --RAW-CONTROL-CHARS --quit-if-one-screen --status-column --LONG-PROMPT --HILITE-UNREAD --window=-4' # See less options comment below.
-export BAT_PAGER="less $LESS" # Make bat use less pager options.
-
 export HISTSIZE=100000 SAVEHIST=100000 HISTFILE="$XDG_CACHE_HOME/zsh/history" # Set history file location and size.
-
-[[ -d "$XDG_CONFIG_HOME/terminfo" ]] && export TERMINFO="$XDG_CONFIG_HOME/terminfo" # Put terminal info in here.
-[[ $TERM == xterm ]] && TERM=xterm-256color
 
 # }}} Environment Variables
 
@@ -159,26 +89,12 @@ export PATH
 # {{{ Zsh Plugins and Sourcing
 
 # Source plugins
-source "/Users/gib/.local/share/zsh/plugins/powerlevel10k/powerlevel10k.zsh-theme"
-source "/Users/gib/.config/zsh/early/completion-keybindings.zsh"
-source "/Users/gib/.config/zsh/early/p10k.zsh"
+source $XDG_DATA_HOME/zsh/plugins/powerlevel10k/powerlevel10k.zsh-theme
+source $XDG_CONFIG_HOME/zsh/early/p10k.zsh
 source $XDG_CACHE_HOME/zsh/ls_colors.zsh
-source "/Users/gib/.local/share/zsh/plugins/zsh-defer/zsh-defer.plugin.zsh"
+source $XDG_DATA_HOME/zsh/plugins/zsh-defer/zsh-defer.plugin.zsh
 
-zsh-defer source "/Users/gib/.local/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
-zsh-defer source "/Users/gib/.local/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
-zsh-defer source "/Users/gib/.local/share/zsh/plugins/zsh-completions/zsh-completions.plugin.zsh"
-zsh-defer source "/Users/gib/.local/share/fzf/shell/completion.zsh"
-zsh-defer source "/Users/gib/.local/share/fzf/shell/key-bindings.zsh"
-zsh-defer -c "autoload -Uz compinit && compinit -d $XDG_CACHE_HOME/zsh/.zcompdump$(hostname)"
-zsh-defer source "/Users/gib/.config/zsh/deferred/apple.zsh"
-zsh-defer source "/Users/gib/.config/zsh/deferred/functions-and-aliases.zsh"
-zsh-defer source "/Users/gib/.config/zsh/deferred/macos-setdir.zsh"
-zsh-defer source "/Users/gib/.local/share/zsh/completions/_cargo"
-zsh-defer source "/Users/gib/.local/share/zsh/completions/_kitty"
-zsh-defer source "/Users/gib/.local/share/zsh/completions/_rustup"
-zsh-defer source "/Users/gib/.local/share/zsh/completions/_up"
-zsh-defer source "/Users/gib/.local/share/zsh/completions/_volta"
+zsh-defer source $XDG_CONFIG_HOME/zsh/deferred.zsh
 
 # }}} Zsh Plugins and Sourcing
 
@@ -205,23 +121,110 @@ setopt pushd_minus # Make `cd -2` be two dirs ago rather than `cd +2`.
 setopt pushd_silent # Don't print pushd stack after pushd or cd (unless in CDPATH).
 setopt share_history # Do show history from other open tabs.
 
-CDPATH=~ # Check ~ for directories after checking . (`c/d/` matches `./c*/d*/`, then tries `~/c*/d*/`).
-
 # }}} Zsh options
 
-# {{{ Tool specific
 
-# Set key repeat rate if available (Linux only). You probably want something less excessive here, like rate 250 30.
-if [[ "$uname" = Linux ]]; then
-  exists xset && xset r rate 120 45
-  export PANEL_FIFO=/tmp/panel-fifo # Used by bspwm.
-fi
+# {{{ Early Completion Keybindings
+
+# Better ls commands.
+# l->full detail + hidden, la->no detail + hidden, ll->full detail no hidden, md->create dir.
+alias ls="${commands[gls]+g}ls --color=auto" l='ls -lAh' la='ls -A' ll='ls -l'
+
+# We want this to expand when defined.
+alias ..="cd .." ...="cd ../.." ....="cd ../../.." .....="cd ../../../.." ......="cd ../../../../.."
+# shellcheck disable=SC2139 # We want this to expand when defined.
+alias -- -="cd -"
+alias cg='cd $(git rev-parse --show-toplevel)' # Change to top level of git dir.
+
+# }}} Early Completion Keybindings
+
+# {{{ Early Aliases
+
+_gib_vim=
+{ (( $+commands[nvim] )) && _gib_vim=nvim; } || { (( $+commands[vim] )) && _gib_vim=vim; } || _gib_vim=vi # Take what you can get.
+[[ $VISUAL == 'nvr --remote-wait' ]] && _gib_vim=$VISUAL # Allow passing through the neovim init.vim value.
+export VISUAL=$_gib_vim EDITOR=$_gib_vim # Set vim/nvim as the default editor.
+unset _gib_vim
+
+alias vq="v '+cexpr(getreg(\"+\"))'" # vim quickfix: copy a set of file:line lines then run to populate the quickfix list.
+alias vim='VIMINIT=":source $XDG_CONFIG_HOME/nvim/init.vim" vim' # Make vim use nvim config file.
+alias vt='v ~/tmp/drafts/t' # vim temp: Edit a common scratch file (allows vim history preservation).
+
+alias v="$=VISUAL" xv="xargs $=VISUAL"
+alias k=kubectl kx=kubectx kn='kubectl config set-context --current --namespace' # Build tools.
+
+# }}} Early Aliases
+
+# {{{ Early Keybindings
+
+# ^D with contents clears the buffer, without contents exits (sends an actual ^D).
+_gib_clear_exit() { [[ -n $BUFFER ]] && zle kill-buffer || zle self-insert-unmeta; }
+zle -N _gib_clear_exit
+
+# ⌥-n with contents inserts, without contents cd's to matching directory.
+_gib_fzfz_cd() {
+  local orig_buffer_len=${#${(z)BUFFER}}
+  LBUFFER="${LBUFFER}$(zoxide query --list | fzf --no-sort --reverse --tiebreak=end,index)"
+  local ret=$?
+  zle redisplay
+  typeset -f zle-line-init >/dev/null && zle zle-line-init
+  if [[ $ret -eq 0 && -n "$BUFFER" && $orig_buffer_len == 0 ]]; then
+    zle .accept-line
+  fi
+  return $ret
+}
+zle -N _gib_fzfz_cd
+
+# Changes the cursor shape. KEYMAP is set when called by zsh keymap change.
+# If normal mode then 'vicmd', if insert mode then 'main' or 'viins'.
+zle-keymap-select() {
+  if [[ $KEYMAP == vicmd || $1 = block ]]; then
+    printf "\e[2 q"  # Block cursor '█'
+  elif [[ $1 = underline ]]; then
+    printf "\e[4 q"  # Underline cursor '_'.
+  elif [[ $KEYMAP == main || $KEYMAP == viins || -z $KEYMAP || $1 = beam ]]; then
+    printf "\e[6 q"  # I-beam cursor 'I' or '|'.
+  else  # Default cursor is I-beam.
+    printf "\e[6 q"  # I-beam cursor 'I' or '|'.
+  fi
+}
+zle -N zle-keymap-select # Bind zle-keymap-select() above to be called when the keymap is changed.
+
+zle-line-init() {
+  zle -K viins  # Every line starts in insert mode.
+  zle-keymap-select beam # Every line starts with I-beam cursor.
+}
+zle -N zle-line-init     # Bind zle-line-init() above to be called when the line editor is initialized.
+
+# Modes:
+# - main -> 'viins' for vim, 'emacs' for emacs mode.
+# - viins -> insert mode
+# - vicmd -> normal mode
+# - visual -> visual mode
+
+bindkey -v # Enable vi-mode.
+
+bindkey -M vicmd ' ' edit-command-line # <Space> in cmd mode opens editor.
+
+bindkey -M vicmd ' ' edit-command-line # <Space> in cmd mode opens editor.
+bindkey -M vicmd '^d' _gib_clear_exit
+bindkey -M viins "^A" beginning-of-line # Ctrl-A = Go to beginning of line (Emacs default).
+bindkey -M viins "^E" end-of-line       # Ctrl-E = Go to end of line (Emacs default).
+bindkey -M viins ' ' magic-space # <Space> = do history expansion
+bindkey -M viins '\e ' edit-command-line # <Alt><Space> in insert mode opens editor.
+bindkey -M viins '\e.' insert-last-word # Alt-. inserts last word from previous line.
+bindkey -M viins '\ec' fzf-cd-widget # Alt-c opens fzf cd into subdir.
+bindkey -M viins '\en' _gib_fzfz_cd # Override Ctrl-n binding from zsh vim plugin.
+bindkey -M viins '^D' _gib_clear_exit # Ctrl-D = Clear or exit terminal on.
+bindkey -M viins '^T' fzf-file-widget # Ctrl-T = Preserve fzf file widget setting.
+bindkey -M viins '^U' vi-kill-line # Ctrl-u deletes the current line (not whole buffer).
+bindkey -M viins '^W' backward-kill-word # Ctrl-w deletes the current line (not whole buffer).
+
+# }}} Early Keybindings
 
 GIBRC=$((GIBRC++)) # Increment GIBRC.
 
-# }}} Tool specific
-
-# # Enable logging 2/2, see helpers/sort_timings.zsh
+# # Enable zsh startup profiling 2/2, see helpers/sort_timings.zsh
 # unsetopt XTRACE
 # exec 2>&3 3>&-
 
