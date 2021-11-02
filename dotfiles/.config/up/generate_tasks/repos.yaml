@@ -1,6 +1,6 @@
 run_lib: generate_git
 data:
-- path: ${dotfile_dir}/.config/up/tasks/clone_repos.toml
+- path: ${dotfile_dir}/.config/up/tasks/clone_repos.yaml
   search_paths: ["~/code"]
   excludes: ["/tmp/", "/go/"]
   prune: true
