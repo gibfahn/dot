@@ -43,6 +43,9 @@ export XDG_CACHE_HOME=${XDG_CACHE_HOME:-"$HOME/.cache"} # Cache stuff should go 
 export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-"$HOME/.config"} # Config stuff should go here.
 export XDG_DATA_HOME=${XDG_DATA_HOME:-"$HOME/.local/share"} # Data should go here.
 export HISTSIZE=100000 SAVEHIST=100000 HISTFILE="$XDG_CACHE_HOME/zsh/history" # Set history file location and size.
+export CARGO_HOME="$XDG_DATA_HOME/cargo" # Cargo goes here.
+export VOLTA_HOME="$XDG_CACHE_HOME/volta" # Set directory to use for volta install.
+export GOPATH="$HOME/code/go"
 
 # }}} Environment Variables
 
@@ -68,7 +71,6 @@ path=(
   ${CARGO_HOME:+$CARGO_HOME/bin} # Rust packages.
   ${VOLTA_HOME:+$VOLTA_HOME/bin} # Node.js and packages.
 
-  ${brew_prefix:+$brew_prefix/opt/llvm/bin} # Homebrew clangd tools.
   ${brew_prefix:+$brew_prefix/opt/ruby/bin} # Brew ruby.
   ${brew_prefix:+$brew_prefix/lib/ruby/gems/*/bin(N)} # Add ruby or skip.
   ${brew_prefix:+$brew_prefix/bin} # Alternate brew install location.
@@ -79,7 +81,6 @@ path=(
 
   $HOME/Library/Python/*/bin(N) # macOS Python User Packages.
   ${GOPATH:+$GOPATH/bin} # Go binaries.
-  ${VULKAN_SDK:+$VULKAN_SDK/bin} # VulkanSDK packages.
   $path
 )
 export PATH
