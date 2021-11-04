@@ -2,6 +2,10 @@ run_if_cmd: ["/bin/bash", "-cex", '[[ $(uname) == Darwin ]]']
 run_lib: defaults
 data:
   NSGlobalDomain:
+    # Unnatural scrolling direction (swipe down to scroll down).
+    # You can force reapply this with:
+    #   /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+    com.apple.swipescrolldirection: false
 
     # Expand save panel by default
     NSNavPanelExpandedStateForSaveMode: true
@@ -86,6 +90,10 @@ data:
       "2": "y-MM-dd"
       "3": "y-MM-dd"
       "4": "EEEE, y-MM-dd"
+
+    # System Preferences > Sound Effects > Select and alert sound: Heroine.
+    # Change the error sound to the drum.
+    com.apple.sound.beep.sound: /System/Library/Sounds/Hero.aiff
 
   com.apple.AppleMultitouchTrackpad:
 
@@ -276,6 +284,12 @@ data:
     # Copy email addresses as `foo@example.com` instead of `Foo Bar <foo@example.com>` in Mail.app
     AddressesIncludeNameOnPasteboard: false
 
+    NSUserKeyEquivalents:
+      # -> Mail: ⌘-b moves to Archive.
+      Archive: '@b'
+      # -> Mail: ⌘-u sends the message.
+      Send: '@u'
+
   com.apple.mail-shared:
     # Mail -> Preferences -> Composing -> Mark addresses not ending with (checkbox):
     AlertForNonmatchingDomains: true
@@ -288,3 +302,8 @@ data:
   com.apple.Maps:
     # Avoid tolls by default.
     MapsDefaultAvoidTollsKey: true
+
+  net.kovidgoyal.kitty:
+    NSUserKeyEquivalents:
+      # Free up ⌘-h by remapping "Hide Kitty" to something obscure.
+      "Hide kitty": '~^$\U00a7'

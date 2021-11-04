@@ -1,7 +1,8 @@
-# Only run when /var/db/locate.database was modified more than an hour ago.
-run_if_cmd:
-- /bin/bash
-- -cex
-- "[[ $(uname) == Darwin ]] && (( ($(date +%s) - $(stat -L -f '%m' /var/db/locate.database)) > (1*60*60) ))"
+needs_sudo: true
 
+# Only run when /var/db/locate.database was modified more than an hour ago.
+run_if_cmd: ["${dot_dir}/up/run_if/updatedb"]
+
+# You can also have this run automatically in the background once a week by running:
+#   sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.locate.plist
 run_cmd: ["sudo", "-n", "/usr/libexec/locate.updatedb"]

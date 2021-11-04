@@ -1,0 +1,121 @@
+run_if_cmd: ["/bin/bash", "-cex", '[[ $USER == gib && $(uname) == Darwin ]]']
+run_lib: defaults
+data:
+  NSGlobalDomain:
+    # Set up fastest key repeat rate (needs relogin).
+    KeyRepeat: 1
+    # Sets a low time before key starts repeating.
+    InitialKeyRepeat: 8
+
+    # Use Dark mode.
+    AppleInterfaceStyle: Dark
+    # Don't brighten window contents (better contrast in Dark Mode).
+    # System Preferences > General > Allow wallpaper tinting in windows (true here means uncheck the tickbox).
+    AppleReduceDesktopTinting: true
+
+    # Auto-hide menu bar.
+    _HIHideMenuBar: true
+
+    # Add a context menu item for showing the Web Inspector in web views
+    WebKitDeveloperExtras: true
+
+    # Disable the animations for opening Quick Look windows
+    QLPanelAnimationDuration: 0.0
+
+    # Set sidebar icon size to medium
+    NSTableViewDefaultSizeMode: 2
+
+    NSUserKeyEquivalents:
+      # Create global shortcut "Merge all windows" ⌘-M
+      "Merge All Windows": '@$m'
+
+  com.apple.dock:
+    # Auto-hide dock.
+    autohide: true
+
+    # Have the Dock only show apps currently running.
+    static-only: true
+
+    # Make the dock appear instantly.
+    # https://simcityltd.medium.com/how-to-get-the-perfect-macos-dock-b2593f9c0f0b
+    autohide-delay: 0.0
+    autohide-time-modifier: 0.25
+
+  com.apple.finder:
+    # Allow Finder to be quit (hides Desktop files).
+    QuitMenuItem: 1
+
+  com.apple.ActivityMonitor:
+    # Show all processes in Activity Monitor
+    ShowCategory: 0
+
+  com.apple.HIToolbox:
+    # Enable dictation with double-tap of Fn button.
+    AppleDictationAutoEnable: 1
+    # System Preferences > Keyboard > Press Function key to: Start Dictation.
+    #                               > Press and hold Fn key to: Show F1, F2, F3 Keys.
+    AppleFnUsageType: 3
+
+  com.apple.MobileSMS:
+    # Messages > Preferences > Keep messages: Forever.
+    KeepMessageForDays: 0
+
+  com.apple.Safari:
+    # Enable Safari’s debug menu
+    IncludeInternalDebugMenu: true
+    # Enable Safari’s debug menu
+    # Prevent Safari from opening ‘safe’ files automatically after downloading
+    AutoOpenSafeDownloads: false
+    # Default to saving files in ~/tmp.
+    NSNavLastRootDirectory: '~/tmp'
+    # Safari > Preferences > General > Safari opens with: All non-private windows from last session.
+    OpenPrivateWindowWhenNotRestoringSessionAtLaunch: false
+    # Make Safari’s search banners default to Contains instead of Starts With
+    FindOnPageMatchesWordStartsOnly: false
+
+  com.apple.Spotlight:
+    orderedItems:
+    - enabled: "1"
+      name: APPLICATIONS
+    - enabled: "1"
+      name: MENU_EXPRESSION
+    - enabled: "1"
+      name: MENU_DEFINITION
+    - enabled: "1"
+      name: SYSTEM_PREFS
+    - enabled: "0"
+      name: DIRECTORIES
+    - enabled: "0"
+      name: PDF
+    - enabled: "0"
+      name: FONTS
+    - enabled: "0"
+      name: DOCUMENTS
+    - enabled: "0"
+      name: MESSAGES
+    - enabled: "0"
+      name: CONTACT
+    - enabled: "0"
+      name: EVENT_TODO
+    - enabled: "0"
+      name: IMAGES
+    - enabled: "0"
+      name: BOOKMARKS
+    - enabled: "0"
+      name: MUSIC
+    - enabled: "0"
+      name: MOVIES
+    - enabled: "0"
+      name: PRESENTATIONS
+    - enabled: "0"
+      name: SPREADSHEETS
+    - enabled: "0"
+      name: SOURCE
+    - enabled: "0"
+      name: MENU_OTHER
+    - enabled: "1"
+      name: MENU_CONVERSION
+    - enabled: "0"
+      name: MENU_WEBSEARCH
+    - enabled: "0"
+      name: MENU_SPOTLIGHT_SUGGESTIONS
