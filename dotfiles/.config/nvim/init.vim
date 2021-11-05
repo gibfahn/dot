@@ -146,6 +146,7 @@ try
   Plug 'chrisbra/Colorizer'                         " Color ansi escape codes (:h Colorizer).
   Plug 'coderifous/textobj-word-column.vim'         " Adds ic/ac and iC/aC motions to block select word column in paragraph.
   Plug 'fweep/vim-zsh-path-completion'              " Nicer file browser plugin.
+  Plug 'ggandor/lightspeed.nvim'                    " Quickest way to jump to any char on the screen (alternative to easymotion/sneak/hop).
   Plug 'gibfahn/vim-gib'                            " Use vim colorscheme.
   Plug 'godlygeek/tabular'                          " Make tables easier (:help Tabular).
   Plug 'honza/vim-snippets'                         " Work around https://github.com/neoclide/coc-snippets/issues/126 .
@@ -153,11 +154,11 @@ try
   Plug 'junegunn/fzf', { 'dir': '~/.local/share/fzf', 'do': './install --bin' } " :h fzf
   Plug 'junegunn/fzf.vim'                           " Try :Files, :GFiles? :Buffers :Lines :History :Commits :BCommits
   Plug 'junegunn/vim-peekaboo'                      " Pop up register list when pasting/macroing.
-  Plug 'ggandor/lightspeed.nvim'                    " Quickest way to jump to any char on the screen (alternative to easymotion/sneak/hop).
   Plug 'kana/vim-operator-user'                     " Make it easier to define operators.
   Plug 'kana/vim-textobj-line'                      " Adds `il` and `al` text objects for current line.
   Plug 'kana/vim-textobj-user'                      " Allows you to create custom text objects (used in vim-textobj-line).
   Plug 'mzlogin/vim-markdown-toc'                   " Markdown Table of Contents.
+  Plug 'nanotee/zoxide.vim'
   Plug 'neoclide/coc.nvim', {'branch': 'release'}   " Language Server with VSCode Extensions.
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate', 'branch': '0.5-compat'} " Treesitter syntax highlighting.
   Plug 'pechorin/any-jump.nvim'                     " Go to definition that doesn't require a language server.
@@ -351,6 +352,7 @@ nnoremap <A-S> [s|         " Prev spelling mistake.
 nnoremap <A-t> :tabnext<CR>|               " Next tab.
 nnoremap <A-T> :tabprev<CR>|               " Prev tab.
 nnoremap <A-x> :call BufferClose('')<CR>|  " Close current buffer.
+nnoremap <A-z> :Zi<CR>|  " Switch to different directory.
 
 nmap              <C-W>>     <C-W>><SID>ws|         " Adds mappings to make Ctrl-W -/+/</>
 nmap              <C-W><     <C-W><<SID>ws|         " ↳ repeatable, so you can press Ctrl-W
