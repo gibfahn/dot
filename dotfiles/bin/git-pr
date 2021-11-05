@@ -27,6 +27,8 @@ while [[ $# != 0 ]]; do
   [[ $1 =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
 
   [[ $1 =~ ^(--edit|-e)$ ]] && { action=edit; shift; }
+
+  [[ $1 =~ ^(--open|-o)$ ]] && { action=open; shift; }
 done
 
 main() {
@@ -45,6 +47,7 @@ main() {
   case $action in
     create) pr_create ;;
     edit) pr_edit ;;
+    open) pr_open ;;
   esac
 }
 
@@ -52,6 +55,9 @@ pr_create() {
   file=$(pr_file)
   gh pr create --title "$(head -1 "$file")" --body "$(tail +3 "$file")" --base "$up_branch"
   rm "$file"
+
+  # Now open the PR in the browser.
+  pr_open
 }
 
 pr_edit() {
@@ -86,6 +92,18 @@ pr_edit() {
   prompt_to_confirm "Does this change look correct?"
 
   gh pr edit $pr_number --body "$new_pr_body"
+}
+
+pr_open() {
+  push_ref=$(branch_ref "@{push}") # e.g. fork/my-pr-branch
+  push_branch=${push_ref#*/} # e.g. my-pr-branch
+
+  # You should be able to just run this:
+  #   gh pr view -w
+  # But gh can't detect push branches, e.g. https://github.com/cli/cli/issues/575
+  pr_number=$(gh pr list --state all --head $push_branch --json number --jq '.[].number')
+  [[ $pr_number =~ ^[0-9]+$ ]] || error "Failed to get PR number, output: '$pr_number'"
+  gh pr view -w $pr_number
 }
 
 branch_ref() {

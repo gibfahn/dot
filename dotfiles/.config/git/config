@@ -137,6 +137,7 @@
   paw = "!curl -nL ${1%.patch}.patch | git am -3 -S --whitespace=warn # " # Patch but don't fix whitespace.
   ppr = "!git check-pr-branch && git push && git pr # "          # Push and raise PR at the same time.
   pre = pr --edit                                               # Update the PR description.
+  pro = pr --open                                               # Open the PR pointed to by the current branch.
   # Push to PR branch, works with the `git-fp` script in this repo.
   ptp = "!set -x; branch=$(git branch --show-current); git push $(git config branch.${branch}.pushRemote) @:${branch#*-} #"
   pt  = "!git push -u $1 $(git head-branch) #"                  # g pt origin sets branch to track up + pushes.
