@@ -101,7 +101,9 @@ pr_open() {
   # You should be able to just run this:
   #   gh pr view -w
   # But gh can't detect push branches, e.g. https://github.com/cli/cli/issues/575
-  pr_number=$(gh pr list --state all --head $push_branch --json number --jq '.[].number')
+  pr_number=$(gh pr list --state=open --limit=1 --head=$push_branch --json=number --jq='.[0].number')
+  # First check open PR branches, then fall back to the most recent closed one.
+  [[ $pr_number =~ ^[0-9]+$ ]] || pr_number=$(gh pr list --state=all --limit=1 --head=$push_branch --json=number --jq='.[0].number')
   [[ $pr_number =~ ^[0-9]+$ ]] || error "Failed to get PR number, output: '$pr_number'"
   gh pr view -w $pr_number
 }
