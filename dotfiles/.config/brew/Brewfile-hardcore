@@ -103,12 +103,12 @@ cask "zoom"                              # Zoom web meetings client.
 
 # Mac App Store Apps (some paid). `mas list` to see what you've already installed.
 
+# mas "Xcode", id: 497799835               # Needed to compile llvm (among other things).
+mas "Dato", id: 1470584107
 mas "Final Cut Pro", id: 424389933
 mas "GarageBand", id: 682658836
 mas "Logic Pro X", id: 634148309
-mas "Xcode", id: 497799835               # Needed to compile llvm (among other things).
 mas "iMovie", id: 408981434
-mas "Dato", id: 1470584107
 
 # Disabled due to: https://github.com/mas-cli/mas/issues/417
 mas "Be Focused", id: 973134470          # Pomodoro Timer.
