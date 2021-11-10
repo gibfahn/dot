@@ -163,9 +163,11 @@ zle -N _gib_clear_exit
 
 # ⌥-n with contents inserts, without contents cd's to matching directory.
 _gib_fzfz_cd() {
+  local selected_dir
   local orig_buffer_len=${#${(z)BUFFER}}
-  LBUFFER="${LBUFFER}$(zoxide query --list | fzf --no-sort --reverse --tiebreak=end,index)"
+  selected_dir=$(zoxide query --list | fzf --no-sort --reverse --tiebreak=end,index)
   local ret=$?
+  LBUFFER="${LBUFFER}${selected_dir:q}"
   zle redisplay
   typeset -f zle-line-init >/dev/null && zle zle-line-init
   if [[ $ret -eq 0 && -n "$BUFFER" && $orig_buffer_len == 0 ]]; then
