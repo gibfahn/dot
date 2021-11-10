@@ -2,9 +2,14 @@
 
 set -ex
 
+# TODO: once macOS updates to 582 or later, switch to writing the lesskey source directly.
+# Prior to version 582, the lesskey program needed to be run to convert a lesskey source file to a
+# lesskey binary file for less to use.  Newer versions of less read the lesskey source file directly
+# and ignore the binary file if the source file exists.
+
 # Set up less file (colors for less).
-# We don't save the input to a lesskey file because we need the terminal to
-# resolve the tput commands.
+# We don't commit the lesskey file because we need the machine's terminal to resolve the tput
+# commands.
 lesskey -o "$XDG_CACHE_HOME/less" <(
   cat <<EOF
 $(echo "#env") # Get a comment.

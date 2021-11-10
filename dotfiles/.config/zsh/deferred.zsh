@@ -35,7 +35,6 @@ export HTTPIE_CONFIG_DIR="$XDG_CONFIG_HOME/httpie" # https://github.com/jakubroz
 export IPYTHONDIR="$XDG_CACHE_HOME/ipython" # Move iPython dir from ~.
 export LESSHISTFILE="$XDG_CACHE_HOME/less/history" # Get less to put its history here.
 export LESSKEY="$XDG_CACHE_HOME/less" # Less color settings.
-export MANPAGER="sh -c 'col -bx | bat -l man -p'" # Use bat for man pages.
 export MINIKUBE_HOME="$XDG_CACHE_HOME/minikube" # https://github.com/kubernetes/minikube/issues/4109
 export NODE_REPL_HISTORY="$XDG_CACHE_HOME/node_repl_history" # Set node-gyp download location.
 export NPM_CONFIG_CACHE="$XDG_CACHE_HOME/npm" # Set npm cache location.
