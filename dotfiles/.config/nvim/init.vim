@@ -391,7 +391,7 @@ nnoremap <Leader>d :call BufferClose('')<CR>|                              " Clo
 nnoremap <Leader>D :%d<CR>|                                                " Delete all text in buffer.
 vnoremap <Leader>d "+d|                                                    " Cut from clipboard (visual mode).
 nnoremap <Leader>e <C-w>q|                                                 " Close current split (keeps buffer).
-nnoremap <Leader>E :cclose<CR>:lclose<CR>:helpclose<CR><C-W>z|             " Close open preview windows (e.g. language server definitions).
+nnoremap <Leader>E <C-W>z:cclose<CR>:lclose<CR>:helpclose<CR><Plug>(coc-float-hide)|             " Close open preview windows (e.g. language server definitions).
 nnoremap <Leader>f :Files<CR>|                                             " Search file names    for file,
 nnoremap <Leader>F :grep |                                                 " Search file contents for file.
 nnoremap <leader>ga :AnyJumpLastResults<CR>|                               " open last closed search window again

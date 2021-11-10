@@ -13,6 +13,26 @@
   // Trigger completion after InsertEnter.
   "suggest.triggerAfterInsertEnter": true,
 
+  // Show the close button in popup window.
+  "suggest.floatConfig": {
+    "close": true
+  },
+
+  // Show the close button in popup window.
+  "diagnostic.floatConfig": {
+    "close": true
+  },
+
+  // Show the close button in popup window.
+  "signature.floatConfig": {
+    "close": true
+  },
+
+  // Show the close button in popup window.
+  "hover.floatConfig": {
+    "close": true
+  },
+
   // Used in the gutter for errors.
   "diagnostic.errorSign": "✖",
   // Used in the gutter for warnings.
