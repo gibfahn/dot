@@ -105,6 +105,7 @@ pr_open() {
   # First check open PR branches, then fall back to the most recent closed one.
   [[ $pr_number =~ ^[0-9]+$ ]] || pr_number=$(gh pr list --state=all --limit=1 --head=$push_branch --json=number --jq='.[0].number')
   [[ $pr_number =~ ^[0-9]+$ ]] || error "Failed to get PR number, output: '$pr_number'"
+  gh pr view --json=url --jq=.url $pr_number | cpy
   gh pr view -w $pr_number
 }
 
@@ -183,6 +184,13 @@ prompt_to_confirm() {
   if [[ -n ${user_input:-} ]]; then
     error "User entered text."
   fi
+}
+
+cpy() {
+  case $OSTYPE in
+    darwin*) pbcopy $@ ;;
+    linux*) xclip -selection clipboard $@ ;;
+  esac
 }
 
 main "$@"
