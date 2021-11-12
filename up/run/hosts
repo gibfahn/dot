@@ -1,0 +1,54 @@
+#!/bin/zsh
+
+# Add entries to the /etc/hosts file.
+
+set -euo pipefail
+
+set -x
+
+hosts=(
+  # Block YouTube
+  # https://apple.stackexchange.com/questions/373190/block-youtube-on-safari-in-hosts-file
+  youtube.com
+  youtu.be
+  youtube-nocookie.com
+
+  # Block Twitter
+  twitter.com
+)
+
+heading_line="# Added by gib dot host blocking script."
+
+typeset -a hosts_lines=("${(@f)"$(</etc/hosts)"}") # "
+
+changed=
+
+for host_name in ${hosts[@]}; do
+  for host in $host_name www.$host_name; do
+    matching_line="127.0.0.1 $host"
+    if ! (($hosts_lines[(Ie)$matching_line])); then
+      if [[ -z $changed ]] && ! (($hosts_lines[(Ie)$heading_line])); then
+        hosts_lines+=("$heading_line")
+        hosts_lines+=()
+      fi
+      changed=true
+      echo >&2 "Adding $host to /etc/hosts"
+      hosts_lines+=("$matching_line")
+    fi
+  done
+done
+
+if [[ $1 == --run-if ]]; then
+  [[ $USER == gib ]] || exit 1 # User is gib or we don't run.
+  [[ -n $changed ]] || exit 1 # Something changed or we don't run.
+  exit 0 # Run.
+fi
+
+if [[ -n $changed ]]; then
+  sudo tee <<<"${(@F)hosts_lines}" /etc/hosts >/dev/null
+
+  case $OSTYPE in
+    darwin*) dscacheutil -flushcache ;;
+    *) echo "Not yet supported, fix $0" && exit 1 ;;
+  esac
+fi
