@@ -62,4 +62,4 @@ cask "workflowy"                         # Infinitely nested bullet point list a
 
 mas "Pages", id: 409201541               # Edit docx and pages files.
 mas "Runcat", id: 1429033973             # Show CPU usage in menu bar.
-mas "Refined GitHub", id: 1519867270     # Better GitHub interactions.
+mas "Dato", id: 1470584107

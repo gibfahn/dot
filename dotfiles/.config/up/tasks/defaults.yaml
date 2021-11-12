@@ -262,6 +262,11 @@ data:
   com.apple.menuextra.clock:
     DateFormat: "EEE d MMM  HH:mm:ss"
 
+    # Show the smallest clock we can, as we use Dato for time.
+    ShowDayOfWeek: false
+    ShowDayOfMonth: false
+    IsAnalog: true
+
   com.apple.mail:
 
     # Mail -> Preferences -> Viewing -> Show Message Headers -> Custom
@@ -303,7 +308,35 @@ data:
     # Avoid tolls by default.
     MapsDefaultAvoidTollsKey: true
 
+  # https://sw.kovidgoyal.net/kitty/
   net.kovidgoyal.kitty:
     NSUserKeyEquivalents:
       # Free up ⌘-h by remapping "Hide Kitty" to something obscure.
       "Hide kitty": '~^$\U00a7'
+
+  # https://sindresorhus.com/dato
+  com.sindresorhus.Dato:
+    showTimeInMenuBar: true
+    showWeekNumberInMenu: false
+    showCalendarInMenu: false
+    showAmPm: false
+    showDayOfWeekInMenu: false
+    showWeekNumberInMenuBar: false
+    showTimeZonesInMenu: true
+    showMonthInMenuBar: true
+    showSecondsInMenuBar: true
+    showDateInMenu: false
+    iconInMenuBar: none
+    enabledCalendars: []
+    # See https://nsdateformatter.com for docs.
+    # e.g. Fri 2021-11-12 13:43:02
+    dateTimeFormat: "E yyyy-MM-dd HH:mm:ss"
+    timeZonesInMenuBackup: []
+    showDateInMenuBar: true
+    timeZonesInMenu:
+      - "{\"timeZone\":\"Asia\\/Shanghai\",\"menuBarTitle\":\"\",\"id\":\"6F4DAB8E-524A-45BB-BB97-EBD1AEB547EE\",\"notes\":\"\",\"isInMenuBar\":false,\"timeFormat\":\"system\",\"name\":\"🇨🇳 China\",\"originalName\":\"Beijing\"}"
+      - "{\"timeZone\":\"America\\/New_York\",\"menuBarTitle\":\"\",\"id\":\"5D935EF6-867C-4634-B346-D53E3313D065\",\"notes\":\"\",\"isInMenuBar\":false,\"timeFormat\":\"system\",\"name\":\"🗽 New York City\",\"originalName\":\"New York City\"}"
+      - "{\"timeZone\":\"America\\/Los_Angeles\",\"menuBarTitle\":\"\",\"id\":\"45987DD3-E7DF-4329-8516-85462AC0B8B1\",\"notes\":\"\",\"isInMenuBar\":false,\"timeFormat\":\"system\",\"name\":\"🌁 San Francisco\",\"originalName\":\"San Francisco\"}"
+    showAddEventButtonInMenu: false
+    showTimeInMenu: false
+    showWeekDayInMenuBar: true
