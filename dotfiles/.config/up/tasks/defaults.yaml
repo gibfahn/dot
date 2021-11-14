@@ -330,7 +330,7 @@ data:
     enabledCalendars: []
     # See https://nsdateformatter.com for docs.
     # e.g. Fri 2021-11-12 13:43:02
-    dateTimeFormat: "E yyyy-MM-dd HH:mm:ss"
+    dateTimeFormat: "yyyy-MM-dd E HH:mm:ss"
     timeZonesInMenuBackup: []
     showDateInMenuBar: true
     timeZonesInMenu:
