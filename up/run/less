@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
-set -ex
+set -euo pipefail
 
 # TODO: once macOS updates to 582 or later, switch to writing the lesskey source directly.
 # Prior to version 582, the lesskey program needed to be run to convert a lesskey source file to a
 # lesskey binary file for less to use.  Newer versions of less read the lesskey source file directly
 # and ignore the binary file if the source file exists.
+
+current=$(md5 -q "$XDG_CACHE_HOME/less")
 
 # Set up less file (colors for less).
 # We don't commit the lesskey file because we need the machine's terminal to resolve the tput
@@ -58,3 +60,6 @@ LESS_TERMCAP_us = $(
   )
 EOF
 )
+
+# Skip if we didn't change anything.
+[[ "$current" == "$(md5 -q "$XDG_CACHE_HOME/less")" ]] && exit 204
