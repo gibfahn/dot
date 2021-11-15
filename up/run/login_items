@@ -3,7 +3,7 @@
 set -euo pipefail
 
 # OS is darwin or we don't run.
-[[ $1 == --run-if && $OSTYPE == darwin* ]] && exit 1
+[[ ${1:-} == --run-if && $OSTYPE == darwin* ]] && exit 1
 
 # Login Items that should be added to System Preferences -> Users & Groups -> Login Items
 required_login_items=(
@@ -19,7 +19,7 @@ IFS=$'\n' current_login_items=($(osascript -e 'tell application "System Events" 
 for item_path in "${required_login_items[@]}"; do
   item=$(basename "${item_path%.app}")
   if ! (( ${current_login_items[(I)$item]} )); then
-    if [[ $1 == --run-if ]]; then
+    if [[ ${1:-} == --run-if ]]; then
       exit 0 # We need to change something, so should run.
     else
       echo "Adding login item $item" >&2
@@ -29,4 +29,4 @@ for item_path in "${required_login_items[@]}"; do
 done
 
 # We didn't need to change anything, so exit 1 to not run.
-[[ $1 == --run-if ]] && exit 1
+[[ ${1:-} == --run-if ]] && exit 1

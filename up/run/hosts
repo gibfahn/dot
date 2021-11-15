@@ -38,7 +38,7 @@ for host_name in ${hosts[@]}; do
   done
 done
 
-if [[ $1 == --run-if ]]; then
+if [[ ${1:-} == --run-if ]]; then
   [[ $USER == gib ]] || exit 1 # User is gib or we don't run.
   [[ -n $changed ]] || exit 1 # Something changed or we don't run.
   exit 0 # Run.
