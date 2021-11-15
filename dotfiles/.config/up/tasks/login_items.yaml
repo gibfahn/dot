@@ -1,9 +1,3 @@
-run_if_cmd: ["/bin/bash", "-cex", '[[ $(uname) == Darwin ]]']
+run_if_cmd: ["${dot_dir}/up/run/login_items", "--run-if"]
 
-run_cmd:
-- "${dot_dir}/up/run/login_items"
-- /Applications/Rectangle.app
-- /Applications/CopyQ.app
-- /Applications/Hammerspoon.app
-- /Applications/Time Out.app
-- /Applications/Dato.app
+run_cmd: ["${dot_dir}/up/run/login_items"]
