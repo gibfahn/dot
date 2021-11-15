@@ -3,4 +3,6 @@
 set -eux
 
 # Run if gpg home unset, or gpg agent conf doesn't contain the expected values.
-[[ ! -d $GNUPGHOME ]] || ! grep -q 'pinentry-program .*/pinentry-mac' "$GNUPGHOME"/gpg-agent.conf
+if [[ -d $GNUPGHOME ]] || grep -q 'pinentry-program .*/pinentry-mac' "$GNUPGHOME"/gpg-agent.conf; then
+  exit 204
+fi

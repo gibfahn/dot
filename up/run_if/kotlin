@@ -11,4 +11,4 @@ changes=$(gitCloneOrUpdate fwcd/KotlinLanguageServer "$XDG_DATA_HOME/KotlinLangu
 
 log_info "$changes"
 
-[[ -n $changes ]] # Run if there were changes.
+[[ -n $changes ]] || exit 204 # Run if there were changes.

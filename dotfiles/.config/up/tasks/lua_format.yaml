@@ -1,2 +1,2 @@
-run_if_cmd: ["/bin/bash", "-cex", "which lua-format"]
+run_if_cmd: ["/bin/bash", "-cex", "which lua-format || exit 204"]
 run_cmd: ["${dot_dir}/up/run/lua_format"]

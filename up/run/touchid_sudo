@@ -1,11 +1,13 @@
-#!/usr/bin/env zsh
+#!/bin/bash
 
-set -eu
+set -euo pipefail
 
-autoload -U colors && colors
+[[ $OSTYPE == darwin* ]] || exit 204 # Don't run if not Darwin.
 
-unchanged="# sudo: auth account password session
+# The fixed string, with touchid added as the second option.
+fixed="# sudo: auth account password session
 auth       sufficient     pam_smartcard.so
+auth       sufficient     pam_tid.so
 auth       required       pam_opendirectory.so
 account    required       pam_permit.so
 password   required       pam_deny.so
@@ -13,8 +15,20 @@ session    required       pam_permit.so"
 
 current=$(</etc/pam.d/sudo)
 
+# Skip if /etc/pam.d/sudo is already the fixed version.
+[[ "$current" == "$fixed" ]] && exit 204
+
+# What comes in macOS by default.
+unchanged="# sudo: auth account password session
+auth       sufficient     pam_smartcard.so
+auth       required       pam_opendirectory.so
+account    required       pam_permit.so
+password   required       pam_deny.so
+session    required       pam_permit.so"
+
+# Bail out if the contents don't match what we expected to see.
 if [[ "$unchanged" != "$current" ]]; then
-  echo -e "${fg[red]}Error:${reset_color} unexpected contents of /etc/pam.d/sudo:
+  echo -e "Error: unexpected contents of /etc/pam.d/sudo:
 
 Actual:
 ---$current---
@@ -24,5 +38,5 @@ Expected:
   exit 7
 fi
 
-# Inserts `auth       sufficient     pam_tid.so` on line 2 of /etc/pam.d/sudo
-sudo gsed -i "2iauth       sufficient     pam_tid.so" /etc/pam.d/sudo
+# Insert `auth       sufficient     pam_tid.so` on line 3 of /etc/pam.d/sudo
+sudo tee <<<"${fixed}" /etc/pam.d/sudo >/dev/null

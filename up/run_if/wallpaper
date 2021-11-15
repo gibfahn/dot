@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 # Run if the desktop background is not already the one we set.
-! osascript -e '
+osascript -e '
     tell application "System Events"
         tell every desktop
             get picture
         end tell
-    end tell' | tr ',' '\n' | grep "$MAC_DESKTOP_BACKGROUND"
+    end tell' | tr ',' '\n' | grep "$MAC_DESKTOP_BACKGROUND" && exit 204

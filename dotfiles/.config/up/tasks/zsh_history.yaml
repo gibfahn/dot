@@ -1,2 +1,2 @@
-run_if_cmd: ["/bin/bash", "-cex", '[[ $(uname) == Darwin && -e "$HISTFILE" && -e "$ZSH_CLOUD_HISTFILE" ]]']
+run_if_cmd: ["/bin/bash", "-cex", '[[ $(uname) == Darwin && -e "$HISTFILE" && -e "$ZSH_CLOUD_HISTFILE" ]] || exit 204']
 run_cmd: ["${dot_dir}/up/run/zsh_history"]

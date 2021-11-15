@@ -8,4 +8,4 @@ set -eux
 current=$(sha256sum /Library/Preferences/com.apple.HIToolbox.plist | awk '{print $1}')
 fixed=$(sha256sum "$(dirname "$0")"/../config/colemak_com.apple.HIToolbox.plist | awk '{print $1}')
 
-[[ "$current" != "$fixed" ]] # Run if if /etc/pam.d/sudo is not already fixed.
+[[ "$current" != "$fixed" ]] || exit 204 # Run if if /etc/pam.d/sudo is not already fixed.

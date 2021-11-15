@@ -1,6 +1,6 @@
 requires: ["wrk_dotfile_repo"]
 
-run_if_cmd: ["/bin/bash", "-cex", '[[ $USER == gib ]]']
+run_if_cmd: ["/bin/bash", "-cex", '[[ $USER == gib ]] || exit 204']
 run_lib: link
 
 data:

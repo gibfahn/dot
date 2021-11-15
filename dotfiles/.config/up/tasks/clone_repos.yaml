@@ -4,7 +4,7 @@ run_lib: git
 run_if_cmd:
   - /bin/bash
   - "-cex"
-  - "[[ $USER == gib ]]"
+  - "[[ $USER == gib ]] || exit 204"
 needs_sudo: false
 data:
   - path: /Users/gib/.local/share/zsh/plugins/LS_COLORS

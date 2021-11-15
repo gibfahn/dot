@@ -1,3 +1,9 @@
-run_if_cmd: ["${dot_dir}/up/run/login_items", "--run-if"]
+# Login Items that should be added to System Preferences -> Users & Groups -> Login Items
 
-run_cmd: ["${dot_dir}/up/run/login_items"]
+run_cmd:
+- "${dot_dir}/up/run/login_items"
+- /Applications/Rectangle.app
+- /Applications/CopyQ.app
+- /Applications/Hammerspoon.app
+- /Applications/Time Out.app
+- /Applications/Dato.app

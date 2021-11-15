@@ -1,3 +1,2 @@
 needs_sudo: true # Used for modifying sudo config file.
-run_if_cmd: ["${dot_dir}/up/run_if/touchid_sudo"]
 run_cmd: ["${dot_dir}/up/run/touchid_sudo"]

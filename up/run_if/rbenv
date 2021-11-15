@@ -7,4 +7,4 @@ set -eux
 changed1=$(gitCloneOrUpdate rbenv/rbenv "$XDG_DATA_HOME/rbenv")
 changed2=$(gitCloneOrUpdate rbenv/rbenv-default-gems "$XDG_DATA_HOME/rbenv"/plugins/rbenv-default-gems)
 
-[[ -n $changed1 || -n $changed2 ]] # Run if something changed.
+[[ -n $changed1 || -n $changed2 ]] || exit 204 # Run if something changed.

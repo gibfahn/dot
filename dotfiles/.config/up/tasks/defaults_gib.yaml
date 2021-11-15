@@ -1,4 +1,4 @@
-run_if_cmd: ["/bin/bash", "-cex", '[[ $USER == gib && $(uname) == Darwin ]]']
+run_if_cmd: ["/bin/bash", "-cex", '[[ $USER == gib && $(uname) == Darwin ]] || exit 204']
 run_lib: defaults
 data:
   NSGlobalDomain:

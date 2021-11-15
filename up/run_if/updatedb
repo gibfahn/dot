@@ -2,9 +2,9 @@
 
 set -eux
 
-[[ $(uname) == Darwin ]] || exit 1
+[[ $OSTYPE == darwin* ]] || exit 204
 
-[[ -e /var/db/locate.database ]] || exit 1
+[[ -e /var/db/locate.database ]] || exit 204
 
 # Run if the db is less than an hour old.
-((($(date +%s) - $(stat -L -f '%m' /var/db/locate.database)) > (1 * 60 * 60)))
+((($(date +%s) - $(stat -L -f '%m' /var/db/locate.database)) > (1 * 60 * 60))) || exit 204

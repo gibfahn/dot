@@ -8,7 +8,7 @@ set -e
 
 . "$(dirname "$0")"/../../helpers/setup.sh # Load helper script from dot/helpers.
 
-hasSudo || exit
+hasSudo || exit 1
 
 # Apk install things. Added them individually so you can comment out lines to skip.
 apk_list=(# List of things to install.
