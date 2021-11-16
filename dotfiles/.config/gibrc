@@ -165,7 +165,7 @@ zle -N _gib_clear_exit
 _gib_fzfz_cd() {
   local selected_dir
   local orig_buffer_len=${#${(z)BUFFER}}
-  selected_dir=$(zoxide query --list | fzf --reverse --keep-right --filepath-word)
+  selected_dir=$(zoxide query --list | fzf --reverse --keep-right --filepath-word --tiebreak=end,index)
   local ret=$?
   LBUFFER="${LBUFFER}${selected_dir:q}"
   zle redisplay
