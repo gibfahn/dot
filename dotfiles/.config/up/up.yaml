@@ -1,4 +1,5 @@
 bootstrap_tasks:
+- update_up
 - link_dotfiles
 - link_wrk_dotfiles
 - mac
