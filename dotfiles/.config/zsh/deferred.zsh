@@ -68,9 +68,6 @@ source $XDG_DATA_HOME/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlight
 source $XDG_DATA_HOME/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 source $XDG_DATA_HOME/zsh/plugins/zsh-completions/zsh-completions.plugin.zsh
 
-autoload -Uz compinit
-compinit -d $XDG_CACHE_HOME/zsh/.zcompdump$HOST # $HOST is set by zsh.
-
 source $XDG_CONFIG_HOME/zsh/deferred/macos-setdir.zsh
 [[ -e $XDG_CONFIG_HOME/zsh/deferred/apple.zsh ]] && source $XDG_CONFIG_HOME/zsh/deferred/apple.zsh
 
@@ -463,5 +460,9 @@ autoload -Uz add-zsh-hook
 
 add-zsh-hook precmd _gib_prompt_precmd
 add-zsh-hook preexec _gib_prompt_preexec
+
+# Initialise completions after everything else.
+autoload -Uz compinit
+compinit
 
 # }}} Completions and Keybindings
