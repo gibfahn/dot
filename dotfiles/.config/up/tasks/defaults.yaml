@@ -267,6 +267,10 @@ data:
     ShowDayOfMonth: false
     IsAnalog: true
 
+    # Force the clock to a specific date and time.
+    # Refs: https://robservatory.com/a-problem-of-time-with-big-sur-screencasts/
+    # ForceClock: "2007:01:09:09:41"
+
   com.apple.mail:
 
     # Mail -> Preferences -> Viewing -> Show Message Headers -> Custom
