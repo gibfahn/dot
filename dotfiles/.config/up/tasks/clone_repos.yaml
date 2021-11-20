@@ -41,12 +41,12 @@ data:
   - path: /Users/gib/code/me/codelets
     remotes:
       - name: up
-        fetch_url: "git@github.com:gibfahn/codelets"
+        fetch_url: "https://github.com/gibfahn/codelets"
     prune: true
   - path: /Users/gib/code/me/fahn.co
     remotes:
       - name: up
-        fetch_url: "git@gitlab.com:gib/fahn.co"
+        fetch_url: "https://gitlab.com/gib/fahn.co"
     prune: true
   - path: /Users/gib/code/me/homebrew-tap
     remotes:
@@ -56,15 +56,16 @@ data:
   - path: /Users/gib/code/me/me
     remotes:
       - name: up
-        fetch_url: "git@gitlab.com:gib/me"
+        fetch_url: "https://gitlab.com/gib/me.git"
     prune: true
   - path: /Users/gib/code/me/up-rs
     remotes:
       - name: up
         fetch_url: "https://github.com/gibfahn/up-rs"
     prune: true
+
   - path: /Users/gib/code/tunes
     remotes:
       - name: up
-        fetch_url: "git@gitlab.com:gib/tunes"
+        fetch_url: "https://gitlab.com/gib/tunes.git"
     prune: true
