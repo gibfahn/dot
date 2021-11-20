@@ -10,7 +10,7 @@ necessary to clone the `wrk_dotfile_dir` before running `up` for the first time.
 ```shell
 curl --create-dirs -Lo ~/bin/up https://github.com/gibfahn/up-rs/releases/latest/download/up-darwin
 chmod +x ~/bin/up
-~/bin/up run --bootstrap --fallback-url https://github.com/gibfahn/dot
+~/bin/up run -bf gibfahn/dot
 ```
 
 Then see [manual.md][].
