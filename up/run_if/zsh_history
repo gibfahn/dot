@@ -1,0 +1,3 @@
+#!/bin/sh
+
+[ "$(uname)" = Darwin -a -e "$HISTFILE" -a -e "$ZSH_CLOUD_HISTFILE" ] && which zsh || exit 204

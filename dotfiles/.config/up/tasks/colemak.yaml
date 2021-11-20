@@ -1,3 +1,3 @@
 needs_sudo: true
-run_if_cmd: ["${dot_dir}/up/run_if/colemak"]
+run_if_cmd: ["/bin/sh", "-cex", '[ "$(uname)" = Darwin -a "$(whoami)" = gib ] || exit 204']
 run_cmd: ["${dot_dir}/up/run/colemak"]

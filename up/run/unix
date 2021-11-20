@@ -3,17 +3,11 @@
 
 # Installs things that I use on all Unix systems (e.g. macOS and Linux).
 
-set -ex
+set -euo pipefail
+
+set -x
 
 . "$(dirname "$0")"/../../helpers/setup.sh # Load helper script from dot/helpers.
-
-if [[ -e "$XDG_CACHE_HOME"/z ]]; then
-  log_skip "z cache file"
-else
-  log_get "z cache file"
-  mkdir -p "$XDG_CACHE_HOME"
-  touch "$XDG_CACHE_HOME"/z
-fi
 
 # Set default shell to zsh (or $NEWSHELL if set).
 

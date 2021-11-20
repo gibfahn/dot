@@ -1,4 +1,8 @@
-#!/usr/bin/env bash
+#!/bin/sh
+
+set -eux
+
+[ "$(uname)" = Darwin ] || exit 204
 
 # Run if the desktop background is not already the one we set.
 osascript -e '

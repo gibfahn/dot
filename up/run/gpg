@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-set -eux
+set -euo pipefail
+
+set -x
 
 # Set up gpg agent Keychain integration.
 # https://stackoverflow.com/questions/39494631/gpg-failed-to-sign-the-data-fatal-failed-to-write-commit-object-git-2-10-0
@@ -11,5 +13,5 @@ echo "pinentry-program $pinentry_mac_path" >>"$GNUPGHOME"/gpg-agent.conf
 
 # Avoid gpg warning:
 # gpg: WARNING: unsafe permissions on homedir '~/.local/share/gnupg'
-chmod 700 $GNUPGHOME
-chmod 600 $GNUPGHOME/gpg-agent.conf
+chmod 700 "$GNUPGHOME"
+chmod 600 "$GNUPGHOME"/gpg-agent.conf

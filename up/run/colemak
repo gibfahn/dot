@@ -7,6 +7,10 @@ set -eu
 autoload -U colors && colors
 
 current=$(sha256sum /Library/Preferences/com.apple.HIToolbox.plist | awk '{print $1}')
+fixed=$(sha256sum "$(dirname "$0")"/../config/colemak_com.apple.HIToolbox.plist | awk '{print $1}')
+
+[[ "$current" != "$fixed" ]] || exit 204 # Skip if /etc/pam.d/sudo is not already fixed.
+
 original=$(sha256sum "$(dirname "$0")"/../config/original_com.apple.HIToolbox.plist | awk '{print $1}')
 
 if [[ "$original" != "$current" ]]; then

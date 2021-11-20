@@ -3,5 +3,5 @@ description: |
   To autorestart run:
     sudo softwareupdate --install --all --restart
 
-run_if_cmd: ["/bin/bash", "-c", "exit 204"] # TODO(gib): Unskip this.
+run_if_cmd: ["/bin/sh", "-c", "exit 204"] # TODO(gib): Unskip this.
 run_cmd: ["softwareupdate", "--install", "--all"]

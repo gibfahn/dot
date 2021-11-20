@@ -1,6 +1,6 @@
 requires: ["wrk_dotfile_repo"]
 
-run_if_cmd: ["/bin/bash", "-cex", '[[ $USER == gib ]] || exit 204']
+run_if_cmd: ["/bin/sh", "-cex", '[ -e /usr/local/bin/appleconnect ] || exit 204']
 run_lib: link
 
 data:

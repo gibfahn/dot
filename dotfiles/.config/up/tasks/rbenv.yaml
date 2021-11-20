@@ -1,2 +1,2 @@
-run_if_cmd: ["${dot_dir}/up/run_if/rbenv"]
+run_if_cmd: ["/bin/sh", "-cex", '[ -x /bin/bash ] && which ruby || exit 204']
 run_cmd: ["${dot_dir}/up/run/rbenv"]

@@ -1,2 +1,3 @@
 needs_sudo: true # Used for fixing insecure zsh dirs.
+run_if_cmd: ["/bin/sh", "-cex", '[ "$(whoami)" = gib ] || exit 204']
 run_cmd: ["${dot_dir}/up/run/unix"]

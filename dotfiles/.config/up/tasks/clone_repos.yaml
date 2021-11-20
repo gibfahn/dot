@@ -2,9 +2,9 @@
 ---
 run_lib: git
 run_if_cmd:
-  - /bin/bash
+  - /bin/sh
   - "-cex"
-  - "[[ $USER == gib ]] || exit 204"
+  - '[ "$(uname)" = gib ] || exit 204'
 needs_sudo: false
 data:
   - path: /Users/gib/.local/share/zsh/plugins/LS_COLORS
