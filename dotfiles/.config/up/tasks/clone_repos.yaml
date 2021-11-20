@@ -3,68 +3,67 @@
 run_lib: git
 needs_sudo: false
 data:
-  - path: /Users/gib/.local/share/zsh/plugins/LS_COLORS
+  - path: ~/.local/share/zsh/plugins/LS_COLORS
     remotes:
       - name: up
         fetch_url: "https://github.com/trapd00r/LS_COLORS"
     prune: true
-  - path: /Users/gib/.local/share/zsh/plugins/fast-syntax-highlighting
+  - path: ~/.local/share/zsh/plugins/fast-syntax-highlighting
     remotes:
       - name: up
         fetch_url: "https://github.com/zdharma-continuum/fast-syntax-highlighting"
     prune: true
-  - path: /Users/gib/.local/share/zsh/plugins/powerlevel10k
+  - path: ~/.local/share/zsh/plugins/powerlevel10k
     remotes:
       - name: up
         fetch_url: "https://github.com/romkatv/powerlevel10k"
     prune: true
-  - path: /Users/gib/.local/share/zsh/plugins/zsh-autosuggestions
+  - path: ~/.local/share/zsh/plugins/zsh-autosuggestions
     remotes:
       - name: up
         fetch_url: "https://github.com/zsh-users/zsh-autosuggestions"
     prune: true
-  - path: /Users/gib/.local/share/zsh/plugins/zsh-completions
+  - path: ~/.local/share/zsh/plugins/zsh-completions
     remotes:
       - name: up
         fetch_url: "https://github.com/zsh-users/zsh-completions"
     prune: true
-  - path: /Users/gib/.local/share/zsh/plugins/zsh-defer
+  - path: ~/.local/share/zsh/plugins/zsh-defer
     remotes:
       - name: up
         fetch_url: "https://github.com/romkatv/zsh-defer"
     prune: true
-  - path: /Users/gib/code/dot
+  - path: ~/code/dot
     remotes:
       - name: up
         fetch_url: "https://github.com/gibfahn/dot"
     prune: true
-  - path: /Users/gib/code/me/codelets
+  - path: ~/code/me/codelets
     remotes:
       - name: up
         fetch_url: "https://github.com/gibfahn/codelets"
     prune: true
-  - path: /Users/gib/code/me/fahn.co
+  - path: ~/code/me/fahn.co
     remotes:
       - name: up
         fetch_url: "https://gitlab.com/gib/fahn.co"
     prune: true
-  - path: /Users/gib/code/me/homebrew-tap
+  - path: ~/code/me/homebrew-tap
     remotes:
       - name: up
         fetch_url: "https://github.com/gibfahn/homebrew-tap"
     prune: true
-  - path: /Users/gib/code/me/me
+  - path: ~/code/me/me
     remotes:
       - name: up
         fetch_url: "https://gitlab.com/gib/me.git"
     prune: true
-  - path: /Users/gib/code/me/up-rs
+  - path: ~/code/me/up-rs
     remotes:
       - name: up
         fetch_url: "https://github.com/gibfahn/up-rs"
     prune: true
-
-  - path: /Users/gib/code/tunes
+  - path: ~/code/tunes
     remotes:
       - name: up
         fetch_url: "https://gitlab.com/gib/tunes.git"
