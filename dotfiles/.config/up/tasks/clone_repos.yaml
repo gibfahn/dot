@@ -52,11 +52,6 @@ data:
       - name: up
         fetch_url: "git@gitlab.com:gib/fahn.co"
     prune: true
-  - path: /Users/gib/code/me/gnt
-    remotes:
-      - name: up
-        fetch_url: "git@github.com:gibfahn/gnt"
-    prune: true
   - path: /Users/gib/code/me/homebrew-tap
     remotes:
       - name: up
@@ -71,11 +66,6 @@ data:
     remotes:
       - name: up
         fetch_url: "https://github.com/gibfahn/up-rs"
-    prune: true
-  - path: /Users/gib/code/me/vim-gib
-    remotes:
-      - name: up
-        fetch_url: "git@github.com:gibfahn/vim-gib"
     prune: true
   - path: /Users/gib/code/tunes
     remotes:
