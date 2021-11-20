@@ -1,5 +1,6 @@
 bootstrap_tasks:
 - update_up
+- clone_repos
 - link_dotfiles
 - link_wrk_dotfiles
 - mac
