@@ -6,14 +6,14 @@
 # Include (source) with this line (assuming you're in dot):
 # . "$(dirname "$0")"/helpers/setup.sh # Load helper script from dot/helpers.
 
-set -e
+set -euo pipefail
 
 # No POSIX way to get dir of sourced script.
-[ "$BASH_VERSION" ] && thisDir="$(dirname "${BASH_SOURCE[0]}")"
-[ "$ZSH_VERSION" ] && thisDir="$(dirname "$0")"
+[ "${BASH_VERSION:-}" ] && thisDir="$(dirname "${BASH_SOURCE[0]}")"
+[ "${ZSH_VERSION:-}" ] && thisDir="$(dirname "$0")"
 [ -z "$thisDir" ] && thisDir="./helpers"
 
-[[ -z "$dotDir" ]] && dotDir="$(cd "$thisDir"/.. && pwd)"
+[[ -z "${dotDir:-}" ]] && dotDir="$(cd "$thisDir"/.. && pwd)"
 
 # Get colour aliases.
 . "$thisDir"/colours.sh

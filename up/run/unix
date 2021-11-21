@@ -19,7 +19,7 @@ elif [[ "$(uname)" == Linux ]]; then # Linux.
 fi
 # Fall back to $SHELL if that doesn't work.
 shell=${shell:-$SHELL}
-if [[ -z "$ZSH_VERSION" && "${shell##*/}" != zsh ]]; then
+if [[ -z "${ZSH_VERSION:-}" && "${shell##*/}" != zsh ]]; then
   NEWSHELL=${NEWSHELL-$(grep zsh /etc/shells | tail -1)} # Set NEWSHELL for a different shell.
   if [[ -e "$NEWSHELL" ]]; then
     log_get "Shell change (Current shell is $shell, changing to $NEWSHELL)."
