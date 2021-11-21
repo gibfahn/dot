@@ -343,7 +343,7 @@ readMacOSDefault() {
 # Prints nothing to stdout if there were no changes.
 # Set sudo=sudo if you need to write with sudo.
 updateMacOSDefault() {
-  local domain key val_type val vals host # Args.
+  local domain key val_type val vals host= # Args.
   local current_val
   [[ ${1:-} == "-currentHost" ]] && host="$1" && shift
   domain="$1"
