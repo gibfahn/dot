@@ -202,6 +202,8 @@ zle-line-init() {
 }
 zle -N zle-line-init     # Bind zle-line-init() above to be called when the line editor is initialized.
 
+# Immediately loaded keybindings (more expensive ones are in deferred.zsh).
+
 # Modes:
 # - main -> 'viins' for vim, 'emacs' for emacs mode.
 # - viins -> insert mode
@@ -211,9 +213,8 @@ zle -N zle-line-init     # Bind zle-line-init() above to be called when the line
 bindkey -v # Enable vi-mode.
 
 bindkey -M vicmd ' ' edit-command-line # <Space> in cmd mode opens editor.
+bindkey -M vicmd '^D' _gib_clear_exit
 
-bindkey -M vicmd ' ' edit-command-line # <Space> in cmd mode opens editor.
-bindkey -M vicmd '^d' _gib_clear_exit
 bindkey -M viins "^A" beginning-of-line # Ctrl-A = Go to beginning of line (Emacs default).
 bindkey -M viins "^E" end-of-line       # Ctrl-E = Go to end of line (Emacs default).
 bindkey -M viins ' ' magic-space # <Space> = do history expansion
@@ -221,10 +222,13 @@ bindkey -M viins '\e ' edit-command-line # <Alt><Space> in insert mode opens edi
 bindkey -M viins '\e.' insert-last-word # Alt-. inserts last word from previous line.
 bindkey -M viins '\ec' fzf-cd-widget # Alt-c opens fzf cd into subdir.
 bindkey -M viins '\en' _gib_fzfz_cd # Override Ctrl-n binding from zsh vim plugin.
-bindkey -M viins '^D' _gib_clear_exit # Ctrl-D = Clear or exit terminal on.
-bindkey -M viins '^T' fzf-file-widget # Ctrl-T = Preserve fzf file widget setting.
-bindkey -M viins '^U' vi-kill-line # Ctrl-u deletes the current line (not whole buffer).
-bindkey -M viins '^W' backward-kill-word # Ctrl-w deletes the current line (not whole buffer).
+bindkey -M viins '^?' backward-delete-char # Backspace: delete a char.
+bindkey -M viins '^D' _gib_clear_exit # Ctrl-d: clear or exit terminal.
+bindkey -M viins '^H' backward-delete-char # Ctrl-h: delete a char.
+bindkey -M viins '^T' fzf-file-widget # Ctrl-t: preserve fzf file widget setting.
+bindkey -M viins '^U' backward-kill-line # Ctrl-u: delete the current line (not whole buffer).
+bindkey -M viins '^W' backward-kill-word # Ctrl-w: delete the current line (not whole buffer).
+
 
 # }}} Early Keybindings
 

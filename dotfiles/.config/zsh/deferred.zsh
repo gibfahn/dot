@@ -423,14 +423,16 @@ _gib_join_lines() { local item; while read -r item; do echo -n "${(q)item} "; do
 autoload -Uz select-word-style
 select-word-style shell # "Word" means a shell argument, so Ctrl-w will delete one shell arg.
 
+# More expensive keybindings, with deferred loading. Immediately loaded ones are in gibrc.
+
 bindkey -M vicmd '^Y' gib-yank-all # Ctrl-y copies everything to the system clipboard.
 
-bindkey -M viins "^[[A" history-beginning-search-backward-end # Re-enable up   for history search.
-bindkey -M viins "^[[B" history-beginning-search-forward-end  # Re-enable down for history search.
-bindkey -M viins '^G^P' _gib_fzf-gp-widget # Ctrl-G-P searches all binaries in the $PATH.
-bindkey -M viins '^R' gib-fzf-history-widget # Ctrl-R = Multi-select for history search.
-bindkey -M viins '^Y' gib-yank-all # Ctrl-y copies everything to the system clipboard.
-bindkey -M viins '^[^M' self-insert-unmeta # <Alt>-Enter Insert a literal enter (newline char).
+bindkey -M viins "^[[A" history-beginning-search-backward-end # Up: backwards history search.
+bindkey -M viins "^[[B" history-beginning-search-forward-end # Down: forwards history search.
+bindkey -M viins '^G^P' _gib_fzf-gp-widget # Ctrl-g-p: search all binaries in the $PATH.
+bindkey -M viins '^R' gib-fzf-history-widget # Ctrl-r: multi-select for history search.
+bindkey -M viins '^Y' gib-yank-all # Ctrl-y: copy everything to the system clipboard.
+bindkey -M viins '^[^M' self-insert-unmeta # Alt-Enter: insert a literal enter (newline char).
 
 if [[ -n "${terminfo[kcbt]}" ]]; then
   bindkey "${terminfo[kcbt]}" reverse-menu-complete   # <Shift>-<Tab> - move backwards through the completion menu.
