@@ -167,10 +167,6 @@ rv() {
 # fda is find all (don't ignore anything).
 (( $+commands[fd] )) && alias fda='fd --no-ignore --hidden --exclude=.git' || fd() { find . -iname "*$**"; } # Find by filename (case insensitive).
 (( $+commands[rg] )) && alias rg='rg' rga='rg --hidden --no-ignore --glob=!.git' # rga is grep all (don't ignore anything).
-alias g=git md="mkdir -p"
-# x->close terminal, g->git, h->history, path->print $PATH,
-alias path='echo $PATH | tr : "\n"' dt="date +%Y-%m-%d"
-alias s="TERM=xterm-256color ssh" # Reset cursor to block and ssh.
 # Footgun, make sure you only use this for a single command, after that exit the shell.
 # e.g. sudo_later; sleep 1000; sudo halt
 alias sudo_later="(while sudo -v; do sleep 60; done) &" # Preserve sudo for a command you'll run later (needs TouchID Sudo).

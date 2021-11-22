@@ -136,6 +136,10 @@ alias ..="cd .." ...="cd ../.." ....="cd ../../.." .....="cd ../../../.." ......
 # shellcheck disable=SC2139 # We want this to expand when defined.
 alias -- -="cd -"
 alias cg='cd $(git rev-parse --show-toplevel)' # Change to top level of git dir.
+alias g=git md="mkdir -p"
+# x->close terminal, g->git, h->history, path->print $PATH,
+alias path='echo $PATH | tr : "\n"' dt="date +%Y-%m-%d"
+alias s="TERM=xterm-256color ssh" # Reset cursor to block and ssh.
 
 # }}} Early Completion Keybindings
 
