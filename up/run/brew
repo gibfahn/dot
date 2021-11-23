@@ -7,8 +7,8 @@ set -ex
 # Install brew and Xcode Command Line Tools.
 if ! exists brew; then
   # Should only exist if we're on a work machine.
-  if [[ -d $wrk_dotfile_dir ]]; then
-    "$wrk_dotfile_dir"/setup/brew.sh
+  if [[ -d ${wrk_dot_dir:-} ]]; then
+    "$wrk_dot_dir"/up/run/brew
   else
     { set +x; } 2>/dev/null
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -32,7 +32,9 @@ export HOMEBREW_CASK_OPTS=--no-quarantine
 # Upgrade everything, even things that weren't in your Brewfile.
 brew update
 
-if ! brew outdated sogouinput; then
+# If the cask is installed and outdated.
+if brew list --cask sogouinput && ! brew outdated sogouinput; then
+  # Cask can no longer be upgraded, must be manually reinstalled.
   brew reinstall sogouinput
 
   sogou_dir="$(brew info sogouinput | awk '/\/Caskroom\/sogouinput\// { print $1 }')"

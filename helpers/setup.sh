@@ -344,7 +344,7 @@ readMacOSDefault() {
 # Set sudo=sudo if you need to write with sudo.
 updateMacOSDefault() {
   local domain key val_type val vals host= # Args.
-  local current_val
+  local current_val sudo=${sudo:-}
   [[ ${1:-} == "-currentHost" ]] && host="$1" && shift
   domain="$1"
   shift
