@@ -3,6 +3,8 @@ bootstrap_tasks:
 - clone_repos
 - link_dotfiles
 - link_wrk_dotfiles
+- defaults
+- defaults_gib
 - mac
 - brew
 
