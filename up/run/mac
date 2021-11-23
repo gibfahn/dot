@@ -84,5 +84,5 @@ if [[ -e /Library/LaunchDaemons/limit.maxfiles.plist ]]; then
   log_skip "File watcher limit (already increased)."
 else
   log_get "File watcher limit."
-  cp "$(dirname "$0")"/config/limit.maxfiles.plist /Library/LaunchDaemons/limit.maxfiles.plist
+  sudo cp "$(dirname "$0")"/../config/limit.maxfiles.plist /Library/LaunchDaemons/limit.maxfiles.plist
 fi
