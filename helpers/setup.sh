@@ -94,8 +94,8 @@ gitClone() {
   log_get "$@"
   REPO=$1
   shift # First arg is repo, rest are passed on to git clone.
-  git clone "git@github.com:$REPO.git" "$@" \
-    || git clone "https://github.com/$REPO.git" "$@"
+  git clone "https://github.com/$REPO.git" "$@" \
+    || git clone "git@github.com:$REPO.git" "$@"
 }
 
 # TODO(gib): Should this update from the up remote?
