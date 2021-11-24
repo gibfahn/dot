@@ -31,17 +31,13 @@ if no rustup || no cargo; then # Install/set up rust.
   # Install rustup. Don't modify path as that's already in gibrc.
   RUSTUP_HOME="$XDG_DATA_HOME"/rustup CARGO_HOME="$XDG_DATA_HOME"/cargo curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
 
-  if [[ -d "$HOME/.rustup" ]]; then
-    # Move to proper directories
-    mv "$HOME/.rustup" "$XDG_DATA_HOME/rustup"
-    mv "$HOME/.cargo" "$XDG_DATA_HOME/cargo"
-  fi
-
   export PATH="$XDG_DATA_HOME/cargo/bin:$PATH"
 
-  # Install stable and nightly (stable should be a no-op).
+  # Install stable and nightly.
   rustup install nightly
-  rustup install stable
+  rustup install stable # Should be a no-op.
+  # Set default toolchain to stable.
+  rustup default stable
 
   # Make sure we have useful components:
   rustup component add --toolchain stable rust-analysis rust-src clippy rustfmt
