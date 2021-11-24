@@ -33,7 +33,7 @@ export HOMEBREW_CASK_OPTS=--no-quarantine
 brew update
 
 # If the cask is installed and outdated.
-if brew list --cask sogouinput && ! brew outdated sogouinput; then
+if brew list --cask | grep -q sogouinput && ! brew outdated sogouinput; then
   # Cask can no longer be upgraded, must be manually reinstalled.
   brew reinstall sogouinput
 
