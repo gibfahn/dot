@@ -12,9 +12,10 @@ set -x
 # Set default shell to zsh (or $NEWSHELL if set).
 
 # $SHELL isn't updated until we logout, so check whether chsh was already run.
-if [[ "$(uname)" == Darwin ]]; then # macOS
+uname=$(uname)
+if [[ "$uname" == Darwin ]]; then # macOS
   shell=$(dscl . -read "$HOME" UserShell)
-elif [[ "$(uname)" == Linux ]]; then # Linux.
+elif [[ "$uname" == Linux ]]; then # Linux.
   shell=$(grep "$USER" /etc/passwd | awk -F : '{print $NF}')
 fi
 # Fall back to $SHELL if that doesn't work.
@@ -32,61 +33,6 @@ else
   log_skip "Shell change ($shell is already the default shell)"
 fi
 
-# Change git user.name and user.email
-if [[ ! -f "$XDG_CONFIG_HOME/git/my-config" ]]; then
-  # Allow manual override with `GIT_NAME` and `GIT_EMAIL`.
-  # shellcheck disable=SC2153
-  [[ -n "$GIT_NAME" ]] && git_name="$GIT_NAME"
-  # shellcheck disable=SC2153
-  [[ -n "$GIT_EMAIL" ]] && git_email="$GIT_EMAIL"
-
-  if [[ "$USER" == gib ]]; then
-    git_name=${git_name:-"Gibson Fahnestock"}
-    git_email=${git_email:-"gibfahn@gmail.com"}
-  fi
-
-  if [[ -e "$HOME/.gitconfig" ]]; then
-    git_name=${git_name:-"$(git config user.name)"}
-    git_email=${git_email:-"$(git config user.email)"}
-    log_get "Git Config (moving ~/.gitconfig to ~/backup/.gitconfig, preserving name as '$git_name' and email
-    as '$git_email'. Make sure to move any settings you want preserved across)."
-    mv "$HOME/.gitconfig" "$HOME/backup/.gitconfig"
-  fi
-
-  if [[ -z "$git_name" ]]; then
-    read -rp "Git name not set, what's your full name? " git_name
-  fi
-  if [[ -z "$git_email" ]]; then
-    read -rp "Git email not set, what's your email address? " git_email
-  fi
-
-  my_git_config="# vi filetype=gitconfig
-
-[user]
-  # Needs to match gpg signing email.
-  name = $git_name
-  email = $git_email
-"
-
-  printf "%s" "$my_git_config" >"$XDG_CONFIG_HOME/git/my-config"
-
-  log_get "Git Config (git name set to $(git config user.name) and email set to $(git config user.email))"
-else
-  log_skip "Git Config as already set to $(git config user.name) <$(git config user.email)>"
-fi
-
-# Set up a default ssh config
-if [[ ! -e ~/.ssh/config ]]; then
-  log_get "SSH Config (copying default)."
-  [[ -d ~/.ssh ]] || { mkdir ~/.ssh && chmod 700 ~/.ssh; }
-  cp "$(dirname "$0")"/config/ssh-config ~/.ssh/config
-else
-  log_skip "SSH Config (not overwriting ~/.ssh/config, copy manually from ./config/ssh-config as necessary)."
-fi
-
-# Set up zsh scripts:
-mkdir -p "$XDG_DATA_HOME/zsh"
-
 # Cleanup any zsh completion dirs with bad permissions.
 insecure_dirs=()
 while read -r val; do
@@ -102,11 +48,6 @@ if [[ -n ${insecure_dirs[*]} ]]; then
   done
 else
   log_skip "compinit (zsh completion dir permissions)"
-fi
-
-# Symlink fzf
-if not fzf && [[ -d "$XDG_DATA_HOME"/fzf/bin/ ]]; then
-  ln -sf "$XDG_DATA_HOME"/fzf/bin/* "$HOME"/bin/
 fi
 
 log_get "Updating ZSH Completions"
