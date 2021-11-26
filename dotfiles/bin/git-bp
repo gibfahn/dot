@@ -14,19 +14,19 @@ Note that it defaults to deleting on enter, hit n to avoid.
 FORCE_PRUNE= QUIET=
 
 while [[ $# != 0 ]]; do
-  [[ $1 =~ ^(--help|-h)$ ]] && { usage; exit; }
+  [[ ${1:-} =~ ^(--help|-h)$ ]] && { usage; exit; }
 
-  [[ $1 =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
+  [[ ${1:-} =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
 
-  [[ $1 =~ ^(--force|-f)$ ]] && { FORCE_PRUNE=true; shift; }
+  [[ ${1:-} =~ ^(--force|-f)$ ]] && { FORCE_PRUNE=true; shift; }
 
-  [[ $1 =~ ^(--quiet|-q)$ ]] && { QUIET=true; shift; }
+  [[ ${1:-} =~ ^(--quiet|-q)$ ]] && { QUIET=true; shift; }
 done
 
 branches_to_prune=()
 
 log() {
-  [[ -z $QUIET ]] && echo "$1" >&2
+  [[ -z $QUIET ]] && echo "${1:-}" >&2
 }
 
 while read branch up_branch; do

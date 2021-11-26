@@ -10,9 +10,9 @@ Script reads from Clipboard and writes to clipboard.
 "
 }
 
-[[ $1 =~ ^(--help|-h)$ ]] && { usage; exit; }
+[[ ${1:-} =~ ^(--help|-h)$ ]] && { usage; exit; }
 
-[[ $1 =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
+[[ ${1:-} =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
 
 # Work out copy/paste command for Linux and macOS.
 case $(uname) in

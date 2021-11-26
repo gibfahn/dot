@@ -10,9 +10,9 @@ you add your own things that need updating, add to this script.
 "
 }
 
-[[ $1 =~ ^(--help|-h)$ ]] && { usage; exit; }
+[[ ${1:-} =~ ^(--help|-h)$ ]] && { usage; exit; }
 
-[[ $1 =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
+[[ ${1:-} =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
 
 # Get path to dotfiles.
 dotDir="$(cd "$(dirname "$(readlink $0)")"/../..; pwd)"

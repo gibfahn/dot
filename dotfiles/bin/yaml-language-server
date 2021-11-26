@@ -1,14 +1,23 @@
 #!/usr/bin/env bash
 
 usage() {
-echo "$(tput bold; tput setaf 74)$0 [-h|--help]$(tput sgr0)
+  echo "$(
+    tput bold
+    tput setaf 74
+  )$0 [-h|--help]$(tput sgr0)
 
 Script to wrap the yaml language server.
 "
 }
 
-[[ $1 =~ ^(--help|-h)$ ]] && { usage; exit; }
+[[ ${1:-} =~ ^(--help|-h)$ ]] && {
+  usage
+  exit
+}
 
-[[ $1 =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
+[[ ${1:-} =~ ^(--version|-v)$ ]] && {
+  echo "main"
+  exit
+}
 
 node "$XDG_DATA_HOME"/nvim/plugged/yaml-language-server/out/server/src/server.js --stdio

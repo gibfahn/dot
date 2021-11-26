@@ -22,13 +22,13 @@ To update an existing pull request body after force pushing (to add the new comm
 action=create
 
 while [[ $# != 0 ]]; do
-  [[ $1 =~ ^(--help|-h)$ ]] && { usage; exit; }
+  [[ ${1:-} =~ ^(--help|-h)$ ]] && { usage; exit; }
 
-  [[ $1 =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
+  [[ ${1:-} =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
 
-  [[ $1 =~ ^(--edit|-e)$ ]] && { action=edit; shift; }
+  [[ ${1:-} =~ ^(--edit|-e)$ ]] && { action=edit; shift; }
 
-  [[ $1 =~ ^(--open|-o)$ ]] && { action=open; shift; }
+  [[ ${1:-} =~ ^(--open|-o)$ ]] && { action=open; shift; }
 done
 
 main() {
