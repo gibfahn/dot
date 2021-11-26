@@ -221,6 +221,23 @@
       "securities": {
         "undefined": "info"
       }
+    },
+    "write-good": {
+      "command": "write-good",
+      "debounce": 100,
+      "args": ["--text=%text", "--no-passive", "--no-adverb"],
+      "offsetLine": 0,
+      "offsetColumn": 1,
+      "sourceName": "write-good",
+      "formatLines": 1,
+      "formatPattern": [
+        "(.*)\\s+on\\s+line\\s+(\\d+)\\s+at\\s+column\\s+(\\d+)\\s*$",
+        {
+          "line": 2,
+          "column": 3,
+          "message": 1
+        }
+      ]
     }
   },
   // Default linters: https://github.com/iamcco/diagnostic-languageserver/wiki/Linters
@@ -229,7 +246,7 @@
     "sh": "shellcheck",
     "sieve": "check-sieve",
     "vim": "vint",
-    "markdown": ["markdownlint", "textidote-md", "write-good", "languagetool"],
+    "markdown": ["markdownlint", "textidote-md", "languagetool"],
     "": ["write-good", "languagetool"], // Things with no specified filetype.
     "text": ["write-good", "languagetool"],
     "gitcommit": ["write-good", "languagetool"],
