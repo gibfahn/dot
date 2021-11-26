@@ -1,0 +1,19 @@
+{
+ /* Default key bindings for the system.
+  *
+  * See https://www.hcs.harvard.edu/~jrus/site/cocoa-text.html for more details.
+  *
+  * Modifier Keys:
+  *
+  * "@t" = Command-t
+  * "^t" = Control-t
+  * "~t" = Option-t
+  * "@^T" = Command-Control-Shift-t
+  * "~ " = Option-space
+  *
+  * Default settings: /System/Library/Frameworks/AppKit.framework/Resources/StandardKeyBinding.dict
+  */
+
+  /* Ctrl-w = delete word. */
+  "^w" = (deleteWordBackward:);
+}
