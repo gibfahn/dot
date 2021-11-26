@@ -98,7 +98,6 @@ cask "microsoft-teams"                   # Microsoft Teams
 cask "onedrive"                          # Microsoft OneDrive.
 cask "slack-beta"                        # Everyone uses Slack right?
 cask "stay"                              # Save and restore window positions, invaluable with multi-monitor setups.
-cask "vimr"                              # GUI neovim.
 cask "zoom"                              # Zoom web meetings client.
 
 # Mac App Store Apps (some paid). `mas list` to see what you've already installed.
