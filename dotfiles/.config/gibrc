@@ -95,7 +95,7 @@ source $XDG_CONFIG_HOME/zsh/early/p10k.zsh
 source $XDG_CACHE_HOME/zsh/ls_colors.zsh
 source $XDG_DATA_HOME/zsh/plugins/zsh-defer/zsh-defer.plugin.zsh
 
-zsh-defer source $XDG_CONFIG_HOME/zsh/deferred.zsh
+zsh-defer source $XDG_CONFIG_HOME/zsh/deferred/deferred.zsh
 
 # }}} Zsh Plugins and Sourcing
 
