@@ -76,13 +76,17 @@ data:
   com.apple.Spotlight:
     orderedItems:
     - enabled: true
-      name: APPLICATIONS
+      name: APPLICATIONS # Open Applications.
     - enabled: true
-      name: MENU_EXPRESSION
+      name: SYSTEM_PREFS # Open System Preferences panes.
     - enabled: true
-      name: MENU_DEFINITION
+      name: BOOKMARKS # Open Safari Bookmarks and History.
     - enabled: true
-      name: SYSTEM_PREFS
+      name: MENU_DEFINITION # Define words.
+    - enabled: true
+      name: MENU_EXPRESSION # Inline Calculator.
+    - enabled: true
+      name: MENU_CONVERSION # Currency Conversion.
     - enabled: false
       name: DIRECTORIES
     - enabled: false
@@ -100,8 +104,6 @@ data:
     - enabled: false
       name: IMAGES
     - enabled: false
-      name: BOOKMARKS
-    - enabled: false
       name: MUSIC
     - enabled: false
       name: MOVIES
@@ -113,8 +115,6 @@ data:
       name: SOURCE
     - enabled: false
       name: MENU_OTHER
-    - enabled: true
-      name: MENU_CONVERSION
     - enabled: false
       name: MENU_WEBSEARCH
     - enabled: false
