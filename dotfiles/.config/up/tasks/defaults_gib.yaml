@@ -75,47 +75,47 @@ data:
 
   com.apple.Spotlight:
     orderedItems:
-    - enabled: "1"
+    - enabled: true
       name: APPLICATIONS
-    - enabled: "1"
+    - enabled: true
       name: MENU_EXPRESSION
-    - enabled: "1"
+    - enabled: true
       name: MENU_DEFINITION
-    - enabled: "1"
+    - enabled: true
       name: SYSTEM_PREFS
-    - enabled: "0"
+    - enabled: false
       name: DIRECTORIES
-    - enabled: "0"
+    - enabled: false
       name: PDF
-    - enabled: "0"
+    - enabled: false
       name: FONTS
-    - enabled: "0"
+    - enabled: false
       name: DOCUMENTS
-    - enabled: "0"
+    - enabled: false
       name: MESSAGES
-    - enabled: "0"
+    - enabled: false
       name: CONTACT
-    - enabled: "0"
+    - enabled: false
       name: EVENT_TODO
-    - enabled: "0"
+    - enabled: false
       name: IMAGES
-    - enabled: "0"
+    - enabled: false
       name: BOOKMARKS
-    - enabled: "0"
+    - enabled: false
       name: MUSIC
-    - enabled: "0"
+    - enabled: false
       name: MOVIES
-    - enabled: "0"
+    - enabled: false
       name: PRESENTATIONS
-    - enabled: "0"
+    - enabled: false
       name: SPREADSHEETS
-    - enabled: "0"
+    - enabled: false
       name: SOURCE
-    - enabled: "0"
+    - enabled: false
       name: MENU_OTHER
-    - enabled: "1"
+    - enabled: true
       name: MENU_CONVERSION
-    - enabled: "0"
+    - enabled: false
       name: MENU_WEBSEARCH
-    - enabled: "0"
+    - enabled: false
       name: MENU_SPOTLIGHT_SUGGESTIONS
