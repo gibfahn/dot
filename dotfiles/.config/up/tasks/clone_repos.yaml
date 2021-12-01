@@ -53,18 +53,8 @@ data:
       - name: up
         fetch_url: "https://github.com/gibfahn/homebrew-tap"
     prune: true
-  # - path: ~/code/me/me
-  #   remotes:
-  #     - name: up
-  #       fetch_url: "https://gitlab.com/gib/me.git"
-  #   prune: true
   - path: ~/code/me/up-rs
     remotes:
       - name: up
         fetch_url: "https://github.com/gibfahn/up-rs"
     prune: true
-  # - path: ~/code/tunes
-  #   remotes:
-  #     - name: up
-  #       fetch_url: "https://gitlab.com/gib/tunes.git"
-  #   prune: true
