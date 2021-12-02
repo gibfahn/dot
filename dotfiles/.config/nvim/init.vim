@@ -31,6 +31,9 @@ let g:mundo_right = 1                               " Undo window on right.
 let g:peekaboo_window = "vert bo 50new"             " Increase peekaboo window width to 50.
 let g:surround_97 = "\1before: \1\r\2after: \2"     " yswa surrounds with specified text (prompts for before/after).
 let g:surround_no_mappings = 1                      " Manually map surround, see SurroundOp() function.
+let g:terminal_scrollback_buffer_size = 100000      " Store lots of terminal history (neovim-only).
+
+if executable("nvr")| let $VISUAL = 'nvr --remote-wait'| endif " Use existing nvim window to open new files (e.g. `g cm`).
 
 " Settings for custom statusline.
 let g:lightline = {
@@ -364,6 +367,13 @@ nnoremap <script> <SID>ws+   <C-W>+<SID>ws|         " ↳ modifications, and thi
 nnoremap <script> <SID>ws-   <C-W>-<SID>ws|         " ↳ tweaks.
 nmap              <SID>ws    <Nop>
 
+" Terminal Mode Mappings
+tnoremap <A-h> <C-\><C-n><C-w>h|                  " Switch left  a window in terminal,
+tnoremap <A-n> <C-\><C-n><C-w>j|                  "  ↳     down  a window in terminal,
+tnoremap <A-e> <C-\><C-n><C-w>k|                  "  ↳     up    a window in terminal,
+tnoremap <A-i> <C-\><C-n><C-w>l|                  "  ↳     right a window in terminal.
+tnoremap <Esc> <C-\><C-n>|                        " Go to normal mode.
+
 " Normal Mode Leader Mappings:
 
 nnoremap <Leader>a @a|                                                     " Apply macro a (add with qa or yank to a reg with "ay).
@@ -437,7 +447,8 @@ nnoremap <Leader>q :qa<CR>|                                                " Qui
 nnoremap <Leader>r :%s/|                                                   " Replace in current doc.
 nnoremap <Leader>R :/ce <bar> up<Home>cfdo %s/|                            " Replace in all quickfix files (use after gr).
 nnoremap <Leader>S :<C-u>set operatorfunc=<SID>SortLinesOpFunc<CR>g@|      " Sort lines in <motion>.
-"        <Leader>t and T used for terminal splits.
+nnoremap <Leader>t :vsplit term://$SHELL<CR>i|    " Open terminal in new split.
+nnoremap <Leader>T :term<CR>|                     " Open terminal in current split.
 nnoremap <Leader>u :MundoToggle<CR>|                                       " Toggle Undo tree visualisation.
 "        <Leader>v and V unused.
 nnoremap <Leader>w :up<CR>|                                                " Write if there were changes.
@@ -619,37 +630,6 @@ function! s:SortLinesOpFunc(...)
     '[,']sort
 endfunction
 
-if has('nvim')                                      " NeoVim specific settings.
-  let g:terminal_scrollback_buffer_size = 100000    " Store lots of terminal history.
-  if executable("nvr")| let $VISUAL = 'nvr --remote-wait'| endif " Use existing nvim window to open new files (e.g. `g cm`).
-  nnoremap <Leader>t :vsplit term://$SHELL<CR>i|    " Open terminal in new split.
-  nnoremap <Leader>T :term<CR>|                     " Open terminal in current split.
-  tnoremap <A-h> <C-\><C-n><C-w>h|                  " Switch left  a window in terminal,
-  tnoremap <A-n> <C-\><C-n><C-w>j|                  "  ↳     down  a window in terminal,
-  tnoremap <A-e> <C-\><C-n><C-w>k|                  "  ↳     up    a window in terminal,
-  tnoremap <A-i> <C-\><C-n><C-w>l|                  "  ↳     right a window in terminal.
-  tnoremap <Esc> <C-\><C-n>|                        " Go to normal mode.
-
-  augroup gibTermGroup                              " Autocommands for nvim only
-    au TermOpen * setlocal nonumber norelativenumber  " No line numbers in terminal
-    au TermOpen * setlocal wrap                     " Soft line wrapping in terminal.
-  augroup end
-
-else                                                " Vim-specific settings.
-  set termwinscroll=100000                          " Store lots of terminal history.
-  nnoremap <Leader>t :term<CR>|wincmd L|                     " Open terminal in new split.
-  nnoremap <Leader>T :term ++curwin<CR>|                     " Open terminal in current split.
-  tnoremap <A-h> <C-w>h|                            " Switch left  a window in terminal,
-  tnoremap <A-n> <C-w>j|                            "  ↳     down  a window in terminal,
-  tnoremap <A-e> <C-w>k|                            "  ↳     up    a window in terminal,
-  tnoremap <A-i> <C-w>l|                            "  ↳     right a window in terminal.
-  tnoremap <Esc> <C-W>N|                            " Make Escape work in terminal.
-
-  augroup gibTermGroup                              " Autocommands for nvim only
-    au TerminalOpen * if &buftype == 'terminal'| setlocal nonumber norelativenumber| endif " No line numbers in terminal
-  augroup end
-endif
-
 " Used in Swapfile autocmds below.
 function! s:HandleRecover()
   echo system('diff - ' . shellescape(expand('%:p')), join(getline(1, '$'), "\n") . "\n")
@@ -808,6 +788,8 @@ augroup gibAutoGroup                                " Group of automatic functio
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
   autocmd VimEnter * silent! tabonly|               " Don't allow starting Vim with multiple tabs.
 
+  au TermOpen * setlocal nonumber norelativenumber  " No line numbers in terminal
+  au TermOpen * setlocal wrap                     " Soft line wrapping in terminal.
 augroup END
 
 " }}} Autocommands

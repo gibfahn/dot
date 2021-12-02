@@ -30,8 +30,6 @@ require'lightspeed'.setup {
     x_mode_prefix_key = '<c-x>',
     -- Allow seeing that you can match on newlines with s<char><Enter>
     substitute_chars = {['\r'] = '¬'},
-    instant_repeat_fwd_key = ';',
-    instant_repeat_bwd_key = ',',
     -- Labels to set for jumps.
     labels = {
         "s", "f", "n", "/", "u", "t", "q", "m", "S", "F", "G", "H", "L", "M",
