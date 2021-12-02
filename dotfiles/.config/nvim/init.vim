@@ -32,6 +32,7 @@ let g:peekaboo_window = "vert bo 50new"             " Increase peekaboo window w
 let g:surround_97 = "\1before: \1\r\2after: \2"     " yswa surrounds with specified text (prompts for before/after).
 let g:surround_no_mappings = 1                      " Manually map surround, see SurroundOp() function.
 let g:terminal_scrollback_buffer_size = 100000      " Store lots of terminal history (neovim-only).
+let g:lightspeed_last_motion = ''                   " :h lightspeed-custom-mappings
 
 if executable("nvr")| let $VISUAL = 'nvr --remote-wait'| endif " Use existing nvim window to open new files (e.g. `g cm`).
 
@@ -312,6 +313,11 @@ inoremap <silent><expr> <A-CR> coc#_select_confirm()
 nnoremap <Tab> :bn<CR>|   " Tab to switch to next buffer,
 nnoremap <S-Tab> :bp<CR>| "  ↳ Shift-Tab to switch to previous buffer.
 nnoremap <C-p> <C-i>|     " <C-o> = go to previous jump, <C-p> is go to next (normally <C-i>, but that == Tab, used above).
+
+" ; and , repeat the last f/F/t/T/s/S mapping.
+" :h lightspeed-custom-mappings
+nnoremap <expr> ; g:lightspeed_last_motion == 'sx' ? "<Plug>Lightspeed_;_sx" : "<Plug>Lightspeed_;_ft"
+nnoremap <expr> , g:lightspeed_last_motion == 'sx' ? "<Plug>Lightspeed_,_sx" : "<Plug>Lightspeed_,_ft"
 
 " Ctrl Alt Mappings:
 
@@ -787,6 +793,10 @@ augroup gibAutoGroup                                " Group of automatic functio
   " Update signature help on jump placeholder (show function signature when you jump to it).
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
   autocmd VimEnter * silent! tabonly|               " Don't allow starting Vim with multiple tabs.
+
+  " :h lightspeed-custom-mappings
+  autocmd User LightspeedSxEnter let g:lightspeed_last_motion = 'sx'
+  autocmd User LightspeedFtEnter let g:lightspeed_last_motion = 'ft'
 
   au TermOpen * setlocal nonumber norelativenumber  " No line numbers in terminal
   au TermOpen * setlocal wrap                     " Soft line wrapping in terminal.
