@@ -214,6 +214,7 @@ bindkey -v # Enable vi-mode.
 
 bindkey -M vicmd ' ' edit-command-line # <Space> in cmd mode opens editor.
 bindkey -M vicmd '^D' _gib_clear_exit
+bindkey -M vicmd '\ez' _gib_fzfz_cd # Alt-z switches to a commonly-used directory.
 
 bindkey -M viins "^A" beginning-of-line # Ctrl-A = Go to beginning of line (Emacs default).
 bindkey -M viins "^E" end-of-line       # Ctrl-E = Go to end of line (Emacs default).
@@ -221,7 +222,7 @@ bindkey -M viins ' ' magic-space # <Space> = do history expansion
 bindkey -M viins '\e ' edit-command-line # <Alt><Space> in insert mode opens editor.
 bindkey -M viins '\e.' insert-last-word # Alt-. inserts last word from previous line.
 bindkey -M viins '\ec' fzf-cd-widget # Alt-c opens fzf cd into subdir.
-bindkey -M viins '\en' _gib_fzfz_cd # Override Ctrl-n binding from zsh vim plugin.
+bindkey -M viins '\ez' _gib_fzfz_cd # Alt-z switches to a commonly-used directory.
 bindkey -M viins '^?' backward-delete-char # Backspace: delete a char.
 bindkey -M viins '^D' _gib_clear_exit # Ctrl-d: clear or exit terminal.
 bindkey -M viins '^H' backward-delete-char # Ctrl-h: delete a char.
