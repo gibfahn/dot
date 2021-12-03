@@ -1,7 +1,3 @@
-" BREAKING CHANGES:
-" - s is now lightspeed jump (use `cl` for `s`) function (:h lightspeed).
-" - <C-i> is now :bn (<C-i>==Tab for vim), use <C-p> for <C-i> function.
-
 " {{{ Global Variables
 
 if empty($XDG_CONFIG_HOME)| let $XDG_CONFIG_HOME = $HOME . '/.config'| endif
@@ -20,9 +16,8 @@ let g:any_jump_disable_default_keybindings = 1      " Conflicts with other usefu
 let g:buftabline_indicators = 1                     " Show a + if the buffer has been modified.
 let g:buftabline_numbers = 2                        " Show buftabline's count (use <Leader>1-9 to switch.
 let g:colorizer_use_virtual_text = 1                " Use virtual text
-let g:echodoc#type = 'virtual' " Needs nvim 0.3.2 (`brew unlink neovim && brew install --HEAD neovim` for now).
+let g:echodoc#type = 'virtual'                      " Needs nvim 0.3.2.
 let g:fzf_history_dir = $XDG_CACHE_HOME . '/fzf-history' " Save history of fzf vim commands.
-let g:github_enterprise_urls = ['https://github.pie.apple.com'] " Add your GHE repo so vim-fugitive's :Gbrowse! can use it (try with visual mode).
 let g:is_posix = 1                                  " Assume shell for syntax highlighting.
 let g:loaded_netrw = 1                              " Skip loading netrw file browser (use vim-readdir instead).
 let g:loaded_netrwPlugin = 1                        " Don't use the built-in file browser (use vim-readdir instead).
@@ -35,6 +30,10 @@ let g:terminal_scrollback_buffer_size = 100000      " Store lots of terminal his
 let g:lightspeed_last_motion = ''                   " :h lightspeed-custom-mappings
 
 if executable("nvr")| let $VISUAL = 'nvr --remote-wait'| endif " Use existing nvim window to open new files (e.g. `g cm`).
+
+" {{{ Lua config
+lua require('init-nvim')
+" }}} Lua config
 
 " Settings for custom statusline.
 let g:lightline = {
@@ -81,120 +80,7 @@ let g:lightline = {
     \ 'gitbranch': 'fugitive#head', },
   \ }
 
-" Extensions (plugins) for CoC language client.
-let g:coc_global_extensions = [
-  \ 'coc-actions',
-  \ 'coc-ccls',
-  \ 'coc-clangd',
-  \ 'coc-css',
-  \ 'coc-diagnostic',
-  \ 'coc-dictionary',
-  \ 'coc-emoji',
-  \ 'coc-eslint',
-  \ 'coc-go',
-  \ 'coc-groovy',
-  \ 'coc-highlight',
-  \ 'coc-html',
-  \ 'coc-java',
-  \ 'coc-json',
-  \ 'coc-lua',
-  \ 'coc-prettier',
-  \ 'coc-python',
-  \ 'coc-rust-analyzer',
-  \ 'coc-snippets',
-  \ 'coc-solargraph',
-  \ 'coc-sourcekit',
-  \ 'coc-svg',
-  \ 'coc-syntax',
-  \ 'coc-tabnine',
-  \ 'coc-tsserver',
-  \ 'coc-vetur',
-  \ 'coc-word',
-  \ 'coc-yaml',
-  \ ]
-
 " }}} Global Variables
-
-" {{{ Load plugins
-
-" Plugins are installed here.
-let s:plugin_path = $XDG_DATA_HOME . '/nvim/plugged'
-" Path to colorscheme, change if you use a different color scheme.
-let $colorscheme_path = s:plugin_path . '/vim-gib/colors/gib.vim'
-
-try
-  " Add vim-plug dir to vim runtimepath (already there for nvim).
-  exe 'set rtp+=' . $XDG_DATA_HOME . '/nvim/site'
-  " Install vim-plug if not already installed.
-  if empty(glob($XDG_DATA_HOME . '/nvim/site/autoload/plug.vim'))
-    echo "Vim-Plug not installed, downloading..."
-    !curl -fLo "$XDG_DATA_HOME/nvim/site/autoload/plug.vim" --create-dirs
-      \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-  endif
-
-  call plug#begin(s:plugin_path)    " Load plugins with vim-plug.
-
-  " Conditionally enable plugin (always install, only activate if condition met).
-  function! Cond(cond, ...)
-    let opts = get(a:000, 0, {})
-    return a:cond ? opts : extend(opts, { 'on': [], 'for': [] })
-  endfunction
-
-  Plug 'AndrewRadev/splitjoin.vim'                  " gS to split, gJ to join lines.
-  Plug 'airblade/vim-gitgutter'                     " Show git diffs in the gutter (left of line numbers) (:h gitgutter).
-  Plug 'ap/vim-buftabline'                          " Show buffers in the tab bar.
-  Plug 'ap/vim-readdir'                             " Nicer file browser plugin that works with buftabline.
-  Plug 'aymericbeaumet/vim-symlink'                 " Resolve symlinks when opening files.
-  Plug 'cespare/vim-toml'                           " Toml syntax highlighting.
-  Plug 'chrisbra/Colorizer'                         " Color ansi escape codes (:h Colorizer).
-  Plug 'coderifous/textobj-word-column.vim'         " Adds ic/ac and iC/aC motions to block select word column in paragraph.
-  Plug 'fweep/vim-zsh-path-completion'              " Nicer file browser plugin.
-  Plug 'ggandor/lightspeed.nvim'                    " Quickest way to jump to any char on the screen (alternative to easymotion/sneak/hop).
-  Plug 'gibfahn/vim-gib'                            " Use vim colorscheme.
-  Plug 'godlygeek/tabular'                          " Make tables easier (:help Tabular).
-  Plug 'honza/vim-snippets'                         " Work around https://github.com/neoclide/coc-snippets/issues/126 .
-  Plug 'itchyny/lightline.vim'                      " Customize statusline and tabline.
-  Plug 'junegunn/fzf', { 'dir': '~/.local/share/fzf', 'do': './install --bin' } " :h fzf
-  Plug 'junegunn/fzf.vim'                           " Try :Files, :GFiles? :Buffers :Lines :History :Commits :BCommits
-  Plug 'junegunn/vim-peekaboo'                      " Pop up register list when pasting/macroing.
-  Plug 'kana/vim-operator-user'                     " Make it easier to define operators.
-  Plug 'kana/vim-textobj-line'                      " Adds `il` and `al` text objects for current line.
-  Plug 'kana/vim-textobj-user'                      " Allows you to create custom text objects (used in vim-textobj-line).
-  Plug 'mzlogin/vim-markdown-toc'                   " Markdown Table of Contents.
-  Plug 'nanotee/zoxide.vim'
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}   " Language Server with VSCode Extensions.
-  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate', 'branch': '0.5-compat'} " Treesitter syntax highlighting.
-  Plug 'pechorin/any-jump.nvim'                     " Go to definition that doesn't require a language server.
-  Plug 'puremourning/vimspector'                    " Multi-language debugger using the VSCode Debug Adapter Protocol.
-  Plug 'rust-lang/rust.vim'                         " Rust language bindings.
-  Plug 'simnalamburt/vim-mundo'                     " Graphical undo tree (updated fork of Gundo).
-  Plug 'subnut/nvim-ghost.nvim', {'do': ':call nvim_ghost#installer#install()'} " Edit browser text areas in Neovim (:h ghost).
-  Plug 'tpope/vim-abolish'                          " Work with variants of words (replacing, capitalizing etc).
-  Plug 'tpope/vim-commentary'                       " Autodetect comment type for lang.
-  Plug 'tpope/vim-fugitive'                         " Git commands in vim.
-  Plug 'tpope/vim-repeat'                           " Allows you to use . with plugin mappings.
-  Plug 'tpope/vim-rhubarb'                          " GitHub support.
-  Plug 'tpope/vim-rsi'                              " Insert/commandline readline-style mappings, e.g. C-a for beginning of line.
-  Plug 'tpope/vim-surround'                         " Add/mod/remove surrounding chars.
-  Plug 'tpope/vim-unimpaired'                       " [ and ] mappings (help unimpaired).
-
-  let s:wrk_plugin_path = $XDG_CONFIG_HOME . '/nvim/wrk-plug.vim'
-  if !empty(glob(s:wrk_plugin_path))
-    execute('source ' . s:wrk_plugin_path)
-  endif
-
-  " Plugins where order is important (last one wins).
-  Plug 'sheerun/vim-polyglot'                       " Syntax files for a large number of different languages.
-  Plug 'tpope/vim-sleuth'                           " Automatically detect indentation.
-  Plug 'editorconfig/editorconfig-vim'              " Parse .editorconfig files (https://editorconfig.org/).
-
-  call plug#end()                                   " Initialize plugin system
-  catch /E117: Unknown function: plug#begin/
-    echo "ERROR:\tvim-plug automatic install failed. Original error was:\n\t" . v:exception . "\n"
-endtry
-
-" }}} Load plugins
 
 " {{{ Vim options
 
@@ -251,13 +137,6 @@ set path=.,/usr/include,,**                         " Add ** to the search path 
 if exists('+breakindent')| set breakindent| let &showbreak = '↳   '| set cpo+=n| end " Nicer line wrapping for long lines.
 if exists('&inccommand')| set inccommand=split| endif " Show search and replace as you type.
 if exists("&wildignorecase")| set wildignorecase| endif " Case insensitive file tab completion with :e.
-try
-  colo gib                                          " Use my colorscheme
-catch /E185: Cannot find color scheme 'gib'/
-  echo "ERROR:\tGib colorscheme not installed, falling back to desert.\n\tRun :PU or check Plugin setup in vimrc file."
-  echo "\tOriginal error was:\n\t\t" . v:exception . "\n"
-  colo desert
-endtry
 
 " }}} Vim options
 
@@ -419,7 +298,6 @@ nnoremap <Leader>gf :call DupBuffer()<CR>gF|                               " Ope
 nnoremap <Leader>gg :tab G<CR>|                                            " Open fugitive Gstatus in a new tab.
 nnoremap <Leader>gG :Gcd<CR>|                                              " Cd to root of git directory current file is in.
 nnoremap <Leader>gh :call <SID>SynStack()<CR>|                             " Show which syntax is set for current cursor location.
-nnoremap <Leader>gH :e $colorscheme_path<CR>                               " Edit colorscheme file.
 nnoremap <Leader>gl :source <C-r>=SessionFile()<CR><CR>|                   " Load saved session for vim cwd to a default session path.
 nnoremap <Leader>gL :source <C-r>=SessionFile()<CR>|                       " Load saved session for vim cwd to a custom path.
 nnoremap <Leader>gn :set number!<CR>|                                      " Toggle line numbers.
@@ -520,7 +398,6 @@ endfunction
 function! s:RipWithRange() range
   call s:CallRipGrep(join(getline(a:firstline, a:lastline), '\n'))
 endfunction
-call operator#user#define('ripgrep-root', 'OperatorRip')
 
 function! OperatorRip(wiseness) abort
   if a:wiseness ==# 'char'
@@ -704,7 +581,6 @@ endfun
 " Browse command is used by fugitive as I have Netrw disabled.
 command! -nargs=1 Browse call Browse(<q-args>)|     " :Browse runs :call Browse() (defined above).
 command! Trim call TrimWhitespace()|                " :Trim runs :call Trim() (defined above).
-command! PU PlugClean | PlugUpdate | PlugUpgrade|   " :PU updates/cleans plugins and vim-plug.
 command W :execute ':silent w !sudo tee % > /dev/null' | :edit!| " :W writes as sudo.
 
 " TODO(gib): Also start using proximity-sort in vimrc.
@@ -769,10 +645,7 @@ augroup gibAutoGroup                                " Group of automatic functio
   autocmd BufWinEnter * if exists('b:swapchoice') && b:swapchoice == 'r' | call s:HandleRecover() | endif
   autocmd BufWinEnter * if exists('b:swapchoice') && exists('b:swapchoice_likely') | let b:swapchoice = b:swapchoice_likely | unlet b:swapchoice_likely | endif
   autocmd BufWritePost $MYVIMRC nested source $MYVIMRC " Reload vimrc on save.
-  autocmd BufWritePost $colorscheme_path nested source $colorscheme_path " Reload colorscheme on save:
   autocmd BufWritePre * if expand("<afile>:p:h") !~ "fugitive:" | call mkdir(expand("<afile>:p:h"), "p") | endif " Create dir if it doesn't already exist on save.
-  " Highlight symbol under cursor on CursorHold (show other instances of current word).
-  autocmd CursorHold * silent call CocActionAsync('highlight')
   autocmd FileType go set listchars=tab:\ \ ,trail:·,nbsp:☠ " Don't highlight tabs in Go.
   autocmd FileType help wincmd L                    " Open new help windows on the right,
   " autocmd FileType qf wincmd L                       "  ↳       build windows on the right.
@@ -790,8 +663,6 @@ augroup gibAutoGroup                                " Group of automatic functio
   " Recover deletes swapfile if no difference, or shows diff if different.
   autocmd SwapExists  * let b:swapchoice = '?' | let b:swapname = v:swapname
   autocmd User CocDiagnosticChange call lightline#update()
-  " Update signature help on jump placeholder (show function signature when you jump to it).
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
   autocmd VimEnter * silent! tabonly|               " Don't allow starting Vim with multiple tabs.
 
   " :h lightspeed-custom-mappings
@@ -803,7 +674,5 @@ augroup gibAutoGroup                                " Group of automatic functio
 augroup END
 
 " }}} Autocommands
-
-lua require('init-nvim')
 
 " vim: foldmethod=marker
