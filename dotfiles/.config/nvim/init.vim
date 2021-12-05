@@ -1,144 +1,8 @@
 " {{{ Global Variables
 
-if empty($XDG_CONFIG_HOME)| let $XDG_CONFIG_HOME = $HOME . '/.config'| endif
-if empty($XDG_CACHE_HOME)| let $XDG_CACHE_HOME = $HOME . '/.cache'| endif
-if empty($XDG_DATA_HOME)| let $XDG_DATA_HOME = $HOME . '/.local/share'| endif
-
-" Sometimes vim runs before my dotfiles.
-if $PATH !~ '/usr/local/bin'| let $PATH = '/usr/local/bin/:' . $PATH| endif
-if $PATH !~ '/opt/brew/bin'| let $PATH = '/opt/brew/bin/:' . $PATH| endif
-
-if filereadable('/opt/brew/bin/python3')
-  let g:python3_host_prog = "/opt/brew/bin/python3"  " Speed up startup by not looking for python3 every time.
-endif
-
-let g:any_jump_disable_default_keybindings = 1      " Conflicts with other useful bindings.
-let g:buftabline_indicators = 1                     " Show a + if the buffer has been modified.
-let g:buftabline_numbers = 2                        " Show buftabline's count (use <Leader>1-9 to switch.
-let g:colorizer_use_virtual_text = 1                " Use virtual text
-let g:echodoc#type = 'virtual'                      " Needs nvim 0.3.2.
-let g:fzf_history_dir = $XDG_CACHE_HOME . '/fzf-history' " Save history of fzf vim commands.
-let g:is_posix = 1                                  " Assume shell for syntax highlighting.
-let g:loaded_netrw = 1                              " Skip loading netrw file browser (use vim-readdir instead).
-let g:loaded_netrwPlugin = 1                        " Don't use the built-in file browser (use vim-readdir instead).
-let g:mundo_preview_bottom = 1                      " Undo diff preview on bottom.
-let g:mundo_right = 1                               " Undo window on right.
-let g:peekaboo_window = "vert bo 50new"             " Increase peekaboo window width to 50.
-let g:surround_97 = "\1before: \1\r\2after: \2"     " yswa surrounds with specified text (prompts for before/after).
-let g:surround_no_mappings = 1                      " Manually map surround, see SurroundOp() function.
-let g:terminal_scrollback_buffer_size = 100000      " Store lots of terminal history (neovim-only).
-let g:lightspeed_last_motion = ''                   " :h lightspeed-custom-mappings
-
-if executable("nvr")| let $VISUAL = 'nvr --remote-wait'| endif " Use existing nvim window to open new files (e.g. `g cm`).
-
 " {{{ Lua config
 lua require('init-nvim')
 " }}} Lua config
-
-" Settings for custom statusline.
-let g:lightline = {
-  \ 'colorscheme': 'wombat',
-  \ 'active': {
-    \ 'left': [ [ 'mode', 'paste' ],
-    \           [ 'readonly', 'relativepath', 'modified' ],
-    \           [ 'gitbranch' ],
-    \           [ 'truncate_here' ],
-    \           [ 'coc_error', 'coc_warning', 'coc_info', 'coc_hint' ], ],
-    \ 'right': [ [ 'lineinfo' ],
-    \            [ 'percent' ],
-    \            [ 'fileformat', 'fileencoding', 'filetype' ],
-    \            [ 'currentfunction' ], ] },
-  \ 'inactive': {
-    \ 'left': [ [ 'relativepath' ] ],
-    \ 'right': [ [ 'lineinfo' ],
-    \            [ 'percent' ] ] },
-  \ 'tabline': {
-    \ 'left': [ [ 'tabs' ] ],
-    \ 'right': [ [ 'close' ] ] },
-  \ 'component': {
-    \ 'truncate_here': '%<',
-    \ 'fileformat': '%{&ff=="unix"?"":&ff}',
-    \ 'fileencoding': '%{&fenc=="utf-8"?"":&fenc}' },
-  \ 'component_expand': {
-    \ 'coc_error': 'LightlineCocErrors',
-    \ 'coc_warning': 'LightlineCocWarnings',
-    \ 'coc_info': 'LightlineCocInfos',
-    \ 'coc_hint': 'LightlineCocHints', },
-  \ 'component_visible_condition': {
-    \ 'truncate_here': 0,
-    \ 'fileformat': '&ff&&&ff!="unix"',
-    \ 'fileencoding': '&fenc&&&fenc!="utf-8"' },
-  \ 'component_type': {
-    \ 'coc_error': 'error',
-    \ 'coc_warning': 'warning',
-    \ 'coc_info': 'tabsel',
-    \ 'coc_hint': 'middle',
-    \ 'coc_fix': 'middle',
-    \ 'truncate_here': 'raw' },
-  \ 'component_function': {
-    \ 'currentfunction': 'CocCurrentFunction',
-    \ 'gitbranch': 'fugitive#head', },
-  \ }
-
-" }}} Global Variables
-
-" {{{ Vim options
-
-set nocompatible                                    " Remove vi compatibility hacks.
-let mapleader = "\<Space>"                          " Set <Leader> (default shortcut used in mappings below) to Spacebar.
-
-syntax enable                                       " Turn on syntax highlighting.
-filetype plugin indent on                           " Use file-specific plugins and indentation rules.
-
-set autoindent                                      " Moving to a new line keeps the same indentation (overridden by filetype indent on).
-set autoread                                        " Auto read when file is changed elsewhere.
-set backspace=indent,eol,start                      " Backspace works across lines.
-set confirm                                         " Ask if you want to save unsaved files instead of failing.
-set diffopt+=vertical                               " Always use vertical diffs.
-set expandtab                                       " Insert spaces when tab key pressed.
-set ffs=unix                                        " Force Unix line endings (\n) (always show \r (^M), never autoinsert them).
-set foldexpr=nvim_treesitter#foldexpr()             " Fold with treesitter.
-set foldmethod=expr foldlevel=99                    " Fold according to the syntax rules, expand all by default.
-set formatoptions-=t                                " Don't autowrap text at 80.
-set gdefault                                        " Global replace default (off: /g).
-set hidden                                          " Don't force saving buffers on switching.
-set history=1000                                    " More command/search history.
-set hlsearch                                        " Highlight search matches (off: <Space>/).
-set ignorecase                                      " Ignore case for lowercase searches (re-enable with \C in pattern),
-set incsearch                                       " Incremental searching.
-set laststatus=2                                    " Always display the status line.
-set lazyredraw                                      " Don't redraw if you don't have to (e.g. in macros).
-set list listchars=tab:»·,trail:·,nbsp:☠            " Display extra whitespace.
-set mouse=a                                         " Mouse in all modes (mac: Fn+drag = copy).
-set nojoinspaces                                    " One space (not two) after punctuation..
-set nonumber                                        " Turn off line numbers.
-set noshowmode                                      " Don't show when in insert mode (set in lightline).
-set notildeop                                       " Keep tilde (~) as it's default. If you want the operator version use g~.
-set ruler                                           " Always show cursor position.
-set shiftwidth=2 tabstop=2 softtabstop=2            " Set tab width to 2.
-set showcmd                                         " Display incomplete commands.
-set signcolumn=auto                                 " Resize the sign column automatically.
-set smartcase                                       "  ↳ don't for mixed-case.
-set splitbelow                                      " Open new split panes to right and,
-set splitright                                      "  ↳ bottom, which feels more natural.
-set t_Co=256                                        " Use 256 color terminal.
-set termguicolors                                   " Uses 24-bit colors in the terminal (guifg and guibg).
-set undolevels=1000                                 " More undo history.
-set updatetime=100                                  " Delay after which to write to swap file and run CursorHold event.
-set visualbell                                      " Flash the screen instead of beeping when doing something wrong.
-set wildchar=<Tab> wildmenu                         " Tab complete with files (e.g. `:e`)
-set wildmode=list:longest,list:full                 " 1st Tab completes to longest common string, 2nd+ cycles through options.
-
-let s:undodir = $XDG_CACHE_HOME . "/vim/undo"
-if !isdirectory(s:undodir)| call mkdir(s:undodir, "p", 0700)| endif
-set undofile                                        " Persist undo history on file close.
-let &undodir=s:undodir                              " Store undo files in cache dir.
-set path=.,/usr/include,,**                         " Add ** to the search path so :find x works recursively.
-if exists('+breakindent')| set breakindent| let &showbreak = '↳   '| set cpo+=n| end " Nicer line wrapping for long lines.
-if exists('&inccommand')| set inccommand=split| endif " Show search and replace as you type.
-if exists("&wildignorecase")| set wildignorecase| endif " Case insensitive file tab completion with :e.
-
-" }}} Vim options
 
 " {{{ Key mappings
 
@@ -205,9 +69,6 @@ nnoremap <expr> , g:lightspeed_last_motion == 'sx' ? "<Plug>Lightspeed_,_sx" : "
 " coc-tsserver, coc-python are the examples of servers that support it.
 nmap <silent> <A-TAB> <Plug>(coc-range-select)
 xmap <silent> <A-TAB> <Plug>(coc-range-select)
-
-let g:coc_snippet_prev = '<a-l>' " Use <Alt-l> for jump to previous placeholder.
-let g:coc_snippet_next = '<a-u>' " Use <Alt-u> for jump to next placeholder.
 
 imap <C-n> <Plug>(coc-snippets-expand-jump)| " Both expand and jump (make expand higher priority.)
 imap <A-n> <Plug>(coc-snippets-expand-jump)| " Both expand and jump (make expand higher priority.)

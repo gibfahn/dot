@@ -3,6 +3,133 @@
 --   https://vonheikemen.github.io/devlog/tools/configuring-neovim-using-lua/
 --   https://neovim.io/doc/user/lua.html
 --   https://github.com/nanotee/nvim-lua-guide
+--
+-- {{{ Global variables
+-- Sometimes vim runs before my dotfiles.
+if not vim.env.PATH:find('/usr/local/bin') then
+    vim.env.PATH:append('/usr/local/bin:')
+end
+
+vim.env.XDG_CACHE_HOME = vim.env.XDG_CACHE_HOME or vim.env.HOME .. '/.cache'
+vim.env.XDG_CONFIG_HOME = vim.env.XDG_CONFIG_HOME or vim.env.HOME .. '/.config'
+vim.env.XDG_DATA_HOME = vim.env.XDG_DATA_HOME or vim.env.HOME .. '/.local/share'
+
+vim.g.any_jump_disable_default_keybindings = 1 -- Conflicts with other useful bindings.
+vim.g.buftabline_indicators = 1 -- Show a + if the buffer has been modified.
+vim.g.buftabline_numbers = 2 -- Show buftabline's count (use <Leader>1-9 to switch.
+vim.g.coc_snippet_next = '<a-u>' -- Use <Alt-u> for jump to next placeholder.
+vim.g.coc_snippet_prev = '<a-l>' -- Use <Alt-l> for jump to previous placeholder.
+vim.g.colorizer_use_virtual_text = 1 -- Use virtual text
+vim.g.fzf_history_dir = vim.env.XDG_CACHE_HOME .. '/fzf-history' -- Save history of fzf vim commands.
+vim.g.is_posix = 1 -- Assume shell for syntax highlighting.
+vim.g.lightspeed_last_motion = '' -- :h lightspeed-custom-mappings
+vim.g.loaded_netrw = 1 -- Skip loading netrw file browser (use vim-readdir instead).
+vim.g.loaded_netrwPlugin = 1 -- Don't use the built-in file browser (use vim-readdir instead).
+vim.g.mapleader = ' ' -- use space as a the leader key
+vim.g.mundo_preview_bottom = 1 -- Undo diff preview on bottom.
+vim.g.mundo_right = 1 -- Undo window on right.
+vim.g.peekaboo_window = "vert bo 50new" -- Increase peekaboo window width to 50.
+vim.g.surround_97 = "\1before: \1\r\2after: \2" -- yswa surrounds with specified text (prompts for before/after).
+vim.g.surround_no_mappings = 1 -- Manually map surround, see SurroundOp() function.
+vim.g.terminal_scrollback_buffer_size = 100000 -- Store lots of terminal history (neovim-only).
+
+-- Settings for custom statusline.
+vim.g.lightline = {
+    colorscheme = 'wombat',
+    active = {
+        left = {
+            {'mode', 'paste'}, {'readonly', 'relativepath', 'modified'},
+            {'gitbranch'}, {'truncate_here'},
+            {'coc_error', 'coc_warning', 'coc_info', 'coc_hint'}
+        },
+        right = {
+            {'lineinfo'}, {'percent'},
+            {'fileformat', 'fileencoding', 'filetype'}, {'currentfunction'}
+        }
+    },
+    inactive = {left = {{'relativepath'}}, right = {{'lineinfo'}, {'percent'}}},
+    tabline = {left = {{'tabs'}}, right = {{'close'}}},
+    component = {
+        truncate_here = '%<',
+        fileformat = '%{&ff=="unix"?"":&ff}',
+        fileencoding = '%{&fenc=="utf-8"?"":&fenc}'
+    },
+    component_expand = {
+        coc_error = 'LightlineCocErrors',
+        coc_warning = 'LightlineCocWarnings',
+        coc_info = 'LightlineCocInfos',
+        coc_hint = 'LightlineCocHints'
+    },
+    component_visible_condition = {
+        truncate_here = 0,
+        fileformat = '&ff&&&ff!="unix"',
+        fileencoding = '&fenc&&&fenc!="utf-8"'
+    },
+    component_type = {
+        coc_error = 'error',
+        coc_warning = 'warning',
+        coc_info = 'tabsel',
+        coc_hint = 'middle',
+        coc_fix = 'middle',
+        truncate_here = 'raw'
+    },
+    component_function = {
+        currentfunction = 'CocCurrentFunction',
+        gitbranch = 'fugitive#head'
+    }
+}
+
+if vim.fn.executable("nvr") then
+    -- Use existing nvim window to open new files (e.g. `g cm`).
+    vim.env.VISUAL = 'nvr --remote-wait'
+end
+-- }}} Global variables
+
+-- {{{ Vim options
+
+vim.cmd 'colorscheme desert' -- Default colorscheme in case plugins don't load.
+
+vim.opt.breakindent = true -- Nicer line wrapping for long lines.
+vim.opt.confirm = true -- Ask if you want to save unsaved files instead of failing.
+vim.opt.diffopt:append("vertical") -- Always use vertical diffs.
+vim.opt.expandtab = true -- Use spaces instead of tabs
+vim.opt.fileformats = "unix" -- Force Unix line endings (\n) (always show \r (^M), never autoinsert them).
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()" -- Fold with treesitter.
+vim.opt.foldlevel = 99 -- expand all by default.
+vim.opt.foldmethod = "expr" -- Fold according to the syntax rules,
+vim.opt.formatoptions:remove("t") -- Don't autowrap text at 80.
+vim.opt.gdefault = true -- Global replace default (off: /g).
+vim.opt.hidden = true -- Enable background buffers
+vim.opt.history = 1000 -- More command/search history.
+vim.opt.ignorecase = true -- Ignore case for lowercase searches (re-enable with \C in pattern),
+vim.opt.inccommand = "split" -- Show search and replace as you type.
+vim.opt.joinspaces = false -- No double spaces with join
+vim.opt.lazyredraw = true -- Don't redraw if you don't have to (e.g. in macros).
+vim.opt.list = true -- Show some invisible characters (see listchars).
+vim.opt.listchars = {tab = "»·", trail = "·", nbsp = "☠"} -- Display extra whitespace.
+vim.opt.mouse = "a" -- Mouse in all modes (mac: Fn+drag = copy).
+vim.opt.number = false -- Show line numbers
+vim.opt.path = ".,/usr/include,,**" -- Add ** to the search path so :find x works recursively.
+vim.opt.shiftround = true -- Round indent to multiple of 'shiftwidth'. Applies to > and < commands.
+vim.opt.shiftwidth = 2 -- Size of an indent
+vim.opt.showbreak = "↳   " -- Nicer line wrapping for long lines.
+vim.opt.showmode = false -- Don't show when in insert mode (set in lightline).
+vim.opt.sidescrolloff = 8 -- Columns of context
+vim.opt.signcolumn = "auto" -- Resize the sign column automatically.
+vim.opt.smartcase = true -- Do not ignore case with capitals
+vim.opt.smartindent = true -- Insert indents automatically
+vim.opt.softtabstop = 2 -- Number of spaces tabs count for
+vim.opt.splitbelow = true -- Put new windows below current
+vim.opt.splitright = true -- Put new windows right of current
+vim.opt.tabstop = 2 -- Number of spaces tabs count for
+vim.opt.termguicolors = true -- True color support
+vim.opt.updatetime = 100 -- Delay after which to write to swap file and run CursorHold event.
+vim.opt.visualbell = true -- Flash the screen instead of beeping when doing something wrong.
+vim.opt.wildignorecase = true -- Case insensitive file tab completion with :e.
+vim.opt.wildmode = {"list", "longest"} -- 1st Tab completes to longest common string, 2nd+ cycles through options.
+
+-- }}} Vim options
+
 -- {{{ Package Manager Setup
 -- variable that is only set if we're bootstrapping (Packer hasn't been installed).
 local packer_bootstrap
