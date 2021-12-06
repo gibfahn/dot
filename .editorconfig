@@ -21,6 +21,10 @@ binary_next_line = true
 [*.md]
 indent_size = 2
 
+[*.lua]
+indent_size = 2
+max_line_length = 120
+
 # File used for git commit message editing.
 [COMMIT_EDITMSG]
 max_line_length = 72

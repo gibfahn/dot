@@ -111,7 +111,8 @@
   "solargraph.autoformat": false, // Enable to format while typing.
   "Lua.telemetry.enable": false,
   "Lua.diagnostics.globals": [
-    "hs" // HammerSpoon global variable.
+    "hs", // HammerSpoon global variable.
+    "vim" // Vim global variable.
   ],
 
   /*
@@ -262,6 +263,17 @@
     "buildifier-fmt": {
       "command": "buildifier",
       "args": ["--mode=fix"]
+    },
+    "lua-format": {
+      "command": "lua-format",
+      // Args: https://github.com/Koihik/LuaFormatter
+      "args": [
+        "-i",
+        // Limit at n columns.
+        "--column-limit=120",
+        // N spaces per indent.
+        "--indent-width=2"
+      ]
     },
     "shfmt": {
       "command": "shfmt",
