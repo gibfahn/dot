@@ -451,11 +451,8 @@ end
 -- char was empty or whitespace. Else triggers completion.
 function Smart_Tab()
   local check_back_space = function()
-    local col = vim.fn.col('.') - 1
-    if not col then return true end
-    local char = vim.fn.getline('.'):sub(col, col)
-    if not char then return true end
-    return array_contains({'', ' ', '\t'}, v)
+    local col = vim.api.nvim_win_get_cursor(0)[2]
+    return (col == 0 or vim.api.nvim_get_current_line():sub(col, col):match('%s')) and true
   end
 
   if (vim.fn.pumvisible() ~= 0) then
