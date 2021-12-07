@@ -341,7 +341,7 @@ map('n', '<Leader><', '<Cmd>exe "vertical resize ".(winwidth(0) * 2/3)<CR>', {si
 map('n', '<Leader>>', '<Cmd>exe "vertical resize ".(winwidth(0) * 3/2)<CR>', {silent = true}) -- Increase window width to 3/2.
 map('n', '<Leader>D', '<Cmd>%d<CR>') -- Delete all text in buffer.
 map('n', '<Leader>E', '<C-W>z:cclose<CR>:lclose<CR>:helpclose<CR><Plug>(coc-float-hide)') -- Close open preview windows (e.g. language server definitions).
-map('n', '<Leader>F', '<Cmd>grep ') -- Search file contents for file.
+map('n', '<Leader>F', ':grep ') -- Search file contents for file.
 map('n', '<Leader>P', '"+P') -- Paste from system clipboard before cursor.
 map('n', '<Leader>R', ':/ce <bar> up<Home>cfdo %s/') -- Replace in all quickfix files (use after gr).
 map('n', '<Leader>S', ':<C-u>set operatorfunc=SortLinesOpFunc<CR>g@') -- Sort lines in <motion>.
@@ -361,7 +361,7 @@ map('n', '<Leader>ci', '<Plug>(coc-implementation)', {silent = true, noremap = f
 map('n', '<Leader>co', '<Cmd>CocList outline<CR>', {silent = true}) -- Find symbol of current document
 map('n', '<Leader>cp', '<Cmd>CocListResume<CR>', {silent = true}) -- Resume latest coc list
 map('n', '<Leader>cr', '<Plug>(coc-rename)', {noremap = false}) -- Remap for rename current word
-map('n', '<Leader>cs', '<Cmd>CocList -I symbols<cr>', {silent = true}) -- Search workspace symbols
+map('n', '<Leader>cs', '<Cmd>CocList -I symbols<CR>', {silent = true}) -- Search workspace symbols
 map('n', '<Leader>cu', '<Plug>(coc-references)', {silent = true, noremap = false}) -- Go to usages.
 map('n', '<Leader>cy', '<Plug>(coc-type-definition)', {silent = true, noremap = false}) -- Go to type definition.
 map('n', '<Leader>d', '<Cmd>call BufferClose("")<CR>') -- Close buffer without closing split,
