@@ -159,6 +159,7 @@ map('n', '<A-N>', '100<C-w>j') -- Switch to the bottom window,
 map('n', '<A-Q>', '<Cmd>cprev<CR>') -- Prev item in the quickfix list.
 map('n', '<A-S>', '[s') -- Prev spelling mistake.
 map('n', '<A-Space>', 'v<Plug>(coc-codeaction-selected)<Esc>', {noremap = false}) -- Run available LSP actions (neoclide/coc.nvim#1981).
+map('n', '<A-Enter>', '<plug>(coc-codelens-action)', {noremap = false}) -- Run available CodeLens actions (e.g. run tests).
 map('n', '<A-T>', '<Cmd>tabprev<CR>') -- Prev tab.
 map('n', '<A-TAB>', '<Plug>(coc-range-select)', {silent = true, noremap = false}) -- Visually select increasingly large ranges (requires LS 'textDocument/selectionRange').
 map('n', '<A-c>', '<Plug>(coc-diagnostic-next)', {noremap = false}) -- Next changed Coc message (e.g. compile error).
