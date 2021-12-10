@@ -262,7 +262,7 @@ map('n', '<SID>ws-', '<C-W>-<SID>ws', {script = true}) -- Hold to continue decre
 map('n', '<SID>ws<', '<C-W><<SID>ws', {script = true}) -- Hold to continue decreasing current window width.
 map('n', '<SID>ws>', '<C-W>><SID>ws', {script = true}) -- Hold to continue increasing current window width.
 map('n', '<Tab>', '<Cmd>bn<CR>') -- Tab to switch to next buffer,
-map('n', 'K', 'v:lua.Show_Documentation()', {expr = true}) -- Use K for show documentation in preview window
+map('n', 'K', '<CMD>lua Show_Documentation()<CR>') -- Use K for show documentation in preview window
 map('n', 'N', '(v:searchforward) ? "N" : "n"', {expr = true}) -- N is always "next one up" even if you hit #
 map('n', 'Q', '<nop>') -- Q unused (disabled to avoid accidental triggering).
 map('n', 'gr', '<Plug>(operator-ripgrep-root)', {noremap = false}) -- Ripgrep search for operator.
@@ -320,14 +320,15 @@ function Smart_Tab()
 end
 
 -- Used in K mapping above.
--- Copied from coc.nvim README, opens vim help or language server help.
+-- Copied from coc.nvim README, ported to lua, opens vim help or language server help.
+-- https://stackoverflow.com/questions/59440719/vime523-not-allowed-here
 function Show_Documentation()
   if (array_contains({'vim', 'help'}, vim.bo.filetype) or vim.fn.expand('%:p') == vim.fn.stdpath('config') .. 'init.lua') then
-    vim.fn.execute('h ' .. vim.fn.expand('<cword>'))
+    vim.cmd('help ' .. vim.fn.expand('<cword>'))
   elseif (vim.fn['coc#rpc#ready']()) then
     vim.fn.CocActionAsync('doHover')
   else
-    vim.fn.execute(vim.o.keywordprg .. " " .. vim.fn.expand('<cword>'))
+    vim.cmd(vim.o.keywordprg .. " " .. vim.fn.expand('<cword>'))
   end
 end
 -- }}} Functions
