@@ -11,14 +11,14 @@ Note that it defaults to deleting on enter, hit n to avoid.
 "
 }
 
-FORCE_PRUNE= QUIET=
+CHECK= QUIET=
 
 while [[ $# != 0 ]]; do
   [[ ${1:-} =~ ^(--help|-h)$ ]] && { usage; exit; }
 
   [[ ${1:-} =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
 
-  [[ ${1:-} =~ ^(--force|-f)$ ]] && { FORCE_PRUNE=true; shift; }
+  [[ ${1:-} =~ ^(--check|-c)$ ]] && { CHECK=true; shift; }
 
   [[ ${1:-} =~ ^(--quiet|-q)$ ]] && { QUIET=true; shift; }
 done
@@ -46,7 +46,7 @@ if [[ ${#branches_to_prune[@]} = 0 ]]; then
   exit 0
 fi
 
-if [[ -n $FORCE_PRUNE ]]; then
+if [[ -z $CHECK ]]; then
   log "Deleting branches: ${branches_to_prune[*]}"
 else
   # Prompt before deleting.
