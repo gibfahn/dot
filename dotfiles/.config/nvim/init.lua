@@ -397,7 +397,6 @@ end)
 
 pcall(require, "wrk-init-nvim") -- Load work config if present.
 
-vim.cmd 'colorscheme gib'
 vim.cmd 'command! PU PackerSync' -- :PU updates Packer plugin configuration.
 
 if packer_bootstrap then
@@ -418,6 +417,8 @@ end
 -- }}} Package Manager Setup
 
 -- {{{ Package Setup
+
+vim.cmd 'colorscheme gib'
 
 -- Set up Treesitter languages.
 require'nvim-treesitter.configs'.setup {

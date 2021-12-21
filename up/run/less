@@ -7,7 +7,7 @@ set -euo pipefail
 # lesskey binary file for less to use.  Newer versions of less read the lesskey source file directly
 # and ignore the binary file if the source file exists.
 
-current=$(md5 -q "$XDG_CACHE_HOME/less")
+current=$(md5 -q "$XDG_CACHE_HOME/less" 2>/dev/null || true)
 
 # Set up less file (colors for less).
 # We don't commit the lesskey file because we need the machine's terminal to resolve the tput
@@ -62,4 +62,4 @@ EOF
 )
 
 # Skip if we didn't change anything.
-[[ "$current" == "$(md5 -q "$XDG_CACHE_HOME/less")" ]] && exit 204
+[[ "$current" != "$(md5 -q "$XDG_CACHE_HOME/less")" ]] || exit 204
