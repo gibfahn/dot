@@ -1,19 +1,2 @@
-#!/bin/bash
 
-if command -v rg >/dev/null; then
-  if rg -F "TODO($(whoami)):"; then
-    printf "
-Found TODOs in the repo, to view these in Vim use:
 
-    v -q <(rg -F \"TODO($(whoami)):\" --vimgrep)
-"
-  fi
-  if rg -F "XXX($(whoami)):"; then
-    printf "
-Found XXXs in the repo, failing, to view these in Vim use:
-
-    v -q <(rg -F \"XXX($(whoami)):\" --vimgrep)
-"
-    exit 1
-  fi
-fi
