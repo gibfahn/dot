@@ -281,6 +281,8 @@ HyperMode:bind({'alt'}, '\\', function()
   end, {'--validate'}):start()
 end)
 HyperMode:bind({'cmd'}, '\\', function()
+  -- Print current IP addresses (useful in case you need to SSH in to kill Installer Progress).
+  message.new('🌐 IP Addresses: \n' .. table.concat(hs.host.addresses(), "\n")):notify(20)
   -- Quit Installer Progress (useful if it gets hung sometimes on boot).
   killAll({"Installer Progress"}, {sudo = true})
 end)
