@@ -146,9 +146,11 @@ map('i', '<CR>', [[pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\
 map('i', '<S-Tab>', [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]], {expr = true}) -- Shift-Tab is previous entry if completion menu open.
 map('i', '<Tab>', 'v:lua.Smart_Tab()', {expr = true, silent = true}) -- If in completion, next entry, else if previous character was a space indent, else trigger completion manually.
 map('n', "<Leader>Z", [[&foldlevel ? 'zM' :'zR']], {expr = true}) -- Toggle folding everywhere (see also "zi).
-map('n', ',', 'g:lightspeed_last_motion == "sx" ? "<Plug>Lightspeed_,_sx" : "<Plug>Lightspeed_,_ft"', {expr = true}) -- , repeats the last f/F/t/T/s/S mapping.
+map('n', ',', 'g:lightspeed_last_motion == "sx" ? "<Plug>Lightspeed_,_sx" : "<Plug>Lightspeed_,_ft"',
+    {noremap = false, expr = true}) -- , repeats the last f/F/t/T/s/S mapping.
 map('n', '-', '<Cmd>e %:h<CR>') -- Use - to open the current buffer directory in the file browser (repeat for `cd ..`).
-map('n', ';', 'g:lightspeed_last_motion == "sx" ? "<Plug>Lightspeed_;_sx" : "<Plug>Lightspeed_;_ft"', {expr = true}) -- ; repeats the last f/F/t/T/s/S mapping backwards.
+map('n', ';', 'g:lightspeed_last_motion == "sx" ? "<Plug>Lightspeed_;_sx" : "<Plug>Lightspeed_;_ft"',
+    {noremap = false, expr = true}) -- ; repeats the last f/F/t/T/s/S mapping backwards.
 map('n', '<A-C>', '<Plug>(coc-diagnostic-prev)', {noremap = false}) -- Prev changed Coc diagnostic.
 map('n', '<A-E>', '100<C-w>k') -- Switch to the top window,
 map('n', '<A-G>', '<Plug>(GitGutterPrevHunk)', {noremap = false}) -- Prev changed git hunk.
