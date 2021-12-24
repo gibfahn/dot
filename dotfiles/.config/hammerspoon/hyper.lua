@@ -47,7 +47,7 @@ hs.hotkey.bind({}, 'F17', pressedF17, releasedF17)
 --     e.g. killAll('Dock'), killAll({'-9', 'docker'})
 --   sudo: optionally set to true to run with `sudo killall`
 --     e.g. killAll('Dock', {sudo=true})
-local killAll = function(killArgs, opts)
+KillAll = function(killArgs, opts)
   HyperMode:exit()
   local sudo = opts and opts.sudo or false
   if (type(killArgs) ~= "table") then killArgs = {killArgs} end
@@ -170,7 +170,7 @@ end)
 
 -- {{{ Hyper-⌥-q -> Force Quit Webex
 -- Quit webex without spending an age trying to find the button.
-HyperMode:bind({'alt'}, 'q', function() killAll({'-9', '-m', '.*Meeting Center.*'}) end)
+HyperMode:bind({'alt'}, 'q', function() KillAll({'-9', '-m', '.*Meeting Center.*'}) end)
 -- }}} Hyper-⌥-q -> Force Quit Webex
 
 -- {{{ Hyper-⇧-w -> Restart Wi-Fi
@@ -270,7 +270,7 @@ HyperMode:bind({}, '\\', function()
     '/Users/gib/tmp/nuke/' .. frontmostApplicationName .. ' ' .. date .. '.spindump.txt', frontmostApplicationName
   }):start()
 end)
-HyperMode:bind({'shift'}, '\\', function() killAll("Finder") end)
+HyperMode:bind({'shift'}, '\\', function() KillAll("Finder") end)
 HyperMode:bind({'alt'}, '\\', function()
   hs.task.new("/usr/bin/sudo", function(exitCode, stdOut, stdErr)
     hs.notify.new({
@@ -282,7 +282,7 @@ HyperMode:bind({'alt'}, '\\', function()
 end)
 
 -- {{{ Hyper-⇧-x -> Restart the touch strip.
-HyperMode:bind({'shift'}, 'x', function() killAll("ControlStrip") end)
+HyperMode:bind({'shift'}, 'x', function() KillAll("ControlStrip") end)
 -- }}} Hyper-⇧-x -> Restart the touch strip.
 
 -- {{{ Hyper-<mods>-v -> Connect to VPN
