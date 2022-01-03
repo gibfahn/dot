@@ -8,6 +8,9 @@ esac
 
 # {{{ Environment Variables
 
+# Remove this after Rust 1.58.0 ships (https://github.com/rust-lang/rust/pull/90544).
+export RUSTC_LOG=rustc_metadata=error
+
 CDPATH=~ # Check ~ for directories after checking . (`c/d/` matches `./c*/d*/`, then tries `~/c*/d*/`).
 
 _gib_bat_cmd='bat --style=numbers --color=always --pager=never --terminal-width=$FZF_PREVIEW_COLUMNS --wrap=character'
