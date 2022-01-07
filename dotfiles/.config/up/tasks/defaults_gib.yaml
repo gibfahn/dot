@@ -44,6 +44,8 @@ data:
   com.apple.finder:
     # Allow Finder to be quit (hides Desktop files).
     QuitMenuItem: 1
+    # Don't show Desktop icons (hide the desktop view).
+    CreateDesktop: false
 
   com.apple.ActivityMonitor:
     # Show all processes in Activity Monitor
