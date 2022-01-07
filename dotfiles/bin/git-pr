@@ -89,7 +89,6 @@ pr_edit() {
   echo $new_pr_body > $TMPDIR/new_pr_body
   echo $old_pr_body > $TMPDIR/old_pr_body
   git diff --color=always --no-index $TMPDIR/old_pr_body $TMPDIR/new_pr_body && true
-  prompt_to_confirm "Does this change look correct?"
 
   gh pr edit $pr_number --body "$new_pr_body"
 }
