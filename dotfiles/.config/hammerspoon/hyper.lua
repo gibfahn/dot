@@ -199,24 +199,6 @@ HyperMode:bind({'shift'}, 'd', function()
 end)
 -- }}} Hyper-⇧-d -> Paste today's date and time.
 
--- {{{ Hyper-⌥-d -> Paste build number.
-HyperMode:bind({'alt'}, 'd', function()
-  hs.task.new("/usr/bin/sw_vers", function(exitCode, stdOut, stdErr)
-    hs.notify.new({
-      title = 'Typing current build number',
-      informativeText = exitCode .. " " .. stdOut,
-      stdErr,
-      withdrawAfter = 3
-    }):send()
-    -- Copy and type build version with trailing newline removed.
-    stdOut = stdOut:gsub("%s*$", "")
-    hs.pasteboard.setContents(stdOut)
-    HyperMode:exit()
-    hs.eventtap.keyStrokes(stdOut)
-  end, {"-buildVersion"}):start()
-end)
--- }}} Hyper-⌥-d -> Paste build number.
-
 -- {{{ Hyper-⌥-m -> Format selected Message ID as link and copy to clipboard.
 HyperMode:bind({'shift'}, 'm', function()
   hs.eventtap.keyStroke({'cmd'}, 'c') -- Copy selected email message ID (e.g. from Mail.app).
