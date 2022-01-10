@@ -6,7 +6,7 @@
 --
 -- {{{ Global variables
 -- Sometimes vim runs before my dotfiles.
-if not vim.env.PATH:find('/usr/local/bin') then vim.env.PATH:append('/usr/local/bin:') end
+if not vim.env.PATH:find('/usr/local/bin') then vim.env.PATH = '/usr/local/bin:' .. vim.env.PATH end
 
 vim.env.XDG_CACHE_HOME = vim.env.XDG_CACHE_HOME or vim.env.HOME .. '/.cache'
 vim.env.XDG_CONFIG_HOME = vim.env.XDG_CONFIG_HOME or vim.env.HOME .. '/.config'
