@@ -318,6 +318,9 @@
 
 [url "https://github.com/"]
   insteadOf = hh:                 # Hub https.
+  # Enable this to use HTTPS instead of SSH.
+  # insteadOf = git@github.com:
+  # insteadOf = ssh://git@github.com/
 [url "git@github.com:"]
   insteadOf = hs:                 # Hub ssh.
 [url "https://github.com/gibfahn/"]
