@@ -434,12 +434,6 @@ require'nvim-treesitter.configs'.setup {
 -- (in Operator-pending mode the search is invoked with z/Z not s/S)
 -- `:h lightspeed` for more info.
 require'lightspeed'.setup {
-  jump_on_partial_input_safety_timeout = 400,
-  -- This can get _really_ slow if the window has a lot of content,
-  -- turn it on only if your machine can always cope with it.
-  highlight_unique_chars = false,
-  -- Makes the search area more obvious.
-  grey_out_search_area = true,
   -- If you have '                  ', only match the first '  '.
   match_only_the_start_of_same_char_seqs = true,
   -- How many matches to show for s/f/t.
