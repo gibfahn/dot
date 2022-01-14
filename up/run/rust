@@ -39,6 +39,9 @@ if no rustup || no cargo; then # Install/set up rust.
   # Set default toolchain to stable.
   rustup default stable
 
+  # Install ARM64 Darwin toolchain.
+  rustup target add aarch64-apple-darwin
+
   # Make sure we have useful components:
   rustup component add --toolchain stable rust-analysis rust-src clippy rustfmt
   rustup component add --toolchain nightly rust-analysis rust-src clippy rustfmt
