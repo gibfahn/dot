@@ -233,7 +233,7 @@ map('n', '<Leader>gb', '<Cmd>AnyJumpBack<CR>') -- open previous opened file (aft
 map('n', '<Leader>gc', '<Cmd>cd %:p:h<CR>') -- Change vim directory (:pwd) to current file's dirname (e.g. for <space>f, :e).
 map('n', '<Leader>gd', '<Cmd>w !git diff --no-index % - <CR>') -- Diff between saved file and current.
 map('n', '<Leader>gf', '<Cmd>call DupBuffer()<CR>gF') -- Open file path:row:col under cursor in last window.
-map('n', '<Leader>gg', '<Cmd>tab G<CR>') -- Open fugitive Gstatus in a new tab.
+map('n', '<Leader>gg', '<Cmd>tab Git<CR>') -- Open fugitive Gstatus in a new tab.
 map('n', '<Leader>gn', '<Cmd>set number!<CR>') -- Toggle line numbers.
 map('n', '<Leader>gp', '`[v`]') -- Visual selection of the last thing you copied or pasted.
 map('n', '<Leader>gq', '<Cmd>set fo-=t<CR><Cmd>set fo?<CR>') -- Turn off auto-inserting newlines when you go over the textwidth.
