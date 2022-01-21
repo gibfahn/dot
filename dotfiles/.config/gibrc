@@ -104,6 +104,7 @@ zsh-defer source $XDG_CONFIG_HOME/zsh/deferred/deferred.zsh
 setopt always_to_end # Move to end of word after completing that word from the middle of it.
 setopt auto_cd # Typing a path that isn't a command will cd to it.
 setopt auto_pushd # cd pushes onto pushd stack (Try `cd -<Tab>`)
+setopt complete_aliases # Do completion before expanding aliases.
 setopt complete_in_word # Allow completing words when you're in the middle of them.
 setopt extended_history # Save timestamps in history.
 setopt hist_expire_dups_first # Delete duplicates when history is full.
