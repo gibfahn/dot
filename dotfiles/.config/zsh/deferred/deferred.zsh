@@ -468,3 +468,5 @@ autoload -Uz compinit
 compinit
 
 # }}} Completions and Keybindings
+
+# vim: foldmethod=marker filetype=zsh tw=100
