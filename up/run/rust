@@ -36,8 +36,6 @@ if no rustup || no cargo; then # Install/set up rust.
   # Install stable and nightly.
   rustup install nightly
   rustup install stable # Should be a no-op.
-  # Set default toolchain to stable.
-  rustup default stable
 
   # Install ARM64 Darwin toolchain.
   rustup target add aarch64-apple-darwin
@@ -47,6 +45,10 @@ if no rustup || no cargo; then # Install/set up rust.
   rustup component add --toolchain nightly rust-analysis rust-src clippy rustfmt
 else
   rustup update
-  not cargo-install-update && cargo install cargo-update
-  cargo install-update -ia "${rust_crates[@]}" # Update everything installed with cargo install.
 fi
+
+# Set default toolchain to stable.
+rustup default stable
+
+not cargo-install-update && cargo install cargo-update
+cargo install-update -ia "${rust_crates[@]}" # Update everything installed with cargo install.
