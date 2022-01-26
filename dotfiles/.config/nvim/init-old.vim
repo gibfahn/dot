@@ -207,9 +207,9 @@ augroup gibAutoGroup                                " Group of automatic functio
   autocmd BufWritePost <sfile> nested source <sfile> " Reload vimrc on save.
   autocmd BufWritePost $MYVIMRC nested source $MYVIMRC " Reload vimrc on save.
   autocmd BufWritePre * if expand("<afile>:p:h") !~ "fugitive:" | call mkdir(expand("<afile>:p:h"), "p") | endif " Create dir if it doesn't already exist on save.
-  autocmd FileType fugitive nmap S sk]c| " https://github.com/tpope/vim-fugitive/issues/1926
-  autocmd FileType fugitive nmap <A-g> ]c| " Skip to next git hunk.
-  autocmd FileType fugitive nmap <A-G> [c| " Skip to previous git hunk.
+  autocmd FileType fugitive nmap <buffer> S sk]c| " https://github.com/tpope/vim-fugitive/issues/1926
+  autocmd FileType fugitive nmap <buffer> <A-g> ]c| " Skip to next git hunk.
+  autocmd FileType fugitive nmap <buffer> <A-G> [c| " Skip to previous git hunk.
   autocmd FileType go set listchars=tab:\ \ ,trail:·,nbsp:☠ " Don't highlight tabs in Go.
   autocmd FileType help wincmd L                    " Open new help windows on the right,
   autocmd FileType json setlocal foldmethod=indent  " JSON files should be folded by indent.
