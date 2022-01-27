@@ -1,11 +1,9 @@
-#!/usr/bin/env bash
-
-. "$(dirname "$0")/../../helpers/setup.sh" # Load helper script from dot/helpers.
+#!/usr/bin/env zsh
 
 set -ex
 
 # Install brew and Xcode Command Line Tools.
-if ! exists brew; then
+if ! type brew; then
   # Should only exist if we're on a work machine.
   if [[ -d ${wrk_dot_dir:-} ]]; then
     "$wrk_dot_dir"/up/run/brew
@@ -45,23 +43,18 @@ brew upgrade # You may occasionally want to run `brew upgrade --greedy` in case 
 
 # brew install things. Edit config/Brewfile to adjust.
 brew tap Homebrew/bundle
-if [[ $USER == gib ]]; then
-  brewfiles=$(ls "$XDG_CONFIG_HOME"/brew/*)
-else
-  brewfiles=$(ls "$XDG_CONFIG_HOME"/brew/* | grep -v hardcore)
-fi
-# Replace '\n' with ' ':
-brewfiles=${brewfiles//
-/ }
 
-if ! brew bundle --file=<(cat $brewfiles) check >/dev/null; then
-  brew bundle --file=<(cat $brewfiles) | grep -Evx "Using [-_/0-9a-zA-Z ]+"
+[[ $USER == gib ]] && brewfiles=("$XDG_CONFIG_HOME"/brew/*) \
+  || brewfiles=("$XDG_CONFIG_HOME"/brew/Brewfile)
+
+if ! brew bundle --file=<(cat ${brewfiles[@]}) check >/dev/null; then
+  brew bundle --file=<(cat ${brewfiles[@]}) | grep -Evx "Using [-_/0-9a-zA-Z ]+"
 fi
 
 # Useful to see what you need to add to your Brewfiles.
 echo "Brew packages that would be cleaned up, run this to actually clean:
-  brew bundle cleanup --force --file=<(cat $brewfiles)"
-brew bundle cleanup --file=<(cat $brewfiles)
+  brew bundle cleanup --force --file=<(cat ${brewfiles[@]})"
+brew bundle cleanup --file=<(cat ${brewfiles[@]})
 
 copyq_version_new=$(copyq --version)
 
