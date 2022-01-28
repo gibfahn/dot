@@ -32,4 +32,4 @@ As long as it goes in `$HOME`, just put it in the same relative directory inside
 `~/.bashrc` becomes `dotfiles/.bashrc`). If you rerun `link` it should get symlinked into the right
 place.
 
-[manual.md]: /setup/manual.md
+[manual.md]: /up/manual.md
