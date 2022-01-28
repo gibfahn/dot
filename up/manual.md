@@ -1,15 +1,14 @@
 # Manual Setup
 
+Note that these are the manual steps I personally use (that I haven't yet managed to automate).
+You will probably have different things you want/need to set up.
+
 ## macOS
 
 ### PreReqs
 
-Before you can run the macOS setup for the first time, you need to do the
-following:
-
-- Install the Xcode Command Line Tools:
-  - Open `Terminal.app` and run `git`, follow prompts to install.
-- Set up relevant ssh/gpg keys.
+While running `up-rs` for the first time, you will need to ensure you set up gpg and ssh keys you
+need in later steps.
 
 ### System Preferences:
 
@@ -24,7 +23,6 @@ scutil --set LocalHostName
 - `Keyboard`:
   - `Shortcuts`
     - `Services` -> remove mappings from `man Page` shortcuts
-  - `Input Sources` -> add `Colemak`
 - `Sharing`:
   - Tick the `Screen Sharing` checkbox.
 - Security & Privacy:
@@ -53,4 +51,3 @@ After installing:
 
 [Paragon for NTFS]: https://www.seagate.com/gb/en/support/software/paragon/
 [`paragon-ntfs`]: https://formulae.brew.sh/cask/paragon-ntfs
-[sVim]: https://github.com/flippidippi/sVim
