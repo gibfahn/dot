@@ -121,3 +121,9 @@ data:
       name: MENU_WEBSEARCH
     - enabled: false
       name: MENU_SPOTLIGHT_SUGGESTIONS
+
+
+  # Change Sogou keyboard layout to Colemak:
+  # ⚙ -> 偏好号设置 -> 按键 -> 键盘布局 -> 其他键盘 -> Colemak
+  '/Users/gib/Library/Application Support/Sogou/InputMethod/SogouPY/UserPreferences.plist':
+    keyboardSelected: com.apple.keylayout.Colemak
