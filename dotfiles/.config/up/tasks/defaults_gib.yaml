@@ -122,6 +122,13 @@ data:
     - enabled: false
       name: MENU_SPOTLIGHT_SUGGESTIONS
 
+  com.apple.loginwindow:
+    # Skip the "want to reopen apps?" prompt when computer restarts unexpectedly.
+    # "You shut down your computer because of a problem. If you want to open the applications that
+    # were open when you shut down, click Open" -> Cancel
+    SkipRestartTALWarning: true
+    # Default to no for "Reopen windows when logging back in?" reboot prompt.
+    TALLogoutSavesState: false
 
   # Change Sogou keyboard layout to Colemak:
   # ⚙ -> 偏好号设置 -> 按键 -> 键盘布局 -> 其他键盘 -> Colemak
