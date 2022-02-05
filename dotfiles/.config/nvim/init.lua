@@ -84,8 +84,6 @@ vim.g.lightline = {
 
 vim.cmd 'colorscheme desert' -- Default colorscheme in case plugins don't load.
 
-vim.opt.grepformat = '%f:%l:%c:%m,%f:%l:%m' -- Teach vim how to parse the ripgrep output.
-vim.opt.grepprg = 'rg -S --vimgrep --no-heading --hidden --glob !.git' -- Use ripgrep for file searching.
 vim.opt.breakindent = true -- Nicer line wrapping for long lines.
 vim.opt.confirm = true -- Ask if you want to save unsaved files instead of failing.
 vim.opt.diffopt:append("vertical") -- Always use vertical diffs.
@@ -96,6 +94,8 @@ vim.opt.foldlevel = 99 -- expand all by default.
 vim.opt.foldmethod = "expr" -- Fold according to the syntax rules,
 vim.opt.formatoptions:remove("t") -- Don't autowrap text at 80.
 vim.opt.gdefault = true -- Global replace default (off: /g).
+vim.opt.grepformat = '%f:%l:%c:%m,%f:%l:%m' -- Teach vim how to parse the ripgrep output.
+vim.opt.grepprg = 'rg -S --vimgrep --no-heading --hidden --glob !.git' -- Use ripgrep for file searching.
 vim.opt.hidden = true -- Enable background buffers
 vim.opt.history = 1000 -- More command/search history.
 vim.opt.ignorecase = true -- Ignore case for lowercase searches (re-enable with \C in pattern),
@@ -120,7 +120,9 @@ vim.opt.splitbelow = true -- Put new windows below current
 vim.opt.splitright = true -- Put new windows right of current
 vim.opt.tabstop = 2 -- Number of spaces tabs count for
 vim.opt.termguicolors = true -- True color support
+vim.opt.undofile = true -- Persistent undo file saved between file edits.
 vim.opt.updatetime = 100 -- Delay after which to write to swap file and run CursorHold event.
+vim.opt.updatetime = 50 -- After how many characters should we save a swap file?
 vim.opt.visualbell = true -- Flash the screen instead of beeping when doing something wrong.
 vim.opt.wildignorecase = true -- Case insensitive file tab completion with :e.
 vim.opt.wildmode = {"list", "longest"} -- 1st Tab completes to longest common string, 2nd+ cycles through options.
