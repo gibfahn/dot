@@ -75,31 +75,6 @@ function! SortLinesOpFunc(...)
     '[,']sort
 endfunction
 
-" Used in Swapfile autocmds below.
-function! s:HandleRecover()
-  echo system('diff - ' . shellescape(expand('%:p')), join(getline(1, '$'), "\n") . "\n")
-  if v:shell_error
-    call s:DiffOrig()
-  else
-    call delete(b:swapname)
-    echohl WarningMsg
-    echomsg "No differences; deleting the old swap file."
-    echohl NONE
-    call feedkeys(" ")
-  endif
-endfunction
-
-" Used in Swapfile autocommands below.
-function! s:DiffOrig()
-  vert new
-  set bt=nofile
-  r #
-  0d_
-  diffthis
-  wincmd p
-  diffthis
-endfunction
-
  " Helper function for LightlineCoc*() functions.
 function! s:lightline_coc_diagnostic(kind, sign) abort
   let info = get(b:, 'coc_diagnostic_info', 0)
@@ -186,15 +161,11 @@ command! -nargs=+ -complete=file Lr lexpr system(<q-args>)
 augroup gibAutoGroup                                " Group of automatic functions.
   autocmd!|                                         " Remove existing autocmds.
 
-  autocmd BufEnter    * let b:swapchoice_likely = (&l:ro ? 'o' : 'e')
   autocmd BufNewFile,BufRead *.bats  set filetype=sh       " Bats is a shell test file type.
-  autocmd BufReadPost * let b:swapchoice_likely = (&l:ro ? 'o' : 'r')
   autocmd BufReadPost *|                            " On open jump to last cursor position if possible.
     \ if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") |
     \   execute "normal g`\"" |
     \ endif
-  autocmd BufWinEnter * if exists('b:swapchoice') && b:swapchoice == 'r' | call s:HandleRecover() | endif
-  autocmd BufWinEnter * if exists('b:swapchoice') && exists('b:swapchoice_likely') | let b:swapchoice = b:swapchoice_likely | unlet b:swapchoice_likely | endif
   autocmd BufWritePost <sfile> nested source <sfile> " Reload vimrc on save.
   autocmd BufWritePost $MYVIMRC nested source $MYVIMRC " Reload vimrc on save.
   autocmd BufWritePre * if expand("<afile>:p:h") !~ "fugitive:" | call mkdir(expand("<afile>:p:h"), "p") | endif " Create dir if it doesn't already exist on save.
@@ -214,8 +185,6 @@ augroup gibAutoGroup                                " Group of automatic functio
   " Use getcmdwintype() to avoid running in the q: window (otherwise you get lots of errors).
   autocmd FocusGained,BufEnter,CursorHold,CursorHoldI * if getcmdwintype() == '' | checktime | endif
   autocmd QuickFixCmdPost *grep* cwindow|           " Open the quickfix window on grep.
-  " Recover deletes swapfile if no difference, or shows diff if different.
-  autocmd SwapExists  * let b:swapchoice = '?' | let b:swapname = v:swapname
   autocmd User CocDiagnosticChange call lightline#update()
   autocmd VimEnter * silent! tabonly|               " Don't allow starting Vim with multiple tabs.
 

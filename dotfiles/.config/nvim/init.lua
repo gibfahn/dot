@@ -360,6 +360,7 @@ require('packer').startup(function(use)
   use 'aymericbeaumet/vim-symlink' -- Resolve symlinks when opening files.
   use 'cespare/vim-toml' -- Toml syntax highlighting.
   use 'chrisbra/Colorizer' -- Color ansi escape codes (:h Colorizer).
+  use 'chrisbra/Recover.vim' -- add a diff option when a swap file is found.
   use 'coderifous/textobj-word-column.vim' -- Adds ic/ac and iC/aC motions to block select word column in paragraph.
   use 'fweep/vim-zsh-path-completion' -- Nicer file browser plugin.
   use 'ggandor/lightspeed.nvim' -- Quickest way to jump to any char on the screen (alternative to easymotion/sneak/hop).
@@ -394,7 +395,8 @@ require('packer').startup(function(use)
 
   -- Plugins where order is important (last one wins).
 
-  use 'sheerun/vim-polyglot' -- Syntax files for a large number of different languages.
+  -- Disabled until https://github.com/sheerun/vim-polyglot/issues/765 is fixed.
+  -- use 'sheerun/vim-polyglot' -- Syntax files for a large number of different languages.
   use 'tpope/vim-sleuth' -- Automatically detect indentation.
   use 'editorconfig/editorconfig-vim' -- Parse .editorconfig files (https://editorconfig.org/).
 
