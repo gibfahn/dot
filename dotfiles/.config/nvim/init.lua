@@ -177,7 +177,7 @@ map('n', '<A-n>', '<C-w>j') -- Switch down a window,
 map('n', '<A-q>', '<Cmd>cnext<CR>') -- Next item in the quickfix list.
 map('n', '<A-s>', ']s') -- Next spelling mistake.
 map('n', '<A-t>', '<Cmd>tabnext<CR>') -- Next tab.
-map('n', '<A-x>', '<Cmd>call BufferClose("")<CR>') -- Close current buffer.
+map('n', '<A-x>', '<Cmd>Bdelete<CR>') -- Close current buffer.
 map('n', '<A-z>', '<Cmd>Zi<CR>') -- Switch to different directory.
 map('n', '<C-W>+', '<C-W>+<SID>ws', {noremap = false}) -- Increase current window height.
 map('n', '<C-W>-', '<C-W>-<SID>ws', {noremap = false}) -- Decrease current window height.
@@ -224,7 +224,7 @@ map('n', '<Leader>cr', '<Plug>(coc-rename)', {noremap = false}) -- Remap for ren
 map('n', '<Leader>cs', '<Cmd>CocList -I symbols<CR>', {silent = true}) -- Search workspace symbols
 map('n', '<Leader>cu', '<Plug>(coc-references)', {silent = true, noremap = false}) -- Go to usages.
 map('n', '<Leader>cy', '<Plug>(coc-type-definition)', {silent = true, noremap = false}) -- Go to type definition.
-map('n', '<Leader>d', '<Cmd>call BufferClose("")<CR>') -- Close buffer without closing split,
+map('n', '<Leader>d', '<Cmd>Bdelete<CR>') -- Close buffer without closing split,
 map('n', '<Leader>e', '<C-w>q') -- Close current split (keeps buffer).
 map('n', '<Leader>f', '<Cmd>Files<CR>') -- Search file names for file,
 map('n', '<Leader>gC', '<Cmd>e ~/.config/nvim/coc-settings.json<CR>') -- Edit colorscheme file.
@@ -367,6 +367,7 @@ require('packer').startup(function(use)
   use 'godlygeek/tabular' -- Make tables easier (:help Tabular).
   use 'honza/vim-snippets' -- Work around https://github.com/neoclide/coc-snippets/issues/126 .
   use 'itchyny/lightline.vim' -- Customize statusline and tabline.
+  use 'moll/vim-bbye' -- Delete buffer without closing split.
   use 'junegunn/fzf.vim' -- Try :Files, :GFiles? :Buffers :Lines :History :Commits :BCommits
   use 'junegunn/vim-peekaboo' -- Pop up register list when pasting/macroing.
   use 'kana/vim-operator-user' -- Make it easier to define operators.

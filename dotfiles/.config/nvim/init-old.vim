@@ -44,15 +44,6 @@ function! DupBuffer()
   call setpos('.', pos) " Set cursor position to what is was before.
 endfunction
 
-function! BufferClose(bang) abort " Call BufferClose('!') to get bd!
-  let oldbuf = bufnr('%') | let oldwin = winnr()
-  if len(getbufinfo({'buflisted':1})) == 1 | enew | else | bp | endif " Open new if no other buffers.
-  " For each window with oldbuf open, switch to previous buffer.
-  while bufwinnr(oldbuf) != -1 | exec bufwinnr(oldbuf) 'wincmd w'| bp | endwhile
-  " Delete oldbuf and restore window to oldwin
-  exec oldwin 'wincmd w' | exec oldbuf 'bd' . a:bang
-endfunc
-
 " Make vim-surround work in operator-pending mode, so the cursor changes when you press e.g. ys.
 " Requires custom mapping and disabling default mappings (SurroundOp).
 function! SurroundOp(char)
