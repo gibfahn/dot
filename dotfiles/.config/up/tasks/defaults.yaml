@@ -333,7 +333,7 @@ data:
     iconInMenuBar: none
     enabledCalendars: []
     # See https://nsdateformatter.com for docs.
-    # e.g. Fri 2021-11-12 13:43:02
+    # e.g. 2021-11-12 Fri 13:43:02
     dateTimeFormat: "yyyy-MM-dd E HH:mm:ss"
     timeZonesInMenuBackup: []
     showDateInMenuBar: true
