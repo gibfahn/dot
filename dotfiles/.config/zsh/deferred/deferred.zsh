@@ -184,6 +184,7 @@ rs() { for i in "$@"; do rustc "${i%.rs}.rs"; ./"${i%.rs}"; done; } # Compile/ru
 # .. = up 1 dir, ... = up 2 dirs, .... = up 3 dirs (etc.). - = go to last dir.
 alias next='git next && git show' # Useful for demos.
 alias gm='wait; git mf' # After cd'ing into a repo, fetch will run as a background job. Use this to wait for it to finish then mf.
+alias fe="fd | entr" # Shortcut for the most common "run this command when something changes" I use.
 
 # Find-replace everything in the current directory. Use `--` to pass args to fd.
 # e.g. 'sda s/foo/bar/g', 'sda --hidden -- s/foo/bar/g'
