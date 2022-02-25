@@ -40,7 +40,6 @@ brew "bandwhich"                         # See what's using bandwidth on your ma
 brew "bat"                               # Nicer cat with syntax highlighting etc.
 brew "bazelisk"                          # Easily use the latest version of bazel.
 brew "binutils"                          # GNU versions of tools for interacting with binaries (nm, strings etc).
-brew "broot"                             # Interactive version of "tree".
 brew "buildifier"                        # Bazel code formatter.
 brew "buildozer"                         # Automatically apply fixes to bazel files.
 brew "dfu-programmer"                    # QMK dependency used for flashing my Ergodox Infinity.
