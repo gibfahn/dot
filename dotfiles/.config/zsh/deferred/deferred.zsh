@@ -162,6 +162,13 @@ rv() {
   "$=VISUAL" -q <(eval "$cmd")
 }
 
+# Interactive move to trash..
+# dli -> interactive delete files in current directory.
+# dli foo/* bar/* -> interactive delete files in foo and bar subdirectories.
+dli() {
+  { [[ $# == 0 ]] && fd -0d 1 || print -N $@; } | fzf --read0 --print0 | xargs -0 ${=aliases[dl]}
+}
+
 # }}} Functions
 
 # {{{ Aliases
@@ -173,7 +180,6 @@ rv() {
 # Footgun, means your shell has sudo privileges forever, make sure you only use this for a single command, after that exit the shell.
 # e.g. sudo_later; sleep 1000; sudo halt
 alias sudo_later="sudo -v; (while sudo -v; do sleep 60; done) &" # Preserve sudo for a command you'll run later.
-alias dli="fd -0d 1 | fzf --read0 --print0 | xargs -0 ${=aliases[dl]}" # Interactive delete.
 alias bounce="echo -n '\a'" # Ring the terminal bell (bounce the dock icon in macOS).
 alias pstree="pstree -g 3" # Use the nicest pstree output (unicode).
 # Run command every $1 seconds until it succeeds, e.g. `every 60 curl https://example.com`
