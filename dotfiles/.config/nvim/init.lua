@@ -368,12 +368,12 @@ require('packer').startup(function(use)
   use 'godlygeek/tabular' -- Make tables easier (:help Tabular).
   use 'honza/vim-snippets' -- Work around https://github.com/neoclide/coc-snippets/issues/126 .
   use 'itchyny/lightline.vim' -- Customize statusline and tabline.
-  use 'moll/vim-bbye' -- Delete buffer without closing split.
   use 'junegunn/fzf.vim' -- Try :Files, :GFiles? :Buffers :Lines :History :Commits :BCommits
   use 'junegunn/vim-peekaboo' -- Pop up register list when pasting/macroing.
   use 'kana/vim-operator-user' -- Make it easier to define operators.
   use 'kana/vim-textobj-line' -- Adds `il` and `al` text objects for current line.
   use 'kana/vim-textobj-user' -- Allows you to create custom text objects (used in vim-textobj-line).
+  use 'moll/vim-bbye' -- Delete buffer without closing split.
   use 'mzlogin/vim-markdown-toc' -- Markdown Table of Contents.
   use 'nanotee/zoxide.vim' -- Use zoxide to quickly jump to directories.
   use 'pechorin/any-jump.nvim' -- Go to definition that doesn't require a language server.
@@ -388,17 +388,13 @@ require('packer').startup(function(use)
   use 'tpope/vim-rsi' -- Insert/commandline readline-style mappings, e.g. C-a for beginning of line.
   use 'tpope/vim-surround' -- Add/mod/remove surrounding chars.
   use 'tpope/vim-unimpaired' -- [ and ] mappings (help unimpaired).
+  use {'editorconfig/editorconfig-vim', after = 'vim-sleuth'} -- Parse .editorconfig files (https://editorconfig.org/).
   use {'neoclide/coc.nvim', branch = 'release'} -- Language Server with VSCode Extensions.
   use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'} -- Treesitter syntax highlighting.
+  use {'sheerun/vim-polyglot', config = 'vim.opt.shortmess:remove("A")'} -- Syntax files for a large number of different languages + workaround for https://github.com/sheerun/vim-polyglot/issues/765.
   use {'subnut/nvim-ghost.nvim', run = ':call nvim_ghost#installer#install()'} -- Edit browser text areas in Neovim (:h ghost).
+  use {'tpope/vim-sleuth', after = 'vim-polyglot'} -- Automatically detect indentation.
   use {'~/.local/share/fzf', as = 'fzf', run = './install --bin'} -- :h fzf
-
-  -- Plugins where order is important (last one wins).
-
-  -- Disabled until https://github.com/sheerun/vim-polyglot/issues/765 is fixed.
-  -- use 'sheerun/vim-polyglot' -- Syntax files for a large number of different languages.
-  use 'tpope/vim-sleuth' -- Automatically detect indentation.
-  use 'editorconfig/editorconfig-vim' -- Parse .editorconfig files (https://editorconfig.org/).
 
 end)
 
