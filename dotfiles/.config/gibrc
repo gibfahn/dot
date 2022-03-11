@@ -21,7 +21,7 @@
 [ "$ZSH_VERSION" ] || return # Only run if using zsh
 
 case $- in
-  *i*) [[ -n "$GIBRC" ]] && echo "Reusing gibrc..." ;;
+  *i*) [[ -n "$GIBRC" ]] && echo "Reusing gibrc..." >&2 ;;
   *) return ;; # Exit if not running interactively.
 esac
 export GIBRC=${GIBRC:-0} # First time through this is 0, next time 1 (etc).
