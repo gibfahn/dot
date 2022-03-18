@@ -55,6 +55,7 @@
   bss = bisect start
   btu = "!git branch -u ${1:-up/$(git default-branch up)} #" # g btu remote/branch (defaults to up/HEAD).
   btp = "!git config branch.$(git head-branch).pushRemote ${1:-fork} #" # `g btp up` sets push remote for this branch to up, useful when pushing directly to 'up'.
+  btpa = "!git config remote.pushDefault $1 #" # Set push remote for all future branches in this repo. Use this when you have a repo you don't want to fork.
 
   # I manually specify -S because gpgsign only works with Git 2.x. Also it means that test suites
   # using `git commit` don't break, and machines without gpg can commit using the full commands.
