@@ -153,7 +153,7 @@ gcl() {
 rv() {
   local cmd
   cmd="$(fc -lnr -100 | awk '$1 == "rg" || $1 == "rga" {
-    out="rg --vimgrep"
+    out="rg --smart-case --vimgrep"
     if ($1 == "rga") { out=out" --hidden --no-ignore --glob=!.git" }
     for (i=2; i<=NF; i++) { out=out" "$i }
     print out; exit
@@ -176,7 +176,7 @@ dli() {
 (( $+commands[gsed] )) && alias sed=gsed
 # fda is find all (don't ignore anything).
 (( $+commands[fd] )) && alias fda='fd --no-ignore --hidden --exclude=.git' || fd() { find . -iname "*$**"; } # Find by filename (case insensitive).
-(( $+commands[rg] )) && alias rg='rg' rga='rg --hidden --no-ignore --glob=!.git' # rga is grep all (don't ignore anything).
+(( $+commands[rg] )) && alias rg='rg --smart-case' rga='rg --smart-case --hidden --no-ignore --glob=!.git' # rga is grep all (don't ignore anything).
 # Footgun, means your shell has sudo privileges forever, make sure you only use this for a single command, after that exit the shell.
 # e.g. sudo_later; sleep 1000; sudo halt
 alias sudo_later="sudo -v; (while sudo -v; do sleep 60; done) &" # Preserve sudo for a command you'll run later.
