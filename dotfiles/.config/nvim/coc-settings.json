@@ -8,15 +8,9 @@
   "suggest.enablePreview": true,
   // Enable preselect feature on Neovim, automatically select first item.
   // "suggest.enablePreselect": true,
-  // Input number to select completion, could be wrong when using '<up>' and '<down>' to select complete item.
-  "suggest.numberSelect": false,
   // Trigger completion after InsertEnter.
   "suggest.triggerAfterInsertEnter": true,
-
-  // Show the close button in popup window.
-  "suggest.floatConfig": {
-    "close": true
-  },
+  "colors.filetypes": ["*"],
 
   // Show the close button in popup window.
   "diagnostic.floatConfig": {
@@ -32,6 +26,8 @@
   "hover.floatConfig": {
     "close": true
   },
+
+  "links.tooltip": true,
 
   // Used in the gutter for errors.
   "diagnostic.errorSign": "✖",
@@ -56,7 +52,6 @@
     "<C-q>": "action:quickfix"
   },
   "codeLens.enable": true,
-  "coc.preferences.colorSupport": true,
   // Unset this as the python autoformat disagrees with flake8.
   "coc.preferences.formatOnType": true,
   "coc.preferences.formatOnTypeFiletypes": ["rust", "json", "go"],
@@ -93,14 +88,16 @@
   "rust-analyzer.cargo.loadOutDirsFromCheck": true,
   "rust-analyzer.procMacro.enable": true,
   // Use crate:: style absolute paths by default vs super:: style relative paths.
-  "rust-analyzer.assist.importPrefix": "by_crate",
+  "rust-analyzer.assist.importPrefix": "crate",
   // Use nightly rustfmt, see https://github.com/rust-analyzer/rust-analyzer/issues/3627
   "rust-analyzer.rustfmt.extraArgs": ["+nightly"],
   "yaml.format.enable": true,
   "yaml.hover": true,
   "yaml.schemas": {
     "https://pages.github.pie.apple.com/dchao3/kw-to-json-schema/resources/rio.schema.json": "/rio.yml",
-    "http://json.schemastore.org/gitlab-ci": "/.gitlab-ci.yml"
+    "http://json.schemastore.org/gitlab-ci": "/.gitlab-ci.yml",
+    // Ansible schema is used by default for everything that has path tasks/*.yaml
+    "": "up/tasks/*.yaml"
   },
   "json.schemas": [
     {
