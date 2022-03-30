@@ -221,6 +221,7 @@ map('n', '<Leader>ci', '<Plug>(coc-implementation)', {silent = true, noremap = f
 map('n', '<Leader>co', '<Cmd>CocList outline<CR>', {silent = true}) -- Find symbol of current document
 map('n', '<Leader>cp', '<Cmd>CocListResume<CR>', {silent = true}) -- Resume latest coc list
 map('n', '<Leader>cr', '<Plug>(coc-rename)', {noremap = false}) -- Remap for rename current word
+map('n', '<Leader>cR', '<Plug>(coc-refactor)', {noremap = false}) -- Remap for refactoring current selection.
 map('n', '<Leader>cs', '<Cmd>CocList -I symbols<CR>', {silent = true}) -- Search workspace symbols
 map('n', '<Leader>cu', '<Plug>(coc-references)', {silent = true, noremap = false}) -- Go to usages.
 map('n', '<Leader>cy', '<Plug>(coc-type-definition)', {silent = true, noremap = false}) -- Go to type definition.
