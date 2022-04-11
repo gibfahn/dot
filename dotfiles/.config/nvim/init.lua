@@ -425,11 +425,7 @@ end
 vim.cmd 'colorscheme gib'
 
 -- Set up Treesitter languages.
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = "maintained",
-  highlight = {enable = true},
-  indent = {enable = true}
-}
+require'nvim-treesitter.configs'.setup {ensure_installed = "all", highlight = {enable = true}, indent = {enable = true}}
 
 -- https://github.com/ggandor/lightspeed.nvim
 --   s|S char1 (char2|shortcut)? (<tab>|<s-tab>)* label?
