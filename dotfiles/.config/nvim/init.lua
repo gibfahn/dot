@@ -179,10 +179,6 @@ map('n', '<A-s>', ']s') -- Next spelling mistake.
 map('n', '<A-t>', '<Cmd>tabnext<CR>') -- Next tab.
 map('n', '<A-x>', '<Cmd>Bdelete<CR>') -- Close current buffer.
 map('n', '<A-z>', '<Cmd>Zi<CR>') -- Switch to different directory.
-map('n', '<C-W>+', '<C-W>+<SID>ws', {noremap = false}) -- Increase current window height.
-map('n', '<C-W>-', '<C-W>-<SID>ws', {noremap = false}) -- Decrease current window height.
-map('n', '<C-W><', '<C-W><<SID>ws', {noremap = false}) -- Decrease current window width.
-map('n', '<C-W>>', '<C-W>><SID>ws', {noremap = false}) -- Increase current window width.
 map('n', '<C-p>', '<C-i>') -- <C-o> = go to previous jump, <C-p> is go to next (normally <C-i>, but that == Tab, used above).
 map('n', '<Leader>+', '<Cmd>exe "resize ".(winheight(0) * 3/2)<CR>', {silent = true}) -- Increase window height to 3/2.
 map('n', '<Leader>-', '<Cmd>exe "resize ".(winheight(0) * 2/3)<CR>', {silent = true}) -- Reduce window height to 3/2.
@@ -261,11 +257,6 @@ map('n', '<Leader>x', '<Cmd>x<CR>') -- Save (if changes) and quit.
 map('n', '<Leader>y', '"+y') -- Copy to clipboard (normal mode).
 map('n', '<Leader>z', 'za') -- Toggle folding on current line.
 map('n', '<S-Tab>', '<Cmd>bp<CR>') -- Shift-Tab to switch to previous buffer.
-map('n', '<SID>ws', '<Nop>', {noremap = false}) -- Stop the window size mappings from recursing.
-map('n', '<SID>ws+', '<C-W>+<SID>ws', {script = true}) -- Hold to continue increasing current window height.
-map('n', '<SID>ws-', '<C-W>-<SID>ws', {script = true}) -- Hold to continue decreasing current window height.
-map('n', '<SID>ws<', '<C-W><<SID>ws', {script = true}) -- Hold to continue decreasing current window width.
-map('n', '<SID>ws>', '<C-W>><SID>ws', {script = true}) -- Hold to continue increasing current window width.
 map('n', '<Tab>', '<Cmd>bn<CR>') -- Tab to switch to next buffer,
 map('n', 'K', '<CMD>lua Show_Documentation()<CR>') -- Use K for show documentation in preview window
 map('n', 'N', '(v:searchforward) ? "N" : "n"', {expr = true}) -- N is always "next one up" even if you hit #
@@ -374,6 +365,7 @@ require('packer').startup(function(use)
   use 'kana/vim-textobj-line' -- Adds `il` and `al` text objects for current line.
   use 'kana/vim-textobj-user' -- Allows you to create custom text objects (used in vim-textobj-line).
   use 'moll/vim-bbye' -- Delete buffer without closing split.
+  use 'sedm0784/vim-resize-mode' -- Continuous resizing.
   use 'mzlogin/vim-markdown-toc' -- Markdown Table of Contents.
   use 'nanotee/zoxide.vim' -- Use zoxide to quickly jump to directories.
   use 'pechorin/any-jump.nvim' -- Go to definition that doesn't require a language server.
