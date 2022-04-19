@@ -2,9 +2,9 @@ run_if_cmd: ["/bin/sh", "-cex", '[ "$(whoami)" = gib -a "$(uname)" = Darwin ] ||
 run_lib: defaults
 data:
   NSGlobalDomain:
-    # Set up fastest key repeat rate (needs relogin).
+    # Set up fastest key repeat rate (needs relogin). Default 2.
     KeyRepeat: 1
-    # Sets a low time before key starts repeating.
+    # Sets a low time before key starts repeating (default 15).
     InitialKeyRepeat: 8
 
     # Use Dark mode.
@@ -25,6 +25,9 @@ data:
     # Set sidebar icon size to medium
     NSTableViewDefaultSizeMode: 2
 
+    # Increase window resize speed for Cocoa applications
+    NSWindowResizeTime: 0.001
+
     NSUserKeyEquivalents:
       # Create global shortcut "Merge all windows" ⌘-M
       "Merge All Windows": '@$m'
@@ -40,6 +43,9 @@ data:
     # https://simcityltd.medium.com/how-to-get-the-perfect-macos-dock-b2593f9c0f0b
     autohide-delay: 0.0
     autohide-time-modifier: 0.25
+
+    # Speed up Mission Control animations
+    expose-animation-duration: 0.1
 
   com.apple.finder:
     # Allow Finder to be quit (hides Desktop files).
