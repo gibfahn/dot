@@ -250,7 +250,7 @@ map('n', '<Leader>i', '<Cmd>vsp<CR><C-w>h:bp<CR>') -- Open vertical split.
 map('n', '<Leader>j', '<Cmd>AnyJump<CR>') -- Jump to definition under cursore
 map('n', '<Leader>l', ':Locate ') -- Search filesystem for files.
 map('n', '<Leader>n', '<Cmd>sp<CR><C-w>k:bp<CR>') -- Open horizontal split,
-map('n', '<Leader>o', '<Cmd>set operatorfunc=OpenUrl<CR>g@') -- Open the selected text with the appropriate program (like netrw-gx).
+map('n', '<Leader>o', '<Plug>(coc-openlink)', {noremap = false}) -- Open the selected text with the appropriate program (like netrw-gx).
 map('n', '<Leader>p', '"+p') -- Paste from clipboard after cursor.
 map('n', '<Leader>q', '<Cmd>qa<CR>') -- Quit if no unsaved changes (for single file use <Space>d instead).
 map('n', '<Leader>r', ':%s/') -- Replace in current doc.
@@ -287,7 +287,6 @@ map('v', '<C-n>', '<Plug>(coc-snippets-select)', {noremap = false}) -- Select te
 map('v', '<Leader>cf', '<Plug>(coc-format-selected)', {noremap = false}) -- Format selected region
 map('v', '<Leader>d', '"+d') -- Cut from clipboard (visual mode).
 map('v', '<Leader>gs', ':<C-u>call SumVis()<CR>') -- Sum selected numbers.
-map('v', '<Leader>o', ':<c-u>call OpenUrl(visualmode())<CR>') -- Open the selected text with the appropriate program (like netrw-gx).
 map('v', '<Leader>p', '"+p') -- Paste from clipboard (visual mode).
 map('v', '<Leader>y', '"+y') -- Copy from clipboard (visual mode).
 map('v', 'g//', [[y/\V<C-R>=&ic?'\c':'\C'<CR><C-r>=escape(@",'/\')<CR><CR>]]) -- Search for selected text case-insensitively.

@@ -19,15 +19,6 @@ function! OperatorRip(wiseness) abort
   endif
 endfunction
 
-" Open selected text with Browse function below, used with `<Leader>o` mappings.
-function! OpenUrl(type)
-  if a:type ==# 'v'| execute "normal! `<v`>y"| " If in charwise visual mode, copy selected URL.
-  elseif a:type ==# 'char'| execute "normal! `[v`]y"| " If given a text object URL, copy it.
-  else| return
-  endif
-  call Browse(@@)
-endfunction
-
 " Open path or URL using system open command.
 function! Browse(pathOrUrl)
   " This doesn't work with /usr/bin/vim on macOS (doesn't identify as macOS).
