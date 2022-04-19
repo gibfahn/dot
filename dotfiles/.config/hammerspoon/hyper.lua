@@ -150,24 +150,6 @@ end)
 HyperMode:bind({}, ';', hs.caffeinate.lockScreen)
 -- }}} Hyper-; -> lock screen
 
--- {{{ Hyper-q -> Work setup
--- Open work apps and turn on VPN.
-HyperMode:bind({}, 'q', function()
-  hs.notify.new({title = 'Work Setup', withdrawAfter = 3}):send()
-  local appsToOpen = {'Activity Monitor', 'Safari', 'Slack', 'Calendar', 'Mail', 'Radar 8', 'Kitty', 'Workflowy'}
-  for _, app in ipairs(appsToOpen) do hs.application.launchOrFocus(app) end
-end)
--- }}} Hyper-q -> Work setup
-
--- {{{ Hyper-shift-q -> Minimal setup
--- Open work apps I actually use and turn on VPN.
-HyperMode:bind({'shift'}, 'q', function()
-  hs.notify.new({title = 'Minimal Work Setup', withdrawAfter = 3}):send()
-  local appsToOpen = {'Activity Monitor', 'Safari', 'Kitty'}
-  for _, app in ipairs(appsToOpen) do hs.application.launchOrFocus(app) end
-end)
--- }}} Hyper-shift-q -> Minimal setup
-
 -- {{{ Hyper-⌥-q -> Force Quit Webex
 -- Quit webex without spending an age trying to find the button.
 HyperMode:bind({'alt'}, 'q', function() KillAll({'-9', '-m', '.*Meeting Center.*'}) end)
@@ -266,21 +248,6 @@ end)
 -- {{{ Hyper-⇧-x -> Restart the touch strip.
 HyperMode:bind({'shift'}, 'x', function() KillAll("ControlStrip") end)
 -- }}} Hyper-⇧-x -> Restart the touch strip.
-
--- {{{ Hyper-<mods>-v -> Connect to VPN
-CallVpn = function(arg)
-  hs.task.new(os.getenv("HOME") .. "/bin/vpn", function(exitCode, stdOut, stdErr)
-    hs.notify.new({
-      title = 'VPN ' .. arg .. '...',
-      informativeText = exitCode .. " " .. stdOut .. " " .. stdErr,
-      withdrawAfter = 3
-    }):send()
-  end, {arg}):start()
-end
-HyperMode:bind({}, 'v', function() CallVpn("corporate") end)
-HyperMode:bind({'shift'}, 'v', function() CallVpn("off") end)
-HyperMode:bind({'cmd'}, 'v', function() CallVpn("dc") end)
--- }}} Hyper-<mods>-v -> Connect to VPN
 
 -- {{{ Hyper-{h,n,e,i} -> Arrow Keys, Hyper-{j,l,u,y} -> Home,PgDn,PgUp,End
 for _, hotkey in ipairs({
