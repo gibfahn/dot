@@ -47,6 +47,9 @@ data:
     # Speed up Mission Control animations
     expose-animation-duration: 0.1
 
+    # Don’t animate opening applications from the Dock
+    # launchanim: false
+
   com.apple.finder:
     # Allow Finder to be quit (hides Desktop files).
     QuitMenuItem: 1
