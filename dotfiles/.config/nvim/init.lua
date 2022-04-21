@@ -344,6 +344,7 @@ require('packer').startup(function(use)
   -- Packer can manage itself
   use 'wbthomason/packer.nvim'
 
+  use "fladson/vim-kitty" -- Syntax highlighting for kitty.conf file.
   use 'AndrewRadev/splitjoin.vim' -- gS to split, gJ to join lines.
   use 'airblade/vim-gitgutter' -- Show git diffs in the gutter (left of line numbers) (:h gitgutter).
   use 'ap/vim-buftabline' -- Show buffers in the tab bar.
@@ -365,12 +366,12 @@ require('packer').startup(function(use)
   use 'kana/vim-textobj-line' -- Adds `il` and `al` text objects for current line.
   use 'kana/vim-textobj-user' -- Allows you to create custom text objects (used in vim-textobj-line).
   use 'moll/vim-bbye' -- Delete buffer without closing split.
-  use 'sedm0784/vim-resize-mode' -- Continuous resizing.
   use 'mzlogin/vim-markdown-toc' -- Markdown Table of Contents.
   use 'nanotee/zoxide.vim' -- Use zoxide to quickly jump to directories.
   use 'pechorin/any-jump.nvim' -- Go to definition that doesn't require a language server.
   use 'puremourning/vimspector' -- Multi-language debugger using the VSCode Debug Adapter Protocol.
   use 'rust-lang/rust.vim' -- Rust language bindings.
+  use 'sedm0784/vim-resize-mode' -- Continuous resizing.
   use 'simnalamburt/vim-mundo' -- Graphical undo tree (updated fork of Gundo).
   use 'tpope/vim-abolish' -- Work with variants of words (replacing, capitalizing etc).
   use 'tpope/vim-commentary' -- Autodetect comment type for lang.
