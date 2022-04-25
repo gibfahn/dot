@@ -132,6 +132,10 @@ data:
     FXPreferredViewStyle: Nlsv
     # Show hidden files in the finder.
     AppleShowAllFiles: 1
+    # Allow Finder to be quit (hides Desktop files).
+    QuitMenuItem: 1
+    # Don't show Desktop icons (hide the desktop view).
+    CreateDesktop: false
 
 
   com.apple.universalaccess:
