@@ -8,99 +8,133 @@ set -euo pipefail
 # https://github.com/pqrs-org/Karabiner-Elements/issues/2331
 # https://github.com/jasonrudolph/keyboard
 
-FROM='"HIDKeyboardModifierMappingSrc"'
-TO='"HIDKeyboardModifierMappingDst"'
-
-C="0x700000006"
-V="0x700000019"
-
-ESCAPE="0x700000029"
-OPEN_BRACKET="0x70000002F" # [ or {
-CLOSE_BRACKET="0x700000030" # ] or }
-BACKSLASH="0x700000031" # \ or |
-NON_US_POUND="0x700000032" # §/± for UK
-GRAVE_TILDE="0x700000035" # `/~
-CAPS_LOCK="0x700000039"
-
-F1="0x70000003A"
-F2="0x70000003B"
-F3="0x70000003C"
-F4="0x70000003D"
-F5="0x70000003E"
-F6="0x70000003F"
-F7="0x700000040"
-F8="0x700000041"
-F9="0x700000042"
-F10="0x700000043"
-F11="0x700000044"
-F12="0x700000045"
-F17="0x70000006C"
-
-PRINT_SCREEN="0x700000046"
-SCROLL_LOCK="0x700000047"
-PAUSE="0x700000048"
-INSERT="0x700000049"
-HOME="0x70000004A"
-PAGE_UP="0x70000004B"
-DELETE_FORWARD="0x70000004C"
-END="0x70000004D"
-PAGE_DOWN="0x70000004E"
-
-APPLICATION="0x700000065" # PC Menu?
-POWER="0x700000066"
-
-VOLUME_MUTE="0x70000007F"
-VOLUME_UP="0x700000080"
-VOLUME_DOWN="0x700000081"
-#CSMR_VOLUME_MUTE="0xC000000E2" # Apple keyboard mute
-#CSMR_VOLUME_INCREMENT="0xC000000E9" # Apple keyboard volume increment
-#CSMR_VOLUME_DECREMENT="0xC000000EA" # Apple keyboard volume decrement
-
-LEFT_CTRL="0x7000000E0"
-LEFT_SHIFT="0x7000000E1"
-LEFT_ALT="0x7000000E2"
-LEFT_GUI="0x7000000E3"
-RIGHT_CTRL="0x7000000E4"
-RIGHT_SHIFT="0x7000000E5"
-RIGHT_ALT="0x7000000E6"
-RIGHT_GUI="0x7000000E7"
-
-ISO_BACKSLASH="0x700000064"
-
-MEDIA_PLAY="0xC000000B0"
-MEDIA_NEXT="0xC000000B5"
-MEDIA_PREV="0xC000000B6"
-MEDIA_EJECT="0xC000000B8"
-
 # List all available Services & Devices with:
 #   hidutil list
 
-# Settings for Apple Keyboards.
 # Vendors:
 # - 0x5ac = Apple
 # - 0x2516 = Cooler Master
 # - 0x43e = LG
 # - 0x1209 = Keyboardio
 
-# Apple Keyboards.
-# ISO_BACKSLASH becomes GRAVE_TILDE
-# GRAVE_TILDE becomees hyper
-hidutil property --matching '{"VendorID":0x5ac}' --set "{\"UserKeyMapping\":[
-{$FROM: $CAPS_LOCK,             $TO: $LEFT_SHIFT},
-{$FROM: $LEFT_SHIFT,             $TO: $LEFT_CTRL},
-{$FROM: $GRAVE_TILDE,             $TO: $F17},
-{$FROM: $ISO_BACKSLASH, $TO: $GRAVE_TILDE}
-]}" >/dev/null
+main() {
+  whoami=$(whoami)
+  case $whoami in
+    gib) remap_gib ;;
+    eve) remap_eve ;;
+    *) error "Unknown user $whoami" ;;
+  esac
 
-# Cooler Master Keyboards.
-# Convert windows keyboard to macOS (swap cmd and alt).
-# GRAVE_TILDE (`) is already in the right place, ISO_BACKSLASH (§) becomes Hyper.
-hidutil property --matching '{"VendorID":0x2516}' --set "{\"UserKeyMapping\":[
-{$FROM: $CAPS_LOCK,             $TO: $LEFT_SHIFT},
-{$FROM: $LEFT_SHIFT,             $TO: $LEFT_CTRL},
-{$FROM: $LEFT_GUI,             $TO: $LEFT_ALT},
-{$FROM: $LEFT_ALT,             $TO: $LEFT_GUI},
-{$FROM: $ISO_BACKSLASH,             $TO: $F17}
-]}" >/dev/null
+  echo "Hidutil remap successful."
+}
 
-echo "Hidutil remap successful."
+remap_gib() {
+  # Apple Keyboards.
+  # ISO_BACKSLASH becomes GRAVE_TILDE
+  # GRAVE_TILDE becomees hyper
+  hidutil property --matching '{"VendorID":0x5ac}' --set "{\"UserKeyMapping\":[
+  {$FROM: $CAPS_LOCK,             $TO: $LEFT_SHIFT},
+  {$FROM: $LEFT_SHIFT,             $TO: $LEFT_CTRL},
+  {$FROM: $GRAVE_TILDE,             $TO: $F17},
+  {$FROM: $ISO_BACKSLASH, $TO: $GRAVE_TILDE}
+  ]}" >/dev/null
+
+  # Cooler Master Keyboards.
+  # Convert windows keyboard to macOS (swap cmd and alt).
+  # GRAVE_TILDE (`) is already in the right place, ISO_BACKSLASH (§) becomes Hyper.
+  hidutil property --matching '{"VendorID":0x2516}' --set "{\"UserKeyMapping\":[
+  {$FROM: $CAPS_LOCK,             $TO: $LEFT_SHIFT},
+  {$FROM: $LEFT_SHIFT,             $TO: $LEFT_CTRL},
+  {$FROM: $LEFT_GUI,             $TO: $LEFT_ALT},
+  {$FROM: $LEFT_ALT,             $TO: $LEFT_GUI},
+  {$FROM: $ISO_BACKSLASH,             $TO: $F17}
+  ]}" >/dev/null
+}
+
+remap_eve() {
+  # Apple Keyboards.
+  hidutil property --matching '{"VendorID":0x5ac}' --set "{\"UserKeyMapping\":[
+  {$FROM: $CAPS_LOCK,             $TO: $LEFT_SHIFT}
+  ]}" >/dev/null
+
+  # Cooler Master Keyboards.
+  # Convert windows keyboard to macOS (swap cmd and alt).
+  hidutil property --matching '{"VendorID":0x2516}' --set "{\"UserKeyMapping\":[
+  {$FROM: $CAPS_LOCK,             $TO: $LEFT_SHIFT},
+  {$FROM: $LEFT_GUI,             $TO: $LEFT_ALT},
+  {$FROM: $LEFT_ALT,             $TO: $LEFT_GUI}
+  ]}" >/dev/null
+}
+
+set_env_vars() {
+  FROM='"HIDKeyboardModifierMappingSrc"'
+  TO='"HIDKeyboardModifierMappingDst"'
+
+  C="0x700000006"
+  V="0x700000019"
+
+  ESCAPE="0x700000029"
+  OPEN_BRACKET="0x70000002F" # [ or {
+  CLOSE_BRACKET="0x700000030" # ] or }
+  BACKSLASH="0x700000031" # \ or |
+  NON_US_POUND="0x700000032" # §/± for UK
+  GRAVE_TILDE="0x700000035" # `/~
+  CAPS_LOCK="0x700000039"
+
+  F1="0x70000003A"
+  F2="0x70000003B"
+  F3="0x70000003C"
+  F4="0x70000003D"
+  F5="0x70000003E"
+  F6="0x70000003F"
+  F7="0x700000040"
+  F8="0x700000041"
+  F9="0x700000042"
+  F10="0x700000043"
+  F11="0x700000044"
+  F12="0x700000045"
+  F17="0x70000006C"
+
+  PRINT_SCREEN="0x700000046"
+  SCROLL_LOCK="0x700000047"
+  PAUSE="0x700000048"
+  INSERT="0x700000049"
+  HOME="0x70000004A"
+  PAGE_UP="0x70000004B"
+  DELETE_FORWARD="0x70000004C"
+  END="0x70000004D"
+  PAGE_DOWN="0x70000004E"
+
+  APPLICATION="0x700000065" # PC Menu?
+  POWER="0x700000066"
+
+  VOLUME_MUTE="0x70000007F"
+  VOLUME_UP="0x700000080"
+  VOLUME_DOWN="0x700000081"
+  #CSMR_VOLUME_MUTE="0xC000000E2" # Apple keyboard mute
+  #CSMR_VOLUME_INCREMENT="0xC000000E9" # Apple keyboard volume increment
+  #CSMR_VOLUME_DECREMENT="0xC000000EA" # Apple keyboard volume decrement
+
+  LEFT_CTRL="0x7000000E0"
+  LEFT_SHIFT="0x7000000E1"
+  LEFT_ALT="0x7000000E2"
+  LEFT_GUI="0x7000000E3"
+  RIGHT_CTRL="0x7000000E4"
+  RIGHT_SHIFT="0x7000000E5"
+  RIGHT_ALT="0x7000000E6"
+  RIGHT_GUI="0x7000000E7"
+
+  ISO_BACKSLASH="0x700000064"
+
+  MEDIA_PLAY="0xC000000B0"
+  MEDIA_NEXT="0xC000000B5"
+  MEDIA_PREV="0xC000000B6"
+  MEDIA_EJECT="0xC000000B8"
+}
+
+# Usage: exit message [rc]
+error() {
+  # printf "${fg[red]}Error:${reset_color} %s\n" "$1"
+  echo -e "${fg[red]}Error:${reset_color} $1"
+  exit "${2:-1}"
+}

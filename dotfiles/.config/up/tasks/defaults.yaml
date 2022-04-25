@@ -1,3 +1,5 @@
+# For an unofficial defaults guide, see: https://macos-defaults.com
+
 run_if_cmd: ["/bin/sh", "-cex", '[ "$(uname)" = Darwin ] || exit 204']
 run_lib: defaults
 data:
