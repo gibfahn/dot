@@ -48,6 +48,7 @@ export PEX_ROOT="$XDG_CACHE_HOME/pex" # Cache directory for https://github.com/p
 export RBENV_ROOT="$XDG_CACHE_HOME/rbenv" # Set rbenv location.
 export RUSTUP_HOME="$XDG_DATA_HOME/rustup" # Rustup goes here.
 export SCCACHE_DIR="$XDG_CACHE_HOME/sccache" # sccache cache dir.
+export TIME_STYLE=long-iso # See `man gls` on macOS, sets the time style for `ls -l`.
 export VIRTUAL_ENV_DISABLE_PROMPT=1 # Add the virtualenv prompt myself.
 export ZDOTDIR="${XDG_CONFIG_HOME}/zsh" # Path to zsh config files.
 
