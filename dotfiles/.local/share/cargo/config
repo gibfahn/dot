@@ -7,6 +7,11 @@ linker = "x86_64-linux-musl-gcc"
 ta = "test -- --ignored"  # Run all tests.
 tar = "test --release --ignored"  # Run all tests in --release mode.
 
+# https://nexte.st -> `cargo install cargo-nextest`
+nt = "nextest"
+nr = "nextest run"
+nra = "nextest run --run-ignored=all"
+
 br = "build --release"
 rr = "run --release"
 tr = "test --release"
