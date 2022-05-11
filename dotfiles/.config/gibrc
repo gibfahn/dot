@@ -152,7 +152,7 @@ export VISUAL=$_gib_vim EDITOR=$_gib_vim # Set vim/nvim as the default editor.
 unset _gib_vim
 
 alias vq="v '+cexpr(getreg(\"+\"))'" # vim quickfix: copy a set of file:line lines then run to populate the quickfix list.
-alias vt='v ~/tmp/drafts/t' # vim temp: Edit a common scratch file (allows vim history preservation).
+alias vt='v ~/tmp/drafts/t.md' # vim temp: Edit a common scratch file (allows vim history preservation).
 
 alias v="$=VISUAL" xv="xargs $=VISUAL"
 alias k=kubectl kx=kubectx kn='kubectl config set-context --current --namespace' # Build tools.
