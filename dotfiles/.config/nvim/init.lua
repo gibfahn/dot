@@ -67,7 +67,7 @@ vim.g.lightline = {
     coc_fix = 'middle',
     truncate_here = 'raw'
   },
-  component_function = {currentfunction = 'CocCurrentFunction', gitbranch = 'fugitive#head'},
+  component_function = {currentfunction = 'CocCurrentFunction', gitbranch = 'FugitiveHead'},
   active = {
     left = {
       {'mode', 'paste'}, {'readonly', 'relativepath', 'modified'}, {'gitbranch'}, {'truncate_here'},
