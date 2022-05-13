@@ -55,7 +55,8 @@ remap_gib() {
   # Kinesis Freestyle Keyboard
   hidutil property --matching '{"VendorID":0x58f}' --set "{\"UserKeyMapping\":[
   {$FROM: $CAPS_LOCK,             $TO: $LEFT_SHIFT},
-  {$FROM: $LEFT_SHIFT,             $TO: $LEFT_CTRL}
+  {$FROM: $LEFT_SHIFT,             $TO: $LEFT_CTRL},
+  {$FROM: $LEFT_CTRL,             $TO: $F17}
   ]}" >/dev/null
 
 }
