@@ -2,6 +2,8 @@
 
 set -eu
 
+autoload -U colors && colors
+
 usage() {
 echo "$(tput bold; tput setaf 74)$ZSH_ARGZERO [pr number] [up_remote] $(tput sgr0)
 
@@ -47,21 +49,18 @@ main() {
     export GH_HOST=$(remote_host "$up_remote")
 
     # Checkout PR branch and save its name and remote.
-    only_log_failure gh pr checkout $pr_number
-    pr_branch=$(git branch --show-current)
+    pr_branch=pr/$pr_number
+    only_log_failure gh pr checkout $pr_number -b $pr_branch
     push_remote=$(git config branch.$pr_branch.remote)
 
-    # Switch to better-named branch
-    head_branch=$pr_number-$pr_branch
-    git switch --quiet -c $head_branch
-    git branch --quiet --delete $pr_branch
     git branch --quiet --set-upstream-to=$(git symbolic-ref --short refs/remotes/$up_remote/HEAD)
-    git config branch.$head_branch.pushRemote $push_remote
+    git config branch.$pr_branch.pushRemote $push_remote
+
     echo "git-fp: Pull Request ${pr_number} fetched as branch ${head_branch}" >&2
   else
     # Update current branch to latest PR head commit.
-    pr_number=${head_branch%%-*}
-    pr_branch=${head_branch#*-}
+    [[ $head_branch == pr/* ]] || error "Current branch ${head_branch} doesn't seem to be a PR branch"
+    pr_number=${head_branch#pr/}
     git fetch --force --update-head-ok $up_remote pull/$pr_number/head:$head_branch
     echo "git-fp: Branch ${head_branch} updated to latest Pull Request ${pr_number}" >&2
   fi
@@ -83,6 +82,13 @@ remote_url() {
 # Remote hostname, used for setting GH_HOST.
 remote_host() {
   git remote get-url ${1:?} | sed -e 's/^git@//' -e 's|https://||' -e 's/:.*//' -e 's|/.*||'
+}
+
+# Usage: exit message [rc]
+error() {
+  # printf "${fg[red]}Error:${reset_color} %s\n" "$1"
+  echo -e "${fg[red]}Error:${reset_color} $1"
+  exit "${2:-1}"
 }
 
 main "$@"
