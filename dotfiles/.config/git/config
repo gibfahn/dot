@@ -281,7 +281,7 @@
 [log]
   follow = true            # Log tracks file move/rename.
 [merge]
-  conflictstyle = diff3    # Show common ancestor in diffs (initially confusing, but very helpful).
+  conflictstyle = zdiff3   # Show common ancestor in diffs (initially confusing, but very helpful).
   tool = vimdiff           # Use vimdiff (actually neovim's vimdiff) to view and fix merge conflicts (instead of `g mc`).
 [mergetool]
   prompt = false           # Don't confirm that I want to open the difftool every time.
