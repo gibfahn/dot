@@ -11,10 +11,11 @@ rust_crates=(
   # tally                         # Nicer time (shows memory, page faults etc), I'm using hyperfine instead.
   bingrep        # Grep binary packages.
   cargo-edit     # Gives `cargo {add,rm,upgrade}` commands.
+  cargo-nextest  # Parallel test runner framework.
+  cargo-sweep    # Clean out old target directories.
   clog-cli       # Changelog generator.
   cobalt-bin     # Static site generator (https://cobalt-org.github.io/).
   proximity-sort # Sort paths by proximity to a directory.
-  cargo-nextest  # Parallel test runner framework.
 )
 
 # These are installed and updated through brew on Darwin.

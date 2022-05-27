@@ -1,0 +1,41 @@
+#!/usr/bin/env zsh
+
+set -euo pipefail
+
+autoload -U colors && colors
+
+usage() {
+echo "$(tput bold; tput setaf 74)$ZSH_ARGZERO [-h|--help] [-v|--version]$(tput sgr0)
+
+purge_caches: purge all caches on the system.
+"
+}
+
+[[ ${1:-} =~ ^(--help|-h)$ ]] && {
+  usage
+  exit
+}
+
+[[ ${1:-} =~ ^(--version|-v)$ ]] && {
+  echo "main"
+  exit
+}
+
+main() {
+  echo "Disk usage before:"
+  df -h /
+
+  open -a docker
+
+  # https://www.reddit.com/r/rust/comments/cbc24k/psa_run_cargo_clean_on_old_projects_you_dont/
+  cargo sweep
+
+  (( $+commands[liv] )) && liv purge
+
+  docker system prune --all --volumes
+
+  echo "Disk usage after:"
+  df -h /
+}
+
+main "$@"
