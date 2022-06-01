@@ -94,7 +94,6 @@
   "yaml.format.enable": true,
   "yaml.hover": true,
   "yaml.schemas": {
-    "https://pages.github.pie.apple.com/dchao3/kw-to-json-schema/resources/rio.schema.json": "/rio.yml",
     "http://json.schemastore.org/gitlab-ci": "/.gitlab-ci.yml",
     // Ansible schema is used by default for everything that has path tasks/*.yaml
     "": "up/tasks/*.yaml"
