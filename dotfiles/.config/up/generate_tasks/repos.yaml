@@ -1,7 +1,7 @@
 run_lib: generate_git
 data:
 - path: ${dotfile_dir}/.config/up/tasks/clone_repos.yaml
-  search_paths: ["~/code", "${XDG_DATA_HOME}/zsh/plugins"]
+  search_paths: ["~/code", "${XDG_DATA_HOME}/fzf", "${XDG_DATA_HOME}/zsh/plugins"]
   excludes: ["/tmp/", "/go/"]
   prune: true
   remote_order: ["up", "fork"]

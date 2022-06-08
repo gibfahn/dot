@@ -3,6 +3,13 @@
 run_lib: git
 needs_sudo: false
 data:
+  - path: ~/.local/share/fzf
+    remotes:
+      - name: fork
+        fetch_url: "https://github.com/gibfahn/fzf.git"
+      - name: origin
+        fetch_url: "https://github.com/junegunn/fzf.git"
+    prune: true
   - path: ~/.local/share/zsh/plugins/LS_COLORS
     remotes:
       - name: up
