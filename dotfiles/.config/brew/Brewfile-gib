@@ -7,6 +7,8 @@ tap "gibfahn/tap", "https://github.com/gibfahn/homebrew-tap" # My personal tap f
 
 # Brew formulae
 
+# brew "asciinema"                         # Screen recorder for the terminal.
+# brew "bandwhich"                         # See what's using bandwidth on your machine.
 # brew "bash-completion"                   # Generally useful bash completions.
 # brew "ccache"                            # Speeds up C/C++ recompilation.
 # brew "certbot"                           # LetsEncrypt.
@@ -15,14 +17,19 @@ tap "gibfahn/tap", "https://github.com/gibfahn/homebrew-tap" # My personal tap f
 # brew "exa"                               # Nicer ls replacement.
 # brew "exercism"                          # Learn coding languages.
 # brew "gng"                               # Wrapper around ./gradlew for gradle projects (gw and gng).
+# brew "gnutls"                            # Provides gnutls-cli for setting up TLS connections.
 # brew "graphviz"                          # Gives you the `dot` tool for generating diagrams.
 # brew "groovy"                            # Helpful for testing Jenkins scripts.
 # brew "hexyl"                             # Hex viewer in Rust.
+# brew "httpie"                            # Alternative to curl, `http` binary.
 # brew "ipython"                           # Interactive python shell.
 # brew "kakoune"                           # Nicer but WIP alternative to neovim.
 # brew "kubernetes-helm"                   # Package manager for Docker.
 # brew "ninja"                             # Google meta build system (used in V8).
+# brew "postgresql"                        # Solid database.
+# brew "pv"                                # Show data flow through bash pipes.
 # brew "redis"                             # In-memory key-object store.
+# brew "speedtest-cli"                     # Check network speed from the command-line.
 # brew "tmux"                              # Terminal multiplexer.
 # brew "watchexec"                         # Like entr (evaluating which one is better).
 # brew "xsv"                               # csv manipulator.
@@ -35,8 +42,6 @@ tap "gibfahn/tap", "https://github.com/gibfahn/homebrew-tap" # My personal tap f
 # cask "vagrant"                           # Quick command-line image spin-up.
 # cask "virtualbox"                        # Manage VMs (Linux or Windows).
 # cask "vulkan-sdk"                        # Use the vulkan graphics APIs on macOS.
-brew "asciinema"                         # Screen recorder for the terminal.
-brew "bandwhich"                         # See what's using bandwidth on your machine.
 brew "bat"                               # Nicer cat with syntax highlighting etc.
 brew "bazelisk"                          # Easily use the latest version of bazel.
 brew "binutils"                          # GNU versions of tools for interacting with binaries (nm, strings etc).
@@ -53,23 +58,18 @@ brew "git-lfs"                           # Git Large File Storage. Use with `git
 brew "gnu-tar"                           # GNU version of tar.
 brew "gnu-time"                          # GNU version of time.
 brew "gnu-which"                         # GNU version of which.
-brew "gnutls"                            # Provides gnutls-cli for setting up TLS connections.
 brew "go"                                # Go progamming language.
 brew "grep"                              # GNU version of grep.
-brew "httpie"                            # Alternative to curl, `http` binary.
 brew "hyperfine"                         # Benchmark commands (time but a benchmarking suite).
 brew "jq"                                # Makes it easy to deal with JSON on the command line.
 brew "kubectx"                           # Easily change Kubernetes context or namespace.
 brew "kubernetes-cli"                    # Manage your docker clusters with kube.
 brew "make"                              # GNU version of make.
 brew "moreutils"                         # GNU tools like parallel and sponge.
-brew "postgresql"                        # Solid database.
 brew "protobuf"                          # Serialization format.
-brew "pv"                                # Show data flow through bash pipes.
 brew "ruby"                              # Newer version of Ruby.
 brew "shellcheck"                        # Linter for bash.
 brew "shfmt"                             # Shell script formatter.
-brew "speedtest-cli"                     # Check network speed from the command-line.
 brew "tokei"                             # Counts lines of code in a project.
 brew "wget"                              # Alternative to curl for downloading files.
 
@@ -80,23 +80,21 @@ brew "wget"                              # Alternative to curl for downloading f
 # Brew casks
 
 # cask "adoptopenjdk8"                     # Java 8 that is still supported.
+# cask "firefox-nightly"                   # For those sweet Rust-based improvements.
 # cask "gimp"                              # Heavyweight photo editor.
 # cask "intellij-idea-ce"                  # Java-oriented IDE (good for debugging).
+# cask "meld"                              # Visual file diffing tool.
+# cask "messenger"                           # Facebook Messenger native app.
+# cask "microsoft-teams"                   # Microsoft Teams
+# cask "onedrive"                          # Microsoft OneDrive.
+# cask "stay"                              # Save and restore window positions, invaluable with multi-monitor setups.
 # cask "trailer"                           # GitHub push notifications.
 # cask "visual-studio-code"                # IDE that supports debugging Rust code.
 cask "chrysalis"                         # Used to flash my KeyboardIO Model 01.
 cask "daisydisk"                         # See what's using disk space and easily clean it up.
 cask "docker"                            # Build and run docker images.
-cask "firefox-nightly"                   # For those sweet Rust-based improvements.
-cask "hyperswitch"                       # Better Cmd-Tab (only windows on a screen).
-cask "intel-power-gadget"                # See performance stats for your machine.
 cask "keycastr"                          # Shows keystrokes in corner of screen (great for casting/demos).
-cask "meld"                              # Visual file diffing tool.
-cask "messenger"                           # Facebook Messenger native app.
-cask "microsoft-teams"                   # Microsoft Teams
-cask "onedrive"                          # Microsoft OneDrive.
 cask "slack-beta"                        # Everyone uses Slack right?
-cask "stay"                              # Save and restore window positions, invaluable with multi-monitor setups.
 cask "zoom"                              # Zoom web meetings client.
 
 # Mac App Store Apps (some paid). `mas list` to see what you've already installed.
@@ -107,7 +105,6 @@ cask "zoom"                              # Zoom web meetings client.
 # mas "Logic Pro X", id: 634148309
 # mas "iMovie", id: 408981434
 
-mas "Be Focused", id: 973134470 # Pomodoro Timer.
 mas "Dark Reader for Safari", id: 1438243180 # Dark mode in every website.
 mas "GhostText", id: 1552641506 # Edit textboxes from neovim.
 mas "Keynote", id: 409183694
