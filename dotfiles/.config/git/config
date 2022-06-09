@@ -249,6 +249,12 @@
 
 [credential]
   helper = osxkeychain   # Store Git credentials in the macOS keychain.
+[credential "https://github.com"]
+  helper =
+  helper = !gh auth git-credential
+[credential "https://gist.github.com"]
+  helper =
+  helper = !gh auth git-credential
 
 [diff]
   wsErrorHighlight = all # diff and show show whitespace errors.
