@@ -22,6 +22,8 @@ if ! xcode-select -p &>/dev/null; then
   xcode-select --install
 fi
 
+export PATH=/opt/homebrew/bin:/opt/brew/bin:$PATH
+
 copyq_version_old=$(copyq --version || true)
 
 # Disable quarantine for casks.
