@@ -2,7 +2,9 @@
 
 . "$(dirname "$0")"/../../helpers/setup.sh # Load helper script from dot/helpers.
 
-set -ex
+set -euo pipefail
+
+set -x
 
 rust_crates=(
   # find_unicode                  # Find unicode.
@@ -40,6 +42,7 @@ if no rustup || no cargo; then # Install/set up rust.
   rustup install stable # Should be a no-op.
 
   # Install ARM64 Darwin toolchain.
+  rustup target add x86_64-apple-darwin
   rustup target add aarch64-apple-darwin
 
   # Make sure we have useful components:
