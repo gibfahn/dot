@@ -94,7 +94,7 @@ cask "chrysalis"                         # Used to flash my KeyboardIO Model 01.
 cask "daisydisk"                         # See what's using disk space and easily clean it up.
 cask "docker"                            # Build and run docker images.
 cask "keycastr"                          # Shows keystrokes in corner of screen (great for casting/demos).
-cask "slack-beta"                        # Everyone uses Slack right?
+cask "slack"                             # Everyone uses Slack right?
 cask "zoom"                              # Zoom web meetings client.
 
 # Mac App Store Apps (some paid). `mas list` to see what you've already installed.
