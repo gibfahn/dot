@@ -51,4 +51,4 @@ for dir in $dirs_to_move; do
 done
 
 # Exit 204 to mark "skipped" if we didn't do anything.
-[[ -z ${did_stuff:-} ]] && exit 204
+[[ -z ${did_stuff:-} ]] && exit 204 || true
