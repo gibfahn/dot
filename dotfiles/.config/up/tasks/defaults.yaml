@@ -318,6 +318,10 @@ data:
     # Avoid tolls by default.
     MapsDefaultAvoidTollsKey: true
 
+  com.apple.Siri:
+    # Don't show Siri icon in the menu bar.
+    StatusMenuVisible: false
+
   # https://sw.kovidgoyal.net/kitty/
   net.kovidgoyal.kitty:
     NSUserKeyEquivalents:
