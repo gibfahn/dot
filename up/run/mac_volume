@@ -10,7 +10,10 @@ shared_name=Shared-Data
 shared_volume=/Volumes/$shared_name
 
 # Create a case-sensitive shared volume for code etc.
-[[ ! -d $shared_volume ]] && diskutil apfs addVolume disk1 'Case-sensitive APFS' $shared_name
+if [[ ! -d $shared_volume ]]; then
+  this_disk=$(/usr/libexec/PlistBuddy -c "print APFSContainerReference" =(diskutil info -plist /))
+  diskutil apfs addVolume $this_disk 'Case-sensitive APFS' $shared_name
+fi
 
 dirs_to_move=(
   ~/code
