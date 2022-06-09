@@ -1,2 +1,0 @@
-echo cp $HOME/.atom/*.* .
-cp $HOME/.atom/*.* .
