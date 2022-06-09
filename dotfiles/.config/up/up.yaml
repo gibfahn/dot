@@ -1,9 +1,10 @@
 bootstrap_tasks:
 - update_up
-- touchid_sudo
-- clone_repos
+- clone_repos # Has to come before anything that needs the dot repo to exist on disk.
+- mac_volume # Should come before linking.
 - link_dotfiles
 - link_wrk_dotfiles
+- touchid_sudo
 - defaults
 - defaults_gib
 - mac

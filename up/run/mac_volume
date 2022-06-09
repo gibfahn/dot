@@ -1,0 +1,51 @@
+#!/usr/bin/env zsh
+
+# Create a case-sensitive volume for code shared between multiple macOS installs.
+
+set -euo pipefail
+
+set -x
+
+shared_name=Shared-Data
+shared_volume=/Volumes/$shared_name
+
+# Create a case-sensitive shared volume for code etc.
+[[ ! -d $shared_volume ]] && diskutil apfs addVolume disk1 'Case-sensitive APFS' $shared_name
+
+dirs_to_move=(
+  ~/code
+  ~/wrk
+  ~/src
+  /opt/brew
+  /opt/homebrew
+)
+
+did_stuff=
+for dir in $dirs_to_move; do
+  [[ -L $dir ]] && continue
+
+  # e.g. /Users/gib/code -> /Volumes/Shared-Data/Users/gib/code
+  shared_dir=${shared_volume}${dir}
+
+  # If directory not present skip it.
+  if [[ ! -d $dir ]]; then
+    if [[ -d $shared_dir ]]; then
+      did_stuff=yes
+      ln -s $shared_dir $dir || sudo ln -s $shared_dir $dir
+      continue
+    else
+      continue
+    fi
+  fi
+
+  did_stuff=yes
+  mkdir -p $(dirname $shared_dir)
+  # If dir is owned by root (e.g. /opt/homebrew) then mv will complete, but deleting old dir will
+  # fail, so delete just that empty dir (if it's truly empty) with `sudo rm -d`
+  mv $dir $shared_dir || sudo rm -d $dir
+  # If we fail to link normally, link with sudo.
+  ln -s $shared_dir $dir || sudo ln -s $shared_dir $dir
+done
+
+# Exit 204 to mark "skipped" if we didn't do anything.
+[[ -z ${did_stuff:-} ]] && exit 204
