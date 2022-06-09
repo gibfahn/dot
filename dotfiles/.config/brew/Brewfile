@@ -2,10 +2,10 @@
 
 # Brew taps
 
+# tap "homebrew/cask-versions"             # Allows installing other versions of casks.
+tap "homebrew/bundle"                    # Allows you to use Brewfiles.
 tap "homebrew/cask"                      # `brew cask` for GUI apps.
 tap "homebrew/cask-fonts"                # Let's you `brew cask install` fonts.
-tap "homebrew/bundle"                    # Allows you to use Brewfiles.
-tap "homebrew/cask-versions"             # Allows installing other versions of casks.
 
 # Bootstrapping.
 
@@ -60,6 +60,6 @@ cask "workflowy"                         # Infinitely nested bullet point list a
 
 # Mac App Store Apps (some paid). `mas list` to see what you've already installed.
 
-mas "Pages", id: 409201541               # Edit docx and pages files.
-mas "Runcat", id: 1429033973             # Show CPU usage in menu bar.
+# mas "Runcat", id: 1429033973             # Show CPU usage in menu bar.
 mas "Dato", id: 1470584107
+mas "Pages", id: 409201541               # Edit docx and pages files.
