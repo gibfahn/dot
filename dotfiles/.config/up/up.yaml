@@ -1,6 +1,7 @@
 bootstrap_tasks:
 - update_up
 - clone_repos # Has to come before anything that needs the dot repo to exist on disk.
+- dump_defaults # Should come before we've changed too much stuff.
 - mac_volume # Should come before linking.
 - link_dotfiles
 - link_wrk_dotfiles

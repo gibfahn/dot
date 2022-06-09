@@ -1,0 +1,17 @@
+#!/usr/bin/env zsh
+
+# Dump the defaults set when you first run up, so you can compare later.
+
+set -euo pipefail
+
+set -x
+
+cache_dir=~/Library/Caches/co.fahn.gib.dot/dump_defaults
+dump_file=$cache_dir/defaults_dump
+
+if [[ -f $dump_file ]]; then
+  exit 204 # Skip
+else
+  mkdir -p $cache_dir
+  defaults read >$dump_file
+fi
