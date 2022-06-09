@@ -4,6 +4,7 @@ bootstrap_tasks:
 - mac_volume # Should come before linking.
 - link_dotfiles
 - link_wrk_dotfiles
+- computer_name
 - touchid_sudo
 - defaults
 - defaults_gib

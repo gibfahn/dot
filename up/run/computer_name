@@ -1,0 +1,29 @@
+#!/usr/bin/env zsh
+
+set -euo pipefail
+
+set -x
+
+user=$(whoami)
+User=${(C)user} # Capitalise the current username, e.g. gib -> Gib.
+
+mac_type=MBP # MacBook Pro.
+qualifier=${wrk_dot_dir:+Wrk} # Wrk if it's a work machine.
+year=$(date +%Y)
+
+mac_name=$User-$qualifier$mac_type-$year
+
+did_stuff= # Did we change anything?
+
+if [[ $(scutil --get LocalHostName) != $User-* ]]; then
+  did_stuff=yes
+  scutil --set LocalHostName $mac_name
+fi
+
+if [[ $(scutil --get ComputerName) != $User-* ]]; then
+  did_stuff=yes
+  scutil --set ComputerName $mac_name
+fi
+
+# Exit 204 to mark "skipped" if we didn't do anything.
+[[ -z ${did_stuff:-} ]] && exit 204
