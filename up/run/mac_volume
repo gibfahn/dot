@@ -19,8 +19,6 @@ dirs_to_move=(
   ~/code
   ~/wrk
   ~/src
-  /opt/brew
-  /opt/homebrew
 )
 
 did_stuff=
