@@ -421,7 +421,14 @@ end
 vim.cmd 'colorscheme gib'
 
 -- Set up Treesitter languages.
-require'nvim-treesitter.configs'.setup {ensure_installed = "all", highlight = {enable = true}, indent = {enable = true}}
+require'nvim-treesitter.configs'.setup {ensure_installed = "all",
+  -- List of parsers to ignore installing (for "all")
+  ignore_install = {
+    -- Broken on Apple silicon: https://github.com/claytonrcarter/tree-sitter-phpdoc/issues/15
+    "phpdoc"
+  },
+  highlight = {enable = true}, indent = {enable = true}
+}
 
 -- https://github.com/ggandor/lightspeed.nvim
 --   s|S char1 (char2|shortcut)? (<tab>|<s-tab>)* label?
