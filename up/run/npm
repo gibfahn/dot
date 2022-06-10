@@ -10,6 +10,7 @@ npm_modules=(
   dockerfile-language-server-nodejs # Language server for Dockerfiles.
   javascript-typescript-langserver  # Language server for JavaScript and Typescript files.
   markdownlint-cli                  # Markdown linter.
+  neovim                            # Neovim plugin.
   write-good                        # English text linter.
   yarn                              # Alternative to npm.
 )

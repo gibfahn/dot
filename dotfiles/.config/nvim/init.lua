@@ -7,6 +7,10 @@
 -- {{{ Global variables
 -- Sometimes vim runs before my dotfiles.
 if not vim.env.PATH:find('/usr/local/bin') then vim.env.PATH = '/usr/local/bin:' .. vim.env.PATH end
+if vim.fn.filereadable('/opt/homebrew/bin/python3') == 1 then
+  -- Speed up startup by not looking for python3 every time.
+  vim.g.python3_host_prog = "/opt/homebrew/bin/python3"
+end
 
 vim.env.XDG_CACHE_HOME = vim.env.XDG_CACHE_HOME or vim.env.HOME .. '/.cache'
 vim.env.XDG_CONFIG_HOME = vim.env.XDG_CONFIG_HOME or vim.env.HOME .. '/.config'

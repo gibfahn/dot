@@ -6,6 +6,7 @@ ruby_gems=(
   reek       # Ruby style checker for code smells.
   rubocop    # Ruby style checker and formatter.
   solargraph # Ruby LanguageServer Client.
+  neovim     # Neovim plugin for Ruby.
 )
 
 # Not needed for other people.
