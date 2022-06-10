@@ -14,6 +14,7 @@ brew "gnupg"                             # gpg command line.
 cask "kitty"                             # GPU Accelerated cross-platform Terminal Emulator.
 cask "font-hasklug-nerd-font"            # Nice programming font Hasklig (Source Code Pro + Ligatures) + Nerd Font extensions.
 cask "rectangle"                         # Window manager that's easy to get used to.
+cask "hammerspoon"                       # Scriptable automator for macOS.
 cask "copyq"                             # Clipboard manager with history (needs manual setup).
 brew "neovim"                            # New and improved vim.
 brew "watch"                             # Rerun a command every n seconds.
@@ -41,6 +42,7 @@ brew "python"                            # Python 3
 brew "ripgrep"                           # Super-fast version of grep.
 brew "terminal-notifier"                 # Log notifications from the terminal.
 brew "tree"                              # Recursive ls.
+brew "volta"                             # Node version manager.
 brew "zoxide"                            # Z (for changing directory) but in Rust.
 brew "zsh"                               # Nicer interactive shell.
 
@@ -49,7 +51,6 @@ brew "zsh"                               # Nicer interactive shell.
 # cask "google-chrome"                     # You probably want/have Chrome.
 # cask "karabiner-elements"                # Key remapper (see $c/karabiner/karabiner.json for my settings).
 # cask "steam"                             # Play games on macOS.
-cask "hammerspoon"                       # Scriptable automator for macOS.
 cask "keyboard-cleaner"                  # Block all keystrokes except ⌘-q so you can wipe your keyboard.
 cask "sogouinput"                        # Nicer Chinese input experience.
 cask "spotify"                           # Music.
