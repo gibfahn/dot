@@ -5,9 +5,13 @@ set -eux
 [ "$(uname)" = Darwin ] || exit 204
 
 # Run if the desktop background is not already the one we set.
-osascript -e '
+backgrounds="$(osascript -e '
     tell application "System Events"
         tell every desktop
             get picture
         end tell
-    end tell' | tr ',' '\n' | grep "$MAC_DESKTOP_BACKGROUND" && exit 204
+      end tell' | tr ',' '\n')"
+
+[ -z "$backgrounds" ] && exit 1
+
+echo "$backgrounds" | grep "$MAC_DESKTOP_BACKGROUND" && exit 204 || exit 0
