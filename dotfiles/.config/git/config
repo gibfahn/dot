@@ -248,13 +248,12 @@
   # commentChar = auto # Allow editing commits that didn't use '#' as the comment character.
 
 [credential]
-  helper = osxkeychain   # Store Git credentials in the macOS keychain.
-[credential "https://github.com"]
   helper =
   helper = !gh auth git-credential
-[credential "https://gist.github.com"]
-  helper =
-  helper = !gh auth git-credential
+
+# To use the macOS keychain for a non-github git instance:
+# [credential "https://github.com"]
+#  helper = osxkeychain   # Store Git credentials in the macOS keychain.
 
 [diff]
   wsErrorHighlight = all # diff and show show whitespace errors.
