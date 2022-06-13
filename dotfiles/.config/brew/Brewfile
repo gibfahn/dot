@@ -57,6 +57,7 @@ cask "spotify"                           # Music.
 cask "time-out"                          # Reminds you to take breaks.
 cask "vlc"                               # Nice video player.
 cask "wechat"                            # Chinese chat client.
+cask "whatsapp"                          # Whatsapp client.
 cask "workflowy"                         # Infinitely nested bullet point list app.
 
 # Mac App Store Apps (some paid). `mas list` to see what you've already installed.
