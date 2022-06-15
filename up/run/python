@@ -3,9 +3,11 @@
 set -eux
 
 pip3_modules=(
+  'python-language-server[all]' # Python language server (I use it in neovim).
+  black                         # Python linter.
+  isort                         # Python import sorter.
   neovim-remote                 # Connect to existing nvim sessions (try `g cm` in a nvim terminal).
   pynvim                        # Python plugin framework for neovim.
-  'python-language-server[all]' # Python language server (I use it in neovim).
   vim-vint                      # Vim linter.
 )
 
