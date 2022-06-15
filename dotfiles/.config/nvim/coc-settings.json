@@ -81,7 +81,14 @@
   "python.linting.flake8Enabled": true,
   "python.linting.pydocstyleEnabled": false,
   "python.jediEnabled": false,
-  "rust-analyzer.checkOnSave.command": "clippy",
+  "rust-analyzer.checkOnSave.overrideCommand": [
+    "cargo",
+    "+nightly",
+    "clippy",
+    "--workspace",
+    "--message-format=json",
+    "--all-targets"
+  ],
   // Use a global target dir for rust-analyzer so that `cargo-watch` doesn't have to wait for it.
   // https://twitter.com/CecileTonglet/status/1362441476203032581
   /* "rust-analyzer.checkOnSave.extraArgs": ["--target-dir", "/Users/gib/.cache/rust-analyzer-target"], */
