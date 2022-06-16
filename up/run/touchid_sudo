@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# If you don't care about whether /etc/pam.d/sudo has changed in other ways you can run:
+# /usr/bin/grep -q "pam_tid.so" /etc/pam.d/sudo || sudo /usr/bin/sed -ie '1s;^;auth       sufficient     pam_tid.so\n;' /etc/pam.d/sudo
+
 set -euo pipefail
 
 [[ $OSTYPE == darwin* ]] || exit 204 # Don't run if not Darwin.
@@ -39,4 +42,4 @@ Expected:
 fi
 
 # Insert `auth       sufficient     pam_tid.so` on line 3 of /etc/pam.d/sudo
-sudo tee <<<"${fixed}" /etc/pam.d/sudo >/dev/null
+sudo tee /etc/pam.d/sudo <<<"${fixed}" >/dev/null
