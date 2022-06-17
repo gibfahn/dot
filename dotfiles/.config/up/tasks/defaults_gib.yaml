@@ -135,6 +135,22 @@ data:
     # Default to no for "Reopen windows when logging back in?" reboot prompt.
     TALLogoutSavesState: false
 
+  # Defaults for ⌘-⇧-5 screen recording.
+  com.apple.screencapture:
+    # Save files to this directory.
+    location: ~/tmp/screen_shot_recording
+    location-last: ~/tmp/screen_shot_recording
+    # Show clicks in screen recording.
+    showsClicks: true
+    # Show cursor in screen recording.
+    showsCursor: true
+    # Record whole display.
+    style: display
+    # Save to file.
+    target: file
+    # Default to a screen recording not a screenshot.
+    video: true
+
   # Change Sogou keyboard layout to Colemak:
   # ⚙ -> 偏好号设置 -> 按键 -> 键盘布局 -> 其他键盘 -> Colemak
   '/Users/gib/Library/Application Support/Sogou/InputMethod/SogouPY/UserPreferences.plist':
