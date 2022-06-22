@@ -4,7 +4,8 @@ set -eux
 
 [ "$(uname)" = Darwin ] || exit 204
 
-[ -e /var/db/locate.database ] || exit 204
+# If it doesn't exist, create it.
+[ -e /var/db/locate.database ] || exit 0
 
 # Run if the db is less than an hour old.
 ((($(date +%s) - $(stat -L -f '%m' /var/db/locate.database)) > (1 * 60 * 60))) || exit 204
