@@ -41,11 +41,10 @@ vim.g.surround_no_mappings = 1 -- Manually map surround, see SurroundOp() functi
 vim.g.terminal_scrollback_buffer_size = 100000 -- Store lots of terminal history (neovim-only).
 
 -- Extensions (plugins) for CoC language client.
-vim.g.coc_global_extensions = {
-  'coc-actions', 'coc-ccls', 'coc-clangd', 'coc-css', 'coc-diagnostic', 'coc-dictionary', 'coc-emoji', 'coc-eslint',
-  'coc-go', 'coc-groovy', 'coc-highlight', 'coc-html', 'coc-java', 'coc-json', 'coc-lua', 'coc-prettier', 'coc-python',
-  'coc-rust-analyzer', 'coc-snippets', 'coc-solargraph', 'coc-sourcekit', 'coc-svg', 'coc-syntax', 'coc-tabnine',
-  'coc-tsserver', 'coc-vetur', 'coc-word', 'coc-yaml'
+vim.g.coc_global_extensions = { 'coc-actions', 'coc-ccls', 'coc-clangd', 'coc-css', 'coc-diagnostic', 'coc-dictionary',
+  'coc-emoji', 'coc-eslint', 'coc-go', 'coc-groovy', 'coc-highlight', 'coc-html', 'coc-java', 'coc-json', 'coc-lua',
+  'coc-prettier', 'coc-markdownlint', 'coc-python', 'coc-rust-analyzer', 'coc-snippets', 'coc-solargraph',
+  'coc-sourcekit', 'coc-svg', 'coc-syntax', 'coc-tabnine', 'coc-tsserver', 'coc-vetur', 'coc-word', 'coc-yaml'
 }
 
 -- Settings for custom statusline.

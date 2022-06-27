@@ -254,7 +254,7 @@
     "sh": "shellcheck",
     "sieve": "check-sieve",
     "vim": "vint",
-    "markdown": ["markdownlint", "textidote-md", "languagetool"],
+    "markdown": ["textidote-md", "languagetool"],
     "": ["write-good", "languagetool"], // Things with no specified filetype.
     "text": ["write-good", "languagetool"],
     "gitcommit": ["write-good", "languagetool"],

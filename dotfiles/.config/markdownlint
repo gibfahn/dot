@@ -1,0 +1,21 @@
+{
+  // Configure coc-markdownlint: https://github.com/fannheyward/coc-markdownlint#rules
+  // Rules: https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+  // Example: https://github.com/DavidAnson/markdownlint/blob/main/schema/.markdownlint.jsonc
+
+  // Include default lints.
+  "default": true,
+
+  // Disable line length checking.
+  "line-length": false,
+
+  // Allow code blocks right next to code. Useful for bullet lists, e.g.:
+  // - Item 1
+  //     ```shell
+  "blanks-around-fences": false,
+
+  // Allow arbitrary indentation for lists. Don't want to force one indent depth globally.
+  "ul-indent": false
+}
+
+// vim: set filetype=jsonc
