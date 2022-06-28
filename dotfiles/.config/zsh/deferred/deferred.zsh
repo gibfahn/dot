@@ -244,7 +244,8 @@ chpwd() { # Commands to run after changing directory.
   ${=aliases[ls]} -A 1>&2 # Show dir contents.
   [[ -d .git ]] && git fetch --all --quiet & # Fetch git remotes.
   # Add new entries to the zoxide database.
-  zoxide add -- "$PWD"
+  # Anything started with /Volumes/Shared-Data/ is a shared mount, see up/run/mac_volume
+  zoxide add -- "${PWD#/Volumes/Shared-Data}"
 }
 
 command mkdir -p ${HISTFILE:h} # Create HISTFILE dir if necessary.
