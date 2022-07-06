@@ -4,6 +4,9 @@ set -euo pipefail
 
 set -x
 
+# Skip if there are more than 2 users on the machine.
+[[ $(ls /Users | wc -l | tr -d ' ') == 2 ]] || exit 204
+
 user=$(whoami)
 User=${(C)user} # Capitalise the current username, e.g. gib -> Gib.
 
