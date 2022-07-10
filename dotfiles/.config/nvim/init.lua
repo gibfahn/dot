@@ -43,10 +43,7 @@ vim.g.terminal_scrollback_buffer_size = 100000 -- Store lots of terminal history
 -- Extensions (plugins) for CoC language client.
 vim.g.coc_global_extensions = { 'coc-actions', 'coc-ccls', 'coc-clangd', 'coc-css', 'coc-diagnostic', 'coc-dictionary',
   'coc-emoji', 'coc-eslint', 'coc-go', 'coc-groovy', 'coc-highlight', 'coc-html', 'coc-java', 'coc-json', 'coc-lua',
-  'coc-prettier',
-  -- Workaround for https://github.com/fannheyward/coc-markdownlint/pull/455
-  'https://github.com/gibfahn/coc-markdownlint',
-  'coc-python', 'coc-rust-analyzer', 'coc-snippets', 'coc-solargraph',
+  'coc-prettier', 'coc-markdownlint', 'coc-python', 'coc-rust-analyzer', 'coc-snippets', 'coc-solargraph',
   'coc-sourcekit', 'coc-svg', 'coc-syntax', 'coc-tabnine', 'coc-tsserver', 'coc-vetur', 'coc-word', 'coc-yaml'
 }
 
