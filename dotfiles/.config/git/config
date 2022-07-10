@@ -133,6 +133,7 @@
   next = "!git -c advice.detachedHead=false checkout $(git log --reverse --ancestry-path @^..${1:-master} --oneline | grep -v skipme | head -2 | tail -1 | cut -d ' ' -f 1)"
 
   p   = push                                                    # Push commits to a remote.
+  pd  = "!git push -d ${1%%/*} ${1#*/} #"                       # Delete a remote branch in the form remote/branch.
   pf  = push --force-with-lease                                 # Better version of push -f.
   pa  = "!curl -nL ${1%.patch}.patch | git am -S --whitespace=fix # "     # Patch Github PR.
   pap = "!curl -nL ${1%.patch}.patch | git am -3 -S --whitespace=fix  # " # Please patch it.
@@ -141,7 +142,7 @@
   pre = pr --edit                                               # Update the PR description.
   pro = pr --open                                               # Open the PR pointed to by the current branch.
   # Push to PR branch, works with the `git-fp` script in this repo.
-  ptp = "!set -x; branch=$(git branch --show-current); git push $(git config branch.${branch}.pushRemote) @:${branch#*-} #"
+  ptp = "!set -x; branch=$(git branch --show-current); git push $(git config branch.${branch}.pushRemote) @:${branch#*-} $@ #"
   pt  = "!git push -u $1 $(git head-branch) #"                  # g pt origin sets branch to track up + pushes.
   pl  = pull
 
