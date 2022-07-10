@@ -210,8 +210,8 @@ map('n', '<Leader>X', '<Cmd>xa<CR>') -- Quit all windows.
 map('n', '<Leader>Y', '<Cmd>%y+<CR>') -- Copy file to clipboard (normal mode).
 map('n', '<Leader>a', '@a') -- Apply macro a (add with qa or yank to a reg with "ay).
 map('n', '<Leader>b', '<Cmd>Buffers<CR>') -- Search buffer list for file.
-map('n', '<Leader>cA', ':<C-u>CocList diagnostics<cr>', {silent = true}) -- Show all diagnostics (<C-a><C-q> to open all in quickfix).
 map('n', '<Leader>cD', ':call DupBuffer()<CR><Plug>(coc-definition)', {silent = true, noremap = false}) -- Go to definition in other slit.
+map('n', '<Leader>ce', ':<C-u>CocList diagnostics<cr>', {silent = true}) -- Show all diagnostics (<C-a><C-q> to open all in quickfix).
 map('n', '<Leader>cE', ':<C-u>CocList extensions<cr>', {silent = true}) -- Manage extensions
 map('n', '<Leader>cc', '<Cmd>CocList commands<CR>', {silent = true}) -- Show commands
 map('n', '<Leader>cd', '<Plug>(coc-definition)', {silent = true, noremap = false}) -- Go to definition.
