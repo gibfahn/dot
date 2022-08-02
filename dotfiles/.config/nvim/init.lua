@@ -147,8 +147,8 @@ map('c', '%%', "getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'", {expr = true}
 map('i', '<A-CR>', 'coc#_select_confirm()', {expr = true, silent = true}) -- Alt-Enter: accept first result.
 map('i', '<C-u>', '<C-g>u<C-u>') -- Make <C-u> undo-friendly
 map('i', '<C-w>', '<C-g>u<C-w>') -- Make <C-w> undo-friendly
-map('i', '<CR>', [[pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], {expr = true}) -- If in completion, select current, else normal enter (with coc hook).
-map('i', '<S-Tab>', [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]], {expr = true}) -- Shift-Tab is previous entry if completion menu open.
+map('i', '<CR>', [[coc#pum#visible() ? coc#_select_confirm() : "\<CR>"]], {expr = true}) -- If in completion, select current, else normal enter (with coc hook).
+map('i', '<S-Tab>', [[coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"]], {expr = true}) -- Shift-Tab is previous entry if completion menu open.
 map('i', '<Tab>', 'v:lua.Smart_Tab()', {expr = true, silent = true}) -- If in completion, next entry, else if previous character was a space indent, else trigger completion manually.
 map('n', "<Leader>Z", [[&foldlevel ? 'zM' :'zR']], {expr = true}) -- Toggle folding everywhere (see also "zi).
 map('n', ',', 'g:lightspeed_last_motion == "sx" ? "<Plug>Lightspeed_,_sx" : "<Plug>Lightspeed_,_ft"',
@@ -309,8 +309,8 @@ function Smart_Tab()
     return (col == 0 or vim.api.nvim_get_current_line():sub(col, col):match('%s')) and true
   end
 
-  if (vim.fn.pumvisible() ~= 0) then
-    return t('<C-n>')
+  if (vim.fn['coc#pum#visible']() ~= 0) then
+    return vim.fn['coc#pum#next'](1)
   elseif (check_back_space()) then
     return t('<Tab>')
   end
