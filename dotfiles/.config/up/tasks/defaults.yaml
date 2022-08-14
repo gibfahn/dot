@@ -148,10 +148,6 @@ data:
     # Set default time for new events to 25 minutes not 60 minutes.
     Default duration in minutes for new event: 25
 
-  com.knollsoft.Rectangle:
-    # See: https://github.com/rxhanson/Rectangle/issues/190#issuecomment-780898717
-    showExportImport: true
-
   org.hammerspoon.Hammerspoon:
     # Write hammerspoon config to alternate location.
     # TODO(gib): make sure we're not escaping the ~ once it's allowed by up-rs.
