@@ -84,6 +84,7 @@
   # Interactively show files in $@, one line per file.
   di = "!set -x; git diff --color=always --stat=1000 --format=\"\" \"${@:-@}\" \
     | fzf --ansi -m --no-sort --reverse --tiebreak=index \
+    --bind=\"alt-a:execute(git add {1})+down\" \
     --preview \"git diff ${*:-@} -- \\$(sed -E -e 's/^\\s*([^\\|]*)\\s*\\|.*/\\1/' -e 's/(.*)\\{(.*) => (.*)\\}(.*)/\\1\\2\\4 \\1\\3\\4/' <<< {}) | delta \" \
     | awk '{print $1}' #"
   dn  = "!git diff --name-only \"${@:-HEAD}\" #"                # diff of staged and unstaged file names.
