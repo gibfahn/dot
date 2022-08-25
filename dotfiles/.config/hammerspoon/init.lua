@@ -18,6 +18,7 @@ if (user == "gib") then
 
   RequireIfAvailable('wrk') -- Uses RemapKeys from hidutil, so require order matters.
 end
+require('window-management')
 
 -- Always remap keys on first loading hammerspoon.
 RemapKeys()

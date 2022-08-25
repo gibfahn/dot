@@ -75,3 +75,11 @@ if exists kitty; then
   # Completion for kitty
   kitty + complete setup zsh >"$XDG_DATA_HOME/zsh/completions/_kitty"
 fi
+
+# Symlink in Hammerspoon Spoon Lunette if not already present.
+lunette_symlink=~/.config/hammerspoon/Spoons/Lunette.spoon
+lunette_source=~/.local/share/hammerspoon/Lunette/Source/Lunette.spoon
+if [[ ! -L $lunette_symlink && -d $lunette_source ]]; then
+  mkdir -p "$(dirname "$lunette_symlink")"
+  ln -s "$lunette_source" "$lunette_symlink"
+fi

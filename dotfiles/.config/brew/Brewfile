@@ -13,7 +13,6 @@ cask "1password"                         # Password manager, installed first so 
 brew "gnupg"                             # gpg command line.
 cask "kitty"                             # GPU Accelerated cross-platform Terminal Emulator.
 cask "font-hasklug-nerd-font"            # Nice programming font Hasklig (Source Code Pro + Ligatures) + Nerd Font extensions.
-cask "rectangle"                         # Window manager that's easy to get used to.
 cask "hammerspoon"                       # Scriptable automator for macOS.
 cask "copyq"                             # Clipboard manager with history (needs manual setup).
 brew "neovim"                            # New and improved vim.
@@ -22,6 +21,7 @@ brew "pstree"                            # Hierarchical tree of processes, `pstr
 
 # Brew formulae
 
+# cask "rectangle"                         # Window manager that's easy to get used to.
 # brew "dockutil"                          # Add and remove things from the dock (e.g. `dockutil --remove all`).
 brew "bash"                              # macOS Bash is very old.
 brew "coreutils"                         # GNU versions of utils that are out-of-date or FreeBSD on macOS (inc dircolors).
