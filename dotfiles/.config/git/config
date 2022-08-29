@@ -120,7 +120,6 @@
     | grep -oE '[a-f0-9]{7,}' #"
   lia = li --all
   lpr = "log -s --reverse --format='%h %s%n%n%b%n<br/>%n' @{upstream}..@" # Log to paste into a PR comment.
-  changelog  = "! git log --pretty=format:'* %h - %s %n%w(76,4,4)%b%n' --abbrev-commit \"$@\" | perl -0 -p -e 's/(^|[^\\\\])([<>])/\\1\\\\\\2/g ; s/(\\s*\\n)+\\*/\\n\\n*/g' #"
 
   ma  = merge --abort
   mb  = "!git merge-base ${1:-master} ${2:-HEAD} ${@:2} #" # Get commit this branch forked from.
