@@ -97,6 +97,19 @@ data:
     # Change the error sound to the drum.
     com.apple.sound.beep.sound: /System/Library/Sounds/Hero.aiff
 
+    # UK English, with ISO 8601 Dates (https://xkcd.com/1179/)
+    AppleLocale: en_GB@calendar=iso8601
+
+    # Main language UK English, then Chinese
+    AppleLanguages:
+    - en-GB
+    - zh-Hans-GB
+
+    # Use metric everywhere.
+    AppleMeasurementUnits: Centimeters
+    AppleMetricUnits: true
+    AppleTemperatureUnit: Celsius
+
   com.apple.AppleMultitouchTrackpad:
 
     # Click strength: Haptic feedback 0: Light 1: Medium 2: Firm
@@ -211,6 +224,9 @@ data:
     # System Preferences > Trackpad > More Gestures > App Expose > Enable
     # Swipe down with 3 fingers to see windows for current app.
     showAppExposeGestureEnabled: true
+
+    # Dock Region to UK
+    region: GB
 
   com.apple.assistant.support:
     # System Preferences > Keyboard > Dictation > On
