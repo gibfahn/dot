@@ -8,11 +8,6 @@ data:
       - name: up
         fetch_url: "https://github.com/junegunn/fzf.git"
     prune: true
-  - path: ~/.local/share/hammerspoon/Lunette
-    remotes:
-      - name: up
-        fetch_url: "https://github.com/scottwhudson/Lunette"
-    prune: true
   - path: ~/.local/share/zsh/plugins/LS_COLORS
     remotes:
       - name: up
