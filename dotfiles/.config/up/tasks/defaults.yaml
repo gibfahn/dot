@@ -366,3 +366,23 @@ data:
     showAddEventButtonInMenu: false
     showTimeInMenu: false
     showWeekDayInMenuBar: true
+
+  # https://github.com/hluk/CopyQ
+  com.copyq.copyq:
+    Options.clipboard_notification_lines: 3
+    Options.always_on_top: true
+    Options.tray_items: 10
+    Options.activate_item_with_single_click: true
+    Options.confirm_exit: false
+    Options.item_popup_interval: 3
+    Options.maxitems: 9999
+
+    # Two tabs, second one called Images
+    Tabs.2.name: Images
+    Tabs.2.store_items: true
+    Tabs.size: 2
+    Tabs.2.max_item_count: 0
+    Tabs.2.icon: ""
+    Options.tabs:
+      - "&clipboard"
+      - Images
