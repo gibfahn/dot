@@ -1,0 +1,15 @@
+theme = "onedark"
+
+[editor]
+gutters = ["diagnostics", "line-numbers"]
+# Add once https://github.com/helix-editor/helix/pull/2759 ships.
+# bufferline = "multiple"
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[editor.file-picker]
+hidden = false
+
