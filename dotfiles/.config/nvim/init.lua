@@ -29,7 +29,6 @@ vim.g.coc_snippet_prev = '<a-l>' -- Use <Alt-l> for jump to previous placeholder
 vim.g.colorizer_use_virtual_text = 1 -- Use virtual text
 vim.g.fzf_history_dir = vim.env.XDG_CACHE_HOME .. '/fzf-history' -- Save history of fzf vim commands.
 vim.g.is_posix = 1 -- Assume shell for syntax highlighting.
-vim.g.lightspeed_last_motion = '' -- :h lightspeed-custom-mappings
 vim.g.loaded_netrw = 1 -- Skip loading netrw file browser (use vim-readdir instead).
 vim.g.loaded_netrwPlugin = 1 -- Don't use the built-in file browser (use vim-readdir instead).
 vim.g.mapleader = ' ' -- use space as a the leader key
@@ -130,6 +129,8 @@ vim.opt.visualbell = true -- Flash the screen instead of beeping when doing some
 vim.opt.wildignorecase = true -- Case insensitive file tab completion with :e.
 vim.opt.wildmode = {"list", "longest"} -- 1st Tab completes to longest common string, 2nd+ cycles through options.
 
+vim.api.nvim_set_hl(0, 'LeapBackdrop', { fg = '#707070' }) -- Grey out leap search area.
+
 -- }}} Vim options
 
 -- {{{ Mappings
@@ -151,11 +152,7 @@ map('i', '<CR>', [[coc#pum#visible() ? coc#_select_confirm() : "\<CR>"]], {expr 
 map('i', '<S-Tab>', [[coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"]], {expr = true}) -- Shift-Tab is previous entry if completion menu open.
 map('i', '<Tab>', 'v:lua.Smart_Tab()', {expr = true, silent = true}) -- If in completion, next entry, else if previous character was a space indent, else trigger completion manually.
 map('n', "<Leader>Z", [[&foldlevel ? 'zM' :'zR']], {expr = true}) -- Toggle folding everywhere (see also "zi).
-map('n', ',', 'g:lightspeed_last_motion == "sx" ? "<Plug>Lightspeed_,_sx" : "<Plug>Lightspeed_,_ft"',
-    {noremap = false, expr = true}) -- , repeats the last f/F/t/T/s/S mapping.
 map('n', '-', '<Cmd>e %:h<CR>') -- Use - to open the current buffer directory in the file browser (repeat for `cd ..`).
-map('n', ';', 'g:lightspeed_last_motion == "sx" ? "<Plug>Lightspeed_;_sx" : "<Plug>Lightspeed_;_ft"',
-    {noremap = false, expr = true}) -- ; repeats the last f/F/t/T/s/S mapping backwards.
 map('n', '<A-C>', '<Plug>(coc-diagnostic-prev)', {noremap = false}) -- Prev changed Coc diagnostic.
 map('n', '<A-E>', '100<C-w>k') -- Switch to the top window,
 map('n', '<A-G>', '<Plug>(GitGutterPrevHunk)', {noremap = false}) -- Prev changed git hunk.
@@ -358,7 +355,7 @@ require('packer').startup(function(use)
   use 'chrisbra/Recover.vim' -- add a diff option when a swap file is found.
   use 'coderifous/textobj-word-column.vim' -- Adds ic/ac and iC/aC motions to block select word column in paragraph.
   use 'fweep/vim-zsh-path-completion' -- Nicer file browser plugin.
-  use 'ggandor/lightspeed.nvim' -- Quickest way to jump to any char on the screen (alternative to easymotion/sneak/hop).
+  use 'ggandor/leap.nvim' -- Quickest way to jump to any char on the screen (alternative to easymotion/sneak/hop/lightspeed/pounce).
   use 'gibfahn/vim-gib' -- Use vim colorscheme.
   use 'godlygeek/tabular' -- Make tables easier (:help Tabular).
   use 'honza/vim-snippets' -- Work around https://github.com/neoclide/coc-snippets/issues/126 .
@@ -429,25 +426,11 @@ require'nvim-treesitter.configs'.setup {ensure_installed = "all",
   highlight = {enable = true}, indent = {enable = true}
 }
 
--- https://github.com/ggandor/lightspeed.nvim
+-- https://github.com/ggandor/leap.nvim
 --   s|S char1 (char2|shortcut)? (<tab>|<s-tab>)* label?
 -- (in Operator-pending mode the search is invoked with z/Z not s/S)
--- `:h lightspeed` for more info.
-require'lightspeed'.setup {
-  -- If you have '                  ', only match the first '  '.
-  match_only_the_start_of_same_char_seqs = true,
-  -- How many matches to show for s/f/t.
-  limit_ft_matches = 40,
-  -- Allow seeing that you can match on newlines with s<char><Enter>
-  substitute_chars = {['\r'] = '¬'},
-  -- Labels to set for jumps.
-  labels = {
-    "s", "f", "n", "/", "u", "t", "q", "m", "S", "F", "G", "H", "L", "M", "0", "1", "2", "3", "4", "5", "6", "7", "8",
-    "9", "N", "U", "R", "Z", "T", "Q", "'", "-", "?", "\"", "`", "+", "!", "(", ")", "\\", "[", "]", ":", "|", "<", ">",
-    "W", "E", "Y", "I", "O", "P", "A", "D", "J", "K", "X", "C", "V", "B", ".", ",", "w", "e", "r", "y", "i", "o", "p",
-    "a", "d", "g", "h", "j", "k", "l", "z", "x", "c", "v", "b"
-  }
-}
+-- `:h leap` for more info.
+require('leap').set_default_keymaps()
 
 -- }}} Package Setup
 
