@@ -155,6 +155,7 @@ map('n', "<Leader>Z", [[&foldlevel ? 'zM' :'zR']], {expr = true}) -- Toggle fold
 map('n', '-', '<Cmd>e %:h<CR>') -- Use - to open the current buffer directory in the file browser (repeat for `cd ..`).
 map('n', '<A-C>', '<Plug>(coc-diagnostic-prev)', {noremap = false}) -- Prev changed Coc diagnostic.
 map('n', '<A-E>', '100<C-w>k') -- Switch to the top window,
+map('n', '<A-F>', '<Cmd>CocPrev<CR>', {noremap = false}) -- Next Coc list (e.g. compile error).
 map('n', '<A-G>', '<Plug>(GitGutterPrevHunk)', {noremap = false}) -- Prev changed git hunk.
 map('n', '<A-H>', '100<C-w>h') -- Switch to the leftmost window,
 map('n', '<A-I>', '100<C-w>l') -- Switch to the rightmost window.
@@ -169,6 +170,7 @@ map('n', '<A-TAB>', '<Plug>(coc-range-select)', {silent = true, noremap = false}
 map('n', '<A-c>', '<Plug>(coc-diagnostic-next)', {noremap = false}) -- Next changed Coc message (e.g. compile error).
 map('n', '<A-d>', '<Cmd>tabclose<CR>') -- Close current tab.
 map('n', '<A-e>', '<C-w>k') -- Switch up a window,
+map('n', '<A-f>', '<Cmd>CocNext<CR>', {noremap = false}) -- Next Coc list (e.g. compile error if you hit <Leader>ce).
 map('n', '<A-g>', '<Plug>(GitGutterNextHunk)', {noremap = false}) -- Next changed git hunk.
 map('n', '<A-h>', '<C-w>h') -- Switch left a window,
 map('n', '<A-i>', '<C-w>l') -- Switch right a window.
@@ -208,7 +210,7 @@ map('n', '<Leader>Y', '<Cmd>%y+<CR>') -- Copy file to clipboard (normal mode).
 map('n', '<Leader>a', '@a') -- Apply macro a (add with qa or yank to a reg with "ay).
 map('n', '<Leader>b', '<Cmd>Buffers<CR>') -- Search buffer list for file.
 map('n', '<Leader>cD', ':call DupBuffer()<CR><Plug>(coc-definition)', {silent = true, noremap = false}) -- Go to definition in other slit.
-map('n', '<Leader>ce', ':<C-u>CocList diagnostics<cr>', {silent = true}) -- Show all diagnostics (<C-a><C-q> to open all in quickfix).
+map('n', '<Leader>ce', ':<C-u>CocList --first diagnostics<cr>', {silent = true}) -- Show all diagnostics (<C-a><C-q> to open all in quickfix).
 map('n', '<Leader>cE', ':<C-u>CocList extensions<cr>', {silent = true}) -- Manage extensions
 map('n', '<Leader>cc', '<Cmd>CocList commands<CR>', {silent = true}) -- Show commands
 map('n', '<Leader>cd', '<Plug>(coc-definition)', {silent = true, noremap = false}) -- Go to definition.
