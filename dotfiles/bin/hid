@@ -14,6 +14,7 @@ set -euo pipefail
 
 # Vendors:
 # - 0x5ac = Apple
+# - 0x4c = Apple Bluetooth
 # - 0x2516 = Cooler Master
 # - 0x43e = LG
 # - 0x1209 = Keyboardio
@@ -34,7 +35,7 @@ remap_gib() {
   # Apple Keyboards.
   # ISO_BACKSLASH becomes GRAVE_TILDE
   # GRAVE_TILDE becomees hyper
-  hidutil property --matching '{"VendorID":0x5ac}' --set "{\"UserKeyMapping\":[
+  hidutil property --matching '[{"VendorID":0x5ac},{"VendorID":0x4c}]' --set "{\"UserKeyMapping\":[
   {$FROM: $CAPS_LOCK,             $TO: $LEFT_SHIFT},
   {$FROM: $LEFT_SHIFT,             $TO: $LEFT_CTRL},
   {$FROM: $GRAVE_TILDE,             $TO: $F17},
