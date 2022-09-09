@@ -129,8 +129,6 @@ vim.opt.visualbell = true -- Flash the screen instead of beeping when doing some
 vim.opt.wildignorecase = true -- Case insensitive file tab completion with :e.
 vim.opt.wildmode = {"list", "longest"} -- 1st Tab completes to longest common string, 2nd+ cycles through options.
 
-vim.api.nvim_set_hl(0, 'LeapBackdrop', { fg = '#707070' }) -- Grey out leap search area.
-
 -- }}} Vim options
 
 -- {{{ Mappings
@@ -414,6 +412,30 @@ end
 
 -- }}} Package Manager Setup
 
+-- {{{ Package Autocommands
+
+-- Create autocmd triggered on ColorScheme change.
+vim.api.nvim_create_autocmd('ColorScheme', {
+  callback = function ()
+    vim.api.nvim_set_hl(0, 'LeapBackdrop', { fg = '#707070' }) -- Grey out leap search area.
+  end
+})
+
+vim.cmd([[
+  augroup packer_user_config
+    autocmd!
+    " Update my colorscheme when I edit it.
+    autocmd BufWritePost gib.vim source <afile>
+
+    " Highlight symbol under cursor on CursorHold (show other instances of current word).
+    autocmd CursorHold * silent call CocActionAsync('highlight')
+
+    " Update signature help on jump placeholder (show function signature when you jump to it).
+    autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+  augroup end
+]])
+-- }}} Package Autocommands
+
 -- {{{ Package Setup
 
 vim.cmd 'colorscheme gib'
@@ -435,22 +457,6 @@ require'nvim-treesitter.configs'.setup {ensure_installed = "all",
 require('leap').set_default_keymaps()
 
 -- }}} Package Setup
-
--- {{{ Package Autocommands
-vim.cmd([[
-  augroup packer_user_config
-    autocmd!
-    " Update my colorscheme when I edit it.
-    autocmd BufWritePost gib.vim source <afile>
-
-    " Highlight symbol under cursor on CursorHold (show other instances of current word).
-    autocmd CursorHold * silent call CocActionAsync('highlight')
-
-    " Update signature help on jump placeholder (show function signature when you jump to it).
-    autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-  augroup end
-]])
--- }}} Package Autocommands
 
 vim.cmd("source " .. vim.fn.stdpath('config') .. '/init-old.vim')
 
