@@ -165,6 +165,7 @@ map('n', '<A-Space>', 'v<Plug>(coc-codeaction-selected)<Esc>', {noremap = false}
 map('n', '<A-Enter>', '<plug>(coc-codelens-action)', {noremap = false}) -- Run available CodeLens actions (e.g. run tests).
 map('n', '<A-T>', '<Cmd>tabprev<CR>') -- Prev tab.
 map('n', '<A-TAB>', '<Plug>(coc-range-select)', {silent = true, noremap = false}) -- Visually select increasingly large ranges (requires LS 'textDocument/selectionRange').
+map('n', '<A-X>', '<Cmd>bd<CR>') -- Close current buffer (work around https://github.com/moll/vim-bbye/issues/15).
 map('n', '<A-c>', '<Plug>(coc-diagnostic-next)', {noremap = false}) -- Next changed Coc message (e.g. compile error).
 map('n', '<A-d>', '<Cmd>tabclose<CR>') -- Close current tab.
 map('n', '<A-e>', '<C-w>k') -- Switch up a window,
