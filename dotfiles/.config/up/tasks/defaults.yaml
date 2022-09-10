@@ -216,7 +216,7 @@ data:
     # Allow the App Store to reboot machine on macOS updates
     AutoUpdateRestartRequired: true
 
-  com.apple.Dock:
+  com.apple.dock:
     # Greys out hidden apps in the dock (so you can see which are hidden).
     showhidden: true
     # Don't show recents in dock.
