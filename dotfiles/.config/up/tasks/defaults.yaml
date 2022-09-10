@@ -228,10 +228,6 @@ data:
     AutoUpdateRestartRequired: true
 
   com.apple.dock:
-    # Greys out hidden apps in the dock (so you can see which are hidden).
-    showhidden: true
-    # Don't show recents in dock.
-    show-recents: false
     # System Preferences > Trackpad > More Gestures > App Expose > Enable
     # Swipe down with 3 fingers to see windows for current app.
     showAppExposeGestureEnabled: true
