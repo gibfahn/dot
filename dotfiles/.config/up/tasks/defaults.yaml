@@ -119,17 +119,6 @@ data:
     # Silent clicking
     ActuationStrength: 0
 
-    # Allow three finger drag to work the same way as tap and hold drag.
-    TrackpadThreeFingerDrag: true
-    TrackpadThreeFingerHorizSwipeGesture: 0
-    TrackpadThreeFingerVertSwipeGesture: 0
-
-  com.apple.driver.AppleBluetoothMultitouch.trackpad:
-    # Allow three finger drag to work the same way as tap and hold drag.
-    TrackpadThreeFingerDrag: true
-    TrackpadThreeFingerHorizSwipeGesture: 0
-    TrackpadThreeFingerVertSwipeGesture: 0
-
   com.apple.TextInputMenu:
     # Keyboard -> Input Sources -> Show Input menu in menu bar.
     visible: true
