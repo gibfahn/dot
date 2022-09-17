@@ -19,3 +19,5 @@ git add $p10k_path
 git commit -m "feat(zsh): update to latest stock p10k.zsh version"
 
 git diff $previous_stock_update $current_commit -- $p10k_path | git apply
+git add $p10k_path
+git commit -m "fix(zsh): re-apply p10k.zsh modifications"
