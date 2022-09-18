@@ -56,10 +56,9 @@ data:
 
   com.apple.HIToolbox:
     # Enable dictation with double-tap of Fn button.
-    AppleDictationAutoEnable: 1
-    # System Preferences > Keyboard > Press Function key to: Start Dictation.
-    #                               > Press and hold Fn key to: Show F1, F2, F3 Keys.
-    AppleFnUsageType: 3
+    AppleDictationAutoEnable: 0
+    # System Settings > Keyboard > Press Function key to: change input source
+    AppleFnUsageType: 1
 
   com.apple.MobileSMS:
     # Messages > Preferences > Keep messages: Forever.
