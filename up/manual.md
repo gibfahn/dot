@@ -15,8 +15,9 @@ need in later steps.
 Set the computer name (needs restart to take effect):
 
 ```shell
-# e.g. scutil --set LocalHostName "$USER-MBP-$year"
-scutil --set LocalHostName
+# e.g. name="$USER-MBP-$year"
+scutil --set LocalHostName ${name:?}
+scutil --set ComputerName ${name:?}
 ```
 
 - `Touch ID` -> Add other fingerprints

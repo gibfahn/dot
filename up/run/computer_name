@@ -11,10 +11,9 @@ user=$(whoami)
 User=${(C)user} # Capitalise the current username, e.g. gib -> Gib.
 
 mac_type=MBP # MacBook Pro.
-qualifier=${wrk_dot_dir:+Wrk} # Wrk if it's a work machine.
 year=$(date +%Y)
 
-mac_name=$User-$qualifier$mac_type-$year
+mac_name=$User-$mac_type-$year
 
 did_stuff= # Did we change anything?
 
