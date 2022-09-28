@@ -42,6 +42,9 @@ main() {
   if [[ -n ${pr_number:-} ]]; then
     # Assuming new PR checkout.
 
+    # Convert a URL like 'https://github.com/org/repo/pull/485/files' into '485'
+    pr_number=$(sed -E 's;.*/([0-9]+)/?(files)?$;\1;' <<<$pr_number)
+
     # TODO: stop setting this once `gh` gains decent up/push branch recognition.
     export GH_REPO=$(remote_url "$up_remote")
     export GH_HOST=$(remote_host "$up_remote")
