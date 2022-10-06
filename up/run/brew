@@ -53,10 +53,13 @@ if ! brew bundle --file=<(cat ${brewfiles[@]}) check >/dev/null; then
   brew bundle --file=<(cat ${brewfiles[@]}) | grep -Evx "Using [-_/0-9a-zA-Z ]+"
 fi
 
-# Useful to see what you need to add to your Brewfiles.
-echo "Brew packages that would be cleaned up, run this to actually clean:
-  brew bundle cleanup --force --file=<(cat ${brewfiles[@]})"
-brew bundle cleanup --file=<(cat ${brewfiles[@]})
+# Only run this expensive step if stdout and stderr are ttys (script is being run interactively).
+if [[ -t 1 && -t 2 ]]; then
+  # Useful to see what you need to add to your Brewfiles.
+  echo "Brew packages that would be cleaned up, run this to actually clean:
+    brew bundle cleanup --force --file=<(cat ${brewfiles[@]})"
+  brew bundle cleanup --file=<(cat ${brewfiles[@]})
+fi
 
 copyq_version_new=$(copyq --version)
 
