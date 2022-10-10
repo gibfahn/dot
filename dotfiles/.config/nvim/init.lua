@@ -28,6 +28,11 @@ vim.g.coc_snippet_next = '<a-u>' -- Use <Alt-u> for jump to next placeholder.
 vim.g.coc_snippet_prev = '<a-l>' -- Use <Alt-l> for jump to previous placeholder.
 vim.g.colorizer_use_virtual_text = 1 -- Use virtual text
 vim.g.fzf_history_dir = vim.env.XDG_CACHE_HOME .. '/fzf-history' -- Save history of fzf vim commands.
+vim.g.hardtime_allow_different_key = 1 -- Only enable hardtime for multiple consecutive presses of the same key.
+vim.g.hardtime_default_on = 1 -- Enable hardtime by default.
+vim.g.hardtime_maxcount = 5 -- Allow 5 consecutive keypresses before enabling hardtime.
+vim.g.hardtime_motion_with_count_resets = 1 -- Using a count (e.g. 8j) resets the hardtime limit.
+vim.g.hardtime_showmsg = 1 -- Notify when hardtime activated.
 vim.g.is_posix = 1 -- Assume shell for syntax highlighting.
 vim.g.loaded_netrw = 1 -- Skip loading netrw file browser (use vim-readdir instead).
 vim.g.loaded_netrwPlugin = 1 -- Don't use the built-in file browser (use vim-readdir instead).
@@ -210,7 +215,7 @@ map('n', '<Leader>a', '@a') -- Apply macro a (add with qa or yank to a reg with 
 map('n', '<Leader>b', '<Cmd>Buffers<CR>') -- Search buffer list for file.
 map('n', '<Leader>cD', ':call DupBuffer()<CR><Plug>(coc-definition)', {silent = true, noremap = false}) -- Go to definition in other slit.
 map('n', '<Leader>ce', ':<C-u>CocList --first diagnostics<cr>', {silent = true}) -- Show all diagnostics (<C-a><C-q> to open all in quickfix).
-map('n', '<Leader>cE', ':<C-u>CocList extensions<cr>', {silent = true}) -- Manage extensions
+map('n', '<Leader>cE', ':<C-u>CocList diagnostics<cr>', {silent = true}) -- Manage extensions
 map('n', '<Leader>cc', '<Cmd>CocList commands<CR>', {silent = true}) -- Show commands
 map('n', '<Leader>cd', '<Plug>(coc-definition)', {silent = true, noremap = false}) -- Go to definition.
 map('n', '<Leader>cf', '<Plug>(coc-format)', {noremap = false}) -- Format current buffer.
@@ -367,6 +372,7 @@ require('packer').startup(function(use)
   use 'puremourning/vimspector' -- Multi-language debugger using the VSCode Debug Adapter Protocol.
   use 'sedm0784/vim-resize-mode' -- Continuous resizing.
   use 'simnalamburt/vim-mundo' -- Graphical undo tree (updated fork of Gundo).
+  use 'takac/vim-hardtime' -- Stop you using repeated keypresses.
   use 'tpope/vim-commentary' -- Autodetect comment type for lang.
   use 'tpope/vim-fugitive' -- Git commands in vim.
   use 'tpope/vim-repeat' -- Allows you to use . with plugin mappings.
