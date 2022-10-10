@@ -126,6 +126,9 @@
     //     ```shell
     "blanks-around-fences": false,
 
+    // It's okay to have multiple `### Foo` headings in a doc.
+    "no-duplicate-heading": false,
+
     // Allow arbitrary indentation for lists. Don't want to force one indent depth globally.
     "ul-indent": false
   },
