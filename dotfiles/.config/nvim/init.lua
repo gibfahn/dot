@@ -157,19 +157,23 @@ map('i', '<Tab>', 'v:lua.Smart_Tab()', {expr = true, silent = true}) -- If in co
 map('n', "<Leader>Z", [[&foldlevel ? 'zM' :'zR']], {expr = true}) -- Toggle folding everywhere (see also "zi).
 map('n', '-', '<Cmd>e %:h<CR>') -- Use - to open the current buffer directory in the file browser (repeat for `cd ..`).
 map('n', '<A-C>', '<Plug>(coc-diagnostic-prev)', {noremap = false}) -- Prev changed Coc diagnostic.
+map('n', '<A-Down>', '<C-e>') -- Scroll down a line.
 map('n', '<A-E>', '100<C-w>k') -- Switch to the top window,
+map('n', '<A-Enter>', '<plug>(coc-codelens-action)', {noremap = false}) -- Run available CodeLens actions (e.g. run tests).
 map('n', '<A-F>', '<Cmd>CocPrev<CR>', {noremap = false}) -- Next Coc list (e.g. compile error).
 map('n', '<A-G>', '<Plug>(GitGutterPrevHunk)', {noremap = false}) -- Prev changed git hunk.
 map('n', '<A-H>', '100<C-w>h') -- Switch to the leftmost window,
 map('n', '<A-I>', '100<C-w>l') -- Switch to the rightmost window.
 map('n', '<A-L>', '<Cmd>lprev<CR>') -- Prev item in the location list.
+map('n', '<A-Left>', 'zh') -- Scroll view left a character.
 map('n', '<A-N>', '100<C-w>j') -- Switch to the bottom window,
 map('n', '<A-Q>', '<Cmd>cprev<CR>') -- Prev item in the quickfix list.
+map('n', '<A-Right>', 'zl') -- Scroll view right a character.
 map('n', '<A-S>', '[s') -- Prev spelling mistake.
 map('n', '<A-Space>', 'v<Plug>(coc-codeaction-selected)<Esc>', {noremap = false}) -- Run available LSP actions (neoclide/coc.nvim#1981).
-map('n', '<A-Enter>', '<plug>(coc-codelens-action)', {noremap = false}) -- Run available CodeLens actions (e.g. run tests).
 map('n', '<A-T>', '<Cmd>tabprev<CR>') -- Prev tab.
 map('n', '<A-TAB>', '<Plug>(coc-range-select)', {silent = true, noremap = false}) -- Visually select increasingly large ranges (requires LS 'textDocument/selectionRange').
+map('n', '<A-Up>', '<C-y>') -- Scroll up a line.
 map('n', '<A-X>', '<Cmd>bd<CR>') -- Close current buffer (work around https://github.com/moll/vim-bbye/issues/15).
 map('n', '<A-c>', '<Plug>(coc-diagnostic-next)', {noremap = false}) -- Next changed Coc message (e.g. compile error).
 map('n', '<A-d>', '<Cmd>tabclose<CR>') -- Close current tab.
@@ -214,16 +218,16 @@ map('n', '<Leader>Y', '<Cmd>%y+<CR>') -- Copy file to clipboard (normal mode).
 map('n', '<Leader>a', '@a') -- Apply macro a (add with qa or yank to a reg with "ay).
 map('n', '<Leader>b', '<Cmd>Buffers<CR>') -- Search buffer list for file.
 map('n', '<Leader>cD', ':call DupBuffer()<CR><Plug>(coc-definition)', {silent = true, noremap = false}) -- Go to definition in other slit.
-map('n', '<Leader>ce', ':<C-u>CocList --first diagnostics<cr>', {silent = true}) -- Show all diagnostics (<C-a><C-q> to open all in quickfix).
 map('n', '<Leader>cE', ':<C-u>CocList diagnostics<cr>', {silent = true}) -- Manage extensions
+map('n', '<Leader>cR', '<Plug>(coc-refactor)', {noremap = false}) -- Remap for refactoring current selection.
 map('n', '<Leader>cc', '<Cmd>CocList commands<CR>', {silent = true}) -- Show commands
 map('n', '<Leader>cd', '<Plug>(coc-definition)', {silent = true, noremap = false}) -- Go to definition.
+map('n', '<Leader>ce', ':<C-u>CocList --first diagnostics<cr>', {silent = true}) -- Show all diagnostics (<C-a><C-q> to open all in quickfix).
 map('n', '<Leader>cf', '<Plug>(coc-format)', {noremap = false}) -- Format current buffer.
 map('n', '<Leader>ci', '<Plug>(coc-implementation)', {silent = true, noremap = false}) -- Go to implementation.
 map('n', '<Leader>co', '<Cmd>CocList outline<CR>', {silent = true}) -- Find symbol of current document
 map('n', '<Leader>cp', '<Cmd>CocListResume<CR>', {silent = true}) -- Resume latest coc list
 map('n', '<Leader>cr', '<Plug>(coc-rename)', {noremap = false}) -- Remap for rename current word
-map('n', '<Leader>cR', '<Plug>(coc-refactor)', {noremap = false}) -- Remap for refactoring current selection.
 map('n', '<Leader>cs', '<Cmd>CocList -I symbols<CR>', {silent = true}) -- Search workspace symbols
 map('n', '<Leader>cu', '<Plug>(coc-references)', {silent = true, noremap = false}) -- Go to usages.
 map('n', '<Leader>cy', '<Plug>(coc-type-definition)', {silent = true, noremap = false}) -- Go to type definition.
