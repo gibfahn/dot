@@ -13,6 +13,7 @@ build --repository_cache=~/.cache/bazel-repositories/
 # test --test_output=errors
 
 # If on a work Mac, use the work bazelrc.
+# This includes a --server_javabase setting.
 try-import /Users/gib/.config/bazel/wrk.bazelrc
 
 # vim: filetype=conf
