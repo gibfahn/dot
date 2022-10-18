@@ -58,7 +58,7 @@ data:
     # Enable dictation with double-tap of Fn button (1 to enable).
     AppleDictationAutoEnable: 0
     # System Settings > Keyboard > Press Function key to: (disable to make it change input source).
-    # AppleFnUsageType: 1
+    AppleFnUsageType: 1
 
   com.apple.MobileSMS:
     # Messages > Preferences > Keep messages: Forever.
