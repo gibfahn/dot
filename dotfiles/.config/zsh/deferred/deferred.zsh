@@ -23,7 +23,6 @@ export BAT_THEME="TwoDark" # Set the default theme for bat and delta.
 export CCACHE_CONFIGPATH="$XDG_CONFIG_HOME"/ccache.config
 export CCACHE_DIR="$XDG_CACHE_HOME"/ccache # Ccache cache.
 export COURSIER_CREDENTIALS="$XDG_CONFIG_HOME/coursier/credentials.properties"
-export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
 export FZF_ALT_C_COMMAND='fd --type d --hidden --no-ignore --follow --exclude .git'
 export FZF_CTRL_R_OPTS="--height=100% --preview-window=down:30%:noborder --preview '$_gib_bat_cmd --language=zsh <<<\$(echo {2..})', --bind='ctrl-y:execute(${aliases[cpy]} <<< {2..})'"
 export FZF_CTRL_T_COMMAND='fd --type f --hidden --follow --exclude .git'
