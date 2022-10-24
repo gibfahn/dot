@@ -1,0 +1,19 @@
+#!/usr/bin/env zsh
+
+set -eu
+
+usage() {
+echo "$(tput bold; tput setaf 74)$ZSH_ARGZERO [-h|--help] [-v|--version]$(tput sgr0)
+
+cargo fixall: runs cargo and clippy fixup commands, then the formatter.
+"
+}
+
+main() {
+  cargo +nightly fix --allow-staged
+  git add --all
+  cargo +nightly clippy --fix --allow-staged
+  cargo +nightly fmt
+}
+
+main $@

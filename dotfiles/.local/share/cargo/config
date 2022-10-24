@@ -28,6 +28,7 @@ i = "install"
 
 cl = "clippy"
 f = "fmt"
+fa = "fixall" # Custom command, see cargo-fixall in this repo.
 a = "add"  # From cargo-edit
 ud = "update"
 ug = "upgrade"
