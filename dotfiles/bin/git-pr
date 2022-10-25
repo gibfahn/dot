@@ -68,11 +68,11 @@ pr_edit() {
   current_branch=$(git branch --show-current)
 
   pr_number_and_body=$(
-    gh api -X GET repos/$up_org/$up_repo/pulls -F head=":$push_org:$current_branch" -f state=open --jq '.[0] | "\(.number)\n\(.body)"')
+    gh api -X GET repos/$up_org/$up_repo/pulls -F head="$current_branch" -f state=open --jq ".[] | select(.user.login == \"$push_org\") | \"\(.number)\n\(.body)\"")
   pr_number=$(head -1 <<<"$pr_number_and_body")
   old_pr_body=$(tail +2 <<<"$pr_number_and_body")
 
-  [[ $pr_number == null || $old_pr_body == null ]] && error "Failed to find PR branch."
+  [[ $pr_number == null || $old_pr_body == null ]] && error "Failed to find PR for $push_org:$current_branch"
 
   if [[ $old_pr_body != *"$commit_block_title"* ]]; then
     new_pr_body=$(<<<"$old_pr_body" && echo && <<<"$commit_block_title" && echo && pr_log)
