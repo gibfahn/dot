@@ -140,6 +140,14 @@ apple_app_bundleid() {
   esac
 }
 
+# Show which apps made a noise in the last 30 minutes.
+# Refs:
+# - <https://dreness.com/blog/archives/155773>
+# - <https://gist.github.com/dreness/1de1def13c83d19630ab0646ba8f0597>
+mac_recent_audio_notifications() {
+  log show --info --last 30m --predicate 'senderImagePath = "/usr/sbin/systemsoundserverd"' --style compact | awk '/Incoming Request/ {print $1 ":" $2 " " $14}'
+}
+
 # Clone repo and cd into path (can't be in git config as we cd).
 gcl() {
   local clone_dir ret
