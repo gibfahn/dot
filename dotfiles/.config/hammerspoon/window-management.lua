@@ -1,5 +1,6 @@
 -- Replacement for Spectacle/Rectangle.
-local log = hs.logger.new('window-management.lua', 'debug')
+local log = hs.logger.new('win-manage', 'debug')
+log.d("Loading module")
 
 --- Disable animation duration so resizing is instant.
 hs.window.animationDuration = 0

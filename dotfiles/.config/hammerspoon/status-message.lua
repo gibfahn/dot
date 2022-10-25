@@ -1,3 +1,6 @@
+local log = hs.logger.new('statusmess', 'debug')
+log.d("Loading module")
+
 -- Copied from https://github.com/jasonrudolph/keyboard/blob/master/hammerspoon/control-escape.lua
 local drawing = require 'hs.drawing'
 local geometry = require 'hs.geometry'

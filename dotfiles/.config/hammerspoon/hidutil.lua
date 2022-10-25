@@ -1,4 +1,5 @@
-local log = hs.logger.new('hidutil.lua', 'debug')
+local log = hs.logger.new('hidutil', 'debug')
+log.d("Loading module")
 
 -- Run key remapping script, used in hyper.lua too.
 RemapKeys = function()

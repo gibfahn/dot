@@ -1,3 +1,6 @@
+local log = hs.logger.new('ctrl-esc', 'debug')
+log.d("Loading module")
+
 -- Copied from https://github.com/jasonrudolph/keyboard/blob/master/hammerspoon/control-escape.lua
 -- Credit for this implementation goes to @arbelt and @jasoncodes 🙇⚡️😻
 --

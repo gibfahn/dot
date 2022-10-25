@@ -22,6 +22,7 @@
 --   '---'---'---'---'---'   '---'---'---'---'---'---'
 local message = require('status-message')
 local log = hs.logger.new('hyper.lua', 'debug')
+log.d("Loading module")
 
 -- {{{ F17 -> Hyper Key
 
