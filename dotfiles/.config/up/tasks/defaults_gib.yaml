@@ -154,3 +154,8 @@ data:
   # ⚙ -> 偏好号设置 -> 按键 -> 键盘布局 -> 其他键盘 -> Colemak
   '/Users/gib/Library/Application Support/Sogou/InputMethod/SogouPY/UserPreferences.plist':
     keyboardSelected: com.apple.keylayout.Colemak
+
+  # Show how long builds take in Xcode.
+  # https://macos-defaults.com/xcode/showbuildoperationduration.html
+  com.apple.dt.Xcode:
+    ShowBuildOperationDuration: true
