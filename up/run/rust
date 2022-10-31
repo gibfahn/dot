@@ -19,19 +19,35 @@ rust_crates=(
   proximity-sort # Sort paths by proximity to a directory.
 )
 
-# These are installed and updated through brew on Darwin.
-if [[ $(uname) == Linux ]]; then
-  rust_crates+=(
-    # exa
-    # watchexec                   # Like entr (evaluating which one is better).
-    # xsv                         # csv manipulator.
-    bat           # Nicer cat with syntax highlighting etc.
-    hyperfine     # Benchmark commands (time but a benchmarking suite).
-    cargo-edit    # Gives `cargo {add,rm,upgrade}` commands.
-    cargo-nextest # Parallel test runner framework.
-    cobalt-bin    # Static site generator (https://cobalt-org.github.io/).
-  )
-fi
+linux_rust_crates=(
+  # exa
+  # watchexec                   # Like entr (evaluating which one is better).
+  # xsv                         # csv manipulator.
+  bat           # Nicer cat with syntax highlighting etc.
+  hyperfine     # Benchmark commands (time but a benchmarking suite).
+  cargo-edit    # Gives `cargo {add,rm,upgrade}` commands.
+  cargo-nextest # Parallel test runner framework.
+  cobalt-bin    # Static site generator (https://cobalt-org.github.io/).
+)
+
+case $(uname) in
+  # These are installed and updated through brew on Darwin.
+  Linux) rust_crates+=("${linux_rust_crates[@]}") ;;
+  # These are installed and updated through brew on Darwin, so remove them from cargo. Otherwise
+  # they keep getting updated, even though we're no longer using them.
+  Darwin)
+    if exists jq; then
+      installed_crates=("$(jq -r '.installs | keys[] | split(" ")[0]' <"$CARGO_HOME"/.crates2.json)")
+      for crate in "${linux_rust_crates[@]}"; do
+        for installed_crate in "${installed_crates[@]}"; do
+          if [[ $crate == "$installed_crate" ]]; then
+            cargo uninstall "$crate"
+          fi
+        done
+      done
+    fi
+    ;;
+esac
 
 if no rustup || no cargo; then # Install/set up rust.
   # Install rustup. Don't modify path as that's already in gibrc.
