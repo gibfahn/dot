@@ -196,6 +196,11 @@
   smi  = submodule update --init --recursive   # Update to main repo upstream branch's submodule versions (make submodules match parent's HEADs).
   smu  = submodule update --remote             # Update submodules to submodule repos latest versions (make submodules match submodule upstream HEADs).
 
+  # Search the github API for a user and return their username.
+  user = "!user=${1?}; GH_HOST=$(git remote-host $(git up-remote)) gh api graphql -f query=\"query { search(type:USER, query: \\\"$user\\\", first:10) { userCount edges { node { ... on User { login, name, email, } } } } }\" | jq -r '.data.search.edges[] | .node | \"@\\(.login) - \\(.name)<\\(.email)>\"' | fzf | awk '{print $1}' #"
+  # Same, but returns all matches. Useful in vim when wanting to mention people, e.g. `V:!git users "<firstname lastname>"<CR>
+  users = "!user=${1?}; GH_HOST=$(git remote-host $(git up-remote)) gh api graphql -f query=\"query { search(type:USER, query: \\\"$user\\\", first:10) { userCount edges { node { ... on User { login, name, email, } } } } }\" | jq -r '.data.search.edges[] | .node | \"@\\(.login) - \\(.name)<\\(.email)>\"' #"
+
   # `git wa` to check out `main` to `~/tmp/worktrees/<repo name>`, `git wa dev` to check out the `dev` branch instead.
   wa   = "! dir=${2:-~/tmp/worktrees/\"$(basename \"$(git rev-parse --show-toplevel)\")\"}; git worktree add \"$dir\" \"${1:-main}\" && cd \"$dir\" #"
   # `git wr` to clean up a worktree created with `git wa`.
