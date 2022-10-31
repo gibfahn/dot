@@ -7,16 +7,15 @@ set -euo pipefail
 set -x
 
 rust_crates=(
+  # Not currently used:
   # find_unicode                  # Find unicode.
   # oxipng                        # Compress png images.
   # svgcleaner                    # Remove unnecessary info from svgs.
   # tally                         # Nicer time (shows memory, page faults etc), I'm using hyperfine instead.
-  bingrep        # Grep binary packages.
-  cargo-edit     # Gives `cargo {add,rm,upgrade}` commands.
-  cargo-nextest  # Parallel test runner framework.
+  # bingrep        # Grep binary packages.
+
   cargo-sweep    # Clean out old target directories.
   clog-cli       # Changelog generator.
-  cobalt-bin     # Static site generator (https://cobalt-org.github.io/).
   proximity-sort # Sort paths by proximity to a directory.
 )
 
@@ -26,8 +25,11 @@ if [[ $(uname) == Linux ]]; then
     # exa
     # watchexec                   # Like entr (evaluating which one is better).
     # xsv                         # csv manipulator.
-    bat       # Nicer cat with syntax highlighting etc.
-    hyperfine # Benchmark commands (time but a benchmarking suite).
+    bat           # Nicer cat with syntax highlighting etc.
+    hyperfine     # Benchmark commands (time but a benchmarking suite).
+    cargo-edit    # Gives `cargo {add,rm,upgrade}` commands.
+    cargo-nextest # Parallel test runner framework.
+    cobalt-bin    # Static site generator (https://cobalt-org.github.io/).
   )
 fi
 

@@ -47,6 +47,9 @@ brew "bazelisk"                          # Easily use the latest version of baze
 brew "binutils"                          # GNU versions of tools for interacting with binaries (nm, strings etc).
 brew "buildifier"                        # Bazel code formatter.
 brew "buildozer"                         # Automatically apply fixes to bazel files.
+brew "cargo-edit"                        # Gives `cargo {add,rm,upgrade}` commands.
+brew "cargo-nextest"                     # Parallel test runner framework.
+brew "cobalt"                            # Static site generator (https://cobalt-org.github.io/).
 brew "dfu-programmer"                    # QMK dependency used for flashing my Ergodox Infinity.
 brew "dfu-util"                          # QMK dependency used for flashing my Ergodox Infinity.
 brew "diffutils"                         # GNU versions of diff and related tools.
