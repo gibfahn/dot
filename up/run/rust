@@ -37,7 +37,7 @@ case $(uname) in
   # they keep getting updated, even though we're no longer using them.
   Darwin)
     if exists jq; then
-      installed_crates=("$(jq -r '.installs | keys[] | split(" ")[0]' <"$CARGO_HOME"/.crates2.json)")
+      installed_crates=($(jq -r '.installs | keys[] | split(" ")[0]' <"$CARGO_HOME"/.crates2.json))
       for crate in "${linux_rust_crates[@]}"; do
         for installed_crate in "${installed_crates[@]}"; do
           if [[ $crate == "$installed_crate" ]]; then
