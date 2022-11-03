@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-set -eu
+set -euo pipefail
 
 autoload -U colors && colors
 
@@ -61,18 +61,8 @@ pr_create() {
 }
 
 pr_edit() {
-  push_ref=$(branch_ref "@{push}") # e.g. fork/my-pr-branch
-  push_remote=${push_ref%%/*} # e.g. push
-  push_branch=${push_ref#*/} # e.g. my-pr-branch
-  push_org=$(remote_org $push_remote)
-  current_branch=$(git branch --show-current)
-
-  pr_number_and_body=$(
-    gh api -X GET repos/$up_org/$up_repo/pulls -F head="$current_branch" -f state=open --jq ".[] | select(.user.login == \"$push_org\") | \"\(.number)\n\(.body)\"")
-  pr_number=$(head -1 <<<"$pr_number_and_body")
-  old_pr_body=$(tail +2 <<<"$pr_number_and_body")
-
-  [[ $pr_number == null || $old_pr_body == null ]] && error "Failed to find PR for $push_org:$current_branch"
+  pr_number=$(get_pr_number)
+  old_pr_body=$(gh api --method=GET repos/$up_org/$up_repo/pulls/$pr_number --jq ".body")
 
   if [[ $old_pr_body != *"$commit_block_title"* ]]; then
     new_pr_body=$(<<<"$old_pr_body" && echo && <<<"$commit_block_title" && echo && pr_log)
@@ -94,18 +84,27 @@ pr_edit() {
 }
 
 pr_open() {
+  pr_number=$(get_pr_number)
+  gh pr view --json=url --jq=.url $pr_number | tr -d '\n' | cpy
+  gh pr view -w $pr_number
+}
+
+get_pr_number() {
+  local pr_number push_ref push_remote push_branch push_org
+
   push_ref=$(branch_ref "@{push}") # e.g. fork/my-pr-branch
+  push_remote=${push_ref%%/*} # e.g. push
   push_branch=${push_ref#*/} # e.g. my-pr-branch
+  push_org=$(remote_org $push_remote)
 
   # You should be able to just run this:
   #   gh pr view -w
   # But gh can't detect push branches, e.g. https://github.com/cli/cli/issues/575
-  pr_number=$(gh pr list --state=open --limit=1 --head=$push_branch --json=number --jq='.[0].number')
+  pr_number=$(gh pr list --state=open --limit=1 --head=$push_org:$push_branch --json=number --jq='.[].number')
   # First check open PR branches, then fall back to the most recent closed one.
   [[ $pr_number =~ ^[0-9]+$ ]] || pr_number=$(gh pr list --state=all --limit=1 --head=$push_branch --json=number --jq='.[0].number')
   [[ $pr_number =~ ^[0-9]+$ ]] || error "Failed to get PR number, output: '$pr_number'"
-  gh pr view --json=url --jq=.url $pr_number | tr -d '\n' | cpy
-  gh pr view -w $pr_number
+  echo $pr_number
 }
 
 branch_ref() {
