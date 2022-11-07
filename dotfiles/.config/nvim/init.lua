@@ -336,6 +336,7 @@ function Show_Documentation()
     vim.cmd(vim.o.keywordprg .. " " .. vim.fn.expand('<cword>'))
   end
 end
+
 -- }}} Functions
 
 -- {{{ Vimscript Commands and Functions
@@ -357,14 +358,6 @@ vim.cmd([[
     elseif a:wiseness ==# 'line'
       '[,']call s:RipWithRange()
     endif
-  endfunction
-
-  " Open path or URL using system open command.
-  function! Browse(pathOrUrl)
-    " This doesn't work with /usr/bin/vim on macOS (doesn't identify as macOS).
-    if has('mac')| let openCmd = 'open'| else| let openCmd = 'xdg-open'| endif
-      silent execute "! " . openCmd . " " . shellescape(a:pathOrUrl, 1)| " Escape Path or URL and pass as arg to open command.
-      echo openCmd . " " shellescape(a:pathOrUrl, 1)| " Echo what we ran so it's visible.
   endfunction
 
   " Opens current buffer in previous split (at the same position but centered).
@@ -452,8 +445,6 @@ vim.cmd([[
     endif
   endfunction
 
-  " Browse command is used by fugitive as I have Netrw disabled.
-  command! -nargs=1 Browse call Browse(<q-args>)|     " :Browse runs :call Browse() (defined above).
   command! Trim call TrimWhitespace()|                " :Trim runs :call Trim() (defined above).
   command W :execute ':silent w !sudo tee % > /dev/null' | :edit!| " :W writes as sudo.
 
@@ -470,11 +461,6 @@ vim.cmd([[
     \ call fzf#vim#grep(
     \   'rg  --vimgrep --color=always --smart-case --hidden ' . shellescape(<q-args>), 1,
     \   fzf#vim#with_preview({'options': ['-m', '--bind=ctrl-a:toggle-all,alt-j:jump,alt-k:jump-accept']}, 'right:50%', 'ctrl-p'))
-
-  " Use `:Format` to format current buffer
-  command! -nargs=0 Format :call CocAction('format')
-  " Use `:Fold` to fold current buffer
-  command! -nargs=? Fold :call CocAction('fold', <f-args>)
 
   " Run a command and interpret the output in the quickfix window
   command! -nargs=+ -complete=file Cr cexpr system(<q-args>)
