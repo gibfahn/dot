@@ -479,7 +479,7 @@ if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
   packer_bootstrap = vim.fn.system({
     'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path
   })
-  vim.cmd [[packadd packer.nvim]]
+  vim.cmd "packadd packer.nvim"
 end
 
 require('packer').startup(function(use)
@@ -536,7 +536,14 @@ end)
 
 pcall(require, "wrk-init-nvim") -- Load work config if present.
 
-vim.cmd 'command! PU PackerSync' -- :PU updates Packer plugin configuration.
+-- :PU asynchronously updates plugins.
+vim.api.nvim_create_user_command(
+  'PU',
+  function(_opts)
+    vim.cmd "TSUpdateSync"
+    require('packer').sync()
+  end, {desc = "Updating plugins..."}
+)
 
 if packer_bootstrap then
   -- Automatically set up your configuration after cloning packer.nvim
