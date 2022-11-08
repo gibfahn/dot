@@ -9,6 +9,7 @@ local styledtext = require 'hs.styledtext'
 
 local statusmessage = {}
 statusmessage.new = function(messageText)
+    log.d("Building status message with contents: " .. messageText)
     local buildParts = function(messageText)
         local frame = screen.primaryScreen():frame()
 
@@ -47,6 +48,7 @@ statusmessage.new = function(messageText)
     return {
         _buildParts = buildParts,
         show = function(self)
+            log.d("Showing status message with contents: " .. messageText)
             self:hide()
 
             self.background, self.text = self._buildParts(messageText)
@@ -54,6 +56,7 @@ statusmessage.new = function(messageText)
             self.text:show()
         end,
         hide = function(self)
+            log.d("Hiding status message with contents: " .. messageText)
             if self.background then
                 self.background:delete()
                 self.background = nil
@@ -64,6 +67,7 @@ statusmessage.new = function(messageText)
             end
         end,
         notify = function(self, seconds)
+            log.d("Showing and then hiding status message with contents: " .. messageText)
             local seconds = seconds or 1
             self:show()
             hs.timer.delayed.new(seconds, function() self:hide() end):start()

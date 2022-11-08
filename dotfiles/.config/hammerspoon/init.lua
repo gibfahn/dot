@@ -4,9 +4,10 @@ log.d("Loading module")
 hs.hotkey.bind({'ctrl'}, '`', nil, function() hs.reload() end)
 
 function RequireIfAvailable(module)
-  local function requiref(module) require(module) end
+  log.d("Requiring " .. module .. "if available...")
+  local function requiref(module_name) require(module_name) end
   local res = pcall(requiref, module)
-  if not (res) then log.d("Module not loaded as not found: " .. module) end
+  if not (res) then log.i("Module not loaded as not found: " .. module) end
 end
 
 local user = os.getenv("USER")
@@ -14,6 +15,7 @@ local user = os.getenv("USER")
 require('hidutil')
 
 if (user == "gib") then
+  log.d("Loading gib configuration...")
   require('hyper') -- Uses RemapKeys from hidutil, so require order matters.
   require('control-escape')
 

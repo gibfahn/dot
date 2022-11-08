@@ -129,19 +129,20 @@ local user = os.getenv("USER")
 
 -- Gib and Brian use vim arrow keys, others use normal arrow keys.
 local key_bindings = (user == "gib" or user == "brian") and {
-  { key = 'h', func = left_half },
-  { key = 'n', func = next_display },
-  { key = 'e', func = full_screen },
-  { key = 'i', func = right_half },
+  { key = 'h', func = left_half, func_name = "left_half" },
+  { key = 'n', func = next_display, func_name = "next_display" },
+  { key = 'e', func = full_screen, func_name = "full_screen" },
+  { key = 'i', func = right_half, func_name = "right_half" },
 } or {
-  { key = 'left', func = left_half },
-  { key = 'down', func = next_display },
-  { key = 'up', func = full_screen },
-  { key = 'right', func = right_half },
+  { key = 'left', func = left_half, func_name = "left_half" },
+  { key = 'down', func = next_display, func_name = "next_display" },
+  { key = 'up', func = full_screen, func_name = "full_screen" },
+  { key = 'right', func = right_half, func_name = "right_half" },
 }
 
 for _, hotkey in ipairs(key_bindings) do
   hs.hotkey.bind({'cmd', 'alt'}, hotkey.key, function()
+    log.df("User ran Cmd-Alt-%s, moving window to %s", hotkey.key, hotkey.func_name)
     local window = hs.window.focusedWindow()
     local newFrame = hotkey.func(window:frame(), window:screen():frame())
     window:setFrame(newFrame)

@@ -3,6 +3,7 @@ log.d("Loading module")
 
 -- Run key remapping script, used in hyper.lua too.
 RemapKeys = function()
+  log.d("Remapping keys...")
   local cmd = os.getenv("HOME") .. "/bin/hid"
   local output, _, _, rc = hs.execute(cmd)
   hs.hid.capslock.set(false) -- Turn off Caps Lock.
@@ -31,7 +32,10 @@ RemapKeyWatcher = hs.caffeinate.watcher.new(function(event)
   }
   -- Check event number against commented numbers above.
   log.d('Event: ', event, ' matches: ', eventsToMatch[event])
-  if eventsToMatch[event] then RemapKeys() end
+  if eventsToMatch[event] then
+    log.d("RemapKeyWatcher found matching event: " .. event)
+    RemapKeys()
+  end
 end)
 RemapKeyWatcher:start()
 

@@ -81,7 +81,14 @@ local hyperModeAppMappings = {
 
 }
 for _, mapping in ipairs(hyperModeAppMappings) do
-  HyperMode:bind(mapping.mods, mapping.key, function() hs.application.launchOrFocus(mapping.app) end)
+  HyperMode:bind(
+    mapping.mods,
+    mapping.key,
+    function()
+      log.df("Hyper+%s pressed, opening or focusing app %s", mapping.key, mapping.app)
+      hs.application.launchOrFocus(mapping.app)
+    end
+  )
 end
 -- }}} Hyper-<key> -> Launch apps
 
@@ -103,6 +110,7 @@ end)
 
 -- Hyper-. -> tap to unmute mic.
 HyperMode:bind({}, '.', function()
+  log.d("Unmuting the mic...")
   local device = hs.audiodevice.defaultInputDevice()
   local muteSuccess = device:setInputMuted(false)
 
@@ -158,6 +166,7 @@ HyperMode:bind({'alt'}, 'q', function() KillAll({'-9', '-m', '.*Meeting Center.*
 
 -- {{{ Hyper-⇧-w -> Restart Wi-Fi
 HyperMode:bind({'shift'}, 'w', function()
+  log.d("Restarting Wi-Fi...")
   hs.notify.new({title = 'Restarting Wi-Fi...', withdrawAfter = 3}):send()
   hs.wifi.setPower(false)
   hs.wifi.setPower(true)
@@ -166,6 +175,7 @@ end)
 
 -- {{{ Hyper-d -> Paste today's date.
 HyperMode:bind({}, 'd', function()
+  log.d("Pasting today's date...")
   local date = os.date("%Y-%m-%d")
   hs.pasteboard.setContents(date)
   HyperMode:exit()
@@ -175,6 +185,7 @@ end)
 
 -- {{{ Hyper-⇧-d -> Paste today's date and time.
 HyperMode:bind({'shift'}, 'd', function()
+  log.d("Pasting today's date and time...")
   local date = os.date("%Y-%m-%d %H:%M:%S")
   hs.pasteboard.setContents(date)
   HyperMode:exit()
@@ -184,6 +195,7 @@ end)
 
 -- {{{ Hyper-⌥-m -> Format selected Message ID as link and copy to clipboard.
 HyperMode:bind({'shift'}, 'm', function()
+  log.d("Copying selected email message ID as a link and copying to the clipboard...")
   hs.eventtap.keyStroke({'cmd'}, 'c') -- Copy selected email message ID (e.g. from Mail.app).
   -- Allow some time for the command+c keystroke to fire asynchronously before
   -- we try to read from the clipboard
@@ -205,6 +217,7 @@ HyperMode:bind({}, 'p', function() hs.eventtap.keyStroke({'cmd', 'ctrl', 'shift'
 
 -- {{{ Hyper-Enter -> Open clipboard contents.
 HyperMode:bind({}, 'return', function()
+  log.d("Opening clipboard contents.")
   local clipboard = hs.pasteboard.getContents():gsub("%s*$", "")
   hs.task.new("/usr/bin/open", function(exitCode, stdOut, stdErr)
     hs.notify.new({
