@@ -1,0 +1,153 @@
+#!/usr/bin/env zsh
+
+set -euo pipefail
+
+autoload -U colors && colors
+
+usage() {
+  setopt local_options posix_argzero
+  echo "$(tput bold; tput setaf 74)$ZSH_ARGZERO [-h|--help] [-v|--version] [OPTIONS] $(tput sgr0)
+
+$(tput bold)git fork$(tput sgr0)
+
+Create a GitHub fork, or fetch an existing fork.
+If a new fork is created, it will be cleaned of all refs except a single branch.
+
+OPTIONS:
+
+--clean: cleans an existing fork
+
+--up-remote: name of the remote to fork, default 'up'
+
+--fork-remote: name of the forked remote, default 'fork'
+
+--up-branch: name of branch to push to fork remote with the --fork-branch name.
+
+--fork-branch: name of the branch to leave or create on the fork remote, default 'forkmain'
+
+--parallelism: number of delete operations to pass to each delete invocation, default '10'
+
+"
+}
+
+# Defaults
+
+action=clone
+up_remote=up
+fork_remote=fork
+up_branch=
+fork_branch=forkmain
+parallelism=10
+
+while [[ $# != 0 ]]; do
+  [[ ${1:-} =~ ^(--help|-h)$ ]] && { usage; exit; }
+
+  [[ ${1:-} =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
+
+  [[ ${1:-} =~ ^(--clean|-c)$ ]] && { action=clean; shift; continue; }
+
+  [[ ${1:-} =~ ^--up-remote$ ]] && { up_remote=$2; shift 2; continue; }
+
+  [[ ${1:-} =~ ^--fork-remote$ ]] && { fork_remote=$2; shift 2; continue; }
+
+  [[ ${1:-} =~ ^--up-branch$ ]] && { up_branch=$2; shift 2; continue; }
+
+  [[ ${1:-} =~ ^--fork-branch$ ]] && { fork_branch=$2; shift 2; continue; }
+
+  [[ ${1:-} =~ ^--parallelism$ ]] && { parallelism=$2; shift 2; continue; }
+
+  [[ $# != 0 ]] && { echo "Too many args"; usage; exit 1; }
+done
+
+main() {
+  # Set default here so we don't waste time calculating if the up remote was overridden.
+  : ${up_branch:=$(default_branch $up_remote)}
+
+  if [[ $action == clone ]]; then
+    if git remote | grep -qx $fork_remote; then
+      echo >&2 "Fork remote already exists, skipping..."
+      exit 0
+    fi
+
+    # TODO: stop setting this once `gh` gains decent up/push branch recognition.
+    export GH_REPO=$(remote_url "$up_remote")
+    export GH_HOST=$(remote_host "$up_remote")
+    # Fork the repo.
+    gh repo fork --clone=false --remote=true --remote-name=$fork_remote
+
+    # Print remotes.
+    git remote -v
+
+    if git show-ref --verify --quiet refs/remotes/$fork_remote/$fork_branch; then
+      echo >&2 "Fork already existed remotely and contains $fork_branch, skipping clean..."
+      exit 0
+    fi
+  fi
+
+  git push $fork_remote ${up_remote}/${up_branch}:refs/heads/${fork_branch}
+  change_branch $fork_remote $fork_branch
+  default_branch $fork_remote
+  clean_fork $fork_remote $fork_branch $parallelism
+}
+
+remote_url() {
+  git remote get-url "$1"
+}
+
+# Remote hostname, used for setting GH_HOST.
+remote_host() {
+  git remote get-url ${1:?} | sed -e 's/^git@//' -e 's|https://||' -e 's/:.*//' -e 's|/.*||'
+}
+
+# Github org for remote. `remote_org up` -> gibfahn.
+remote_org() {
+  git remote get-url $1 | awk -F ':|/' '{if ($NF) {print $(NF-1)} else {print $(NF-2)}}'
+}
+
+# Github repo for remote. `remote_repo up` -> dot.
+remote_repo() {
+  git remote get-url $1 | sed -e 's|/$||' -e 's|.*/||' -e 's/.git$//'
+}
+
+# Default branch for remote. `g default-branch up` -> master
+default_branch() {
+  (
+    git symbolic-ref --short refs/remotes/$1/HEAD || {
+      git remote set-head --auto $1 \
+        && git symbolic-ref --short refs/remotes/$1/HEAD;
+    }
+  ) | sed "s|^$1/||"
+}
+
+# Change the remote default branch to "$2" (default: "forkmain"), for remote $1 (default: "fork").
+change_branch() {
+  local fork=${1}
+  local branch=${2}
+  local remote_repo_name=$(remote_repo $fork)
+  GH_HOST=$(remote_host $fork) gh api -XPATCH repos/$(remote_org $fork)/$remote_repo_name \
+    -f name=$remote_repo_name \
+    -f default_branch=$branch \
+    --jq .default_branch
+  git remote set-head --auto $fork
+}
+
+# Removes all branches and tags from remote "$1" except "$2" (default: forkmain).
+# For massive remotes you may want to increase the parallelism "$3" beyond the default of 10.
+clean_fork() {
+  local fork=${1:-fork}
+  local branch=${2:-forkmain}
+  local parallelism=${3:-10}
+  git ls-remote --heads --tags $fork \
+    | awk '!/\^\{\}/ && !/refs\/heads\/'"$branch"'/ {print $NF}' \
+    | xargs -n $parallelism git push --delete $fork
+  git remote prune $fork
+}
+
+# Usage: exit message [rc]
+error() {
+  # printf "${fg[red]}Error:${reset_color} %s\n" "$1"
+  echo -e "${fg[red]}Error:${reset_color} $1"
+  exit "${2:-1}"
+}
+
+main $@

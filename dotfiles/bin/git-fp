@@ -3,30 +3,40 @@
 set -eu
 
 usage() {
-echo "$(tput bold; tput setaf 74)$ZSH_ARGZERO [pr number] [up_remote] $(tput sgr0)
+echo "$(tput bold; tput setaf 74)$ZSH_ARGZERO [OPTIONS] [pr number] $(tput sgr0)
 
 git fetch pr: fetch and set up a PR branch.
 
 Given no args, force updates the current branch to the relevant PR.
 
-git fp 123 up -> Create a branch called '123-<PR branch name>' and set the push and upstream remotes accordingly.
+git fp 123    -> Create a branch called '123-<PR branch name>' and set the push and upstream remotes accordingly.
+git fp --up-remote up 123 -> Create a branch called '123-<PR branch name>' and set the push and upstream remotes accordingly, looking at remote 'up'.
 git fp        -> Update the current branch (assumed to be a PR branch created by this script).
 git ptp       -> push to the user's branch (in my git config as an alias).
 
 Creates and assumes local branches of the form <PR Number>-<PR Branch Name>, e.g. 123-myfeaturebranch.
+
+OPTIONS:
+
+--up-remote: name of the remote fetch the PR for, default 'up'
+
 "
 }
+
+up_remote=
 
 while [[ $# != 0 ]]; do
   [[ ${1:-} =~ ^(--help|-h)$ ]] && { usage; exit; }
 
   [[ ${1:-} =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
 
-  [[ ${1:-} =~ ^(--quiet|-q)$ ]] && { QUIET=true; shift; continue }
+  [[ ${1:-} =~ ^(--quiet|-q)$ ]] && { QUIET=true; shift; }
 
-  [[ $# != 0 ]] && { pr_number=$1; shift; }
+  [[ ${1:-} =~ ^(--quiet|-q)$ ]] && { QUIET=true; shift; }
 
-  [[ $# != 0 ]] && { up_remote=$1; shift; }
+  [[ ${1:-} =~ ^--up-remote$ ]] && { up_remote=$2; shift 2; continue; }
+
+  [[ $# != 0 ]] && { pr_number=$1; shift; continue; }
 
   [[ $# != 0 ]] && { echo "Too many args"; usage; exit 1; }
 done
