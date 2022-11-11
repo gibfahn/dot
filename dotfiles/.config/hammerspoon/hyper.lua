@@ -75,7 +75,7 @@ end
 local hyperModeAppMappings = {
 
   {key = '/', app = 'Finder'}, {key = 'a', app = 'Activity Monitor'}, {key = 'b', app = 'Safari'},
-  {key = 'c', app = 'Slack'}, {key = 'f', app = 'Firefox Nightly'}, {key = 'k', app = 'Calendar'},
+  {key = 'c', app = 'Slack'}, {key = 'f', app = 'Firefox'}, {key = 'k', app = 'Calendar'},
   {key = 'm', app = 'Mail'}, {key = 'r', app = 'Radar 8'}, {key = 's', app = 'Spotify'}, {key = 't', app = 'Kitty'},
   {key = 'w', app = 'Workflowy'}, {key = 'x', app = 'Messenger', mods = {'alt'}}, {key = 'x', app = 'Messages'}
 
