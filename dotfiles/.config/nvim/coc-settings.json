@@ -5,12 +5,14 @@
 
   // Used to show a menu item is a snippet.
   "suggest.snippetIndicator": " ►",
-  "suggest.enablePreview": true,
   // Enable preselect feature on Neovim, automatically select first item.
   // "suggest.enablePreselect": true,
   // Trigger completion after InsertEnter.
   "suggest.triggerAfterInsertEnter": true,
-  "colors.filetypes": ["*"],
+  "colors.enable": true,
+  // Don't select the first item by default, so that Tab works to select it, and nothing is
+  // otherwise selected.
+  "suggest.noselect": true,
 
   // Show the close button in popup window.
   "diagnostic.floatConfig": {
