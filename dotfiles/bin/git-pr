@@ -14,8 +14,17 @@ Raise PR from @{push} against @{upstream}.
 See this post for the @{push} and @{upstream} workflow:
 https://fahn.co/posts/a-better-pull-request-workflow-with-git-push-branches.html
 
-To update an existing pull request body after force pushing (to add the new commit range) use:
-  git pr --edit
+OPTIONS:
+
+--help: prints this help message
+
+--version: prints the script version
+
+--edit: updates an existing pull request body after force pushing (to add the new commit range)
+
+--open: opens the pull request URL for the current branch in the browser
+
+--draft: creates a draft pull request (only applies when creating a new PR)
 "
 }
 
@@ -29,6 +38,8 @@ while [[ $# != 0 ]]; do
   [[ ${1:-} =~ ^(--edit|-e)$ ]] && { action=edit; shift; }
 
   [[ ${1:-} =~ ^(--open|-o)$ ]] && { action=open; shift; }
+
+  [[ ${1:-} =~ ^(--draft|-d)$ ]] && {draft=true; shift; }
 done
 
 main() {
@@ -53,7 +64,7 @@ main() {
 
 pr_create() {
   file=$(pr_file)
-  gh pr create --title "$(head -1 "$file")" --body "$(tail +3 "$file")" --base "$up_branch"
+  gh pr create --title "$(head -1 "$file")" --body "$(tail +3 "$file")" --base "$up_branch" ${draft:+--draft}
   rm "$file"
 
   # Now open the PR in the browser.
