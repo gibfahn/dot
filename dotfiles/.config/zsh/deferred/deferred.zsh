@@ -244,7 +244,7 @@ alias curl="noglob curl" # Don't match on ? [] etc in curl URLs, avoids needing 
 
 # }}} Aliases
 
-chpwd() { # Commands to run after changing directory.
+chpwd() { # Commands to run after changing directory (via cd or pushd).
   [[ -t 1 ]] || return # Exit if stdout is not a tty.
   setopt local_options no_monitor # This only disables the "job start", not the "job complete".
   # I know I set the ls alias earlier, so use that.
