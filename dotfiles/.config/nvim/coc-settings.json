@@ -132,7 +132,10 @@
     "no-duplicate-heading": false,
 
     // Allow arbitrary indentation for lists. Don't want to force one indent depth globally.
-    "ul-indent": false
+    "ul-indent": false,
+
+    // MD033/no-inline-html: allow inline html elements in Markdown.
+    "no-inline-html": false
   },
   "prettier.disableLanguages": ["markdown"],
   "prettier.trailingComma": "all",
