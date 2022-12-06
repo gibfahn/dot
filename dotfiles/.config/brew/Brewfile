@@ -13,6 +13,7 @@ cask "1password"                         # Password manager, installed first so 
 brew "gnupg"                             # gpg command line.
 cask "kitty"                             # GPU Accelerated cross-platform Terminal Emulator.
 cask "font-hasklug-nerd-font"            # Nice programming font Hasklig (Source Code Pro + Ligatures) + Nerd Font extensions.
+cask "font-sauce-code-pro-nerd-font"     # Nice programming font Source Code Pro + Ligatures + Nerd Font extensions.
 cask "hammerspoon"                       # Scriptable automator for macOS.
 cask "copyq"                             # Clipboard manager with history (needs manual setup).
 brew "neovim"                            # New and improved vim.
