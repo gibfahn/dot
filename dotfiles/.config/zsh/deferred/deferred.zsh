@@ -125,13 +125,15 @@ tabs_to_spaces() {
 # Refs: StackOverflow (https://stackoverflow.com/questions/27509838/how-to-get-bundle-id-of-ios-app-either-using-ipa-file-or-app-installed-on-iph)
 # Usage:
 #   apple_app_bundleid https://apps.apple.com/us/app/watch/id1069511734
+#   apple_app_bundleid https://apps.apple.com/gb/app/clubspark-booker/id1028325841
 #   apple_app_bundleid /Applications/kitty.app
 apple_app_bundleid() {
   case $1 in;
     https://*) # Assume URL (Google for the app, copy URL).
+      country=$(sed -E 's;https://apps.apple.com/([^/]+)/.*;\1;' <<<"$1")
       # Assumes links like https://apps.apple.com/us/app/magic-the-gathering-arena/id1496227521#?platform=ipad
       id=$(sed -E 's;.*/id([0-9]+).*;\1;' <<<"$1")
-      curl "https://itunes.apple.com/lookup?id=${id}" | jq -r '"app://\(.results[0].bundleId)"'
+      curl "https://itunes.apple.com/${country}/lookup?id=${id}" | jq -r '"app://\(.results[0].bundleId)"'
       ;;
     *) # Assume App Name / Path.
       id=$1
