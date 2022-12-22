@@ -481,6 +481,10 @@ autoload -Uz add-zsh-hook
 add-zsh-hook precmd _gib_prompt_precmd
 add-zsh-hook preexec _gib_prompt_preexec
 
+# Don't send SIGTTOU to background jobs that write to the tty. Fixes this in busy commands:
+# [1]  + 82656 suspended (tty output)  cargo run
+stty -tostop
+
 # Initialise completions after everything else.
 autoload -Uz compinit
 compinit
