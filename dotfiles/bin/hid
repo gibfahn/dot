@@ -19,6 +19,8 @@ set -euo pipefail
 # - 0x43e = LG
 # - 0x1209 = Keyboardio
 
+autoload -U colors && colors
+
 main() {
   set_env_vars
   whoami=$(whoami)
