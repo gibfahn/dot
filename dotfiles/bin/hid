@@ -25,7 +25,7 @@ main() {
   set_env_vars
   whoami=$(whoami)
   case $whoami in
-    gib) remap_gib ;;
+    gib|brian) remap_gib ;;
     eve) remap_eve ;;
     *) error "Unknown user $whoami" ;;
   esac
