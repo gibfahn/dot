@@ -9,7 +9,7 @@ if ! type brew; then
     "$wrk_dot_dir"/up/run/brew
   else
     { set +x; } 2>/dev/null
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    /bin/bash -c "$(NONINTERACTIVE=1 curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     set -x
   fi
 fi
