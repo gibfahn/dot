@@ -539,7 +539,7 @@ vim.cmd([[
   endfunction
 
   command! Trim call TrimWhitespace()|                " :Trim runs :call Trim() (defined above).
-  command W :execute ':silent w !sudo tee % > /dev/null' | :edit!| " :W writes as sudo.
+  command! W :execute ':silent w !sudo tee % > /dev/null' | :edit!| " :W writes as sudo.
 
   command! -bang -nargs=? -complete=dir Files
     \ call fzf#vim#files(<q-args>, {'source': s:list_cmd('find', ''),
