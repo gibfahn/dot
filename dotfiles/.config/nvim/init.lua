@@ -136,6 +136,98 @@ vim.opt.wildmode = {"list", "longest"} -- 1st Tab completes to longest common st
 
 -- }}} Vim options
 
+-- {{{ Package Manager Setup
+-- variable that is only set if we're bootstrapping (Packer hasn't been installed).
+local packer_bootstrap
+
+local install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
+if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
+  packer_bootstrap = vim.fn.system({
+    'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path
+  })
+  vim.cmd "packadd packer.nvim"
+end
+
+require('packer').startup(function(use)
+  -- Packer can manage itself
+  use 'wbthomason/packer.nvim'
+
+  use "fladson/vim-kitty" -- Syntax highlighting for kitty.conf file.
+  use 'AndrewRadev/splitjoin.vim' -- gS to split, gJ to join lines.
+  use 'airblade/vim-gitgutter' -- Show git diffs in the gutter (left of line numbers) (:h gitgutter).
+  use 'ap/vim-buftabline' -- Show buffers in the tab bar.
+  use 'ap/vim-readdir' -- Nicer file browser plugin that works with buftabline.
+  use 'aymericbeaumet/vim-symlink' -- Resolve symlinks when opening files.
+  use 'chrisbra/Colorizer' -- Color ansi escape codes (:h Colorizer).
+  use 'chrisbra/Recover.vim' -- add a diff option when a swap file is found.
+  use 'coderifous/textobj-word-column.vim' -- Adds ic/ac and iC/aC motions to block select word column in paragraph.
+  use 'fweep/vim-zsh-path-completion' -- Nicer file browser plugin.
+  use 'ggandor/leap.nvim' -- Quickest way to jump to any char on the screen (alternative to easymotion/sneak/hop/lightspeed/pounce).
+  use 'gibfahn/vim-gib' -- Use vim colorscheme.
+  use 'honza/vim-snippets' -- Work around https://github.com/neoclide/coc-snippets/issues/126 .
+  use 'itchyny/lightline.vim' -- Customize statusline and tabline.
+  use 'junegunn/fzf.vim' -- Try :Files, :GFiles? :Buffers :Lines :History :Commits :BCommits
+  use 'junegunn/vim-peekaboo' -- Pop up register list when pasting/macroing.
+  use 'kana/vim-operator-user' -- Make it easier to define operators.
+  use 'kana/vim-textobj-line' -- Adds `il` and `al` text objects for current line.
+  use 'kana/vim-textobj-user' -- Allows you to create custom text objects (used in vim-textobj-line).
+  use 'puremourning/vimspector' -- Multi-language debugger using the VSCode Debug Adapter Protocol.
+  use 'sedm0784/vim-resize-mode' -- Continuous resizing.
+  use 'simnalamburt/vim-mundo' -- Graphical undo tree (updated fork of Gundo).
+  use 'takac/vim-hardtime' -- Stop you using repeated keypresses.
+  use 'tpope/vim-commentary' -- Autodetect comment type for lang.
+  use 'tpope/vim-fugitive' -- Git commands in vim.
+  use 'tpope/vim-repeat' -- Allows you to use . with plugin mappings.
+  use 'tpope/vim-rhubarb' -- GitHub support.
+  use 'tpope/vim-rsi' -- Insert/commandline readline-style mappings, e.g. C-a for beginning of line.
+  use 'tpope/vim-surround' -- Add/mod/remove surrounding chars.
+  use 'tpope/vim-unimpaired' -- [ and ] mappings (help unimpaired).
+  use {'cespare/vim-toml', ft = 'toml'} -- Toml syntax highlighting.
+  use {'editorconfig/editorconfig-vim', after = 'vim-sleuth'} -- Parse .editorconfig files (https://editorconfig.org/).
+  use {'godlygeek/tabular', cmd = 'Tabularize'} -- Make tables easier (:help Tabular).
+  use {'moll/vim-bbye', cmd = 'Bdelete'} -- Delete buffer without closing split.
+  use {'mzlogin/vim-markdown-toc', ft = 'markdown'} -- Markdown Table of Contents.
+  use {'nanotee/zoxide.vim', cmd = 'Zi'} -- Use zoxide to quickly jump to directories.
+  use {'neoclide/coc.nvim', branch = 'release'} -- Language Server with VSCode Extensions.
+  use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'} -- Treesitter syntax highlighting.
+  use {'pechorin/any-jump.nvim', cmd = 'AnyJump'} -- Go to definition that doesn't require a language server.
+  use {'rust-lang/rust.vim', ft = 'rust'} -- Rust language bindings.
+  use {'sheerun/vim-polyglot', config = 'vim.opt.shortmess:remove("A")'} -- Syntax files for languages + work around https://github.com/sheerun/vim-polyglot/issues/765.
+  use {'subnut/nvim-ghost.nvim', run = ':call nvim_ghost#installer#install()'} -- Edit browser text areas in Neovim (:h ghost).
+  use {'tpope/vim-abolish', cmd = {'Abolish', 'Subvert', 'S'}} -- Work with variants of words (replacing, capitalizing etc).
+  use {'tpope/vim-sleuth', after = 'vim-polyglot'} -- Automatically detect indentation.
+  use {'~/.local/share/fzf', as = 'fzf', run = './install --bin'} -- :h fzf
+
+end)
+
+pcall(require, "wrk-init-nvim") -- Load work config if present.
+
+-- :PU asynchronously updates plugins.
+vim.api.nvim_create_user_command(
+  'PU',
+  function(_opts)
+    vim.cmd "TSUpdateSync"
+    require('packer').sync()
+  end, {desc = "Updating plugins..."}
+)
+
+if packer_bootstrap then
+  -- Automatically set up your configuration after cloning packer.nvim
+  -- Put this at the end after all plugins
+  require('packer').sync()
+
+  -- If we just bootstrapped the package manager, our packages won't be available, so skip their setup.
+  vim.cmd([[
+      augroup packer_bootstrap_config
+        autocmd!
+        autocmd User PackerComplete exec 'source '. stdpath('config') . '/init.lua'
+      augroup end
+    ]])
+  return
+end
+
+-- }}} Package Manager Setup
+
 -- {{{ Mappings
 --
 -- (see http://vim.wikia.com/wiki/Unused_keys for unused keys)
@@ -465,98 +557,6 @@ vim.cmd([[
 ]])
 
 -- }}} Vimscript Commands and Functions
-
--- {{{ Package Manager Setup
--- variable that is only set if we're bootstrapping (Packer hasn't been installed).
-local packer_bootstrap
-
-local install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
-if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-  packer_bootstrap = vim.fn.system({
-    'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path
-  })
-  vim.cmd "packadd packer.nvim"
-end
-
-require('packer').startup(function(use)
-  -- Packer can manage itself
-  use 'wbthomason/packer.nvim'
-
-  use "fladson/vim-kitty" -- Syntax highlighting for kitty.conf file.
-  use 'AndrewRadev/splitjoin.vim' -- gS to split, gJ to join lines.
-  use 'airblade/vim-gitgutter' -- Show git diffs in the gutter (left of line numbers) (:h gitgutter).
-  use 'ap/vim-buftabline' -- Show buffers in the tab bar.
-  use 'ap/vim-readdir' -- Nicer file browser plugin that works with buftabline.
-  use 'aymericbeaumet/vim-symlink' -- Resolve symlinks when opening files.
-  use 'chrisbra/Colorizer' -- Color ansi escape codes (:h Colorizer).
-  use 'chrisbra/Recover.vim' -- add a diff option when a swap file is found.
-  use 'coderifous/textobj-word-column.vim' -- Adds ic/ac and iC/aC motions to block select word column in paragraph.
-  use 'fweep/vim-zsh-path-completion' -- Nicer file browser plugin.
-  use 'ggandor/leap.nvim' -- Quickest way to jump to any char on the screen (alternative to easymotion/sneak/hop/lightspeed/pounce).
-  use 'gibfahn/vim-gib' -- Use vim colorscheme.
-  use 'honza/vim-snippets' -- Work around https://github.com/neoclide/coc-snippets/issues/126 .
-  use 'itchyny/lightline.vim' -- Customize statusline and tabline.
-  use 'junegunn/fzf.vim' -- Try :Files, :GFiles? :Buffers :Lines :History :Commits :BCommits
-  use 'junegunn/vim-peekaboo' -- Pop up register list when pasting/macroing.
-  use 'kana/vim-operator-user' -- Make it easier to define operators.
-  use 'kana/vim-textobj-line' -- Adds `il` and `al` text objects for current line.
-  use 'kana/vim-textobj-user' -- Allows you to create custom text objects (used in vim-textobj-line).
-  use 'puremourning/vimspector' -- Multi-language debugger using the VSCode Debug Adapter Protocol.
-  use 'sedm0784/vim-resize-mode' -- Continuous resizing.
-  use 'simnalamburt/vim-mundo' -- Graphical undo tree (updated fork of Gundo).
-  use 'takac/vim-hardtime' -- Stop you using repeated keypresses.
-  use 'tpope/vim-commentary' -- Autodetect comment type for lang.
-  use 'tpope/vim-fugitive' -- Git commands in vim.
-  use 'tpope/vim-repeat' -- Allows you to use . with plugin mappings.
-  use 'tpope/vim-rhubarb' -- GitHub support.
-  use 'tpope/vim-rsi' -- Insert/commandline readline-style mappings, e.g. C-a for beginning of line.
-  use 'tpope/vim-surround' -- Add/mod/remove surrounding chars.
-  use 'tpope/vim-unimpaired' -- [ and ] mappings (help unimpaired).
-  use {'cespare/vim-toml', ft = 'toml'} -- Toml syntax highlighting.
-  use {'editorconfig/editorconfig-vim', after = 'vim-sleuth'} -- Parse .editorconfig files (https://editorconfig.org/).
-  use {'godlygeek/tabular', cmd = 'Tabularize'} -- Make tables easier (:help Tabular).
-  use {'moll/vim-bbye', cmd = 'Bdelete'} -- Delete buffer without closing split.
-  use {'mzlogin/vim-markdown-toc', ft = 'markdown'} -- Markdown Table of Contents.
-  use {'nanotee/zoxide.vim', cmd = 'Zi'} -- Use zoxide to quickly jump to directories.
-  use {'neoclide/coc.nvim', branch = 'release'} -- Language Server with VSCode Extensions.
-  use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'} -- Treesitter syntax highlighting.
-  use {'pechorin/any-jump.nvim', cmd = 'AnyJump'} -- Go to definition that doesn't require a language server.
-  use {'rust-lang/rust.vim', ft = 'rust'} -- Rust language bindings.
-  use {'sheerun/vim-polyglot', config = 'vim.opt.shortmess:remove("A")'} -- Syntax files for languages + work around https://github.com/sheerun/vim-polyglot/issues/765.
-  use {'subnut/nvim-ghost.nvim', run = ':call nvim_ghost#installer#install()'} -- Edit browser text areas in Neovim (:h ghost).
-  use {'tpope/vim-abolish', cmd = {'Abolish', 'Subvert', 'S'}} -- Work with variants of words (replacing, capitalizing etc).
-  use {'tpope/vim-sleuth', after = 'vim-polyglot'} -- Automatically detect indentation.
-  use {'~/.local/share/fzf', as = 'fzf', run = './install --bin'} -- :h fzf
-
-end)
-
-pcall(require, "wrk-init-nvim") -- Load work config if present.
-
--- :PU asynchronously updates plugins.
-vim.api.nvim_create_user_command(
-  'PU',
-  function(_opts)
-    vim.cmd "TSUpdateSync"
-    require('packer').sync()
-  end, {desc = "Updating plugins..."}
-)
-
-if packer_bootstrap then
-  -- Automatically set up your configuration after cloning packer.nvim
-  -- Put this at the end after all plugins
-  require('packer').sync()
-
-  -- If we just bootstrapped the package manager, our packages won't be available, so skip their setup.
-  vim.cmd([[
-      augroup packer_bootstrap_config
-        autocmd!
-        autocmd User PackerComplete exec 'source '. stdpath('config') . '/init.lua'
-      augroup end
-    ]])
-  return
-end
-
--- }}} Package Manager Setup
 
 -- {{{ Package Autocommands
 
