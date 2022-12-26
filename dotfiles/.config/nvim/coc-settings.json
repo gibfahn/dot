@@ -319,5 +319,7 @@
       "filetypes": ["swift"]
     }
   },
-  "java.errors.incompleteClasspath.severity": "ignore"
+  "java.errors.incompleteClasspath.severity": "ignore",
+  // Don't remind me that ultisnips needs python to be installed.
+  "snippets.ultisnips.pythonPrompt": false
 }
