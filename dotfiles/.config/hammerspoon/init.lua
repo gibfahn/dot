@@ -14,7 +14,7 @@ local user = os.getenv("USER")
 
 require('hidutil')
 
-if (user == "gib") then
+if (user == "gib" or user == "brian") then
   log.d("Loading gib configuration...")
   require('hyper') -- Uses RemapKeys from hidutil, so require order matters.
   require('control-escape')
