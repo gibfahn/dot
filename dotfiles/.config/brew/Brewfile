@@ -66,3 +66,4 @@ cask "workflowy"                         # Infinitely nested bullet point list a
 # mas "Runcat", id: 1429033973             # Show CPU usage in menu bar.
 mas "Dato", id: 1470584107
 mas "Pages", id: 409201541               # Edit docx and pages files.
+mas "1Password for Safari", id: 1569813296 # 1Password browser extension.
