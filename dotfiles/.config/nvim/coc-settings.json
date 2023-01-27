@@ -83,6 +83,7 @@
   "python.linting.flake8Enabled": true,
   "python.linting.pydocstyleEnabled": false,
   "python.jediEnabled": false,
+  "python.formatting.provider": "black",
   "rust-analyzer.checkOnSave.overrideCommand": [
     "cargo",
     "+nightly",
