@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# See https://discussions.apple.com/thread/251602703
+# From: https://apple.stackexchange.com/questions/313454/applescript-find-the-users-set-default-browser
+
+plutil -convert json -o - -- ~/Library/Preferences/com.apple.LaunchServices/com.apple.launchservices.secure.plist \
+  | python3 -c "import sys, json
+input = json.load(sys.stdin)
+for handler in input['LSHandlers']:
+  if handler.get('LSHandlerURLScheme') == 'https':
+    print(handler['LSHandlerRoleAll'])
+"
