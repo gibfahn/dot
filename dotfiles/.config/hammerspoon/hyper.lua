@@ -74,7 +74,7 @@ end
 -- {{{ Hyper-<key> -> Launch apps
 local hyperModeAppMappings = {
 
-  {key = '/', app = 'Finder'}, {key = 'a', app = 'Activity Monitor'}, {key = 'b', app = 'Safari'},
+  {key = '/', app = 'Finder'}, {key = 'a', app = 'Activity Monitor'},
   {key = 'c', app = 'Slack'}, {key = 'f', app = 'Firefox'}, {key = 'k', app = 'Calendar'},
   {key = 'm', app = 'Mail'}, {key = 'r', app = 'Radar 8'}, {key = 's', app = 'Spotify'}, {key = 't', app = 'Kitty'},
   {key = 'w', app = 'Workflowy'}, {key = 'x', app = 'Messenger', mods = {'alt'}}, {key = 'x', app = 'Messages'}
@@ -91,6 +91,23 @@ for _, mapping in ipairs(hyperModeAppMappings) do
   )
 end
 -- }}} Hyper-<key> -> Launch apps
+
+-- Hyper-b -> launch default browser.
+DefaultBrowserBundleID = (
+  function()
+    local handlers = hs.plist.read(os.getenv("HOME") .. "/Library/Preferences/com.apple.LaunchServices/com.apple.launchservices.secure.plist")
+    for _, handler in ipairs(handlers.LSHandlers) do
+      if handler.LSHandlerURLScheme == "https" then
+        return handler.LSHandlerRoleAll
+      end
+    end
+  end
+)()
+HyperMode:bind({}, 'b', function()
+  log.d("Opening default browser " .. DefaultBrowserBundleID)
+  hs.application.launchOrFocusByBundleID(DefaultBrowserBundleID)
+end)
+-- }}} Global microphone muting hotkeys.
 
 -- {{{ Global microphone muting hotkeys.
 local messageMuting = message.new('muted 🎤')
