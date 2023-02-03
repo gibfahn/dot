@@ -69,9 +69,3 @@ if exists up; then
   # Completion for up-rs
   up completions zsh >"$XDG_DATA_HOME/zsh/completions/_up"
 fi
-
-# _kitty
-if exists kitty; then
-  # Completion for kitty
-  kitty + complete setup zsh >"$XDG_DATA_HOME/zsh/completions/_kitty"
-fi
