@@ -206,7 +206,9 @@ pcall(require, "wrk-init-nvim") -- Load work config if present.
 vim.api.nvim_create_user_command(
   'PU',
   function(_opts)
-    vim.cmd "TSUpdateSync"
+    if vim.fn.exists(":TSUpdateSync") ~= 0 then
+      vim.cmd "TSUpdateSync"
+    end
     require('packer').sync()
   end, {desc = "Updating plugins..."}
 )
