@@ -16,6 +16,9 @@ data:
     # Auto-hide menu bar.
     _HIHideMenuBar: true
 
+    # Hide menu bar even in full-screen apps.
+    AppleMenuBarVisibleInFullscreen: false
+
     # Add a context menu item for showing the Web Inspector in web views
     WebKitDeveloperExtras: true
 
