@@ -98,7 +98,7 @@ vim.opt.expandtab = true -- Use spaces instead of tabs
 vim.opt.fileformats = "unix" -- Force Unix line endings (\n) (always show \r (^M), never autoinsert them).
 vim.opt.foldexpr = "nvim_treesitter#foldexpr()" -- Fold with treesitter.
 vim.opt.foldlevel = 99 -- expand all by default.
-vim.opt.foldmethod = "expr" -- Fold according to the syntax rules,
+-- vim.opt.foldmethod = "expr" -- Fold according to syntax rules (disabled in favour of setlocal below)
 vim.opt.formatoptions:remove("t") -- Don't autowrap text at 80.
 vim.opt.gdefault = true -- Global replace default (off: /g).
 vim.opt.grepformat = '%f:%l:%c:%m,%f:%l:%m' -- Teach vim how to parse the ripgrep output.
@@ -597,18 +597,18 @@ vim.cmd([[
     autocmd BufWritePost <sfile> nested source <sfile> " Reload vimrc on save.
     autocmd BufWritePost $MYVIMRC nested source $MYVIMRC " Reload vimrc on save.
     autocmd BufWritePre * if expand("<afile>:p:h") !~ "fugitive:" | call mkdir(expand("<afile>:p:h"), "p") | endif " Create dir if it doesn't already exist on save.
+    autocmd FileType * setlocal foldmethod=expr  " YAML files should be folded by indent.
     autocmd FileType fugitive nmap <buffer> S sk]c| " https://github.com/tpope/vim-fugitive/issues/1926
     autocmd FileType fugitive nmap <buffer> <A-g> ]c| " Skip to next git hunk.
     autocmd FileType fugitive nmap <buffer> <A-G> [c| " Skip to previous git hunk.
     autocmd FileType go set listchars=tab:\ \ ,trail:·,nbsp:☠ " Don't highlight tabs in Go.
     autocmd FileType help wincmd L                    " Open new help windows on the right,
-    autocmd FileType json setlocal foldmethod=indent  " JSON files should be folded by indent.
     " Allow comments in json.
     autocmd FileType json syntax match Comment +\/\/.\+$+
-    autocmd FileType python setlocal foldmethod=indent textwidth=100  " Python files should be folded by indent.
     " Setup formatexpr specified filetype(s).
     autocmd FileType typescript,json,rust setl formatexpr=CocAction('formatSelected')
-    autocmd FileType yaml setlocal foldmethod=indent  " YAML files should be folded by indent.
+    " Work around https://github.com/fannheyward/coc-rust-analyzer/issues/1113
+    autocmd FileType yaml,rust,json,python setlocal foldmethod=indent  " Some files should be folded by indent.
     " Check if files modified when you open a new window, switch back to vim, or if you don't move the cursor for 100ms.
     " Use getcmdwintype() to avoid running in the q: window (otherwise you get lots of errors).
     autocmd FocusGained,BufEnter,CursorHold,CursorHoldI * if getcmdwintype() == '' | checktime | endif
