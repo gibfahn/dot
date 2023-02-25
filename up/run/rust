@@ -15,7 +15,6 @@ rust_crates=(
   # bingrep        # Grep binary packages.
 
   cargo-sweep    # Clean out old target directories.
-  clog-cli       # Changelog generator.
   proximity-sort # Sort paths by proximity to a directory.
 )
 
