@@ -86,3 +86,6 @@ else
   log_get "File watcher limit."
   sudo cp "$(dirname "$0")"/../config/limit.maxfiles.plist /Library/LaunchDaemons/limit.maxfiles.plist
 fi
+
+# Remove any accidentally added Shared-Data links. They should all go via the symlink.
+zoxide query --list | grep Shared-Data | xargs zoxide remove
