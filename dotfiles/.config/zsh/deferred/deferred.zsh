@@ -172,6 +172,13 @@ rv() {
   "$=VISUAL" -q <(eval "$cmd")
 }
 
+# vim quickfix: copy a set of file:line lines then run to populate the quickfix list.
+vq() {
+  # Uses gsed on macOS.
+  ${=aliases[pst]} | ${=aliases[sed]} -En 's;(^|.*\s)(\S*/\S*:[0-9]+[0-9:]*).*;\2;p' | ${=aliases[cpy]}
+  ${=aliases[v]} +copen '+cexpr(getreg("+"))'
+}
+
 # Interactive move to trash..
 # dli -> interactive delete files in current directory.
 # dli foo/* bar/* -> interactive delete files in foo and bar subdirectories.
