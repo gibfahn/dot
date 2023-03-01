@@ -1,6 +1,3 @@
-# Karabiner backs up format when it makes automated changes.
-/config/karabiner/automatic_backups/
-
 # "Lockfiles" created by brew (not actually a lockfile).
 /setup/config/Brewfile.lock.json
 /setup/config/Brewfile-hardcore.lock.json
