@@ -107,9 +107,9 @@
   l   = log --graph --decorate --oneline                                # Graph log.
   la  = log --graph --decorate --oneline --all                          # Graph log of all commits.
   las = log --graph --decorate --oneline --all --simplify-by-decoration # Graph log of tag/branch/labelled commits.
-  ll  = log --color --graph --pretty=format:'%C(214)%h%C(reset)%C(196)%d%C(reset) %s %C(35)(%cr)%C(27) <%an>%C(reset)'
+  ll  = log --color --graph --pretty=format:'%C(214)%h%C(reset)%C(196)%d%C(reset) %s %C(35)(%ci)%C(27) <%an>%C(reset)'
   # Interactive log of $@.
-  li = "!git log --graph --color=always --format=\"%C(auto)%h%d %s %C(black)%C(bold)<%an> %cr%C(auto)\" \"$@\" \
+  li = "!git log --graph --color=always --format=\"%C(auto)%h%d %s %C(black)%C(bold)<%an> %ci%C(auto)\" \"$@\" \
     | fzf --ansi -m --no-sort --reverse --tiebreak=index \
     --preview \"git show --color=always \\$(grep -oE '[a-f0-9]{7,}' <<< {} | head -1) | delta \" \
     --bind \"ctrl-o:execute: git shi \\$(grep -oE '[a-f0-9]{7,}' <<< {} | head -1)\" \
