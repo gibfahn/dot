@@ -88,4 +88,5 @@ else
 fi
 
 # Remove any accidentally added Shared-Data links. They should all go via the symlink.
-zoxide query --list | grep Shared-Data | xargs zoxide remove
+log_get "Removing shared-data links"
+zoxide query --list | { grep Shared-Data && true; } | xargs zoxide remove

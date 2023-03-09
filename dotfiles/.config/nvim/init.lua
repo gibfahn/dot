@@ -28,11 +28,6 @@ vim.g.coc_snippet_next = '<a-u>' -- Use <Alt-u> for jump to next placeholder.
 vim.g.coc_snippet_prev = '<a-l>' -- Use <Alt-l> for jump to previous placeholder.
 vim.g.colorizer_use_virtual_text = 1 -- Use virtual text
 vim.g.fzf_history_dir = vim.env.XDG_CACHE_HOME .. '/fzf-history' -- Save history of fzf vim commands.
-vim.g.hardtime_allow_different_key = 1 -- Only enable hardtime for multiple consecutive presses of the same key.
-vim.g.hardtime_default_on = 1 -- Enable hardtime by default.
-vim.g.hardtime_maxcount = 5 -- Allow 5 consecutive keypresses before enabling hardtime.
-vim.g.hardtime_motion_with_count_resets = 1 -- Using a count (e.g. 8j) resets the hardtime limit.
-vim.g.hardtime_showmsg = 1 -- Notify when hardtime activated.
 vim.g.is_posix = 1 -- Assume shell for syntax highlighting.
 vim.g.loaded_netrw = 1 -- Skip loading netrw file browser (use vim-readdir instead).
 vim.g.loaded_netrwPlugin = 1 -- Don't use the built-in file browser (use vim-readdir instead).
@@ -54,7 +49,7 @@ vim.g.coc_global_extensions = { 'coc-actions', 'coc-ccls', 'coc-clangd', 'coc-cs
 -- Settings for custom statusline.
 vim.g.lightline = {
   colorscheme = 'wombat',
-  component = {truncate_here = '%<', fileformat = '%{&ff=="unix"?"":&ff}', fileencoding = '%{&fenc=="utf-8"?"":&fenc}'},
+  component = { truncate_here = '%<', fileformat = '%{&ff=="unix"?"":&ff}', fileencoding = '%{&fenc=="utf-8"?"":&fenc}' },
   component_expand = {
     coc_error = 'LightlineCocErrors',
     coc_warning = 'LightlineCocWarnings',
@@ -74,16 +69,16 @@ vim.g.lightline = {
     coc_fix = 'middle',
     truncate_here = 'raw'
   },
-  component_function = {currentfunction = 'CocCurrentFunction', gitbranch = 'FugitiveHead'},
+  component_function = { currentfunction = 'CocCurrentFunction', gitbranch = 'FugitiveHead' },
   active = {
     left = {
-      {'mode', 'paste'}, {'readonly', 'relativepath', 'modified'}, {'gitbranch'}, {'truncate_here'},
-      {'coc_error', 'coc_warning', 'coc_info', 'coc_hint'}
+      { 'mode',      'paste' }, { 'readonly', 'relativepath', 'modified' }, { 'gitbranch' }, { 'truncate_here' },
+      { 'coc_error', 'coc_warning', 'coc_info', 'coc_hint' }
     },
-    right = {{'lineinfo'}, {'percent'}, {'fileformat', 'fileencoding', 'filetype'}, {'currentfunction'}}
+    right = { { 'lineinfo' }, { 'percent' }, { 'fileformat', 'fileencoding', 'filetype' }, { 'currentfunction' } }
   },
-  inactive = {left = {{'relativepath'}}, right = {{'lineinfo'}, {'percent'}}},
-  tabline = {left = {{'tabs'}}, right = {{'close'}} }
+  inactive = { left = { { 'relativepath' } }, right = { { 'lineinfo' }, { 'percent' } } },
+  tabline = { left = { { 'tabs' } }, right = { { 'close' } } }
 }
 -- }}} Global variables
 
@@ -110,7 +105,7 @@ vim.opt.inccommand = "split" -- Show search and replace as you type.
 vim.opt.joinspaces = false -- No double spaces with join
 vim.opt.lazyredraw = true -- Don't redraw if you don't have to (e.g. in macros).
 vim.opt.list = true -- Show some invisible characters (see listchars).
-vim.opt.listchars = {tab = "»·", trail = "·", nbsp = "☠"} -- Display extra whitespace.
+vim.opt.listchars = { tab = "»·", trail = "·", nbsp = "☠" } -- Display extra whitespace.
 vim.opt.mouse = "a" -- Mouse in all modes (mac: Fn+drag = copy).
 vim.opt.number = false -- Show line numbers
 vim.opt.path = ".,/usr/include,,**" -- Add ** to the search path so :find x works recursively.
@@ -132,7 +127,7 @@ vim.opt.updatetime = 100 -- Delay after which to write to swap file and run Curs
 vim.opt.updatetime = 50 -- After how many characters should we save a swap file?
 vim.opt.visualbell = true -- Flash the screen instead of beeping when doing something wrong.
 vim.opt.wildignorecase = true -- Case insensitive file tab completion with :e.
-vim.opt.wildmode = {"list", "longest"} -- 1st Tab completes to longest common string, 2nd+ cycles through options.
+vim.opt.wildmode = { "list", "longest" } -- 1st Tab completes to longest common string, 2nd+ cycles through options.
 
 -- }}} Vim options
 
@@ -174,7 +169,6 @@ require('packer').startup(function(use)
   use 'puremourning/vimspector' -- Multi-language debugger using the VSCode Debug Adapter Protocol.
   use 'sedm0784/vim-resize-mode' -- Continuous resizing.
   use 'simnalamburt/vim-mundo' -- Graphical undo tree (updated fork of Gundo).
-  use 'takac/vim-hardtime' -- Stop you using repeated keypresses.
   use 'tpope/vim-commentary' -- Autodetect comment type for lang.
   use 'tpope/vim-fugitive' -- Git commands in vim.
   use 'tpope/vim-repeat' -- Allows you to use . with plugin mappings.
@@ -182,22 +176,21 @@ require('packer').startup(function(use)
   use 'tpope/vim-rsi' -- Insert/commandline readline-style mappings, e.g. C-a for beginning of line.
   use 'tpope/vim-surround' -- Add/mod/remove surrounding chars.
   use 'tpope/vim-unimpaired' -- [ and ] mappings (help unimpaired).
-  use {'cespare/vim-toml', ft = 'toml'} -- Toml syntax highlighting.
-  use {'editorconfig/editorconfig-vim', after = 'vim-sleuth'} -- Parse .editorconfig files (https://editorconfig.org/).
-  use {'godlygeek/tabular', cmd = 'Tabularize'} -- Make tables easier (:help Tabular).
-  use {'moll/vim-bbye', cmd = 'Bdelete'} -- Delete buffer without closing split.
-  use {'mzlogin/vim-markdown-toc', ft = 'markdown'} -- Markdown Table of Contents.
-  use {'nanotee/zoxide.vim', cmd = 'Zi'} -- Use zoxide to quickly jump to directories.
-  use {'neoclide/coc.nvim', branch = 'release'} -- Language Server with VSCode Extensions.
-  use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'} -- Treesitter syntax highlighting.
-  use {'pechorin/any-jump.nvim', cmd = 'AnyJump'} -- Go to definition that doesn't require a language server.
-  use {'rust-lang/rust.vim', ft = 'rust'} -- Rust language bindings.
-  use {'sheerun/vim-polyglot', config = 'vim.opt.shortmess:remove("A")'} -- Syntax files for languages + work around https://github.com/sheerun/vim-polyglot/issues/765.
-  use {'subnut/nvim-ghost.nvim', run = ':call nvim_ghost#installer#install()'} -- Edit browser text areas in Neovim (:h ghost).
-  use {'tpope/vim-abolish', cmd = {'Abolish', 'Subvert', 'S'}} -- Work with variants of words (replacing, capitalizing etc).
-  use {'tpope/vim-sleuth', after = 'vim-polyglot'} -- Automatically detect indentation.
-  use {'~/.local/share/fzf', as = 'fzf', run = './install --bin'} -- :h fzf
-
+  use { 'cespare/vim-toml', ft = 'toml' } -- Toml syntax highlighting.
+  use { 'editorconfig/editorconfig-vim', after = 'vim-sleuth' } -- Parse .editorconfig files (https://editorconfig.org/).
+  use { 'godlygeek/tabular', cmd = 'Tabularize' } -- Make tables easier (:help Tabular).
+  use { 'moll/vim-bbye', cmd = 'Bdelete' } -- Delete buffer without closing split.
+  use { 'mzlogin/vim-markdown-toc', ft = 'markdown' } -- Markdown Table of Contents.
+  use { 'nanotee/zoxide.vim', cmd = 'Zi' } -- Use zoxide to quickly jump to directories.
+  use { 'neoclide/coc.nvim', branch = 'release' } -- Language Server with VSCode Extensions.
+  use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' } -- Treesitter syntax highlighting.
+  use { 'pechorin/any-jump.nvim', cmd = 'AnyJump' } -- Go to definition that doesn't require a language server.
+  use { 'rust-lang/rust.vim', ft = 'rust' } -- Rust language bindings.
+  use { 'sheerun/vim-polyglot', config = 'vim.opt.shortmess:remove("A")' } -- Syntax files for languages + work around https://github.com/sheerun/vim-polyglot/issues/765.
+  use { 'subnut/nvim-ghost.nvim', run = ':call nvim_ghost#installer#install()' } -- Edit browser text areas in Neovim (:h ghost).
+  use { 'tpope/vim-abolish', cmd = { 'Abolish', 'Subvert', 'S' } } -- Work with variants of words (replacing, capitalizing etc).
+  use { 'tpope/vim-sleuth', after = 'vim-polyglot' } -- Automatically detect indentation.
+  use { '~/.local/share/fzf', as = 'fzf', run = './install --bin' } -- :h fzf
 end)
 
 pcall(require, "wrk-init-nvim") -- Load work config if present.
@@ -210,7 +203,7 @@ vim.api.nvim_create_user_command(
       vim.cmd "TSUpdateSync"
     end
     require('packer').sync()
-  end, {desc = "Updating plugins..."}
+  end, { desc = "Updating plugins..." }
 )
 
 if packer_bootstrap then
@@ -236,26 +229,26 @@ end
 --
 -- Create a mapping (noremap by default).
 local function map(mode, lhs, rhs, opts)
-  local options = {noremap = true}
+  local options = { noremap = true }
   if opts then options = vim.tbl_extend('force', options, opts) end
   vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
 
-map('c', '%%', "getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'", {expr = true}) -- %%: expands to dirname of current file.
-map('i', '<A-CR>', 'coc#_select_confirm()', {expr = true, silent = true}) -- Alt-Enter: accept first result.
+map('c', '%%', "getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'", { expr = true }) -- %%: expands to dirname of current file.
+map('i', '<A-CR>', 'coc#_select_confirm()', { expr = true, silent = true }) -- Alt-Enter: accept first result.
 map('i', '<C-u>', '<C-g>u<C-u>') -- Make <C-u> undo-friendly
 map('i', '<C-w>', '<C-g>u<C-w>') -- Make <C-w> undo-friendly
-map('i', '<CR>', [[coc#pum#visible() ? coc#pum#confirm() : "\<CR>"]], {expr = true}) -- If in completion, select current, else normal enter (with coc hook).
-map('i', '<S-Tab>', [[coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"]], {expr = true}) -- Shift-Tab is previous entry if completion menu open.
-map('i', '<Tab>', 'v:lua.Smart_Tab()', {expr = true, silent = true}) -- If in completion, next entry, else if previous character was a space indent, else trigger completion manually.
-map('n', "<Leader>Z", [[&foldlevel ? 'zM' :'zR']], {expr = true}) -- Toggle folding everywhere (see also "zi).
+map('i', '<CR>', [[coc#pum#visible() ? coc#pum#confirm() : "\<CR>"]], { expr = true }) -- If in completion, select current, else normal enter (with coc hook).
+map('i', '<S-Tab>', [[coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"]], { expr = true }) -- Shift-Tab is previous entry if completion menu open.
+map('i', '<Tab>', 'v:lua.Smart_Tab()', { expr = true, silent = true }) -- If in completion, next entry, else if previous character was a space indent, else trigger completion manually.
+map('n', "<Leader>Z", [[&foldlevel ? 'zM' :'zR']], { expr = true }) -- Toggle folding everywhere (see also "zi).
 map('n', '-', '<Cmd>e %:h<CR>') -- Use - to open the current buffer directory in the file browser (repeat for `cd ..`).
-map('n', '<A-C>', '<Plug>(coc-diagnostic-prev)', {noremap = false}) -- Prev changed Coc diagnostic.
+map('n', '<A-C>', '<Plug>(coc-diagnostic-prev)', { noremap = false }) -- Prev changed Coc diagnostic.
 map('n', '<A-Down>', '<C-e>') -- Scroll down a line.
 map('n', '<A-E>', '100<C-w>k') -- Switch to the top window,
-map('n', '<A-Enter>', '<plug>(coc-codelens-action)', {noremap = false}) -- Run available CodeLens actions (e.g. run tests).
-map('n', '<A-F>', '<Cmd>CocPrev<CR>', {noremap = false}) -- Next Coc list (e.g. compile error).
-map('n', '<A-G>', '<Plug>(GitGutterPrevHunk)', {noremap = false}) -- Prev changed git hunk.
+map('n', '<A-Enter>', '<plug>(coc-codelens-action)', { noremap = false }) -- Run available CodeLens actions (e.g. run tests).
+map('n', '<A-F>', '<Cmd>CocPrev<CR>', { noremap = false }) -- Next Coc list (e.g. compile error).
+map('n', '<A-G>', '<Plug>(GitGutterPrevHunk)', { noremap = false }) -- Prev changed git hunk.
 map('n', '<A-H>', '100<C-w>h') -- Switch to the leftmost window,
 map('n', '<A-I>', '100<C-w>l') -- Switch to the rightmost window.
 map('n', '<A-L>', '<Cmd>lprev<CR>') -- Prev item in the location list.
@@ -264,16 +257,16 @@ map('n', '<A-N>', '100<C-w>j') -- Switch to the bottom window,
 map('n', '<A-Q>', '<Cmd>cprev<CR>') -- Prev item in the quickfix list.
 map('n', '<A-Right>', 'zl') -- Scroll view right a character.
 map('n', '<A-S>', '[s') -- Prev spelling mistake.
-map('n', '<A-Space>', 'v<Plug>(coc-codeaction-selected)<Esc>', {noremap = false}) -- Run available LSP actions (neoclide/coc.nvim#1981).
+map('n', '<A-Space>', 'v<Plug>(coc-codeaction-selected)<Esc>', { noremap = false }) -- Run available LSP actions (neoclide/coc.nvim#1981).
 map('n', '<A-T>', '<Cmd>tabprev<CR>') -- Prev tab.
-map('n', '<A-TAB>', '<Plug>(coc-range-select)', {silent = true, noremap = false}) -- Visually select increasingly large ranges (requires LS 'textDocument/selectionRange').
+map('n', '<A-TAB>', '<Plug>(coc-range-select)', { silent = true, noremap = false }) -- Visually select increasingly large ranges (requires LS 'textDocument/selectionRange').
 map('n', '<A-Up>', '<C-y>') -- Scroll up a line.
 map('n', '<A-X>', '<Cmd>bd<CR>') -- Close current buffer (work around https://github.com/moll/vim-bbye/issues/15).
-map('n', '<A-c>', '<Plug>(coc-diagnostic-next)', {noremap = false}) -- Next changed Coc message (e.g. compile error).
+map('n', '<A-c>', '<Plug>(coc-diagnostic-next)', { noremap = false }) -- Next changed Coc message (e.g. compile error).
 map('n', '<A-d>', '<Cmd>tabclose<CR>') -- Close current tab.
 map('n', '<A-e>', '<C-w>k') -- Switch up a window,
-map('n', '<A-f>', '<Cmd>CocNext<CR>', {noremap = false}) -- Next Coc list (e.g. compile error if you hit <Leader>ce).
-map('n', '<A-g>', '<Plug>(GitGutterNextHunk)', {noremap = false}) -- Next changed git hunk.
+map('n', '<A-f>', '<Cmd>CocNext<CR>', { noremap = false }) -- Next Coc list (e.g. compile error if you hit <Leader>ce).
+map('n', '<A-g>', '<Plug>(GitGutterNextHunk)', { noremap = false }) -- Next changed git hunk.
 map('n', '<A-h>', '<C-w>h') -- Switch left a window,
 map('n', '<A-i>', '<C-w>l') -- Switch right a window.
 map('n', '<A-l>', '<Cmd>lnext<CR>') -- Next item in the location list.
@@ -284,21 +277,21 @@ map('n', '<A-t>', '<Cmd>tabnext<CR>') -- Next tab.
 map('n', '<A-x>', '<Cmd>Bdelete<CR>') -- Close current buffer.
 map('n', '<A-z>', '<Cmd>Zi<CR>') -- Switch to different directory.
 map('n', '<C-p>', '<C-i>') -- <C-o> = go to previous jump, <C-p> is go to next (normally <C-i>, but that == Tab, used above).
-map('n', '<Leader>+', '<Cmd>exe "resize ".(winheight(0) * 3/2)<CR>', {silent = true}) -- Increase window height to 3/2.
-map('n', '<Leader>-', '<Cmd>exe "resize ".(winheight(0) * 2/3)<CR>', {silent = true}) -- Reduce window height to 3/2.
+map('n', '<Leader>+', '<Cmd>exe "resize ".(winheight(0) * 3/2)<CR>', { silent = true }) -- Increase window height to 3/2.
+map('n', '<Leader>-', '<Cmd>exe "resize ".(winheight(0) * 2/3)<CR>', { silent = true }) -- Reduce window height to 3/2.
 map('n', '<Leader>/', '<Cmd>noh<CR>') -- Turn off find highlighting.
-map('n', '<Leader>1', '<Plug>BufTabLine.Go(1)', {noremap = false}) -- <Leader>1 goes to buffer 1 (see numbers in tab bar).
-map('n', '<Leader>2', '<Plug>BufTabLine.Go(2)', {noremap = false}) -- <Leader>1 goes to buffer 2 (see numbers in tab bar).
-map('n', '<Leader>3', '<Plug>BufTabLine.Go(3)', {noremap = false}) -- <Leader>1 goes to buffer 3 (see numbers in tab bar).
-map('n', '<Leader>4', '<Plug>BufTabLine.Go(4)', {noremap = false}) -- <Leader>1 goes to buffer 4 (see numbers in tab bar).
-map('n', '<Leader>5', '<Plug>BufTabLine.Go(5)', {noremap = false}) -- <Leader>1 goes to buffer 5 (see numbers in tab bar).
-map('n', '<Leader>6', '<Plug>BufTabLine.Go(6)', {noremap = false}) -- <Leader>1 goes to buffer 6 (see numbers in tab bar).
-map('n', '<Leader>7', '<Plug>BufTabLine.Go(7)', {noremap = false}) -- <Leader>1 goes to buffer 7 (see numbers in tab bar).
-map('n', '<Leader>8', '<Plug>BufTabLine.Go(8)', {noremap = false}) -- <Leader>1 goes to buffer 8 (see numbers in tab bar).
-map('n', '<Leader>9', '<Plug>BufTabLine.Go(-1)', {noremap = false}) -- <Leader>1 goes to buffer 9 (last buffer (see numbers in tab bar).
+map('n', '<Leader>1', '<Plug>BufTabLine.Go(1)', { noremap = false }) -- <Leader>1 goes to buffer 1 (see numbers in tab bar).
+map('n', '<Leader>2', '<Plug>BufTabLine.Go(2)', { noremap = false }) -- <Leader>1 goes to buffer 2 (see numbers in tab bar).
+map('n', '<Leader>3', '<Plug>BufTabLine.Go(3)', { noremap = false }) -- <Leader>1 goes to buffer 3 (see numbers in tab bar).
+map('n', '<Leader>4', '<Plug>BufTabLine.Go(4)', { noremap = false }) -- <Leader>1 goes to buffer 4 (see numbers in tab bar).
+map('n', '<Leader>5', '<Plug>BufTabLine.Go(5)', { noremap = false }) -- <Leader>1 goes to buffer 5 (see numbers in tab bar).
+map('n', '<Leader>6', '<Plug>BufTabLine.Go(6)', { noremap = false }) -- <Leader>1 goes to buffer 6 (see numbers in tab bar).
+map('n', '<Leader>7', '<Plug>BufTabLine.Go(7)', { noremap = false }) -- <Leader>1 goes to buffer 7 (see numbers in tab bar).
+map('n', '<Leader>8', '<Plug>BufTabLine.Go(8)', { noremap = false }) -- <Leader>1 goes to buffer 8 (see numbers in tab bar).
+map('n', '<Leader>9', '<Plug>BufTabLine.Go(-1)', { noremap = false }) -- <Leader>1 goes to buffer 9 (last buffer (see numbers in tab bar).
 map('n', '<Leader>;', '@:') -- Repeat the last executed command.
-map('n', '<Leader><', '<Cmd>exe "vertical resize ".(winwidth(0) * 2/3)<CR>', {silent = true}) -- Decrease window width to 2/3.
-map('n', '<Leader>>', '<Cmd>exe "vertical resize ".(winwidth(0) * 3/2)<CR>', {silent = true}) -- Increase window width to 3/2.
+map('n', '<Leader><', '<Cmd>exe "vertical resize ".(winwidth(0) * 2/3)<CR>', { silent = true }) -- Decrease window width to 2/3.
+map('n', '<Leader>>', '<Cmd>exe "vertical resize ".(winwidth(0) * 3/2)<CR>', { silent = true }) -- Increase window width to 3/2.
 map('n', '<Leader>D', '<Cmd>%d<CR>') -- Delete all text in buffer.
 map('n', '<Leader>E', '<C-W>z:cclose<CR>:lclose<CR>:helpclose<CR><Plug>(coc-float-hide)') -- Close open preview windows (e.g. language server definitions).
 map('n', '<Leader>F', ':grep ') -- Search file contents for file.
@@ -311,21 +304,21 @@ map('n', '<Leader>X', '<Cmd>xa<CR>') -- Quit all windows.
 map('n', '<Leader>Y', '<Cmd>%y+<CR>') -- Copy file to clipboard (normal mode).
 map('n', '<Leader>a', '@a') -- Apply macro a (add with qa or yank to a reg with "ay).
 map('n', '<Leader>b', '<Cmd>Buffers<CR>') -- Search buffer list for file.
-map('n', '<Leader>cD', ':call DupBuffer()<CR><Plug>(coc-definition)', {silent = true, noremap = false}) -- Go to definition in other slit.
-map('n', '<Leader>cE', ':<C-u>CocList diagnostics<cr>', {silent = true}) -- Manage extensions
-map('n', '<Leader>cR', '<Plug>(coc-refactor)', {noremap = false}) -- Remap for refactoring current selection.
-map('n', '<Leader>cc', '<Cmd>CocList commands<CR>', {silent = true}) -- Show commands
-map('n', '<Leader>cd', '<Plug>(coc-definition)', {silent = true, noremap = false}) -- Go to definition.
-map('n', '<Leader>ce', ':<C-u>CocList --first diagnostics<cr>', {silent = true}) -- Show all diagnostics (<C-a><C-q> to open all in quickfix).
-map('n', '<Leader>cf', '<Plug>(coc-format)', {noremap = false}) -- Format current buffer.
-map('n', '<Leader>ci', '<Plug>(coc-implementation)', {silent = true, noremap = false}) -- Go to implementation.
-map('n', '<Leader>co', '<Cmd>CocList outline<CR>', {silent = true}) -- Find symbol of current document
-map('n', '<Leader>cp', '<Cmd>CocListResume<CR>', {silent = true}) -- Resume latest coc list
+map('n', '<Leader>cD', ':call DupBuffer()<CR><Plug>(coc-definition)', { silent = true, noremap = false }) -- Go to definition in other slit.
+map('n', '<Leader>cE', ':<C-u>CocList diagnostics<cr>', { silent = true }) -- Manage extensions
+map('n', '<Leader>cR', '<Plug>(coc-refactor)', { noremap = false }) -- Remap for refactoring current selection.
+map('n', '<Leader>cc', '<Cmd>CocList commands<CR>', { silent = true }) -- Show commands
+map('n', '<Leader>cd', '<Plug>(coc-definition)', { silent = true, noremap = false }) -- Go to definition.
+map('n', '<Leader>ce', ':<C-u>CocList --first diagnostics<cr>', { silent = true }) -- Show all diagnostics (<C-a><C-q> to open all in quickfix).
+map('n', '<Leader>cf', '<Plug>(coc-format)', { noremap = false }) -- Format current buffer.
+map('n', '<Leader>ci', '<Plug>(coc-implementation)', { silent = true, noremap = false }) -- Go to implementation.
+map('n', '<Leader>co', '<Cmd>CocList outline<CR>', { silent = true }) -- Find symbol of current document
+map('n', '<Leader>cp', '<Cmd>CocListResume<CR>', { silent = true }) -- Resume latest coc list
 map('n', '<Leader>cq', '<Cmd>cexpr getreg("+")<CR>') -- Open the current clipboard in the Quickfix window.
-map('n', '<Leader>cr', '<Plug>(coc-rename)', {noremap = false}) -- Remap for rename current word
-map('n', '<Leader>cs', '<Cmd>CocList -I symbols<CR>', {silent = true}) -- Search workspace symbols
-map('n', '<Leader>cu', '<Plug>(coc-references)', {silent = true, noremap = false}) -- Go to usages.
-map('n', '<Leader>cy', '<Plug>(coc-type-definition)', {silent = true, noremap = false}) -- Go to type definition.
+map('n', '<Leader>cr', '<Plug>(coc-rename)', { noremap = false }) -- Remap for rename current word
+map('n', '<Leader>cs', '<Cmd>CocList -I symbols<CR>', { silent = true }) -- Search workspace symbols
+map('n', '<Leader>cu', '<Plug>(coc-references)', { silent = true, noremap = false }) -- Go to usages.
+map('n', '<Leader>cy', '<Plug>(coc-type-definition)', { silent = true, noremap = false }) -- Go to type definition.
 map('n', '<Leader>d', '<Cmd>Bdelete<CR>') -- Close buffer without closing split,
 map('n', '<Leader>e', '<C-w>q') -- Close current split (keeps buffer).
 map('n', '<Leader>f', '<Cmd>Files<CR>') -- Search file names for file,
@@ -351,7 +344,7 @@ map('n', '<Leader>i', '<Cmd>vsp<CR><C-w>h:bp<CR>') -- Open vertical split.
 map('n', '<Leader>j', '<Cmd>AnyJump<CR>') -- Jump to definition under cursore
 map('n', '<Leader>l', ':Locate ') -- Search filesystem for files.
 map('n', '<Leader>n', '<Cmd>sp<CR><C-w>k:bp<CR>') -- Open horizontal split,
-map('n', '<Leader>o', '<Plug>(coc-openlink)', {noremap = false}) -- Open the selected text with the appropriate program (like netrw-gx).
+map('n', '<Leader>o', '<Plug>(coc-openlink)', { noremap = false }) -- Open the selected text with the appropriate program (like netrw-gx).
 map('n', '<Leader>p', '"+p') -- Paste from clipboard after cursor.
 map('n', '<Leader>q', '<Cmd>qa<CR>') -- Quit if no unsaved changes (for single file use <Space>d instead).
 map('n', '<Leader>r', ':%s/') -- Replace in current doc.
@@ -364,31 +357,31 @@ map('n', '<Leader>z', 'za') -- Toggle folding on current line.
 map('n', '<S-Tab>', '<Cmd>bp<CR>') -- Shift-Tab to switch to previous buffer.
 map('n', '<Tab>', '<Cmd>bn<CR>') -- Tab to switch to next buffer,
 map('n', 'K', '<CMD>lua Show_Documentation()<CR>') -- Use K for show documentation in preview window
-map('n', 'N', '(v:searchforward) ? "N" : "n"', {expr = true}) -- N is always "next one up" even if you hit #
+map('n', 'N', '(v:searchforward) ? "N" : "n"', { expr = true }) -- N is always "next one up" even if you hit #
 map('n', 'Q', '<nop>') -- Q unused (disabled to avoid accidental triggering).
-map('n', 'gr', '<Plug>(operator-ripgrep-root)', {noremap = false}) -- Ripgrep search for operator.
-map('n', 'n', '(v:searchforward) ? "n" : "N"', {expr = true}) -- n is always "next one down" even if you hit #
-map('o', 'S', "'<esc>'.SurroundOp('S')", {expr = true, noremap = false}) --
-map('o', 'af', '<Plug>(coc-funcobj-a)', {noremap = false}) -- select around function (requires 'textDocument.documentSymbol')
-map('o', 'if', '<Plug>(coc-funcobj-i)', {noremap = false}) -- select in function (requires 'textDocument.documentSymbol')
-map('o', 's', "'<esc>'.SurroundOp('s')", {expr = true, noremap = false}) --
+map('n', 'gr', '<Plug>(operator-ripgrep-root)', { noremap = false }) -- Ripgrep search for operator.
+map('n', 'n', '(v:searchforward) ? "n" : "N"', { expr = true }) -- n is always "next one down" even if you hit #
+map('o', 'S', "'<esc>'.SurroundOp('S')", { expr = true, noremap = false }) --
+map('o', 'af', '<Plug>(coc-funcobj-a)', { noremap = false }) -- select around function (requires 'textDocument.documentSymbol')
+map('o', 'if', '<Plug>(coc-funcobj-i)', { noremap = false }) -- select in function (requires 'textDocument.documentSymbol')
+map('o', 's', "'<esc>'.SurroundOp('s')", { expr = true, noremap = false }) --
 map('t', '<A-e>', [[<C-\><C-n><C-w>k]]) -- Switch up a window in terminal,
 map('t', '<A-h>', [[<C-\><C-n><C-w>h]]) -- Switch left a window in terminal,
 map('t', '<A-i>', [[<C-\><C-n><C-w>l]]) -- Switch right a window in terminal.
 map('t', '<A-n>', [[<C-\><C-n><C-w>j]]) -- Switch down a window in terminal,
 map('t', '<Esc>', [[<C-\><C-n>]]) -- Go to normal mode.
 map('v', '//', [[y/\V<C-r>=escape(@",'/\')<CR><CR>]]) -- Search for selected text with // (very no-magic mode, searches for exactly what you select).
-map('v', '<A-Space>', '<Plug>(coc-codeaction-selected)', {noremap = false}) -- Run available LSP actions (https://github.com/neoclide/coc.nvim/issues/1981).
-map('v', '<C-n>', '<Plug>(coc-snippets-select)', {noremap = false}) -- Select text for visual placeholder of snippet.
-map('v', '<Leader>cf', '<Plug>(coc-format-selected)', {noremap = false}) -- Format selected region
+map('v', '<A-Space>', '<Plug>(coc-codeaction-selected)', { noremap = false }) -- Run available LSP actions (https://github.com/neoclide/coc.nvim/issues/1981).
+map('v', '<C-n>', '<Plug>(coc-snippets-select)', { noremap = false }) -- Select text for visual placeholder of snippet.
+map('v', '<Leader>cf', '<Plug>(coc-format-selected)', { noremap = false }) -- Format selected region
 map('v', '<Leader>d', '"+d') -- Cut from clipboard (visual mode).
 map('v', '<Leader>gs', ':<C-u>call SumVis()<CR>') -- Sum selected numbers.
 map('v', '<Leader>p', '"+p') -- Paste from clipboard (visual mode).
 map('v', '<Leader>y', '"+y') -- Copy from clipboard (visual mode).
 map('v', 'g//', [[y/\V<C-R>=&ic?'\c':'\C'<CR><C-r>=escape(@",'/\')<CR><CR>]]) -- Search for selected text case-insensitively.
-map('v', 'gr', '<Plug>(operator-ripgrep-root)', {noremap = false}) -- Ripgrep search for selection.
-map('x', 'af', '<Plug>(coc-funcobj-a)', {noremap = false}) -- select around function (requires 'textDocument.documentSymbol')
-map('x', 'if', '<Plug>(coc-funcobj-i)', {noremap = false}) -- select in function (requires 'textDocument.documentSymbol')
+map('v', 'gr', '<Plug>(operator-ripgrep-root)', { noremap = false }) -- Ripgrep search for selection.
+map('x', 'af', '<Plug>(coc-funcobj-a)', { noremap = false }) -- select around function (requires 'textDocument.documentSymbol')
+map('x', 'if', '<Plug>(coc-funcobj-i)', { noremap = false }) -- select in function (requires 'textDocument.documentSymbol')
 
 -- }}} Mappings
 
@@ -423,7 +416,7 @@ end
 -- Copied from coc.nvim README, ported to lua, opens vim help or language server help.
 -- https://stackoverflow.com/questions/59440719/vime523-not-allowed-here
 function Show_Documentation()
-  if (array_contains({'vim', 'help'}, vim.bo.filetype) or vim.fn.expand('%:p') == vim.fn.stdpath('config') .. 'init.lua') then
+  if (array_contains({ 'vim', 'help' }, vim.bo.filetype) or vim.fn.expand('%:p') == vim.fn.stdpath('config') .. 'init.lua') then
     vim.cmd('help ' .. vim.fn.expand('<cword>'))
   elseif (vim.fn['coc#rpc#ready']()) then
     vim.fn.CocActionAsync('doHover')
@@ -564,7 +557,7 @@ vim.cmd([[
 
 -- Create autocmd triggered on ColorScheme change.
 vim.api.nvim_create_autocmd('ColorScheme', {
-  callback = function ()
+  callback = function()
     vim.api.nvim_set_hl(0, 'LeapBackdrop', { fg = '#707070' }) -- Grey out leap search area.
   end
 })
@@ -631,12 +624,12 @@ vim.cmd([[
 vim.cmd 'colorscheme gib'
 
 -- Set up Treesitter languages.
-require'nvim-treesitter.configs'.setup {
+require 'nvim-treesitter.configs'.setup {
   ensure_installed = "all",
   -- List of parsers to ignore installing (for "all")
   ignore_install = {
   },
-  highlight = {enable = true}, indent = {enable = true}
+  highlight = { enable = true }, indent = { enable = true }
 }
 
 -- https://github.com/ggandor/leap.nvim
