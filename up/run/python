@@ -9,6 +9,7 @@ pip3_modules=(
   neovim-remote                 # Connect to existing nvim sessions (try `g cm` in a nvim terminal).
   pynvim                        # Python plugin framework for neovim.
   vim-vint                      # Vim linter.
+  cpplint                       # C++ linter.
 )
 
 # Install or update pip modules.

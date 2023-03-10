@@ -254,7 +254,10 @@
     "email": "languagetool",
     "sh": "shellcheck",
     "sieve": "check-sieve",
+    "zsh": "zsh",
     "vim": "vint",
+    "cpp": "cpplint",
+    "html": "tidy",
     "markdown": ["textidote-md", "languagetool"],
     "": ["write-good", "languagetool"], // Things with no specified filetype.
     "text": ["write-good", "languagetool"],

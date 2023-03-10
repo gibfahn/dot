@@ -74,6 +74,7 @@ brew "protobuf"                          # Serialization format.
 brew "ruby"                              # Newer version of Ruby.
 brew "shellcheck"                        # Linter for bash.
 brew "shfmt"                             # Shell script formatter.
+brew "tidy-html5"                        # HTML5 linter.
 brew "tokei"                             # Counts lines of code in a project.
 brew "wget"                              # Alternative to curl for downloading files.
 
