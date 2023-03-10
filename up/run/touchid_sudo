@@ -7,6 +7,12 @@ set -euo pipefail
 
 [[ $OSTYPE == darwin* ]] || exit 204 # Don't run if not Darwin.
 
+# Use work override script if present.
+if [[ -d ${wrk_dot_dir:-} ]]; then
+  "$wrk_dot_dir"/up/run/touchid_sudo
+  exit
+fi
+
 # The fixed string, with touchid added as the second option.
 fixed="# sudo: auth account password session
 auth       sufficient     pam_smartcard.so
