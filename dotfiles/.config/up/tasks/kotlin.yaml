@@ -1,2 +1,0 @@
-run_if_cmd: ["/bin/sh", "-cex", '{ which vim || which nvim; } && which bash || exit 204']
-run_cmd: ["${dot_dir}/up/run/kotlin"]

@@ -28,7 +28,7 @@ addPPA() {
 addPPA ppa:neovim-ppa/stable ppa:hluk/copyq ppa:git-core/ppa ppa:ubuntu-mozilla-daily/ppa universe
 
 # Apt install things. Added them individually so you can comment out lines to skip.
-apt_list=(# List of things to install.
+apt_list=( # List of things to install.
   git            # Get an up-to-date git from the git-core ppa.
   gcc g++        # Should be there already, but make sure.
   curl           # Amazingly some installations don't come with curl.
@@ -81,6 +81,15 @@ if [[ $USER == gib ]] && not bspwm; then
   cp "$BUILD_DIR"/baskerville/bspwm/examples/panel/panel{,_bar,_colors} "$BIN_DIR"
 fi
 
+# Some machines can't understand GitHub's https certs for some reason.
+gitClone() {
+  log_get "$@"
+  REPO=$1
+  shift # First arg is repo, rest are passed on to git clone.
+  git clone "https://github.com/$REPO.git" "$@" \
+    || git clone "git@github.com:$REPO.git" "$@"
+}
+
 # Build j4-dmenu-desktop (used in bspwm).
 if [[ $USER == gib ]] && not j4-dmenu-desktop; then
   # This is an extension for dmenu, so make sure we have that.
@@ -98,18 +107,6 @@ if [[ $USER == gib ]] && not j4-dmenu-desktop; then
     echo "Failed to cd"
     exit 1
   }
-fi
-
-# Change default version of gpg to gpg2 (which Ubuntu should be doing soon, it's
-# in Debian Stretch). Don't do anything unless we're sure.
-gpgVersion=$(gpg --version | head -1 | awk '{print $NF}')
-if [[ ${gpgVersion%%.*} == 1 ]] && exists gpg2 \
-  && [[ "$(command -v gpg)" = /usr/bin/gpg && "$(command -v gpg2)" = /usr/bin/gpg2 ]]; then
-  log_get "Setting default gpg to gpg2 not gpg1"
-  sudo mv /usr/bin/gpg /usr/bin/gpg1
-  sudo update-alternatives --verbose --install /usr/bin/gpg gnupg /usr/bin/gpg2 50
-else
-  log_skip "Setting gpg2 as default (not messing with default)"
 fi
 
 if not google-chrome; then
