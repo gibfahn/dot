@@ -180,6 +180,8 @@
     --preview \"git stash show --patch --color=always \\$(cut -d : -f 1 <<< {}) | delta \" \
     --bind \"ctrl-o:execute: git shi \\$(cut -d : -f 1 <<< {})\" \
     | cut -d : -f 1 #"
+  # Git stash with message, uses vipe from moreutils.
+  stm = "!git stash push -m \"$(</dev/null vipe)\" #"
   stp = stash pop
   std = stash drop
   sw  = switch # New way to checkout branches.
