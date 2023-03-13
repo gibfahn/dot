@@ -187,7 +187,7 @@ require('packer').startup(function(use)
   use { 'pechorin/any-jump.nvim', cmd = 'AnyJump' } -- Go to definition that doesn't require a language server.
   use { 'rust-lang/rust.vim', ft = 'rust' } -- Rust language bindings.
   use { 'sheerun/vim-polyglot', config = 'vim.opt.shortmess:remove("A")' } -- Syntax files for languages + work around https://github.com/sheerun/vim-polyglot/issues/765.
-  use { 'subnut/nvim-ghost.nvim', run = ':call nvim_ghost#installer#install()' } -- Edit browser text areas in Neovim (:h ghost).
+  -- use { 'subnut/nvim-ghost.nvim', run = ':call nvim_ghost#installer#install()' } -- Edit browser text areas in Neovim (:h ghost). Disabled until https://github.com/subnut/nvim-ghost.nvim/issues/50 is fixed.
   use { 'tpope/vim-abolish', cmd = { 'Abolish', 'Subvert', 'S' } } -- Work with variants of words (replacing, capitalizing etc).
   use { 'tpope/vim-sleuth', after = 'vim-polyglot' } -- Automatically detect indentation.
   use { '~/.local/share/fzf', as = 'fzf', run = './install --bin' } -- :h fzf
