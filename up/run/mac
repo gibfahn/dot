@@ -1,92 +1,54 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 # shellcheck shell=bash disable=SC1090,SC2016
 
 # Things I like to have on a Mac.
 
-set -e
+set -euo pipefail
 
 . "$(dirname "$0")/../../helpers/setup.sh" # Load helper script from dot/helpers.
 
-# Link VS Code preferences into the macOS specific folder.
-if [[ $USER == gib && -d "$HOME/Library/Application Support/Code/" ]]; then
-  for file in "$HOME"/.config/code/*.json; do
-    ln -sf "$file" "$HOME/Library/Application Support/Code/User/$(basename "$file")"
-  done
-fi
-
-# Set Keyboard Shortcuts -> App Shortcuts
-# To add your own, first add them in System Preferences -> Keyboard ->
-# Shortcuts -> App Shortcuts, then find them in the output of:
-#   defaults find NSUserKeyEquivalents
-# Use the existing and the help output of `defaults` to work it out.
-#   @command, ~option, ^ctrl, $shift
-# The global domain NSGlobalDomain NSGlobalDomain is the same as -g or -globalDomain.
-# -bool yes/true or no/false correspond to -int 1 or 0.
-# You can view plist files with /usr/libexec/PlistBuddy
-# To log changing plist files try one of:
-#     sudo log stream --level debug --predicate "process == 'cfprefsd' AND eventMessage contains 'wrote the key'"
-#     sudo iosnoop -n cfprefsd
-
-log_section "Setting macOS defaults."
-
-# Enable Tap to Click for the current user.
-updateMacOSDefault -currentHost NSGlobalDomain com.apple.mouse.tapBehavior int 1
-
-# Prevent Photos from opening automatically when devices are plugged in
-updateMacOSDefault -currentHost com.apple.ImageCapture disableHotPlug bool true
-
-if [[ $USER == gib ]]; then # Set keyboard preferences.
-  log_section "Setting gib extra macOS defaults."
-
-  # Disable the macOS chime sound when you power on the machine.
-  # On is %00, off is %01.
-  if startup_mute=$(nvram StartupMute | awk '{print $NF}') && [[ $startup_mute == %01 ]]; then
-    log_skip "macOS Startup Chime already disabled."
-  else
-    log_get "Disabling macOS Startup Chime"
-    sudo nvram StartupMute=%01
+main() {
+  # Link VS Code preferences into the macOS specific folder.
+  if [[ $USER == gib && -d "$HOME/Library/Application Support/Code/" ]]; then
+    for file in "$HOME"/.config/code/*.json; do
+      ln -sf "$file" "$HOME/Library/Application Support/Code/User/$(basename "$file")"
+    done
   fi
 
-  # TODO(gib): Add more shortcuts:
-  #
-  # Make changing windows quicker with keyboard.
-  #   defaults write com.apple.dock expose-animation-duration -float 0.1
-  # Increase window resize speed for Cocoa animations
-  #   defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
-  # https://github.com/pawelgrzybek/dotfiles/blob/master/setup-macos.sh
-  # https://github.com/mathiasbynens/dotfiles/blob/master/.macos
-  # https://github.com/kevinSuttle/macOS-Defaults
-  # Show path bar in finder:
-  #   defaults write com.apple.finder ShowPathbar -bool true
-  # Cmd-Enter sends email in Mail.
+  if [[ $USER == gib ]]; then # Set keyboard preferences.
+    log_section "Setting gib extra macOS defaults."
 
-else
-  log_section "Setting macOS defaults for not gib."
+    # Disable the macOS chime sound when you power on the machine.
+    # On is %00, off is %01.
+    if startup_mute=$(nvram StartupMute | awk '{print $NF}') && [[ $startup_mute == %01 ]]; then
+      log_skip "macOS Startup Chime already disabled."
+    else
+      log_get "Disabling macOS Startup Chime"
+      sudo nvram StartupMute=%01
+    fi
+  fi
 
-  # Set up a faster key repeat rate (needs relogin).
-  updateMacOSDefault NSGlobalDomain KeyRepeat int 2
+  # Apply any changes made above:
 
-  # Sets a low time before key starts repeating.
-  updateMacOSDefault NSGlobalDomain InitialKeyRepeat int 15
-fi
+  # Increase max file watch limit. See https://eradman.com/entrproject/limits.html
+  # File downloaded from: https://eradman.com/entrproject/etc/limit.maxfiles.plist
+  if [[ -e /Library/LaunchDaemons/limit.maxfiles.plist ]]; then
+    log_skip "File watcher limit (already increased)."
+  else
+    log_get "File watcher limit."
+    sudo cp "$(dirname "$0")"/../config/limit.maxfiles.plist /Library/LaunchDaemons/limit.maxfiles.plist
+  fi
 
-# System Preferences -> Users & Groups -> Login Options -> Show Input menu in login window
-sudo=sudo updateMacOSDefault /Library/Preferences/com.apple.loginwindow showInputMenu bool true
+  # Remove any accidentally added Shared-Data links. They should all go via the symlink.
+  log_get "Removing shared-data links"
+  zoxide query --list | { grep Shared-Data || true; } | xargs -t zoxide remove
 
-# System Preferences -> Software Update -> Automatically keep my mac up to date
-sudo=sudo updateMacOSDefault /Library/Preferences/com.apple.SoftwareUpdate AutomaticDownload bool true
+  echo "All done"
+}
 
-# Apply any changes made above:
+# Used when you're starting a new section.
+log_section() {
+  printf "❯❯❯ %s\n" "$@" 1>&2
+}
 
-# Increase max file watch limit. See https://eradman.com/entrproject/limits.html
-# File downloaded from: https://eradman.com/entrproject/etc/limit.maxfiles.plist
-if [[ -e /Library/LaunchDaemons/limit.maxfiles.plist ]]; then
-  log_skip "File watcher limit (already increased)."
-else
-  log_get "File watcher limit."
-  sudo cp "$(dirname "$0")"/../config/limit.maxfiles.plist /Library/LaunchDaemons/limit.maxfiles.plist
-fi
-
-# Remove any accidentally added Shared-Data links. They should all go via the symlink.
-log_get "Removing shared-data links"
-zoxide query --list | { grep Shared-Data && true; } | xargs zoxide remove
+main "$@"

@@ -1,0 +1,8 @@
+run_if_cmd: ["/bin/sh", "-cex", '[ "$(whoami)" != gib -a "$(uname)" = Darwin ] || exit 204']
+run_lib: defaults
+data:
+  NSGlobalDomain:
+    # Set up a faster key repeat rate (needs relogin). Default 2.
+    KeyRepeat: 2
+    # Sets a low time before key starts repeating (default 15).
+    InitialKeyRepeat: 15

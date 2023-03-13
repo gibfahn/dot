@@ -2,7 +2,25 @@
 
 run_if_cmd: ["/bin/sh", "-cex", '[ "$(uname)" = Darwin ] || exit 204']
 run_lib: defaults
+needs_sudo: true
 data:
+  # System Preferences -> Users & Groups -> Login Options -> Show Input menu in login window
+  /Library/Preferences/com.apple.loginwindow.plist:
+    showInputMenu: true
+
+  # System Preferences -> Software Update -> Automatically keep my mac up to date
+  /Library/Preferences/com.apple.SoftwareUpdate.plist:
+    AutomaticDownload: true
+
+  # NSGlobalDomain preferences.
+  ~/Library/Preferences/ByHost/.GlobalPreferences.${UP_HARDWARE_UUID}.plist:
+      # Enable Tap to Click for the current user.
+      com.apple.mouse.tapBehavior: 1
+
+  ~/Library/Preferences/ByHost/com.apple.ImageCapture.${UP_HARDWARE_UUID}.plist:
+      # Prevent Photos from opening automatically when devices are plugged in
+      disableHotPlug: true
+
   NSGlobalDomain:
     # Unnatural scrolling direction (swipe down to scroll down).
     # You can force reapply this with:
@@ -110,6 +128,10 @@ data:
     AppleMetricUnits: true
     AppleTemperatureUnit: Celsius
 
+    NSUserKeyEquivalents:
+      # Create global shortcut "Merge all windows" ⌘-⇧-M
+      Merge All Windows: '@$m'
+
   com.apple.AppleMultitouchTrackpad:
 
     # Click strength: Haptic feedback 0: Light 1: Medium 2: Firm
@@ -150,12 +172,6 @@ data:
     # Don't show Desktop icons (hide the desktop view).
     CreateDesktop: false
 
-
-  com.apple.universalaccess:
-    # System Preferences > Accessibility > Zoom > Use scroll gesture with modifer keys to zoom > Enabled
-    closeViewScrollWheelToggle: true
-    # Follow the keyboard focus while zoomed in
-    closeViewZoomFollowsFocus: true
 
   com.apple.iCal:
     # Set default time for new events to 25 minutes not 60 minutes.
@@ -330,12 +346,6 @@ data:
     # Don't show Siri icon in the menu bar.
     StatusMenuVisible: false
 
-  # https://sw.kovidgoyal.net/kitty/
-  net.kovidgoyal.kitty:
-    NSUserKeyEquivalents:
-      # Free up ⌘-h by remapping "Hide Kitty" to something obscure.
-      "Hide kitty": '~^$\U00a7'
-
   # https://sindresorhus.com/dato
   com.sindresorhus.Dato:
     showTimeInMenuBar: true
@@ -382,3 +392,22 @@ data:
     Options.tabs:
       - "&clipboard"
       - Images
+
+  com.apple.universalaccess:
+    # System Preferences > Accessibility > Zoom > Use scroll gesture with modifer keys to zoom > Enabled
+    closeViewScrollWheelToggle: true
+    # Follow the keyboard focus while zoomed in
+    closeViewZoomFollowsFocus: true
+    # Set Keyboard Shortcuts -> App Shortcuts
+    # To add your own, first add them in System Preferences -> Keyboard ->
+    # Shortcuts -> App Shortcuts, then find them in the output of:
+    #   defaults find NSUserKeyEquivalents
+    # Use the existing and the help output of `defaults` to work it out.
+    #   @command, ~option, ^ctrl, $shift
+    # For global shortcuts use NSGlobalDomain.
+    # These apps are the ones that have custom keyboard shortcuts set up. See the
+    # NSUserKeyEquivalents dicts elsewhere in this file for the keyboard shortcuts set.
+    com.apple.custommenu.apps:
+    - NSGlobalDomain
+    - com.apple.mail
+    - ... # Preserve existing entries.
