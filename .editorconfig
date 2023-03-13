@@ -18,6 +18,15 @@ switch_case_indent = true
 # Lines can start with && or ||
 binary_next_line = true
 
+# Duplicate block seems to be needed for helpers/setup.sh to be formatted properly.
+[*.sh]
+indent_size = 2
+## Read by shfmt
+# Indent the options to case statements.
+switch_case_indent = true
+# Lines can start with && or ||
+binary_next_line = true
+
 [*.md]
 indent_size = 2
 

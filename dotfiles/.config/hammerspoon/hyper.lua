@@ -155,7 +155,7 @@ HyperMode:bind({}, '.', function()
   -- The below 500ms sleep seems to work for me, but if not you can try
   -- hitting this unmute hotkey twice. Sad but it seems to work.
 
-  local webex = hs.application.find("Cisco Webex Meetings")
+  local webex = hs.application.find("Webex Meetings")
   if (webex ~= nil) then webex:selectMenuItem("Unmute Me") end
   if (muteSuccess) then
     messageHot:notify()
