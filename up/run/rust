@@ -48,7 +48,7 @@ case $(uname) in
     ;;
 esac
 
-if no rustup || no cargo; then # Install/set up rust.
+if ! exists rustup || ! exists cargo; then # Install/set up rust.
   # Install rustup. Don't modify path as that's already in gibrc.
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | RUSTUP_HOME="$XDG_DATA_HOME"/rustup CARGO_HOME="$XDG_DATA_HOME"/cargo sh -s -- -y --no-modify-path
 
@@ -72,7 +72,7 @@ fi
 # Set default toolchain to stable.
 rustup default stable
 
-not cargo-install-update && cargo install cargo-update
+exists cargo-install-update || cargo install cargo-update
 cargo install-update -ia "${rust_crates[@]}" # Update everything installed with cargo install.
 
 # Clean up cargo build artifacts from versions of rust that are no longer installed.
