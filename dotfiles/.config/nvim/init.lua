@@ -198,7 +198,7 @@ pcall(require, "wrk-init-nvim") -- Load work config if present.
 -- :PU asynchronously updates plugins.
 vim.api.nvim_create_user_command(
   'PU',
-  function(_opts)
+  function(_)
     if vim.fn.exists(":TSUpdateSync") ~= 0 then
       vim.cmd "TSUpdateSync"
     end
@@ -553,70 +553,110 @@ vim.cmd([[
 
 -- }}} Vimscript Commands and Functions
 
--- {{{ Package Autocommands
+-- {{{ Autocommands
+
+-- AutoCmd group for my custom commands.
+local gib_autogroup = vim.api.nvim_create_augroup("gib_autogroup", { clear = true })
 
 -- Create autocmd triggered on ColorScheme change.
 vim.api.nvim_create_autocmd('ColorScheme', {
   callback = function()
     vim.api.nvim_set_hl(0, 'LeapBackdrop', { fg = '#707070' }) -- Grey out leap search area.
-  end
+  end,
+  group = gib_autogroup,
 })
 
-vim.cmd([[
-  augroup packer_user_config
-    autocmd!
-    " Update my colorscheme when I edit it.
-    autocmd BufWritePost gib.vim source <afile>
+-- Bats is a shell test file type.
+vim.api.nvim_create_autocmd("BufNewFile,BufRead",
+  { pattern = { "*.bats" }, command = "set filetype=sh", group = gib_autogroup })
 
-    " Highlight symbol under cursor on CursorHold (show other instances of current word).
-    autocmd CursorHold * silent call CocActionAsync('highlight')
+-- Work around https://github.com/fannheyward/coc-rust-analyzer/issues/1113
+-- Setup formatexpr specified filetype(s).
+vim.api.nvim_create_autocmd("FileType",
+  {
+    pattern = { "typescript,json,rust" },
+    command = "setlocal formatexpr=CocAction('formatSelected')",
+    group = gib_autogroup
+  })
+-- Some files should be folded by indent.
+vim.api.nvim_create_autocmd("FileType",
+  { pattern = { "yaml,rust,json,python" }, command = "setlocal foldmethod=indent", group = gib_autogroup })
 
-    " Update signature help on jump placeholder (show function signature when you jump to it).
-    autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-  augroup end
-]])
--- }}} Package Autocommands
+-- Highlight symbol under cursor on CursorHold (show other instances of current word).
+vim.api.nvim_create_autocmd("CursorHold",
+  {
+    pattern = { "*" },
+    callback = function(opts) vim.fn['CocActionAsync']('highlight') end
+    ,
+    group = gib_autogroup
+  })
 
--- {{{ Autocommands
-vim.cmd([[
-  augroup gibAutoGroup                                " Group of automatic functions.
-    autocmd!|                                         " Remove existing autocmds.
+-- Update signature help on jump placeholder (show function signature when you jump to it).
+vim.api.nvim_create_autocmd("User",
+  {
+    pattern = { "CocJumpPlaceholder" },
+    callback = function() vim.fn['CocActionAsync']('showSignatureHelp') end,
+    group = gib_autogroup
+  })
 
-    autocmd BufNewFile,BufRead *.bats  set filetype=sh       " Bats is a shell test file type.
-    autocmd BufReadPost *|                            " On open jump to last cursor position if possible.
-      \ if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") |
-      \   execute "normal g`\"" |
-      \ endif
-    autocmd BufWritePost <sfile> nested source <sfile> " Reload vimrc on save.
-    autocmd BufWritePost $MYVIMRC nested source $MYVIMRC " Reload vimrc on save.
-    autocmd BufWritePre * if expand("<afile>:p:h") !~ "fugitive:" | call mkdir(expand("<afile>:p:h"), "p") | endif " Create dir if it doesn't already exist on save.
-    autocmd FileType * setlocal foldmethod=expr  " YAML files should be folded by indent.
-    autocmd FileType fugitive nmap <buffer> S sk]c| " https://github.com/tpope/vim-fugitive/issues/1926
-    autocmd FileType fugitive nmap <buffer> <A-g> ]c| " Skip to next git hunk.
-    autocmd FileType fugitive nmap <buffer> <A-G> [c| " Skip to previous git hunk.
-    autocmd FileType go set listchars=tab:\ \ ,trail:·,nbsp:☠ " Don't highlight tabs in Go.
-    autocmd FileType help wincmd L                    " Open new help windows on the right,
-    " Allow comments in json.
-    autocmd FileType json syntax match Comment +\/\/.\+$+
-    " Setup formatexpr specified filetype(s).
-    autocmd FileType typescript,json,rust setl formatexpr=CocAction('formatSelected')
-    " Work around https://github.com/fannheyward/coc-rust-analyzer/issues/1113
-    autocmd FileType yaml,rust,json,python setlocal foldmethod=indent  " Some files should be folded by indent.
-    " Check if files modified when you open a new window, switch back to vim, or if you don't move the cursor for 100ms.
-    " Use getcmdwintype() to avoid running in the q: window (otherwise you get lots of errors).
-    autocmd FocusGained,BufEnter,CursorHold,CursorHoldI * if getcmdwintype() == '' | checktime | endif
-    autocmd QuickFixCmdPost *grep* cwindow|           " Open the quickfix window on grep.
-    autocmd User CocDiagnosticChange call lightline#update()
-    autocmd VimEnter * silent! tabonly|               " Don't allow starting Vim with multiple tabs.
+-- Reload vimrc on save.
+vim.api.nvim_create_autocmd("BufWritePost",
+  { pattern = { "*/.config/nvim/init.lua" }, command = "source $MYVIMRC", nested = true, group = gib_autogroup })
+-- YAML files should be folded by indent.
+vim.api.nvim_create_autocmd("FileType",
+  { pattern = { "*" }, command = "setlocal foldmethod=expr", group = gib_autogroup })
+-- https://github.com/tpope/vim-fugitive/issues/1926
+vim.api.nvim_create_autocmd("FileType",
+  { pattern = { "fugitive" }, command = "nmap <buffer> S sk]c", group = gib_autogroup })
+-- Skip to next git hunk.
+vim.api.nvim_create_autocmd("FileType",
+  { pattern = { "fugitive" }, command = "nmap <buffer> <A-g> ]c", group = gib_autogroup })
+-- Skip to previous git hunk.
+vim.api.nvim_create_autocmd("FileType",
+  { pattern = { "fugitive" }, command = "nmap <buffer> <A-G> [c", group = gib_autogroup })
+-- Don't highlight tabs in Go.
+vim.api.nvim_create_autocmd("FileType",
+  { pattern = { "go" }, command = [[set listchars=tab:\ \ ,trail:·,nbsp:☠ ]], group = gib_autogroup })
+-- Open new help windows on the right,
+vim.api.nvim_create_autocmd("FileType", { pattern = { "help" }, command = "wincmd L", group = gib_autogroup })
+-- Allow comments in json.
+vim.api.nvim_create_autocmd("FileType",
+  { pattern = { "json" }, command = [[syntax match Comment +\/\/.\+$+]], group = gib_autogroup })
+-- Check if files modified when you open a new window, switch back to vim, or if you don't move the cursor for 100ms.
+-- Use getcmdwintype() to avoid running in the q: window (otherwise you get lots of errors).
+vim.api.nvim_create_autocmd("FocusGained,BufEnter,CursorHold,CursorHoldI",
+  { pattern = { "*" }, command = "if getcmdwintype() == '' | checktime | endif", group = gib_autogroup })
+-- Open the quickfix window on grep.
+vim.api.nvim_create_autocmd("QuickFixCmdPost", { pattern = { "*grep*" }, command = "cwindow", group = gib_autogroup })
+vim.api.nvim_create_autocmd("User",
+  { pattern = { "CocDiagnosticChange" }, command = "call lightline#update()", group = gib_autogroup })
+-- Don't allow starting Vim with multiple tabs.
+vim.api.nvim_create_autocmd("VimEnter", { pattern = { "*" }, command = "silent! tabonly", group = gib_autogroup })
 
-    " :h lightspeed-custom-mappings
-    autocmd User LightspeedSxEnter let g:lightspeed_last_motion = 'sx'
-    autocmd User LightspeedFtEnter let g:lightspeed_last_motion = 'ft'
+-- No line numbers in terminal
+vim.api.nvim_create_autocmd("TermOpen",
+  { pattern = "*", command = "setlocal nonumber norelativenumber", group = gib_autogroup })
+-- Soft line wrapping in terminal.
+vim.api.nvim_create_autocmd("TermOpen",
+  { pattern = "*", command = "setlocal wrap", group = gib_autogroup })
+-- Create dir if it doesn't already exist on save.
+vim.api.nvim_create_autocmd("BufWritePre",
+  {
+    pattern = "*",
+    command = [[if expand("<afile>:p:h") !~ "fugitive:" | call mkdir(expand("<afile>:p:h"), "p") | endif]],
+    group = gib_autogroup
+  })
 
-    au TermOpen * setlocal nonumber norelativenumber  " No line numbers in terminal
-    au TermOpen * setlocal wrap                     " Soft line wrapping in terminal.
-  augroup END
-]])
+-- On open jump to last cursor position if possible.
+vim.api.nvim_create_autocmd("BufReadPost",
+  {
+    pattern = "*",
+    command = [[if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") | execute "normal g`\"" | endif]]
+    ,
+    group = gib_autogroup
+  })
+
+
 -- }}} Autocommands
 
 -- {{{ Package Setup
