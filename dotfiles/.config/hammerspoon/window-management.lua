@@ -143,7 +143,7 @@ local key_bindings = (user == "gib" or user == "brian") and {
 for _, hotkey in ipairs(key_bindings) do
   hs.hotkey.bind({'cmd', 'alt'}, hotkey.key, function()
     log.df("User ran Cmd-Alt-%s, moving window to %s", hotkey.key, hotkey.func_name)
-    local window = hs.window.focusedWindow()
+    local window = hs.window.focusedWindow() or hs.window.frontmostWindow()
     local newFrame = hotkey.func(window:frame(), window:screen():frame())
     window:setFrame(newFrame)
   end)
