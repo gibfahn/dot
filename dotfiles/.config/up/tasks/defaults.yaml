@@ -394,20 +394,19 @@ data:
       - Images
 
   com.apple.universalaccess:
-    # System Preferences > Accessibility > Zoom > Use scroll gesture with modifer keys to zoom > Enabled
+    # System Settings > Accessibility > Zoom > Use scroll gesture with modifer keys to zoom > Enabled
     closeViewScrollWheelToggle: true
     # Follow the keyboard focus while zoomed in
     closeViewZoomFollowsFocus: true
-    # Set Keyboard Shortcuts -> App Shortcuts
-    # To add your own, first add them in System Preferences -> Keyboard ->
-    # Shortcuts -> App Shortcuts, then find them in the output of:
-    #   defaults find NSUserKeyEquivalents
-    # Use the existing and the help output of `defaults` to work it out.
-    #   @command, ~option, ^ctrl, $shift
-    # For global shortcuts use NSGlobalDomain.
-    # These apps are the ones that have custom keyboard shortcuts set up. See the
-    # NSUserKeyEquivalents dicts elsewhere in this file for the keyboard shortcuts set.
+    # Set global or app-specific Keyboard Shortcuts.
+    # To add your own:
+    # - Add them in System Settings > Keyboard > Shortcuts > App Shortcuts
+    # - Find them in the output of: `defaults find NSUserKeyEquivalents`
+    #   Modifiers: @command, ~option, ^ctrl, $shift
+    # - Add the `<com.apple.app>: NSUserKeyEquivalents: <Menu item>: <shortcut>` mapping
+    #   - For global shortcuts use NSGlobalDomain.
+    # - Add the `<com.apple.app>` name to this dict (`com.apple.universalaccess:
+    # com.apple.custommenu.apps: ["<com.apple.app>"]`). You don't need to add NSGlobalDomain.
     com.apple.custommenu.apps:
-    - NSGlobalDomain
     - com.apple.mail
     - ... # Preserve existing entries.
