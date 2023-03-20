@@ -4,11 +4,11 @@ run_if_cmd: ["/bin/sh", "-cex", '[ "$(uname)" = Darwin ] || exit 204']
 run_lib: defaults
 needs_sudo: true
 data:
-  # System Preferences -> Users & Groups -> Login Options -> Show Input menu in login window
+  # System Settings > Users & Groups > Login Options > Show Input menu in login window
   /Library/Preferences/com.apple.loginwindow.plist:
     showInputMenu: true
 
-  # System Preferences -> Software Update -> Automatically keep my mac up to date
+  # System Settings > Software Update > Automatically keep my mac up to date
   /Library/Preferences/com.apple.SoftwareUpdate.plist:
     AutomaticDownload: true
 
@@ -41,11 +41,11 @@ data:
     # Maximise window when you double-click on the title bar.
     AppleActionOnDoubleClick: Maximize
 
-    # System Preferences > Keyboard > Text > Use smart quotes and dashes -> disable.
+    # System Settings > Keyboard > Text > Use smart quotes and dashes > disable.
     NSAutomaticDashSubstitutionEnabled: false
     NSAutomaticQuoteSubstitutionEnabled: false
 
-    # System Preferences -> Keyboard -> Shortcuts -> Full Keyboard Access
+    # System Settings > Keyboard > Shortcuts > Full Keyboard Access
     # Full Keyboard Access: In Windows and Dialogs, press Tab to move keyboard
     # focus between:
     #   0: Text Boxes and Lists only
@@ -66,7 +66,7 @@ data:
     # Allow text selection in any QuickLook window.
     QLEnableTextSelection: 1
 
-    # System Preferences > General > Click in the scrollbar to: Jump to the spot that's clicked
+    # System Settings > General > Click in the scrollbar to: Jump to the spot that's clicked
     AppleScrollerPagingBehavior: 1
 
     # Increases trackpad tracking speed / sensitivity (SysPref max 3.0).
@@ -75,30 +75,30 @@ data:
     # Disable force clicking.
     com.apple.trackpad.forceClick: false
 
-    # System Preferences > Keyboard > Text > Capitalize words automatically.
+    # System Settings > Keyboard > Text > Capitalize words automatically.
     NSAutomaticCapitalizationEnabled: true
 
-    # System Preferences > Keyboard > Text > Add full stop with double-space.
+    # System Settings > Keyboard > Text > Add full stop with double-space.
     NSAutomaticPeriodSubstitutionEnabled: true
 
     # Show a list when saving files.
     NavPanelFileListModeForSaveMode: 2
 
     # Disabled to use the multicolour accent colour.
-    # System Preferences > General > Accent Colour > Purple
+    # System Settings > General > Accent Colour > Purple
     # AppleAccentColor = 5
 
     # Enable key repeat.
     # TODO(gib): Not sure if needed for Hammerspoon key repeat.
     ApplePressAndHoldEnabled: false
 
-    # System Preferences > General > Highlight Colour > Blue
+    # System Settings > General > Highlight Colour > Blue
     AppleAquaColorVariant: 1
 
-    # System Preferences > General > Ask to keep changes when closing documents.
+    # System Settings > General > Ask to keep changes when closing documents.
     NSCloseAlwaysConfirmsChanges: true
 
-    # System Preferences > General > Close windows when quitting an app (untick == true)
+    # System Settings > General > Close windows when quitting an app (untick == true)
     NSQuitAlwaysKeepsWindows: true
 
     # Enable Tap to Click for the login screen
@@ -111,7 +111,7 @@ data:
       "3": "y-MM-dd"
       "4": "EEEE, y-MM-dd"
 
-    # System Preferences > Sound Effects > Select and alert sound: Heroine.
+    # System Settings > Sound Effects > Select and alert sound: Heroine.
     # Change the error sound to the drum.
     com.apple.sound.beep.sound: /System/Library/Sounds/Hero.aiff
 
@@ -142,7 +142,7 @@ data:
     ActuationStrength: 0
 
   com.apple.TextInputMenu:
-    # Keyboard -> Input Sources -> Show Input menu in menu bar.
+    # Keyboard > Input Sources > Show Input menu in menu bar.
     visible: true
 
   com.apple.LaunchServices:
@@ -150,7 +150,7 @@ data:
     LSQuarantine: false
 
   com.apple.systempreferences:
-    # System Preferences -> View ->
+    # System Settings > View >
     #   "Organise by Category" => false (default)
     #   "Organise Alphabetically" => true
     ShowAllMode: true
@@ -233,7 +233,7 @@ data:
     AutoUpdateRestartRequired: true
 
   com.apple.dock:
-    # System Preferences > Trackpad > More Gestures > App Expose > Enable
+    # System Settings > Trackpad > More Gestures > App Expose > Enable
     # Swipe down with 3 fingers to see windows for current app.
     showAppExposeGestureEnabled: true
 
@@ -241,7 +241,7 @@ data:
     region: GB
 
   com.apple.assistant.support:
-    # System Preferences > Keyboard > Dictation > On
+    # System Settings > Keyboard > Dictation > On
     "Dictation Enabled": true
 
   com.apple.controlcenter:
@@ -255,31 +255,31 @@ data:
 
 
   com.apple.Safari:
-    # Safari -> General -> Safari opens with -> All non-private windows from last session
+    # Safari > General > Safari opens with > All non-private windows from last session
     AlwaysRestoreSessionAtLaunch: true
 
     ExcludePrivateWindowWhenRestoringSessionAtLaunch: true
 
-    # Safari -> General -> New windows open with -> Empty page
+    # Safari > General > New windows open with > Empty page
     NewTabBehavior: 1
 
-    # Safari -> General -> New tabs open with -> Empty page
+    # Safari > General > New tabs open with > Empty page
     NewWindowBehavior: 1
 
-    # Safari -> General -> Remove history items -> Manually
+    # Safari > General > Remove history items > Manually
     HistoryAgeInDaysLimit: 36500
 
-    # Safari -> Tabs -> Open pages in tabs instead of windows -> Always
+    # Safari > Tabs > Open pages in tabs instead of windows > Always
     TabCreationPolicy: 2
 
-    # Safari -> Advanced -> Show full website address
+    # Safari > Advanced > Show full website address
     ShowFullURLInSmartSearchField: true
 
     # Hides the toolbar when Safari is full-screen (hide everything but the page).
-    # Safari -> View -> Always show toolbar in Full Screen -> Unchecked
+    # Safari > View > Always show toolbar in Full Screen > Unchecked
     AutoShowToolbarInFullScreen: true
 
-    # Safari -> Advanced -> Show Develop menu in menu bar
+    # Safari > Advanced > Show Develop menu in menu bar
     IncludeDevelopMenu: true
     WebKitDeveloperExtrasEnabledPreferenceKey: true
     WebKitPreferences.developerExtrasEnabled: true
@@ -303,37 +303,37 @@ data:
 
   com.apple.mail:
 
-    # Mail -> Preferences -> Viewing -> Show Message Headers -> Custom
+    # Mail > Preferences > Viewing > Show Message Headers > Custom
     CustomHeaders:
     - List-ID
     - Message-ID
     - X-Member-Count
 
-    # Mail -> Preferences -> Viewing -> Show most recent message at the top
+    # Mail > Preferences > Viewing > Show most recent message at the top
     ConversationViewSortDescending: true
 
-    # Mail -> Preferences -> Composing -> Automatically CC Myself.
+    # Mail > Preferences > Composing > Automatically CC Myself.
     ReplyToSelf: true
 
-    # Mail -> Preferences -> Composing -> When quoting text in replies or forwards -> Include all the original message text.
+    # Mail > Preferences > Composing > When quoting text in replies or forwards > Include all the original message text.
     AlwaysIncludeOriginalMessage: true
-    # Mail -> Edit -> Attachments -> Include Original Attachments in Reply
+    # Mail > Edit > Attachments > Include Original Attachments in Reply
     IncludeOriginalAttachments: true
 
     # Copy email addresses as `foo@example.com` instead of `Foo Bar <foo@example.com>` in Mail.app
     AddressesIncludeNameOnPasteboard: false
 
     NSUserKeyEquivalents:
-      # -> Mail: ⌘-b moves to Archive.
+      # Mail: ⌘-b moves to Archive.
       Archive: '@b'
-      # -> Mail: ⌘-u sends the message.
+      # Mail: ⌘-u sends the message.
       Send: '@u'
 
   com.apple.mail-shared:
-    # Mail -> Preferences -> Composing -> Mark addresses not ending with (checkbox):
+    # Mail > Preferences > Composing > Mark addresses not ending with (checkbox):
     AlertForNonmatchingDomains: true
 
-    # Mail -> Preferences -> Composing -> Mark addresses not ending with (addresses not to mark):
+    # Mail > Preferences > Composing > Mark addresses not ending with (addresses not to mark):
     DomainForMatching:
     - "@apple.com"
     - "@group.apple.com"

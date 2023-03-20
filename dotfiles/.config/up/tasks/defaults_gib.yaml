@@ -10,7 +10,7 @@ data:
     # Use Dark mode.
     AppleInterfaceStyle: Dark
     # Don't brighten window contents (better contrast in Dark Mode).
-    # System Preferences > General > Allow wallpaper tinting in windows (true here means uncheck the tickbox).
+    # System Settings > General > Allow wallpaper tinting in windows (true here means uncheck the tickbox).
     AppleReduceDesktopTinting: true
 
     # Auto-hide menu bar.
@@ -85,7 +85,7 @@ data:
     - enabled: true
       name: APPLICATIONS # Open Applications.
     - enabled: true
-      name: SYSTEM_PREFS # Open System Preferences panes.
+      name: SYSTEM_PREFS # Open System Settings panes.
     - enabled: true
       name: BOOKMARKS # Open Safari Bookmarks and History.
     - enabled: true
