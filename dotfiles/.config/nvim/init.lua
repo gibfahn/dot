@@ -586,7 +586,8 @@ vim.api.nvim_create_autocmd("FileType",
 vim.api.nvim_create_autocmd("CursorHold",
   {
     pattern = { "*" },
-    callback = function(opts) vim.fn['CocActionAsync']('highlight') end
+    -- Work around https://github.com/neoclide/coc.nvim/issues/4577
+    callback = function(opts) if (string.find(opts.file, ".log") == nil) then vim.fn['CocActionAsync']('highlight') end end
     ,
     group = gib_autogroup
   })
