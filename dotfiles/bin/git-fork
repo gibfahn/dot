@@ -111,6 +111,8 @@ remote_repo() {
 
 # Default branch for remote. `g default-branch up` -> master
 default_branch() {
+  # Fetch the remote to make sure the upstream ref exists.
+  git fetch $1
   (
     git symbolic-ref --short refs/remotes/$1/HEAD || {
       git remote set-head --auto $1 \
