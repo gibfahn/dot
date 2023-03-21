@@ -106,7 +106,7 @@ local left_half = function(windowFrame, screenFrame)
 end
 
 local next_display = function(windowFrame, screenFrame)
-  return resize_full_screen(windowFrame, hs.window.focusedWindow():screen():next():frame())
+  return resize_full_screen(windowFrame, (hs.window.focusedWindow() or hs.window.frontmostWindow()):screen():next():frame())
 end
 
 local full_screen = function(windowFrame, screenFrame)
