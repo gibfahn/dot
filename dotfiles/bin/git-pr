@@ -55,23 +55,17 @@ main() {
   export GH_REPO=$(remote_url "$up_remote")
   export GH_HOST=$(remote_host "$up_remote")
 
-  # Work around gh regression: https://github.com/cli/cli/issues/7216
-  gh repo set-default $up_org/$up_repo
-
   case $action in
     create) pr_create ;;
     edit) pr_edit ;;
     open) pr_open ;;
   esac
-
-  # Make sure we don't leave the repo with the default, in case this causes future gh commands to
-  # silently select the wrong repo for an action.
-  gh repo set-default --unset
 }
 
 pr_create() {
   file=$(pr_file)
-  gh pr create --title "$(head -1 "$file")" --body "$(tail +3 "$file")" --base "$up_branch" ${draft:+--draft}
+  gh pr create --repo $up_org/$up_repo --title "$(head -1 "$file")" --body "$(tail +3 "$file")" --base "$up_branch" ${draft:+--draft}
+
   rm "$file"
 
   # Now open the PR in the browser.
