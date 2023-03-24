@@ -24,6 +24,11 @@ local message = require('status-message')
 local log = hs.logger.new('hyper.lua', 'debug')
 log.d("Loading module")
 
+if (hs.eventtap.isSecureInputEnabled()) then
+  hs.notify.new({title = 'Hammerspoon', informativeText = '⚠️  Secure input is enabled.', withdrawAfter = 0,
+    otherButtonTitle = "Okay"}):send()
+end
+
 -- {{{ F17 -> Hyper Key
 
 -- A global variable for Hyper Mode

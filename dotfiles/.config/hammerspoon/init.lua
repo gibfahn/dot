@@ -29,4 +29,4 @@ RemapKeys()
 -- Always connect to VPN on first loading Hammerspoon.
 if (user == "gib") then CallVpn("corporate") end
 
-hs.notify.new({title = 'Hammerspoon', informativeText = user .. ' config restored 🤘', withdrawAfter = 3}):send()
+hs.notify.new({title = 'Hammerspoon', informativeText = '✅ ' .. user .. ' config restored', withdrawAfter = 3}):send()
