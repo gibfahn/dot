@@ -19,4 +19,4 @@ for item_path in "${@}"; do
 done
 
 # If we didn't change anything, mark the task as skipped.
-[[ -n changed ]] || exit 204
+[[ -n $changed ]] || exit 204
