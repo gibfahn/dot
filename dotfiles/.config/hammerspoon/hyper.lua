@@ -78,12 +78,11 @@ end
 
 -- {{{ Hyper-<key> -> Launch apps
 local hyperModeAppMappings = {
-
+  -- Keys used in work config: r, shift-r
   {key = '/', app = 'Finder'}, {key = 'a', app = 'Activity Monitor'},
   {key = 'c', app = 'Slack'}, {key = 'f', app = 'Firefox'}, {key = 'k', app = 'Calendar'},
-  {key = 'm', app = 'Mail'}, {key = 'r', app = 'Radar 8'}, {key = 's', app = 'Spotify'}, {key = 't', app = 'Kitty'},
+  {key = 'm', app = 'Mail'}, {key = 's', app = 'Spotify'}, {key = 't', app = 'Kitty'},
   {key = 'w', app = 'Workflowy'}, {key = 'x', app = 'Messenger', mods = {'alt'}}, {key = 'x', app = 'Messages'}
-
 }
 for _, mapping in ipairs(hyperModeAppMappings) do
   HyperMode:bind(
