@@ -128,9 +128,195 @@ data:
     AppleMetricUnits: true
     AppleTemperatureUnit: Celsius
 
+    # Settings > Keyboard > Keyboard Shortcuts > App Shortcuts > All Applications
     NSUserKeyEquivalents:
       # Create global shortcut "Merge all windows" ⌘-⇧-M
       Merge All Windows: '@$m'
+
+    # Settings > Keyboard > Text Replacements
+    # First "on" value wins.
+    NSUserDictionaryReplacementItems:
+    - replace: omw
+      with: on my way
+      on: 1
+    - replace: zss
+      with: You can use ⌘-⇧-Enter to paste the text as a slack snippet if the output is large.
+      on: 1
+    - replace: '!etr'
+      with: ⏎
+      on: 1
+    - replace: ',af'
+      with: applefeedback://inbox?make_visible=1
+      on: 1
+    - replace: adr
+      with: 19 Woodside Grange Road, North Finchley, London, N12 8TW
+      on: 1
+    - replace: adrs
+      with: Flat 49, Shrewsbury House, 42 Cheyne Walk, London, SW3 5LW
+      on: 1
+    - replace: ywt
+      with: Yiwen Tang
+      on: 1
+    - replace: mbe
+      with: 07725792449
+      on: 1
+    - replace: atm
+      with: at the moment
+      on: 1
+    - replace: ymmv
+      with: your mileage may vary
+      on: 1
+    - replace: ',unflip'
+      with: ┬─┬ノ( º _ ºノ)
+      on: 1
+    - replace: ',tableflip'
+      with: (╯°□°)╯︵ ┻━┻
+      on: 1
+    - replace: ',shrug'
+      with: ¯\_(ツ)_/¯
+      on: 1
+    - replace: iiuc
+      with: if I understand correctly
+      on: 1
+    - replace: '!'''
+      with: '`'
+      on: 1
+    - replace: evt
+      with: eventang93
+      on: 1
+    - replace: til
+      with: today I learned
+      on: 1
+    - replace: afaik
+      with: as far as I know
+      on: 1
+    - replace: btw
+      with: by the way
+      on: 1
+    - replace: dw
+      with: don't worry
+      on: 1
+    - replace: tbf
+      with: to be fair
+      on: 1
+    - replace: idk
+      with: I don't know
+      on: 1
+    - replace: tbd
+      with: to be determined
+      on: 1
+    - replace: tbc
+      with: to be confirmed
+      on: 1
+    - replace: ftr
+      with: for the record
+      on: 1
+    - replace: ptal
+      with: please take a look
+      on: 1
+    - replace: omw
+      with: on my way
+      on: 1
+    - replace: iirc
+      with: if I recall correctly
+      on: 1
+    - replace: afaict
+      with: as far as I can tell
+      on: 1
+    - replace: nbd
+      with: no big deal
+      on: 1
+    - replace: '!rdo'
+      with: ⟳
+      on: 1
+    - replace: '!und'
+      with: ⟲
+      on: 1
+    - replace: '!tab'
+      with: ⇥
+      on: 1
+    - replace: '!del'
+      with: ⌦
+      on: 1
+    - replace: '!bsp'
+      with: ⌫
+      on: 1
+    - replace: '!esc'
+      with: ⎋
+      on: 1
+    - replace: '!cps'
+      with: ⇪
+      on: 1
+    - replace: wdyt
+      with: what do you think
+      on: 1
+    - replace: tbh
+      with: to be honest
+      on: 1
+    - replace: fwiw
+      with: for what it's worth
+      on: 1
+    - replace: lmk
+      with: let me know
+      on: 1
+    - replace: imho
+      with: in my humble opinion
+      on: 1
+    - replace: sgtm
+      with: sounds good to me
+      on: 1
+    - replace: ianal
+      with: I am not a lawyer
+      on: 1
+    - replace: aiui
+      with: as I understand it
+      on: 1
+    - replace: imo
+      with: in my opinion
+      on: 1
+    - replace: mbb
+      with: 07707200521
+      on: 1
+    - replace: ',f'
+      with: https://fahn.co
+      on: 1
+    - replace: efg
+      with: evenfahn@gmail.com
+      on: 1
+    - replace: '!ctl'
+      with: ⌃
+      on: 1
+    - replace: '!sft'
+      with: ⇧
+      on: 1
+    - replace: '!opt'
+      with: ⌥
+      on: 1
+    - replace: '!cmd'
+      with: ⌘
+      on: 1
+    - replace: '!apl'
+      with: 
+      on: 1
+    - replace: evg
+      with: eventang93@gmail.com
+      on: 1
+    - replace: mbg
+      with: 07766520802
+      on: 1
+    - replace: gbg
+      with: gibfahn@gmail.com
+      on: 1
+    - replace: evf
+      with: evenfahn
+      on: 1
+    - replace: gbf
+      with: gibfahn
+      on: 1
+    - replace: gfa
+      with: Gibson Fahnestock
+      on: 1
+    - ... # Keep existing shortcuts at lower priority.
 
   com.apple.AppleMultitouchTrackpad:
 
@@ -323,6 +509,8 @@ data:
     # Copy email addresses as `foo@example.com` instead of `Foo Bar <foo@example.com>` in Mail.app
     AddressesIncludeNameOnPasteboard: false
 
+    # Settings > Keyboard > Keyboard Shortcuts > App Shortcuts > Mail.app
+    # Requires com.apple.custommenu.apps setting, see that domain in this file.
     NSUserKeyEquivalents:
       # Mail: ⌘-b moves to Archive.
       Archive: '@b'
