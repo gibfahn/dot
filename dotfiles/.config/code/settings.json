@@ -137,5 +137,6 @@
         "statusBar.debuggingBackground": "#005f5f"
     },
     "rust.clippy_preference": "on",
-    "rust.cfg_test": true
+    "rust.cfg_test": true,
+    "window.zoomLevel": 3
 }
