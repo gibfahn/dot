@@ -177,7 +177,6 @@ require('packer').startup(function(use)
   use 'tpope/vim-surround' -- Add/mod/remove surrounding chars.
   use 'tpope/vim-unimpaired' -- [ and ] mappings (help unimpaired).
   use { 'cespare/vim-toml', ft = 'toml' } -- Toml syntax highlighting.
-  use { 'editorconfig/editorconfig-vim', after = 'vim-sleuth' } -- Parse .editorconfig files (https://editorconfig.org/).
   use { 'godlygeek/tabular', cmd = 'Tabularize' } -- Make tables easier (:help Tabular).
   use { 'moll/vim-bbye', cmd = 'Bdelete' } -- Delete buffer without closing split.
   use { 'mzlogin/vim-markdown-toc', ft = 'markdown' } -- Markdown Table of Contents.
@@ -187,10 +186,11 @@ require('packer').startup(function(use)
   use { 'pechorin/any-jump.nvim', cmd = 'AnyJump' } -- Go to definition that doesn't require a language server.
   use { 'rust-lang/rust.vim', ft = 'rust' } -- Rust language bindings.
   use { 'sheerun/vim-polyglot', config = 'vim.opt.shortmess:remove("A")' } -- Syntax files for languages + work around https://github.com/sheerun/vim-polyglot/issues/765.
-  -- use { 'subnut/nvim-ghost.nvim', run = ':call nvim_ghost#installer#install()' } -- Edit browser text areas in Neovim (:h ghost). Disabled until https://github.com/subnut/nvim-ghost.nvim/issues/50 is fixed.
+  use { 'subnut/nvim-ghost.nvim', run = ':call nvim_ghost#installer#install()' } -- Edit browser text areas in Neovim (:h ghost). Disabled until https://github.com/subnut/nvim-ghost.nvim/issues/50 is fixed.
   use { 'tpope/vim-abolish', cmd = { 'Abolish', 'Subvert', 'S' } } -- Work with variants of words (replacing, capitalizing etc).
   use { 'tpope/vim-sleuth', after = 'vim-polyglot' } -- Automatically detect indentation.
   use { '~/.local/share/fzf', as = 'fzf', run = './install --bin' } -- :h fzf
+
 end)
 
 pcall(require, "wrk-init-nvim") -- Load work config if present.
