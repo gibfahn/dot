@@ -169,7 +169,8 @@ rv() {
     print out; exit
   }')"
   [[ -z "$cmd" ]] && { echo "No rg in the last 100 history commands."; return 1; }
-  "$=VISUAL" -q <(eval "$cmd")
+  # Use =() not <() to work around https://github.com/neovim/neovim/issues/21756
+  "$=VISUAL" -q =(eval "$cmd")
 }
 
 # vim quickfix: copy a set of file:line lines then run to populate the quickfix list.
