@@ -166,7 +166,7 @@ require('packer').startup(function(use)
   use 'kana/vim-operator-user' -- Make it easier to define operators.
   use 'kana/vim-textobj-line' -- Adds `il` and `al` text objects for current line.
   use 'kana/vim-textobj-user' -- Allows you to create custom text objects (used in vim-textobj-line).
-  use 'puremourning/vimspector' -- Multi-language debugger using the VSCode Debug Adapter Protocol.
+  -- use 'puremourning/vimspector' -- Multi-language debugger using the VSCode Debug Adapter Protocol.
   use 'sedm0784/vim-resize-mode' -- Continuous resizing.
   use 'simnalamburt/vim-mundo' -- Graphical undo tree (updated fork of Gundo).
   use 'tpope/vim-commentary' -- Autodetect comment type for lang.
@@ -179,7 +179,7 @@ require('packer').startup(function(use)
   use { 'cespare/vim-toml', ft = 'toml' } -- Toml syntax highlighting.
   use { 'godlygeek/tabular', cmd = 'Tabularize' } -- Make tables easier (:help Tabular).
   use { 'moll/vim-bbye', cmd = 'Bdelete' } -- Delete buffer without closing split.
-  use { 'mzlogin/vim-markdown-toc', ft = 'markdown' } -- Markdown Table of Contents.
+  use { 'mzlogin/vim-markdown-toc', ft = 'markdown', cmd = 'GenTocGFM' } -- Markdown Table of Contents.
   use { 'nanotee/zoxide.vim', cmd = 'Zi' } -- Use zoxide to quickly jump to directories.
   use { 'neoclide/coc.nvim', branch = 'release' } -- Language Server with VSCode Extensions.
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' } -- Treesitter syntax highlighting.
@@ -304,7 +304,7 @@ map('n', '<Leader>X', '<Cmd>xa<CR>') -- Quit all windows.
 map('n', '<Leader>Y', '<Cmd>%y+<CR>') -- Copy file to clipboard (normal mode).
 map('n', '<Leader>a', '@a') -- Apply macro a (add with qa or yank to a reg with "ay).
 map('n', '<Leader>b', '<Cmd>Buffers<CR>') -- Search buffer list for file.
-map('n', '<Leader>cD', ':call DupBuffer()<CR><Plug>(coc-definition)', { silent = true, noremap = false }) -- Go to definition in other slit.
+map('n', '<Leader>cD', ':call DupBuffer()<CR><Plug>(coc-definition)', { silent = true, noremap = false }) -- Go to definition in other split.
 map('n', '<Leader>cE', ':<C-u>CocList diagnostics<cr>', { silent = true }) -- Manage extensions
 map('n', '<Leader>cR', '<Plug>(coc-refactor)', { noremap = false }) -- Remap for refactoring current selection.
 map('n', '<Leader>cc', '<Cmd>CocList commands<CR>', { silent = true }) -- Show commands
@@ -317,8 +317,8 @@ map('n', '<Leader>cp', '<Cmd>CocListResume<CR>', { silent = true }) -- Resume la
 map('n', '<Leader>cq', '<Cmd>cexpr getreg("+")<CR>') -- Open the current clipboard in the Quickfix window.
 map('n', '<Leader>cr', '<Plug>(coc-rename)', { noremap = false }) -- Remap for rename current word
 map('n', '<Leader>cs', '<Cmd>CocList -I symbols<CR>', { silent = true }) -- Search workspace symbols
+map('n', '<Leader>ct', '<Plug>(coc-type-definition)', { silent = true, noremap = false }) -- Go to type definition.
 map('n', '<Leader>cu', '<Plug>(coc-references)', { silent = true, noremap = false }) -- Go to usages.
-map('n', '<Leader>cy', '<Plug>(coc-type-definition)', { silent = true, noremap = false }) -- Go to type definition.
 map('n', '<Leader>d', '<Cmd>Bdelete<CR>') -- Close buffer without closing split,
 map('n', '<Leader>e', '<C-w>q') -- Close current split (keeps buffer).
 map('n', '<Leader>f', '<Cmd>Files<CR>') -- Search file names for file,
