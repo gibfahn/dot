@@ -42,6 +42,11 @@ data:
   - name: up
     fetch_url: https://github.com/gibfahn/dot
   prune: true
+- path: ~/code/me/brian_code
+  remotes:
+  - name: up
+    fetch_url: https://github.com/gibfahn/brian_code.git
+  prune: true
 - path: ~/code/me/codelets
   remotes:
   - name: up
