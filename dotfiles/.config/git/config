@@ -49,6 +49,7 @@
         | column -ts '|'
   bs  = bisect
   bss = bisect start
+  bsr = "!set -x; git bisect reset && git bisect start --first-parent $2 $1 && shift 2 && git bisect run \"$@\" #" # git bsr <good> <bad> <cmd args...>
   btu = "!git branch -u ${1:-up/$(git default-branch up)} #" # g btu remote/branch (defaults to up/HEAD).
   btp = "!git config branch.$(git head-branch).pushRemote ${1:-fork} #" # `g btp up` sets push remote for this branch to up, useful when pushing directly to 'up'.
   btpa = "!git config remote.pushDefault $1 #" # Set push remote for all future branches in this repo. Use this when you have a repo you don't want to fork.
