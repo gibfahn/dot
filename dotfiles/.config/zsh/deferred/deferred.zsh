@@ -187,6 +187,18 @@ dli() {
   { [[ $# == 0 ]] && fd -0d 1 || print -N $@; } | fzf --read0 --print0 | xargs -0 ${=aliases[dl]}
 }
 
+# Backup watch function for machines that don't (yet) have it installed.
+if ! type watch &>/dev/null; then
+  watch() {
+    while true; do
+      clear
+      echo "Running: $*"
+      $@
+      sleep 2
+    done
+  }
+fi
+
 # }}} Functions
 
 # {{{ Aliases
