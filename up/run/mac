@@ -40,8 +40,12 @@ main() {
   fi
 
   # Remove any accidentally added Shared-Data links. They should all go via the symlink.
-  log_get "Removing shared-data links"
-  zoxide query --list | { grep Shared-Data || true; } | xargs -t zoxide remove
+  if (( $+commands[zoxide] )); then
+    log_get "Removing shared-data links"
+    zoxide query --list | { grep Shared-Data || true; } | xargs -t zoxide remove
+  else
+    log_get "Not removing shared-data links as zoxide missing"
+  fi
 
   echo "All done"
 }
