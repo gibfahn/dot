@@ -5,7 +5,7 @@
 
 set -euo pipefail
 
-. "$(dirname "$0")/../../helpers/setup.sh" # Load helper script from dot/helpers.
+. ${0:a:h:h:h}/helpers/setup.sh # Load helper script from dot/helpers.
 
 main() {
   # Link VS Code preferences into the macOS specific folder.
@@ -36,7 +36,7 @@ main() {
     log_skip "File watcher limit (already increased)."
   else
     log_get "File watcher limit."
-    sudo cp "$(dirname "$0")"/../config/limit.maxfiles.plist /Library/LaunchDaemons/limit.maxfiles.plist
+    sudo cp ${0:a:h:h}/config/limit.maxfiles.plist /Library/LaunchDaemons/limit.maxfiles.plist
   fi
 
   # Remove any accidentally added Shared-Data links. They should all go via the symlink.
