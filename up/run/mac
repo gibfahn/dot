@@ -8,13 +8,6 @@ set -euo pipefail
 . ${0:a:h:h:h}/helpers/setup.sh # Load helper script from dot/helpers.
 
 main() {
-  # Link VS Code preferences into the macOS specific folder.
-  if [[ $USER == gib && -d "$HOME/Library/Application Support/Code/" ]]; then
-    for file in "$HOME"/.config/code/*.json; do
-      ln -sf "$file" "$HOME/Library/Application Support/Code/User/$(basename "$file")"
-    done
-  fi
-
   if [[ $USER == gib ]]; then # Set keyboard preferences.
     log_section "Setting gib extra macOS defaults."
 

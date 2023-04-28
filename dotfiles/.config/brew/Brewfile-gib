@@ -100,6 +100,7 @@ cask "daisydisk"                         # See what's using disk space and easil
 cask "docker"                            # Build and run docker images.
 cask "keycastr"                          # Shows keystrokes in corner of screen (great for casting/demos).
 cask "slack"                             # Everyone uses Slack right?
+cask "visual-studio-code"                # Used to teach Brian to code.
 cask "zoom"                              # Zoom web meetings client.
 
 # Mac App Store Apps (some paid). `mas list` to see what you've already installed.
