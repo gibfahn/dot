@@ -84,23 +84,18 @@ brew "wget"                              # Alternative to curl for downloading f
 
 # Brew casks
 
-# cask "adoptopenjdk8"                     # Java 8 that is still supported.
 # cask "firefox-nightly"                   # For those sweet Rust-based improvements.
 # cask "gimp"                              # Heavyweight photo editor.
 # cask "intellij-idea-ce"                  # Java-oriented IDE (good for debugging).
 # cask "meld"                              # Visual file diffing tool.
-# cask "messenger"                           # Facebook Messenger native app.
+# cask "messenger"                         # Facebook Messenger native app.
 # cask "microsoft-teams"                   # Microsoft Teams
 # cask "onedrive"                          # Microsoft OneDrive.
-# cask "stay"                              # Save and restore window positions, invaluable with multi-monitor setups.
-# cask "trailer"                           # GitHub push notifications.
-# cask "visual-studio-code"                # IDE that supports debugging Rust code.
 cask "chrysalis"                         # Used to flash my KeyboardIO Model 01.
 cask "daisydisk"                         # See what's using disk space and easily clean it up.
 cask "docker"                            # Build and run docker images.
 cask "keycastr"                          # Shows keystrokes in corner of screen (great for casting/demos).
 cask "slack"                             # Everyone uses Slack right?
-cask "visual-studio-code"                # Used to teach Brian to code.
 cask "zoom"                              # Zoom web meetings client.
 
 # Mac App Store Apps (some paid). `mas list` to see what you've already installed.
@@ -111,7 +106,6 @@ cask "zoom"                              # Zoom web meetings client.
 # mas "Logic Pro X", id: 634148309
 # mas "iMovie", id: 408981434
 
-mas "Dark Reader for Safari", id: 1438243180 # Dark mode in every website.
 mas "GhostText", id: 1552641506 # Edit textboxes from neovim.
 mas "Keynote", id: 409183694
 mas "Numbers", id: 409203825

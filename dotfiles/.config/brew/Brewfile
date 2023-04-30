@@ -49,13 +49,12 @@ brew "zsh"                               # Nicer interactive shell.
 
 # Brew casks (GUI Applications):
 
-# cask "google-chrome"                     # You probably want/have Chrome.
-# cask "karabiner-elements"                # Key remapper (see $c/karabiner/karabiner.json for my settings).
-# cask "steam"                             # Play games on macOS.
+cask "google-chrome"                     # You probably want/have Chrome.
 cask "keyboard-cleaner"                  # Block all keystrokes except ⌘-q so you can wipe your keyboard.
 cask "sogouinput"                        # Nicer Chinese input experience.
 cask "spotify"                           # Music.
 cask "time-out"                          # Reminds you to take breaks.
+cask "visual-studio-code"                # Used to teach Brian to code.
 cask "vlc"                               # Nice video player.
 cask "wechat"                            # Chinese chat client.
 cask "whatsapp"                          # Whatsapp client.
@@ -67,3 +66,4 @@ cask "workflowy"                         # Infinitely nested bullet point list a
 mas "Dato", id: 1470584107
 mas "Pages", id: 409201541               # Edit docx and pages files.
 mas "1Password for Safari", id: 1569813296 # 1Password browser extension.
+mas "Dark Reader for Safari", id: 1438243180 # Dark mode in every website.
