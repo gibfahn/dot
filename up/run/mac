@@ -40,6 +40,9 @@ main() {
     log_get "Not removing shared-data links as zoxide missing"
   fi
 
+  # Reapply scrolling direction settings, see com.apple.swipescrolldirection in defaults.yaml.
+  /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+
   echo "All done"
 }
 
