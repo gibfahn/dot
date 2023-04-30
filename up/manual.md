@@ -10,7 +10,7 @@ You will probably have different things you want/need to set up.
 While running `up-rs` for the first time, you will need to ensure you set up gpg and ssh keys you
 need in later steps.
 
-### System Preferences:
+### System Preferences
 
 Set the computer name (needs restart to take effect):
 
@@ -28,6 +28,7 @@ scutil --set ComputerName ${name:?}
   - Tick the `Screen Sharing` checkbox.
 - Security & Privacy:
   - Privacy -> Full Disk Access -> Add Terminal.app and Kitty
+    This resolves issues writing to the data volume, e.g. Mail preferences.
   - FileVault -> Turn on FileVault
 
 ### Autostart
