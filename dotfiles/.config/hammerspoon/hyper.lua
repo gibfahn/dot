@@ -100,7 +100,7 @@ end
 DefaultBrowserBundleID = (
   function()
     local handlers = hs.plist.read(os.getenv("HOME") .. "/Library/Preferences/com.apple.LaunchServices/com.apple.launchservices.secure.plist")
-    if handlers.LSHandlers == nil then
+    if handlers == nil or handlers.LSHandlers == nil then
       return "com.apple.safari"
     end
     for _, handler in ipairs(handlers.LSHandlers) do
