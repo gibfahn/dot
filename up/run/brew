@@ -8,6 +8,7 @@ if ! type brew; then
   if [[ -d ${wrk_dot_dir:-} ]]; then
     "$wrk_dot_dir"/up/run/brew
   else
+    sudo -v
     { set +x; } 2>/dev/null
     NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     set -x
