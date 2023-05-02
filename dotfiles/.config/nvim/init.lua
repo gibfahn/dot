@@ -578,9 +578,6 @@ vim.api.nvim_create_autocmd("FileType",
     command = "setlocal formatexpr=CocAction('formatSelected')",
     group = gib_autogroup
   })
--- Some files should be folded by indent.
-vim.api.nvim_create_autocmd("FileType",
-  { pattern = { "yaml,rust,json,python" }, command = "setlocal foldmethod=indent", group = gib_autogroup })
 
 -- Highlight symbol under cursor on CursorHold (show other instances of current word).
 vim.api.nvim_create_autocmd("CursorHold",
@@ -606,6 +603,22 @@ vim.api.nvim_create_autocmd("BufWritePost",
 -- YAML files should be folded by indent.
 vim.api.nvim_create_autocmd("FileType",
   { pattern = { "*" }, command = "setlocal foldmethod=expr", group = gib_autogroup })
+
+-- Some files should be folded by indent.
+vim.api.nvim_create_autocmd("FileType",
+  { pattern = { "yaml,json,python" }, command = "setlocal foldmethod=indent", group = gib_autogroup })
+
+-- Hide rust imports by default.
+-- Refs: https://www.reddit.com/r/neovim/comments/seq0q1/plugin_request_autofolding_file_imports_using/
+vim.api.nvim_create_autocmd("FileType",
+  { pattern = { "rust" },
+    callback = function()
+      vim.opt_local.foldlevelstart = 19
+      vim.opt_local.foldlevel = 19
+      vim.opt_local.foldexpr="v:lnum==1?'>1':getline(v:lnum)=~'use '?20:nvim_treesitter#foldexpr()"
+    end,
+    group = gib_autogroup })
+
 -- https://github.com/tpope/vim-fugitive/issues/1926
 vim.api.nvim_create_autocmd("FileType",
   { pattern = { "fugitive" }, command = "nmap <buffer> S sk]c", group = gib_autogroup })
