@@ -10,6 +10,7 @@ cargo fixall: runs cargo and clippy fixup commands, then the formatter.
 }
 
 main() {
+  git add --all
   cargo +nightly fix --allow-staged
   git add --all
   cargo +nightly clippy --fix --allow-staged
