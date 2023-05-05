@@ -536,18 +536,20 @@ data:
 
   # https://sindresorhus.com/dato
   com.sindresorhus.Dato:
-    showTimeInMenuBar: true
-    showWeekNumberInMenu: false
-    showCalendarInMenu: false
+    enabledCalendars: []
+    iconInMenuBar: none
+    menuShowJoinVideoCallButton: false
     showAmPm: false
+    showCalendarInMenu: false
+    showDateInMenu: false
     showDayOfWeekInMenu: false
-    showWeekNumberInMenuBar: false
-    showTimeZonesInMenu: true
     showMonthInMenuBar: true
     showSecondsInMenuBar: true
-    showDateInMenu: false
-    iconInMenuBar: none
-    enabledCalendars: []
+    showTimeInMenuBar: true
+    showTimeZonesInMenu: true
+    showWeekDayInMenuBar: true
+    showWeekNumberInMenu: false
+    showWeekNumberInMenuBar: false
     # See https://nsdateformatter.com for docs.
     # e.g. 2021-11-12 Fri 13:43:02
     dateTimeFormat: "yyyy-MM-dd E HH:mm:ss"
@@ -559,7 +561,6 @@ data:
       - "{\"timeZone\":\"America\\/Los_Angeles\",\"menuBarTitle\":\"\",\"id\":\"45987DD3-E7DF-4329-8516-85462AC0B8B1\",\"notes\":\"\",\"isInMenuBar\":false,\"timeFormat\":\"system\",\"name\":\"🌁 San Francisco\",\"originalName\":\"San Francisco\"}"
     showAddEventButtonInMenu: false
     showTimeInMenu: false
-    showWeekDayInMenuBar: true
 
   # https://github.com/hluk/CopyQ
   com.copyq.copyq:
