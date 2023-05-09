@@ -54,6 +54,8 @@
     "<C-q>": "action:quickfix"
   },
   "codeLens.enable": true,
+  // Workaround for https://github.com/fannheyward/coc-rust-analyzer/issues/1112
+  "codeLens.position": "eol",
   // Unset this as the python autoformat disagrees with flake8.
   "coc.preferences.formatOnType": true,
   "coc.preferences.formatOnTypeFiletypes": ["rust", "json", "go"],
