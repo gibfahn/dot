@@ -152,7 +152,6 @@ require('packer').startup(function(use)
   use 'airblade/vim-gitgutter' -- Show git diffs in the gutter (left of line numbers) (:h gitgutter).
   use 'ap/vim-buftabline' -- Show buffers in the tab bar.
   use 'ap/vim-readdir' -- Nicer file browser plugin that works with buftabline.
-  use 'aymericbeaumet/vim-symlink' -- Resolve symlinks when opening files.
   use 'chrisbra/Colorizer' -- Color ansi escape codes (:h Colorizer).
   use 'chrisbra/Recover.vim' -- add a diff option when a swap file is found.
   use 'coderifous/textobj-word-column.vim' -- Adds ic/ac and iC/aC motions to block select word column in paragraph.
@@ -190,7 +189,6 @@ require('packer').startup(function(use)
   use { 'tpope/vim-abolish', cmd = { 'Abolish', 'Subvert', 'S' } } -- Work with variants of words (replacing, capitalizing etc).
   use { 'tpope/vim-sleuth', after = 'vim-polyglot' } -- Automatically detect indentation.
   use { '~/.local/share/fzf', as = 'fzf', run = './install --bin' } -- :h fzf
-
 end)
 
 pcall(require, "wrk-init-nvim") -- Load work config if present.
@@ -323,14 +321,14 @@ map('n', '<Leader>d', '<Cmd>Bdelete<CR>') -- Close buffer without closing split,
 map('n', '<Leader>e', '<C-w>q') -- Close current split (keeps buffer).
 map('n', '<Leader>f', '<Cmd>Files<CR>') -- Search file names for file,
 map('n', '<Leader>gC', '<Cmd>e ~/.config/nvim/coc-settings.json<CR>') -- Edit colorscheme file.
-map('n', '<Leader>gG', '<Cmd>Gcd<CR>') -- Cd to root of git directory current file is in.
+map('n', '<Leader>gG', ':Resolve<CR>|:Gcd<CR>') -- Cd to root of git directory current file is in.
 map('n', '<Leader>gQ', '<Cmd>set fo+=t<CR><Cmd>set fo?<CR>') -- Turn on auto-inserting newlines when you go over the textwidth.
 map('n', '<Leader>ga', '<Cmd>AnyJumpLastResults<CR>') -- open last closed search window again
 map('n', '<Leader>gb', '<Cmd>AnyJumpBack<CR>') -- open previous opened file (after jump)
 map('n', '<Leader>gc', '<Cmd>cd %:p:h<CR>') -- Change vim directory (:pwd) to current file's dirname (e.g. for <space>f, :e).
 map('n', '<Leader>gd', '<Cmd>w !git diff --no-index % - <CR>') -- Diff between saved file and current.
 map('n', '<Leader>gf', '<Cmd>call DupBuffer()<CR>gF') -- Open file path:row:col under cursor in last window.
-map('n', '<Leader>gg', '<Cmd>tab Git<CR>') -- Open fugitive Gstatus in a new tab.
+map('n', '<Leader>gg', ':Resolve<CR>|:tab Git<CR>') -- Open fugitive Gstatus in a new tab.
 map('n', '<Leader>gn', '<Cmd>set number!<CR>') -- Toggle line numbers.
 map('n', '<Leader>gp', '`[v`]') -- Visual selection of the last thing you copied or pasted.
 map('n', '<Leader>gq', '<Cmd>set fo-=t<CR><Cmd>set fo?<CR>') -- Turn off auto-inserting newlines when you go over the textwidth.
@@ -533,6 +531,18 @@ vim.cmd([[
     endif
   endfunction
 
+  " Convert buffer to its realpath (resolving symlinks).
+  " https://github.com/tpope/vim-fugitive/pull/814#issuecomment-446767081
+  function! s:Resolve() abort
+    let current = expand('%')
+    let resolved = resolve(current)
+    if current !~# '[\/][\/]' && current !=# resolved
+      silent execute 'keepalt file' fnameescape(resolved)
+      return 'edit'
+    endif
+    return ''
+  endfunction
+
   command! Trim call TrimWhitespace()|                " :Trim runs :call Trim() (defined above).
   command! W :execute ':silent w !sudo tee % > /dev/null' | :edit!| " :W writes as sudo.
 
@@ -549,6 +559,9 @@ vim.cmd([[
     \ call fzf#vim#grep(
     \   'rg  --vimgrep --color=always --smart-case --hidden ' . shellescape(<q-args>), 1,
     \   fzf#vim#with_preview({'options': ['-m', '--bind=ctrl-a:toggle-all,alt-j:jump,alt-k:jump-accept']}, 'right:50%', 'ctrl-p'))
+
+  " https://github.com/tpope/vim-fugitive/pull/814#issuecomment-446767081
+  command! -bar Resolve execute s:Resolve()
 ]])
 
 -- }}} Vimscript Commands and Functions
@@ -611,13 +624,15 @@ vim.api.nvim_create_autocmd("FileType",
 -- Hide rust imports by default.
 -- Refs: https://www.reddit.com/r/neovim/comments/seq0q1/plugin_request_autofolding_file_imports_using/
 vim.api.nvim_create_autocmd("FileType",
-  { pattern = { "rust" },
+  {
+    pattern = { "rust" },
     callback = function()
       vim.opt_local.foldlevelstart = 19
       vim.opt_local.foldlevel = 19
-      vim.opt_local.foldexpr="v:lnum==1?'>1':getline(v:lnum)=~'use '?20:nvim_treesitter#foldexpr()"
+      vim.opt_local.foldexpr = "v:lnum==1?'>1':getline(v:lnum)=~'use '?20:nvim_treesitter#foldexpr()"
     end,
-    group = gib_autogroup })
+    group = gib_autogroup
+  })
 
 -- https://github.com/tpope/vim-fugitive/issues/1926
 vim.api.nvim_create_autocmd("FileType",
