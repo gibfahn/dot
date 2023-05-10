@@ -35,15 +35,20 @@ vim.g.mapleader = ' ' -- use space as a the leader key
 vim.g.mundo_preview_bottom = 1 -- Undo diff preview on bottom.
 vim.g.mundo_right = 1 -- Undo window on right.
 vim.g.peekaboo_window = "vert bo 50new" -- Increase peekaboo window width to 50.
-vim.g.surround_97 = "\1before: \1\r\2after: \2" -- yswa surrounds with specified text (prompts for before/after).
+vim.g.surround_97 =
+"\1before: \1\r\2after: \2" -- yswa surrounds with specified text (prompts for before/after).
 vim.g.surround_no_mappings = 1 -- Manually map surround, see SurroundOp() function.
 vim.g.terminal_scrollback_buffer_size = 100000 -- Store lots of terminal history (neovim-only).
 
 -- Extensions (plugins) for CoC language client.
-vim.g.coc_global_extensions = { 'coc-actions', 'coc-ccls', 'coc-clangd', 'coc-css', 'coc-diagnostic', 'coc-dictionary',
-  'coc-eslint', 'coc-go', 'coc-groovy', 'coc-highlight', 'coc-html', 'coc-java', 'coc-json', 'coc-lua',
-  'coc-prettier', 'coc-markdownlint', 'coc-python', 'coc-rust-analyzer', 'coc-snippets', 'coc-solargraph',
-  'coc-sourcekit', 'coc-svg', 'coc-syntax', 'coc-tabnine', 'coc-tsserver', 'coc-vetur', 'coc-word', 'coc-yaml'
+vim.g.coc_global_extensions = { 'coc-actions', 'coc-ccls', 'coc-clangd', 'coc-css', 'coc-diagnostic',
+  'coc-dictionary',
+  'coc-eslint', 'coc-go', 'coc-groovy', 'coc-highlight', 'coc-html', 'coc-java', 'coc-json',
+  'coc-lua',
+  'coc-prettier', 'coc-markdownlint', 'coc-python', 'coc-rust-analyzer', 'coc-snippets',
+  'coc-solargraph',
+  'coc-sourcekit', 'coc-svg', 'coc-syntax', 'coc-tabnine', 'coc-tsserver', 'coc-vetur', 'coc-word',
+  'coc-yaml'
 }
 
 -- Settings for custom statusline.
@@ -90,14 +95,16 @@ vim.opt.breakindent = true -- Nicer line wrapping for long lines.
 vim.opt.confirm = true -- Ask if you want to save unsaved files instead of failing.
 vim.opt.diffopt:append("vertical") -- Always use vertical diffs.
 vim.opt.expandtab = true -- Use spaces instead of tabs
-vim.opt.fileformats = "unix" -- Force Unix line endings (\n) (always show \r (^M), never autoinsert them).
+vim.opt.fileformats =
+"unix" -- Force Unix line endings (\n) (always show \r (^M), never autoinsert them).
 vim.opt.foldexpr = "nvim_treesitter#foldexpr()" -- Fold with treesitter.
 vim.opt.foldlevel = 99 -- expand all by default.
 -- vim.opt.foldmethod = "expr" -- Fold according to syntax rules (disabled in favour of setlocal below)
 vim.opt.formatoptions:remove("t") -- Don't autowrap text at 80.
 vim.opt.gdefault = true -- Global replace default (off: /g).
 vim.opt.grepformat = '%f:%l:%c:%m,%f:%l:%m' -- Teach vim how to parse the ripgrep output.
-vim.opt.grepprg = 'rg -S --vimgrep --no-heading --hidden --glob !.git' -- Use ripgrep for file searching.
+vim.opt.grepprg =
+'rg -S --vimgrep --no-heading --hidden --glob !.git' -- Use ripgrep for file searching.
 vim.opt.hidden = true -- Enable background buffers
 vim.opt.history = 1000 -- More command/search history.
 vim.opt.ignorecase = true -- Ignore case for lowercase searches (re-enable with \C in pattern),
@@ -302,7 +309,8 @@ map('n', '<Leader>X', '<Cmd>xa<CR>') -- Quit all windows.
 map('n', '<Leader>Y', '<Cmd>%y+<CR>') -- Copy file to clipboard (normal mode).
 map('n', '<Leader>a', '@a') -- Apply macro a (add with qa or yank to a reg with "ay).
 map('n', '<Leader>b', '<Cmd>Buffers<CR>') -- Search buffer list for file.
-map('n', '<Leader>cD', ':call DupBuffer()<CR><Plug>(coc-definition)', { silent = true, noremap = false }) -- Go to definition in other split.
+map('n', '<Leader>cD', ':call DupBuffer()<CR><Plug>(coc-definition)',
+  { silent = true, noremap = false }) -- Go to definition in other split.
 map('n', '<Leader>cE', ':<C-u>CocList diagnostics<cr>', { silent = true }) -- Manage extensions
 map('n', '<Leader>cR', '<Plug>(coc-refactor)', { noremap = false }) -- Remap for refactoring current selection.
 map('n', '<Leader>cc', '<Cmd>CocList commands<CR>', { silent = true }) -- Show commands
@@ -597,7 +605,8 @@ vim.api.nvim_create_autocmd("CursorHold",
   {
     pattern = { "*" },
     -- Work around https://github.com/neoclide/coc.nvim/issues/4577
-    callback = function(opts) if (string.find(opts.file, ".log") == nil) then vim.fn['CocActionAsync']('highlight') end end
+    callback = function(opts) if (string.find(opts.file, ".log") == nil) then vim.fn
+            ['CocActionAsync']('highlight') end end
     ,
     group = gib_autogroup
   })
@@ -612,7 +621,8 @@ vim.api.nvim_create_autocmd("User",
 
 -- Reload vimrc on save.
 vim.api.nvim_create_autocmd("BufWritePost",
-  { pattern = { "*/.config/nvim/init.lua" }, command = "source $MYVIMRC", nested = true, group = gib_autogroup })
+  { pattern = { "*/.config/nvim/init.lua" }, command = "source $MYVIMRC", nested = true,
+    group = gib_autogroup })
 -- YAML files should be folded by indent.
 vim.api.nvim_create_autocmd("FileType",
   { pattern = { "*" }, command = "setlocal foldmethod=expr", group = gib_autogroup })
@@ -646,22 +656,27 @@ vim.api.nvim_create_autocmd("FileType",
   { pattern = { "fugitive" }, command = "nmap <buffer> <A-G> [c", group = gib_autogroup })
 -- Don't highlight tabs in Go.
 vim.api.nvim_create_autocmd("FileType",
-  { pattern = { "go" }, command = [[set listchars=tab:\ \ ,trail:·,nbsp:☠ ]], group = gib_autogroup })
+  { pattern = { "go" }, command = [[set listchars=tab:\ \ ,trail:·,nbsp:☠ ]],
+    group = gib_autogroup })
 -- Open new help windows on the right,
-vim.api.nvim_create_autocmd("FileType", { pattern = { "help" }, command = "wincmd L", group = gib_autogroup })
+vim.api.nvim_create_autocmd("FileType",
+  { pattern = { "help" }, command = "wincmd L", group = gib_autogroup })
 -- Allow comments in json.
 vim.api.nvim_create_autocmd("FileType",
   { pattern = { "json" }, command = [[syntax match Comment +\/\/.\+$+]], group = gib_autogroup })
 -- Check if files modified when you open a new window, switch back to vim, or if you don't move the cursor for 100ms.
 -- Use getcmdwintype() to avoid running in the q: window (otherwise you get lots of errors).
 vim.api.nvim_create_autocmd("FocusGained,BufEnter,CursorHold,CursorHoldI",
-  { pattern = { "*" }, command = "if getcmdwintype() == '' | checktime | endif", group = gib_autogroup })
+  { pattern = { "*" }, command = "if getcmdwintype() == '' | checktime | endif",
+    group = gib_autogroup })
 -- Open the quickfix window on grep.
-vim.api.nvim_create_autocmd("QuickFixCmdPost", { pattern = { "*grep*" }, command = "cwindow", group = gib_autogroup })
+vim.api.nvim_create_autocmd("QuickFixCmdPost",
+  { pattern = { "*grep*" }, command = "cwindow", group = gib_autogroup })
 vim.api.nvim_create_autocmd("User",
   { pattern = { "CocDiagnosticChange" }, command = "call lightline#update()", group = gib_autogroup })
 -- Don't allow starting Vim with multiple tabs.
-vim.api.nvim_create_autocmd("VimEnter", { pattern = { "*" }, command = "silent! tabonly", group = gib_autogroup })
+vim.api.nvim_create_autocmd("VimEnter",
+  { pattern = { "*" }, command = "silent! tabonly", group = gib_autogroup })
 
 -- No line numbers in terminal
 vim.api.nvim_create_autocmd("TermOpen",

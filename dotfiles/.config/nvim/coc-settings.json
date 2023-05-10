@@ -58,19 +58,13 @@
   "codeLens.position": "eol",
   // Unset this as the python autoformat disagrees with flake8.
   "coc.preferences.formatOnType": true,
-  "coc.preferences.formatOnTypeFiletypes": ["rust", "json", "go"],
-  "coc.preferences.formatOnSaveFiletypes": [
-    "bzl",
-    "css",
-    "go",
-    "html",
-    "json",
-    "jsonc",
-    "lua",
-    "python",
-    "rust",
-    "sh"
-  ],
+  "[rust][json][go]": {
+    "coc.preferences.formatOnType": true
+  },
+  "[bzl][css][go][html][json][jsonc][lua][python][rust][sh][zsh]": {
+    "coc.preferences.formatOnSave": true
+  },
+
   "coc.preferences.currentFunctionSymbolAutoUpdate": true,
   // The symbol in the completion menu for words in the current file.
   "coc.source.around.shortcut": "↕",
@@ -86,7 +80,8 @@
   "python.linting.pydocstyleEnabled": false,
   "python.jediEnabled": false,
   "python.formatting.provider": "black",
-  "rust-analyzer.checkOnSave.overrideCommand": [
+  // Docs: https://github.com/fannheyward/coc-rust-analyzer#configurations
+  "rust-analyzer.check.overrideCommand": [
     "cargo",
     "+nightly",
     "clippy",
@@ -142,7 +137,7 @@
   "solargraph.diagnostics": false,
   "solargraph.formatting": true,
   "solargraph.autoformat": false, // Enable to format while typing.
-  "Lua.telemetry.enable": false,
+  // Docs: https://github.com/josa42/coc-lua#lualslua-language-server
   "Lua.diagnostics.globals": [
     "hs", // HammerSpoon global variable.
     "vim" // Vim global variable.
