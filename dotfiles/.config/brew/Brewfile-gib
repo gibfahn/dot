@@ -42,7 +42,6 @@ tap "gibfahn/tap", "https://github.com/gibfahn/homebrew-tap" # My personal tap f
 # cask "vagrant"                           # Quick command-line image spin-up.
 # cask "virtualbox"                        # Manage VMs (Linux or Windows).
 # cask "vulkan-sdk"                        # Use the vulkan graphics APIs on macOS.
-brew "1password-cli"                     # CLI way to access 1Password credentials.
 brew "bat"                               # Nicer cat with syntax highlighting etc.
 brew "bazelisk"                          # Easily use the latest version of bazel.
 brew "binutils"                          # GNU versions of tools for interacting with binaries (nm, strings etc).
@@ -92,6 +91,7 @@ brew "wget"                              # Alternative to curl for downloading f
 # cask "messenger"                         # Facebook Messenger native app.
 # cask "microsoft-teams"                   # Microsoft Teams
 # cask "onedrive"                          # Microsoft OneDrive.
+cask "1password-cli"                     # CLI way to access 1Password credentials.
 cask "chrysalis"                         # Used to flash my KeyboardIO Model 01.
 cask "daisydisk"                         # See what's using disk space and easily clean it up.
 cask "docker"                            # Build and run docker images.
