@@ -298,6 +298,7 @@
   "diagnostic-languageserver.formatFiletypes": {
     "python": ["black", "isort"],
     "sh": "shfmt",
+    "zsh": "shfmt",
     "bzl": "buildifier-fmt",
     "lua": "lua-format",
     "css": "stylelint"
