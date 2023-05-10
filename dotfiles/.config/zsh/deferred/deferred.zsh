@@ -42,6 +42,7 @@ export NODE_REPL_HISTORY="$XDG_CACHE_HOME/node_repl_history" # Set node-gyp down
 export NPM_CONFIG_CACHE="$XDG_CACHE_HOME/npm" # Set npm cache location.
 export NPM_CONFIG_DEVDIR="$XDG_CACHE_HOME/node-gyp" # Set node-gyp download location.
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/config" # Set up my npm config location.
+export OP_BIOMETRIC_UNLOCK_ENABLED=true # https://developer.1password.com/docs/cli/app-integration/#set-the-biometric-unlock-environment-variable
 export PAGER=less
 export PEX_ROOT="$XDG_CACHE_HOME/pex" # Cache directory for https://github.com/pantsbuild/pex.
 export RBENV_ROOT="$XDG_CACHE_HOME/rbenv" # Set rbenv location.

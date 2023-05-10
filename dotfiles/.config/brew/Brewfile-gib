@@ -42,6 +42,7 @@ tap "gibfahn/tap", "https://github.com/gibfahn/homebrew-tap" # My personal tap f
 # cask "vagrant"                           # Quick command-line image spin-up.
 # cask "virtualbox"                        # Manage VMs (Linux or Windows).
 # cask "vulkan-sdk"                        # Use the vulkan graphics APIs on macOS.
+brew "1password-cli"                     # CLI way to access 1Password credentials.
 brew "bat"                               # Nicer cat with syntax highlighting etc.
 brew "bazelisk"                          # Easily use the latest version of bazel.
 brew "binutils"                          # GNU versions of tools for interacting with binaries (nm, strings etc).
