@@ -629,7 +629,8 @@ vim.api.nvim_create_autocmd("FileType",
     callback = function()
       vim.opt_local.foldlevelstart = 19
       vim.opt_local.foldlevel = 19
-      vim.opt_local.foldexpr = "v:lnum==1?'>1':getline(v:lnum)=~'use '?20:nvim_treesitter#foldexpr()"
+      vim.opt_local.foldexpr =
+      "v:lnum==1?'>1':getline(v:lnum)=~'^ *use'?20:nvim_treesitter#foldexpr()"
     end,
     group = gib_autogroup
   })
