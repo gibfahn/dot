@@ -602,3 +602,15 @@ data:
     com.apple.custommenu.apps:
     - com.apple.mail
     - ... # Preserve existing entries.
+
+
+  # An Apple mouse plugged directly in to the machine.
+  com.apple.AppleMultitouchMouse:
+    # Settings > Mouse > Secondary Click > Click Right Side
+    MouseButtonMode: TwoButton
+
+  # An Apple mouse connected over Bluetooth.
+  com.apple.driver.AppleBluetoothMultitouch.mouse:
+    # Settings > Mouse > Secondary Click > Click Right Side
+    MouseButtonMode: TwoButton
+
