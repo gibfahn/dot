@@ -64,11 +64,12 @@ remap_gib() {
 
   # Kinesis Freestyle Edge Keyboard
   hidutil property --matching '{"VendorID":0x29ea}' --set "{\"UserKeyMapping\":[
-  {$FROM: $CAPS_LOCK,             $TO: $LEFT_SHIFT},
-  {$FROM: $LEFT_SHIFT,             $TO: $LEFT_CTRL},
+  {$FROM: $CAPS_LOCK,            $TO: $LEFT_SHIFT},
+  {$FROM: $LEFT_SHIFT,           $TO: $LEFT_CTRL},
   {$FROM: $LEFT_GUI,             $TO: $LEFT_ALT},
   {$FROM: $LEFT_ALT,             $TO: $LEFT_GUI},
-  {$FROM: $LEFT_CTRL,             $TO: $F17}
+  {$FROM: $F1,                   $TO: $ESCAPE},
+  {$FROM: $LEFT_CTRL,            $TO: $F17}
   ]}" >/dev/null
 
 }
