@@ -25,7 +25,7 @@ main() {
   set_env_vars
   whoami=$(whoami)
   case $whoami in
-    gib|brian) remap_gib ;;
+    gib | brian) remap_gib ;;
     eve) remap_eve ;;
     *) error "Unknown user $whoami" ;;
   esac
@@ -87,11 +87,11 @@ set_env_vars() {
   V="0x700000019"
 
   ESCAPE="0x700000029"
-  OPEN_BRACKET="0x70000002F" # [ or {
+  OPEN_BRACKET="0x70000002F"  # [ or {
   CLOSE_BRACKET="0x700000030" # ] or }
-  BACKSLASH="0x700000031" # \ or |
-  NON_US_POUND="0x700000032" # §/± for UK
-  GRAVE_TILDE="0x700000035" # `/~
+  BACKSLASH="0x700000031"     # \ or |
+  NON_US_POUND="0x700000032"  # §/± for UK
+  GRAVE_TILDE="0x700000035"   # `/~
   CAPS_LOCK="0x700000039"
 
   F1="0x70000003A"
