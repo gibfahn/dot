@@ -104,6 +104,9 @@ data:
     # Enable Tap to Click for the login screen
     com.apple.mouse.tapBehavior: 1
 
+    # Settings > Mouse > Tracking Speed > Fastest
+    com.apple.mouse.scaling: 3.0
+
     # Set Date format to RFC 3339 formatting, e.g. 2000-12-25
     AppleICUDateFormatStrings:
       "1": "y-MM-dd"
