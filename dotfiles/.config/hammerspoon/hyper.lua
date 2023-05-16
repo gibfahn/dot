@@ -108,6 +108,8 @@ DefaultBrowserBundleID = (
         return handler.LSHandlerRoleAll
       end
     end
+    -- If we didn't find a matching handler, default to Safari.
+    return "com.apple.safari"
   end
 )()
 HyperMode:bind({}, 'b', function()
