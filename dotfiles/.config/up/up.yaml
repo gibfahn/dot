@@ -20,6 +20,7 @@ inherit_env:
 - TERMINFO # If set by terminal, enables nice colouring.
 - SSH_AUTH_SOCK # Set by ssh agent.
 - HISTFILE # Used to backup zsh history.
+- TMPDIR # Write temp files to the expected place.
 
 env:
   dot_dir: "~/code/dot" # Directory to clone dotfiles to.
