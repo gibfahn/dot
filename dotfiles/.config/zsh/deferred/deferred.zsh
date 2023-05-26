@@ -185,7 +185,7 @@ vq() {
 # dli -> interactive delete files in current directory.
 # dli foo/* bar/* -> interactive delete files in foo and bar subdirectories.
 dli() {
-  { [[ $# == 0 ]] && fd -0d 1 || print -N $@; } | fzf --read0 --print0 | xargs -0 ${=aliases[dl]}
+  { [[ $# == 0 ]] && fd -0d 1 || print -N $@; } | fzf --reverse --read0 --print0 | xargs -0 ${=aliases[dl]}
 }
 
 # Backup watch function for machines that don't (yet) have it installed.
