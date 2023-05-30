@@ -195,7 +195,7 @@
   smi  = submodule update --init --recursive   # Update to main repo upstream branch's submodule versions (make submodules match parent's HEADs).
   smu  = submodule update --remote             # Update submodules to submodule repos latest versions (make submodules match submodule upstream HEADs).
 
-  # Interactively unsubscribe to repos you don't want to follow.
+  # Interactively unsubscribe to repos you don't want to follow (faster version of https://github.com/watching).
   # e.g. GH_HOST=github.mycorp.com git unsubscribe
   # To sort by repo not org, swap the `--key` sort options.
   unsubscribe = "!gh api --paginate user/subscriptions --jq '.[].full_name' | sort --field-separator=/ --key=1 --key=2 | fzf --reverse --multi --track --no-sort | sed 's|.*|repos/&/subscription|' | xargs -t -n 1 -J% gh api --method DELETE % #"
