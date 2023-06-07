@@ -476,6 +476,10 @@ data:
     # Enable the Web Inspector in Safari
     com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled: true
 
+    # Safari > View > Show Status bar
+    # Toggle it with ⌘-/
+    ShowOverlayStatusBar: true
+
   # Set Menu Bar date format: https://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table
   # Note that only some formats are allowed. This shows: day of the week, date, time with seconds.
   com.apple.menuextra.clock:
