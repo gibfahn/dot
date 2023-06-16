@@ -1,0 +1,35 @@
+#!/usr/bin/env zsh
+
+set -eux
+
+if [[ ! -f ~/.config/gh/hosts.yml ]]; then
+  exit 204
+fi
+
+# Make sure we're not using the old-style hosts where the tokens are embedded (don't want to commit
+# these to dotfiles).
+if grep -q oauth_token ~/.config/gh/hosts.yml; then
+  echo "Found tokens in hosts.yml, switch to keychain tokens instead."
+  exit 1
+fi
+
+githubs=("${(@f)$(sed -n <~/.config/gh/hosts.yml 's/^\([a-z].*\):$/\1/p')}")
+
+# GitHubs we don't have a token for.
+missing_auth=()
+
+for github in ${githubs[@]}; do
+  if ! gh auth token --hostname $github >/dev/null; then
+    missing_auth+=$github
+  fi
+done
+
+if [[ ${#missing_auth[@]} == 0 ]]; then
+  exit 204
+fi
+
+echo "Failed to authenticate to these GitHub servers: ${missing_auth[*]} run these commands to authenticate:"
+for github in ${missing_auth[@]}; do
+  echo "  gh auth login --hostname '$github' -p https"
+done
+exit 1
