@@ -256,6 +256,8 @@ alias t2j="python3 -c 'import sys, toml, json; json.dump(toml.load(sys.stdin), s
 # Url encode and decode stdin or first argument.
 alias url_encode='python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read()[0:-1]))"'
 alias url_decode='python3 -c "import urllib.parse, sys; print(urllib.parse.unquote(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read()[0:-1]))"'
+# Convert from UTF-16 to UTF-8
+alias utf16_decode='python3 -c "import sys; sys.stdin.reconfigure(encoding=\"utf-16\"); print(sys.stdin.read())"'
 
 if (( $+commands[kitty] )); then
   alias icat="kitty +kitten icat" # Kitty terminal specific: https://sw.kovidgoyal.net/kitty/kittens/icat.html
