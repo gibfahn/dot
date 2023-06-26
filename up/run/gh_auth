@@ -6,6 +6,9 @@ if [[ ! -f ~/.config/gh/hosts.yml ]]; then
   exit 204
 fi
 
+# If gh isn't installed, skip.
+(( $+commands[gh] )) || exit 204
+
 # Make sure we're not using the old-style hosts where the tokens are embedded (don't want to commit
 # these to dotfiles).
 if grep -q oauth_token ~/.config/gh/hosts.yml; then
