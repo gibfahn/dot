@@ -8,6 +8,7 @@ set -euo pipefail
 # Values from: https://opensource.apple.com/source/IOHIDFamily/IOHIDFamily-1035.41.2/IOHIDFamily/IOHIDUsageTables.h.auto.html
 # https://github.com/pqrs-org/Karabiner-Elements/issues/2331
 # https://github.com/jasonrudolph/keyboard
+# Generator: https://hidutil-generator.netlify.app
 
 # List all available Services & Devices with:
 #   hidutil list

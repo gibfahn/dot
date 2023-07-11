@@ -12,19 +12,14 @@ end
 
 local user = os.getenv("USER")
 
-require('hidutil')
-
 if (user == "gib" or user == "brian") then
   log.d("Loading gib configuration...")
-  require('hyper') -- Uses RemapKeys from hidutil, so require order matters.
+  require('hyper')
   require('control-escape')
 
-  RequireIfAvailable('wrk') -- Uses RemapKeys from hidutil, so require order matters.
+  RequireIfAvailable('wrk') -- Uses HyperMode from hyper, so require order matters.
 end
 require('window-management')
-
--- Always remap keys on first loading hammerspoon.
-RemapKeys()
 
 -- Always connect to VPN on first loading Hammerspoon.
 if (user == "gib") then CallVpn("corporate") end
