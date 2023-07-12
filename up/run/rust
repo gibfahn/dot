@@ -20,7 +20,6 @@ rust_crates=(
 
 linux_rust_crates=(
   # exa
-  # watchexec                   # Like entr (evaluating which one is better).
   # xsv                         # csv manipulator.
   bat           # Nicer cat with syntax highlighting etc.
   hyperfine     # Benchmark commands (time but a benchmarking suite).

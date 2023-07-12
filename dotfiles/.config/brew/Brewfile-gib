@@ -14,7 +14,6 @@ tap "gibfahn/tap", "https://github.com/gibfahn/homebrew-tap" # My personal tap f
 # brew "certbot"                           # LetsEncrypt.
 # brew "cmake"                             # Commonly-used meta build system.
 # brew "ctags"                             # Used for autocomplete in Vim (etc).
-# brew "exa"                               # Nicer ls replacement.
 # brew "exercism"                          # Learn coding languages.
 # brew "gng"                               # Wrapper around ./gradlew for gradle projects (gw and gng).
 # brew "gnutls"                            # Provides gnutls-cli for setting up TLS connections.
@@ -31,7 +30,6 @@ tap "gibfahn/tap", "https://github.com/gibfahn/homebrew-tap" # My personal tap f
 # brew "redis"                             # In-memory key-object store.
 # brew "speedtest-cli"                     # Check network speed from the command-line.
 # brew "tmux"                              # Terminal multiplexer.
-# brew "watchexec"                         # Like entr (evaluating which one is better).
 # brew "xsv"                               # csv manipulator.
 # cask "balenaetcher"                      # Flash disk images (e.g. Linux bootable USB sticks).
 # cask "disk-inventory-x"                  # Graphical view of what's taking up disk space.
