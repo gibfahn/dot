@@ -21,17 +21,6 @@ main() {
     fi
   fi
 
-  # Apply any changes made above:
-
-  # Increase max file watch limit. See https://eradman.com/entrproject/limits.html
-  # File downloaded from: https://eradman.com/entrproject/etc/limit.maxfiles.plist
-  if [[ -e /Library/LaunchDaemons/limit.maxfiles.plist ]]; then
-    log_skip "File watcher limit (already increased)."
-  else
-    log_get "File watcher limit."
-    sudo cp ${0:a:h:h}/config/limit.maxfiles.plist /Library/LaunchDaemons/limit.maxfiles.plist
-  fi
-
   # Remove any accidentally added Shared-Data links. They should all go via the symlink.
   if (( $+commands[zoxide] )); then
     log_get "Removing shared-data links"
