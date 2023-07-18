@@ -1,7 +1,7 @@
 local log = hs.logger.new('init.lua', 'debug')
 log.d("Loading module")
 -- Use Control+` to reload Hammerspoon config
-hs.hotkey.bind({'ctrl'}, '`', nil, function() hs.reload() end)
+hs.hotkey.bind({ 'ctrl' }, '`', nil, function() hs.reload() end)
 
 function RequireIfAvailable(module)
   log.d("Requiring " .. module .. "if available...")
@@ -12,8 +12,10 @@ end
 
 local user = os.getenv("USER")
 
+require('hidutil')
+
 if (user == "gib" or user == "brian") then
-  log.d("Loading gib configuration...")
+  log.d("Loading " .. user .. " configuration...")
   require('hyper')
   require('control-escape')
 
@@ -21,7 +23,10 @@ if (user == "gib" or user == "brian") then
 end
 require('window-management')
 
+-- Always remap keys on first loading hammerspoon.
+RemapKeys()
+
 -- Always connect to VPN on first loading Hammerspoon.
 if (user == "gib") then CallVpn("corporate") end
 
-hs.notify.new({title = 'Hammerspoon', informativeText = '✅ ' .. user .. ' config restored', withdrawAfter = 3}):send()
+hs.notify.new({ title = 'Hammerspoon', informativeText = '✅ ' .. user .. ' config restored', withdrawAfter = 3 }):send()
