@@ -13,8 +13,6 @@ export RUSTC_LOG=rustc_metadata=error
 
 CDPATH=~ # Check ~ for directories after checking . (`c/d/` matches `./c*/d*/`, then tries `~/c*/d*/`).
 
-_gib_bat_cmd='bat --style=numbers --color=always --pager=never --terminal-width=$FZF_PREVIEW_COLUMNS --wrap=character'
-
 export ATOM_HOME="$XDG_DATA_HOME"/atom # Atom data goes here.
 export AWS_CONFIG_FILE="$XDG_CONFIG_HOME/aws/config"
 export AWS_SHARED_CREDENTIALS_FILE="$HOME/.ssh/tokens/aws/credentials"
@@ -24,12 +22,12 @@ export CCACHE_CONFIGPATH="$XDG_CONFIG_HOME"/ccache.config
 export CCACHE_DIR="$XDG_CACHE_HOME"/ccache # Ccache cache.
 export COURSIER_CREDENTIALS="$XDG_CONFIG_HOME/coursier/credentials.properties"
 export FZF_ALT_C_COMMAND='fd --type d --hidden --no-ignore --follow --exclude .git'
-export FZF_CTRL_R_OPTS="--height=100% --preview-window=down:30%:noborder --preview '$_gib_bat_cmd --language=zsh <<<\$(echo {2..})', --bind='ctrl-y:execute(${aliases[cpy]} <<< {2..})'"
+export FZF_CTRL_R_OPTS="--height=100% --preview-window=down:30%:noborder --preview 'file-preview - -- --language=zsh <<<\$(echo {2..})', --bind='ctrl-y:execute(${aliases[cpy]} <<< {2..})'"
 export FZF_CTRL_T_COMMAND='fd --type f --hidden --follow --exclude .git'
 export FZF_CTRL_T_OPTS="--height=100% --preview-window=right:60%:noborder"
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git' # Use fd for fuzzy finding if available.
 # Ctrl-a -> select/deselect all, Ctrl-y -> copy line, Alt-s -> sneak to line, Alt-Shift-s -> sneak to line + enter, Ctrl-p is open/close preview window.
-export FZF_DEFAULT_OPTS="--select-1 --exit-0 --preview-window=right:50% --preview '[[ -d {} ]] && tree -C -L 2 -x --noreport --dirsfirst {} || {{ [[ -e {} ]] && $_gib_bat_cmd -- {}; }} || printf {}' -m --bind='ctrl-o:execute(\$VISUAL {} </dev/tty >/dev/tty),ctrl-a:toggle-all,ctrl-s:toggle-sort,alt-w:toggle-preview-wrap,alt-s:jump,alt-up:half-page-up,alt-down:half-page-down,alt-S:jump-accept,ctrl-p:toggle-preview,ctrl-y:execute(${aliases[cpy]} <<< {})'"
+export FZF_DEFAULT_OPTS="--select-1 --exit-0 --preview-window=right:50% --preview 'file-preview {}' -m --bind='ctrl-o:execute(\$VISUAL {} </dev/tty >/dev/tty),ctrl-a:toggle-all,ctrl-s:toggle-sort,alt-w:toggle-preview-wrap,alt-s:jump,alt-up:half-page-up,alt-down:half-page-down,alt-S:jump-accept,ctrl-p:toggle-preview,ctrl-y:execute(${aliases[cpy]} <<< {})'"
 export GNUPGHOME="$XDG_DATA_HOME"/gnupg # Gpg data.
 export GRADLE_USER_HOME="$XDG_DATA_HOME"/gradle # Also contains gradle.properties (symlink from XDG_CONFIG_HOME).
 export HELM_HOME="$XDG_DATA_HOME/helm" # Move Helm data dir from ~.
@@ -51,8 +49,6 @@ export SCCACHE_DIR="$XDG_CACHE_HOME/sccache" # sccache cache dir.
 export TIME_STYLE=long-iso # See `man gls` on macOS, sets the time style for `ls -l`.
 export VIRTUAL_ENV_DISABLE_PROMPT=1 # Add the virtualenv prompt myself.
 export ZDOTDIR="${XDG_CONFIG_HOME}/zsh" # Path to zsh config files.
-
-unset _gib_bat_cmd
 
 # Less options: Tab is 4 spaces, search ignores case, enable colours, cat if less than one screen.
 # --status-column=>column to show lines matching current search or first unread line after moving

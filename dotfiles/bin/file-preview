@@ -1,0 +1,34 @@
+#!/usr/bin/env zsh
+
+set -euo pipefail
+
+# A script to preview things in the terminal, mostly used for fzf preview windows.
+
+bat_command=(
+  bat --style=numbers --color=always --pager=never --terminal-width=$FZF_PREVIEW_COLUMNS --wrap=character
+)
+
+extension=$(basename $1)
+extension=${extension#*.}
+
+# If stdin specified, assume rest of input is bat args.
+if [[ $1 == - ]]; then
+  shift
+  exec ${bat_command[@]} $@
+fi
+
+if [[ -d $1 ]]; then
+  exec tree -C -L 2 -x --noreport --dirsfirst $*
+fi
+
+case $extension in
+  png | jpg | heic) exec kitty +kitten icat $1 ;;
+  tar.gz) exec tar -tf $1 ;;
+  zip) exec unzip -l $1 ;;
+esac
+
+if [[ -e $1 ]]; then
+  exec ${bat_command[@]} $1
+fi
+
+printf $@
