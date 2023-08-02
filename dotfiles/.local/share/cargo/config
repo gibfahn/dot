@@ -12,6 +12,7 @@ nt = "nextest"
 nr = "nextest run"
 nra = "nextest run --run-ignored=all"
 
+ba = "build --all-targets" # Build tests too.
 br = "build --release"
 rr = "run --release"
 tr = "test --release"
