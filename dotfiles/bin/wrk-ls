@@ -1,0 +1,7 @@
+#!/bin/zsh
+
+set -euo pipefail
+
+if which wrk-ls-real; then
+  wrk-ls-real "$@"
+fi

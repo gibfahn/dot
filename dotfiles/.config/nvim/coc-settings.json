@@ -198,7 +198,15 @@
     "textidote-md": {
       "command": "textidote",
       "debounce": 500,
-      "args": ["--type", "md", "--check", "en", "--output", "singleline", "--no-color"],
+      "args": [
+        "--type",
+        "md",
+        "--check",
+        "en",
+        "--output",
+        "singleline",
+        "--no-color"
+      ],
       "offsetLine": 0,
       "offsetColumn": 0,
       "sourceName": "textidote",
@@ -218,7 +226,13 @@
       "command": "reek",
       "sourceName": "reek",
       "debounce": 100,
-      "args": ["--format", "json", "--force-exclusion", "--stdin-filename", "%filepath"],
+      "args": [
+        "--format",
+        "json",
+        "--force-exclusion",
+        "--stdin-filename",
+        "%filepath"
+      ],
       "parseJson": {
         "line": "lines[0]",
         "endLine": "lines[1]",
@@ -319,6 +333,11 @@
     "swift": {
       "command": "sourcekit-lsp",
       "filetypes": ["swift"]
+    },
+    "wrk": {
+      "command": "wrk-ls",
+      "trace.server": "verbose",
+      "filetypes": ["*"]
     }
   },
   "java.errors.incompleteClasspath.severity": "ignore",

@@ -328,7 +328,7 @@ map('n', '<Leader>cu', '<Plug>(coc-references)', { silent = true, noremap = fals
 map('n', '<Leader>d', '<Cmd>Bdelete<CR>') -- Close buffer without closing split,
 map('n', '<Leader>e', '<C-w>q') -- Close current split (keeps buffer).
 map('n', '<Leader>f', '<Cmd>Files<CR>') -- Search file names for file,
-map('n', '<Leader>gC', '<Cmd>e ~/.config/nvim/coc-settings.json<CR>') -- Edit colorscheme file.
+map('n', '<Leader>gC', '<Cmd>CocConfig<CR>') -- Edit colorscheme file.
 map('n', '<Leader>gG', ':Resolve<CR>|:Gcd<CR>') -- Cd to root of git directory current file is in.
 map('n', '<Leader>gQ', '<Cmd>set fo+=t<CR><Cmd>set fo?<CR>') -- Turn on auto-inserting newlines when you go over the textwidth.
 map('n', '<Leader>ga', '<Cmd>AnyJumpLastResults<CR>') -- open last closed search window again
@@ -605,8 +605,12 @@ vim.api.nvim_create_autocmd("CursorHold",
   {
     pattern = { "*" },
     -- Work around https://github.com/neoclide/coc.nvim/issues/4577
-    callback = function(opts) if (string.find(opts.file, ".log") == nil) then vim.fn
-            ['CocActionAsync']('highlight') end end
+    callback = function(opts)
+      if (string.find(opts.file, ".log") == nil) then
+        vim.fn
+            ['CocActionAsync']('highlight')
+      end
+    end
     ,
     group = gib_autogroup
   })
@@ -621,8 +625,12 @@ vim.api.nvim_create_autocmd("User",
 
 -- Reload vimrc on save.
 vim.api.nvim_create_autocmd("BufWritePost",
-  { pattern = { "*/.config/nvim/init.lua" }, command = "source $MYVIMRC", nested = true,
-    group = gib_autogroup })
+  {
+    pattern = { "*/.config/nvim/init.lua" },
+    command = "source $MYVIMRC",
+    nested = true,
+    group = gib_autogroup
+  })
 -- YAML files should be folded by indent.
 vim.api.nvim_create_autocmd("FileType",
   { pattern = { "*" }, command = "setlocal foldmethod=expr", group = gib_autogroup })
@@ -656,8 +664,11 @@ vim.api.nvim_create_autocmd("FileType",
   { pattern = { "fugitive" }, command = "nmap <buffer> <A-G> [c", group = gib_autogroup })
 -- Don't highlight tabs in Go.
 vim.api.nvim_create_autocmd("FileType",
-  { pattern = { "go" }, command = [[set listchars=tab:\ \ ,trail:·,nbsp:☠ ]],
-    group = gib_autogroup })
+  {
+    pattern = { "go" },
+    command = [[set listchars=tab:\ \ ,trail:·,nbsp:☠ ]],
+    group = gib_autogroup
+  })
 -- Open new help windows on the right,
 vim.api.nvim_create_autocmd("FileType",
   { pattern = { "help" }, command = "wincmd L", group = gib_autogroup })
@@ -667,8 +678,11 @@ vim.api.nvim_create_autocmd("FileType",
 -- Check if files modified when you open a new window, switch back to vim, or if you don't move the cursor for 100ms.
 -- Use getcmdwintype() to avoid running in the q: window (otherwise you get lots of errors).
 vim.api.nvim_create_autocmd("FocusGained,BufEnter,CursorHold,CursorHoldI",
-  { pattern = { "*" }, command = "if getcmdwintype() == '' | checktime | endif",
-    group = gib_autogroup })
+  {
+    pattern = { "*" },
+    command = "if getcmdwintype() == '' | checktime | endif",
+    group = gib_autogroup
+  })
 -- Open the quickfix window on grep.
 vim.api.nvim_create_autocmd("QuickFixCmdPost",
   { pattern = { "*grep*" }, command = "cwindow", group = gib_autogroup })
