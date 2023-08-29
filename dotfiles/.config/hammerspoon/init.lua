@@ -3,12 +3,7 @@ log.d("Loading module")
 -- Use Control+` to reload Hammerspoon config
 hs.hotkey.bind({ 'ctrl' }, '`', nil, function() hs.reload() end)
 
-function RequireIfAvailable(module)
-  log.d("Requiring " .. module .. "if available...")
-  local function requiref(module_name) require(module_name) end
-  local res = pcall(requiref, module)
-  if not (res) then log.i("Module not loaded as not found: " .. module) end
-end
+local home_dir = os.getenv("HOME")
 
 local user = os.getenv("USER")
 
@@ -19,7 +14,13 @@ if (user == "gib" or user == "brian") then
   require('hyper')
   require('control-escape')
 
-  RequireIfAvailable('wrk') -- Uses HyperMode from hyper, so require order matters.
+  for file in hs.fs.dir(home_dir) do
+    if file == "wrk" then
+      log.d("Requiring work config as ~/wrk present.")
+      require("wrk")
+    end
+  end
+
 end
 require('window-management')
 
