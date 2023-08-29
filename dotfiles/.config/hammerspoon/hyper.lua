@@ -76,11 +76,21 @@ end
 
 -- }}} Generally useful functions
 
+-- If this machine has a Slack Web configured, use that.
+local slack_app
+if hs.application.infoForBundlePath(os.getenv("HOME") .. '/Applications/Slack Web.app') ~= nil then
+  log.d("Found Slack Web App, using that...")
+  slack_app = 'Slack Web'
+else
+  log.d("Didn't find Slack Web App, using basic Slack app...")
+  slack_app = 'Slack'
+end
+
 -- {{{ Hyper-<key> -> Launch apps
 local hyperModeAppMappings = {
   -- Keys used in work config: r, shift-r
   {key = '/', app = 'Finder'}, {key = 'a', app = 'Activity Monitor'},
-  {key = 'c', app = 'Slack'}, {key = 'f', app = 'Firefox'}, {key = 'k', app = 'Calendar'},
+  {key = 'c', app = slack_app}, {key = 'f', app = 'Firefox'}, {key = 'k', app = 'Calendar'},
   {key = 'm', app = 'Mail'}, {key = 's', app = 'Spotify'}, {key = 't', app = 'Kitty'},
   {key = 'w', app = 'Workflowy'}, {key = 'x', app = 'Messenger', mods = {'alt'}}, {key = 'x', app = 'Messages'}
 }

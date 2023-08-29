@@ -4,7 +4,6 @@ log.d("Loading module")
 hs.hotkey.bind({ 'ctrl' }, '`', nil, function() hs.reload() end)
 
 local home_dir = os.getenv("HOME")
-
 local user = os.getenv("USER")
 
 require('hidutil')
