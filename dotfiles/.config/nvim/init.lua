@@ -150,7 +150,7 @@ local plugin_opts = {
 }
 
 -- Always require the wrk.lua config if ~/wrk exists.
-if vim.fn.isdirectory(home_dir .. 'wrk') ~= 0 then
+if vim.fn.isdirectory(home_dir .. '/wrk') ~= 0 then
   require("wrk")
 end
 
