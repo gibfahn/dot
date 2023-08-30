@@ -1,0 +1,13 @@
+#!/bin/zsh
+
+set -euo pipefail
+
+# Toggle whether the menu bar shows or is auto-hidden.
+# Prompts for System Events control the first time you run it.
+
+[[ "$(defaults read -g _HIHideMenuBar)" == 1 ]] && hide=false || hide=true
+
+osascript -e "
+tell application \"System Events\"
+	tell dock preferences to set autohide menu bar to $hide
+end tell"

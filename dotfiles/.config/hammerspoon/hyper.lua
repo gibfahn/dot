@@ -24,6 +24,8 @@ local message = require('status-message')
 local log = hs.logger.new('hyper.lua', 'debug')
 log.d("Loading module")
 
+local home_dir = os.getenv("HOME")
+
 if (hs.eventtap.isSecureInputEnabled()) then
   hs.notify.new({title = 'Hammerspoon', informativeText = '⚠️  Secure input is enabled.', withdrawAfter = 0,
     otherButtonTitle = "Okay"}):send()
@@ -78,7 +80,7 @@ end
 
 -- If this machine has a Slack Web configured, use that.
 local slack_app
-if hs.application.infoForBundlePath(os.getenv("HOME") .. '/Applications/Slack Web.app') ~= nil then
+if hs.application.infoForBundlePath(home_dir .. '/Applications/Slack Web.app') ~= nil then
   log.d("Found Slack Web App, using that...")
   slack_app = 'Slack Web'
 else
@@ -246,6 +248,23 @@ HyperMode:bind({'shift'}, 'm', function()
   end)
 end)
 -- }}} Hyper-⌥-m -> Format selected Message ID as link and copy to clipboard.
+
+-- {{{ Hyper-⌘-m -> Hide or show the menu bar.
+HyperMode:bind({'cmd'}, 'm', function()
+  log.d("Toggling menu bar hide/show...")
+
+  hs.task.new(home_dir .. "/bin/toggle_menu_bar", function(exitCode, stdOut, stdErr)
+    hs.notify.new({
+      title = 'Toggling menu bar hide/show...',
+      informativeText = exitCode .. " " .. stdOut,
+      stdErr,
+      withdrawAfter = 3
+    }):send()
+  end
+
+  ):start()
+end)
+-- }}} Hyper-⌘-m -> Hide or show the menu bar.
 
 -- {{{ Hyper-p -> Screenshot of selected area to clipboard.
 HyperMode:bind({}, 'p', function() hs.eventtap.keyStroke({'cmd', 'ctrl', 'shift'}, '4') end)
