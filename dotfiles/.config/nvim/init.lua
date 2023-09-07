@@ -158,10 +158,10 @@ end
 vim.api.nvim_create_user_command(
   'PU',
   function(_)
+    require("lazy").sync(plugin_opts)
     if vim.fn.exists(":TSUpdateSync") ~= 0 then
       vim.cmd "TSUpdateSync"
     end
-    require("lazy").sync(plugin_opts)
   end, { desc = "Updating plugins..." }
 )
 
