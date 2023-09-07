@@ -175,6 +175,7 @@
     --preview \"git show ${@:-@} -- \\$(sed -E -e 's/^\\s*([^\\|]*)\\s*\\|.*/\\1/' -e 's/(.*)\\{(.*) => (.*)\\}(.*)/\\1\\2\\4 \\1\\3\\4/' <<< {}) | delta \" \
     | awk '{print $1}' #"
   st  = stash
+  sta = stash --include-untracked # Like `add -A` but with stash.
   # Interactive log of $@.
   sti = "!git stash list --color=always \"$@\" \
     | fzf --ansi -m --no-sort --reverse --tiebreak=index \
