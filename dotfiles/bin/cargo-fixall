@@ -3,13 +3,17 @@
 set -eu
 
 usage() {
-echo "$(tput bold; tput setaf 74)$ZSH_ARGZERO [-h|--help] [-v|--version]$(tput sgr0)
+  echo "$(
+    tput bold
+    tput setaf 74
+  )$ZSH_ARGZERO [-h|--help] [-v|--version]$(tput sgr0)
 
 cargo fixall: runs cargo and clippy fixup commands, then the formatter.
 "
 }
 
 main() {
+  set -x
   git add --all
   cargo +nightly fix --allow-staged
   git add --all
