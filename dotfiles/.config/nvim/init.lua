@@ -66,7 +66,7 @@ vim.g.lightline = {
   component_visible_condition = {
     truncate_here = 0,
     fileformat = '&ff&&&ff!="unix"',
-    fileencoding = '&fenc&&&fenc!="utf-8"'
+    fileencoding = '&fenc&&&fenc!="utf-8"',
   },
   component_type = {
     coc_error = 'error',
@@ -76,13 +76,18 @@ vim.g.lightline = {
     coc_fix = 'middle',
     truncate_here = 'raw'
   },
-  component_function = { currentfunction = 'CocCurrentFunction', gitbranch = 'FugitiveHead' },
+  component_function = {
+    currentfunction = 'CocCurrentFunction',
+    gitbranch = 'FugitiveHead',
+    wordcount = 'WordCount',
+    charcount = 'CharCount',
+  },
   active = {
     left = {
       { 'mode',      'paste' }, { 'readonly', 'relativepath', 'modified' }, { 'gitbranch' }, { 'truncate_here' },
       { 'coc_error', 'coc_warning', 'coc_info', 'coc_hint' }
     },
-    right = { { 'lineinfo' }, { 'percent' }, { 'fileformat', 'fileencoding', 'filetype' }, { 'currentfunction' } }
+    right = { { 'lineinfo' }, { 'percent', 'wordcount', 'charcount' }, { 'fileformat', 'fileencoding', 'filetype' }, { 'currentfunction' } }
   },
   inactive = { left = { { 'relativepath' } }, right = { { 'lineinfo' }, { 'percent' } } },
   tabline = { left = { { 'tabs' } }, right = { { 'close' } } }
@@ -392,6 +397,25 @@ end
 
 -- {{{ Vimscript Commands and Functions
 vim.cmd([[
+  " https://github.com/itchyny/lightline.vim/issues/295
+  function WordCount()
+    let g:word_count=wordcount().words .. 'w'
+    if has_key(wordcount(),'visual_words')
+      let g:word_count=wordcount().visual_words.'w' " count selected words
+    endif
+    return g:word_count
+  endfunction
+
+  " https://github.com/itchyny/lightline.vim/issues/295
+  function CharCount()
+    let g:char_count=wordcount().chars.'c'
+    if has_key(wordcount(),'visual_chars')
+      let g:char_count=wordcount().visual_chars.'c' " count selected chars
+    endif
+    return g:char_count
+  endfunction
+
+
   function! s:CallRipGrep(...) abort
     call fzf#vim#grep('rg --vimgrep --color=always --smart-case --hidden --glob !.git -F ' . shellescape(join(a:000, ' ')), 1,
           \ fzf#vim#with_preview({ 'options': ['-m', '--bind=ctrl-a:toggle-all,alt-j:jump,alt-k:jump-accept']}, 'right:50%', 'ctrl-p'), 1)

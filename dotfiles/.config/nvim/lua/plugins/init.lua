@@ -16,7 +16,6 @@ return {
   'junegunn/fzf.vim', -- Try :Files, :GFiles? :Buffers :Lines :History :Commits :BCommits
   'junegunn/vim-peekaboo', -- Pop up register list when pasting/macroing.
   'kana/vim-operator-user', -- Make it easier to define operators.
-  { 'kana/vim-textobj-line',           dependencies = { 'kana/vim-textobj-user' }, }, -- Adds `il` and `al` text objects for current line.
   'kana/vim-textobj-user', -- Allows you to create custom text objects (used in vim-textobj-line).
   'sedm0784/vim-resize-mode', -- Continuous resizing.
   'simnalamburt/vim-mundo', -- Graphical undo tree (updated fork of Gundo).
@@ -29,6 +28,7 @@ return {
   'tpope/vim-unimpaired', -- [ and ] mappings (help unimpaired).
   { 'cespare/vim-toml',                ft = 'toml' }, -- Toml syntax highlighting.
   { 'godlygeek/tabular',               cmd = 'Tabularize' }, -- Make tables easier (:help Tabular).
+  { 'kana/vim-textobj-line',           dependencies = { 'kana/vim-textobj-user' }, }, -- Adds `il` and `al` text objects for current line.
   { 'moll/vim-bbye',                   cmd = 'Bdelete' }, -- Delete buffer without closing split.
   { 'mzlogin/vim-markdown-toc',        ft = 'markdown',                                      cmd = 'GenTocGFM' }, -- Markdown Table of Contents.
   { 'nanotee/zoxide.vim',              cmd = 'Zi' }, -- Use zoxide to quickly jump to directories.
