@@ -9,7 +9,7 @@ return {
   'chrisbra/Recover.vim', -- add a diff option when a swap file is found.
   'coderifous/textobj-word-column.vim', -- Adds ic/ac and iC/aC motions to block select word column in paragraph.
   'fweep/vim-zsh-path-completion', -- Nicer file browser plugin.
-  'gibfahn/vim-gib', -- Use vim colorscheme.
+  'gibfahn/gib-noir.nvim', -- Use my neovim colorscheme.
   'honza/vim-snippets', -- Work around https://github.com/neoclide/coc-snippets/issues/126 .
   'itchyny/lightline.vim', -- Customize statusline and tabline.
   'junegunn/fzf.vim', -- Try :Files, :GFiles? :Buffers :Lines :History :Commits :BCommits

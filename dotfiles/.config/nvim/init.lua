@@ -146,7 +146,7 @@ vim.opt.wildmode = { "list", "longest" } -- 1st Tab completes to longest common 
 
 local plugin_opts = {
   install = {
-    colorscheme = { "gib" },
+    colorscheme = { "gib-noir" },
   },
 }
 
@@ -674,7 +674,7 @@ vim.api.nvim_create_autocmd("BufReadPost",
 
 -- {{{ Package Setup
 
-vim.cmd 'colorscheme gib'
+vim.cmd 'colorscheme gib-noir'
 
 -- Set up Treesitter languages.
 require 'nvim-treesitter.configs'.setup {
