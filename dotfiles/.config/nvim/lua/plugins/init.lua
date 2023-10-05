@@ -41,6 +41,19 @@ return {
   { dir = '~/.local/share/fzf',        name = 'fzf',                                         build = './install, --bin' }, -- :h fzf
 
   {
+    "folke/noice.nvim", -- Fancier UI for messages, cmdline, popups
+    event = "VeryLazy",
+    opts = {
+      -- add any options here
+    },
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+      "rcarriga/nvim-notify",
+    }
+  },
+
+
+  {
     "folke/flash.nvim",
     event = "VeryLazy",
     opts = {
