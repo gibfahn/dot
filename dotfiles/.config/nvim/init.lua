@@ -560,14 +560,6 @@ vim.cmd([[
 -- AutoCmd group for my custom commands.
 local gib_autogroup = vim.api.nvim_create_augroup("gib_autogroup", { clear = true })
 
--- Create autocmd triggered on ColorScheme change.
-vim.api.nvim_create_autocmd('ColorScheme', {
-  callback = function()
-    vim.api.nvim_set_hl(0, 'LeapBackdrop', { fg = '#707070' }) -- Grey out leap search area.
-  end,
-  group = gib_autogroup,
-})
-
 -- Bats is a shell test file type.
 vim.api.nvim_create_autocmd("BufNewFile,BufRead",
   { pattern = { "*.bats" }, command = "set filetype=sh", group = gib_autogroup })
@@ -711,12 +703,6 @@ require 'nvim-treesitter.configs'.setup {
   },
   highlight = { enable = true }, indent = { enable = true }
 }
-
--- https://github.com/ggandor/leap.nvim
---   s|S char1 (char2|shortcut)? (<tab>|<s-tab>)* label?
--- (in Operator-pending mode the search is invoked with z/Z not s/S)
--- `:h leap` for more info.
-require('leap').set_default_keymaps()
 
 -- }}} Package Setup
 

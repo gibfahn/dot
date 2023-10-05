@@ -9,7 +9,6 @@ return {
   'chrisbra/Recover.vim', -- add a diff option when a swap file is found.
   'coderifous/textobj-word-column.vim', -- Adds ic/ac and iC/aC motions to block select word column in paragraph.
   'fweep/vim-zsh-path-completion', -- Nicer file browser plugin.
-  'ggandor/leap.nvim', -- Quickest way to jump to any char on the screen (alternative to easymotion/sneak/hop/lightspeed/pounce).
   'gibfahn/vim-gib', -- Use vim colorscheme.
   'honza/vim-snippets', -- Work around https://github.com/neoclide/coc-snippets/issues/126 .
   'itchyny/lightline.vim', -- Customize statusline and tabline.
@@ -41,5 +40,27 @@ return {
   { 'tpope/vim-abolish',               cmd = { 'Abolish', 'Subvert', 'S' } }, -- Work with variants of words (replacing, capitalizing etc).
   { 'tpope/vim-sleuth',                dependencies = { 'vim-polyglot' } }, -- Automatically detect indentation.
   { dir = '~/.local/share/fzf',        name = 'fzf',                                         build = './install, --bin' }, -- :h fzf
+
+  {
+    "folke/flash.nvim",
+    event = "VeryLazy",
+    opts = {
+      labels = "arstdhneioqwfpgjluyzxcvbkm1234567890", -- Colemak order, include numbers
+      jump = {
+        autojump = true, -- automatically jump when there is only one match
+        inclusive = false, -- delete up to the char entered, not including it.
+      },
+      label = {
+        reuse = "all", -- flash tries to re-use labels that were already assigned to a position
+      },
+    },
+    keys = {
+      { "s",     mode = { "n", "x", "o" }, function() require("flash").jump() end,              desc = "Flash" },
+      { "S",     mode = { "n", "x", "o" }, function() require("flash").treesitter() end,        desc = "Flash Treesitter" },
+      { "r",     mode = "o",               function() require("flash").remote() end,            desc = "Remote Flash" },
+      { "R",     mode = { "o", "x" },      function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
+      { "<c-s>", mode = { "c" },           function() require("flash").toggle() end,            desc = "Toggle Flash Search" },
+    },
+  },
 
 }
