@@ -37,9 +37,6 @@ vim.g.mapleader = ' ' -- use space as a the leader key
 vim.g.mundo_preview_bottom = 1 -- Undo diff preview on bottom.
 vim.g.mundo_right = 1 -- Undo window on right.
 vim.g.peekaboo_window = "vert bo 50new" -- Increase peekaboo window width to 50.
-vim.g.surround_97 =
-"\1before: \1\r\2after: \2" -- yswa surrounds with specified text (prompts for before/after).
-vim.g.surround_no_mappings = 1 -- Manually map surround, see SurroundOp() function.
 vim.g.terminal_scrollback_buffer_size = 100000 -- Store lots of terminal history (neovim-only).
 
 -- Extensions (plugins) for CoC language client.
@@ -329,10 +326,8 @@ map('n', 'N', '(v:searchforward) ? "N" : "n"', { expr = true }) -- N is always "
 map('n', 'Q', '<nop>') -- Q unused (disabled to avoid accidental triggering).
 map('n', 'gr', '<Plug>(operator-ripgrep-root)', { noremap = false }) -- Ripgrep search for operator.
 map('n', 'n', '(v:searchforward) ? "n" : "N"', { expr = true }) -- n is always "next one down" even if you hit #
-map('o', 'S', "'<esc>'.SurroundOp('S')", { expr = true, noremap = false }) --
 map('o', 'af', '<Plug>(coc-funcobj-a)', { noremap = false }) -- select around function (requires 'textDocument.documentSymbol')
 map('o', 'if', '<Plug>(coc-funcobj-i)', { noremap = false }) -- select in function (requires 'textDocument.documentSymbol')
-map('o', 's', "'<esc>'.SurroundOp('s')", { expr = true, noremap = false }) --
 map('t', '<A-e>', [[<C-\><C-n><C-w>k]]) -- Switch up a window in terminal,
 map('t', '<A-h>', [[<C-\><C-n><C-w>h]]) -- Switch left a window in terminal,
 map('t', '<A-i>', [[<C-\><C-n><C-w>l]]) -- Switch right a window in terminal.
@@ -398,7 +393,7 @@ end
 -- {{{ Vimscript Commands and Functions
 vim.cmd([[
   " https://github.com/itchyny/lightline.vim/issues/295
-  function WordCount()
+  function! WordCount()
     let g:word_count=wordcount().words .. 'w'
     if has_key(wordcount(),'visual_words')
       let g:word_count=wordcount().visual_words.'w' " count selected words
@@ -407,7 +402,7 @@ vim.cmd([[
   endfunction
 
   " https://github.com/itchyny/lightline.vim/issues/295
-  function CharCount()
+  function! CharCount()
     let g:char_count=wordcount().chars.'c'
     if has_key(wordcount(),'visual_chars')
       let g:char_count=wordcount().visual_chars.'c' " count selected chars
@@ -441,19 +436,6 @@ vim.cmd([[
     let buff = bufnr('%') " Save buffer number of current buffer.
     execute "normal! \<c-w>p:b " buff "\<CR>"| " Change to previous buffer and open saved buffer.
     call setpos('.', pos) " Set cursor position to what is was before.
-  endfunction
-
-  " Make vim-surround work in operator-pending mode, so the cursor changes when you press e.g. ys.
-  " Requires custom mapping and disabling default mappings (SurroundOp).
-  function! SurroundOp(char)
-      if v:operator ==# 'd'
-          return "\<plug>D" . a:char . "urround"
-      elseif v:operator ==# 'c'
-          return "\<plug>C" . a:char . "urround"
-      elseif v:operator ==# 'y'
-          return "\<plug>Y" . a:char . "urround"
-      endif
-      return ''
   endfunction
 
   " Returns the function the cursor is currently in, used in lightline status bar.

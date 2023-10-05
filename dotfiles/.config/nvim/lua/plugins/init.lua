@@ -23,7 +23,6 @@ return {
   'tpope/vim-repeat', -- Allows you to use . with plugin mappings.
   'tpope/vim-rhubarb', -- GitHub support.
   'tpope/vim-rsi', -- Insert/commandline readline-style mappings, e.g. C-a for beginning of line.
-  'tpope/vim-surround', -- Add/mod/remove surrounding chars.
   'tpope/vim-unimpaired', -- [ and ] mappings (help unimpaired).
   { 'cespare/vim-toml',                ft = 'toml' }, -- Toml syntax highlighting.
   { 'godlygeek/tabular',               cmd = 'Tabularize' }, -- Make tables easier (:help Tabular).
@@ -63,4 +62,47 @@ return {
     },
   },
 
+  {
+    "kylechui/nvim-surround", -- Add/change/remove surrounding pairs of characters.
+    version = "*",
+    event = "VeryLazy",
+    opts = {
+      -- Use z for surround because s is for flash.
+      keymaps = {
+        normal = "yz",
+        normal_cur = "yzz",
+        normal_line = "yZ",
+        normal_cur_line = "yZZ",
+        visual = "Z",
+        visual_line = "gZ",
+        delete = "dz",
+        change = "cz",
+      },
+      surrounds = {
+        -- Add markdown link with link as contents of system clipboard.
+        -- <https://github.com/kylechui/nvim-surround/discussions/53#discussioncomment-3134891>
+        ["l"] = {
+          add = function()
+            local clipboard = vim.fn.getreg("+"):gsub("\n", "")
+            return {
+              { "[" },
+              { "](" .. clipboard .. ")" },
+            }
+          end,
+          find = "%b[]%b()",
+          delete = "^(%[)().-(%]%b())()$",
+          change = {
+            target = "^()()%b[]%((.-)()%)$",
+            replacement = function()
+              local clipboard = vim.fn.getreg("+"):gsub("\n", "")
+              return {
+                { "" },
+                { clipboard },
+              }
+            end,
+          },
+        },
+      },
+    },
+  },
 }
