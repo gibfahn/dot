@@ -8,16 +8,28 @@ local user = os.getenv("USER")
 
 require('hidutil')
 
+local isWrkMachine = false
+for file in hs.fs.dir(home_dir) do
+  if file == "wrk" then
+    log.d("Requiring work config as ~/wrk present.")
+    isWrkMachine = true
+  end
+end
+
 if (user == "gib" or user == "brian") then
   log.d("Loading " .. user .. " configuration...")
+
+  -- Work app mappings, used in hyper.lua below.
+  WrkHyperModeAppMappings = nil
+  if isWrkMachine then
+    WrkHyperModeAppMappings = require('wrk-app-mappings')
+  end
+
   require('hyper')
   require('control-escape')
 
-  for file in hs.fs.dir(home_dir) do
-    if file == "wrk" then
-      log.d("Requiring work config as ~/wrk present.")
-      require("wrk")
-    end
+  if isWrkMachine then
+    require("wrk")
   end
 
 end
@@ -27,6 +39,6 @@ require('window-management')
 RemapKeys()
 
 -- Always connect to VPN on first loading Hammerspoon.
-if (user == "gib") then CallVpn("corporate") end
+if isWrkMachine then CallVpn("corporate") end
 
 hs.notify.new({ title = 'Hammerspoon', informativeText = '✅ ' .. user .. ' config restored', withdrawAfter = 3 }):send()

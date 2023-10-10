@@ -78,31 +78,112 @@ end
 
 -- }}} Generally useful functions
 
--- If this machine has a Slack Web configured, use that.
-local slack_app
-if hs.application.infoForBundlePath(home_dir .. '/Applications/Slack Web.app') ~= nil then
-  log.d("Found Slack Web App, using that...")
-  slack_app = 'Slack Web'
-else
-  log.d("Didn't find Slack Web App, using basic Slack app...")
-  slack_app = 'Slack'
+-- Launch specified app, switch focus to app, or rotate to next window of app, or next app.
+-- Modified version of <https://rakhesh.com/coding/using-hammerspoon-to-switch-apps/>
+local function launchOrFocusOrRotate(apps)
+  log.df("Opening or focusing apps: [%s]", table.concat(apps, ", "))
+  -- Get the first app from the list
+  local app = apps[1]
+
+  local focusedWindow = hs.window.focusedWindow()
+  -- Output of the above is an hs.window object
+
+  -- I can get the application it belongs to via the :application() method
+  -- See https://www.hammerspoon.org/docs/hs.window.html#application
+  local focusedWindowApp = focusedWindow:application()
+  -- This returns an hs.application object
+
+  -- Get the name of this application; this isn't really useful for us as launchOrFocus needs the app name on disk
+  -- I do use it below, further on...
+  local focusedWindowAppName = focusedWindowApp:name()
+
+  -- This gives the path - /Applications/<application>.app
+  local focusedWindowPath = focusedWindowApp:path()
+
+  -- I need to extract <application> from that
+  local appNameOnDisk = string.gsub(focusedWindowPath,"/Applications/", "")
+  appNameOnDisk = string.gsub(appNameOnDisk,".app", "")
+  -- Finder has this as its path
+  appNameOnDisk = string.gsub(appNameOnDisk,"/System/Library/CoreServices/","")
+  appNameOnDisk = string.lower(appNameOnDisk)
+
+  local currentIndex = nil
+  for i,v in ipairs(apps) do
+    if string.lower(v) == appNameOnDisk then
+      currentIndex = i
+      break
+    end
+  end
+  log.df("appNameOnDisk: %s", appNameOnDisk)
+  log.df("currentIndex: %s", currentIndex)
+  log.df("focusedWindow: %s", focusedWindow)
+  log.df("focusedWindowApp: %s", focusedWindowApp)
+  log.df("focusedWindowPath: %s", focusedWindowPath)
+
+  -- If not currently focused, try to find the next window.
+  if currentIndex == nil then
+    hs.application.launchOrFocus(app)
+    return
+  end
+
+  -- hs.application.get needs the name as per hs.application:name() and not the name on disk
+  -- It can also take pid or bundle, but that doesn't help here
+  -- Since I have the name already from above, I can use that though
+  local appWindows = hs.application.get(focusedWindowAppName):allWindows()
+
+  -- https://www.hammerspoon.org/docs/hs.application.html#allWindows
+  -- A table of zero or more hs.window objects owned by the application. From the current space.
+
+  -- Does the app have more than 1 window, if so switch between them
+  if #appWindows > 1 then
+    -- It seems that this list order changes after one window get focused,
+    -- Let's directly bring the last one to focus every time
+    -- https://www.hammerspoon.org/docs/hs.window.html#focus
+    if app == "Finder" then
+      -- If the app is Finder the window count returned is one more than the actual count, so I subtract
+      appWindows[#appWindows-1]:focus()
+    else
+      appWindows[#appWindows]:focus()
+    end
+    return
+  end
+  -- The app doesn't have more than one window, but we are focussed on it and still pressing the key
+  -- So let's switch to the next app in that list if present
+
+  -- The next app in the list after the currently found app.
+  local newIndex = currentIndex + 1
+  if currentIndex == #apps then
+    newIndex = 1
+  end
+  app = apps[newIndex]
+  hs.application.launchOrFocus(app)
 end
 
 -- {{{ Hyper-<key> -> Launch apps
 local hyperModeAppMappings = {
   -- Keys used in work config: r, shift-r
   {key = '/', app = 'Finder'}, {key = 'a', app = 'Activity Monitor'},
-  {key = 'c', app = slack_app}, {key = 'f', app = 'Firefox'}, {key = 'k', app = 'Calendar'},
+  {key = 'c', apps = {'Slack', 'Slack Web'}}, {key = 'f', app = 'Firefox'}, {key = 'k', app = 'Calendar'},
   {key = 'm', app = 'Mail'}, {key = 's', app = 'Spotify'}, {key = 't', app = 'Kitty'},
   {key = 'w', app = 'Workflowy'}, {key = 'x', app = 'Messenger', mods = {'alt'}}, {key = 'x', app = 'Messages'}
 }
+-- Add in wrk mappings if present.
+if WrkHyperModeAppMappings ~= nil then
+  for _,val in ipairs(WrkHyperModeAppMappings) do
+    table.insert(hyperModeAppMappings, val)
+  end
+end
+
 for _, mapping in ipairs(hyperModeAppMappings) do
+  local apps = mapping.apps
+  if apps == nil then
+    apps = {mapping.app}
+  end
   HyperMode:bind(
     mapping.mods,
     mapping.key,
     function()
-      log.df("Hyper+%s pressed, opening or focusing app %s", mapping.key, mapping.app)
-      hs.application.launchOrFocus(mapping.app)
+      launchOrFocusOrRotate(apps)
     end
   )
 end
