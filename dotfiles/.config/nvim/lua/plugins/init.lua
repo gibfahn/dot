@@ -60,7 +60,6 @@ return {
       labels = "arstdhneioqwfpgjluyzxcvbkm1234567890", -- Colemak order, include numbers
       jump = {
         autojump = true, -- automatically jump when there is only one match
-        inclusive = false, -- delete up to the char entered, not including it.
       },
       label = {
         reuse = "all", -- flash tries to re-use labels that were already assigned to a position
