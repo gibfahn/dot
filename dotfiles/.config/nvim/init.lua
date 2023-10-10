@@ -542,7 +542,7 @@ vim.cmd([[
 local gib_autogroup = vim.api.nvim_create_augroup("gib_autogroup", { clear = true })
 
 -- Bats is a shell test file type.
-vim.api.nvim_create_autocmd("BufNewFile,BufRead",
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead", },
   { pattern = { "*.bats" }, command = "set filetype=sh", group = gib_autogroup })
 
 -- Work around https://github.com/fannheyward/coc-rust-analyzer/issues/1113
@@ -631,7 +631,7 @@ vim.api.nvim_create_autocmd("FileType",
   { pattern = { "json" }, command = [[syntax match Comment +\/\/.\+$+]], group = gib_autogroup })
 -- Check if files modified when you open a new window, switch back to vim, or if you don't move the cursor for 100ms.
 -- Use getcmdwintype() to avoid running in the q: window (otherwise you get lots of errors).
-vim.api.nvim_create_autocmd("FocusGained,BufEnter,CursorHold,CursorHoldI",
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" },
   {
     pattern = { "*" },
     command = "if getcmdwintype() == '' | checktime | endif",
