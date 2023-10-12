@@ -9,37 +9,15 @@ tap "gibfahn/tap", "https://github.com/gibfahn/homebrew-tap" # My personal tap f
 
 # brew "asciinema"                         # Screen recorder for the terminal.
 # brew "bandwhich"                         # See what's using bandwidth on your machine.
-# brew "bash-completion"                   # Generally useful bash completions.
-# brew "ccache"                            # Speeds up C/C++ recompilation.
-# brew "certbot"                           # LetsEncrypt.
-# brew "cmake"                             # Commonly-used meta build system.
-# brew "ctags"                             # Used for autocomplete in Vim (etc).
 # brew "exercism"                          # Learn coding languages.
-# brew "gng"                               # Wrapper around ./gradlew for gradle projects (gw and gng).
-# brew "gnutls"                            # Provides gnutls-cli for setting up TLS connections.
 # brew "graphviz"                          # Gives you the `dot` tool for generating diagrams.
-# brew "groovy"                            # Helpful for testing Jenkins scripts.
 # brew "hexyl"                             # Hex viewer in Rust.
-# brew "httpie"                            # Alternative to curl, `http` binary.
-# brew "ipython"                           # Interactive python shell.
-# brew "kakoune"                           # Nicer but WIP alternative to neovim.
-# brew "kubernetes-helm"                   # Package manager for Docker.
-# brew "ninja"                             # Google meta build system (used in V8).
-# brew "postgresql"                        # Solid database.
 # brew "pv"                                # Show data flow through bash pipes.
-# brew "redis"                             # In-memory key-object store.
-# brew "speedtest-cli"                     # Check network speed from the command-line.
-# brew "tmux"                              # Terminal multiplexer.
 # brew "xsv"                               # csv manipulator.
 # cask "balenaetcher"                      # Flash disk images (e.g. Linux bootable USB sticks).
 # cask "disk-inventory-x"                  # Graphical view of what's taking up disk space.
-# cask "font-fira-code"                    # Nicer programming font option 1.
-# cask "font-source-code-pro"              # Nicer programming font option 3.
 # cask "geektool"                          # Display things on Desktop (I have a todo list).
 # cask "grandperspective"                  # Alternative to disk-inventory-x, shows disk space usage.
-# cask "vagrant"                           # Quick command-line image spin-up.
-# cask "virtualbox"                        # Manage VMs (Linux or Windows).
-# cask "vulkan-sdk"                        # Use the vulkan graphics APIs on macOS.
 brew "bat"                               # Nicer cat with syntax highlighting etc.
 brew "bazelisk"                          # Easily use the latest version of bazel.
 brew "binutils"                          # GNU versions of tools for interacting with binaries (nm, strings etc).
@@ -82,7 +60,6 @@ brew "wget"                              # Alternative to curl for downloading f
 
 # Brew casks
 
-# cask "firefox-nightly"                   # For those sweet Rust-based improvements.
 # cask "gimp"                              # Heavyweight photo editor.
 # cask "intellij-idea-ce"                  # Java-oriented IDE (good for debugging).
 # cask "meld"                              # Visual file diffing tool.
