@@ -1,0 +1,19 @@
+#!/usr/bin/env zsh
+
+set -euo pipefail
+
+set -x
+
+# OS is darwin or we don't run.
+[[ $OSTYPE == darwin* ]] || exit 204
+
+loginwindow_prefs=~/Library/Preferences/ByHost/com.apple.loginwindow*
+
+# If we can't find the file, we probably already nuked the preferences.
+if [[ ! -f $loginwindow_prefs ]]; then
+  exit 204
+fi
+
+sudo chown root ~/Library/Preferences/ByHost/com.apple.loginwindow*
+
+sudo chmod 000 ~/Library/Preferences/ByHost/com.apple.loginwindow*

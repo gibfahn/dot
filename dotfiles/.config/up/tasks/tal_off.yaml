@@ -1,0 +1,4 @@
+# Disable Transparent App Lifecycle (re-opening apps on reboot).
+run_if_cmd: ["/bin/sh", "-cex", '[ "$(whoami)" = gib -a "$(uname)" = Darwin ] || exit 204']
+
+run_cmd: ["${dot_dir}/up/run/tal_off"]
