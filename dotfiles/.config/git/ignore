@@ -12,6 +12,10 @@
 # VirtualEnvs
 /.venv/
 
+# Vim per-project languageserver config.
+# I think coc.nvim specific.
+/.vim/
+
 # Bazel build dependencies (no leading slash as you can multiple bazel projects in one repo).
 .bazel/
 bazel-out
