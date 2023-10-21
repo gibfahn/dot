@@ -239,6 +239,27 @@ sda() {
   "${find[@]}" | "${replace[@]}"
 }
 
+# Rename everything in the current directory according to provided sed expression. Use `--` to pass args to fd.
+# e.g. 'sdr s/foo/bar/g', 'sdr --hidden -- s/foo/bar/g'
+sdr() {
+  local arg find=() replace=()
+  for arg in "$@"; do
+    if [[ $arg == -- ]]; then
+      find=("${replace[@]}")
+      replace=()
+    else
+      replace+=("$arg")
+    fi
+  done
+  find=()
+  for file_path in "${(@f)$(fd --type file --hidden --exclude .git "${find[@]}")}"; do
+    new_path=$(gsed "${replace[@]}" <<<"$file_path")
+    if [[ $file_path != "$new_path" ]]; then
+      mv -v $file_path $new_path
+    fi
+  done
+}
+
 # Copy last command.
 alias clc="fc -ln -1 | sed -e 's/\\\\n/\\n/g' -e 's/\\\\t/\\t/g' | ${=aliases[cpy]}" # "
 # Run last command and copy the command and its output.
