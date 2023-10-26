@@ -41,6 +41,15 @@ return {
   { dir = '~/.local/share/fzf',        name = 'fzf',                                         build = './install, --bin' }, -- :h fzf
 
   {
+    "rcarriga/nvim-notify", -- Notification plugin used by noice.
+    event = "VeryLazy",
+    opts = {
+      top_down = false, -- Notifications start at the bottom to stay out of your way.
+    },
+  },
+
+
+  {
     "folke/noice.nvim", -- Fancier UI for messages, cmdline, popups
     event = "VeryLazy",
     opts = {
