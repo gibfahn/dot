@@ -147,6 +147,27 @@ mac_recent_audio_notifications() {
   log show --info --last 30m --predicate 'senderImagePath = "/usr/sbin/systemsoundserverd"' --style compact | awk '/Incoming Request/ {print $1 ":" $2 " " $14}'
 }
 
+# Extract an OCI Archive to a local directory for debugging (doesn't handle everything).
+oci_extract() {
+  setopt local_options err_return no_unset
+  tarball=${1:?Missing argument #1: docker tarball}
+  local tempdir=$(mktemp -d) exit_code=0
+
+  tar -xzf $tarball -C $tempdir
+  cd $tempdir
+  mkdir root
+
+  cat manifest.json | jq -r '.[].Layers[]' | while read layer; do
+    if ! tar -xzf $layer -C root; then
+      echo "Encountered error while extracting layer - continuing on best-effort basis"
+      exit_code=1
+    fi
+  done
+
+  echo "Docker image extracted in: $tempdir/root"
+  return $exit_code
+}
+
 # Clone repo and cd into path (can't be in git config as we cd).
 gcl() {
   local clone_dir ret
