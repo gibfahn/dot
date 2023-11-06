@@ -27,8 +27,12 @@ log.d("Loading module")
 local home_dir = os.getenv("HOME")
 
 if (hs.eventtap.isSecureInputEnabled()) then
-  hs.notify.new({title = 'Hammerspoon', informativeText = '⚠️  Secure input is enabled.', withdrawAfter = 0,
-    otherButtonTitle = "Okay"}):send()
+  hs.notify.new({
+    title = 'Hammerspoon',
+    informativeText = '⚠️  Secure input is enabled.',
+    withdrawAfter = 0,
+    otherButtonTitle = "Okay"
+  }):send()
 end
 
 -- {{{ F17 -> Hyper Key
@@ -80,131 +84,74 @@ end
 
 -- Launch specified app, switch focus to app, or rotate to next window of app, or next app.
 -- Modified version of <https://rakhesh.com/coding/using-hammerspoon-to-switch-apps/>
-local function launchOrFocusOrRotate(apps)
+local function switchToApp(apps)
   log.df("Opening or focusing apps: [%s]", table.concat(apps, ", "))
-  -- Get the first app from the list
-  local app = apps[1]
+  if #apps == 1 then
+    log.df("Only one app in list, switching to %s", apps[1])
+    hs.application.launchOrFocus(apps[1])
+    return
+  end
 
-  local focusedWindow = hs.window.focusedWindow()
-  -- Output of the above is an hs.window object
-
-  -- I can get the application it belongs to via the :application() method
   -- See https://www.hammerspoon.org/docs/hs.window.html#application
-  local focusedWindowApp = focusedWindow:application()
-  -- This returns an hs.application object
-
-  -- Get the name of this application; this isn't really useful for us as launchOrFocus needs the app name on disk
-  -- I do use it below, further on...
-  local focusedWindowAppName = focusedWindowApp:name()
-
-  -- This gives the path - /Applications/<application>.app
-  local focusedWindowPath = focusedWindowApp:path()
-
-  -- I need to extract <application> from that
-  local appNameOnDisk = string.gsub(focusedWindowPath,"/Applications/", "")
-  appNameOnDisk = string.gsub(appNameOnDisk,".app", "")
-  -- Finder has this as its path
-  appNameOnDisk = string.gsub(appNameOnDisk,"/System/Library/CoreServices/","")
-  appNameOnDisk = string.lower(appNameOnDisk)
+  -- This gives the path - /path/to/<application>.app.
+  local focusedWindowPath = hs.window.focusedWindow():application():path()
+  -- Extract <application> from the path. This isn't the same as the name the application gives
+  -- itself.
+  local focusedApp = string.lower(string.gsub(focusedWindowPath, ".*/([^/]*).app", "%1"))
 
   local currentIndex = nil
-  for i,v in ipairs(apps) do
-    if string.lower(v) == appNameOnDisk then
+  for i, v in ipairs(apps) do
+    if string.lower(v) == focusedApp then
       currentIndex = i
       break
     end
   end
-  log.df("appNameOnDisk: %s", appNameOnDisk)
-  log.df("currentIndex: %s", currentIndex)
-  log.df("focusedWindow: %s", focusedWindow)
-  log.df("focusedWindowApp: %s", focusedWindowApp)
-  log.df("focusedWindowPath: %s", focusedWindowPath)
+  log.df("Focused app: %s, currentIndex: %s, focusedWindowPath: %s", focusedApp, currentIndex, focusedWindowPath)
 
-  -- If not currently focused, try to find the next window.
+  -- If none of the apps in the list are currently focused, select the first app from the list.
   if currentIndex == nil then
-    hs.application.launchOrFocus(app)
+    hs.application.launchOrFocus(apps[1])
     return
   end
-
-  -- hs.application.get needs the name as per hs.application:name() and not the name on disk
-  -- It can also take pid or bundle, but that doesn't help here
-  -- Since I have the name already from above, I can use that though
-  local appWindows = hs.application.get(focusedWindowAppName):allWindows()
-
-  -- https://www.hammerspoon.org/docs/hs.application.html#allWindows
-  -- A table of zero or more hs.window objects owned by the application. From the current space.
-
-  -- Does the app have more than 1 window, if so switch between them
-  if #appWindows > 1 then
-    -- It seems that this list order changes after one window get focused,
-    -- Let's directly bring the last one to focus every time
-    -- https://www.hammerspoon.org/docs/hs.window.html#focus
-    if app == "Finder" then
-      -- If the app is Finder the window count returned is one more than the actual count, so I subtract
-      appWindows[#appWindows-1]:focus()
-    else
-      appWindows[#appWindows]:focus()
-    end
-    return
-  end
-  -- The app doesn't have more than one window, but we are focussed on it and still pressing the key
-  -- So let's switch to the next app in that list if present
 
   -- The next app in the list after the currently found app.
   local newIndex = currentIndex + 1
-  if currentIndex == #apps then
-    newIndex = 1
-  end
-  app = apps[newIndex]
-  hs.application.launchOrFocus(app)
+  if currentIndex == #apps then newIndex = 1 end
+  -- An app in the list is currently focused, so select the next app in the list
+  hs.application.launchOrFocus(apps[newIndex])
 end
 
 -- {{{ Hyper-<key> -> Launch apps
 local hyperModeAppMappings = {
   -- Keys used in work config: r, shift-r
-  {key = '/', app = 'Finder'}, {key = 'a', app = 'Activity Monitor'},
-  {key = 'c', apps = {'Slack', 'Slack Web'}}, {key = 'f', app = 'Firefox'}, {key = 'k', app = 'Calendar'},
-  {key = 'm', app = 'Mail'}, {key = 's', app = 'Spotify'}, {key = 't', app = 'Kitty'},
-  {key = 'w', app = 'Workflowy'}, {key = 'x', app = 'Messenger', mods = {'alt'}}, {key = 'x', app = 'Messages'}
+  {key = '/', app = 'Finder'}, {key = 'a', app = 'Activity Monitor'}, {key = 'c', apps = {'Slack', 'Slack Web'}},
+  {key = 'f', app = 'Firefox'}, {key = 'k', app = 'Calendar'}, {key = 'm', app = 'Mail'}, {key = 's', app = 'Spotify'},
+  {key = 't', app = 'Kitty'}, {key = 'w', app = 'Workflowy'}, {key = 'x', app = 'Messenger', mods = {'alt'}},
+  {key = 'x', app = 'Messages'}
 }
 -- Add in wrk mappings if present.
 if WrkHyperModeAppMappings ~= nil then
-  for _,val in ipairs(WrkHyperModeAppMappings) do
-    table.insert(hyperModeAppMappings, val)
-  end
+  for _, val in ipairs(WrkHyperModeAppMappings) do table.insert(hyperModeAppMappings, val) end
 end
 
 for _, mapping in ipairs(hyperModeAppMappings) do
   local apps = mapping.apps
-  if apps == nil then
-    apps = {mapping.app}
-  end
-  HyperMode:bind(
-    mapping.mods,
-    mapping.key,
-    function()
-      launchOrFocusOrRotate(apps)
-    end
-  )
+  if apps == nil then apps = {mapping.app} end
+  HyperMode:bind(mapping.mods, mapping.key, function() switchToApp(apps) end)
 end
 -- }}} Hyper-<key> -> Launch apps
 
 -- Hyper-b -> launch default browser.
-DefaultBrowserBundleID = (
-  function()
-    local handlers = hs.plist.read(os.getenv("HOME") .. "/Library/Preferences/com.apple.LaunchServices/com.apple.launchservices.secure.plist")
-    if handlers == nil or handlers.LSHandlers == nil then
-      return "com.apple.safari"
-    end
-    for _, handler in ipairs(handlers.LSHandlers) do
-      if handler.LSHandlerURLScheme == "https" then
-        return handler.LSHandlerRoleAll
-      end
-    end
-    -- If we didn't find a matching handler, default to Safari.
-    return "com.apple.safari"
+DefaultBrowserBundleID = (function()
+  local handlers = hs.plist.read(os.getenv("HOME") ..
+                                     "/Library/Preferences/com.apple.LaunchServices/com.apple.launchservices.secure.plist")
+  if handlers == nil or handlers.LSHandlers == nil then return "com.apple.safari" end
+  for _, handler in ipairs(handlers.LSHandlers) do
+    if handler.LSHandlerURLScheme == "https" then return handler.LSHandlerRoleAll end
   end
-)()
+  -- If we didn't find a matching handler, default to Safari.
+  return "com.apple.safari"
+end)()
 HyperMode:bind({}, 'b', function()
   log.d("Opening default browser " .. DefaultBrowserBundleID)
   hs.application.launchOrFocusByBundleID(DefaultBrowserBundleID)
@@ -341,9 +288,7 @@ HyperMode:bind({'cmd'}, 'm', function()
       stdErr,
       withdrawAfter = 3
     }):send()
-  end
-
-  ):start()
+  end):start()
 end)
 -- }}} Hyper-⌘-m -> Hide or show the menu bar.
 
