@@ -216,6 +216,11 @@ if ! type watch &>/dev/null; then
   }
 fi
 
+# Generate an alphanumeric password $1 characters long.
+password_gen() {
+  cat /dev/urandom | LC_ALL=C tr -dc '[:alnum:]' | fold -w ${1?Missing argument 1: password length} | head -1 | tr -d '\n'
+}
+
 # }}} Functions
 
 # {{{ Aliases
