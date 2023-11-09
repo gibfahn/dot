@@ -41,7 +41,7 @@ apt_list=( # List of things to install.
   neovim         # Better vim (works well with my vim config.
   copyq          # Clipboard manager with history (needs a bit of manual setup).
   meld           # Graphical diff between folders.
-  xclip          # Copy/paste shell commands, used in gibrc.
+  xclip          # Copy/paste shell commands, used in zshrc.
   i3             # Window manager. Obsolete since I moved to bspwm.
   dfu-util       # Used for flashing my ergodox.
   scrot          # Take screenshots (works from the command line).

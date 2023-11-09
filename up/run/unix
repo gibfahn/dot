@@ -51,8 +51,8 @@ else
 fi
 
 log_get "Updating ZSH Completions"
-# Put completion files into this dir so they get picked up by zinit in gibrc.
-# Anything that pulls directly from a URL can be added directly to _gib_completion_files in gibrc.
+# Put completion files into this dir so they get picked up by zinit in zshrc.
+# Anything that pulls directly from a URL can be added directly to _gib_completion_files in zshrc.
 mkdir -p "$XDG_DATA_HOME/zsh/completions"
 
 # _rustup and _cargo

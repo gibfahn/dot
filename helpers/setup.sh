@@ -1,7 +1,7 @@
 # shellcheck shell=bash disable=SC1090
 
 # Helper functions and vars for use in the other setup scripts. Most of these are from
-# my gibrc, but that's not necessarily installed yet.
+# my zshrc, but that's not necessarily installed yet.
 
 # Include (source) with this line (assuming you're in dot):
 # . "$(dirname "$0")"/helpers/setup.sh # Load helper script from dot/helpers.

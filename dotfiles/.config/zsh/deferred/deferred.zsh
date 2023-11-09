@@ -48,7 +48,6 @@ export RUSTUP_HOME="$XDG_DATA_HOME/rustup" # Rustup goes here.
 export SCCACHE_DIR="$XDG_CACHE_HOME/sccache" # sccache cache dir.
 export TIME_STYLE=long-iso # See `man gls` on macOS, sets the time style for `ls -l`.
 export VIRTUAL_ENV_DISABLE_PROMPT=1 # Add the virtualenv prompt myself.
-export ZDOTDIR="${XDG_CONFIG_HOME}/zsh" # Path to zsh config files.
 
 _LESS=(
   --tabs=4 # tab is 4 spaces
@@ -515,7 +514,7 @@ _gib_join_lines() { local item; while read -r item; do echo -n "${(q)item} "; do
 autoload -Uz select-word-style
 select-word-style shell # "Word" means a shell argument, so Ctrl-w will delete one shell arg.
 
-# More expensive keybindings, with deferred loading. Immediately loaded ones are in gibrc.
+# More expensive keybindings, with deferred loading. Immediately loaded ones are in zshrc.
 
 bindkey -M vicmd '^Y' gib-yank-all # Ctrl-y copies everything to the system clipboard.
 
