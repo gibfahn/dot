@@ -50,12 +50,17 @@ export TIME_STYLE=long-iso # See `man gls` on macOS, sets the time style for `ls
 export VIRTUAL_ENV_DISABLE_PROMPT=1 # Add the virtualenv prompt myself.
 export ZDOTDIR="${XDG_CONFIG_HOME}/zsh" # Path to zsh config files.
 
-# Less options: Tab is 4 spaces, search ignores case, enable colours, cat if less than one screen.
-# --status-column=>column to show lines matching current search or first unread line after moving
-# -quit-if-one-screen=>exit if file fits in one screen, --ignore-case=>smartcase search, --LONG-PROMPT=>verbose prompt, --RAW-CONTROL-CHARS=>show colors,
-# --HILITE-UNREAD=>highlight first unread line moving, --tabs=4=>tab is 4 spaces, --window=-4=>keep 4 lines overlapping when scrolling with the space key
-export LESS='--tabs=4 --ignore-case --RAW-CONTROL-CHARS --quit-if-one-screen --status-column --LONG-PROMPT --HILITE-UNREAD --window=-4' # See less options comment below.
-export BAT_PAGER="less $LESS" # Make bat use less pager options.
+_LESS=(
+  --tabs=4 # tab is 4 spaces
+  --ignore-case # smartcase search
+  --Raw-control-chars # show colors,
+  --quit-if-one-screen # exit if file fits in one screen
+  --Long-prompt # verbose prompt
+  --Hilite-unread # highlight first unread line moving
+  --window=-4 # keep 4 lines overlapping when scrolling with the space key
+)
+export LESS=${_LESS[*]}
+unset _LESS
 
 [[ -d "$XDG_CONFIG_HOME/terminfo" ]] && export TERMINFO="$XDG_CONFIG_HOME/terminfo" # Put terminal info in here.
 [[ $TERM == xterm ]] && TERM=xterm-256color

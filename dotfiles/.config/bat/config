@@ -2,14 +2,14 @@
 --theme="TwoDark"
 
 # No fancy styles. Use `--style="changes"` to see git gutter.
---style="plain"
+--style="header,rule"
 
 # Use italic text on the terminal (not supported on all terminals)
 --italic-text=always
 
 # TODO(gib): upstream these to bat.
-# Use Python highlighting for Bazel files.
---map-syntax "*.bazel:Python"
+# For a list of available languages run `bat --list-languages`.
 --map-syntax "WORKSPACE:Python"
---map-syntax ".bazelrc:bash"
+--map-syntax ".bazelrc:Bourne Again Shell (bash)"
 --map-syntax "*.pcl:Groovy"
+--map-syntax "*.pkl:Groovy"
