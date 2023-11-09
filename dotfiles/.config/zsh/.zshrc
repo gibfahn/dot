@@ -1,7 +1,7 @@
 # shellcheck shell=zsh
-# My shell configuration file. Must be sourced. I include this from .profile, .bashrc, and .zshrc
-# like so:
-#   . "$HOME/.config/gibrc"
+
+# Startup files: https://zsh.sourceforge.io/Intro/intro_3.html
+# .zshrc is sourced in interactive shells.
 
 # {{{ Initial setup
 
@@ -16,15 +16,6 @@
 # echo "Logging to $logfile"
 # exec 3>&2 2>$logfile
 # setopt XTRACE
-
-[ -n "$NORC" ] && return # Don't run if NORC set.
-[ "$ZSH_VERSION" ] || return # Only run if using zsh
-
-case $- in
-  *i*) [[ -n "$GIBRC" ]] && echo "Reusing gibrc..." >&2 ;;
-  *) return ;; # Exit if not running interactively.
-esac
-export GIBRC=${GIBRC:-0} # First time through this is 0, next time 1 (etc).
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -231,8 +222,6 @@ bindkey -M viins '^W' backward-kill-word # Ctrl-w: delete the current line (not 
 
 
 # }}} Early Keybindings
-
-GIBRC=$((GIBRC++)) # Increment GIBRC.
 
 # # Enable zsh startup profiling 2/2, see helpers/sort_timings.zsh
 # unsetopt XTRACE
