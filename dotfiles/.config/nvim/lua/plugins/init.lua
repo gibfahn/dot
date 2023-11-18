@@ -73,10 +73,15 @@ return {
       label = {
         reuse = "all", -- flash tries to re-use labels that were already assigned to a position
       },
+      modes = {
+        search = {
+          enabled = false, -- off by default
+        },
+      },
     },
     keys = {
-      { "s",     mode = { "n", "x", "o" }, function() require("flash").jump() end,              desc = "Flash" },
-      { "S",     mode = { "n", "x", "o" }, function() require("flash").treesitter() end,        desc = "Flash Treesitter" },
+      { "S",     mode = { "n", "x", "o" }, function() require("flash").jump() end,              desc = "Flash" },
+      { "<a-s>",     mode = { "n", "x", "o" }, function() require("flash").treesitter() end,        desc = "Flash Treesitter" },
       { "r",     mode = "o",               function() require("flash").remote() end,            desc = "Remote Flash" },
       { "R",     mode = { "o", "x" },      function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
       { "<c-s>", mode = { "c" },           function() require("flash").toggle() end,            desc = "Toggle Flash Search" },
@@ -90,14 +95,14 @@ return {
     opts = {
       -- Use z for surround because s is for flash.
       keymaps = {
-        normal = "yz",
-        normal_cur = "yzz",
+        normal = "ys",
+        normal_cur = "yss",
         normal_line = "yZ",
         normal_cur_line = "yZZ",
-        visual = "Z",
-        visual_line = "gZ",
-        delete = "dz",
-        change = "cz",
+        visual = "s",
+        visual_line = "gs",
+        delete = "ds",
+        change = "cs",
       },
       surrounds = {
         -- Add markdown link with link as contents of system clipboard.
