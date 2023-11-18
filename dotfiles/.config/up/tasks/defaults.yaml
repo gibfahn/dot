@@ -250,6 +250,9 @@ data:
     - replace: '!cps'
       with: ⇪
       on: 1
+    - replace: '!pmt'
+      with: ❯
+      on: 1
     - replace: wdyt
       with: what do you think
       on: 1
