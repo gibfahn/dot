@@ -142,14 +142,39 @@ _gib_vim=
 export VISUAL=$_gib_vim EDITOR=$_gib_vim # Set vim/nvim as the default editor.
 unset _gib_vim
 
-alias vt='v ~/tmp/drafts/t.md' # vim temp: Edit a common scratch file (allows vim history preservation).
-
 alias v="$=VISUAL" xv="xargs $=VISUAL"
 alias k=kubectl kx=kubectx kn='kubectl config set-context --current --namespace' # Build tools.
 
 # }}} Early Aliases
 
 # {{{ Early Keybindings
+
+# vim temp: Edit a scratch file (allows vim history preservation).
+vt() {
+  local file_path file_name drafts=~/tmp/drafts
+  local archive=$drafts/archive
+  if [[ -n $1 ]]; then
+    file_name=$(date "+%Y-%m-%d")_${1%.md}.md
+    file_path=$drafts/$file_name
+  else
+    file_path=$(fd --type=file --print0 --max-depth=1 . ~/tmp/drafts/ | fzf --tac --reverse --read0 --no-multi)
+    file_name=$(basename $file_path)
+  fi
+  if [[ ! -f $file_path && $file_name != t.md ]]; then
+    if [[-f $archive/$file_name ]]; then
+      mv -v $archive/$file_name $file_path
+      gsed -i 's/^- \[.\] Done$/- [ ] Done/'
+    else
+      cat <<<'- [ ] Done\n' >$file_path
+    fi
+  fi
+  ${aliases[v]} $file_path
+  if [[ $(basename $file_path) != t.md ]] && grep -qFx -e '- [x] Done' -e '- [X] Done' $file_path; then
+    echo "Archiving $file_path ..."
+    mkdir -p ~/tmp/drafts/archive/
+    mv $file_path ~/tmp/drafts/archive/
+  fi
+}
 
 # ^D with contents clears the buffer, without contents exits (sends an actual ^D).
 _gib_clear_exit() { [[ -n $BUFFER ]] && zle kill-buffer || zle self-insert-unmeta; }
