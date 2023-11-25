@@ -151,21 +151,25 @@ alias k=kubectl kx=kubectx kn='kubectl config set-context --current --namespace'
 
 # vim temp: Edit a scratch file (allows vim history preservation).
 vt() {
-  local file_path file_name drafts=~/tmp/drafts
+  local file_path file_name existing_files drafts=~/tmp/drafts
   local archive=$drafts/archive
   if [[ -n $1 ]]; then
-    file_name=$(date "+%Y-%m-%d")_${1%.md}.md
-    file_path=$drafts/$file_name
+    existing_files=($drafts/*_${1%.md}.md(N))
+    if [[ ${#existing_files[@]} == 1 ]]; then
+      file_path=${existing_files[1]}
+    else
+      file_path=$drafts/$(date "+%Y-%m-%d")_${1%.md}.md
+    fi
   else
     file_path=$(fd --type=file --print0 --max-depth=1 . ~/tmp/drafts/ | fzf --tac --reverse --read0 --no-multi)
-    file_name=$(basename $file_path)
   fi
+  file_name=$(basename $file_path)
   if [[ ! -f $file_path && $file_name != t.md ]]; then
-    if [[-f $archive/$file_name ]]; then
+    if [[ -f $archive/$file_name ]]; then
       mv -v $archive/$file_name $file_path
       gsed -i 's/^- \[.\] Done$/- [ ] Done/'
     else
-      cat <<<'- [ ] Done\n' >$file_path
+      cat <<<'- [ ] Done' >$file_path
     fi
   fi
   ${aliases[v]} $file_path
