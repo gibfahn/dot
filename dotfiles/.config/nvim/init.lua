@@ -199,6 +199,8 @@ end
 
 map('c', '%%', "getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'", { expr = true }) -- %%: expands to dirname of current file.
 map('i', '<A-CR>', 'coc#_select_confirm()', { expr = true, silent = true }) -- Alt-Enter: accept first result.
+map('i', '<A-t>', ' <C-r><C-r>=&commentstring<CR><C-o>:s/%s/TODO(gib): /<CR><C-o>A', { silent = true }) -- Alt-t: insert TODO comment.
+map('i', '<A-x>', ' <C-r><C-r>=&commentstring<CR><C-o>:s/%s/XXX(gib): /<CR><C-o>A', { silent = true }) -- Alt-x: insert XXX comment (ignore-xxx).
 map('i', '<C-u>', '<C-g>u<C-u>') -- Make <C-u> undo-friendly
 map('i', '<C-w>', '<C-g>u<C-w>') -- Make <C-w> undo-friendly
 map('i', '<CR>', [[coc#pum#visible() ? coc#pum#confirm() : "\<CR>"]], { expr = true }) -- If in completion, select current, else normal enter (with coc hook).
@@ -267,8 +269,7 @@ map('n', '<Leader>X', '<Cmd>xa<CR>') -- Quit all windows.
 map('n', '<Leader>Y', '<Cmd>%y+<CR>') -- Copy file to clipboard (normal mode).
 map('n', '<Leader>a', '@a') -- Apply macro a (add with qa or yank to a reg with "ay).
 map('n', '<Leader>b', '<Cmd>Buffers<CR>') -- Search buffer list for file.
-map('n', '<Leader>cD', ':call DupBuffer()<CR><Plug>(coc-definition)',
-  { silent = true, noremap = false }) -- Go to definition in other split.
+map('n', '<Leader>cD', ':call DupBuffer()<CR><Plug>(coc-definition)', { silent = true, noremap = false }) -- Go to definition in other split.
 map('n', '<Leader>cE', ':<C-u>CocList diagnostics<cr>', { silent = true }) -- Manage extensions
 map('n', '<Leader>cR', '<Plug>(coc-refactor)', { noremap = false }) -- Remap for refactoring current selection.
 map('n', '<Leader>cc', '<Cmd>CocList commands<CR>', { silent = true }) -- Show commands
