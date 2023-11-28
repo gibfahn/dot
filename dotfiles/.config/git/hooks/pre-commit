@@ -7,7 +7,7 @@ if command -v rg >/dev/null; then
   color_setting=--color=always
   [[ -n ${MYVIMRC:-} ]] && color_setting=
   # shellcheck disable=2086 # I want the color setting to expand to nothing.
-  if matches=$(rg $color_setting --hidden --word-regexp --fixed-strings "XXX($whoami):" | grep -v ignore-xxx); then
+  if matches=$(rg $color_setting --no-ignore-dot --word-regexp --fixed-strings "XXX($whoami):" | grep -v ignore-xxx); then
     if [[ -z ${MYVIMRC:-} ]]; then
       RED='\033[0;31m' # Red.
       NC='\033[0m'     # No Colour.
