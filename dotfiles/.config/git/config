@@ -22,7 +22,7 @@
   # Quote an alias you want to save here (quotes \ and ", and wraps in "! #" to handle args).
   quote-string = "!read -r l; sed -E -e 's/([\\\"])/\\\\\\1/g' -e 's/(.*)/\"!\\1 #\"/' <<<\"$l\" #"
   remote-org = "!git remote get-url $1 | awk -F ':|/' '{if ($NF) {print $(NF-1)} else {print $(NF-2)}}' #" # Github org for remote. `g remote-org up` -> gibfahn.
-  remote-repo = "!git remote get-url $1 | sed -e 's|.*/||' -e 's/.git$//' #" # Github repo for remote. `g remote-repo up` -> dot.
+  remote-repo = "!git remote get-url $1 | sed -e 's|/$||' -e 's|.*/||' -e 's/.git$//' #" # Github repo for remote. `g remote-repo up` -> dot.
   remote-host = "!git remote get-url ${1:?} | sed -e 's/^git@//' -e 's|https://||' -e 's/:.*//' -e 's|/.*||' #" # Used for setting GH_HOST.
   update-default-branch = "!git remote set-head --auto ${1:-up} && git symbolic-ref --short refs/remotes/${1:-up}/HEAD;  #" # Reset the default branch for a remote.
 
