@@ -74,6 +74,7 @@ source $XDG_DATA_HOME/zsh/plugins/zsh-completions/zsh-completions.plugin.zsh
 
 source $XDG_CONFIG_HOME/zsh/deferred/macos-setdir.zsh
 [[ -e $XDG_CONFIG_HOME/zsh/deferred/apple.zsh ]] && source $XDG_CONFIG_HOME/zsh/deferred/apple.zsh
+[[ -e /Applications/iTerm.app/Contents/Resources/iterm2_shell_integration.zsh ]] && source /Applications/iTerm.app/Contents/Resources/iterm2_shell_integration.zsh
 
 for _gib_file in $XDG_DATA_HOME/zsh/completions/*(N); do
   echo $_gib_file

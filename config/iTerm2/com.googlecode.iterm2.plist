@@ -74,6 +74,17 @@
 			<key>Version</key>
 			<integer>1</integer>
 		</dict>
+		<key>0x61-0x100000-0x0</key>
+		<dict>
+			<key>Action</key>
+			<integer>33</integer>
+			<key>Label</key>
+			<string></string>
+			<key>Text</key>
+			<string></string>
+			<key>Version</key>
+			<integer>0</integer>
+		</dict>
 		<key>0x68-0x100000-0x4</key>
 		<dict>
 			<key>Action</key>
@@ -96,6 +107,28 @@
 			<key>Version</key>
 			<integer>0</integer>
 		</dict>
+		<key>0x6a-0x100000-0x10</key>
+		<dict>
+			<key>Action</key>
+			<integer>4</integer>
+			<key>Label</key>
+			<string></string>
+			<key>Text</key>
+			<string></string>
+			<key>Version</key>
+			<integer>0</integer>
+		</dict>
+		<key>0x6c-0x100000-0x20</key>
+		<dict>
+			<key>Action</key>
+			<integer>8</integer>
+			<key>Label</key>
+			<string></string>
+			<key>Text</key>
+			<string></string>
+			<key>Version</key>
+			<integer>1</integer>
+		</dict>
 		<key>0x6e-0x100000-0x26</key>
 		<dict>
 			<key>Action</key>
@@ -107,6 +140,39 @@
 			<key>Version</key>
 			<integer>1</integer>
 		</dict>
+		<key>0x73-0x100000-0x2</key>
+		<dict>
+			<key>Action</key>
+			<integer>34</integer>
+			<key>Label</key>
+			<string></string>
+			<key>Text</key>
+			<string></string>
+			<key>Version</key>
+			<integer>0</integer>
+		</dict>
+		<key>0x75-0x100000-0x22</key>
+		<dict>
+			<key>Action</key>
+			<integer>9</integer>
+			<key>Label</key>
+			<string></string>
+			<key>Text</key>
+			<string></string>
+			<key>Version</key>
+			<integer>0</integer>
+		</dict>
+		<key>0x79-0x100000-0x1f</key>
+		<dict>
+			<key>Action</key>
+			<integer>5</integer>
+			<key>Label</key>
+			<string></string>
+			<key>Text</key>
+			<string></string>
+			<key>Version</key>
+			<integer>0</integer>
+		</dict>
 		<key>0x9-0x40000</key>
 		<dict>
 			<key>Action</key>
@@ -114,75 +180,49 @@
 			<key>Text</key>
 			<string></string>
 		</dict>
-		<key>0xf700-0x300000</key>
+		<key>0xf700-0x300000-0x7e</key>
 		<dict>
 			<key>Action</key>
-			<integer>7</integer>
+			<integer>55</integer>
+			<key>Label</key>
+			<string></string>
 			<key>Text</key>
 			<string></string>
+			<key>Version</key>
+			<integer>1</integer>
 		</dict>
-		<key>0xf701-0x300000</key>
+		<key>0xf701-0x300000-0x7d</key>
 		<dict>
 			<key>Action</key>
-			<integer>6</integer>
+			<integer>56</integer>
+			<key>Label</key>
+			<string></string>
 			<key>Text</key>
 			<string></string>
+			<key>Version</key>
+			<integer>1</integer>
 		</dict>
-		<key>0xf702-0x320000</key>
+		<key>0xf702-0x300000-0x7b</key>
 		<dict>
 			<key>Action</key>
-			<integer>33</integer>
+			<integer>53</integer>
+			<key>Label</key>
+			<string></string>
 			<key>Text</key>
 			<string></string>
+			<key>Version</key>
+			<integer>1</integer>
 		</dict>
-		<key>0xf703-0x320000</key>
+		<key>0xf703-0x300000-0x7c</key>
 		<dict>
 			<key>Action</key>
-			<integer>34</integer>
+			<integer>54</integer>
+			<key>Label</key>
+			<string></string>
 			<key>Text</key>
 			<string></string>
-		</dict>
-		<key>0xf729-0x100000</key>
-		<dict>
-			<key>Action</key>
-			<integer>5</integer>
-			<key>Text</key>
-			<string></string>
-		</dict>
-		<key>0xf72b-0x100000</key>
-		<dict>
-			<key>Action</key>
-			<integer>4</integer>
-			<key>Text</key>
-			<string></string>
-		</dict>
-		<key>0xf72c-0x100000</key>
-		<dict>
-			<key>Action</key>
-			<integer>9</integer>
-			<key>Text</key>
-			<string></string>
-		</dict>
-		<key>0xf72c-0x20000</key>
-		<dict>
-			<key>Action</key>
-			<integer>9</integer>
-			<key>Text</key>
-			<string></string>
-		</dict>
-		<key>0xf72d-0x100000</key>
-		<dict>
-			<key>Action</key>
-			<integer>8</integer>
-			<key>Text</key>
-			<string></string>
-		</dict>
-		<key>0xf72d-0x20000</key>
-		<dict>
-			<key>Action</key>
-			<integer>8</integer>
-			<key>Text</key>
-			<string></string>
+			<key>Version</key>
+			<integer>1</integer>
 		</dict>
 	</dict>
 	<key>HapticFeedbackForEsc</key>
@@ -204,6 +244,18 @@
 			<true/>
 			<key>ASCII Ligatures</key>
 			<true/>
+			<key>AWDS Pane Directory</key>
+			<string></string>
+			<key>AWDS Pane Option</key>
+			<string>No</string>
+			<key>AWDS Tab Directory</key>
+			<string></string>
+			<key>AWDS Tab Option</key>
+			<string>No</string>
+			<key>AWDS Window Directory</key>
+			<string></string>
+			<key>AWDS Window Option</key>
+			<string>No</string>
 			<key>Allow Title Setting</key>
 			<true/>
 			<key>Ambiguous Double Width</key>
@@ -999,6 +1051,10 @@
 	<integer>0</integer>
 	<key>StretchTabsToFillBar</key>
 	<true/>
+	<key>SwitchPaneModifier</key>
+	<integer>6</integer>
+	<key>SwitchWindowModifier</key>
+	<integer>9</integer>
 	<key>TabStyleWithAutomaticOption</key>
 	<integer>6</integer>
 	<key>TabViewType</key>
