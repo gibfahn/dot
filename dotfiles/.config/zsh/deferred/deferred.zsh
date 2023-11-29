@@ -543,7 +543,7 @@ _gib_prompt_preexec() {
   printf '\e[4 q' # Cursor is an underline (_) while command is running.
   # Set window title to first 40 chars of command we're about to run.
   title="$(print -Pn "%1~") ❯ $1"
-  printf "\e]2;%s\a" "${title:0:60}"
+  printf "\033];%s\007" "${title:0:60}"
 }
 
 autoload -Uz add-zsh-hook
