@@ -535,7 +535,8 @@ fi
 # Run before the prompt is displayed.
 _gib_prompt_precmd() {
   # Set window title to current directory.
-  print -Pn "\e]2;%1~\a"
+  title="$(print -Pn "%1~")"
+  printf "\033];%s\007" "${title:0:60}"
 }
 
 # Run between user hitting Enter key, and command being run.
