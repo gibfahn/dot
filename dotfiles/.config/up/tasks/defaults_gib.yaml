@@ -162,3 +162,8 @@ data:
   # https://macos-defaults.com/xcode/showbuildoperationduration.html
   com.apple.dt.Xcode:
     ShowBuildOperationDuration: true
+
+  # iTerm2 terminal emulator.
+  com.googlecode.iterm2:
+    # Tell iTerm2 to load configs from my dotfiles.
+    PrefsCustomFolder: /Users/gib/code/dot/config/iTerm2
