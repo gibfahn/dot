@@ -537,7 +537,13 @@ fi
 _gib_prompt_precmd() {
   # Set window title to current directory.
   title="$(print -Pn "%1~")"
-  printf "\033];%s\007" "${title:0:60}"
+  if [[ $TERM_PROGRAM == iTerm.app ]]; then
+    # On kitty this returns `;dot` instead of `dot`.
+    printf "\033];%s\007" "${title:0:60}"
+  else
+    # On iTerm2 this is ignored entirely.
+    printf "\e]2;%s\a" "${title:0:60}"
+  fi
 }
 
 # Run between user hitting Enter key, and command being run.
@@ -545,7 +551,11 @@ _gib_prompt_preexec() {
   printf '\e[4 q' # Cursor is an underline (_) while command is running.
   # Set window title to first 40 chars of command we're about to run.
   title="$(print -Pn "%1~") ❯ $1"
-  printf "\033];%s\007" "${title:0:60}"
+  if [[ $TERM_PROGRAM == iTerm.app ]]; then
+    printf "\033];%s\007" "${title:0:60}"
+  else
+    printf "\e]2;%s\a" "${title:0:60}"
+  fi
 }
 
 autoload -Uz add-zsh-hook
