@@ -610,7 +610,7 @@ vim.api.nvim_create_autocmd("FileType",
 
 -- https://github.com/tpope/vim-fugitive/issues/1926
 vim.api.nvim_create_autocmd("FileType",
-  { pattern = { "fugitive" }, command = "nmap <buffer> S sk]c", group = gib_autogroup })
+  { pattern = { "fugitive" }, command = "nmap <buffer> S sk]czz", group = gib_autogroup })
 -- Skip to next git hunk.
 vim.api.nvim_create_autocmd("FileType",
   { pattern = { "fugitive" }, command = "nmap <buffer> <A-g> ]c", group = gib_autogroup })
