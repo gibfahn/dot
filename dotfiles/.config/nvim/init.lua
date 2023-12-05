@@ -613,10 +613,10 @@ vim.api.nvim_create_autocmd("FileType",
   { pattern = { "fugitive" }, command = "nmap <buffer> S sk]czz", group = gib_autogroup })
 -- Skip to next git hunk.
 vim.api.nvim_create_autocmd("FileType",
-  { pattern = { "fugitive" }, command = "nmap <buffer> <A-g> ]c", group = gib_autogroup })
+  { pattern = { "fugitive" }, command = "nmap <buffer> <A-g> ]czz", group = gib_autogroup })
 -- Skip to previous git hunk.
 vim.api.nvim_create_autocmd("FileType",
-  { pattern = { "fugitive" }, command = "nmap <buffer> <A-G> [c", group = gib_autogroup })
+  { pattern = { "fugitive" }, command = "nmap <buffer> <A-G> [czz", group = gib_autogroup })
 -- Don't highlight tabs in Go.
 vim.api.nvim_create_autocmd("FileType",
   {
