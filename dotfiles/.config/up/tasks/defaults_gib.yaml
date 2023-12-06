@@ -79,6 +79,10 @@ data:
     OpenPrivateWindowWhenNotRestoringSessionAtLaunch: false
     # Make Safari’s search banners default to Contains instead of Starts With
     FindOnPageMatchesWordStartsOnly: false
+    # Settings > Tabs > Tab Layout > Compact
+    ShowStandaloneTabBar: false
+    # Settings > Tabs > Always show website titles in tabs > Checked
+    EnableNarrowTabs: false
 
   com.apple.Spotlight:
     orderedItems:
