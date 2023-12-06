@@ -71,6 +71,7 @@ cask "chrysalis"                         # Used to flash my KeyboardIO Model 01.
 cask "daisydisk"                         # See what's using disk space and easily clean it up.
 cask "docker"                            # Build and run docker images.
 cask "keycastr"                          # Shows keystrokes in corner of screen (great for casting/demos).
+cask "obsidian"                          # Markdown-based note-taking app.
 cask "slack"                             # Everyone uses Slack right?
 cask "zoom"                              # Zoom web meetings client.
 
