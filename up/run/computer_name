@@ -18,7 +18,13 @@ fi
 user=$(whoami)
 User=${(C)user} # Capitalise the current username, e.g. gib -> Gib.
 
-mac_type=MBP # MacBook Pro.
+case $(system_profiler SPHardwareDataType | awk '/Model Name:/ { print $3,$NF; }') in
+  "MacBook Pro") mac_type=MBP ;;
+  "Mac Studio") mac_type=MacStudio ;;
+  "Mac Pro") mac_type=MacPro ;;
+  *) echo "Unknown Mac type"; exit 1 ;;
+esac
+
 year=$(date +%Y)
 
 mac_name=$User-$mac_type-$year
