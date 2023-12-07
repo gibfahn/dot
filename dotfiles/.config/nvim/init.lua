@@ -197,156 +197,156 @@ local function map(mode, lhs, rhs, opts)
   vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
 
-map('c', '%%', "getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'", { expr = true })                       -- %%: expands to dirname of current file.
-map('i', '<A-CR>', 'coc#_select_confirm()', { expr = true, silent = true })                               -- Alt-Enter: accept first result.
+map('c', '%%', "getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'", { expr = true })                    -- %%: expands to dirname of current file.
+map('i', '<A-CR>', 'coc#_select_confirm()', { expr = true, silent = true })                            -- Alt-Enter: accept first result.
 map('i', '<A-t>', ' <C-r><C-r>=&commentstring<CR><C-o>:s/%s/TODO(gib): /<CR><C-o>A',
-  { silent = true })                                                                                      -- Alt-t: insert TODO comment.
-map('i', '<A-x>', ' <C-r><C-r>=&commentstring<CR><C-o>:s/%s/XXX(gib): /<CR><C-o>A', { silent = true })    -- Alt-x: insert XXX comment (ignore-xxx).
-map('i', '<C-u>', '<C-g>u<C-u>')                                                                          -- Make <C-u> undo-friendly
-map('i', '<C-w>', '<C-g>u<C-w>')                                                                          -- Make <C-w> undo-friendly
-map('i', '<CR>', [[coc#pum#visible() ? coc#pum#confirm() : "\<CR>"]], { expr = true })                    -- If in completion, select current, else normal enter (with coc hook).
-map('i', '<S-Tab>', [[coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"]], { expr = true })                  -- Shift-Tab is previous entry if completion menu open.
-map('i', '<Tab>', 'v:lua.Smart_Tab()', { expr = true, silent = true })                                    -- If in completion, next entry, else if previous character was a space indent, else trigger completion manually.
-map('n', "<Leader>Z", [[&foldlevel ? 'zM' :'zR']], { expr = true })                                       -- Toggle folding everywhere (see also "zi).
-map('n', '-', '<Cmd>e %:h<CR>')                                                                           -- Use - to open the current buffer directory in the file browser (repeat for `cd ..`).
-map('n', '<A-C>', '<Plug>(coc-diagnostic-prev)', { noremap = false })                                     -- Prev changed Coc diagnostic.
-map('n', '<A-Down>', '<C-e>')                                                                             -- Scroll down a line.
-map('n', '<A-E>', '100<C-w>k')                                                                            -- Switch to the top window,
-map('n', '<A-Enter>', '<plug>(coc-codelens-action)', { noremap = false })                                 -- Run available CodeLens actions (e.g. run tests).
-map('n', '<A-F>', '<Cmd>CocPrev<CR>', { noremap = false })                                                -- Next Coc list (e.g. compile error).
-map('n', '<A-G>', '<Plug>(GitGutterPrevHunk)', { noremap = false })                                       -- Prev changed git hunk.
-map('n', '<A-H>', '100<C-w>h')                                                                            -- Switch to the leftmost window,
-map('n', '<A-I>', '100<C-w>l')                                                                            -- Switch to the rightmost window.
-map('n', '<A-L>', '<Cmd>lprev<CR>')                                                                       -- Prev item in the location list.
-map('n', '<A-Left>', 'zh')                                                                                -- Scroll view left a character.
-map('n', '<A-N>', '100<C-w>j')                                                                            -- Switch to the bottom window,
-map('n', '<A-Q>', '<Cmd>cprev<CR>')                                                                       -- Prev item in the quickfix list.
-map('n', '<A-Right>', 'zl')                                                                               -- Scroll view right a character.
-map('n', '<A-S>', '[s')                                                                                   -- Prev spelling mistake.
-map('n', '<A-Space>', 'v<Plug>(coc-codeaction-selected)<Esc>', { noremap = false })                       -- Run available LSP actions (neoclide/coc.nvim#1981).
-map('n', '<A-T>', '<Cmd>tabprev<CR>')                                                                     -- Prev tab.
-map('n', '<A-TAB>', '<Plug>(coc-range-select)', { silent = true, noremap = false })                       -- Visually select increasingly large ranges (requires LS 'textDocument/selectionRange').
-map('n', '<A-Up>', '<C-y>')                                                                               -- Scroll up a line.
-map('n', '<A-X>', '<Cmd>bd<CR>')                                                                          -- Close current buffer (work around https://github.com/moll/vim-bbye/issues/15).
-map('n', '<A-c>', '<Plug>(coc-diagnostic-next)', { noremap = false })                                     -- Next changed Coc message (e.g. compile error).
-map('n', '<A-d>', '<Cmd>tabclose<CR>')                                                                    -- Close current tab.
-map('n', '<A-e>', '<C-w>k')                                                                               -- Switch up a window,
-map('n', '<A-f>', '<Cmd>CocNext<CR>', { noremap = false })                                                -- Next Coc list (e.g. compile error if you hit <Leader>ce).
-map('n', '<A-g>', '<Plug>(GitGutterNextHunk)', { noremap = false })                                       -- Next changed git hunk.
-map('n', '<A-h>', '<C-w>h')                                                                               -- Switch left a window,
-map('n', '<A-i>', '<C-w>l')                                                                               -- Switch right a window.
-map('n', '<A-l>', '<Cmd>lnext<CR>')                                                                       -- Next item in the location list.
-map('n', '<A-n>', '<C-w>j')                                                                               -- Switch down a window,
-map('n', '<A-q>', '<Cmd>cnext<CR>')                                                                       -- Next item in the quickfix list.
-map('n', '<A-s>', ']s')                                                                                   -- Next spelling mistake.
-map('n', '<A-t>', '<Cmd>tabnext<CR>')                                                                     -- Next tab.
-map('n', '<A-x>', '<Cmd>Bdelete<CR>')                                                                     -- Close current buffer.
-map('n', '<A-z>', '<Cmd>Zi<CR>')                                                                          -- Switch to different directory.
-map('n', '<C-p>', '<C-i>')                                                                                -- <C-o> = go to previous jump, <C-p> is go to next (normally <C-i>, but that == Tab, used above).
-map('n', '<Leader>+', '<Cmd>exe "resize ".(winheight(0) * 3/2)<CR>', { silent = true })                   -- Increase window height to 3/2.
-map('n', '<Leader>-', '<Cmd>exe "resize ".(winheight(0) * 2/3)<CR>', { silent = true })                   -- Reduce window height to 3/2.
-map('n', '<Leader>/', '<Cmd>noh<CR>')                                                                     -- Turn off find highlighting.
-map('n', '<Leader>1', '<Plug>BufTabLine.Go(1)', { noremap = false })                                      -- <Leader>1 goes to buffer 1 (see numbers in tab bar).
-map('n', '<Leader>2', '<Plug>BufTabLine.Go(2)', { noremap = false })                                      -- <Leader>1 goes to buffer 2 (see numbers in tab bar).
-map('n', '<Leader>3', '<Plug>BufTabLine.Go(3)', { noremap = false })                                      -- <Leader>1 goes to buffer 3 (see numbers in tab bar).
-map('n', '<Leader>4', '<Plug>BufTabLine.Go(4)', { noremap = false })                                      -- <Leader>1 goes to buffer 4 (see numbers in tab bar).
-map('n', '<Leader>5', '<Plug>BufTabLine.Go(5)', { noremap = false })                                      -- <Leader>1 goes to buffer 5 (see numbers in tab bar).
-map('n', '<Leader>6', '<Plug>BufTabLine.Go(6)', { noremap = false })                                      -- <Leader>1 goes to buffer 6 (see numbers in tab bar).
-map('n', '<Leader>7', '<Plug>BufTabLine.Go(7)', { noremap = false })                                      -- <Leader>1 goes to buffer 7 (see numbers in tab bar).
-map('n', '<Leader>8', '<Plug>BufTabLine.Go(8)', { noremap = false })                                      -- <Leader>1 goes to buffer 8 (see numbers in tab bar).
-map('n', '<Leader>9', '<Plug>BufTabLine.Go(-1)', { noremap = false })                                     -- <Leader>1 goes to buffer 9 (last buffer (see numbers in tab bar).
-map('n', '<Leader>;', '@:')                                                                               -- Repeat the last executed command.
-map('n', '<Leader><', '<Cmd>exe "vertical resize ".(winwidth(0) * 2/3)<CR>', { silent = true })           -- Decrease window width to 2/3.
-map('n', '<Leader>>', '<Cmd>exe "vertical resize ".(winwidth(0) * 3/2)<CR>', { silent = true })           -- Increase window width to 3/2.
-map('n', '<Leader>D', '<Cmd>%d<CR>')                                                                      -- Delete all text in buffer.
-map('n', '<Leader>E', '<C-W>z:cclose<CR>:lclose<CR>:helpclose<CR><Plug>(coc-float-hide)')                 -- Close open preview windows (e.g. language server definitions).
-map('n', '<Leader>F', ':grep ')                                                                           -- Search file contents for file.
-map('n', '<Leader>P', '"+P')                                                                              -- Paste from system clipboard before cursor.
-map('n', '<Leader>R', ':/ce <bar> up<Home>cfdo %s/')                                                      -- Replace in all quickfix files (use after gr).
-map('n', '<Leader>S', ':<C-u>set operatorfunc=SortLinesOpFunc<CR>g@')                                     -- Sort lines in <motion>.
-map('n', '<Leader>T', '<Cmd>term<CR>')                                                                    -- Open terminal in current split.
-map('n', '<Leader>W', '<Cmd>w<CR>')                                                                       -- Write whether or not there were changes.
-map('n', '<Leader>X', '<Cmd>xa<CR>')                                                                      -- Quit all windows.
-map('n', '<Leader>Y', '<Cmd>%y+<CR>')                                                                     -- Copy file to clipboard (normal mode).
-map('n', '<Leader>a', '@a')                                                                               -- Apply macro a (add with qa or yank to a reg with "ay).
-map('n', '<Leader>b', '<Cmd>Buffers<CR>')                                                                 -- Search buffer list for file.
+  { silent = true })                                                                                   -- Alt-t: insert TODO comment.
+map('i', '<A-x>', ' <C-r><C-r>=&commentstring<CR><C-o>:s/%s/XXX(gib): /<CR><C-o>A', { silent = true }) -- Alt-x: insert XXX comment (ignore-xxx).
+map('i', '<C-u>', '<C-g>u<C-u>')                                                                       -- Make <C-u> undo-friendly
+map('i', '<C-w>', '<C-g>u<C-w>')                                                                       -- Make <C-w> undo-friendly
+map('i', '<CR>', [[coc#pum#visible() ? coc#pum#confirm() : "\<CR>"]], { expr = true })                 -- If in completion, select current, else normal enter (with coc hook).
+map('i', '<S-Tab>', [[coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"]], { expr = true })               -- Shift-Tab is previous entry if completion menu open.
+map('i', '<Tab>', 'v:lua.Smart_Tab()', { expr = true, silent = true })                                 -- If in completion, next entry, else if previous character was a space indent, else trigger completion manually.
+map('n', "<Leader>Z", [[&foldlevel ? 'zM' :'zR']], { expr = true })                                    -- Toggle folding everywhere (see also "zi).
+map('n', '-', '<Cmd>e %:h<CR>')                                                                        -- Use - to open the current buffer directory in the file browser (repeat for `cd ..`).
+map('n', '<A-C>', '<Plug>(coc-diagnostic-prev)', { noremap = false })                                  -- Prev changed Coc diagnostic.
+map('n', '<A-Down>', '<C-e>')                                                                          -- Scroll down a line.
+map('n', '<A-E>', '100<C-w>k')                                                                         -- Switch to the top window,
+map('n', '<A-Enter>', '<plug>(coc-codelens-action)', { noremap = false })                              -- Run available CodeLens actions (e.g. run tests).
+map('n', '<A-F>', '<Cmd>CocPrev<CR>', { noremap = false })                                             -- Next Coc list (e.g. compile error).
+map('n', '<A-G>', '<Plug>(GitGutterPrevHunk)', { noremap = false })                                    -- Prev changed git hunk.
+map('n', '<A-H>', '100<C-w>h')                                                                         -- Switch to the leftmost window,
+map('n', '<A-I>', '100<C-w>l')                                                                         -- Switch to the rightmost window.
+map('n', '<A-L>', '<Cmd>lprev<CR>')                                                                    -- Prev item in the location list.
+map('n', '<A-Left>', 'zh')                                                                             -- Scroll view left a character.
+map('n', '<A-N>', '100<C-w>j')                                                                         -- Switch to the bottom window,
+map('n', '<A-Q>', '<Cmd>cprev<CR>')                                                                    -- Prev item in the quickfix list.
+map('n', '<A-Right>', 'zl')                                                                            -- Scroll view right a character.
+map('n', '<A-S>', '[s')                                                                                -- Prev spelling mistake.
+map('n', '<A-Space>', 'v<Plug>(coc-codeaction-selected)<Esc>', { noremap = false })                    -- Run available LSP actions (neoclide/coc.nvim#1981).
+map('n', '<A-T>', '<Cmd>tabprev<CR>')                                                                  -- Prev tab.
+map('n', '<A-TAB>', '<Plug>(coc-range-select)', { silent = true, noremap = false })                    -- Visually select increasingly large ranges (requires LS 'textDocument/selectionRange').
+map('n', '<A-Up>', '<C-y>')                                                                            -- Scroll up a line.
+map('n', '<A-X>', '<Cmd>bd<CR>')                                                                       -- Close current buffer (work around https://github.com/moll/vim-bbye/issues/15).
+map('n', '<A-c>', '<Plug>(coc-diagnostic-next)', { noremap = false })                                  -- Next changed Coc message (e.g. compile error).
+map('n', '<A-d>', '<Cmd>tabclose<CR>')                                                                 -- Close current tab.
+map('n', '<A-e>', '<C-w>k')                                                                            -- Switch up a window,
+map('n', '<A-f>', '<Cmd>CocNext<CR>', { noremap = false })                                             -- Next Coc list (e.g. compile error if you hit <Leader>ce).
+map('n', '<A-g>', '<Plug>(GitGutterNextHunk)', { noremap = false })                                    -- Next changed git hunk.
+map('n', '<A-h>', '<C-w>h')                                                                            -- Switch left a window,
+map('n', '<A-i>', '<C-w>l')                                                                            -- Switch right a window.
+map('n', '<A-l>', '<Cmd>lnext<CR>')                                                                    -- Next item in the location list.
+map('n', '<A-n>', '<C-w>j')                                                                            -- Switch down a window,
+map('n', '<A-q>', '<Cmd>cnext<CR>')                                                                    -- Next item in the quickfix list.
+map('n', '<A-s>', ']s')                                                                                -- Next spelling mistake.
+map('n', '<A-t>', '<Cmd>tabnext<CR>')                                                                  -- Next tab.
+map('n', '<A-x>', '<Cmd>Bdelete<CR>')                                                                  -- Close current buffer.
+map('n', '<A-z>', '<Cmd>Zi<CR>')                                                                       -- Switch to different directory.
+map('n', '<C-p>', '<C-i>')                                                                             -- <C-o> = go to previous jump, <C-p> is go to next (normally <C-i>, but that == Tab, used above).
+map('n', '<Leader>+', '<Cmd>exe "resize ".(winheight(0) * 3/2)<CR>', { silent = true })                -- Increase window height to 3/2.
+map('n', '<Leader>-', '<Cmd>exe "resize ".(winheight(0) * 2/3)<CR>', { silent = true })                -- Reduce window height to 3/2.
+map('n', '<Leader>/', '<Cmd>noh<CR>')                                                                  -- Turn off find highlighting.
+map('n', '<Leader>1', '<Plug>BufTabLine.Go(1)', { noremap = false })                                   -- <Leader>1 goes to buffer 1 (see numbers in tab bar).
+map('n', '<Leader>2', '<Plug>BufTabLine.Go(2)', { noremap = false })                                   -- <Leader>1 goes to buffer 2 (see numbers in tab bar).
+map('n', '<Leader>3', '<Plug>BufTabLine.Go(3)', { noremap = false })                                   -- <Leader>1 goes to buffer 3 (see numbers in tab bar).
+map('n', '<Leader>4', '<Plug>BufTabLine.Go(4)', { noremap = false })                                   -- <Leader>1 goes to buffer 4 (see numbers in tab bar).
+map('n', '<Leader>5', '<Plug>BufTabLine.Go(5)', { noremap = false })                                   -- <Leader>1 goes to buffer 5 (see numbers in tab bar).
+map('n', '<Leader>6', '<Plug>BufTabLine.Go(6)', { noremap = false })                                   -- <Leader>1 goes to buffer 6 (see numbers in tab bar).
+map('n', '<Leader>7', '<Plug>BufTabLine.Go(7)', { noremap = false })                                   -- <Leader>1 goes to buffer 7 (see numbers in tab bar).
+map('n', '<Leader>8', '<Plug>BufTabLine.Go(8)', { noremap = false })                                   -- <Leader>1 goes to buffer 8 (see numbers in tab bar).
+map('n', '<Leader>9', '<Plug>BufTabLine.Go(-1)', { noremap = false })                                  -- <Leader>1 goes to buffer 9 (last buffer (see numbers in tab bar).
+map('n', '<Leader>;', '@:')                                                                            -- Repeat the last executed command.
+map('n', '<Leader><', '<Cmd>exe "vertical resize ".(winwidth(0) * 2/3)<CR>', { silent = true })        -- Decrease window width to 2/3.
+map('n', '<Leader>>', '<Cmd>exe "vertical resize ".(winwidth(0) * 3/2)<CR>', { silent = true })        -- Increase window width to 3/2.
+map('n', '<Leader>D', '<Cmd>%d<CR>')                                                                   -- Delete all text in buffer.
+map('n', '<Leader>E', '<C-W>z:cclose<CR>:lclose<CR>:helpclose<CR><Plug>(coc-float-hide)')              -- Close open preview windows (e.g. language server definitions).
+map('n', '<Leader>F', ':grep ')                                                                        -- Search file contents for file.
+map('n', '<Leader>P', '"+P')                                                                           -- Paste from system clipboard before cursor.
+map('n', '<Leader>R', ':/ce <bar> up<Home>cfdo %s/')                                                   -- Replace in all quickfix files (use after gr).
+map('n', '<Leader>S', ':<C-u>set operatorfunc=SortLinesOpFunc<CR>g@')                                  -- Sort lines in <motion>.
+map('n', '<Leader>T', '<Cmd>term<CR>')                                                                 -- Open terminal in current split.
+map('n', '<Leader>W', '<Cmd>w<CR>')                                                                    -- Write whether or not there were changes.
+map('n', '<Leader>X', '<Cmd>xa<CR>')                                                                   -- Quit all windows.
+map('n', '<Leader>Y', '<Cmd>%y+<CR>')                                                                  -- Copy file to clipboard (normal mode).
+map('n', '<Leader>a', '@a')                                                                            -- Apply macro a (add with qa or yank to a reg with "ay).
+map('n', '<Leader>b', '<Cmd>Buffers<CR>')                                                              -- Search buffer list for file.
 map('n', '<Leader>cD', ':call DupBuffer()<CR><Plug>(coc-definition)',
-  { silent = true, noremap = false })                                                                     -- Go to definition in other split.
-map('n', '<Leader>cE', ':<C-u>CocList diagnostics<cr>', { silent = true })                                -- Manage extensions
-map('n', '<Leader>cR', '<Plug>(coc-refactor)', { noremap = false })                                       -- Remap for refactoring current selection.
-map('n', '<Leader>cc', '<Cmd>CocList commands<CR>', { silent = true })                                    -- Show commands
-map('n', '<Leader>cd', '<Plug>(coc-definition)', { silent = true, noremap = false })                      -- Go to definition.
-map('n', '<Leader>ce', ':<C-u>CocList --first diagnostics<cr>', { silent = true })                        -- Show all diagnostics (<C-a><C-q> to open all in quickfix).
-map('n', '<Leader>cf', '<Plug>(coc-format)', { noremap = false })                                         -- Format current buffer.
-map('n', '<Leader>ci', '<Plug>(coc-implementation)', { silent = true, noremap = false })                  -- Go to implementation.
-map('n', '<Leader>co', '<Cmd>CocList outline<CR>', { silent = true })                                     -- Find symbol of current document
-map('n', '<Leader>cp', '<Cmd>CocListResume<CR>', { silent = true })                                       -- Resume latest coc list
-map('n', '<Leader>cq', '<Cmd>cexpr getreg("+")<CR>')                                                      -- Open the current clipboard in the Quickfix window.
-map('n', '<Leader>cr', '<Plug>(coc-rename)', { noremap = false })                                         -- Remap for rename current word
-map('n', '<Leader>cs', '<Cmd>CocList -I symbols<CR>', { silent = true })                                  -- Search workspace symbols
-map('n', '<Leader>ct', '<Plug>(coc-type-definition)', { silent = true, noremap = false })                 -- Go to type definition.
-map('n', '<Leader>cu', '<Plug>(coc-references)', { silent = true, noremap = false })                      -- Go to usages.
-map('n', '<Leader>d', '<Cmd>Bdelete<CR>')                                                                 -- Close buffer without closing split,
-map('n', '<Leader>e', '<C-w>q')                                                                           -- Close current split (keeps buffer).
-map('n', '<Leader>f', '<Cmd>Files<CR>')                                                                   -- Search file names for file,
-map('n', '<Leader>gC', '<Cmd>CocConfig<CR>')                                                              -- Edit colorscheme file.
-map('n', '<Leader>gG', ':Resolve<CR>|:Gcd<CR>')                                                           -- Cd to root of git directory current file is in.
-map('n', '<Leader>gQ', '<Cmd>set fo+=t<CR><Cmd>set fo?<CR>')                                              -- Turn on auto-inserting newlines when you go over the textwidth.
-map('n', '<Leader>ga', '<Cmd>AnyJumpLastResults<CR>')                                                     -- open last closed search window again
-map('n', '<Leader>gb', '<Cmd>AnyJumpBack<CR>')                                                            -- open previous opened file (after jump)
-map('n', '<Leader>gc', '<Cmd>cd %:p:h<CR>')                                                               -- Change vim directory (:pwd) to current file's dirname (e.g. for <space>f, :e).
-map('n', '<Leader>gd', '<Cmd>w !git diff --no-index % - <CR>')                                            -- Diff between saved file and current.
-map('n', '<Leader>gf', '<Cmd>call DupBuffer()<CR>gF')                                                     -- Open file path:row:col under cursor in last window.
-map('n', '<Leader>gg', ':Resolve<CR>|:tab Git<CR>')                                                       -- Open fugitive Gstatus in a new tab.
-map('n', '<Leader>gn', '<Cmd>set number!<CR>')                                                            -- Toggle line numbers.
-map('n', '<Leader>gp', '`[v`]')                                                                           -- Visual selection of the last thing you copied or pasted.
-map('n', '<Leader>gq', '<Cmd>set fo-=t<CR><Cmd>set fo?<CR>')                                              -- Turn off auto-inserting newlines when you go over the textwidth.
-map('n', '<Leader>gt', '<Cmd>set et!<CR>:set et?<CR>')                                                    -- Toggle tabs/spaces.
-map('n', '<Leader>gv', '<Cmd>e $MYVIMRC<CR>')                                                             -- <Space>gv opens vimrc in the editor (autoreloaded on save).
-map('n', '<Leader>gw', '<Cmd>setlocal wrap!<CR>')                                                         -- <Space>gw toggles the soft-wrapping of text (whether text runs off the screen).
-map('n', '<Leader>gx', '<Cmd>grep -F "XXX(gib)"<CR>')                                                     -- <Space>gx searches for XXX comments.
-map('n', '<Leader>ht', 'ITODO(gib): <ESC>:Commentary<CR>$')                                               -- Insert a TODO, (Write todo, then `<Space>ht`).
-map('n', '<Leader>hx', 'IXXX(gib): <ESC>:Commentary<CR>$')                                                -- Insert an XXX, (Write todo, then `<Space>hx`).
-map('n', '<Leader>i', '<Cmd>vsp<CR><C-w>h:bp<CR>')                                                        -- Open vertical split.
-map('n', '<Leader>j', '<Cmd>AnyJump<CR>')                                                                 -- Jump to definition under cursore
-map('n', '<Leader>l', ':Locate ')                                                                         -- Search filesystem for files.
-map('n', '<Leader>n', '<Cmd>sp<CR><C-w>k:bp<CR>')                                                         -- Open horizontal split,
-map('n', '<Leader>o', '<Plug>(coc-openlink)', { noremap = false })                                        -- Open the selected text with the appropriate program (like netrw-gx).
-map('n', '<Leader>p', '"+p')                                                                              -- Paste from clipboard after cursor.
-map('n', '<Leader>q', '<Cmd>qa<CR>')                                                                      -- Quit if no unsaved changes (for single file use <Space>d instead).
-map('n', '<Leader>r', ':%s/')                                                                             -- Replace in current doc.
-map('n', '<Leader>t', '<Cmd>vsplit term://$SHELL<CR>i')                                                   -- Open terminal in new split.
-map('n', '<Leader>u', '<Cmd>MundoToggle<CR>')                                                             -- Toggle Undo tree visualisation.
-map('n', '<Leader>w', '<Cmd>up<CR>')                                                                      -- Write if there were changes.
-map('n', '<Leader>x', '<Cmd>x<CR>')                                                                       -- Save (if changes) and quit.
-map('n', '<Leader>y', '"+y')                                                                              -- Copy to clipboard (normal mode).
-map('n', '<Leader>z', 'za')                                                                               -- Toggle folding on current line.
-map('n', '<S-Tab>', '<Cmd>bp<CR>')                                                                        -- Shift-Tab to switch to previous buffer.
-map('n', '<Tab>', '<Cmd>bn<CR>')                                                                          -- Tab to switch to next buffer,
-map('n', 'K', '<CMD>lua Show_Documentation()<CR>')                                                        -- Use K for show documentation in preview window
-map('n', 'N', '(v:searchforward) ? "N" : "n"', { expr = true })                                           -- N is always "next one up" even if you hit #
-map('n', 'Q', '<nop>')                                                                                    -- Q unused (disabled to avoid accidental triggering).
-map('n', 'gr', '<Plug>(operator-ripgrep-root)', { noremap = false })                                      -- Ripgrep search for operator.
-map('n', 'n', '(v:searchforward) ? "n" : "N"', { expr = true })                                           -- n is always "next one down" even if you hit #
-map('o', 'af', '<Plug>(coc-funcobj-a)', { noremap = false })                                              -- select around function (requires 'textDocument.documentSymbol')
-map('o', 'if', '<Plug>(coc-funcobj-i)', { noremap = false })                                              -- select in function (requires 'textDocument.documentSymbol')
-map('t', '<A-e>', [[<C-\><C-n><C-w>k]])                                                                   -- Switch up a window in terminal,
-map('t', '<A-h>', [[<C-\><C-n><C-w>h]])                                                                   -- Switch left a window in terminal,
-map('t', '<A-i>', [[<C-\><C-n><C-w>l]])                                                                   -- Switch right a window in terminal.
-map('t', '<A-n>', [[<C-\><C-n><C-w>j]])                                                                   -- Switch down a window in terminal,
-map('t', '<Esc>', [[<C-\><C-n>]])                                                                         -- Go to normal mode.
-map('v', '//', [[y/\V<C-r>=escape(@",'/\')<CR><CR>]])                                                     -- Search for selected text with // (very no-magic mode, searches for exactly what you select).
-map('v', '<A-Space>', '<Plug>(coc-codeaction-selected)', { noremap = false })                             -- Run available LSP actions (https://github.com/neoclide/coc.nvim/issues/1981).
-map('v', '<C-n>', '<Plug>(coc-snippets-select)', { noremap = false })                                     -- Select text for visual placeholder of snippet.
-map('v', '<Leader>cf', '<Plug>(coc-format-selected)', { noremap = false })                                -- Format selected region
-map('v', '<Leader>d', '"+d')                                                                              -- Cut from clipboard (visual mode).
-map('v', '<Leader>gs', ':<C-u>call SumVis()<CR>')                                                         -- Sum selected numbers.
-map('v', '<Leader>p', '"+p')                                                                              -- Paste from clipboard (visual mode).
-map('v', '<Leader>y', '"+y')                                                                              -- Copy from clipboard (visual mode).
-map('v', 'g//', [[y/\V<C-R>=&ic?'\c':'\C'<CR><C-r>=escape(@",'/\')<CR><CR>]])                             -- Search for selected text case-insensitively.
-map('v', 'gr', '<Plug>(operator-ripgrep-root)', { noremap = false })                                      -- Ripgrep search for selection.
-map('x', 'af', '<Plug>(coc-funcobj-a)', { noremap = false })                                              -- select around function (requires 'textDocument.documentSymbol')
-map('x', 'if', '<Plug>(coc-funcobj-i)', { noremap = false })                                              -- select in function (requires 'textDocument.documentSymbol')
+  { silent = true, noremap = false })                                                                  -- Go to definition in other split.
+map('n', '<Leader>cE', ':<C-u>CocList diagnostics<cr>', { silent = true })                             -- Manage extensions
+map('n', '<Leader>cR', '<Plug>(coc-refactor)', { noremap = false })                                    -- Remap for refactoring current selection.
+map('n', '<Leader>cc', '<Cmd>CocList commands<CR>', { silent = true })                                 -- Show commands
+map('n', '<Leader>cd', '<Plug>(coc-definition)', { silent = true, noremap = false })                   -- Go to definition.
+map('n', '<Leader>ce', ':<C-u>CocList --first diagnostics<cr>', { silent = true })                     -- Show all diagnostics (<C-a><C-q> to open all in quickfix).
+map('n', '<Leader>cf', '<Plug>(coc-format)', { noremap = false })                                      -- Format current buffer.
+map('n', '<Leader>ci', '<Plug>(coc-implementation)', { silent = true, noremap = false })               -- Go to implementation.
+map('n', '<Leader>co', '<Cmd>CocList outline<CR>', { silent = true })                                  -- Find symbol of current document
+map('n', '<Leader>cp', '<Cmd>CocListResume<CR>', { silent = true })                                    -- Resume latest coc list
+map('n', '<Leader>cq', '<Cmd>cexpr getreg("+")<CR>')                                                   -- Open the current clipboard in the Quickfix window.
+map('n', '<Leader>cr', '<Plug>(coc-rename)', { noremap = false })                                      -- Remap for rename current word
+map('n', '<Leader>cs', '<Cmd>CocList -I symbols<CR>', { silent = true })                               -- Search workspace symbols
+map('n', '<Leader>ct', '<Plug>(coc-type-definition)', { silent = true, noremap = false })              -- Go to type definition.
+map('n', '<Leader>cu', '<Plug>(coc-references)', { silent = true, noremap = false })                   -- Go to usages.
+map('n', '<Leader>d', '<Cmd>Bdelete<CR>')                                                              -- Close buffer without closing split,
+map('n', '<Leader>e', '<C-w>q')                                                                        -- Close current split (keeps buffer).
+map('n', '<Leader>f', '<Cmd>Files<CR>')                                                                -- Search file names for file,
+map('n', '<Leader>gC', '<Cmd>CocConfig<CR>')                                                           -- Edit colorscheme file.
+map('n', '<Leader>gG', ':Resolve<CR>|:Gcd<CR>')                                                        -- Cd to root of git directory current file is in.
+map('n', '<Leader>gQ', '<Cmd>set fo+=t<CR><Cmd>set fo?<CR>')                                           -- Turn on auto-inserting newlines when you go over the textwidth.
+map('n', '<Leader>ga', '<Cmd>AnyJumpLastResults<CR>')                                                  -- open last closed search window again
+map('n', '<Leader>gb', '<Cmd>AnyJumpBack<CR>')                                                         -- open previous opened file (after jump)
+map('n', '<Leader>gc', '<Cmd>cd %:p:h<CR>')                                                            -- Change vim directory (:pwd) to current file's dirname (e.g. for <space>f, :e).
+map('n', '<Leader>gd', '<Cmd>w !git diff --no-index % - <CR>')                                         -- Diff between saved file and current.
+map('n', '<Leader>gf', '<Cmd>call DupBuffer()<CR>gF')                                                  -- Open file path:row:col under cursor in last window.
+map('n', '<Leader>gg', ':Resolve<CR>|:tab Git<CR>')                                                    -- Open fugitive Gstatus in a new tab.
+map('n', '<Leader>gn', '<Cmd>set number!<CR>')                                                         -- Toggle line numbers.
+map('n', '<Leader>gp', '`[v`]')                                                                        -- Visual selection of the last thing you copied or pasted.
+map('n', '<Leader>gq', '<Cmd>set fo-=t<CR><Cmd>set fo?<CR>')                                           -- Turn off auto-inserting newlines when you go over the textwidth.
+map('n', '<Leader>gt', '<Cmd>set et!<CR>:set et?<CR>')                                                 -- Toggle tabs/spaces.
+map('n', '<Leader>gv', '<Cmd>e $MYVIMRC<CR>')                                                          -- <Space>gv opens vimrc in the editor (autoreloaded on save).
+map('n', '<Leader>gw', '<Cmd>setlocal wrap!<CR>')                                                      -- <Space>gw toggles the soft-wrapping of text (whether text runs off the screen).
+map('n', '<Leader>gx', '<Cmd>grep -F "XXX(gib)"<CR>')                                                  -- <Space>gx searches for XXX comments.
+map('n', '<Leader>ht', 'ITODO(gib): <ESC>:Commentary<CR>$')                                            -- Insert a TODO, (Write todo, then `<Space>ht`).
+map('n', '<Leader>hx', 'IXXX(gib): <ESC>:Commentary<CR>$')                                             -- Insert an XXX, (Write todo, then `<Space>hx`).
+map('n', '<Leader>i', '<Cmd>vsp<CR><C-w>h:bp<CR>')                                                     -- Open vertical split.
+map('n', '<Leader>j', '<Cmd>AnyJump<CR>')                                                              -- Jump to definition under cursore
+map('n', '<Leader>l', ':Locate ')                                                                      -- Search filesystem for files.
+map('n', '<Leader>n', '<Cmd>sp<CR><C-w>k:bp<CR>')                                                      -- Open horizontal split,
+map('n', '<Leader>o', '<Plug>(coc-openlink)', { noremap = false })                                     -- Open the selected text with the appropriate program (like netrw-gx).
+map('n', '<Leader>p', '"+p')                                                                           -- Paste from clipboard after cursor.
+map('n', '<Leader>q', '<Cmd>qa<CR>')                                                                   -- Quit if no unsaved changes (for single file use <Space>d instead).
+map('n', '<Leader>r', ':%s/')                                                                          -- Replace in current doc.
+map('n', '<Leader>t', '<Cmd>vsplit term://$SHELL<CR>i')                                                -- Open terminal in new split.
+map('n', '<Leader>u', '<Cmd>MundoToggle<CR>')                                                          -- Toggle Undo tree visualisation.
+map('n', '<Leader>w', '<Cmd>up<CR>')                                                                   -- Write if there were changes.
+map('n', '<Leader>x', '<Cmd>x<CR>')                                                                    -- Save (if changes) and quit.
+map('n', '<Leader>y', '"+y')                                                                           -- Copy to clipboard (normal mode).
+map('n', '<Leader>z', 'za')                                                                            -- Toggle folding on current line.
+map('n', '<S-Tab>', '<Cmd>bp<CR>')                                                                     -- Shift-Tab to switch to previous buffer.
+map('n', '<Tab>', '<Cmd>bn<CR>')                                                                       -- Tab to switch to next buffer,
+map('n', 'K', '<CMD>lua Show_Documentation()<CR>')                                                     -- Use K for show documentation in preview window
+map('n', 'N', '(v:searchforward) ? "N" : "n"', { expr = true })                                        -- N is always "next one up" even if you hit #
+map('n', 'Q', '<nop>')                                                                                 -- Q unused (disabled to avoid accidental triggering).
+map('n', 'gr', '<Plug>(operator-ripgrep-root)', { noremap = false })                                   -- Ripgrep search for operator.
+map('n', 'n', '(v:searchforward) ? "n" : "N"', { expr = true })                                        -- n is always "next one down" even if you hit #
+map('o', 'af', '<Plug>(coc-funcobj-a)', { noremap = false })                                           -- select around function (requires 'textDocument.documentSymbol')
+map('o', 'if', '<Plug>(coc-funcobj-i)', { noremap = false })                                           -- select in function (requires 'textDocument.documentSymbol')
+map('t', '<A-e>', [[<C-\><C-n><C-w>k]])                                                                -- Switch up a window in terminal,
+map('t', '<A-h>', [[<C-\><C-n><C-w>h]])                                                                -- Switch left a window in terminal,
+map('t', '<A-i>', [[<C-\><C-n><C-w>l]])                                                                -- Switch right a window in terminal.
+map('t', '<A-n>', [[<C-\><C-n><C-w>j]])                                                                -- Switch down a window in terminal,
+map('t', '<Esc>', [[<C-\><C-n>]])                                                                      -- Go to normal mode.
+map('v', '//', [[y/\V<C-r>=escape(@",'/\')<CR><CR>]])                                                  -- Search for selected text with // (very no-magic mode, searches for exactly what you select).
+map('v', '<A-Space>', '<Plug>(coc-codeaction-selected)', { noremap = false })                          -- Run available LSP actions (https://github.com/neoclide/coc.nvim/issues/1981).
+map('v', '<C-n>', '<Plug>(coc-snippets-select)', { noremap = false })                                  -- Select text for visual placeholder of snippet.
+map('v', '<Leader>cf', '<Plug>(coc-format-selected)', { noremap = false })                             -- Format selected region
+map('v', '<Leader>d', '"+d')                                                                           -- Cut from clipboard (visual mode).
+map('v', '<Leader>gs', ':<C-u>call SumVis()<CR>')                                                      -- Sum selected numbers.
+map('v', '<Leader>p', '"+p')                                                                           -- Paste from clipboard (visual mode).
+map('v', '<Leader>y', '"+y')                                                                           -- Copy from clipboard (visual mode).
+map('v', 'g//', [[y/\V<C-R>=&ic?'\c':'\C'<CR><C-r>=escape(@",'/\')<CR><CR>]])                          -- Search for selected text case-insensitively.
+map('v', 'gr', '<Plug>(operator-ripgrep-root)', { noremap = false })                                   -- Ripgrep search for selection.
+map('x', 'af', '<Plug>(coc-funcobj-a)', { noremap = false })                                           -- select around function (requires 'textDocument.documentSymbol')
+map('x', 'if', '<Plug>(coc-funcobj-i)', { noremap = false })                                           -- select in function (requires 'textDocument.documentSymbol')
 
 -- }}} Mappings
 
