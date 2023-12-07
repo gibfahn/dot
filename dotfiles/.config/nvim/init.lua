@@ -163,6 +163,10 @@ vim.api.nvim_create_user_command(
     if vim.fn.exists(":TSUpdateSync") ~= 0 then
       vim.cmd "TSUpdateSync"
     end
+    -- Not using CocUpdateSync as it gives no UI output.
+    if vim.fn.exists(":CocUpdateSync") ~= 0 then
+      vim.cmd "CocUpdateSync"
+    end
   end, { desc = "Updating plugins..." }
 )
 
