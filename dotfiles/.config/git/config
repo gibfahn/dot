@@ -159,7 +159,7 @@
   rsf = remote set-url                                       # Change fetch URL of remote `g rs up hsg:dot`.
   rsp = remote set-url --push                                # Change push URL of remote (`g rs up hhg:dot && g rsp up hsg:dot` to use https for fetch and ssh for push, which is faster).
   rt  = restore                                              # Restore working tree from ref (git checkout was split into this).
-  rtp = checkout -p                                          # Selectively undo some of the changes you made.
+  rtp = restore -p                                          # Selectively undo some of the changes you made.
   rth = "!git checkout $(git default-branch ${1:-up}) #"     # Checkout default branch for remote $1 (default: up).
   rv  = remote -v                                            # Show remotes (with URLs).
 
