@@ -24,6 +24,8 @@ OPTIONS:
 
 --open: opens the pull request URL for the current branch in the browser
 
+--markdown: instead of copying just the URL, copy a markdown snippet suitable for pasting into Slack.
+
 --draft: creates a draft pull request (only applies when creating a new PR)
 "
 }
@@ -40,6 +42,8 @@ while [[ $# != 0 ]]; do
   [[ ${1:-} =~ ^(--open|-o)$ ]] && { action=open; shift; }
 
   [[ ${1:-} =~ ^(--draft|-d)$ ]] && {draft=true; shift; }
+
+  [[ ${1:-} =~ ^(--markdown|-m)$ ]] && {markdown=true; shift; }
 done
 
 main() {
@@ -97,7 +101,11 @@ pr_edit() {
 
 pr_open() {
   pr_number=$(get_pr_number)
-  gh pr view --json=url --jq=.url $pr_number | tr -d '\n' | cpy
+  if [[ -n ${markdown:-} ]]; then
+    gh pr view --json=title,url $pr_number | jq -r '":pr-open: ['"$up_org/$up_repo#$pr_number"'](\(.url)) \(.title)"' | tr -d '\n' | cpy
+  else
+    gh pr view --json=url --jq=.url $pr_number | tr -d '\n' | cpy
+  fi
   gh pr view -w $pr_number
 }
 
