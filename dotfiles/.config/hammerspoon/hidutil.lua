@@ -5,16 +5,24 @@ log.d("Loading module")
 -- This is also run by a LaunchAgent, but sometimes that fails, so keep this as a backup.
 RemapKeys = function()
   log.d("Remapping keys...")
-  local cmd = os.getenv("HOME") .. "/bin/hid"
-  local output, _, _, rc = hs.execute(cmd)
-  if rc ~= 0 then
-    hs.notify.new({
-      title = '❌ Key Remap failed',
-      informativeText = rc .. " " .. output,
-      withdrawAfter = 20,
-    }):send()
-  end
-  hs.hid.capslock.set(false) -- Turn off Caps Lock.
+  hs.task.new(os.getenv("HOME") .. "/bin/hid", function(exitCode, stdOut, stdErr)
+    if exitCode == 0 then
+      hs.notify.new({
+        title = '✅ Key Remap succeeded',
+        informativeText = exitCode .. " " .. stdOut .. " " .. stdErr,
+        withdrawAfter = 3
+      }):send()
+    else
+      hs.notify.new({
+        title = '❌ Key Remap failed',
+        informativeText = exitCode .. " " .. stdOut .. " " .. stdErr,
+        withdrawAfter = 20
+      }):send()
+    end
+
+    hs.hid.capslock.set(false) -- Turn off Caps Lock.
+  end):start()
+
 end
 
 -- Always re-remap keys on some events.

@@ -25,6 +25,7 @@ autoload -U colors && colors
 main() {
   set_env_vars
   whoami=$(whoami)
+  hidutil=/usr/bin/hidutil
   case $whoami in
     gib | brian) remap_gib ;;
     eve) remap_eve ;;
@@ -38,7 +39,7 @@ remap_gib() {
   # Apple Keyboards.
   # ISO_BACKSLASH becomes GRAVE_TILDE
   # GRAVE_TILDE becomees hyper
-  hidutil property --matching '[{"VendorID":0x5ac},{"VendorID":0x4c}]' --set "{\"UserKeyMapping\":[
+  $hidutil property --matching '[{"VendorID":0x5ac},{"VendorID":0x4c}]' --set "{\"UserKeyMapping\":[
   {$FROM: $CAPS_LOCK,             $TO: $LEFT_SHIFT},
   {$FROM: $LEFT_SHIFT,             $TO: $LEFT_CTRL},
   {$FROM: $GRAVE_TILDE,             $TO: $F17},
@@ -48,7 +49,7 @@ remap_gib() {
   # Cooler Master Keyboards.
   # Convert windows keyboard to macOS (swap cmd and alt).
   # GRAVE_TILDE (`) is already in the right place, ISO_BACKSLASH (§) becomes Hyper.
-  hidutil property --matching '{"VendorID":0x2516}' --set "{\"UserKeyMapping\":[
+  $hidutil property --matching '{"VendorID":0x2516}' --set "{\"UserKeyMapping\":[
   {$FROM: $CAPS_LOCK,             $TO: $LEFT_SHIFT},
   {$FROM: $LEFT_SHIFT,             $TO: $LEFT_CTRL},
   {$FROM: $LEFT_GUI,             $TO: $LEFT_ALT},
@@ -57,14 +58,14 @@ remap_gib() {
   ]}" >/dev/null
 
   # Kinesis Freestyle Keyboard
-  hidutil property --matching '{"VendorID":0x58f}' --set "{\"UserKeyMapping\":[
+  $hidutil property --matching '{"VendorID":0x58f}' --set "{\"UserKeyMapping\":[
   {$FROM: $CAPS_LOCK,             $TO: $LEFT_SHIFT},
   {$FROM: $LEFT_SHIFT,             $TO: $LEFT_CTRL},
   {$FROM: $LEFT_CTRL,             $TO: $F17}
   ]}" >/dev/null
 
   # Kinesis Freestyle Edge Keyboard
-  hidutil property --matching '{"VendorID":0x29ea}' --set "{\"UserKeyMapping\":[
+  $hidutil property --matching '{"VendorID":0x29ea}' --set "{\"UserKeyMapping\":[
   {$FROM: $CAPS_LOCK,            $TO: $LEFT_SHIFT},
   {$FROM: $LEFT_SHIFT,           $TO: $LEFT_CTRL},
   {$FROM: $LEFT_GUI,             $TO: $LEFT_ALT},
@@ -77,13 +78,13 @@ remap_gib() {
 
 remap_eve() {
   # Apple Keyboards.
-  hidutil property --matching '{"VendorID":0x5ac}' --set "{\"UserKeyMapping\":[
+  $hidutil property --matching '{"VendorID":0x5ac}' --set "{\"UserKeyMapping\":[
   {$FROM: $CAPS_LOCK,             $TO: $LEFT_SHIFT}
   ]}" >/dev/null
 
   # Cooler Master Keyboards.
   # Convert windows keyboard to macOS (swap cmd and alt).
-  hidutil property --matching '{"VendorID":0x2516}' --set "{\"UserKeyMapping\":[
+  $hidutil property --matching '{"VendorID":0x2516}' --set "{\"UserKeyMapping\":[
   {$FROM: $CAPS_LOCK,             $TO: $LEFT_SHIFT},
   {$FROM: $LEFT_GUI,             $TO: $LEFT_ALT},
   {$FROM: $LEFT_ALT,             $TO: $LEFT_GUI}
