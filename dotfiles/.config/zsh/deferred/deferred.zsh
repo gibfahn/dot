@@ -420,21 +420,21 @@ _gib_path_run() {
 # Fzf with multi-select from https://github.com/junegunn/fzf/pull/2098
 # CTRL-R - Paste the selected command from history into the command line
 gib-fzf-history-widget() {
-  local selected num selected_lines selected_line selected_line_arr
+  local selected num selected_line selected_line_arr
   setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
 
-  # Read history lines (split on newline) into selected_lines array.
-  selected_lines=(
-    "${(@f)$(fc -rl 1 | perl -ne 'print if !$seen{(/^\s*[0-9]+\**\s+(.*)/, $1)}++' |
+  # Read history lines (split on newline) into selected array.
+  selected=(
+    "${(@f)$(fc -rl 1 | awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, "", cmd); if (!seen[cmd]++) print $0 }' |
     FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort,ctrl-z:ignore $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} -m" $(__fzfcmd))}"
   )
   local ret=$?
 
   # Remove empty elements, converting ('') to ().
-  selected_lines=($selected_lines)
-  if [[ "${#selected_lines[@]}" -ne 0 ]]; then
+  selected=($selected)
+  if [[ "${#selected[@]}" -ne 0 ]]; then
     local -a history_lines=()
-    for selected_line in "${selected_lines[@]}"; do
+    for selected_line in "${selected[@]}"; do
       # Split each history line on spaces, and take the 1st value (history line number).
       selected_line_arr=($=selected_line)
       num=$selected_line_arr[1]
