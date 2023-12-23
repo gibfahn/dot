@@ -25,7 +25,7 @@ autoload -U colors && colors
 main() {
   set_env_vars
   whoami=$(whoami)
-  hidutil=/usr/bin/hidutil
+  : ${hidutil:=/usr/bin/hidutil}
   case $whoami in
     gib | brian) remap_gib ;;
     eve) remap_eve ;;
