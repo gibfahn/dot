@@ -50,45 +50,6 @@ vim.g.coc_global_extensions = { 'coc-actions', 'coc-ccls', 'coc-clangd', 'coc-cs
   'coc-yaml'
 }
 
--- Settings for custom statusline.
-vim.g.lightline = {
-  colorscheme = 'wombat',
-  component = { truncate_here = '%<', fileformat = '%{&ff=="unix"?"":&ff}', fileencoding = '%{&fenc=="utf-8"?"":&fenc}' },
-  component_expand = {
-    coc_error = 'LightlineCocErrors',
-    coc_warning = 'LightlineCocWarnings',
-    coc_info = 'LightlineCocInfos',
-    coc_hint = 'LightlineCocHints'
-  },
-  component_visible_condition = {
-    truncate_here = 0,
-    fileformat = '&ff&&&ff!="unix"',
-    fileencoding = '&fenc&&&fenc!="utf-8"',
-  },
-  component_type = {
-    coc_error = 'error',
-    coc_warning = 'warning',
-    coc_info = 'tabsel',
-    coc_hint = 'middle',
-    coc_fix = 'middle',
-    truncate_here = 'raw'
-  },
-  component_function = {
-    currentfunction = 'CocCurrentFunction',
-    gitbranch = 'FugitiveHead',
-    wordcount = 'WordCount',
-    charcount = 'CharCount',
-  },
-  active = {
-    left = {
-      { 'mode',      'paste' }, { 'readonly', 'relativepath', 'modified' }, { 'gitbranch' }, { 'truncate_here' },
-      { 'coc_error', 'coc_warning', 'coc_info', 'coc_hint' }
-    },
-    right = { { 'lineinfo' }, { 'percent', 'wordcount', 'charcount' }, { 'fileformat', 'fileencoding', 'filetype' }, { 'currentfunction' } }
-  },
-  inactive = { left = { { 'relativepath' } }, right = { { 'lineinfo' }, { 'percent' } } },
-  tabline = { left = { { 'tabs' } }, right = { { 'close' } } }
-}
 -- }}} Global variables
 
 -- {{{ Vim options
@@ -122,7 +83,7 @@ vim.opt.path = ".,/usr/include,,**" -- Add ** to the search path so :find x work
 vim.opt.shiftround = true -- Round indent to multiple of 'shiftwidth'. Applies to > and < commands.
 vim.opt.shiftwidth = 2 -- Size of an indent
 vim.opt.showbreak = "↳   " -- Nicer line wrapping for long lines.
-vim.opt.showmode = false -- Don't show when in insert mode (set in lightline).
+vim.opt.showmode = false -- Don't show when in insert mode (set in lualine).
 vim.opt.sidescrolloff = 8 -- Columns of context
 vim.opt.signcolumn = "auto" -- Resize the sign column automatically.
 vim.opt.smartcase = true -- Do not ignore case with capitals
@@ -400,7 +361,7 @@ end
 
 -- {{{ Vimscript Commands and Functions
 vim.cmd([[
-  " https://github.com/itchyny/lightline.vim/issues/295
+  " Used in lualine https://github.com/itchyny/lightline.vim/issues/295
   function! WordCount()
     let g:word_count=wordcount().words .. 'w'
     if has_key(wordcount(),'visual_words')
@@ -408,16 +369,6 @@ vim.cmd([[
     endif
     return g:word_count
   endfunction
-
-  " https://github.com/itchyny/lightline.vim/issues/295
-  function! CharCount()
-    let g:char_count=wordcount().chars.'c'
-    if has_key(wordcount(),'visual_chars')
-      let g:char_count=wordcount().visual_chars.'c' " count selected chars
-    endif
-    return g:char_count
-  endfunction
-
 
   function! s:CallRipGrep(...) abort
     call fzf#vim#grep('rg --vimgrep --color=always --smart-case --hidden --glob !.git -F ' . shellescape(join(a:000, ' ')), 1,
@@ -446,7 +397,7 @@ vim.cmd([[
     call setpos('.', pos) " Set cursor position to what is was before.
   endfunction
 
-  " Returns the function the cursor is currently in, used in lightline status bar.
+  " Returns the function the cursor is currently in, used in lualine status bar.
   function! CocCurrentFunction()
     let f = get(b:, 'coc_current_function', '')
     return f == '' ? '' : f . '()'
@@ -462,29 +413,6 @@ vim.cmd([[
   " Function to sort lines as an operator.
   function! SortLinesOpFunc(...)
       '[,']sort
-  endfunction
-
-  " Helper function for LightlineCoc*() functions.
-  function! s:lightline_coc_diagnostic(kind, sign) abort
-    let info = get(b:, 'coc_diagnostic_info', 0)
-    if empty(info) || get(info, a:kind, 0) == 0
-      return ''
-    endif
-    return printf("%s %d", a:sign, info[a:kind])
-  endfunction
-
-  " Used in LightLine config to show diagnostic messages.
-  function! LightlineCocErrors() abort
-    return s:lightline_coc_diagnostic('error', '✖')
-  endfunction
-  function! LightlineCocWarnings() abort
-      return s:lightline_coc_diagnostic('warning', "⚠")
-  endfunction
-  function! LightlineCocInfos() abort
-    return s:lightline_coc_diagnostic('information', "ℹ")
-  endfunction
-  function! LightlineCocHints() abort
-    return s:lightline_coc_diagnostic('hints', "ℹ")
   endfunction
 
   " Sums the selected numbers.
@@ -649,8 +577,6 @@ vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHo
 -- Open the quickfix window on grep.
 vim.api.nvim_create_autocmd("QuickFixCmdPost",
   { pattern = { "*grep*" }, command = "cwindow", group = gib_autogroup })
-vim.api.nvim_create_autocmd("User",
-  { pattern = { "CocDiagnosticChange" }, command = "call lightline#update()", group = gib_autogroup })
 -- Don't allow starting Vim with multiple tabs.
 vim.api.nvim_create_autocmd("VimEnter",
   { pattern = { "*" }, command = "silent! tabonly", group = gib_autogroup })

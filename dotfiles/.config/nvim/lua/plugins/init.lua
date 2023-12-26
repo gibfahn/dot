@@ -1,3 +1,16 @@
+-- Copy of the wombat colorscheme colors I actually use here.
+-- https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/themes/wombat.lua
+local wombat_colors = {
+  base03  = '#242424',
+  base023 = '#353535',
+  base01  = '#585858',
+  base3   = '#d0d0d0',
+  yellow  = '#cae682',
+  orange  = '#e5786d',
+}
+-- Wombat colorscheme's `b` section color.
+local wombat_b = { fg = wombat_colors.base3, bg = wombat_colors.base01 }
+
 return {
 
   "fladson/vim-kitty", -- Syntax highlighting for kitty.conf file.
@@ -11,7 +24,6 @@ return {
   'fweep/vim-zsh-path-completion', -- Nicer file browser plugin.
   'gibfahn/gib-noir.nvim', -- Use my neovim colorscheme.
   'honza/vim-snippets', -- Work around https://github.com/neoclide/coc-snippets/issues/126 .
-  'itchyny/lightline.vim', -- Customize statusline and tabline.
   'junegunn/fzf.vim', -- Try :Files, :GFiles? :Buffers :Lines :History :Commits :BCommits
   'junegunn/vim-peekaboo', -- Pop up register list when pasting/macroing.
   'kana/vim-operator-user', -- Make it easier to define operators.
@@ -39,6 +51,110 @@ return {
   { 'tpope/vim-abolish',               cmd = { 'Abolish', 'Subvert', 'S' } }, -- Work with variants of words (replacing, capitalizing etc).
   { 'tpope/vim-sleuth',                dependencies = { 'vim-polyglot' } }, -- Automatically detect indentation.
   { dir = '~/.local/share/fzf',        name = 'fzf',                                         build = './install, --bin' }, -- :h fzf
+
+
+  {
+    'nvim-lualine/lualine.nvim', -- Statusline plugin.
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    opts = {
+      options = {
+        icons_enabled = false,
+        theme = 'wombat',
+        component_separators = '',
+        section_separators = '',
+      },
+      sections = { -- What to show for the active buffer.
+        lualine_a = {
+          'mode', -- e.g. NORMAL, INSERT, VISUAL, V-LINE, O-PENDING
+        },
+        lualine_b = {
+          {
+            'filename',
+            path = 1, -- Relative path
+            shorting_target = 60,-- Shorten path to leave N chars space in the window for other components.
+            symbols = {
+              readonly = '[RO]', -- Show when the file is non-modifiable or readonly.
+            },
+            -- Workaround for https://github.com/nvim-lualine/lualine.nvim/pull/1170
+            color = wombat_b,
+          },
+        },
+        lualine_c = {
+          'branch', -- git branch
+          {
+            'diff', -- Diff of saved file vs committed.
+            symbols = {added = '+', modified = '~', removed = '-'}, -- Changes the symbols used by the diff.
+          },
+          {
+            'diagnostics', -- LanguageServer diagnostics.
+            icons_enabled = true,
+            symbols = {error = '✖ ', warn = '⚠ ', info = 'ℹ ', hint = 'ℹ '},
+            diagnostics_color = {
+              -- Use lightline defaults.
+              error = { fg = wombat_colors.base03, bg = wombat_colors.orange },
+              warn  = { fg = wombat_colors.base023, bg = wombat_colors.yellow },
+            },
+          }
+        },
+        lualine_x = {
+          'CocCurrentFunction', -- Function the cursor is in.
+          {
+            'encoding', -- File encoding.
+            -- Hide unless it's not a unix file. I don't need to know in the common case.
+            cond = function() return vim.bo.fileencoding ~= 'utf-8' end,
+          },
+          {
+            'fileformat', -- unix, mac, dos (line endings \n , \n\r, \r).
+            -- Hide unless it's not a unix file. I don't need to know in the common case.
+            cond = function() return vim.bo.fileformat ~= 'unix' end,
+          },
+          'filetype', -- vim filetype, e.g. 'lua'
+        },
+        lualine_y = {
+          {
+            'progress', -- %progress in file
+            color = wombat_b, -- Make this section clearer than wombat default.
+          },
+          {
+            'selectioncount', -- number of selected characters or lines
+            color = wombat_b, -- Make this section clearer than wombat default.
+          },
+          {
+            'WordCount', -- number of words in file/selection,
+            color = wombat_b, -- Make this section clearer than wombat default.
+          },
+        },
+        lualine_z = {
+          {
+            'searchcount', -- Number of matches (when searching with /)
+            maxcount = 999, -- Show the actual count if high (vim tops out at >99).
+            timeout = 500,
+          },
+          'location', -- location in file in line:column format
+        }
+      },
+      inactive_sections = {
+        lualine_a = {},
+        lualine_b = {},
+        lualine_c = {
+          {
+            'filename',
+            path = 1, -- Relative path
+            symbols = {
+              readonly = '[RO]', -- Show when the file is non-modifiable or readonly.
+            },
+          },
+        },
+        lualine_x = {'location'},
+        lualine_y = {},
+        lualine_z = {}
+      },
+      tabline = {}, -- Disable tabline.
+      extensions = {
+        'quickfix', -- Show 'Quickfix List' not '[No Name]' for Quickfix buffers
+      },
+    },
+  },
 
   {
     "rcarriga/nvim-notify", -- Notification plugin used by noice.
