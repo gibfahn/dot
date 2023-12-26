@@ -349,8 +349,10 @@ map('v', '<Leader>p', '"+p')                                                    
 map('v', '<Leader>y', '"+y')                                                                           -- Copy from clipboard (visual mode).
 map('v', 'g//', [[y/\V<C-R>=&ic?'\c':'\C'<CR><C-r>=escape(@",'/\')<CR><CR>]])                          -- Search for selected text case-insensitively.
 map('v', 'gr', '<Plug>(operator-ripgrep-root)', { noremap = false })                                   -- Ripgrep search for selection.
+map('x', 'P', 'p' ) -- Use P to update clipboard with selected text when pasting.
 map('x', 'af', '<Plug>(coc-funcobj-a)', { noremap = false })                                           -- select around function (requires 'textDocument.documentSymbol')
 map('x', 'if', '<Plug>(coc-funcobj-i)', { noremap = false })                                           -- select in function (requires 'textDocument.documentSymbol')
+map('x', 'p', 'P' ) -- Don't overwrite clipboard when pasting over text https://vi.stackexchange.com/questions/39149/how-to-stop-neovim-from-yanking-text-on-pasting-over-selection
 
 -- }}} Mappings
 
