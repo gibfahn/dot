@@ -1,16 +1,3 @@
--- Copy of the wombat colorscheme colors I actually use here.
--- https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/themes/wombat.lua
-local wombat_colors = {
-  base03  = '#242424',
-  base023 = '#353535',
-  base01  = '#585858',
-  base3   = '#d0d0d0',
-  yellow  = '#cae682',
-  orange  = '#e5786d',
-}
--- Wombat colorscheme's `b` section color.
-local wombat_b = { fg = wombat_colors.base3, bg = wombat_colors.base01 }
-
 return {
 
   "fladson/vim-kitty", -- Syntax highlighting for kitty.conf file.
@@ -56,104 +43,123 @@ return {
   {
     'nvim-lualine/lualine.nvim', -- Statusline plugin.
     dependencies = { 'nvim-tree/nvim-web-devicons' },
-    opts = {
-      options = {
-        icons_enabled = false,
-        theme = 'wombat',
-        component_separators = '',
-        section_separators = '',
-      },
-      sections = { -- What to show for the active buffer.
-        lualine_a = {
-          'mode', -- e.g. NORMAL, INSERT, VISUAL, V-LINE, O-PENDING
+    -- Use a function not a table so we can `require()` other modules.
+    opts = function()
+
+      -- Copy of the wombat colorscheme colors I actually use here.
+      -- https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/themes/wombat.lua
+      local wombat_colors = {
+        base03  = '#242424',
+        base023 = '#353535',
+        base01  = '#585858',
+        base3   = '#d0d0d0',
+        yellow  = '#cae682',
+        orange  = '#e5786d',
+      }
+
+      local custom_wombat = require'lualine.themes.wombat'
+
+      -- Wombat colorscheme's `b` section color.
+      -- Workaround for https://github.com/nvim-lualine/lualine.nvim/pull/1170
+      custom_wombat.normal.b = { fg = wombat_colors.base3, bg = wombat_colors.base01 }
+      -- Make this section clearer than wombat default.
+      custom_wombat.normal.y = custom_wombat.normal.b
+
+      return {
+        options = {
+          icons_enabled = false,
+          theme = custom_wombat,
+          component_separators = '',
+          section_separators = '',
         },
-        lualine_b = {
-          {
-            'filename',
-            path = 1, -- Relative path
-            shorting_target = 60,-- Shorten path to leave N chars space in the window for other components.
-            symbols = {
-              readonly = '[RO]', -- Show when the file is non-modifiable or readonly.
-            },
-            -- Workaround for https://github.com/nvim-lualine/lualine.nvim/pull/1170
-            color = wombat_b,
+        sections = { -- What to show for the active buffer.
+          lualine_a = {
+            'mode', -- e.g. NORMAL, INSERT, VISUAL, V-LINE, O-PENDING
           },
-        },
-        lualine_c = {
-          'branch', -- git branch
-          {
-            'diff', -- Diff of saved file vs committed.
-            symbols = {added = '+', modified = '~', removed = '-'}, -- Changes the symbols used by the diff.
-          },
-          {
-            'diagnostics', -- LanguageServer diagnostics.
-            icons_enabled = true,
-            symbols = {error = '✖ ', warn = '⚠ ', info = 'ℹ ', hint = 'ℹ '},
-            diagnostics_color = {
-              -- Use lightline defaults.
-              error = { fg = wombat_colors.base03, bg = wombat_colors.orange },
-              warn  = { fg = wombat_colors.base023, bg = wombat_colors.yellow },
+          lualine_b = {
+            {
+              'filename',
+              path = 1, -- Relative path
+              shorting_target = 60,-- Shorten path to leave N chars space in the window for other components.
+              symbols = {
+                readonly = '[RO]', -- Show when the file is non-modifiable or readonly.
+              },
             },
+          },
+          lualine_c = {
+            'branch', -- git branch
+            {
+              'diff', -- Diff of saved file vs committed.
+              symbols = {added = '+', modified = '~', removed = '-'}, -- Changes the symbols used by the diff.
+            },
+            {
+              'diagnostics', -- LanguageServer diagnostics.
+              icons_enabled = true,
+              symbols = {error = '✖ ', warn = '⚠ ', info = 'ℹ ', hint = 'ℹ '},
+              diagnostics_color = {
+                -- Use lightline defaults.
+                error = { fg = wombat_colors.base03, bg = wombat_colors.orange },
+                warn  = { fg = wombat_colors.base023, bg = wombat_colors.yellow },
+              },
+            }
+          },
+          lualine_x = {
+            'CocCurrentFunction', -- Function the cursor is in.
+            {
+              'encoding', -- File encoding.
+              -- Hide unless it's not a unix file. I don't need to know in the common case.
+              cond = function() return vim.bo.fileencoding ~= 'utf-8' end,
+            },
+            {
+              'fileformat', -- unix, mac, dos (line endings \n , \n\r, \r).
+              -- Hide unless it's not a unix file. I don't need to know in the common case.
+              cond = function() return vim.bo.fileformat ~= 'unix' end,
+            },
+            'filetype', -- vim filetype, e.g. 'lua'
+          },
+          lualine_y = {
+            'progress', -- %progress in file
+            'selectioncount', -- number of selected characters or lines
+            'WordCount', -- number of words in file/selection,
+
+            {
+              require("noice").api.status.mode.get, -- Show @recording when recording a macro.
+              cond = require("noice").api.status.mode.has,
+            },
+
+          },
+          lualine_z = {
+            {
+              'searchcount', -- Number of matches (when searching with /)
+              maxcount = 999, -- Show the actual count if high (vim tops out at >99).
+              timeout = 500,
+            },
+
+            'location', -- location in file in line:column format
           }
         },
-        lualine_x = {
-          'CocCurrentFunction', -- Function the cursor is in.
-          {
-            'encoding', -- File encoding.
-            -- Hide unless it's not a unix file. I don't need to know in the common case.
-            cond = function() return vim.bo.fileencoding ~= 'utf-8' end,
-          },
-          {
-            'fileformat', -- unix, mac, dos (line endings \n , \n\r, \r).
-            -- Hide unless it's not a unix file. I don't need to know in the common case.
-            cond = function() return vim.bo.fileformat ~= 'unix' end,
-          },
-          'filetype', -- vim filetype, e.g. 'lua'
-        },
-        lualine_y = {
-          {
-            'progress', -- %progress in file
-            color = wombat_b, -- Make this section clearer than wombat default.
-          },
-          {
-            'selectioncount', -- number of selected characters or lines
-            color = wombat_b, -- Make this section clearer than wombat default.
-          },
-          {
-            'WordCount', -- number of words in file/selection,
-            color = wombat_b, -- Make this section clearer than wombat default.
-          },
-        },
-        lualine_z = {
-          {
-            'searchcount', -- Number of matches (when searching with /)
-            maxcount = 999, -- Show the actual count if high (vim tops out at >99).
-            timeout = 500,
-          },
-          'location', -- location in file in line:column format
-        }
-      },
-      inactive_sections = {
-        lualine_a = {},
-        lualine_b = {},
-        lualine_c = {
-          {
-            'filename',
-            path = 1, -- Relative path
-            symbols = {
-              readonly = '[RO]', -- Show when the file is non-modifiable or readonly.
+        inactive_sections = {
+          lualine_a = {},
+          lualine_b = {},
+          lualine_c = {
+            {
+              'filename',
+              path = 1, -- Relative path
+              symbols = {
+                readonly = '[RO]', -- Show when the file is non-modifiable or readonly.
+              },
             },
           },
+          lualine_x = {'location'},
+          lualine_y = {},
+          lualine_z = {}
         },
-        lualine_x = {'location'},
-        lualine_y = {},
-        lualine_z = {}
-      },
-      tabline = {}, -- Disable tabline.
-      extensions = {
-        'quickfix', -- Show 'Quickfix List' not '[No Name]' for Quickfix buffers
-      },
-    },
+        tabline = {}, -- Disable tabline.
+        extensions = {
+          'quickfix', -- Show 'Quickfix List' not '[No Name]' for Quickfix buffers
+        },
+      }
+    end
   },
 
   {
