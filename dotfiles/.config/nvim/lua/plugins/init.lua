@@ -53,7 +53,9 @@ return {
     "folke/noice.nvim", -- Fancier UI for messages, cmdline, popups
     event = "VeryLazy",
     opts = {
-      -- add any options here
+      presets = {
+        long_message_to_split = true, -- long messages will be sent to a split
+      },
     },
     dependencies = {
       "MunifTanjim/nui.nvim",
