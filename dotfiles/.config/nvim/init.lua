@@ -606,6 +606,14 @@ vim.api.nvim_create_autocmd("BufReadPost",
     group = gib_autogroup
   })
 
+-- When yanking text, briefly highlight it.
+vim.api.nvim_create_autocmd("TextYankPost",
+  {
+    pattern = "*",
+    callback = function() vim.highlight.on_yank() end,
+    group = gib_autogroup
+  })
+
 
 -- }}} Autocommands
 
