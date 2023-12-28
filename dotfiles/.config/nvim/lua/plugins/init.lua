@@ -65,6 +65,22 @@ return {
       -- Make this section clearer than wombat default.
       custom_wombat.normal.y = custom_wombat.normal.b
 
+      -- Word count: show number of words and chars in selection or file, e.g. `100w 1000c`.
+      local function word_char_count()
+        local word_count = vim.fn.wordcount()
+        -- If there's a visual selection, show that count, else show whole file count.
+        local words = word_count.visual_words or word_count.words
+        local chars = word_count.visual_chars or word_count.chars
+        return words .. 'w ' .. chars .. 'c'
+      end
+
+      -- Returns the function the cursor is currently in.
+      local function coc_current_function()
+        if vim.b.coc_current_function then
+          return vim.b.coc_current_function .. '()'
+        end
+      end
+
       return {
         options = {
           icons_enabled = false,
@@ -104,7 +120,7 @@ return {
             }
           },
           lualine_x = {
-            'CocCurrentFunction', -- Function the cursor is in.
+            coc_current_function, -- Function the cursor is in.
             {
               'encoding', -- File encoding.
               -- Hide unless it's not a unix file. I don't need to know in the common case.
@@ -120,7 +136,21 @@ return {
           lualine_y = {
             'progress', -- %progress in file
             'selectioncount', -- number of selected characters or lines
-            'WordCount', -- number of words in file/selection,
+            {
+              word_char_count, -- show number of words in selection or file, e.g. `100w`.
+              cond = function()
+                -- Show if we're in a visual mode.
+                -- See `:h mode()` for a full list of modes.
+                if vim.list_contains({'v', 'vs', 'V', 'Vs', '', 's'}, vim.api.nvim_get_mode().mode) then
+                  return true
+                end
+                -- -- Show if we're in an empty file or a markdown file.
+                if vim.tbl_contains({'', 'markdown'}, vim.bo.filetype) then
+                  return true
+                end
+                return false
+              end,
+            },
 
             {
               require("noice").api.status.mode.get, -- Show @recording when recording a macro.

@@ -116,21 +116,6 @@ if vim.fn.isdirectory(home_dir .. '/wrk') ~= 0 then
   require("wrk")
 end
 
--- :PU asynchronously updates plugins.
-vim.api.nvim_create_user_command(
-  'PU',
-  function(_)
-    require("lazy").sync(plugin_opts)
-    if vim.fn.exists(":TSUpdateSync") ~= 0 then
-      vim.cmd "TSUpdateSync"
-    end
-    -- Not using CocUpdateSync as it gives no UI output.
-    if vim.fn.exists(":CocUpdateSync") ~= 0 then
-      vim.cmd "CocUpdateSync"
-    end
-  end, { desc = "Updating plugins..." }
-)
-
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -319,21 +304,17 @@ map('x', 'p', 'P' ) -- Don't overwrite clipboard when pasting over text https://
 
 -- {{{ Functions
 
--- Replace termcodes in input string (e.g. converts '<C-a>' -> '').
-local function t(str) return vim.api.nvim_replace_termcodes(str, true, true, true) end
-
--- Check whether an array (first arg) contains a value (second arg).
-local function array_contains(array, value)
-  for _, v in ipairs(array) do if v == value then return true end end
-  return false
-end
-
 -- Used in Tab mapping above. If the popup menu is visible, switch to next item in that. Else prints a tab if previous
 -- char was empty or whitespace. Else triggers completion.
 function Smart_Tab()
   local check_back_space = function()
     local col = vim.api.nvim_win_get_cursor(0)[2]
     return (col == 0 or vim.api.nvim_get_current_line():sub(col, col):match('%s')) and true
+  end
+
+  -- Replace termcodes in input string (e.g. converts '<C-a>' -> '').
+  local function t(str)
+    return vim.api.nvim_replace_termcodes(str, true, true, true)
   end
 
   if (vim.fn['coc#pum#visible']() ~= 0) then
@@ -346,9 +327,9 @@ end
 
 -- Used in K mapping above.
 -- Copied from coc.nvim README, ported to lua, opens vim help or language server help.
--- https://stackoverflow.com/questions/59440719/vime523-not-allowed-here
+-- <https://stackoverflow.com/questions/59440719/vime523-not-allowed-here>
 function Show_Documentation()
-  if (array_contains({ 'vim', 'help' }, vim.bo.filetype) or vim.fn.expand('%:p') == vim.fn.stdpath('config') .. 'init.lua') then
+  if (vim.list_contains({ 'vim', 'help' }, vim.bo.filetype) or vim.fn.expand('%:p') == vim.fn.stdpath('config') .. 'init.lua') then
     vim.cmd('help ' .. vim.fn.expand('<cword>'))
   elseif (vim.fn['coc#rpc#ready']()) then
     vim.fn.CocActionAsync('doHover')
@@ -359,17 +340,40 @@ end
 
 -- }}} Functions
 
+-- {{{ User Commands
+
+-- :PU asynchronously updates plugins.
+vim.api.nvim_create_user_command(
+  'PU',
+  function(_)
+    require("lazy").sync(plugin_opts)
+    if vim.fn.exists(":TSUpdateSync") ~= 0 then
+      vim.cmd "TSUpdateSync"
+    end
+    -- Not using CocUpdateSync as it gives no UI output.
+    if vim.fn.exists(":CocUpdateSync") ~= 0 then
+      vim.cmd "CocUpdateSync"
+    end
+  end, { desc = "Updating plugins..." }
+)
+
+-- Run :Trim to trim trailing whitespace in this file.
+vim.api.nvim_create_user_command(
+  'Trim',
+  -- Trim trailing whitespace in the current file.
+  -- <https://vi.stackexchange.com/questions/37421/how-to-remove-neovim-trailing-white-space>
+  function(_)
+      local save_cursor = vim.fn.getpos(".")
+      vim.cmd([[%s/\s\+$//e]])
+      vim.fn.setpos(".", save_cursor)
+  end,
+  {desc = "Trimming whitespace..."}
+)
+
+-- }}} User Commands
+
 -- {{{ Vimscript Commands and Functions
 vim.cmd([[
-  " Used in lualine https://github.com/itchyny/lightline.vim/issues/295
-  function! WordCount()
-    let g:word_count=wordcount().words .. 'w'
-    if has_key(wordcount(),'visual_words')
-      let g:word_count=wordcount().visual_words.'w' " count selected words
-    endif
-    return g:word_count
-  endfunction
-
   function! s:CallRipGrep(...) abort
     call fzf#vim#grep('rg --vimgrep --color=always --smart-case --hidden --glob !.git -F ' . shellescape(join(a:000, ' ')), 1,
           \ fzf#vim#with_preview({ 'options': ['-m', '--bind=ctrl-a:toggle-all,alt-j:jump,alt-k:jump-accept']}, 'right:50%', 'ctrl-p'), 1)
@@ -395,19 +399,6 @@ vim.cmd([[
     let buff = bufnr('%') " Save buffer number of current buffer.
     execute "normal! \<c-w>p:b " buff "\<CR>"| " Change to previous buffer and open saved buffer.
     call setpos('.', pos) " Set cursor position to what is was before.
-  endfunction
-
-  " Returns the function the cursor is currently in, used in lualine status bar.
-  function! CocCurrentFunction()
-    let f = get(b:, 'coc_current_function', '')
-    return f == '' ? '' : f . '()'
-  endfunction
-
-  " Function to trim trailing whitespace in a file.
-  function! TrimWhitespace()
-    let l:save = winsaveview()
-    %s/\s\+$//e
-    call winrestview(l:save)
   endfunction
 
   " Function to sort lines as an operator.
@@ -450,7 +441,6 @@ vim.cmd([[
     return ''
   endfunction
 
-  command! Trim call TrimWhitespace()|                " :Trim runs :call Trim() (defined above).
   command! W :execute ':silent w !sudo tee % > /dev/null' | :edit!| " :W writes as sudo.
 
   command! -bang -nargs=? -complete=dir Files
