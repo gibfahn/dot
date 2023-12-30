@@ -95,6 +95,7 @@
   "rust-analyzer.imports.prefix": "crate",
   // Use nightly rustfmt, see https://github.com/rust-analyzer/rust-analyzer/issues/3627
   "rust-analyzer.rustfmt.extraArgs": ["+nightly"],
+  "rust-analyzer.diagnostics.experimental.enable": true,
   "yaml.format.enable": true,
   "yaml.hover": true,
   "yaml.schemas": {
