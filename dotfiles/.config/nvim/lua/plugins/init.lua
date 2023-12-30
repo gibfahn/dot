@@ -26,7 +26,7 @@ return {
   { 'cespare/vim-toml',                ft = 'toml' }, -- Toml syntax highlighting.
   { 'godlygeek/tabular',               cmd = 'Tabularize' }, -- Make tables easier (:help Tabular).
   { 'kana/vim-textobj-line',           dependencies = { 'kana/vim-textobj-user' }, }, -- Adds `il` and `al` text objects for current line.
-  { 'moll/vim-bbye',                   cmd = 'Bdelete' }, -- Delete buffer without closing split.
+  { 'famiu/bufdelete.nvim',            cmd = 'Bdelete' }, -- Delete buffer without closing split.
   { 'mzlogin/vim-markdown-toc',        ft = 'markdown',                                      cmd = 'GenTocGFM' }, -- Markdown Table of Contents.
   { 'nanotee/zoxide.vim',              cmd = 'Zi' }, -- Use zoxide to quickly jump to directories.
   { 'neoclide/coc.nvim',               branch = 'release' }, -- Language Server with VSCode Extensions.

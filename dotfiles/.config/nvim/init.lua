@@ -177,7 +177,6 @@ map('n', '<A-Space>', 'v<Plug>(coc-codeaction-selected)<Esc>', { noremap = false
 map('n', '<A-T>', '<Cmd>tabprev<CR>')                                                                  -- Prev tab.
 map('n', '<A-TAB>', '<Plug>(coc-range-select)', { silent = true, noremap = false })                    -- Visually select increasingly large ranges (requires LS 'textDocument/selectionRange').
 map('n', '<A-Up>', '<C-y>')                                                                            -- Scroll up a line.
-map('n', '<A-X>', '<Cmd>bd<CR>')                                                                       -- Close current buffer (work around https://github.com/moll/vim-bbye/issues/15).
 map('n', '<A-c>', '<Plug>(coc-diagnostic-next)', { noremap = false })                                  -- Next changed Coc message (e.g. compile error).
 map('n', '<A-d>', '<Cmd>tabclose<CR>')                                                                 -- Close current tab.
 map('n', '<A-e>', '<C-w>k')                                                                            -- Switch up a window,
@@ -236,7 +235,6 @@ map('n', '<Leader>cr', '<Plug>(coc-rename)', { noremap = false })               
 map('n', '<Leader>cs', '<Cmd>CocList -I symbols<CR>', { silent = true })                               -- Search workspace symbols
 map('n', '<Leader>ct', '<Plug>(coc-type-definition)', { silent = true, noremap = false })              -- Go to type definition.
 map('n', '<Leader>cu', '<Plug>(coc-references)', { silent = true, noremap = false })                   -- Go to usages.
-map('n', '<Leader>d', '<Cmd>Bdelete<CR>')                                                              -- Close buffer without closing split,
 map('n', '<Leader>e', '<C-w>q')                                                                        -- Close current split (keeps buffer).
 map('n', '<Leader>f', '<Cmd>Files<CR>')                                                                -- Search file names for file,
 map('n', '<Leader>gC', '<Cmd>CocConfig<CR>')                                                           -- Edit colorscheme file.
