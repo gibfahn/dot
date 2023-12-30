@@ -141,7 +141,7 @@ return {
               cond = function()
                 -- Show if we're in a visual mode.
                 -- See `:h mode()` for a full list of modes.
-                if vim.list_contains({'v', 'vs', 'V', 'Vs', '', 's'}, vim.api.nvim_get_mode().mode) then
+                if vim.tbl_contains({'v', 'vs', 'V', 'Vs', '', 's'}, vim.api.nvim_get_mode().mode) then
                   return true
                 end
                 -- -- Show if we're in an empty file or a markdown file.

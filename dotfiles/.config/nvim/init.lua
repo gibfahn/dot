@@ -329,7 +329,7 @@ end
 -- Copied from coc.nvim README, ported to lua, opens vim help or language server help.
 -- <https://stackoverflow.com/questions/59440719/vime523-not-allowed-here>
 function Show_Documentation()
-  if (vim.list_contains({ 'vim', 'help' }, vim.bo.filetype) or vim.fn.expand('%:p') == vim.fn.stdpath('config') .. 'init.lua') then
+  if (vim.tbl_contains({ 'vim', 'help' }, vim.bo.filetype) or vim.fn.expand('%:p') == vim.fn.stdpath('config') .. 'init.lua') then
     vim.cmd('help ' .. vim.fn.expand('<cword>'))
   elseif (vim.fn['coc#rpc#ready']()) then
     vim.fn.CocActionAsync('doHover')
