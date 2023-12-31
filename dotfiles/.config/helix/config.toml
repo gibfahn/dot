@@ -1,9 +1,20 @@
-theme = "onedark"
+# WIP Helix config <https://helix-editor.com>
 
+# To re-learn how to edit with helix:
+# <https://github.com/helix-editor/helix/wiki/Migrating-from-Vim>
+# `hx --tutor`
+
+# Missing features:
+# - Jump (vim-sneak/flash.nvim): <https://github.com/helix-editor/helix/pull/8875>
+# - Zoxide: <https://github.com/helix-editor/helix/pull/4440>
+
+# Maybe worth a custom gib-noir theme at some point, see <https://docs.helix-editor.com/themes.html>
+theme = "ayu_evolve"
 [editor]
 gutters = ["diagnostics", "line-numbers"]
-# Add once https://github.com/helix-editor/helix/pull/2759 ships.
-# bufferline = "multiple"
+bufferline = "multiple"
+color-modes = true
+shell = ["zsh", "-c"]
 
 [editor.cursor-shape]
 insert = "bar"
@@ -13,3 +24,33 @@ select = "underline"
 [editor.file-picker]
 hidden = false
 
+# Show indents after 3 levels.
+[editor.indent-guides]
+render = true
+skip-levels = 3
+
+# Key Remapping docs: <https://docs.helix-editor.com/remapping.html>
+# Existing keymap: <https://docs.helix-editor.com/keymap.html>
+# Key remap names: <https://github.com/helix-editor/helix/blob/master/helix-term/src/commands.rs>
+[keys.normal]
+"tab" = "goto_next_buffer"
+"S-tab" = "goto_previous_buffer"
+"A-left" = "jump_view_left"
+"A-right" = "jump_view_right"
+"A-up" = "jump_view_up"
+"A-down" = "jump_view_down"
+"C-e" = "scroll_down"
+"C-y" = "scroll_up"
+
+
+[keys.normal.space]
+x = ":x"
+w = ":w"
+q = ":q"
+n = "hsplit"
+i = "vsplit"
+e = "wclose"
+
+[keys.normal.g]
+i = "goto_line_end" # Swapped for Colemak convenience.
+l = "goto_implementation"
