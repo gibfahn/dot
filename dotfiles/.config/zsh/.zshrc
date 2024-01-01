@@ -33,7 +33,8 @@ fi
 export XDG_CACHE_HOME=${XDG_CACHE_HOME:-"$HOME/.cache"} # Cache stuff should go here.
 export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-"$HOME/.config"} # Config stuff should go here.
 export XDG_DATA_HOME=${XDG_DATA_HOME:-"$HOME/.local/share"} # Data should go here.
-export HISTSIZE=200000 SAVEHIST=200000 HISTFILE="$XDG_CACHE_HOME/zsh/history" # Set history file location and size.
+export XDG_STATE_HOME=${XDG_STATE_HOME:-"$HOME/.local/state"} # History and logs should go here.
+export HISTSIZE=200000 SAVEHIST=200000 HISTFILE="$XDG_STATE_HOME/zsh/history" # Set history file location and size.
 export CARGO_HOME="$XDG_DATA_HOME/cargo" # Cargo goes here.
 export VOLTA_HOME="$XDG_CACHE_HOME/volta" # Set directory to use for volta install.
 export GOPATH="$HOME/code/go"

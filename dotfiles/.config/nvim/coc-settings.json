@@ -95,7 +95,7 @@
   "rust-analyzer.imports.prefix": "crate",
   // Use nightly rustfmt, see https://github.com/rust-analyzer/rust-analyzer/issues/3627
   "rust-analyzer.rustfmt.extraArgs": ["+nightly"],
-  "rust-analyzer.diagnostics.experimental.enable": true,
+  // "rust-analyzer.diagnostics.experimental.enable": true,
   "yaml.format.enable": true,
   "yaml.hover": true,
   "yaml.schemas": {
@@ -199,7 +199,15 @@
     "textidote-md": {
       "command": "textidote",
       "debounce": 500,
-      "args": ["--type", "md", "--check", "en", "--output", "singleline", "--no-color"],
+      "args": [
+        "--type",
+        "md",
+        "--check",
+        "en",
+        "--output",
+        "singleline",
+        "--no-color"
+      ],
       "offsetLine": 0,
       "offsetColumn": 0,
       "sourceName": "textidote",
@@ -219,7 +227,13 @@
       "command": "reek",
       "sourceName": "reek",
       "debounce": 100,
-      "args": ["--format", "json", "--force-exclusion", "--stdin-filename", "%filepath"],
+      "args": [
+        "--format",
+        "json",
+        "--force-exclusion",
+        "--stdin-filename",
+        "%filepath"
+      ],
       "parseJson": {
         "line": "lines[0]",
         "endLine": "lines[1]",
