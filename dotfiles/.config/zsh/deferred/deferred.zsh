@@ -1,15 +1,15 @@
+# {{{ Early Aliases
+
 # Cross-platform copy/paste/open/ldd/delete terminal commands (used later via ${aliases[cpy]}.).
 # OSTYPE set by zsh: https://zsh.sourceforge.io/Doc/Release/Parameters.html#Parameters-Set-By-The-Shell
 case $OSTYPE in
   darwin*) alias cpy="pbcopy" pst="pbpaste" ldd="otool -L" o=open dl=trash ;;
   linux*) alias cpy="xclip -selection clipboard" pst="xclip -selection clipboard -o" o=xdg-open dl="gio trash" ;;
 esac
-# ulimit -c unlimited # Uncomment to allow saving of coredumps.
+
+# }}} Early Aliases
 
 # {{{ Environment Variables
-
-# Remove this after Rust 1.58.0 ships (https://github.com/rust-lang/rust/pull/90544).
-export RUSTC_LOG=rustc_metadata=error
 
 CDPATH=~ # Check ~ for directories after checking . (`c/d/` matches `./c*/d*/`, then tries `~/c*/d*/`).
 
@@ -66,35 +66,101 @@ unset _LESS
 
 # }}} Environment Variables
 
-source $XDG_DATA_HOME/fzf/shell/completion.zsh
-source $XDG_DATA_HOME/fzf/shell/key-bindings.zsh
-source $XDG_DATA_HOME/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
-source $XDG_DATA_HOME/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-source $XDG_DATA_HOME/zsh/plugins/zsh-completions/zsh-completions.plugin.zsh
+# {{{ Aliases
 
-source $XDG_CONFIG_HOME/zsh/deferred/macos-setdir.zsh
-[[ -e $XDG_CONFIG_HOME/zsh/deferred/apple.zsh ]] && source $XDG_CONFIG_HOME/zsh/deferred/apple.zsh
-[[ -e /Applications/iTerm.app/Contents/Resources/iterm2_shell_integration.zsh ]] && source /Applications/iTerm.app/Contents/Resources/iterm2_shell_integration.zsh
+(( $+commands[gsed] )) && alias sed=gsed
+# fda is find all (don't ignore anything).
+(( $+commands[fd] )) && alias fda='fd --no-ignore --hidden --exclude=.git' || fd() { find . -iname "*$**"; } # Find by filename (case insensitive).
+(( $+commands[rg] )) && alias rg='rg --smart-case' rga='rg --smart-case --hidden --no-ignore --glob=!.git' # rga is grep all (don't ignore anything).
+# Footgun, means your shell has sudo privileges forever, make sure you only use this for a single command, after that exit the shell.
+# e.g. sudo_later; sleep 1000; sudo halt
+alias sudo_later="sudo -v; (while sudo -v; do sleep 60; done) &" # Preserve sudo for a command you'll run later.
+alias bounce="echo -n '\a'" # Ring the terminal bell (bounce the dock icon in macOS).
+alias pstree="pstree -g 3" # Use the nicest pstree output (unicode).
+# Run command every $1 seconds until it succeeds, e.g. `every 60 curl https://example.com`
+every() { local delay=${1?}; shift; while ! "$@"; do sleep $delay; echo "❯ $*"; done; }
 
-for _gib_file in $XDG_DATA_HOME/zsh/completions/*(N); do
-  echo $_gib_file
-  source $_gib_file
-done
-unset _gib_file
+alias c=cargo ru=rustup  # Rust commands (try `c b`, `c r`, `c t`).
+rs() { for i in "$@"; do rustc "${i%.rs}.rs"; ./"${i%.rs}"; done; } # Compile/run (rs a.rs b).
+# .. = up 1 dir, ... = up 2 dirs, .... = up 3 dirs (etc.). - = go to last dir.
+alias next='git next && git show' # Useful for demos.
+alias gm='wait; git mf' # After cd'ing into a repo, fetch will run as a background job. Use this to wait for it to finish then mf.
+alias we="watchexec" # Shortcut for "run this command when something changes".
+
+# Find-replace everything in the current directory. Use `--` to pass args to fd.
+# e.g. 'sda s/foo/bar/g', 'sda --hidden -- s/foo/bar/g'
+sda() {
+  local arg find=() replace=()
+  for arg in "$@"; do
+    if [[ $arg == -- ]]; then
+      find=("${replace[@]}")
+      replace=()
+    else
+      replace+=("$arg")
+    fi
+  done
+  find=(fd --type file --hidden --exclude .git --print0 "${find[@]}")
+  replace=(xargs -0 gsed -i "${replace[@]}")
+  echo "Now running:"
+  # Painful hack to nicely print the args including the | and any quoted args with spaces in them:
+  (set -x; : "${find[@]}" \| "${replace[@]}") 2>&1 | sed -e "s/'|'/|/" -e 's/.*fd/  fd/'
+  # Actually run the command:
+  "${find[@]}" | "${replace[@]}"
+}
+
+# Rename everything in the current directory according to provided sed expression. Use `--` to pass args to fd.
+# e.g. 'sdr s/foo/bar/g', 'sdr --hidden -- s/foo/bar/g'
+sdr() {
+  local arg find=() replace=()
+  for arg in "$@"; do
+    if [[ $arg == -- ]]; then
+      find=("${replace[@]}")
+      replace=()
+    else
+      replace+=("$arg")
+    fi
+  done
+  find=()
+  for file_path in "${(@f)$(fd --type file --hidden --exclude .git "${find[@]}")}"; do
+    new_path=$(gsed "${replace[@]}" <<<"$file_path")
+    if [[ $file_path != "$new_path" ]]; then
+      mv -v $file_path $new_path
+    fi
+  done
+}
+
+# Copy last command.
+alias clc="fc -ln -1 | sed -e 's/\\\\n/\\n/g' -e 's/\\\\t/\\t/g' | ${=aliases[cpy]}" # "
+# Run last command and copy the command and its output.
+cr() { local a=$(r 2>&1); ${=aliases[cpy]} <<<"❯ $a"; }
+
+# Yaml to json, e.g. "y2j <t.yml | jq .". Requires a `pip install pyyaml`.
+alias j2y="python3 -c 'import sys, yaml, json; yaml.dump(json.load(sys.stdin), sys.stdout, indent=2)'"
+alias y2j="python3 -c 'import sys, yaml, json; json.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2)'"
+alias y2y="python3 -c 'import sys, yaml; yaml.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2)'"
+alias t2j="python3 -c 'import sys, toml, json; json.dump(toml.load(sys.stdin), sys.stdout, indent=2)'"
+# Url encode and decode stdin or first argument.
+alias url_encode='python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read()[0:-1]))"'
+alias url_decode='python3 -c "import urllib.parse, sys; print(urllib.parse.unquote(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read()[0:-1]))"'
+# Convert from UTF-16 to UTF-8
+alias utf16_decode='python3 -c "import sys; sys.stdin.reconfigure(encoding=\"utf-16\"); print(sys.stdin.read())"'
+
+if (( $+commands[kitty] )); then
+  alias icat="kitty +kitten icat" # Kitty terminal specific: https://sw.kovidgoyal.net/kitty/kittens/icat.html
+fi
+[[ -x "/Applications/IntelliJ IDEA CE.app/Contents/MacOS/idea" ]] && alias idea="/Applications/IntelliJ IDEA CE.app/Contents/MacOS/idea" # IntelliJ CE
+alias curl="noglob curl" # Don't match on ? [] etc in curl URLs, avoids needing to quote URL args.
+
+(( $+commands[ggrep] )) && alias grep='ggrep --color=auto'
+
+# }}} Aliases
 
 # {{{ Functions
 
 # Edit a file on the system.
-e() { locate -i0 "$@" | xargs -0 realpath | sort -u | proximity-sort "$PWD" | fzf --tiebreak=index --print0 | xargs -0 "$=VISUAL"; }
-
 mdc() { command mkdir -p "$@"; { [[ $# == 1 ]] && cd "$1"; } || true; } # Mkdir then cd to dir (`mdc foo` = `mkdir foo && cd foo`).
 cpm() { command mkdir -p "${@: -1}" && cp "$@"; } # Mkdir then cp to dir (`cpm foo bar` = `md bar && cp foo bar`).
 mvm() { command mkdir -p "${@: -1}" && mv "$@"; } # Mkdir then mv to dir (`mvm foo bar` = `md bar && mv foo bar`).
-
-# Add or move to beginning of path.
-pathadd() { [[ -d "$1" ]] && PATH="$1"$(echo ":$PATH:" | sed "s|:$1:|:|" | sed 's|:$||'); }
-# Add or move to end of path.
-pathapp() { [[ -d "$1" ]] && PATH=$(echo ":$PATH:" | sed "s|:$1:|:|" | sed 's|^:||')"$1"; }
 
 pth() { # Returns absolute path to each file or dir arg.
   local i
@@ -109,14 +175,18 @@ pth() { # Returns absolute path to each file or dir arg.
   done
 }
 
+# Add a trailing newline to all files in the current directory.
 add_trailing_newline() {
   fd --hidden --exclude=.git --type f "$@" -x gsed -i -e '$a\' '{}'
 }
 
+# Remove trailing whitespace from all files in the current directory.
 remove_trailing_whitespace() {
   fd --hidden --exclude=.git --type f "$@" -x gsed -i -e 's/\s\+$//' '{}'
 }
 
+# Convert tabs to spaces for all files in the current directory.
+# $1: spaces per tab, defaults to 4.
 tabs_to_spaces() {
   spaces_per_tab=${1:-4}
   fd --hidden --exclude=.git --type f -x bash -c "gexpand -i -t $spaces_per_tab {} | sponge {}"
@@ -226,97 +296,6 @@ password_gen() {
   cat /dev/urandom | LC_ALL=C tr -dc '[:alnum:]' | fold -w ${1?Missing argument 1: password length} | head -1 | tr -d '\n'
 }
 
-# }}} Functions
-
-# {{{ Aliases
-
-(( $+commands[gsed] )) && alias sed=gsed
-# fda is find all (don't ignore anything).
-(( $+commands[fd] )) && alias fda='fd --no-ignore --hidden --exclude=.git' || fd() { find . -iname "*$**"; } # Find by filename (case insensitive).
-(( $+commands[rg] )) && alias rg='rg --smart-case' rga='rg --smart-case --hidden --no-ignore --glob=!.git' # rga is grep all (don't ignore anything).
-# Footgun, means your shell has sudo privileges forever, make sure you only use this for a single command, after that exit the shell.
-# e.g. sudo_later; sleep 1000; sudo halt
-alias sudo_later="sudo -v; (while sudo -v; do sleep 60; done) &" # Preserve sudo for a command you'll run later.
-alias bounce="echo -n '\a'" # Ring the terminal bell (bounce the dock icon in macOS).
-alias pstree="pstree -g 3" # Use the nicest pstree output (unicode).
-# Run command every $1 seconds until it succeeds, e.g. `every 60 curl https://example.com`
-every() { local delay=${1?}; shift; while ! "$@"; do sleep $delay; echo "❯ $*"; done; }
-
-alias c=cargo ru=rustup  # Rust commands (try `c b`, `c r`, `c t`).
-rs() { for i in "$@"; do rustc "${i%.rs}.rs"; ./"${i%.rs}"; done; } # Compile/run (rs a.rs b).
-# .. = up 1 dir, ... = up 2 dirs, .... = up 3 dirs (etc.). - = go to last dir.
-alias next='git next && git show' # Useful for demos.
-alias gm='wait; git mf' # After cd'ing into a repo, fetch will run as a background job. Use this to wait for it to finish then mf.
-alias we="watchexec" # Shortcut for "run this command when something changes".
-
-# Find-replace everything in the current directory. Use `--` to pass args to fd.
-# e.g. 'sda s/foo/bar/g', 'sda --hidden -- s/foo/bar/g'
-sda() {
-  local arg find=() replace=()
-  for arg in "$@"; do
-    if [[ $arg == -- ]]; then
-      find=("${replace[@]}")
-      replace=()
-    else
-      replace+=("$arg")
-    fi
-  done
-  find=(fd --type file --hidden --exclude .git --print0 "${find[@]}")
-  replace=(xargs -0 gsed -i "${replace[@]}")
-  echo "Now running:"
-  # Painful hack to nicely print the args including the | and any quoted args with spaces in them:
-  (set -x; : "${find[@]}" \| "${replace[@]}") 2>&1 | sed -e "s/'|'/|/" -e 's/.*fd/  fd/'
-  # Actually run the command:
-  "${find[@]}" | "${replace[@]}"
-}
-
-# Rename everything in the current directory according to provided sed expression. Use `--` to pass args to fd.
-# e.g. 'sdr s/foo/bar/g', 'sdr --hidden -- s/foo/bar/g'
-sdr() {
-  local arg find=() replace=()
-  for arg in "$@"; do
-    if [[ $arg == -- ]]; then
-      find=("${replace[@]}")
-      replace=()
-    else
-      replace+=("$arg")
-    fi
-  done
-  find=()
-  for file_path in "${(@f)$(fd --type file --hidden --exclude .git "${find[@]}")}"; do
-    new_path=$(gsed "${replace[@]}" <<<"$file_path")
-    if [[ $file_path != "$new_path" ]]; then
-      mv -v $file_path $new_path
-    fi
-  done
-}
-
-# Copy last command.
-alias clc="fc -ln -1 | sed -e 's/\\\\n/\\n/g' -e 's/\\\\t/\\t/g' | ${=aliases[cpy]}" # "
-# Run last command and copy the command and its output.
-cr() { local a=$(r 2>&1); ${=aliases[cpy]} <<<"❯ $a"; }
-
-# Yaml to json, e.g. "y2j <t.yml | jq .". Requires a `pip install pyyaml`.
-alias j2y="python3 -c 'import sys, yaml, json; yaml.dump(json.load(sys.stdin), sys.stdout, indent=2)'"
-alias y2j="python3 -c 'import sys, yaml, json; json.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2)'"
-alias y2y="python3 -c 'import sys, yaml; yaml.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2)'"
-alias t2j="python3 -c 'import sys, toml, json; json.dump(toml.load(sys.stdin), sys.stdout, indent=2)'"
-# Url encode and decode stdin or first argument.
-alias url_encode='python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read()[0:-1]))"'
-alias url_decode='python3 -c "import urllib.parse, sys; print(urllib.parse.unquote(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read()[0:-1]))"'
-# Convert from UTF-16 to UTF-8
-alias utf16_decode='python3 -c "import sys; sys.stdin.reconfigure(encoding=\"utf-16\"); print(sys.stdin.read())"'
-
-if (( $+commands[kitty] )); then
-  alias icat="kitty +kitten icat" # Kitty terminal specific: https://sw.kovidgoyal.net/kitty/kittens/icat.html
-fi
-[[ -x "/Applications/IntelliJ IDEA CE.app/Contents/MacOS/idea" ]] && alias idea="/Applications/IntelliJ IDEA CE.app/Contents/MacOS/idea" # IntelliJ CE
-alias curl="noglob curl" # Don't match on ? [] etc in curl URLs, avoids needing to quote URL args.
-
-(( $+commands[ggrep] )) && alias grep='ggrep --color=auto'
-
-# }}} Aliases
-
 chpwd() { # Commands to run after changing directory (via cd or pushd).
   [[ -t 1 ]] || return # Exit if stdout is not a tty.
   setopt local_options no_monitor # This only disables the "job start", not the "job complete".
@@ -328,29 +307,26 @@ chpwd() { # Commands to run after changing directory (via cd or pushd).
   zoxide add -- "${PWD#/Volumes/Shared-Data}"
 }
 
+# }}} Functions
+
+# {{{ Run commands
+
 command mkdir -p ${HISTFILE:h} # Create HISTFILE dir if necessary.
 
-# Add completion dirs to function path.
-_gib_fpath_dirs=(
-  ${brew_prefix:+$brew_prefix/share/zsh/site-functions} # Brew shell completions if there.
-  $XDG_DATA_HOME/zfunc # Put (or symlink) autocomplete scripts in here.
-)
-for _gib_dir in "${_gib_fpath_dirs[@]}"; do
-  [[ -d $_gib_dir ]] && fpath+=("$_gib_dir")
-done
-unset _gib_dir _gib_fpath_dirs
+# ulimit -c unlimited # Uncomment to allow saving of coredumps.
 
-# {{{ Tool specific
+# Don't send SIGTTOU to background jobs that write to the tty. Theoretically fixes this in busy commands:
+# [1]  + 82656 suspended (tty output)  cargo run
+# stty -tostop
 
 # Set key repeat rate if available (Linux only). You probably want something less excessive here, like rate 250 30.
 if [[ $OSTYPE = linux* ]]; then
   (( $+commands[xset] )) && xset r rate 120 45
-  export PANEL_FIFO=/tmp/panel-fifo # Used by bspwm.
 fi
 
-# }}} Tool specific
+# }}} Run Commands
 
-# {{{ Completions and Keybindings
+# {{{ Keybindings
 
 # Fzf git files (unstaged).
 _gib_git_f() {
@@ -563,14 +539,43 @@ autoload -Uz add-zsh-hook
 add-zsh-hook precmd _gib_prompt_precmd
 add-zsh-hook preexec _gib_prompt_preexec
 
-# Don't send SIGTTOU to background jobs that write to the tty. Fixes this in busy commands:
-# [1]  + 82656 suspended (tty output)  cargo run
-stty -tostop
+# }}} Keybindings
+
+# {{{ Source scripts and Completions
+
+# Source my other scripts.
+source $XDG_CONFIG_HOME/zsh/deferred/macos-setdir.zsh
+[[ -e $XDG_CONFIG_HOME/zsh/deferred/apple.zsh ]] && source $XDG_CONFIG_HOME/zsh/deferred/apple.zsh
+[[ -e /Applications/iTerm.app/Contents/Resources/iterm2_shell_integration.zsh ]] && source /Applications/iTerm.app/Contents/Resources/iterm2_shell_integration.zsh
+
+# Source known completions
+source $XDG_DATA_HOME/fzf/shell/completion.zsh
+source $XDG_DATA_HOME/fzf/shell/key-bindings.zsh
+source $XDG_DATA_HOME/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
+source $XDG_DATA_HOME/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $XDG_DATA_HOME/zsh/plugins/zsh-completions/zsh-completions.plugin.zsh
+
+# Source completions that need to be directly run.
+for _gib_file in $XDG_DATA_HOME/zsh/completions/*(N); do
+  echo $_gib_file
+  source $_gib_file
+done
+unset _gib_file
+
+# Add completion dirs that don't need to be directly run to the function path.
+_gib_fpath_dirs=(
+  ${brew_prefix:+$brew_prefix/share/zsh/site-functions} # Brew shell completions if there.
+  $XDG_DATA_HOME/zfunc # Put (or symlink) autocomplete scripts in here.
+)
+for _gib_dir in "${_gib_fpath_dirs[@]}"; do
+  [[ -d $_gib_dir ]] && fpath+=("$_gib_dir")
+done
+unset _gib_dir _gib_fpath_dirs
 
 # Initialise completions after everything else.
 autoload -Uz compinit
 compinit
 
-# }}} Completions and Keybindings
+# }}} Source scripts and Completions
 
 # vim: foldmethod=marker filetype=zsh tw=100
