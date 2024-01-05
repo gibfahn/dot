@@ -2,6 +2,9 @@
 
 set -ex
 
+# Force color on in brew output, even though not writing to a tty.
+export HOMEBREW_COLOR=1
+
 # Install brew and Xcode Command Line Tools.
 if ! type brew; then
   # Should only exist if we're on a work machine.
