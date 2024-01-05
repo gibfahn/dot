@@ -111,7 +111,7 @@ return {
             {
               'diagnostics', -- LanguageServer diagnostics.
               icons_enabled = true,
-              symbols = {error = '✖ ', warn = '⚠ ', info = 'ℹ ', hint = 'ℹ '},
+              symbols = {error = '✖ ', warn = '⚠ ', info = ' ', hint = ' '},
               diagnostics_color = {
                 -- Use lightline defaults.
                 error = { fg = wombat_colors.base03, bg = wombat_colors.orange },
