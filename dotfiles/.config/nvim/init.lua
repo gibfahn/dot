@@ -54,7 +54,7 @@ vim.g.coc_global_extensions = { 'coc-actions', 'coc-ccls', 'coc-clangd', 'coc-cs
 
 -- {{{ Vim options
 
-vim.cmd 'colorscheme desert' -- Default colorscheme in case plugins don't load.
+vim.cmd 'colorscheme habamax' -- Default colorscheme in case plugins don't load.
 
 vim.opt.breakindent = true -- Nicer line wrapping for long lines.
 vim.opt.confirm = true -- Ask if you want to save unsaved files instead of failing.
