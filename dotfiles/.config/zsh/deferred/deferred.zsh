@@ -11,8 +11,6 @@ esac
 
 # {{{ Environment Variables
 
-CDPATH=~ # Check ~ for directories after checking . (`c/d/` matches `./c*/d*/`, then tries `~/c*/d*/`).
-
 export ATOM_HOME="$XDG_DATA_HOME"/atom # Atom data goes here.
 export AWS_CONFIG_FILE="$XDG_CONFIG_HOME/aws/config"
 export AWS_SHARED_CREDENTIALS_FILE="$HOME/.ssh/tokens/aws/credentials"
@@ -62,11 +60,19 @@ export LESS=${_LESS[*]}
 unset _LESS
 
 [[ -d "$XDG_CONFIG_HOME/terminfo" ]] && export TERMINFO="$XDG_CONFIG_HOME/terminfo" # Put terminal info in here.
+
+CDPATH=~ # Check ~ for directories after checking . (`c/d/` matches `./c*/d*/`, then tries `~/c*/d*/`).
+HELPDIR=$brew_prefix/share/zsh/help # Used in run-help below.
 [[ $TERM == xterm ]] && TERM=xterm-256color
 
 # }}} Environment Variables
 
 # {{{ Aliases
+
+# Make help work <https://superuser.com/questions/1563825/is-there-a-zsh-equivalent-to-the-bash-help-builtin>
+unalias run-help # Remove unuseful built-in `alias run-help=man`
+autoload -Uz run-help # Load better run-help function.
+alias help=run-help # `help export` for help on the export builtin.
 
 (( $+commands[gsed] )) && alias sed=gsed
 # fda is find all (don't ignore anything).
