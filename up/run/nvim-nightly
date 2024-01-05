@@ -4,11 +4,16 @@ set -euo pipefail
 
 set -x
 
-[[ -L ~/bin/nvim ]] || exit 204 # Skip if we're not using nvim nightly.
+# Remove any leftovers from the old way of doing things.
+[[ -L ~/bin/nvim ]] && rm ~/bin/nvim
+old_nightly_dir="${XDG_DATA_HOME:-$HOME/.local/share}"/nvim-nightly
+[[ -d "$old_nightly_dir" ]] && rm -rf "$old_nightly_dir"
 
-nightly_dir="${XDG_DATA_HOME:-$HOME/.local/share}"/nvim-nightly
-mkdir -p "$nightly_dir"
+bob_bin_dir="${XDG_DATA_HOME:-$HOME/.local/share}"/bob/nvim-bin
 
-# To use this run:
-#   ln -sf ~/.local/share/nvim-nightly/bin/nvim ~/bin/nvim
-curl -L https://github.com/neovim/neovim/releases/download/nightly/nvim-macos.tar.gz | tar -xv --strip-components 1 -C "$nightly_dir"
+if [[ ! -d "$bob_bin_dir" ]]; then
+  bob use nightly
+  bob install stable
+else
+  bob update --all
+fi

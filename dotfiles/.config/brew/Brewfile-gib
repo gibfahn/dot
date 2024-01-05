@@ -21,6 +21,7 @@ tap "gibfahn/tap", "https://github.com/gibfahn/homebrew-tap" # My personal tap f
 brew "bat"                               # Nicer cat with syntax highlighting etc.
 brew "bazelisk"                          # Easily use the latest version of bazel.
 brew "binutils"                          # GNU versions of tools for interacting with binaries (nm, strings etc).
+brew "bob"                               # Neovim version manager.
 brew "buildifier"                        # Bazel code formatter.
 brew "buildozer"                         # Automatically apply fixes to bazel files.
 brew "cargo-edit"                        # Gives `cargo {add,rm,upgrade}` commands.

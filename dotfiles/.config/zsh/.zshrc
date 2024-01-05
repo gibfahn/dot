@@ -63,6 +63,8 @@ path=(
   ${CARGO_HOME:+$CARGO_HOME/bin} # Rust packages.
   ${VOLTA_HOME:+$VOLTA_HOME/bin} # Node.js and packages.
 
+  ${XDG_DATA_HOME}/bob/nvim-bin # Bob nvim manager nvim directory, comes before brew.
+
   ${brew_prefix:+$brew_prefix/opt/ruby/bin} # Brew ruby.
   ${brew_prefix:+$brew_prefix/lib/ruby/gems/*/bin(N)} # Add ruby or skip.
   ${brew_prefix:+$brew_prefix/bin} # Alternate brew install location.
