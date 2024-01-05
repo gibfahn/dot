@@ -178,156 +178,155 @@ end
 --
 -- (see http://vim.wikia.com/wiki/Unused_keys for unused keys)
 
-vim.keymap.set('c', '%%', "getcmdtype() == ':' ? expand('%:p:h').'/' : '%%'", { expr = true })                    -- %%: expands to dirname of current file.
-vim.keymap.set('i', '<A-CR>', 'coc#_select_confirm()', { expr = true, silent = true })                            -- Alt-Enter: accept first result.
+vim.keymap.set('c', '%%', "getcmdtype() == ':' ? expand('%:p:h')'/' : '%%'", { expr = true, desc = "expands to dirname of current file"})
+vim.keymap.set('i', '<A-CR>', 'coc#_select_confirm()', { expr = true, silent = true, desc = "accept first result"})
 vim.keymap.set('i', '<A-t>', ' <C-r><C-r>=&commentstring<CR><C-o>:s/%s/TODO(gib): /<CR><C-o>A',
-  { silent = true })                                                                                   -- Alt-t: insert TODO comment.
-vim.keymap.set('i', '<A-x>', ' <C-r><C-r>=&commentstring<CR><C-o>:s/%s/XXX(gib): /<CR><C-o>A', { silent = true }) -- Alt-x: insert XXX comment (ignore-xxx).
-vim.keymap.set('i', '<C-u>', '<C-g>u<C-u>')                                                                       -- Make <C-u> undo-friendly
-vim.keymap.set('i', '<C-w>', '<C-g>u<C-w>')                                                                       -- Make <C-w> undo-friendly
-vim.keymap.set('i', '<CR>', [[coc#pum#visible() ? coc#pum#confirm() : "\<CR>"]], { expr = true })                 -- If in completion, select current, else normal enter (with coc hook).
-vim.keymap.set('i', '<S-Tab>', [[coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"]], { expr = true })               -- Shift-Tab is previous entry if completion menu open.
-vim.keymap.set('i', '<Tab>', Smart_Tab, {expr = true})                                 -- If in completion, next entry, else if previous character was a space indent, else trigger completion manually.
-vim.keymap.set('n', "<Leader>Z", [[&foldlevel ? 'zM' :'zR']], { expr = true })                                    -- Toggle folding everywhere (see also "zi).
-vim.keymap.set('n', '-', '<Cmd>e %:h<CR>')                                                                        -- Use - to open the current buffer directory in the file browser (repeat for `cd ..`).
-vim.keymap.set('n', '<A-C>', '<Plug>(coc-diagnostic-prev)', { noremap = false })                                  -- Prev changed Coc diagnostic.
-vim.keymap.set('n', '<A-Down>', '<C-e>')                                                                          -- Scroll down a line.
-vim.keymap.set('n', '<A-E>', '100<C-w>k')                                                                         -- Switch to the top window,
-vim.keymap.set('n', '<A-Enter>', '<plug>(coc-codelens-action)', { noremap = false })                              -- Run available CodeLens actions (e.g. run tests).
-vim.keymap.set('n', '<A-F>', '<Cmd>CocPrev<CR>', { noremap = false })                                             -- Next Coc list (e.g. compile error).
-vim.keymap.set('n', '<A-G>', '<Plug>(GitGutterPrevHunk)', { noremap = false })                                    -- Prev changed git hunk.
-vim.keymap.set('n', '<A-H>', '100<C-w>h')                                                                         -- Switch to the leftmost window,
-vim.keymap.set('n', '<A-I>', '100<C-w>l')                                                                         -- Switch to the rightmost window.
-vim.keymap.set('n', '<A-L>', '<Cmd>lprev<CR>')                                                                    -- Prev item in the location list.
-vim.keymap.set('n', '<A-Left>', 'zh')                                                                             -- Scroll view left a character.
-vim.keymap.set('n', '<A-N>', '100<C-w>j')                                                                         -- Switch to the bottom window,
-vim.keymap.set('n', '<A-Q>', '<Cmd>cprev<CR>')                                                                    -- Prev item in the quickfix list.
-vim.keymap.set('n', '<A-Right>', 'zl')                                                                            -- Scroll view right a character.
-vim.keymap.set('n', '<A-S>', '[s')                                                                                -- Prev spelling mistake.
-vim.keymap.set('n', '<A-Space>', 'v<Plug>(coc-codeaction-selected)<Esc>', { noremap = false })                    -- Run available LSP actions (neoclide/coc.nvim#1981).
-vim.keymap.set('n', '<A-T>', '<Cmd>tabprev<CR>')                                                                  -- Prev tab.
-vim.keymap.set('n', '<A-TAB>', '<Plug>(coc-range-select)', { silent = true, noremap = false })                    -- Visually select increasingly large ranges (requires LS 'textDocument/selectionRange').
-vim.keymap.set('n', '<A-Up>', '<C-y>')                                                                            -- Scroll up a line.
-vim.keymap.set('n', '<A-c>', '<Plug>(coc-diagnostic-next)', { noremap = false })                                  -- Next changed Coc message (e.g. compile error).
-vim.keymap.set('n', '<A-d>', '<Cmd>tabclose<CR>')                                                                 -- Close current tab.
-vim.keymap.set('n', '<A-e>', '<C-w>k')                                                                            -- Switch up a window,
-vim.keymap.set('n', '<A-f>', '<Cmd>CocNext<CR>', { noremap = false })                                             -- Next Coc list (e.g. compile error if you hit <Leader>ce).
-vim.keymap.set('n', '<A-g>', '<Plug>(GitGutterNextHunk)', { noremap = false })                                    -- Next changed git hunk.
-vim.keymap.set('n', '<A-h>', '<C-w>h')                                                                            -- Switch left a window,
-vim.keymap.set('n', '<A-i>', '<C-w>l')                                                                            -- Switch right a window.
-vim.keymap.set('n', '<A-l>', '<Cmd>lnext<CR>')                                                                    -- Next item in the location list.
-vim.keymap.set('n', '<A-n>', '<C-w>j')                                                                            -- Switch down a window,
-vim.keymap.set('n', '<A-q>', '<Cmd>cnext<CR>')                                                                    -- Next item in the quickfix list.
-vim.keymap.set('n', '<A-s>', ']s')                                                                                -- Next spelling mistake.
-vim.keymap.set('n', '<A-t>', '<Cmd>tabnext<CR>')                                                                  -- Next tab.
-vim.keymap.set('n', '<A-x>', '<Cmd>Bdelete<CR>')                                                                  -- Close current buffer.
-vim.keymap.set('n', '<A-z>', '<Cmd>Zi<CR>')                                                                       -- Switch to different directory.
-vim.keymap.set('n', '<C-p>', '<C-i>')                                                                             -- <C-o> = go to previous jump, <C-p> is go to next (normally <C-i>, but that == Tab, used above).
-vim.keymap.set('n', '<Leader>+', '<Cmd>exe "resize ".(winheight(0) * 3/2)<CR>', { silent = true })                -- Increase window height to 3/2.
-vim.keymap.set('n', '<Leader>-', '<Cmd>exe "resize ".(winheight(0) * 2/3)<CR>', { silent = true })                -- Reduce window height to 3/2.
-vim.keymap.set('n', '<Leader>/', '<Cmd>noh<CR>')                                                                  -- Turn off find highlighting.
-vim.keymap.set('n', '<Leader>1', '<Plug>BufTabLine.Go(1)', { noremap = false })                                   -- <Leader>1 goes to buffer 1 (see numbers in tab bar).
-vim.keymap.set('n', '<Leader>2', '<Plug>BufTabLine.Go(2)', { noremap = false })                                   -- <Leader>1 goes to buffer 2 (see numbers in tab bar).
-vim.keymap.set('n', '<Leader>3', '<Plug>BufTabLine.Go(3)', { noremap = false })                                   -- <Leader>1 goes to buffer 3 (see numbers in tab bar).
-vim.keymap.set('n', '<Leader>4', '<Plug>BufTabLine.Go(4)', { noremap = false })                                   -- <Leader>1 goes to buffer 4 (see numbers in tab bar).
-vim.keymap.set('n', '<Leader>5', '<Plug>BufTabLine.Go(5)', { noremap = false })                                   -- <Leader>1 goes to buffer 5 (see numbers in tab bar).
-vim.keymap.set('n', '<Leader>6', '<Plug>BufTabLine.Go(6)', { noremap = false })                                   -- <Leader>1 goes to buffer 6 (see numbers in tab bar).
-vim.keymap.set('n', '<Leader>7', '<Plug>BufTabLine.Go(7)', { noremap = false })                                   -- <Leader>1 goes to buffer 7 (see numbers in tab bar).
-vim.keymap.set('n', '<Leader>8', '<Plug>BufTabLine.Go(8)', { noremap = false })                                   -- <Leader>1 goes to buffer 8 (see numbers in tab bar).
-vim.keymap.set('n', '<Leader>9', '<Plug>BufTabLine.Go(-1)', { noremap = false })                                  -- <Leader>1 goes to buffer 9 (last buffer (see numbers in tab bar).
-vim.keymap.set('n', '<Leader>;', '@:')                                                                            -- Repeat the last executed command.
-vim.keymap.set('n', '<Leader><', '<Cmd>exe "vertical resize ".(winwidth(0) * 2/3)<CR>', { silent = true })        -- Decrease window width to 2/3.
-vim.keymap.set('n', '<Leader>>', '<Cmd>exe "vertical resize ".(winwidth(0) * 3/2)<CR>', { silent = true })        -- Increase window width to 3/2.
-vim.keymap.set('n', '<Leader>D', '<Cmd>%d<CR>')                                                                   -- Delete all text in buffer.
-vim.keymap.set('n', '<Leader>E', '<C-W>z:cclose<CR>:lclose<CR>:helpclose<CR><Plug>(coc-float-hide)')              -- Close open preview windows (e.g. language server definitions).
-vim.keymap.set('n', '<Leader>F', ':grep ')                                                                        -- Search file contents for file.
-vim.keymap.set('n', '<Leader>P', '"+P')                                                                           -- Paste from system clipboard before cursor.
-vim.keymap.set('n', '<Leader>R', ':/ce <bar> up<Home>cfdo %s/')                                                   -- Replace in all quickfix files (use after gr).
-vim.keymap.set('n', '<Leader>S', ':<C-u>set operatorfunc=SortLinesOpFunc<CR>g@')                                  -- Sort lines in <motion>.
-vim.keymap.set('n', '<Leader>T', '<Cmd>term<CR>')                                                                 -- Open terminal in current split.
-vim.keymap.set('n', '<Leader>W', '<Cmd>w<CR>')                                                                    -- Write whether or not there were changes.
-vim.keymap.set('n', '<Leader>X', '<Cmd>xa<CR>')                                                                   -- Quit all windows.
-vim.keymap.set('n', '<Leader>Y', '<Cmd>%y+<CR>')                                                                  -- Copy file to clipboard (normal mode).
-vim.keymap.set('n', '<Leader>a', '@a')                                                                            -- Apply macro a (add with qa or yank to a reg with "ay).
-vim.keymap.set('n', '<Leader>b', '<Cmd>Buffers<CR>')                                                              -- Search buffer list for file.
+  { silent = true, desc = "insert TODO comment"})
+vim.keymap.set('i', '<A-x>', ' <C-r><C-r>=&commentstring<CR><C-o>:s/%s/XXX(gib): /<CR><C-o>A', { silent = true, desc = "insert XXX comment (ignore-xxx)"})
+vim.keymap.set('i', '<C-u>', '<C-g>u<C-u>', {desc = "<C-u> but undo-friendly"})
+vim.keymap.set('i', '<C-w>', '<C-g>u<C-w>', {desc = "<C-w> but undo-friendly"})
+vim.keymap.set('i', '<CR>', [[coc#pum#visible() ? coc#pum#confirm() : "\<CR>"]], { expr = true, desc = "If in completion, select current, else normal <Enter> (with coc hook)"})
+vim.keymap.set('i', '<S-Tab>', [[coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"]], { expr = true, desc = "Previous entry if completion menu open"})
+vim.keymap.set('i', '<Tab>', Smart_Tab, {expr = true, desc = "If in completion, next entry, else if previous character was a space indent, else trigger completion manually"})
+vim.keymap.set('n', "<Leader>Z", [[&foldlevel ? 'zM' :'zR']], { expr = true, desc = 'Toggle folding everywhere'}) -- see also "zi
+vim.keymap.set('n', '-', '<Cmd>e %:h<CR>', {desc = "Open buffer dirname in file browser"}) -- repeat for `cd ..`
+vim.keymap.set('n', '<A-C>', '<Plug>(coc-diagnostic-prev)', { noremap = false, desc = "Prev Coc diagnostic"})
+vim.keymap.set('n', '<A-Down>', '<C-e>', {desc = "Scroll down a line"})
+vim.keymap.set('n', '<A-E>', '100<C-w>k', {desc = "Go to top window,"})
+vim.keymap.set('n', '<A-Enter>', '<plug>(coc-codelens-action)', { noremap = false, desc = "Run available CodeLens actions (e.g. run tests)"})
+vim.keymap.set('n', '<A-F>', '<Cmd>CocPrev<CR>', { noremap = false, desc = "Next Coc list (e.g. compile errors)"})
+vim.keymap.set('n', '<A-G>', '<Plug>(GitGutterPrevHunk)', { noremap = false, desc = "Prev changed git hunk"})
+vim.keymap.set('n', '<A-H>', '100<C-w>h', {desc = "Go to leftmost window,"})
+vim.keymap.set('n', '<A-I>', '100<C-w>l', {desc = "Go to rightmost window"})
+vim.keymap.set('n', '<A-L>', '<Cmd>lprev<CR>', {desc = "Go to previous location list item"})
+vim.keymap.set('n', '<A-Left>', 'zh', {desc = "Scroll view left a char"})
+vim.keymap.set('n', '<A-N>', '100<C-w>j', {desc = "Switch to bottom window,"})
+vim.keymap.set('n', '<A-Q>', '<Cmd>cprev<CR>', {desc = "Go to previous Quickfix list item"})
+vim.keymap.set('n', '<A-Right>', 'zl', {desc = "Scroll view right a char"})
+vim.keymap.set('n', '<A-S>', '[s', {desc = "Go to previous spelling mistake"})
+vim.keymap.set('n', '<A-Space>', 'v<Plug>(coc-codeaction-selected)<Esc>', { noremap = false, desc = "Run available LSP actions"}) -- neoclide/coc.nvim#1981
+vim.keymap.set('n', '<A-T>', '<Cmd>tabprev<CR>', {desc = "Prev tab"})
+vim.keymap.set('n', '<A-TAB>', '<Plug>(coc-range-select)', { silent = true, noremap = false, desc = "Visually select increasingly large ranges"}) -- requires LS 'textDocument/selectionRange'
+vim.keymap.set('n', '<A-Up>', '<C-y>', {desc = "Scroll up a line"})
+vim.keymap.set('n', '<A-c>', '<Plug>(coc-diagnostic-next)', { noremap = false, desc = "Next changed Coc message (e.g. compile error)"})
+vim.keymap.set('n', '<A-d>', '<Cmd>tabclose<CR>', {desc = "Close tab"})
+vim.keymap.set('n', '<A-e>', '<C-w>k', {desc = "Switch up a window"})
+vim.keymap.set('n', '<A-f>', '<Cmd>CocNext<CR>', { noremap = false, desc = "Next Coc list"}) -- e.g. compile error if you hit <Leader>ce
+vim.keymap.set('n', '<A-g>', '<Plug>(GitGutterNextHunk)', { noremap = false, desc = "Next changed git hunk"})
+vim.keymap.set('n', '<A-h>', '<C-w>h', {desc = "Switch left a window,"})
+vim.keymap.set('n', '<A-i>', '<C-w>l', {desc = "Switch right a window"})
+vim.keymap.set('n', '<A-l>', '<Cmd>lnext<CR>', {desc = "Go to next location list item"})
+vim.keymap.set('n', '<A-n>', '<C-w>j', {desc = "Switch down a window,"})
+vim.keymap.set('n', '<A-q>', '<Cmd>cnext<CR>', {desc = "Go to next quickfix item"})
+vim.keymap.set('n', '<A-s>', ']s', {desc = "Go to next spelling mistake"})
+vim.keymap.set('n', '<A-t>', '<Cmd>tabnext<CR>', {desc = "Go to next tab"})
+vim.keymap.set('n', '<A-x>', '<Cmd>Bdelete<CR>', {desc = "Close current buffer"})
+vim.keymap.set('n', '<A-z>', '<Cmd>Zi<CR>', {desc = "Switch to different directory"})
+vim.keymap.set('n', '<C-p>', '<C-i>', {desc = "Go to next jump"}) -- <C-o> = go to previous jump, <C-p> is go to next (normally <C-i>, but that == Tab, used above)
+vim.keymap.set('n', '<Leader>+', '<Cmd>exe "resize ".(winheight(0) * 3/2)<CR>', { silent = true, desc = "Increase window height to 3/2"})
+vim.keymap.set('n', '<Leader>-', '<Cmd>exe "resize ".(winheight(0) * 2/3)<CR>', { silent = true, desc = "Reduce window height to 2/3"})
+vim.keymap.set('n', '<Leader>/', '<Cmd>noh<CR>', {desc = "Turn off search highlight"})
+vim.keymap.set('n', '<Leader>1', '<Plug>BufTabLine.Go(1)', { noremap = false, desc = "Go to buffer 1"})
+vim.keymap.set('n', '<Leader>2', '<Plug>BufTabLine.Go(2)', { noremap = false, desc = "Go to buffer 2"})
+vim.keymap.set('n', '<Leader>3', '<Plug>BufTabLine.Go(3)', { noremap = false, desc = "Go to buffer 3"})
+vim.keymap.set('n', '<Leader>4', '<Plug>BufTabLine.Go(4)', { noremap = false, desc = "Go to buffer 4"})
+vim.keymap.set('n', '<Leader>5', '<Plug>BufTabLine.Go(5)', { noremap = false, desc = "Go to buffer 5"})
+vim.keymap.set('n', '<Leader>6', '<Plug>BufTabLine.Go(6)', { noremap = false, desc = "Go to buffer 6"})
+vim.keymap.set('n', '<Leader>7', '<Plug>BufTabLine.Go(7)', { noremap = false, desc = "Go to buffer 7"})
+vim.keymap.set('n', '<Leader>8', '<Plug>BufTabLine.Go(8)', { noremap = false, desc = "Go to buffer 8"})
+vim.keymap.set('n', '<Leader>9', '<Plug>BufTabLine.Go(-1)', { noremap = false, desc = "Go to last buffer"})
+vim.keymap.set('n', '<Leader>;', '@:', {desc = "Repeat last :command"})
+vim.keymap.set('n', '<Leader><', '<Cmd>exe "vertical resize ".(winwidth(0) * 2/3)<CR>', { silent = true, desc = "Decrease window width to 2/3"})
+vim.keymap.set('n', '<Leader>>', '<Cmd>exe "vertical resize ".(winwidth(0) * 3/2)<CR>', { silent = true, desc = "Increase window width to 3/2"})
+vim.keymap.set('n', '<Leader>D', '<Cmd>%d<CR>', {desc = "Delete all text in buffer"})
+vim.keymap.set('n', '<Leader>E', '<C-W>z:cclose<CR>:lclose<CR>:helpclose<CR><Plug>(coc-float-hide)', {desc = "Close open preview windows"}) -- e.g. language server definitions
+vim.keymap.set('n', '<Leader>F', ':grep ', {desc = "Search file contents for file"})
+vim.keymap.set('n', '<Leader>P', '"+P', {desc = "Paste from system clipboard before cursor"})
+vim.keymap.set('n', '<Leader>R', ':/ce <bar> up<Home>cfdo %s/', {desc = "Replace in all quickfix files"}) -- use after gr
+vim.keymap.set('n', '<Leader>S', ':<C-u>set operatorfunc=SortLinesOpFunc<CR>g@', {desc = "Sort lines in <motion>"})
+vim.keymap.set('n', '<Leader>T', '<Cmd>term<CR>', {desc = "Open terminal in current split"})
+vim.keymap.set('n', '<Leader>W', '<Cmd>w<CR>', {desc = "Force write"}) -- whether or not there were changes
+vim.keymap.set('n', '<Leader>X', '<Cmd>xa<CR>', {desc = "Write all & exit"})
+vim.keymap.set('n', '<Leader>Y', '<Cmd>%y+<CR>', {desc = "Copy file to clipboard"})
+vim.keymap.set('n', '<Leader>a', '@a', {desc = 'Apply macro a'}) -- add with qa or yank to a reg with "ay
+vim.keymap.set('n', '<Leader>b', '<Cmd>Buffers<CR>', {desc = "Search buffer list for file"})
 vim.keymap.set('n', '<Leader>cD', ':call DupBuffer()<CR><Plug>(coc-definition)',
-  { silent = true, noremap = false })                                                                  -- Go to definition in other split.
-vim.keymap.set('n', '<Leader>cE', ':<C-u>CocList diagnostics<cr>', { silent = true })                             -- Manage extensions
-vim.keymap.set('n', '<Leader>cR', '<Plug>(coc-refactor)', { noremap = false })                                    -- Remap for refactoring current selection.
-vim.keymap.set('n', '<Leader>cc', '<Cmd>CocList commands<CR>', { silent = true })                                 -- Show commands
-vim.keymap.set('n', '<Leader>cd', '<Plug>(coc-definition)', { silent = true, noremap = false })                   -- Go to definition.
-vim.keymap.set('n', '<Leader>ce', ':<C-u>CocList --first diagnostics<cr>', { silent = true })                     -- Show all diagnostics (<C-a><C-q> to open all in quickfix).
-vim.keymap.set('n', '<Leader>cf', '<Plug>(coc-format)', { noremap = false })                                      -- Format current buffer.
-vim.keymap.set('n', '<Leader>ci', '<Plug>(coc-implementation)', { silent = true, noremap = false })               -- Go to implementation.
-vim.keymap.set('n', '<Leader>co', '<Cmd>CocList outline<CR>', { silent = true })                                  -- Find symbol of current document
-vim.keymap.set('n', '<Leader>cp', '<Cmd>CocListResume<CR>', { silent = true })                                    -- Resume latest coc list
-vim.keymap.set('n', '<Leader>cq', '<Cmd>cexpr getreg("+")<CR>')                                                   -- Open the current clipboard in the Quickfix window.
-vim.keymap.set('n', '<Leader>cr', '<Plug>(coc-rename)', { noremap = false })                                      -- Remap for rename current word
-vim.keymap.set('n', '<Leader>cs', '<Cmd>CocList -I symbols<CR>', { silent = true })                               -- Search workspace symbols
-vim.keymap.set('n', '<Leader>ct', '<Plug>(coc-type-definition)', { silent = true, noremap = false })              -- Go to type definition.
-vim.keymap.set('n', '<Leader>cu', '<Plug>(coc-references)', { silent = true, noremap = false })                   -- Go to usages.
-vim.keymap.set('n', '<Leader>e', '<C-w>q')                                                                        -- Close current split (keeps buffer).
-vim.keymap.set('n', '<Leader>f', '<Cmd>Files<CR>')                                                                -- Search file names for file,
-vim.keymap.set('n', '<Leader>gC', '<Cmd>CocConfig<CR>')                                                           -- Edit colorscheme file.
-vim.keymap.set('n', '<Leader>gG', ':Resolve<CR>|:Gcd<CR>')                                                        -- Cd to root of git directory current file is in.
-vim.keymap.set('n', '<Leader>gQ', '<Cmd>set fo+=t<CR><Cmd>set fo?<CR>')                                           -- Turn on auto-inserting newlines when you go over the textwidth.
-vim.keymap.set('n', '<Leader>ga', '<Cmd>AnyJumpLastResults<CR>')                                                  -- open last closed search window again
-vim.keymap.set('n', '<Leader>gb', '<Cmd>AnyJumpBack<CR>')                                                         -- open previous opened file (after jump)
-vim.keymap.set('n', '<Leader>gc', '<Cmd>cd %:p:h<CR>')                                                            -- Change vim directory (:pwd) to current file's dirname (e.g. for <space>f, :e).
-vim.keymap.set('n', '<Leader>gd', '<Cmd>w !git diff --no-index % - <CR>')                                         -- Diff between saved file and current.
-vim.keymap.set('n', '<Leader>gf', '<Cmd>call DupBuffer()<CR>gF')                                                  -- Open file path:row:col under cursor in last window.
-vim.keymap.set('n', '<Leader>gg', ':Resolve<CR>|:tab Git<CR>')                                                    -- Open fugitive Gstatus in a new tab.
-vim.keymap.set('n', '<Leader>gn', '<Cmd>set number!<CR>')                                                         -- Toggle line numbers.
-vim.keymap.set('n', '<Leader>gp', '`[v`]')                                                                        -- Visual selection of the last thing you copied or pasted.
-vim.keymap.set('n', '<Leader>gq', '<Cmd>set fo-=t<CR><Cmd>set fo?<CR>')                                           -- Turn off auto-inserting newlines when you go over the textwidth.
-vim.keymap.set('n', '<Leader>gt', '<Cmd>set et!<CR>:set et?<CR>')                                                 -- Toggle tabs/spaces.
-vim.keymap.set('n', '<Leader>gv', '<Cmd>e $MYVIMRC<CR>')                                                          -- <Space>gv opens vimrc in the editor (autoreloaded on save).
-vim.keymap.set('n', '<Leader>gw', '<Cmd>setlocal wrap!<CR>')                                                      -- <Space>gw toggles the soft-wrapping of text (whether text runs off the screen).
-vim.keymap.set('n', '<Leader>gx', '<Cmd>grep -F "XXX(gib)"<CR>')                                                  -- <Space>gx searches for XXX comments.
-vim.keymap.set('n', '<Leader>ht', 'ITODO(gib): <ESC>:Commentary<CR>$')                                            -- Insert a TODO, (Write todo, then `<Space>ht`).
-vim.keymap.set('n', '<Leader>hx', 'IXXX(gib): <ESC>:Commentary<CR>$')                                             -- Insert an XXX, (Write todo, then `<Space>hx`).
-vim.keymap.set('n', '<Leader>i', '<Cmd>vsp<CR><C-w>h:bp<CR>')                                                     -- Open vertical split.
-vim.keymap.set('n', '<Leader>j', '<Cmd>AnyJump<CR>')                                                              -- Jump to definition under cursore
-vim.keymap.set('n', '<Leader>l', ':Locate ')                                                                      -- Search filesystem for files.
-vim.keymap.set('n', '<Leader>n', '<Cmd>sp<CR><C-w>k:bp<CR>')                                                      -- Open horizontal split,
-vim.keymap.set('n', '<Leader>o', '<Plug>(coc-openlink)', { noremap = false })                                     -- Open the selected text with the appropriate program (like netrw-gx).
-vim.keymap.set('n', '<Leader>p', '"+p')                                                                           -- Paste from clipboard after cursor.
-vim.keymap.set('n', '<Leader>q', '<Cmd>qa<CR>')                                                                   -- Quit if no unsaved changes (for single file use <Space>d instead).
-vim.keymap.set('n', '<Leader>r', ':%s/')                                                                          -- Replace in current doc.
-vim.keymap.set('n', '<Leader>t', '<Cmd>vsplit term://$SHELL<CR>i')                                                -- Open terminal in new split.
-vim.keymap.set('n', '<Leader>u', '<Cmd>MundoToggle<CR>')                                                          -- Toggle Undo tree visualisation.
-vim.keymap.set('n', '<Leader>w', '<Cmd>up<CR>')                                                                   -- Write if there were changes.
-vim.keymap.set('n', '<Leader>x', '<Cmd>x<CR>')                                                                    -- Save (if changes) and quit.
-vim.keymap.set('n', '<Leader>y', '"+y')                                                                           -- Copy to clipboard (normal mode).
-vim.keymap.set('n', '<Leader>z', 'za')                                                                            -- Toggle folding on current line.
-vim.keymap.set('n', '<S-Tab>', '<Cmd>bp<CR>')                                                                     -- Shift-Tab to switch to previous buffer.
-vim.keymap.set('n', '<Tab>', '<Cmd>bn<CR>')                                                                       -- Tab to switch to next buffer,
-vim.keymap.set('n', 'K', Show_Documentation)                                                     -- Use K for show documentation in preview window
-vim.keymap.set('n', 'N', '(v:searchforward) ? "N" : "n"', { expr = true })                                        -- N is always "next one up" even if you hit #
-vim.keymap.set('n', 'Q', '<nop>')                                                                                 -- Q unused (disabled to avoid accidental triggering).
-vim.keymap.set('n', 'gr', '<Plug>(operator-ripgrep-root)', { noremap = false })                                   -- Ripgrep search for operator.
-vim.keymap.set('n', 'n', '(v:searchforward) ? "n" : "N"', { expr = true })                                        -- n is always "next one down" even if you hit #
-vim.keymap.set('o', 'af', '<Plug>(coc-funcobj-a)', { noremap = false })                                           -- select around function (requires 'textDocument.documentSymbol')
-vim.keymap.set('o', 'if', '<Plug>(coc-funcobj-i)', { noremap = false })                                           -- select in function (requires 'textDocument.documentSymbol')
-vim.keymap.set('t', '<A-e>', [[<C-\><C-n><C-w>k]])                                                                -- Switch up a window in terminal,
-vim.keymap.set('t', '<A-h>', [[<C-\><C-n><C-w>h]])                                                                -- Switch left a window in terminal,
-vim.keymap.set('t', '<A-i>', [[<C-\><C-n><C-w>l]])                                                                -- Switch right a window in terminal.
-vim.keymap.set('t', '<A-n>', [[<C-\><C-n><C-w>j]])                                                                -- Switch down a window in terminal,
-vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]])                                                                      -- Go to normal mode.
-vim.keymap.set('v', '//', [[y/\V<C-r>=escape(@",'/\')<CR><CR>]])                                                  -- Search for selected text with // (very no-magic mode, searches for exactly what you select).
-vim.keymap.set('v', '<A-Space>', '<Plug>(coc-codeaction-selected)', { noremap = false })                          -- Run available LSP actions (https://github.com/neoclide/coc.nvim/issues/1981).
-vim.keymap.set('v', '<C-n>', '<Plug>(coc-snippets-select)', { noremap = false })                                  -- Select text for visual placeholder of snippet.
-vim.keymap.set('v', '<Leader>cf', '<Plug>(coc-format-selected)', { noremap = false })                             -- Format selected region
-vim.keymap.set('v', '<Leader>d', '"+d')                                                                           -- Cut from clipboard (visual mode).
-vim.keymap.set('v', '<Leader>gs', ':<C-u>call SumVis()<CR>')                                                      -- Sum selected numbers.
-vim.keymap.set('v', '<Leader>p', '"+p')                                                                           -- Paste from clipboard (visual mode).
-vim.keymap.set('v', '<Leader>y', '"+y')                                                                           -- Copy from clipboard (visual mode).
-vim.keymap.set('v', 'g//', [[y/\V<C-R>=&ic?'\c':'\C'<CR><C-r>=escape(@",'/\')<CR><CR>]])                          -- Search for selected text case-insensitively.
-vim.keymap.set('v', 'gr', '<Plug>(operator-ripgrep-root)', { noremap = false })                                   -- Ripgrep search for selection.
-vim.keymap.set('x', 'P', 'p' ) -- Use P to update clipboard with selected text when pasting.
-vim.keymap.set('x', 'af', '<Plug>(coc-funcobj-a)', { noremap = false })                                           -- select around function (requires 'textDocument.documentSymbol')
-vim.keymap.set('x', 'if', '<Plug>(coc-funcobj-i)', { noremap = false })                                           -- select in function (requires 'textDocument.documentSymbol')
-vim.keymap.set('x', 'p', 'P' ) -- Don't overwrite clipboard when pasting over text https://vi.stackexchange.com/questions/39149/how-to-stop-neovim-from-yanking-text-on-pasting-over-selection
+  { silent = true, noremap = false, desc = "Go to definition in other split"})
+vim.keymap.set('n', '<Leader>cE', ':<C-u>CocList diagnostics<cr>', { silent = true, desc = "List all diagnostics in workspace"})
+vim.keymap.set('n', '<Leader>cR', '<Plug>(coc-refactor)', { noremap = false, desc = "Refactor current selection"})
+vim.keymap.set('n', '<Leader>cc', '<Cmd>CocList commands<CR>', { silent = true, desc = "Show Coc commands"})
+vim.keymap.set('n', '<Leader>cd', '<Plug>(coc-definition)', { silent = true, noremap = false, desc = "Go to definition"})
+vim.keymap.set('n', '<Leader>ce', ':<C-u>CocList --first diagnostics<cr>', { silent = true, desc = "Show all diagnostics"}) -- <C-a><C-q> to open all in quickfix
+vim.keymap.set('n', '<Leader>cf', '<Plug>(coc-format)', { noremap = false, desc = "Format current buffer"})
+vim.keymap.set('n', '<Leader>ci', '<Plug>(coc-implementation)', { silent = true, noremap = false, desc = "Go to implementation"})
+vim.keymap.set('n', '<Leader>co', '<Cmd>CocList outline<CR>', { silent = true, desc = "Show symbols in current document"})
+vim.keymap.set('n', '<Leader>cp', '<Cmd>CocListResume<CR>', { silent = true, desc = "Resume latest coc list"})
+vim.keymap.set('n', '<Leader>cq', '<Cmd>cexpr getreg("+")<CR>', {desc = "Open current clipboard in the Quickfix window"})
+vim.keymap.set('n', '<Leader>cr', '<Plug>(coc-rename)', { noremap = false, desc = "Rename current word"})
+vim.keymap.set('n', '<Leader>cs', '<Cmd>CocList -I symbols<CR>', { silent = true, desc = "Search workspace symbols"})
+vim.keymap.set('n', '<Leader>ct', '<Plug>(coc-type-definition)', { silent = true, noremap = false, desc = "Go to type definition"})
+vim.keymap.set('n', '<Leader>cu', '<Plug>(coc-references)', { silent = true, noremap = false, desc = "Go to usages"})
+vim.keymap.set('n', '<Leader>e', '<C-w>q', {desc = "Close current split"}) -- keeps buffer
+vim.keymap.set('n', '<Leader>f', '<Cmd>Files<CR>', {desc = "Search file names"})
+vim.keymap.set('n', '<Leader>gC', '<Cmd>CocConfig<CR>', {desc = "Edit Coc config file"})
+vim.keymap.set('n', '<Leader>gG', ':Resolve<CR>|:Gcd<CR>', {desc = "Chdir to root of git directory current file is in"})
+vim.keymap.set('n', '<Leader>gQ', '<Cmd>set fo+=t<CR><Cmd>set fo?<CR>', {desc = "Auto-add newline for long lines"})
+vim.keymap.set('n', '<Leader>ga', '<Cmd>AnyJumpLastResults<CR>', {desc = "Open last closed coc window"})
+vim.keymap.set('n', '<Leader>gb', '<Cmd>AnyJumpBack<CR>', {desc = "open previous opened file"}) -- after jump
+vim.keymap.set('n', '<Leader>gc', '<Cmd>cd %:p:h<CR>', {desc = "Change to current file's dirname"}) -- e.g. for <space>f, :e
+vim.keymap.set('n', '<Leader>gd', '<Cmd>w !git diff --no-index % - <CR>', {desc = "Diff between saved file and buffer"})
+vim.keymap.set('n', '<Leader>gf', '<Cmd>call DupBuffer()<CR>gF', {desc = "Open file path:row:col under cursor in last window"})
+vim.keymap.set('n', '<Leader>gg', ':Resolve<CR>|:tab Git<CR>', {desc = "Open fugitive in a new tab"})
+vim.keymap.set('n', '<Leader>gn', '<Cmd>set number!<CR>', {desc = "Toggle line numbers"})
+vim.keymap.set('n', '<Leader>gp', '`[v`]', {desc = "Visually select last thing you copied/pasted"})
+vim.keymap.set('n', '<Leader>gq', '<Cmd>set fo-=t<CR><Cmd>set fo?<CR>', {desc = "Don't auto-add newline for long lines"})
+vim.keymap.set('n', '<Leader>gt', '<Cmd>set et!<CR>:set et?<CR>', {desc = "Toggle tabs/spaces"})
+vim.keymap.set('n', '<Leader>gv', '<Cmd>e $MYVIMRC<CR>', {desc = "<Space>gv opens vimrc in the editor"}) -- autoreloaded on save
+vim.keymap.set('n', '<Leader>gw', '<Cmd>setlocal wrap!<CR>', {desc = "Toggle soft-wrapping of text"}) -- whether text runs off the screen
+vim.keymap.set('n', '<Leader>gx', '<Cmd>grep -F "XXX(gib)"<CR>', {desc = "Search for XXX comments"})
+vim.keymap.set('n', '<Leader>ht', 'ITODO(gib): <ESC>:Commentary<CR>$', {desc = "Insert a TODO"}) -- Write todo, then `<Space>ht`
+vim.keymap.set('n', '<Leader>hx', 'IXXX(gib): <ESC>:Commentary<CR>$', {desc = "Insert an XXX"}) -- Write todo, then `<Space>hx`
+vim.keymap.set('n', '<Leader>i', '<Cmd>vsp<CR><C-w>h:bp<CR>', {desc = "Open vertical split"})
+vim.keymap.set('n', '<Leader>j', '<Cmd>AnyJump<CR>', {desc = "Jump to definition under cursor"})
+vim.keymap.set('n', '<Leader>l', ':Locate ', {desc = "Search filesystem for files"})
+vim.keymap.set('n', '<Leader>n', '<Cmd>sp<CR><C-w>k:bp<CR>', {desc = "Open horizontal split"})
+vim.keymap.set('n', '<Leader>o', '<Plug>(coc-openlink)', { noremap = false, desc = "Open selected text"}) -- like netrw-gx
+vim.keymap.set('n', '<Leader>p', '"+p', {desc = "Paste from clipboard"})
+vim.keymap.set('n', '<Leader>q', '<Cmd>qa<CR>', {desc = "Quit if no unsaved changes"}) -- for single file use <Space>d instead
+vim.keymap.set('n', '<Leader>r', ':%s/', {desc = "Replace in buffer"})
+vim.keymap.set('n', '<Leader>t', '<Cmd>vsplit term://$SHELL<CR>i', {desc = "Open terminal in new split"})
+vim.keymap.set('n', '<Leader>u', '<Cmd>MundoToggle<CR>', {desc = "Show/hide undo tree"})
+vim.keymap.set('n', '<Leader>w', '<Cmd>up<CR>', {desc = "Write if changes"})
+vim.keymap.set('n', '<Leader>x', '<Cmd>x<CR>', {desc = "Save and quit"}) -- Only saves if changes.
+vim.keymap.set('n', '<Leader>y', '"+y', {desc = "Copy to clipboard"})
+vim.keymap.set('n', '<Leader>z', 'za', {desc = "Fold current line"})
+vim.keymap.set('n', '<S-Tab>', '<Cmd>bp<CR>', {desc = "Go to previous buffer"})
+vim.keymap.set('n', '<Tab>', '<Cmd>bn<CR>', {desc = "Go to next buffer"})
+vim.keymap.set('n', 'K', Show_Documentation, {desc = "Show documentation"})
+vim.keymap.set('n', 'N', '(v:searchforward) ? "N" : "n"', { expr = true, desc = 'Go to next match'}) -- N is always "next one up" even if you hit #
+vim.keymap.set('n', 'Q', '<nop>', {desc = "unused"}) -- disabled to avoid accidental triggering
+vim.keymap.set('n', 'gr', '<Plug>(operator-ripgrep-root)', { noremap = false, desc = "Ripgrep search for operator"})
+vim.keymap.set('n', 'n', '(v:searchforward) ? "n" : "N"', { expr = true, desc = 'Go to previous match'}) -- N is always "next one down" even if you hit #
+vim.keymap.set('o', 'af', '<Plug>(coc-funcobj-a)', { noremap = false, desc = "Select around function"}) -- requires 'textDocument.documentSymbol'
+vim.keymap.set('o', 'if', '<Plug>(coc-funcobj-i)', { noremap = false, desc = "Select in function"}) -- requires 'textDocument.documentSymbol'
+vim.keymap.set('t', '<A-e>', [[<C-\><C-n><C-w>k]], {desc = "Switch up a window"}) -- in terminal
+vim.keymap.set('t', '<A-h>', [[<C-\><C-n><C-w>h]], {desc = "Switch left a window"}) -- in terminal
+vim.keymap.set('t', '<A-i>', [[<C-\><C-n><C-w>l]], {desc = "Switch right a window"}) -- in terminal
+vim.keymap.set('t', '<A-n>', [[<C-\><C-n><C-w>j]], {desc = "Switch down a window"}) -- in terminal
+vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], {desc = "Go to normal mode"}) -- in terminal
+vim.keymap.set('v', '//', [[y/\V<C-r>=escape(@",'/\')<CR><CR>]], {desc = "Search for selected text"}) -- very no-magic mode, searches for exactly what you select
+vim.keymap.set('v', '<A-Space>', '<Plug>(coc-codeaction-selected)', { noremap = false, desc = "Run LSP actions"}) -- https://github.com/neoclide/coc.nvim/issues/1981
+vim.keymap.set('v', '<Leader>cf', '<Plug>(coc-format-selected)', { noremap = false, desc = "Format selected region"})
+vim.keymap.set('v', '<Leader>d', '"+d', {desc = "Cut from clipboard (visual mode)"})
+vim.keymap.set('v', '<Leader>gs', ':<C-u>call SumVis()<CR>', {desc = "Sum selected numbers"})
+vim.keymap.set('v', '<Leader>p', '"+p', {desc = "Paste from clipboard"})
+vim.keymap.set('v', '<Leader>y', '"+y', {desc = "Copy from clipboard"})
+vim.keymap.set('v', 'g//', [[y/\V<C-R>=&ic?'\c':'\C'<CR><C-r>=escape(@",'/\')<CR><CR>]], {desc = "Search for selected text case-insensitively"})
+vim.keymap.set('v', 'gr', '<Plug>(operator-ripgrep-root)', { noremap = false, desc = "Ripgrep search for selection"})
+vim.keymap.set('x', 'P', 'p', {desc = "Paste and update clipboard"})
+vim.keymap.set('x', 'af', '<Plug>(coc-funcobj-a)', { noremap = false, desc = "Select around function"}) -- requires 'textDocument.documentSymbol'
+vim.keymap.set('x', 'if', '<Plug>(coc-funcobj-i)', { noremap = false, desc = "Select in function"}) -- requires 'textDocument.documentSymbol'
+vim.keymap.set('x', 'p', 'P', {desc = "Paste text"}) -- Doesn't overwrite clipboard https://vi.stackexchange.com/questions/39149/how-to-stop-neovim-from-yanking-text-on-pasting-over-selection
 
 -- }}} Mappings
 

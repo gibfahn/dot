@@ -286,4 +286,14 @@ return {
       },
     },
   },
+
+  {
+    "folke/which-key.nvim", -- Show help when typing keys.
+    event = "VeryLazy",
+    init = function()
+      vim.o.timeout = true
+      vim.o.timeoutlen = 300
+    end,
+    opts = {}, -- https://github.com/folke/which-key.nvim#%EF%B8%8F-configuration
+  }
 }
