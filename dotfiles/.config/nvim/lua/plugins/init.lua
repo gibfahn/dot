@@ -260,6 +260,18 @@ return {
         change = "cs",
       },
       surrounds = {
+        -- Surround with markdown code block, triple backticks.
+        -- <https://github.com/kylechui/nvim-surround/issues/88>
+        ["~"] = {
+          add = function()
+            local config = require("nvim-surround.config")
+            local result = config.get_input("Markdown code block language: ")
+            return {
+              { "```" .. result, '' },
+              { "", "```" },
+            }
+          end,
+        },
         -- Add markdown link with link as contents of system clipboard.
         -- <https://github.com/kylechui/nvim-surround/discussions/53#discussioncomment-3134891>
         ["l"] = {
