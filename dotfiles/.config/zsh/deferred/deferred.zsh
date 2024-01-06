@@ -332,6 +332,39 @@ fi
 
 # }}} Run Commands
 
+# {{{ Source scripts and Completions
+
+# Source my other scripts.
+source $XDG_CONFIG_HOME/zsh/deferred/macos-setdir.zsh
+[[ -e $XDG_CONFIG_HOME/zsh/deferred/apple.zsh ]] && source $XDG_CONFIG_HOME/zsh/deferred/apple.zsh
+[[ -e /Applications/iTerm.app/Contents/Resources/iterm2_shell_integration.zsh ]] && source /Applications/iTerm.app/Contents/Resources/iterm2_shell_integration.zsh
+
+# Source known completions
+source $XDG_DATA_HOME/fzf/shell/completion.zsh
+source $XDG_DATA_HOME/fzf/shell/key-bindings.zsh
+source $XDG_DATA_HOME/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
+source $XDG_DATA_HOME/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $XDG_DATA_HOME/zsh/plugins/zsh-completions/zsh-completions.plugin.zsh
+
+# Source completions that need to be directly run.
+for _gib_file in $XDG_DATA_HOME/zsh/completions/*(N); do
+  echo $_gib_file
+  source $_gib_file
+done
+unset _gib_file
+
+# Add completion dirs that don't need to be directly run to the function path.
+_gib_fpath_dirs=(
+  ${brew_prefix:+$brew_prefix/share/zsh/site-functions} # Brew shell completions if there.
+  $XDG_DATA_HOME/zfunc # Put (or symlink) autocomplete scripts in here.
+)
+for _gib_dir in "${_gib_fpath_dirs[@]}"; do
+  [[ -d $_gib_dir ]] && fpath+=("$_gib_dir")
+done
+unset _gib_dir _gib_fpath_dirs
+
+# }}} Source scripts and Completions
+
 # {{{ Keybindings
 
 # Fzf git files (unstaged).
@@ -547,41 +580,12 @@ add-zsh-hook preexec _gib_prompt_preexec
 
 # }}} Keybindings
 
-# {{{ Source scripts and Completions
-
-# Source my other scripts.
-source $XDG_CONFIG_HOME/zsh/deferred/macos-setdir.zsh
-[[ -e $XDG_CONFIG_HOME/zsh/deferred/apple.zsh ]] && source $XDG_CONFIG_HOME/zsh/deferred/apple.zsh
-[[ -e /Applications/iTerm.app/Contents/Resources/iterm2_shell_integration.zsh ]] && source /Applications/iTerm.app/Contents/Resources/iterm2_shell_integration.zsh
-
-# Source known completions
-source $XDG_DATA_HOME/fzf/shell/completion.zsh
-source $XDG_DATA_HOME/fzf/shell/key-bindings.zsh
-source $XDG_DATA_HOME/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
-source $XDG_DATA_HOME/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-source $XDG_DATA_HOME/zsh/plugins/zsh-completions/zsh-completions.plugin.zsh
-
-# Source completions that need to be directly run.
-for _gib_file in $XDG_DATA_HOME/zsh/completions/*(N); do
-  echo $_gib_file
-  source $_gib_file
-done
-unset _gib_file
-
-# Add completion dirs that don't need to be directly run to the function path.
-_gib_fpath_dirs=(
-  ${brew_prefix:+$brew_prefix/share/zsh/site-functions} # Brew shell completions if there.
-  $XDG_DATA_HOME/zfunc # Put (or symlink) autocomplete scripts in here.
-)
-for _gib_dir in "${_gib_fpath_dirs[@]}"; do
-  [[ -d $_gib_dir ]] && fpath+=("$_gib_dir")
-done
-unset _gib_dir _gib_fpath_dirs
+# {{{ Initialize Completions
 
 # Initialise completions after everything else.
 autoload -Uz compinit
 compinit
 
-# }}} Source scripts and Completions
+# }}} Initialize Completions
 
 # vim: foldmethod=marker filetype=zsh tw=100
