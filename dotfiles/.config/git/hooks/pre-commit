@@ -1,21 +1,38 @@
 #!/bin/bash
 
+#
+# An example hook script to verify what is about to be committed.
+# Called by "git commit" with no arguments.  The hook should
+# exit with non-zero status after issuing an appropriate message if
+# it wants to stop the commit.
+#
+
 set -euo pipefail
+
+# Redirect output to stderr.
+exec 1>&2
+
+if ! git rev-parse --verify HEAD &>/dev/null; then
+  # Initial commit: diff against an empty tree object
+  against=$(git hash-object -t tree /dev/null)
+fi
 
 if command -v rg >/dev/null; then
   whoami=$(whoami)
   color_setting=--color=always
-  [[ -n ${MYVIMRC:-} ]] && color_setting=
+  [[ -n ${MYVIMRC:-} ]] && color_setting= # Don't show colours inside vim.
   # shellcheck disable=2086 # I want the color setting to expand to nothing.
-  if matches=$(rg $color_setting --no-ignore-dot --word-regexp --fixed-strings "XXX($whoami):" | grep -v ignore-xxx); then
+  if matches=$(git diff --staged --unified=0 "${against:-HEAD}" | grep '^+' | grep -v ignore-xxx | grep $color_setting --fixed-strings "XXX($whoami):"); then
     if [[ -z ${MYVIMRC:-} ]]; then
       RED='\033[0;31m' # Red.
       NC='\033[0m'     # No Colour.
     fi
-    printf "${RED:-}ERROR:${NC:-} found XXX. To view these in Vim:
-    v -q <(rga -F \"XXX(%s):\" --vimgrep | grep -v ignore-xxx)
+    printf "${RED:-}ERROR:${NC:-} pre-commit hook found XXX.
+%s
 
-%s" "$whoami" "$matches"
+To view these in Vim:
+    v -q <(rga -F \"XXX(%s):\" --vimgrep | grep -v ignore-xxx)
+" "$matches" "$whoami"
     exit 1
   fi
 fi
