@@ -57,59 +57,75 @@ vim.g.coc_global_extensions = { 'coc-actions', 'coc-ccls', 'coc-clangd', 'coc-cs
 vim.cmd 'colorscheme habamax' -- Default colorscheme in case plugins don't load.
 
 vim.opt.breakindent = true -- Nicer line wrapping for long lines.
+vim.opt.completeopt = "menu,menuone,noselect" -- Nicer completion behaviour.
+-- vim.opt.conceallevel = 3 -- In markdown, hide markup (* for bold/italic, ` for code, [] for links)
 vim.opt.confirm = true -- Ask if you want to save unsaved files instead of failing.
 vim.opt.diffopt:append("vertical") -- Always use vertical diffs.
 vim.opt.expandtab = true -- Use spaces instead of tabs
-vim.opt.fileformats =
-"unix" -- Force Unix line endings (\n) (always show \r (^M), never autoinsert them).
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()" -- Fold with treesitter.
+vim.opt.fileformats = "unix" -- Force Unix line endings (\n) (always show \r (^M), never autoinsert them).
 vim.opt.foldlevel = 99 -- expand all by default.
--- vim.opt.foldmethod = "expr" -- Fold according to syntax rules (disabled in favour of setlocal below)
-vim.opt.formatoptions:remove("t") -- Don't autowrap text at 80.
+vim.opt.foldtext = "v:lua.require'lazyvim.util'.ui.foldtext()"
+vim.opt.formatexpr = "v:lua.require'lazyvim.util'.format.formatexpr()" -- Format with conform/LSP
+vim.opt.formatoptions = "jcroqlnt" -- Sets line wrapping/formatting options.
 vim.opt.gdefault = true -- Global replace default (off: /g).
 vim.opt.grepformat = '%f:%l:%c:%m,%f:%l:%m' -- Teach vim how to parse the ripgrep output.
-vim.opt.grepprg =
-'rg -S --vimgrep --no-heading --hidden --glob !.git' -- Use ripgrep for file searching.
+vim.opt.grepprg = 'rg -S --vimgrep --no-heading --hidden --glob !.git' -- Use ripgrep for file searching.
 vim.opt.hidden = true -- Enable background buffers
 vim.opt.history = 1000 -- More command/search history.
 vim.opt.ignorecase = true -- Ignore case for lowercase searches (re-enable with \C in pattern),
-vim.opt.inccommand = "split" -- Show search and replace as you type.
+vim.opt.inccommand = "split" -- Show search and replace in a split as you type.
 vim.opt.joinspaces = false -- No double spaces with join
 vim.opt.list = true -- Show some invisible characters (see listchars).
 vim.opt.listchars = { tab = "»·", trail = "·", nbsp = "☠" } -- Display extra whitespace.
 vim.opt.mouse = "a" -- Mouse in all modes (mac: Fn+drag = copy).
-vim.opt.number = false -- Show line numbers
-vim.opt.path = ".,/usr/include,,**" -- Add ** to the search path so :find x works recursively.
+vim.opt.number = false -- Don't show line numbers by default.
 vim.opt.shiftround = true -- Round indent to multiple of 'shiftwidth'. Applies to > and < commands.
 vim.opt.shiftwidth = 2 -- Size of an indent
 vim.opt.showbreak = "↳   " -- Nicer line wrapping for long lines.
 vim.opt.showmode = false -- Don't show when in insert mode (set in lualine).
-vim.opt.sidescrolloff = 8 -- Columns of context
+vim.opt.shortmess:append({ I = true, c = true, C = true }) -- Avoid some "hit-enter" prompts
+vim.opt.sidescrolloff = 8 -- Keep 8 columns of context either side (horizontally) of the cursor.
 vim.opt.signcolumn = "auto" -- Resize the sign column automatically.
 vim.opt.smartcase = true -- Do not ignore case with capitals
 vim.opt.smartindent = true -- Insert indents automatically
 vim.opt.softtabstop = 2 -- Number of spaces tabs count for
+vim.opt.spelllang = { "en" } -- Default to English for spellchecker.
 vim.opt.splitbelow = true -- Put new windows below current
+vim.opt.splitkeep = "screen" -- When opening/closing/resizing splits, keep text in same place on screen.
 vim.opt.splitright = true -- Put new windows right of current
 vim.opt.tabstop = 2 -- Number of spaces tabs count for
 vim.opt.termguicolors = true -- True color support
 vim.opt.undofile = true -- Persistent undo file saved between file edits.
-vim.opt.updatetime = 100 -- Delay after which to write to swap file and run CursorHold event.
-vim.opt.updatetime = 50 -- After how many characters should we save a swap file?
+vim.opt.undolevels = 10000 -- Keep 10,000 changes of undo history.
+vim.opt.updatetime = 50 -- Delay after which to write to swap file and run CursorHold event.
+vim.opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 vim.opt.visualbell = true -- Flash the screen instead of beeping when doing something wrong.
 vim.opt.wildignorecase = true -- Case insensitive file tab completion with :e.
-vim.opt.wildmode = { "list", "longest" } -- 1st Tab completes to longest common string, 2nd+ cycles through options.
+vim.opt.wildmode = "longest:full,full" -- Command-line completion mode, 1st tab completes longest common.
 
--- }}} Vim options
+vim.opt.fillchars = {
+  fold = " ", -- Don't show dots after a folded fold.
+  foldsep = " ",
+}
 
+if vim.fn.has("nvim-0.10") == 1 then
+  vim.opt.smoothscroll = true -- Scroll screen lines not real lines.
+end
+
+-- TODO: causes freezes on <= 0.9, so only enable on >= 0.10 for now
+-- Remove once 0.10 ships (copied from lazyvim).
+if vim.fn.has("nvim-0.10") == 1 then
+  vim.opt.foldmethod = "expr"
+  vim.opt.foldexpr = "v:lua.require'lazyvim.util'.ui.foldexpr()"
+else
+  vim.opt.foldmethod = "indent"
+end
+
+
+-- Fix markdown indentation settings (copied from lazyvim).
+vim.g.markdown_recommended_style = 0
 -- {{{ Package Manager Setup
 -- variable that is only set if we're bootstrapping (Packer hasn't been installed).
-
-local plugin_opts = {
-  install = {
-    colorscheme = { "gib-noir" },
-  },
-}
 
 -- Always require the wrk.lua config if ~/wrk exists.
 if vim.fn.isdirectory(home_dir .. '/wrk') ~= 0 then
@@ -131,7 +147,52 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup('plugins', plugin_opts)
+-- Disable lazyvim options setting.
+package.loaded["lazyvim.config.options"] = true
+
+require("lazy").setup({
+  -- List of things to import.
+  spec = {
+    { "LazyVim/LazyVim",
+      -- import = "lazyvim.plugins" -- We don't import anything by default.
+    },
+    { import = "plugins" }, -- Everything in ~/.config/nvim/lua/plugins/
+  },
+  install = {
+    colorscheme = { "gib-noir" },
+  },
+  -- lazyvim defaults. For what these default to see
+  -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/init.lua>
+  defaults = {
+    autocmds = false, -- Don't load lazyvim.config.autocmds
+    keymaps = false, -- Don't load lazyvim.config.keymaps
+    -- lazyvim.config.options can't be configured here since that's loaded before lazyvim setup
+    -- if you want to disable loading options, add `package.loaded["lazyvim.config.options"] = true` to the top of your init.lua
+  },
+  news = {
+    -- When enabled, NEWS.md will be shown when changed.
+    -- This only contains big new features and breaking changes.
+    lazyvim = true,
+    -- Same but for Neovim's news.txt
+    neovim = true,
+  },
+  checker = { enabled = true }, -- automatically check for plugin updates
+  performance = {
+    rtp = {
+      -- disable some rtp plugins
+      disabled_plugins = {
+        "gzip",
+        -- "matchit",
+        -- "matchparen",
+        -- "netrwPlugin",
+        "tarPlugin",
+        "tohtml",
+        "tutor",
+        "zipPlugin",
+      },
+    },
+  },
+})
 
 
 -- }}} Package Manager Setup
@@ -178,7 +239,7 @@ end
 --
 -- (see http://vim.wikia.com/wiki/Unused_keys for unused keys)
 
-vim.keymap.set('c', '%%', "getcmdtype() == ':' ? expand('%:p:h')'/' : '%%'", { expr = true, desc = "expands to dirname of current file"})
+vim.keymap.set('c', '%%', [[getcmdtype() == ':' ? expand('%:p:h')'/' : '%%']], { expr = true, desc = "expands to dirname of current file"})
 vim.keymap.set('i', ',', ',<c-g>u', {desc = "Set undo breakpoint on ,"})
 vim.keymap.set('i', '.', '.<c-g>u', {desc = "Set undo breakpoint on ."})
 vim.keymap.set('i', ';', ';<c-g>u', {desc = "Set undo breakpoint on ;"})
@@ -339,7 +400,7 @@ vim.keymap.set('x', 'p', 'P', {desc = "Paste text"}) -- Doesn't overwrite clipbo
 vim.api.nvim_create_user_command(
   'PU',
   function(_)
-    require("lazy").sync(plugin_opts)
+    require("lazy").sync()
     if vim.fn.exists(":TSUpdateSync") ~= 0 then
       vim.cmd "TSUpdateSync"
     end
