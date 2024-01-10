@@ -239,7 +239,7 @@ end
 --
 -- (see http://vim.wikia.com/wiki/Unused_keys for unused keys)
 
-vim.keymap.set('c', '%%', [[getcmdtype() == ':' ? expand('%:p:h')'/' : '%%']], { expr = true, desc = "expands to dirname of current file"})
+vim.keymap.set('c', '<A-/>', "<C-R>=expand('%:p:h') . '/'<CR>", { desc = "Insert dirname of current file"})
 vim.keymap.set('i', ',', ',<c-g>u', {desc = "Set undo breakpoint on ,"})
 vim.keymap.set('i', '.', '.<c-g>u', {desc = "Set undo breakpoint on ."})
 vim.keymap.set('i', ';', ';<c-g>u', {desc = "Set undo breakpoint on ;"})
@@ -249,7 +249,6 @@ vim.keymap.set('i', '<A-x>', ' <C-r><C-r>=&commentstring<CR><C-o>:s/%s/XXX(gib):
 vim.keymap.set('i', '<C-u>', '<C-g>u<C-u>', {desc = "<C-u> but undo-friendly"})
 vim.keymap.set('i', '<C-w>', '<C-g>u<C-w>', {desc = "<C-w> but undo-friendly"})
 vim.keymap.set('i', '<CR>', [[coc#pum#visible() ? coc#pum#confirm() : "\<CR>"]], { expr = true, desc = "If in completion, select current, else normal <Enter> (with coc hook)"})
-vim.keymap.set('i', '<Esc>', '<cmd>noh<cr><Esc>', { desc = "Escape and clear hlsearch" })
 vim.keymap.set('i', '<S-Tab>', [[coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"]], { expr = true, desc = "Previous entry if completion menu open"})
 vim.keymap.set('i', '<Tab>', Smart_Tab, {expr = true, desc = "If in completion, next entry, else if previous character was a space indent, else trigger completion manually"})
 vim.keymap.set('n', '-', '<Cmd>e %:h<CR>', {desc = "Open buffer dirname in file browser"}) -- repeat for `cd ..`
@@ -286,7 +285,6 @@ vim.keymap.set('n', '<A-t>', '<Cmd>tabnext<CR>', {desc = "Go to next tab"})
 vim.keymap.set('n', '<A-x>', '<Cmd>Bdelete<CR>', {desc = "Close current buffer"})
 vim.keymap.set('n', '<A-z>', '<Cmd>Zi<CR>', {desc = "Switch to different directory"})
 vim.keymap.set('n', '<C-p>', '<C-i>', {desc = "Go to next jump"}) -- <C-o> = go to previous jump, <C-p> is go to next (normally <C-i>, but that == Tab, used above)
-vim.keymap.set('n', '<Esc>', '<cmd>noh<cr><Esc>', { desc = "Escape and clear hlsearch" })
 vim.keymap.set('n', '<Leader>+', '<Cmd>exe "resize ".(winheight(0) * 3/2)<CR>', { silent = true, desc = "Increase window height to 3/2"})
 vim.keymap.set('n', '<Leader>-', '<Cmd>exe "resize ".(winheight(0) * 2/3)<CR>', { silent = true, desc = "Reduce window height to 2/3"})
 vim.keymap.set('n', '<Leader>/', '<Cmd>noh<CR>', {desc = "Turn off search highlight"})
@@ -390,7 +388,8 @@ vim.keymap.set('v', 'gr', '<Plug>(operator-ripgrep-root)', { noremap = false, de
 vim.keymap.set('x', 'P', 'p', {desc = "Paste and update clipboard"})
 vim.keymap.set('x', 'af', '<Plug>(coc-funcobj-a)', { noremap = false, desc = "Select around function"}) -- requires 'textDocument.documentSymbol'
 vim.keymap.set('x', 'if', '<Plug>(coc-funcobj-i)', { noremap = false, desc = "Select in function"}) -- requires 'textDocument.documentSymbol'
-vim.keymap.set('x', 'p', 'P', {desc = "Paste text"}) -- Doesn't overwrite clipboard https://vi.stackexchange.com/questions/39149/how-to-stop-neovim-from-yanking-text-on-pasting-over-selection
+vim.keymap.set({'i', 'x', 'n', 's'}, '<A-w>', '<cmd>w<cr><esc>', { desc = 'Save file' })
+vim.keymap.set({'i', 'n'}, '<Esc>', '<cmd>noh<cr><Esc>', { desc = "Escape and clear hlsearch" })
 
 -- }}} Mappings
 
