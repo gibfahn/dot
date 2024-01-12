@@ -557,14 +557,6 @@ vim.api.nvim_create_autocmd("User",
     group = gib_autogroup
   })
 
--- Reload vimrc on save.
-vim.api.nvim_create_autocmd("BufWritePost",
-  {
-    pattern = { "*/.config/nvim/init.lua" },
-    command = "source $MYVIMRC",
-    nested = true,
-    group = gib_autogroup
-  })
 -- YAML files should be folded by indent.
 vim.api.nvim_create_autocmd("FileType",
   { pattern = { "*" }, command = "setlocal foldmethod=expr", group = gib_autogroup })
