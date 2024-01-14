@@ -145,6 +145,8 @@ alias j2y="python3 -c 'import sys, yaml, json; yaml.dump(json.load(sys.stdin), s
 alias y2j="python3 -c 'import sys, yaml, json; json.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2)'"
 alias y2y="python3 -c 'import sys, yaml; yaml.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2)'"
 alias t2j="python3 -c 'import sys, toml, json; json.dump(toml.load(sys.stdin), sys.stdout, indent=2)'"
+# Markdown to html (rich text).
+alias mth="pbpaste | pandoc --from markdown --to html | textutil -convert rtf -stdin -stdout -format html |  pbcopy -Prefer rtf"
 # Url encode and decode stdin or first argument.
 alias url_encode='python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read()[0:-1]))"'
 alias url_decode='python3 -c "import urllib.parse, sys; print(urllib.parse.unquote(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read()[0:-1]))"'
