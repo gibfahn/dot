@@ -1,0 +1,25 @@
+# Rules: https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+# Example: https://github.com/DavidAnson/markdownlint/blob/main/schema/.markdownlint.jsonc
+# Ini format info: https://github.com/igorshubovych/markdownlint-cli/issues/317
+
+# Include default lints.
+default = true
+
+# MD013/line-length - Line length
+MD013 = false
+
+# Allow arbitrary indentation for lists. Don't want to force one indent depth globally.
+MD007 = false
+
+# It's okay to have multiple `### Foo` headings in a doc.
+MD024 = false
+
+# Allow code blocks right next to code. Useful for bullet lists, e.g.:
+# - Item 1
+#     ```shell
+MD031 = false
+
+# MD033/no-inline-html: allow inline html elements in Markdown.
+MD033 = false
+
+# vim: filetype=ini

@@ -4,7 +4,7 @@ set -euo pipefail
 
 set -x
 
-nvim --headless "+Lazy! sync" +:TSUpdateSync +:CocUpdateSync +qa
+nvim --headless "+Lazy! sync" +:TSUpdateSync +:MasonUpdate +qa
 
 # Work around https://github.com/Maxattax97/coc-ccls/issues/2
 existing=~/.config/coc/extensions/node_modules/coc-ccls/node_modules/ws/lib/extension.js
