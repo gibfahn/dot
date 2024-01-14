@@ -45,7 +45,6 @@ return {
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     -- Use a function not a table so we can `require()` other modules.
     opts = function()
-
       -- Copy of the wombat colorscheme colors I actually use here.
       -- https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/themes/wombat.lua
       local wombat_colors = {
@@ -57,7 +56,7 @@ return {
         orange  = '#e5786d',
       }
 
-      local custom_wombat = require'lualine.themes.wombat'
+      local custom_wombat = require('lualine.themes.wombat')
 
       -- Wombat colorscheme's `b` section color.
       -- Workaround for https://github.com/nvim-lualine/lualine.nvim/pull/1170
@@ -96,7 +95,7 @@ return {
             {
               'filename',
               path = 1, -- Relative path
-              shorting_target = 60,-- Shorten path to leave N chars space in the window for other components.
+              shorting_target = 60, -- Shorten path to leave N chars space in the window for other components.
               symbols = {
                 readonly = '[RO]', -- Show when the file is non-modifiable or readonly.
               },
@@ -106,12 +105,12 @@ return {
             'branch', -- git branch
             {
               'diff', -- Diff of saved file vs committed.
-              symbols = {added = '+', modified = '~', removed = '-'}, -- Changes the symbols used by the diff.
+              symbols = { added = '+', modified = '~', removed = '-' }, -- Changes the symbols used by the diff.
             },
             {
               'diagnostics', -- LanguageServer diagnostics.
               icons_enabled = true,
-              symbols = {error = '✖ ', warn = '⚠ ', info = ' ', hint = ' '},
+              symbols = { error = '✖ ', warn = '⚠ ', info = ' ', hint = ' ' },
               diagnostics_color = {
                 -- Use lightline defaults.
                 error = { fg = wombat_colors.base03, bg = wombat_colors.orange },
@@ -141,11 +140,11 @@ return {
               cond = function()
                 -- Show if we're in a visual mode.
                 -- See `:h mode()` for a full list of modes.
-                if vim.tbl_contains({'v', 'vs', 'V', 'Vs', '', 's'}, vim.api.nvim_get_mode().mode) then
+                if vim.tbl_contains({ 'v', 'vs', 'V', 'Vs', '', 's' }, vim.api.nvim_get_mode().mode) then
                   return true
                 end
                 -- -- Show if we're in an empty file or a markdown file.
-                if vim.tbl_contains({'', 'markdown'}, vim.bo.filetype) then
+                if vim.tbl_contains({ '', 'markdown' }, vim.bo.filetype) then
                   return true
                 end
                 return false
@@ -180,7 +179,7 @@ return {
               },
             },
           },
-          lualine_x = {'location'},
+          lualine_x = { 'location' },
           lualine_y = {},
           lualine_z = {}
         },
@@ -268,7 +267,7 @@ return {
             local result = config.get_input("Markdown code block language: ")
             return {
               { "```" .. result, '' },
-              { "", "```" },
+              { "",              "```" },
             }
           end,
         },
