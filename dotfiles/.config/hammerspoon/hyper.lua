@@ -62,7 +62,7 @@ hs.hotkey.bind({}, 'F17', pressedF17, releasedF17)
 KillAll = function(killArgs, opts)
   HyperMode:exit()
   local sudo = opts and opts.sudo or false
-  if (type(killArgs) ~= "table") then killArgs = {killArgs} end
+  if (type(killArgs) ~= "table") then killArgs = { killArgs } end
   -- -v means print what we kill, use -s in your command to print but not kill.
   table.insert(killArgs, 1, "-v")
   local command = "/usr/bin/killall"
@@ -124,10 +124,10 @@ end
 -- {{{ Hyper-<key> -> Launch apps
 local hyperModeAppMappings = {
   -- Keys used in work config: r, shift-r
-  {key = '/', app = 'Finder'}, {key = 'a', app = 'Activity Monitor'}, {key = 'c', apps = {'Slack', 'Slack Web'}},
-  {key = 'f', app = 'Firefox'}, {key = 'k', app = 'Calendar'}, {key = 'm', app = 'Mail'}, {key = 's', app = 'Spotify'},
-  {key = 't', app = 'Kitty'}, {key = 'w', app = 'Workflowy'}, {key = 'x', app = 'Messenger', mods = {'alt'}},
-  {key = 'x', app = 'Messages'}
+  { key = '/', app = 'Finder' }, { key = 'a', app = 'Activity Monitor' }, { key = 'c', apps = { 'Slack', 'Slack Web' } },
+  { key = 'f', app = 'Firefox' }, { key = 'k', app = 'Calendar' }, { key = 'm', app = 'Mail' }, { key = 's', app = 'Spotify' },
+  { key = 't', app = 'Kitty' }, { key = 'w', app = 'Workflowy' }, { key = 'x', app = 'Messenger', mods = { 'alt' } },
+  { key = 'x', app = 'Messages' }
 }
 -- Add in wrk mappings if present.
 if WrkHyperModeAppMappings ~= nil then
@@ -136,7 +136,7 @@ end
 
 for _, mapping in ipairs(hyperModeAppMappings) do
   local apps = mapping.apps
-  if apps == nil then apps = {mapping.app} end
+  if apps == nil then apps = { mapping.app } end
   HyperMode:bind(mapping.mods, mapping.key, function() switchToApp(apps) end)
 end
 -- }}} Hyper-<key> -> Launch apps
@@ -144,7 +144,7 @@ end
 -- Hyper-b -> launch default browser.
 DefaultBrowserBundleID = (function()
   local handlers = hs.plist.read(os.getenv("HOME") ..
-                                     "/Library/Preferences/com.apple.LaunchServices/com.apple.launchservices.secure.plist")
+    "/Library/Preferences/com.apple.LaunchServices/com.apple.launchservices.secure.plist")
   if handlers == nil or handlers.LSHandlers == nil then return "com.apple.safari" end
   for _, handler in ipairs(handlers.LSHandlers) do
     if handler.LSHandlerURLScheme == "https" then return handler.LSHandlerRoleAll end
@@ -227,13 +227,13 @@ HyperMode:bind({}, ';', hs.caffeinate.lockScreen)
 
 -- {{{ Hyper-⌥-q -> Force Quit Webex
 -- Quit webex without spending an age trying to find the button.
-HyperMode:bind({'alt'}, 'q', function() KillAll({'-9', '-m', '.*Meeting Center.*'}) end)
+HyperMode:bind({ 'alt' }, 'q', function() KillAll({ '-9', '-m', '.*Meeting Center.*' }) end)
 -- }}} Hyper-⌥-q -> Force Quit Webex
 
 -- {{{ Hyper-⇧-w -> Restart Wi-Fi
-HyperMode:bind({'shift'}, 'w', function()
+HyperMode:bind({ 'shift' }, 'w', function()
   log.d("Restarting Wi-Fi...")
-  hs.notify.new({title = 'Restarting Wi-Fi...', withdrawAfter = 3}):send()
+  hs.notify.new({ title = 'Restarting Wi-Fi...', withdrawAfter = 3 }):send()
   hs.wifi.setPower(false)
   hs.wifi.setPower(true)
 end)
@@ -249,7 +249,7 @@ end)
 -- }}} Hyper-d -> Paste today's date.
 
 -- {{{ Hyper-⇧-d -> Paste today's date and time.
-HyperMode:bind({'shift'}, 'd', function()
+HyperMode:bind({ 'shift' }, 'd', function()
   log.d("Pasting today's date and time...")
   local date = os.date("%Y-%m-%d %H:%M:%S")
   HyperMode:exit()
@@ -258,9 +258,9 @@ end)
 -- }}} Hyper-⇧-d -> Paste today's date and time.
 
 -- {{{ Hyper-⌥-m -> Format selected Message ID as link and copy to clipboard.
-HyperMode:bind({'shift'}, 'm', function()
+HyperMode:bind({ 'shift' }, 'm', function()
   log.d("Copying selected email message ID as a link and copying to the clipboard...")
-  hs.eventtap.keyStroke({'cmd'}, 'c') -- Copy selected email message ID (e.g. from Mail.app).
+  hs.eventtap.keyStroke({ 'cmd' }, 'c') -- Copy selected email message ID (e.g. from Mail.app).
   -- Allow some time for the command+c keystroke to fire asynchronously before
   -- we try to read from the clipboard
   hs.timer.doAfter(0.2, function()
@@ -276,7 +276,7 @@ end)
 -- }}} Hyper-⌥-m -> Format selected Message ID as link and copy to clipboard.
 
 -- {{{ Hyper-⌘-m -> Hide or show the menu bar.
-HyperMode:bind({'cmd'}, 'm', function()
+HyperMode:bind({ 'cmd' }, 'm', function()
   log.d("Toggling menu bar hide/show...")
 
   hs.task.new(home_dir .. "/bin/toggle_menu_bar", function(exitCode, stdOut, stdErr)
@@ -291,7 +291,7 @@ end)
 -- }}} Hyper-⌘-m -> Hide or show the menu bar.
 
 -- {{{ Hyper-p -> Screenshot of selected area to clipboard.
-HyperMode:bind({}, 'p', function() hs.eventtap.keyStroke({'cmd', 'ctrl', 'shift'}, '4') end)
+HyperMode:bind({}, 'p', function() hs.eventtap.keyStroke({ 'cmd', 'ctrl', 'shift' }, '4') end)
 -- }}} Hyper-p -> Screenshot of selected area to clipboard.
 
 -- {{{ Hyper-Enter -> Open clipboard contents.
@@ -306,7 +306,7 @@ HyperMode:bind({}, 'return', function()
       stdErr,
       withdrawAfter = 3
     }):send()
-  end, {clipboard}):start()
+  end, { clipboard }):start()
 end)
 -- }}} Hyper-Enter -> Open clipboard contents.
 
@@ -327,34 +327,34 @@ HyperMode:bind({}, '\\', function()
     '/Users/gib/tmp/nuke/' .. frontmostApplicationName .. ' ' .. date .. '.spindump.txt', frontmostApplicationName
   }):start()
 end)
-HyperMode:bind({'shift'}, '\\', function() KillAll("Finder") end)
-HyperMode:bind({'alt'}, '\\', function()
+HyperMode:bind({ 'shift' }, '\\', function() KillAll("Finder") end)
+HyperMode:bind({ 'alt' }, '\\', function()
   hs.task.new("/usr/bin/sudo", function(exitCode, stdOut, stdErr)
     hs.notify.new({
       title = 'Sudo refreshed ...',
       informativeText = exitCode .. " " .. stdOut .. " " .. stdErr,
       withdrawAfter = 3
     }):send()
-  end, {'--validate'}):start()
+  end, { '--validate' }):start()
 end)
 
 -- {{{ Hyper-⇧-x -> Restart the touch strip.
-HyperMode:bind({'shift'}, 'x', function() KillAll("ControlStrip") end)
+HyperMode:bind({ 'shift' }, 'x', function() KillAll("ControlStrip") end)
 -- }}} Hyper-⇧-x -> Restart the touch strip.
 
 -- {{{ Hyper-{h,n,e,i} -> Arrow Keys, Hyper-{j,l,u,y} -> Home,PgDn,PgUp,End
 for _, hotkey in ipairs({
-  {key = 'h', direction = 'left'}, {key = 'n', direction = 'down'}, {key = 'e', direction = 'up'},
-  {key = 'i', direction = 'right'}, {key = 'j', direction = 'home'}, {key = 'l', direction = 'pagedown'},
-  {key = 'u', direction = 'pageup'}, {key = 'y', direction = 'end'}
+  { key = 'h', direction = 'left' }, { key = 'n', direction = 'down' }, { key = 'e', direction = 'up' },
+  { key = 'i', direction = 'right' }, { key = 'j', direction = 'home' }, { key = 'l', direction = 'pagedown' },
+  { key = 'u', direction = 'pageup' }, { key = 'y', direction = 'end' }
 }) do
   for _, mods in ipairs({
-    {}, {'cmd'}, {'alt'}, {'ctrl'}, {'shift'}, {'cmd', 'shift'}, {'alt', 'shift'}, {'ctrl', 'shift'}
+    {}, { 'cmd' }, { 'alt' }, { 'ctrl' }, { 'shift' }, { 'cmd', 'shift' }, { 'alt', 'shift' }, { 'ctrl', 'shift' }
   }) do
     -- hs.hotkey.bind(mods, key, message, pressedfn, releasedfn, repeatfn) -> hs.hotkey object
     HyperMode:bind(mods, hotkey.key, function() hs.eventtap.event.newKeyEvent(mods, hotkey.direction, true):post() end,
-                   function() hs.eventtap.event.newKeyEvent(mods, hotkey.direction, false):post() end,
-                   function() hs.eventtap.event.newKeyEvent(mods, hotkey.direction, true):post() end)
+      function() hs.eventtap.event.newKeyEvent(mods, hotkey.direction, false):post() end,
+      function() hs.eventtap.event.newKeyEvent(mods, hotkey.direction, true):post() end)
   end
 end
 -- }}} Hyper-{h,n,e,i} -> Arrow Keys
