@@ -342,6 +342,16 @@ end)
 HyperMode:bind({ 'shift' }, 'x', function() KillAll("ControlStrip") end)
 -- }}} Hyper-⇧-x -> Restart the touch strip.
 
+-- {{{ Hyper - '>' -> Markdown quote clipboard and re-copy.
+HyperMode:bind({ 'shift' }, '.', function()
+  log.d("Quoting clipboard contents and re-copying...")
+  local text = hs.pasteboard.getContents()
+  text = text:gsub("\n", "\n>")
+  text = ">" .. text
+  hs.pasteboard.setContents(text)
+end)
+-- }}} Hyper - '>' -> Markdown quote clipboard and re-copy.
+
 -- {{{ Hyper-{h,n,e,i} -> Arrow Keys, Hyper-{j,l,u,y} -> Home,PgDn,PgUp,End
 for _, hotkey in ipairs({
   { key = 'h', direction = 'left' }, { key = 'n', direction = 'down' }, { key = 'e', direction = 'up' },
