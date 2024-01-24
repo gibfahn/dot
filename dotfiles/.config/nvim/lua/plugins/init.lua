@@ -82,6 +82,16 @@ return {
         },
       },
     },
+    dependencies = {
+      {
+        "nvim-telescope/telescope-ui-select.nvim",
+        config = function()
+          require("lazyvim.util").on_load("telescope.nvim", function()
+            require("telescope").load_extension("ui-select")
+          end)
+        end,
+      },
+    },
   },
 
   {
@@ -225,8 +235,6 @@ return {
       },
     },
   },
-
-  { "nvim-telescope/telescope-ui-select.nvim" },
 
   "fladson/vim-kitty", -- Syntax highlighting for kitty.conf file.
   "chrisbra/Recover.vim", -- add a diff option when a swap file is found.
