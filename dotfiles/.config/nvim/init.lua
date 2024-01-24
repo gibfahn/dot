@@ -46,7 +46,6 @@ vim.cmd("colorscheme habamax") -- Default colorscheme in case plugins don't load
 
 vim.opt.breakindent = true -- Nicer line wrapping for long lines.
 vim.opt.completeopt = "menu,menuone,noselect" -- Nicer completion behaviour.
-vim.opt.conceallevel = 2 -- Hide * markup for bold and italic, but not markers with substitutions
 vim.opt.confirm = true -- Ask if you want to save unsaved files instead of failing.
 vim.opt.diffopt:append("vertical") -- Always use vertical diffs.
 vim.opt.expandtab = true -- Use spaces instead of tabs
@@ -229,8 +228,6 @@ require("lazy").setup({
 --
 -- (see http://vim.wikia.com/wiki/Unused_keys for unused keys)
 
-local conceallevel = vim.o.conceallevel > 0 and vim.o.conceallevel or 3
-
 -- Allow long lines here so I can sort mappings easily.
 -- stylua: ignore start
 
@@ -336,7 +333,7 @@ vim.keymap.set("n", "<leader>lL", function() require("lazyvim.util").news.change
 vim.keymap.set("n", "<leader>uF", function() require("lazyvim.util").format.toggle(true) end, { desc = "Toggle auto format (buffer)" })
 vim.keymap.set("n", "<leader>uL", function() require("lazyvim.util").toggle("relativenumber") end, { desc = "Toggle Relative Line Numbers" })
 vim.keymap.set("n", "<leader>uT", function() if vim.b.ts_highlight then vim.treesitter.stop() else vim.treesitter.start() end end, { desc = "Toggle Treesitter Highlight" })
-vim.keymap.set("n", "<leader>uc", function() require("lazyvim.util").toggle("conceallevel", false, { 0, conceallevel }) end, { desc = "Toggle Conceal" })
+vim.keymap.set("n", "<leader>uc", function() require("lazyvim.util").toggle("conceallevel", false, { 0, 3 }) end, { desc = "Toggle Conceal" })
 vim.keymap.set("n", "<leader>ud", function() require("lazyvim.util").toggle.diagnostics() end, { desc = "Toggle Diagnostics" })
 vim.keymap.set("n", "<leader>uf", function() require("lazyvim.util").format.toggle() end, { desc = "Toggle auto format (global)" })
 vim.keymap.set("n", "<leader>uh", function() require("lazyvim.util").toggle.inlay_hints() end, { desc = "Toggle Inlay Hints" })
