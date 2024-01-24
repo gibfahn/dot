@@ -54,13 +54,11 @@
   btp = "!git config branch.$(git head-branch).pushRemote ${1:-fork} #" # `g btp up` sets push remote for this branch to up, useful when pushing directly to 'up'.
   btpa = "!git config remote.pushDefault $1 #" # Set push remote for all future branches in this repo. Use this when you have a repo you don't want to fork.
 
-  # I manually specify -S because gpgsign only works with Git 2.x. Also it means that test suites
-  # using `git commit` don't break, and machines without gpg can commit using the full commands.
   ce  = config --global --edit         # Open this file with $VISUAL.
-  c   = commit -S -v                   # Commit with gpg signing.
-  ca  = commit -S -a -v                # Commit all changed files with gpg.
-  cm  = commit -S --amend -v           # Amend the previous commit.
-  cmn = commit -S --amend --no-edit    # Amend the previous commit but don't change the message.
+  c   = commit -v                   # Commit with gpg signing.
+  ca  = commit -a -v                # Commit all changed files with gpg.
+  cm  = commit --amend -v           # Amend the previous commit.
+  cmn = commit --amend --no-edit    # Amend the previous commit but don't change the message.
   # Output Co-authored-by: lines for users who have committed to this repo before.
   cab = "!git log --all --pretty='Co-authored-by: %an <%ae>' | sort -u | fzf # "
   # Fallback that searches the GitHub API for specified username ($1). Useful
@@ -68,7 +66,8 @@
   # emails in their account.
   cabb = "!user=${1?}; GH_HOST=$(git remote-host $(git up-remote)) gh api graphql -f query=\"query { search(type:USER, query: \\\"$user\\\", first: 10) { userCount edges { node { ... on User { name, email, } } } } }\" \
     | jq -r '.data.search.edges[] | \"Co-authored-by: \\(.node.name) <\\(.node.email)>\"' | fzf #"
-  can = commit -S --amend --no-edit -a # Add changed files and commit with the same message.
+  can = commit --amend --no-edit -a # Add changed files and commit with the same message.
+  caw = "! git commit -a -m \"WIP! at $(date '+%Y-%m-%d %H:%M:%S') on $(hostname)\" \"$@\" #" # work in progress commit to be squashed
   cn  = clean -ffdx                    # Remove anything that's untracked (DANGER).
   cl  = clone --recurse-submodules     # Always include submodules.
   cp  = cherry-pick                    # Apply commit hash(es) to current branch.
@@ -132,9 +131,9 @@
   p   = push                                                              # Push commits to a remote.
   pd  = "!git push -d ${1%%/*} ${1#*/} #"                                 # Delete a remote branch in the form remote/branch.
   pf  = push --force-with-lease                                           # Better version of push -f.
-  pa  = "!curl -nL ${1%.patch}.patch | git am -S --whitespace=fix # "     # Patch Github PR.
-  pap = "!curl -nL ${1%.patch}.patch | git am -3 -S --whitespace=fix  # " # Please patch it.
-  paw = "!curl -nL ${1%.patch}.patch | git am -3 -S --whitespace=warn # " # Patch but don't fix whitespace.
+  pa  = "!curl -nL ${1%.patch}.patch | git am --whitespace=fix # "        # Patch Github PR.
+  pap = "!curl -nL ${1%.patch}.patch | git am -3 --whitespace=fix  # "    # Please patch it.
+  paw = "!curl -nL ${1%.patch}.patch | git am -3 --whitespace=warn # "    # Patch but don't fix whitespace.
   ppr = "!git check-pr-branch && git push && git pr --markdown # "        # Push and raise PR at the same time.
   pre = pr --edit                                                         # Update the PR description.
   pro = pr --open --markdown                                              # Open the PR pointed to by the current branch.
@@ -144,22 +143,22 @@
   pl  = pull
 
   ra  = remote add                                           # Add new remote by url.
-  rb  = rebase -S                                            # Rebase and gpg sign.
+  rb  = rebase                                               # Rebase
   rba = rebase --abort                                       # Bail on the rebase session.
   rbc = rebase --continue                                    # Accept the current commit.
   rbs = rebase --skip                                        # Skip current commit you're rebasing on.
   rhu = reset --hard @{u}                                    # Reset hard to the upstream commit.
   rhp = reset --hard @{push}                                 # Reset hard to the push commit.
   rh  = reset --hard                                         # Reset hard (to HEAD by default).
-  ri  = rebase -i -S --autosquash                            # Interactive rebase (defaults to upstream commit @{u}).
-  rip = rebase -i -S --autosquash @{push}                    # Interactive rebase on push branch.
-  rim = "!git rebase -i -S --autosquash $(git merge-base ${1:-main} ${2:-HEAD} ${@:2}) # " # Rebase all commits since you forked the branch.
+  ri  = rebase -i --autosquash                               # Interactive rebase (defaults to upstream commit @{u}).
+  rip = rebase -i --autosquash @{push}                       # Interactive rebase on push branch.
+  rim = "!git rebase -i --autosquash $(git merge-base ${1:-main} ${2:-HEAD} ${@:2}) # " # Rebase all commits since you forked the branch.
   rr  = remote rename                                        # Change name of remote `g rr origin up`.
   rs = "!git remote set-url \"$@\" && git remote set-url --push \"$@\" #" # Set both push and fetch remotes.
   rsf = remote set-url                                       # Change fetch URL of remote `g rs up hsg:dot`.
   rsp = remote set-url --push                                # Change push URL of remote (`g rs up hhg:dot && g rsp up hsg:dot` to use https for fetch and ssh for push, which is faster).
   rt  = restore                                              # Restore working tree from ref (git checkout was split into this).
-  rtp = restore -p                                          # Selectively undo some of the changes you made.
+  rtp = restore -p                                           # Selectively undo some of the changes you made.
   rth = "!git checkout $(git default-branch ${1:-up}) #"     # Checkout default branch for remote $1 (default: up).
   rv  = remote -v                                            # Show remotes (with URLs).
 
