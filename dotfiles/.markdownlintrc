@@ -5,11 +5,14 @@
 # Include default lints.
 default = true
 
-# MD013/line-length - Line length
-MD013 = false
+# MD004/ul-style - don't enforce consistency between * and - , it's fine to have both.
+MD004 = false
 
 # Allow arbitrary indentation for lists. Don't want to force one indent depth globally.
 MD007 = false
+
+# MD013/line-length - Line length
+MD013 = false
 
 # It's okay to have multiple `### Foo` headings in a doc.
 MD024 = false
