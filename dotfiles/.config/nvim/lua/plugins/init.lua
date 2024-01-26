@@ -433,6 +433,14 @@ return {
   },
 
   {
+    "kdheepak/lazygit.nvim",
+    -- optional for floating window border decoration
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
+  },
+
+  {
     "folke/flash.nvim",
     event = "VeryLazy",
     opts = { -- https://github.com/folke/flash.nvim#%EF%B8%8F-configuration

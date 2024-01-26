@@ -23,7 +23,7 @@ local home_dir = os.getenv("HOME")
 
 if vim.fn.executable("nvr") then
   -- Use existing nvim window to open new files (e.g. `g cm`).
-  vim.env.VISUAL = "nvr --remote-wait"
+  vim.env.VISUAL = "nvr -cc vsplit --remote-wait +'set bufhidden=wipe'"
 end
 
 vim.g.any_jump_disable_default_keybindings = 1 -- Conflicts with other useful bindings.
@@ -327,8 +327,7 @@ vim.keymap.set("n", "<Leader>y", '"+y', { desc = "Copy to clipboard" })
 vim.keymap.set("n", "<Leader>z", "za", { desc = "Fold current line" })
 vim.keymap.set("n", "<S-Tab>", "<Cmd>bp<CR>", { desc = "Go to previous buffer" })
 vim.keymap.set("n", "<Tab>", "<Cmd>bn<CR>", { desc = "Go to next buffer" })
-vim.keymap.set("n", "<leader>gL", function() require("lazyvim.util").terminal({ "lazygit" }, { esc_esc = false, ctrl_hjkl = false }) end, { desc = "Lazygit (cwd)" })
-vim.keymap.set("n", "<leader>gl", function() require("lazyvim.util").terminal( { "lazygit" }, { cwd = require("lazyvim.util").root(), esc_esc = false, ctrl_hjkl = false }) end, { desc = "Lazygit (root dir)" })
+vim.keymap.set("n", "<leader>gl", "<Cmd>:LazyGit<CR>", { desc = "Lazygit" })
 vim.keymap.set("n", "<leader>lL", function() require("lazyvim.util").news.changelog() end, { desc = "LazyVim Changelog" })
 vim.keymap.set("n", "<leader>uF", function() require("lazyvim.util").format.toggle(true) end, { desc = "Toggle auto format (buffer)" })
 vim.keymap.set("n", "<leader>uL", function() require("lazyvim.util").toggle("relativenumber") end, { desc = "Toggle Relative Line Numbers" })
