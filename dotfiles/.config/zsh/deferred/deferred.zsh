@@ -1,14 +1,3 @@
-# {{{ Early Aliases
-
-# Cross-platform copy/paste/open/ldd/delete terminal commands (used later via ${aliases[cpy]}.).
-# OSTYPE set by zsh: https://zsh.sourceforge.io/Doc/Release/Parameters.html#Parameters-Set-By-The-Shell
-case $OSTYPE in
-  darwin*) alias cpy="pbcopy" pst="pbpaste" ldd="otool -L" o=open dl=trash ;;
-  linux*) alias cpy="xclip -selection clipboard" pst="xclip -selection clipboard -o" o=xdg-open dl="gio trash" ;;
-esac
-
-# }}} Early Aliases
-
 # {{{ Environment Variables
 
 export ATOM_HOME="$XDG_DATA_HOME"/atom # Atom data goes here.
