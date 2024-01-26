@@ -44,7 +44,7 @@ remap_gib() {
   {$FROM: $LEFT_SHIFT,             $TO: $LEFT_CTRL},
   {$FROM: $GRAVE_TILDE,             $TO: $F17},
   {$FROM: $ISO_BACKSLASH, $TO: $GRAVE_TILDE}
-  ]}" >/dev/null
+  ]}"
 
   # Cooler Master Keyboards.
   # Convert windows keyboard to macOS (swap cmd and alt).
@@ -55,14 +55,14 @@ remap_gib() {
   {$FROM: $LEFT_GUI,             $TO: $LEFT_ALT},
   {$FROM: $LEFT_ALT,             $TO: $LEFT_GUI},
   {$FROM: $ISO_BACKSLASH,             $TO: $F17}
-  ]}" >/dev/null
+  ]}"
 
   # Kinesis Freestyle Keyboard
   $HIDUTIL property --matching '{"VendorID":0x58f}' --set "{\"UserKeyMapping\":[
   {$FROM: $CAPS_LOCK,             $TO: $LEFT_SHIFT},
   {$FROM: $LEFT_SHIFT,             $TO: $LEFT_CTRL},
   {$FROM: $LEFT_CTRL,             $TO: $F17}
-  ]}" >/dev/null
+  ]}"
 
   # Kinesis Freestyle Edge Keyboard
   $HIDUTIL property --matching '{"VendorID":0x29ea}' --set "{\"UserKeyMapping\":[
@@ -72,7 +72,7 @@ remap_gib() {
   {$FROM: $LEFT_ALT,             $TO: $LEFT_GUI},
   {$FROM: $F1,                   $TO: $ESCAPE},
   {$FROM: $LEFT_CTRL,            $TO: $F17}
-  ]}" >/dev/null
+  ]}"
 
 }
 
