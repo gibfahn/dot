@@ -53,7 +53,7 @@ main() {
   up_org=$(remote_org $up_remote)
   up_repo=$(remote_repo $up_remote)
 
-  commit_block_title="#### Commits _(oldest to newest)_"
+  commit_block_title="## Commits _(oldest to newest)_"
 
   # TODO: stop setting this once `gh` gains decent up/push branch recognition.
   export GH_REPO=$(remote_url "$up_remote")
@@ -160,17 +160,16 @@ pr_file() {
     pr_message > "$file"
   fi
   ${VISUAL:-$EDITOR} "$file" >$(tty) <$(tty)
-  echo "$file"
+  # Remove the leading "# " from the string.
+  echo "$file" | cut -c 3- | sed 's/^## Commits/#### Commits/'
 }
 
 # Generates a default PR message.
 # The cat will fail if no template exists, that's okay.
 pr_message() {
   cat <<EOF
-$(pr_title)
-
-$(cat $(git rev-parse --show-toplevel)/{.github/,,docs/}PULL_REQUEST_TEMPLATE{,.md} 2>/dev/null)
-
+# $(pr_title)
+$(cat $(git rev-parse --show-toplevel)/{.github/,,docs/}PULL_REQUEST_TEMPLATE{,.md} 2>/dev/null && echo)
 ---
 
 $commit_block_title
@@ -181,12 +180,12 @@ EOF
 
 pr_title() {
   if [[ $(git rev-list --count @{upstream}..@) == 1 ]]; then
-     git log -1 --format="%s"
+     git log -1 --format="%s" && echo
   fi
 }
 
 pr_log() {
-  git log -s --reverse --format='%h %s%n%n%b%n<br/>%n' @{upstream}..@
+  git log -s --reverse --format='%h %s%n%n%b%n<br/>%n' @{upstream}..@ | sed -e '/./b' -e :n -e 'N;s/\n$//;tn'
 }
 
 # Usage: exit message [rc]
