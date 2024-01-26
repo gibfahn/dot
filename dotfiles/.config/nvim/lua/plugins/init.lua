@@ -435,13 +435,15 @@ return {
   {
     "folke/flash.nvim",
     event = "VeryLazy",
-    opts = {
+    opts = { -- https://github.com/folke/flash.nvim#%EF%B8%8F-configuration
       labels = "arstdhneioqwfpgjluyzxcvbkm1234567890", -- Colemak order, include numbers
       jump = {
         autojump = true, -- automatically jump when there is only one match
       },
       label = {
-        reuse = "all", -- flash tries to re-use labels that were already assigned to a position
+        -- flash tries to re-use labels that were already assigned to a position,
+        -- when typing more characters. By default only lower-case labels are re-used.
+        reuse = "lowercase", ---@type "lowercase" | "all" | "none"
       },
       modes = {
         search = {
