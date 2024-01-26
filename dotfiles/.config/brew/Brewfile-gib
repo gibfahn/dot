@@ -42,6 +42,7 @@ brew "gnu-which"                         # GNU version of which.
 brew "go"                                # Go progamming language.
 brew "grep"                              # GNU version of grep.
 brew "hyperfine"                         # Benchmark commands (time but a benchmarking suite).
+brew "lazygit"                           # Git TUI wrapper, has some staging niceties etc.
 brew "jq"                                # Makes it easy to deal with JSON on the command line.
 brew "kubectx"                           # Easily change Kubernetes context or namespace.
 brew "kubernetes-cli"                    # Manage your docker clusters with kube.
