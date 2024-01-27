@@ -68,7 +68,16 @@ main() {
 
 pr_create() {
   file=$(pr_file)
-  gh pr create --repo $up_org/$up_repo --title "$(head -1 "$file")" --body "$(tail +3 "$file")" --base "$up_branch" ${draft:+--draft}
+  gh pr create --repo $up_org/$up_repo \
+    --title "$(
+      # Remove the leading "# " from the title.
+      head -1 "$file" | cut -c 3-
+    )" \
+    --body "$(
+      # Make the Commits heading less visible.
+      tail +3 "$file" | sed 's/^## Commits/#### Commits/'
+    )" \
+    --base "$up_branch" ${draft:+--draft}
 
   rm "$file"
 
@@ -160,8 +169,7 @@ pr_file() {
     pr_message > "$file"
   fi
   ${VISUAL:-$EDITOR} "$file" >$(tty) <$(tty)
-  # Remove the leading "# " from the string.
-  echo "$file" | cut -c 3- | sed 's/^## Commits/#### Commits/'
+  echo "$file"
 }
 
 # Generates a default PR message.
