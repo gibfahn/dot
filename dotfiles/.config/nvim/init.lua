@@ -304,6 +304,7 @@ vim.keymap.set("n", "<Leader>gG", ":Resolve<CR>|:Gcd<CR>", { desc = "Chdir to ro
 vim.keymap.set("n", "<Leader>gQ", "<Cmd>set fo+=t<CR><Cmd>set fo?<CR>", { desc = "Auto-add newline for long lines" })
 vim.keymap.set("n", "<Leader>gc", "<Cmd>cd %:p:h<CR>", { desc = "Change to current file's dirname" }) -- e.g. for <space>f, :e
 vim.keymap.set("n", "<Leader>gd", "<Cmd>DiffOrig<CR>", { desc = "Diff between saved file and buffer" })
+vim.keymap.set("n", "<Leader>gf", "<Cmd>call DupBuffer()<CR>gF", { desc = "Open path:row:col in last window" })
 vim.keymap.set("n", "<Leader>gg", ":Resolve<CR>|:tab Git<CR>", { desc = "Open fugitive in a new tab" })
 vim.keymap.set("n", "<Leader>gn", "<Cmd>set number!<CR>", { desc = "Toggle line numbers" })
 vim.keymap.set("n", "<Leader>gp", "`[v`]", { desc = "Visually select last copied/pasted text" })
@@ -425,6 +426,14 @@ end, {})
 
 -- {{{ Vimscript Commands and Functions
 vim.cmd([[
+  " Opens current buffer in previous split (at the same position but centered).
+  function! DupBuffer()
+    let pos = getpos(".") " Save cursor position.
+    let buff = bufnr('%') " Save buffer number of current buffer.
+    execute "normal! \<c-w>p:b " buff "\<CR>"| " Change to previous buffer and open saved buffer.
+    call setpos('.', pos) " Set cursor position to what is was before.
+  endfunction
+
   " Convert buffer to its realpath (resolving symlinks).
   " https://github.com/tpope/vim-fugitive/pull/814#issuecomment-446767081
   function! s:Resolve() abort
