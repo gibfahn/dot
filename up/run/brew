@@ -35,16 +35,6 @@ export HOMEBREW_CASK_OPTS=--no-quarantine
 
 # Upgrade everything, even things that weren't in your Brewfile.
 brew update
-
-# If the cask is installed and outdated.
-if brew list --cask | grep -q sogouinput && ! brew outdated sogouinput; then
-  # Cask can no longer be upgraded, must be manually reinstalled.
-  brew reinstall sogouinput
-
-  sogou_dir="$(brew info sogouinput | awk '/\/Caskroom\/sogouinput\// { print $1 }')"
-  open -a "$sogou_dir"/sogou*.app
-fi
-
 brew upgrade # You may occasionally want to run `brew upgrade --greedy` in case built-in cask updaters aren't working.
 
 # brew install things. Edit config/Brewfile to adjust.

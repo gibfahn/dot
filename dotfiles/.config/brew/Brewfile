@@ -48,7 +48,6 @@ brew "zsh"                               # Nicer interactive shell.
 
 cask "google-chrome"                     # You probably want/have Chrome.
 cask "keyboard-cleaner"                  # Block all keystrokes except ⌘-q so you can wipe your keyboard.
-cask "sogouinput"                        # Nicer Chinese input experience.
 cask "spotify"                           # Music.
 cask "time-out"                          # Reminds you to take breaks.
 cask "visual-studio-code"                # Used to teach Brian to code.
