@@ -193,6 +193,7 @@ pr_title() {
 }
 
 pr_log() {
+  # The sed removes duplicate newlines <https://unix.stackexchange.com/a/131228>
   git log -s --reverse --format='%h %s%n%n%b%n<br/>%n' @{upstream}..@ | sed -e '/./b' -e :n -e 'N;s/\n$//;tn'
 }
 
