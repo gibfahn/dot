@@ -251,16 +251,19 @@ gcl() {
 
 # Open vim with the results of the last rg/rga command in the quickfix list.
 rv() {
-  local cmd
-  cmd="$(fc -lnr -100 | awk '$1 == "rg" || $1 == "rga" {
-    out="rg --smart-case --vimgrep"
-    if ($1 == "rga") { out=out" --hidden --no-ignore --glob=!.git" }
-    for (i=2; i<=NF; i++) { out=out" "$i }
-    print out; exit
-  }')"
-  [[ -z "$cmd" ]] && { echo "No rg in the last 100 history commands."; return 1; }
+  local cmd history_line
+  history_line=$(fc -lr -100 | awk '$2 == "rg" || $1 == "rga" { print $1; exit; }')
+  [[ -z "$history_line" ]] && { echo "No rg in the last 100 history commands."; return 1; }
+  eval cmd="($history[$history_line])"
+  # Remove 1st item (rg or rga) and replace with rg + flags, then the rest of the cmd array.
+  if [[ ${cmd[1]} == rga ]]; then
+    cmd=(rg --hidden --no-ignore --glob=!.git --smart-case --vimgrep "${(@)cmd[2,$#cmd]}")
+  else
+    cmd=(rg --glob=!.git --smart-case --vimgrep "${(@)cmd[2,$#cmd]}")
+  fi
+
   # Use =() not <() to work around https://github.com/neovim/neovim/issues/21756
-  "$=VISUAL" -q =(eval "$cmd")
+  "$=VISUAL" -q =("${cmd[@]}")
 }
 
 # vim quickfix: copy a set of file:line lines then run to populate the quickfix list.
