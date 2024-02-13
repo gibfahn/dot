@@ -252,7 +252,7 @@ gcl() {
 # Open vim with the results of the last rg/rga command in the quickfix list.
 rv() {
   local cmd history_line
-  history_line=$(fc -lr -100 | awk '$2 == "rg" || $1 == "rga" { print $1; exit; }')
+  history_line=$(fc -lr -100 | awk '$2 == "rg" || $2 == "rga" { print $1; exit; }')
   [[ -z "$history_line" ]] && { echo "No rg in the last 100 history commands."; return 1; }
   eval cmd="($history[$history_line])"
   # Remove 1st item (rg or rga) and replace with rg + flags, then the rest of the cmd array.
