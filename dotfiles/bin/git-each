@@ -14,6 +14,8 @@ To configure the code dirs set the env var GIT_EACH_DIRS to a newline-separated 
 GIT_EACH_DIRS=\"\$HOME/wrk
 \$HOME/code\"
 
+Set the DEBUG env var to get 'set -x' logging output.
+
 Requires: fd CLI (https://github.com/sharkdp/fd).
   brew install fd
 "
@@ -22,6 +24,53 @@ Requires: fd CLI (https://github.com/sharkdp/fd).
 [[ ${1:-} =~ ^(--help|-h)$ ]] && { usage; exit; }
 
 [[ ${1:-} =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
+
+this_script=$0
+
+main() {
+  if [[ -n ${DEBUG:-} ]]; then
+    set -x
+  fi
+
+  if [[ ${1:-} == --each-dir* ]]; then
+    # Run command on `--each-dir`.
+    if [[ $1 == --each-dir=* ]]; then
+      repo_path=${1#--each-dir=}
+      shift 1
+    else
+      repo_path=${2}
+      shift 2
+    fi
+
+    if [[ $repo_path == */go/* ]]; then
+      exit 0 # Skip go directories.
+    fi
+
+    output=$(cd "$repo_path" && "$@" 2>&1) && true
+    rc=$?
+    if [[ -n ${output:-} ]]; then
+      printf "${fg[magenta]}=> git-each: %s in $repo_path${reset_color}"$'\n' "$*"
+      printf "%s\n" "$(indent <<<"$output")"
+    fi
+    exit $rc
+  else
+    git_each_dirs_input=("${(@f)${GIT_EACH_DIRS:-"$HOME/wrk
+$HOME/code"}}")
+    git_each_dirs=()
+    for dir in "${git_each_dirs_input[@]}"; do
+      if [[ -d $dir ]]; then
+        git_each_dirs+=("${dir}")
+      fi
+    done
+    # Call self with each dir.
+    fd --no-ignore --hidden --type directory '^\.git$' "${git_each_dirs[@]}" -x "$this_script" '--each-dir={//}' "$@" && true
+    rc=$?
+    if [[ $rc != 0 ]]; then
+      error "${fg[magenta]}One or more git-each commands failed ($rc) ⬆⬆⬆.${reset_color}" "$rc"
+    fi
+  fi
+
+}
 
 # Usage: exit message [rc]
 error() {
@@ -37,40 +86,4 @@ indent() {
   sed -e 's/\\/\\\\/g' -e "s/^/    /"
 }
 
-if [[ ${1:-} == --each-dir* ]]; then
-  # Run command on `--each-dir`.
-  if [[ $1 == --each-dir=* ]]; then
-    repo_path=${1#--each-dir=}
-    shift 1
-  else
-    repo_path=${2}
-    shift 2
-  fi
-
-  if [[ $repo_path == */go/* ]]; then
-    exit 0 # Skip go directories.
-  fi
-
-  output=$(cd "$repo_path" && "$@" 2>&1) && true
-  rc=$?
-  if [[ -n ${output:-} ]]; then
-    printf "${fg[magenta]}=> git-each: %s in $repo_path${reset_color}"$'\n' "$*"
-    printf "%s\n" "$(indent <<<"$output")"
-  fi
-  exit $rc
-else
-  git_each_dirs_input=("${(@f)${GIT_EACH_DIRS:-"$HOME/wrk
-    $HOME/code"}}")
-  git_each_dirs=()
-  for dir in "${git_each_dirs_input[@]}"; do
-    if [[ -d $dir ]]; then
-      git_each_dirs+=("${dir}")
-    fi
-  done
-  # Call self with each dir.
-  fd --no-ignore --hidden --type directory '^\.git$' "${git_each_dirs[@]}" -x "$0" '--each-dir={//}' "$@" && true
-  rc=$?
-  if [[ $rc != 0 ]]; then
-    error "${fg[magenta]}One or more git-each commands failed ($rc) ⬆⬆⬆.${reset_color}" "$rc"
-  fi
-fi
+main "$@"
