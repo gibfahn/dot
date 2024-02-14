@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+set -eux
+
+# Things that I want to do to every git repository, every time.
+
+# Add repo to my zoxide search path.
+zoxide add "$PWD"
+
+[[ $PWD == */wrk/* ]] && config_file=~/.config/git/maintenance-wrk.config || config_file=~/.config/git/maintenance.config
+
+# Get realpath of current directory.
+current_dir=$(pwd -P)
+
+# Add git repo to maintenance list to be automatically kept up-to-date.
+if ! grep -qF "$current_dir" "$config_file"; then
+  echo "  repo = $current_dir" >>"$config_file"
+  if ! grep -qF "$current_dir" "$config_file"; then
+    echo "Something went wrong, failed to add '$current_dir' to '$config_file'"
+    exit 1
+  fi
+fi

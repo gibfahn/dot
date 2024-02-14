@@ -361,6 +361,9 @@
 # Personal config for non-work repos.
 [include]
   path = ~/.config/git/my-config
+  path = ~/.config/git/maintenance.config
+  # We want to run wrk maintenance even if not currently in a work directory.
+  path = ~/.config/git/maintenance-wrk.config
 
 # Work config for work repos.
 [includeIf "gitdir:~/wrk/**"]
