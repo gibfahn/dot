@@ -285,6 +285,7 @@
 [fetch]
   prune = true             # Delete local tracking branches if remote is gone.
   fsckObjects = true
+  writeCommitGraph = true  # Cache commit graph to speed up graph log / push operations on fetch.
 [format]
   pretty = fuller          # Shows author and committer.
 [help]
