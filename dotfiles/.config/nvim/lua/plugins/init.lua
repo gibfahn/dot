@@ -12,12 +12,13 @@ return {
 
   -- Disable lazyvim plugins I don't use.
   -- https://www.lazyvim.org/configuration/plugins#-disabling-plugins
+  { "catppuccin", enabled = false }, -- I have my own colorscheme.
   { "echasnovski/mini.surround", enabled = false }, -- I use kylechui/nvim-surround instead.
   { "folke/persistence.nvim", enabled = false }, -- I don't use sessions.
-  { "nvim-neo-tree/neo-tree.nvim", enabled = false }, -- I use oil.nvim instead.
   { "folke/tokyonight.nvim", enabled = false }, -- I have my own colorscheme.
-  { "catppuccin", enabled = false }, -- I have my own colorscheme.
   { "lukas-reineke/headlines.nvim", enabled = false }, -- Don't need fancy markdown highlighting.
+  { "nvim-neo-tree/neo-tree.nvim", enabled = false }, -- I use oil.nvim instead.
+  { "nvimdev/dashboard-nvim", enabled = false }, -- Don't use the splash/start screen.
 
   { "echasnovski/mini.splitjoin", config = true },
 
