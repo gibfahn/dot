@@ -363,13 +363,11 @@ vim.keymap.set("t", "<A-i>", [[<C-\><C-n><C-w>l]], { desc = "Switch right a wind
 vim.keymap.set("t", "<A-n>", [[<C-\><C-n><C-w>j]], { desc = "Switch down a window" }) -- in terminal
 vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], { desc = "Go to normal mode" }) -- in terminal
 vim.keymap.set("v", "//", [[y/\V<C-r>=escape(@",'/\')<CR><CR>]], { desc = "Search for selected text" }) -- very no-magic mode, searches for exactly what you select
-vim.keymap.set("v", "<", "<gv") -- reselect block after indenting
 vim.keymap.set("v", "<A-Down>", ":m '>+1<cr>gv=gv", { desc = "Move line down" })
 vim.keymap.set("v", "<A-Up>", ":m '<-2<cr>gv=gv", { desc = "Move line up" })
 vim.keymap.set("v", "<Leader>d", '"+d', { desc = "Cut from clipboard (visual mode)" })
 vim.keymap.set("v", "<Leader>p", '"+p', { desc = "Paste from clipboard" })
 vim.keymap.set("v", "<Leader>y", '"+y', { desc = "Copy from clipboard" })
-vim.keymap.set("v", ">", ">gv") -- reselect block after indenting
 vim.keymap.set("v", "g//", [[y/\V<C-R>=&ic?'\c':'\C'<CR><C-r>=escape(@",'/\')<CR><CR>]], { desc = "Search for selected text case-insensitively" })
 vim.keymap.set("v", "gr", [[<Cmd>exec 'Telescope grep_string default_text=' . escape(@z, ' ')<cr>]], { noremap = false, desc = "Telescope search for selection" })
 vim.keymap.set("x", "<Leader>j", ":AnyJumpVisual<CR>", { desc = "Jump to definition" })
