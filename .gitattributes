@@ -1,2 +1,2 @@
 # Show keyboardio diff expanded.
-config/keyboardio-model-01-chrysalis-layout.json diff=jq
+config/keyboardio/keyboardio-model-*-chrysalis-layout.json diff=jq
