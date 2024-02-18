@@ -24,13 +24,7 @@ autoload -U colors && colors
 
 main() {
   set_env_vars
-  : ${USER:=$(whoami)}
-  : ${HIDUTIL:=/usr/bin/hidutil}
-  case $USER in
-    gib | brian) remap_gib ;;
-    eve) remap_eve ;;
-    *) error "Unknown user $USER" ;;
-  esac
+  [[ -d /Users/eve ]] && remap_eve || remap_gib
 
   echo "Hidutil remap successful."
 }
@@ -39,7 +33,7 @@ remap_gib() {
   # Apple Keyboards.
   # ISO_BACKSLASH becomes GRAVE_TILDE
   # GRAVE_TILDE becomees hyper
-  $HIDUTIL property --matching '[{"VendorID":0x5ac},{"VendorID":0x4c}]' --set "{\"UserKeyMapping\":[
+  /usr/bin/hidutil property --matching '[{"VendorID":0x5ac},{"VendorID":0x4c}]' --set "{\"UserKeyMapping\":[
   {$FROM: $CAPS_LOCK,             $TO: $LEFT_SHIFT},
   {$FROM: $LEFT_SHIFT,             $TO: $LEFT_CTRL},
   {$FROM: $GRAVE_TILDE,             $TO: $F17},
@@ -49,7 +43,7 @@ remap_gib() {
   # Cooler Master Keyboards.
   # Convert windows keyboard to macOS (swap cmd and alt).
   # GRAVE_TILDE (`) is already in the right place, ISO_BACKSLASH (§) becomes Hyper.
-  $HIDUTIL property --matching '{"VendorID":0x2516}' --set "{\"UserKeyMapping\":[
+  /usr/bin/hidutil property --matching '{"VendorID":0x2516}' --set "{\"UserKeyMapping\":[
   {$FROM: $CAPS_LOCK,             $TO: $LEFT_SHIFT},
   {$FROM: $LEFT_SHIFT,             $TO: $LEFT_CTRL},
   {$FROM: $LEFT_GUI,             $TO: $LEFT_ALT},
@@ -58,14 +52,14 @@ remap_gib() {
   ]}"
 
   # Kinesis Freestyle Keyboard
-  $HIDUTIL property --matching '{"VendorID":0x58f}' --set "{\"UserKeyMapping\":[
+  /usr/bin/hidutil property --matching '{"VendorID":0x58f}' --set "{\"UserKeyMapping\":[
   {$FROM: $CAPS_LOCK,             $TO: $LEFT_SHIFT},
   {$FROM: $LEFT_SHIFT,             $TO: $LEFT_CTRL},
   {$FROM: $LEFT_CTRL,             $TO: $F17}
   ]}"
 
   # Kinesis Freestyle Edge Keyboard
-  $HIDUTIL property --matching '{"VendorID":0x29ea}' --set "{\"UserKeyMapping\":[
+  /usr/bin/hidutil property --matching '{"VendorID":0x29ea}' --set "{\"UserKeyMapping\":[
   {$FROM: $CAPS_LOCK,            $TO: $LEFT_SHIFT},
   {$FROM: $LEFT_SHIFT,           $TO: $LEFT_CTRL},
   {$FROM: $LEFT_GUI,             $TO: $LEFT_ALT},
@@ -78,13 +72,13 @@ remap_gib() {
 
 remap_eve() {
   # Apple Keyboards.
-  $HIDUTIL property --matching '{"VendorID":0x5ac}' --set "{\"UserKeyMapping\":[
+  /usr/bin/hidutil property --matching '{"VendorID":0x5ac}' --set "{\"UserKeyMapping\":[
   {$FROM: $CAPS_LOCK,             $TO: $LEFT_SHIFT}
   ]}" >/dev/null
 
   # Cooler Master Keyboards.
   # Convert windows keyboard to macOS (swap cmd and alt).
-  $HIDUTIL property --matching '{"VendorID":0x2516}' --set "{\"UserKeyMapping\":[
+  /usr/bin/hidutil property --matching '{"VendorID":0x2516}' --set "{\"UserKeyMapping\":[
   {$FROM: $CAPS_LOCK,             $TO: $LEFT_SHIFT},
   {$FROM: $LEFT_GUI,             $TO: $LEFT_ALT},
   {$FROM: $LEFT_ALT,             $TO: $LEFT_GUI}

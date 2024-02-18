@@ -1,0 +1,46 @@
+#!/usr/bin/env zsh
+# shellcheck shell=bash disable=SC1090,SC2016
+
+# Set up a LaunchDaemon to run hidutil keyboard mappings.
+# Docs:
+# <https://developer.apple.com/library/archive/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/CreatingLaunchdJobs.html>
+
+set -euxo pipefail
+
+work_done=
+
+from_path_hid=$dotfile_dir/bin/hid
+to_dir_hid=/opt/gib/bin
+to_path_hid=$to_dir_hid/hid
+
+from_path_daemon=$dot_dir/config/LaunchDaemons/co.fahn.gib.hidutil.plist
+to_path_daemon=/Library/LaunchDaemons/co.fahn.gib.hidutil.plist
+
+if [[ ! -d $to_dir_hid ]]; then
+  work_done=true
+  sudo mkdir -p $to_dir_hid
+fi
+
+if [[ ! -x $to_path_hid || $(shasum -a 256 $from_path_hid | awk '{print $1}') != $(shasum -a 256 $to_path_hid | awk '{print $1}') ]]; then
+  work_done=true
+  sudo cp $from_path_hid $to_path_hid
+fi
+
+if [[ ! -f $to_path_daemon || $(shasum -a 256 $from_path_daemon | awk '{print $1}') != $(shasum -a 256 $to_path_daemon | awk '{print $1}') ]]; then
+  work_done=true
+  sudo cp $from_path_daemon $to_path_daemon
+fi
+
+if ! sudo launchctl list | grep -Fw co.fahn.gib.hidutil; then
+  work_done=true
+  sudo launchctl load -w $to_path_daemon
+  # Work around this from the launchctl manpage:
+  #   Due to bugs in the previous implementation and long-standing client expectations around
+  #   those bugs, the load and unload subcommands will only return a non-zero exit code due to improper
+  #   usage.  Otherwise, zero is always returned.
+  sudo launchctl list | grep -Fw co.fahn.gib.hidutil
+fi
+
+if [[ -z $work_done ]]; then
+  exit 204
+fi
