@@ -75,7 +75,7 @@
   cpc = cherry-pick --continue         # Accept current changes and continue to next commit.
   cpq = cherry-pick --quit             # Only undo last commit (that failed) not all of them.
   d   = "!git diff \"${@:-HEAD}\" #"                   # diff of staged and unstaged..
-  de  = "!git diff --name-only \"${@:-HEAD}\" | xargs $VISUAL # " # Open files changed since last commit in editor.
+  de  = "!git diff --name-only \"${@:-HEAD}\" | tr '\\n' '\\0' | xargs -0 $VISUAL # " # Open files changed since last commit in editor.
   dni  = diff --no-index
   # Interactively show files in $@, one line per file.
   di = "!set -x; git diff --color=always --stat=1000 --format=\"\" \"${@:-@}\" \
@@ -119,7 +119,7 @@
 
   ma  = merge --abort
   mb  = "!git merge-base ${1:-master} ${2:-HEAD} ${@:2} #" # Get commit this branch forked from.
-  mc  = "!echo \"$VISUAL\" | grep -iq vi && c='-c /^\\(|||||||\\|=======\\|>>>>>>>\\|<<<<<<<\\)' || c=\"\"; git diff --name-only --diff-filter=U | xargs $VISUAL $c" # Open merge conflicts in editor.
+  mc  = "!echo \"$VISUAL\" | grep -iq vi && c='-c /^\\(|||||||\\|=======\\|>>>>>>>\\|<<<<<<<\\)' || c=\"\"; git diff --name-only --diff-filter=U | tr '\\n' '\\0' | xargs -0 $VISUAL $c" # Open merge conflicts in editor.
   mf  = "!git merge --ff-only $@ \
          && git submodule update --recursive --init #" # Update branch from other commit (default upstream) as long as other commit has HEAD as an ancestor.
   mfp = mf @{push} # Merge changes from the @{push} branch (useful when GitHub suggestions have been merged).
@@ -165,8 +165,8 @@
   s   = "!git status && git push-status #" # Status including diff from @{push}.
   ss  = status --short --branch
   sh  = show
-  she = "!git show --pretty="" --name-only $@ | xargs $VISUAL #" # Open files changed in last commit in editor.
-  shde = "!{ git show --pretty="" --name-only; git diff HEAD --name-only; } | sort | uniq | xargs $VISUAL #" # Combines `g de` and `g she` files in editor.
+  she = "!git show --pretty="" --name-only $@ | tr '\\n' '\\0' | xargs -0 $VISUAL #" # Open files changed in last commit in editor.
+  shde = "!{ git show --pretty="" --name-only; git diff HEAD --name-only; } | sort | uniq | tr '\\n' '\\0' | xargs -0 $VISUAL #" # Combines `g de` and `g she` files in editor.
   shn = show --pretty="" --name-only # Show names of files changed only.
   # Interactively show files in $@, one line per file.
   shi = "!git show --color=always --stat=1000 --format=\"\" \"${@:-@}\" \
