@@ -1,5 +1,5 @@
 -- Replacement for Spectacle/Rectangle.
-local log = hs.logger.new('win-manage', 'debug')
+local log = hs.logger.new("win-manage", "debug")
 log.d("Loading module")
 
 --- Disable animation duration so resizing is instant.
@@ -8,31 +8,25 @@ hs.window.animationDuration = 0
 -- Functions to check current state
 
 local is_left_half = function(window, screen)
-  return window.x == screen.x and
-         window.y == screen.y and
-         window.w == screen.w // 2 and
-         window.h == screen.h
+  return window.x == screen.x and window.y == screen.y and window.w == screen.w // 2 and window.h == screen.h
 end
 
 local is_left_two_thirds = function(window, screen)
-  return window.x == screen.x and
-         window.y == screen.y and
-         window.w == ((screen.w // 3) * 2) and
-         window.h == screen.h
+  return window.x == screen.x and window.y == screen.y and window.w == ((screen.w // 3) * 2) and window.h == screen.h
 end
 
 local is_right_half = function(window, screen)
-  return window.x == (screen.w // 2) + screen.x and
-         window.y == screen.y and
-         window.w == screen.w // 2 and
-         window.h == screen.h
+  return window.x == (screen.w // 2) + screen.x
+    and window.y == screen.y
+    and window.w == screen.w // 2
+    and window.h == screen.h
 end
 
 local is_right_two_thirds = function(window, screen)
-  return window.x == ((screen.w // 3) + screen.x) and
-         window.y == screen.y and
-         window.w == ((screen.w // 3) * 2) and
-         window.h == screen.h
+  return window.x == ((screen.w // 3) + screen.x)
+    and window.y == screen.y
+    and window.w == ((screen.w // 3) * 2)
+    and window.h == screen.h
 end
 
 -- Resize a window vs a screen.
@@ -106,7 +100,10 @@ local left_half = function(windowFrame, screenFrame)
 end
 
 local next_display = function(windowFrame, screenFrame)
-  return resize_full_screen(windowFrame, (hs.window.focusedWindow() or hs.window.frontmostWindow()):screen():next():frame())
+  return resize_full_screen(
+    windowFrame,
+    (hs.window.focusedWindow() or hs.window.frontmostWindow()):screen():next():frame()
+  )
 end
 
 local full_screen = function(windowFrame, screenFrame)
@@ -128,20 +125,22 @@ end
 local user = os.getenv("USER")
 
 -- Gib and Brian use vim arrow keys, others use normal arrow keys.
-local key_bindings = (user == "gib" or user == "brian") and {
-  { key = 'h', func = left_half, func_name = "left_half" },
-  { key = 'n', func = next_display, func_name = "next_display" },
-  { key = 'e', func = full_screen, func_name = "full_screen" },
-  { key = 'i', func = right_half, func_name = "right_half" },
-} or {
-  { key = 'left', func = left_half, func_name = "left_half" },
-  { key = 'down', func = next_display, func_name = "next_display" },
-  { key = 'up', func = full_screen, func_name = "full_screen" },
-  { key = 'right', func = right_half, func_name = "right_half" },
-}
+local key_bindings = (user == "gib" or user == "brian")
+    and {
+      { key = "h", func = left_half, func_name = "left_half" },
+      { key = "n", func = next_display, func_name = "next_display" },
+      { key = "e", func = full_screen, func_name = "full_screen" },
+      { key = "i", func = right_half, func_name = "right_half" },
+    }
+  or {
+    { key = "left", func = left_half, func_name = "left_half" },
+    { key = "down", func = next_display, func_name = "next_display" },
+    { key = "up", func = full_screen, func_name = "full_screen" },
+    { key = "right", func = right_half, func_name = "right_half" },
+  }
 
 for _, hotkey in ipairs(key_bindings) do
-  hs.hotkey.bind({'cmd', 'alt'}, hotkey.key, function()
+  hs.hotkey.bind({ "cmd", "alt" }, hotkey.key, function()
     log.df("User ran Cmd-Alt-%s, moving window to %s", hotkey.key, hotkey.func_name)
     local window = hs.window.focusedWindow() or hs.window.frontmostWindow()
     local newFrame = hotkey.func(window:frame(), window:screen():frame())
