@@ -146,6 +146,7 @@ local hyperModeAppMappings = {
   { key = "m", app = "Mail" },
   { key = "s", app = "Spotify" },
   { key = "t", app = "Kitty" },
+  { key = "w", app = "Webex", mods = { "shift" } },
   { key = "w", app = "Workflowy" },
   { key = "x", app = "Messenger", mods = { "alt" } },
   { key = "x", app = "Messages" },
@@ -269,7 +270,7 @@ end)
 -- }}} Hyper-⌥-q -> Force Quit Webex
 
 -- {{{ Hyper-⇧-w -> Restart Wi-Fi
-HyperMode:bind({ "shift" }, "w", function()
+HyperMode:bind({ "alt" }, "w", function()
   log.d("Restarting Wi-Fi...")
   hs.notify.new({ title = "Restarting Wi-Fi...", withdrawAfter = 3 }):send()
   hs.wifi.setPower(false)
