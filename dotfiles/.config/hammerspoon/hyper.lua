@@ -237,9 +237,9 @@ HyperMode:bind({}, ".", function()
   -- The below 500ms sleep seems to work for me, but if not you can try
   -- hitting this unmute hotkey twice. Sad but it seems to work.
 
-  local webex = hs.application.find("Webex Meetings")
+  local webex = hs.application.find("Webex")
   if webex ~= nil then
-    webex:selectMenuItem("Unmute Me")
+    hs.eventtap.keyStroke({ "cmd", "shift" }, "m") -- Webex Global Mute/Unmute shortcut.
   end
   if muteSuccess then
     messageHot:notify()
@@ -265,7 +265,7 @@ HyperMode:bind({}, ";", hs.caffeinate.lockScreen)
 -- {{{ Hyper-⌥-q -> Force Quit Webex
 -- Quit webex without spending an age trying to find the button.
 HyperMode:bind({ "alt" }, "q", function()
-  KillAll({ "-9", "-m", ".*Meeting Center.*" })
+  KillAll({ "Webex" })
 end)
 -- }}} Hyper-⌥-q -> Force Quit Webex
 
