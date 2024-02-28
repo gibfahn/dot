@@ -51,7 +51,6 @@ vim.opt.diffopt:append("vertical") -- Always use vertical diffs.
 vim.opt.expandtab = true -- Use spaces instead of tabs
 vim.opt.fileformats = "unix" -- Force Unix line endings (\n) (always show \r (^M), never autoinsert them).
 vim.opt.foldlevel = 99 -- expand all by default.
-vim.opt.foldtext = "v:lua.require'lazyvim.util'.ui.foldtext()"
 vim.opt.formatexpr = "v:lua.require'lazyvim.util'.format.formatexpr()" -- Format with conform/LSP
 vim.opt.formatoptions = "jcroqlnt" -- Sets line wrapping/formatting options.
 vim.opt.gdefault = true -- Global replace default (off: /g).
@@ -472,18 +471,6 @@ vim.api.nvim_create_autocmd("BufWritePost", {
   nested = true,
   group = gib_autogroup,
 })
-
--- YAML files should be folded by indent.
-vim.api.nvim_create_autocmd(
-  "FileType",
-  { pattern = { "*" }, command = "setlocal foldmethod=expr", group = gib_autogroup }
-)
-
--- -- Some files should be folded by indent.
--- vim.api.nvim_create_autocmd(
---   "FileType",
---   { pattern = { "yaml,json,python" }, command = "setlocal foldmethod=indent", group = gib_autogroup }
--- )
 
 -- Hide rust imports by default.
 -- Refs: https://www.reddit.com/r/neovim/comments/seq0q1/plugin_request_autofolding_file_imports_using/
