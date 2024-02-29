@@ -111,7 +111,7 @@ pr_edit() {
 pr_open() {
   pr_number=$(get_pr_number)
   if [[ -n ${markdown:-} ]]; then
-    gh pr view --json=title,url $pr_number | jq -r '":pr-open: ['"$up_org/$up_repo#$pr_number"'](\(.url)) \(.title)"' | tr -d '\n' | cpy
+    gh pr view --json=title,url,number $pr_number | jq -r '":pr-open: [\(.url | capture("^https://.*/(?<repo>[^/]+/[^/]+)/pull/[0-9]+$") .repo)#\(.number)](\(.url)) \(.title)"' | tr -d '\n' | cpy
   else
     gh pr view --json=url --jq=.url $pr_number | tr -d '\n' | cpy
   fi
