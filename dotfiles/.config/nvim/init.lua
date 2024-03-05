@@ -285,6 +285,7 @@ vim.keymap.set("n", "<Leader>8", '<cmd>lua require("bufferline").go_to_buffer(8,
 vim.keymap.set("n", "<Leader>9", '<cmd>lua require("bufferline").go_to_buffer(-1, true)<cr>', { silent = true, desc = "Go to last buffer" })
 vim.keymap.set("n", "<Leader>;", "@:", { desc = "Repeat last :command" })
 vim.keymap.set("n", "<Leader><", '<Cmd>exe "vertical resize ".(winwidth(0) * 2/3)<CR>', { silent = true, desc = "Decrease window width to 2/3" })
+vim.keymap.set("n", "<Leader><BS>", "<Cmd>exit<CR>", { desc = "Save and quit" }) -- Only saves if changes.
 vim.keymap.set("n", "<Leader>>", '<Cmd>exe "vertical resize ".(winwidth(0) * 3/2)<CR>', { silent = true, desc = "Increase window width to 3/2" })
 vim.keymap.set("n", "<Leader>D", "<Cmd>%d<CR>", { desc = "Delete all text in buffer" })
 vim.keymap.set("n", "<Leader>E", "<C-W>z:cclose<CR>:lclose<CR>:helpclose<CR>", { desc = "Close preview windows" }) -- e.g. language server definitions
