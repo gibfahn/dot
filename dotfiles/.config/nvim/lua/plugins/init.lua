@@ -244,6 +244,10 @@ return {
   -- better diagnostics list and others
   {
     "folke/trouble.nvim",
+    opts = {
+      position = "right", -- Open trouble windows on the right.
+      width = 100, -- width of the list when position is left or right
+    },
     keys = {
       -- Swap these so we default to whole workspace diagnostics.
       { "<leader>xX", "<cmd>TroubleToggle document_diagnostics<cr>", desc = "Document Diagnostics (Trouble)" },
