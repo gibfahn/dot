@@ -241,6 +241,16 @@ return {
     },
   },
 
+  -- better diagnostics list and others
+  {
+    "folke/trouble.nvim",
+    keys = {
+      -- Swap these so we default to whole workspace diagnostics.
+      { "<leader>xX", "<cmd>TroubleToggle document_diagnostics<cr>", desc = "Document Diagnostics (Trouble)" },
+      { "<leader>xx", "<cmd>TroubleToggle workspace_diagnostics<cr>", desc = "Workspace Diagnostics (Trouble)" },
+    },
+  },
+
   {
     "akinsho/bufferline.nvim",
     opts = {
