@@ -241,6 +241,7 @@ vim.keymap.set("i", "<A-x>", "<C-r><C-r>=&commentstring<CR><C-o>:s/%s/ XXX(gib):
 vim.keymap.set("i", "<C-u>", "<C-g>u<C-u>", { desc = "<C-u> but undo-friendly" })
 vim.keymap.set("i", "<C-w>", "<C-g>u<C-w>", { desc = "<C-w> but undo-friendly" })
 vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+vim.keymap.set("n", "<A-BS>", "<Cmd>exit<CR>", { desc = "Save and quit" }) -- Only saves if changes.
 vim.keymap.set("n", "<A-C>", vim.diagnostic.goto_prev, { desc = "Prev Diagnostic" })
 vim.keymap.set("n", "<A-Down>", "<cmd>m .+1<cr>==", { desc = "Move line down" })
 vim.keymap.set("n", "<A-E>", "<cmd>resize -1<cr>", { desc = "Decrease window height" })
@@ -285,7 +286,6 @@ vim.keymap.set("n", "<Leader>8", '<cmd>lua require("bufferline").go_to_buffer(8,
 vim.keymap.set("n", "<Leader>9", '<cmd>lua require("bufferline").go_to_buffer(-1, true)<cr>', { silent = true, desc = "Go to last buffer" })
 vim.keymap.set("n", "<Leader>;", "@:", { desc = "Repeat last :command" })
 vim.keymap.set("n", "<Leader><", '<Cmd>exe "vertical resize ".(winwidth(0) * 2/3)<CR>', { silent = true, desc = "Decrease window width to 2/3" })
-vim.keymap.set("n", "<Leader><BS>", "<Cmd>exit<CR>", { desc = "Save and quit" }) -- Only saves if changes.
 vim.keymap.set("n", "<Leader>>", '<Cmd>exe "vertical resize ".(winwidth(0) * 3/2)<CR>', { silent = true, desc = "Increase window width to 3/2" })
 vim.keymap.set("n", "<Leader>D", "<Cmd>%d<CR>", { desc = "Delete all text in buffer" })
 vim.keymap.set("n", "<Leader>E", "<C-W>z:cclose<CR>:lclose<CR>:helpclose<CR>", { desc = "Close preview windows" }) -- e.g. language server definitions
