@@ -252,6 +252,17 @@ return {
   },
 
   {
+    "Saecki/crates.nvim",
+    opts = {
+      -- Make code actions show up in Cargo.toml
+      -- <https://github.com/Saecki/crates.nvim/wiki/Documentation-v0.4.0#code-actions>
+      null_ls = {
+        enabled = true,
+      },
+    },
+  },
+
+  {
     "akinsho/bufferline.nvim",
     opts = {
       options = {
