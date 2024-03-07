@@ -10,6 +10,7 @@ return {
     end,
   },
 
+  { "LazyVim/LazyVim", version = false }, -- Use latest main not latest release.
   -- Disable lazyvim plugins I don't use.
   -- https://www.lazyvim.org/configuration/plugins#-disabling-plugins
   { "catppuccin", enabled = false }, -- I have my own colorscheme.

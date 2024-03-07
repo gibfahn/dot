@@ -192,7 +192,7 @@ require("lazy").setup({
     -- { import = "lazyvim.plugins.extras.lang.typescript" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/lang/typescript.lua>
     { import = "lazyvim.plugins.extras.lang.yaml" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/lang/yaml.lua>
     { import = "lazyvim.plugins.extras.lsp.none-ls" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/lsp/none-ls.lua>
-    -- { import = "lazyvim.plugins.extras.test.core" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/test/core.lua>
+    { import = "lazyvim.plugins.extras.test.core" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/test/core.lua>
     -- { import = "lazyvim.plugins.extras.ui.alpha" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/ui/alpha.lua>
     -- { import = "lazyvim.plugins.extras.ui.edgy" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/ui/edgy.lua>
     { import = "lazyvim.plugins.extras.util.mini-hipatterns" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/util/mini-hipatterns.lua>
