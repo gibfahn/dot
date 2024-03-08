@@ -18,7 +18,9 @@ pip_installed="$(${pip[@]} list | awk '{print $1}')"
 pip_outdated="$(${pip[@]} list --outdated | awk '{print $1}')"
 
 # Update pip itself.
-${pip[@]} install --upgrade pip
+if [[ ! -e $(python3 -c 'import sysconfig, os; print(os.path.join(sysconfig.get_path("stdlib", sysconfig.get_preferred_scheme("prefix")), "EXTERNALLY-MANAGED"))') ]]; then
+  ${pip[@]} install --upgrade pip
+fi
 
 for module in "${pip3_modules[@]}"; do
   if ! echo $pip_installed | grep -qx "${module%\[*}" \
