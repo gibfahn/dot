@@ -247,7 +247,8 @@ return {
     "folke/trouble.nvim",
     opts = {
       position = "right", -- Open trouble windows on the right.
-      width = 100, -- width of the list when position is left or right
+      -- Use 1/3 of the nvim window width or 100, whichever is smaller.
+      width = math.min(math.floor(vim.api.nvim_win_get_width(0) / 3), 100), -- width of the list when position is left or right
     },
     keys = {
       -- Swap these so we default to whole workspace diagnostics.
