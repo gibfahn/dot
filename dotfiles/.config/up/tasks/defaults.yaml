@@ -131,6 +131,10 @@ data:
     AppleMetricUnits: true
     AppleTemperatureUnit: Celsius
 
+    # Settings > General > Language & Region > First day of week
+    AppleFirstWeekday:
+      # Monday
+      gregorian: 2
     # Settings > Keyboard > Keyboard Shortcuts > App Shortcuts > All Applications
     NSUserKeyEquivalents:
       # Create global shortcut "Merge all windows" ⌘-⇧-M
