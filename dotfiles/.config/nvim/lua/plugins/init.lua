@@ -573,7 +573,7 @@ return {
         normal_line = "yZ",
         normal_cur_line = "yZZ",
         visual = "s",
-        visual_line = "gs",
+        visual_line = "gz",
         delete = "ds",
         change = "cs",
       },
