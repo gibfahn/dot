@@ -19,7 +19,6 @@ tap "gibfahn/tap", "https://github.com/gibfahn/homebrew-tap" # My personal tap f
 # cask "geektool"                          # Display things on Desktop (I have a todo list).
 # cask "grandperspective"                  # Alternative to disk-inventory-x, shows disk space usage.
 brew "bat"                               # Nicer cat with syntax highlighting etc.
-brew "bazelisk"                          # Easily use the latest version of bazel.
 brew "binutils"                          # GNU versions of tools for interacting with binaries (nm, strings etc).
 brew "bob"                               # Neovim version manager.
 brew "buildifier"                        # Bazel code formatter.
