@@ -29,6 +29,7 @@ brew "cargo-nextest"                     # Parallel test runner framework.
 brew "cobalt"                            # Static site generator (https://cobalt-org.github.io/).
 brew "dfu-programmer"                    # QMK dependency used for flashing my Ergodox Infinity.
 brew "dfu-util"                          # QMK dependency used for flashing my Ergodox Infinity.
+brew "pipx"                              # Install Python binaries (https://pipx.pypa.io).
 brew "diffutils"                         # GNU versions of diff and related tools.
 brew "findutils"                         # GNU versions of find, locate, updatedb, xargs.
 brew "fswatch"                           # See which files are opened on the system (`fswatch /`).
