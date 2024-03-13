@@ -14,12 +14,12 @@ data:
 
   # NSGlobalDomain preferences.
   ~/Library/Preferences/ByHost/.GlobalPreferences.${UP_HARDWARE_UUID}.plist:
-      # Enable Tap to Click for the current user.
-      com.apple.mouse.tapBehavior: 1
+    # Enable Tap to Click for the current user.
+    com.apple.mouse.tapBehavior: 1
 
   ~/Library/Preferences/ByHost/com.apple.ImageCapture.${UP_HARDWARE_UUID}.plist:
-      # Prevent Photos from opening automatically when devices are plugged in
-      disableHotPlug: true
+    # Prevent Photos from opening automatically when devices are plugged in
+    disableHotPlug: true
 
   NSGlobalDomain:
     # Unnatural scrolling direction (swipe down to scroll down).
@@ -123,8 +123,8 @@ data:
 
     # Main language UK English, then Chinese
     AppleLanguages:
-    - en-GB
-    - zh-Hans-GB
+      - en-GB
+      - zh-Hans-GB
 
     # Use metric everywhere.
     AppleMeasurementUnits: Centimeters
@@ -135,208 +135,207 @@ data:
     AppleFirstWeekday:
       # Monday
       gregorian: 2
+
     # Settings > Keyboard > Keyboard Shortcuts > App Shortcuts > All Applications
     NSUserKeyEquivalents:
       # Create global shortcut "Merge all windows" ⌘-⇧-M
-      Merge All Windows: '@$m'
+      Merge All Windows: "@$m"
 
     # Settings > Keyboard > Text Replacements
     # First "on" value wins.
     NSUserDictionaryReplacementItems:
-    - ... # Keep existing shortcuts at higher priority (only append if missing).
-    - replace: '!pmt'
-      on: 1
-      with: ❯
-    - replace: xg
-      on: 1
-      with: 小G
-    - replace: '!etr'
-      on: 1
-      with: ⏎
-    - replace: ',af'
-      on: 1
-      with: applefeedback://inbox?make_visible=1
-    - replace: adr
-      on: 1
-      with: 19 Woodside Grange Road, North Finchley, London, N12 8TW
-    - replace: adrs
-      on: 1
-      with: Flat 49, Shrewsbury House, 42 Cheyne Walk, London, SW3 5LW
-    - replace: ywt
-      on: 1
-      with: Yiwen Tang
-    - replace: mbe
-      on: 1
-      with: 07725792449
-    - replace: atm
-      on: 1
-      with: at the moment
-    - replace: ymmv
-      on: 1
-      with: your mileage may vary
-    - replace: ',unflip'
-      on: 1
-      with: ┬─┬ノ( º _ ºノ)
-    - replace: ',tableflip'
-      on: 1
-      with: (╯°□°)╯︵ ┻━┻
-    - replace: ',shrug'
-      on: 1
-      with: ¯\_(ツ)_/¯
-    - replace: iiuc
-      on: 1
-      with: if I understand correctly
-    - replace: '!'''
-      on: 1
-      with: '`'
-    - replace: evt
-      on: 1
-      with: eventang93
-    - replace: til
-      on: 1
-      with: today I learned
-    - replace: afaik
-      on: 1
-      with: as far as I know
-    - replace: btw
-      on: 1
-      with: by the way
-    - replace: dw
-      on: 1
-      with: don't worry
-    - replace: tbf
-      on: 1
-      with: to be fair
-    - replace: idk
-      on: 1
-      with: I don't know
-    - replace: tbd
-      on: 1
-      with: to be determined
-    - replace: tbc
-      on: 1
-      with: to be confirmed
-    - replace: ftr
-      on: 1
-      with: for the record
-    - replace: ptal
-      on: 1
-      with: please take a look
-    - replace: omw
-      on: 1
-      with: on my way
-    - replace: asn
-      on: 1
-      with: alexia.soulioti@nhs.net
-    - replace: iirc
-      on: 1
-      with: if I recall correctly
-    - replace: afaict
-      on: 1
-      with: as far as I can tell
-    - replace: nbd
-      on: 1
-      with: no big deal
-    - replace: '!rdo'
-      on: 1
-      with: ⟳
-    - replace: '!und'
-      on: 1
-      with: ⟲
-    - replace: '!tab'
-      on: 1
-      with: ⇥
-    - replace: '!del'
-      on: 1
-      with: ⌦
-    - replace: '!bsp'
-      on: 1
-      with: ⌫
-    - replace: '!esc'
-      on: 1
-      with: ⎋
-    - replace: '!cps'
-      on: 1
-      with: ⇪
-    - replace: wdyt
-      on: 1
-      with: what do you think
-    - replace: tbh
-      on: 1
-      with: to be honest
-    - replace: fwiw
-      on: 1
-      with: for what it's worth
-    - replace: lmk
-      on: 1
-      with: let me know
-    - replace: imho
-      on: 1
-      with: in my humble opinion
-    - replace: sgtm
-      on: 1
-      with: sounds good to me
-    - replace: ianal
-      on: 1
-      with: I am not a lawyer
-    - replace: aiui
-      on: 1
-      with: as I understand it
-    - replace: imo
-      on: 1
-      with: in my opinion
-    - replace: mbb
-      on: 1
-      with: 07707200521
-    - replace: ',f'
-      on: 1
-      with: https://fahn.co
-    - replace: efg
-      on: 1
-      with: evenfahn@gmail.com
-    - replace: oktu
-      on: 1
-      with: Ok to upstream
-    - replace: '!ctl'
-      on: 1
-      with: ⌃
-    - replace: '!sft'
-      on: 1
-      with: ⇧
-    - replace: '!opt'
-      on: 1
-      with: ⌥
-    - replace: '!cmd'
-      on: 1
-      with: ⌘
-    - replace: '!apl'
-      on: 1
-      with: 
-    - replace: evg
-      on: 1
-      with: eventang93@gmail.com
-    - replace: mbg
-      on: 1
-      with: 07766520802
-    - replace: gbg
-      on: 1
-      with: gibfahn@gmail.com
-    - replace: evf
-      on: 1
-      with: evenfahn
-    - replace: gbf
-      on: 1
-      with: gibfahn
-    - replace: gfa
-      on: 1
-      with: Gibson Fahnestock
-    - replace: gaf
-      on: 1
-      with: Gibson Aurelius Fahnestock
-
+      - ... # Keep existing shortcuts at higher priority (only append if missing).
+      - replace: "!pmt"
+        on: 1
+        with: ❯
+      - replace: xg
+        on: 1
+        with: 小G
+      - replace: "!etr"
+        on: 1
+        with: ⏎
+      - replace: ",af"
+        on: 1
+        with: applefeedback://inbox?make_visible=1
+      - replace: adr
+        on: 1
+        with: 19 Woodside Grange Road, North Finchley, London, N12 8TW
+      - replace: adrs
+        on: 1
+        with: Flat 49, Shrewsbury House, 42 Cheyne Walk, London, SW3 5LW
+      - replace: ywt
+        on: 1
+        with: Yiwen Tang
+      - replace: mbe
+        on: 1
+        with: 07725792449
+      - replace: atm
+        on: 1
+        with: at the moment
+      - replace: ymmv
+        on: 1
+        with: your mileage may vary
+      - replace: ",unflip"
+        on: 1
+        with: ┬─┬ノ( º _ ºノ)
+      - replace: ",tableflip"
+        on: 1
+        with: (╯°□°)╯︵ ┻━┻
+      - replace: ",shrug"
+        on: 1
+        with: ¯\_(ツ)_/¯
+      - replace: iiuc
+        on: 1
+        with: if I understand correctly
+      - replace: "!'"
+        on: 1
+        with: "`"
+      - replace: evt
+        on: 1
+        with: eventang93
+      - replace: til
+        on: 1
+        with: today I learned
+      - replace: afaik
+        on: 1
+        with: as far as I know
+      - replace: btw
+        on: 1
+        with: by the way
+      - replace: dw
+        on: 1
+        with: don't worry
+      - replace: tbf
+        on: 1
+        with: to be fair
+      - replace: idk
+        on: 1
+        with: I don't know
+      - replace: tbd
+        on: 1
+        with: to be determined
+      - replace: tbc
+        on: 1
+        with: to be confirmed
+      - replace: ftr
+        on: 1
+        with: for the record
+      - replace: ptal
+        on: 1
+        with: please take a look
+      - replace: omw
+        on: 1
+        with: on my way
+      - replace: asn
+        on: 1
+        with: alexia.soulioti@nhs.net
+      - replace: iirc
+        on: 1
+        with: if I recall correctly
+      - replace: afaict
+        on: 1
+        with: as far as I can tell
+      - replace: nbd
+        on: 1
+        with: no big deal
+      - replace: "!rdo"
+        on: 1
+        with: ⟳
+      - replace: "!und"
+        on: 1
+        with: ⟲
+      - replace: "!tab"
+        on: 1
+        with: ⇥
+      - replace: "!del"
+        on: 1
+        with: ⌦
+      - replace: "!bsp"
+        on: 1
+        with: ⌫
+      - replace: "!esc"
+        on: 1
+        with: ⎋
+      - replace: "!cps"
+        on: 1
+        with: ⇪
+      - replace: wdyt
+        on: 1
+        with: what do you think
+      - replace: tbh
+        on: 1
+        with: to be honest
+      - replace: fwiw
+        on: 1
+        with: for what it's worth
+      - replace: lmk
+        on: 1
+        with: let me know
+      - replace: imho
+        on: 1
+        with: in my humble opinion
+      - replace: sgtm
+        on: 1
+        with: sounds good to me
+      - replace: ianal
+        on: 1
+        with: I am not a lawyer
+      - replace: aiui
+        on: 1
+        with: as I understand it
+      - replace: imo
+        on: 1
+        with: in my opinion
+      - replace: mbb
+        on: 1
+        with: 07707200521
+      - replace: ",f"
+        on: 1
+        with: https://fahn.co
+      - replace: efg
+        on: 1
+        with: evenfahn@gmail.com
+      - replace: oktu
+        on: 1
+        with: Ok to upstream
+      - replace: "!ctl"
+        on: 1
+        with: ⌃
+      - replace: "!sft"
+        on: 1
+        with: ⇧
+      - replace: "!opt"
+        on: 1
+        with: ⌥
+      - replace: "!cmd"
+        on: 1
+        with: ⌘
+      - replace: "!apl"
+        on: 1
+        with: 
+      - replace: evg
+        on: 1
+        with: eventang93@gmail.com
+      - replace: mbg
+        on: 1
+        with: 07766520802
+      - replace: gbg
+        on: 1
+        with: gibfahn@gmail.com
+      - replace: evf
+        on: 1
+        with: evenfahn
+      - replace: gbf
+        on: 1
+        with: gibfahn
+      - replace: gfa
+        on: 1
+        with: Gibson Fahnestock
+      - replace: gaf
+        on: 1
+        with: Gibson Aurelius Fahnestock
 
   com.apple.AppleMultitouchTrackpad:
-
     # Click strength: Haptic feedback 0: Light 1: Medium 2: Firm
     FirstClickThreshold: 0
     SecondClickThreshold: 0
@@ -374,7 +373,6 @@ data:
     QuitMenuItem: 1
     # Don't show Desktop icons (hide the desktop view).
     CreateDesktop: false
-
 
   com.apple.iCal:
     # Set default time for new events to 25 minutes not 60 minutes.
@@ -456,7 +454,6 @@ data:
     "NSStatusItem Visible Battery": true
     "NSStatusItem Visible Clock": true
 
-
   com.apple.Safari:
     # Safari > General > Safari opens with > All non-private windows from last session
     AlwaysRestoreSessionAtLaunch: true
@@ -509,12 +506,11 @@ data:
     # ForceClock: "2007:01:09:09:41"
 
   com.apple.mail:
-
     # Mail > Preferences > Viewing > Show Message Headers > Custom
     CustomHeaders:
-    - List-ID
-    - Message-ID
-    - X-Member-Count
+      - List-ID
+      - Message-ID
+      - X-Member-Count
 
     # Mail > Preferences > Viewing > Show most recent message at the top
     ConversationViewSortDescending: true
@@ -534,9 +530,9 @@ data:
     # Requires com.apple.custommenu.apps setting, see that domain in this file.
     NSUserKeyEquivalents:
       # Mail: ⌘-b moves to Archive.
-      Archive: '@b'
+      Archive: "@b"
       # Mail: ⌘-u sends the message.
-      Send: '@u'
+      Send: "@u"
 
   com.apple.mail-shared:
     # Mail > Preferences > Composing > Mark addresses not ending with (checkbox):
@@ -544,8 +540,8 @@ data:
 
     # Mail > Preferences > Composing > Mark addresses not ending with (addresses not to mark):
     DomainForMatching:
-    - "@apple.com"
-    - "@group.apple.com"
+      - "@apple.com"
+      - "@group.apple.com"
 
   com.apple.Maps:
     # Avoid tolls by default.
@@ -618,9 +614,8 @@ data:
     # - Add the `<com.apple.app>` name to this dict (`com.apple.universalaccess:
     # com.apple.custommenu.apps: ["<com.apple.app>"]`). You don't need to add NSGlobalDomain.
     com.apple.custommenu.apps:
-    - com.apple.mail
-    - ... # Preserve existing entries.
-
+      - com.apple.mail
+      - ... # Preserve existing entries.
 
   # An Apple mouse plugged directly in to the machine.
   com.apple.AppleMultitouchMouse:
@@ -631,4 +626,3 @@ data:
   com.apple.driver.AppleBluetoothMultitouch.mouse:
     # Settings > Mouse > Secondary Click > Click Right Side
     MouseButtonMode: TwoButton
-
