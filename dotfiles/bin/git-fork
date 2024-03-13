@@ -78,6 +78,7 @@ main() {
     # Print remotes.
     git remote -v
 
+    git fetch $fork_remote
     if git show-ref --verify --quiet refs/remotes/$fork_remote/$fork_branch; then
       echo >&2 "Fork already existed remotely and contains $fork_branch, skipping clean..."
       exit 0
