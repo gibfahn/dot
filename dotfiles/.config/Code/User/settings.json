@@ -138,5 +138,6 @@
     },
     "rust.clippy_preference": "on",
     "rust.cfg_test": true,
-    "window.zoomLevel": 3
+    "window.zoomLevel": 3,
+    "workbench.colorTheme": "Default Dark Modern"
 }
