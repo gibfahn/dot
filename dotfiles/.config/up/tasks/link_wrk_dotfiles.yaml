@@ -1,8 +1,8 @@
 requires: ["wrk_dotfile_repo"]
 
-run_if_cmd: ["/bin/sh", "-cex", '[ -e /usr/local/bin/appleconnect ] || exit 204']
+run_if_cmd: ["/bin/sh", "-cex", "[ -e /usr/local/bin/appleconnect ] || exit 204"]
 run_lib: link
 
 data:
   from_dir: $wrk_dotfile_dir
-  to_dir: '~'
+  to_dir: "~"

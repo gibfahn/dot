@@ -1,26 +1,26 @@
 bootstrap_tasks:
-- update_up
-- clone_repos # Has to come before anything that needs the dot repo to exist on disk.
-- dump_defaults # Should come before we've changed too much stuff.
-- mac_volume # Should come before linking.
-- link_dotfiles
-- link_wrk_dotfiles
-- computer_name
-- touchid_sudo
-- defaults
-- defaults_gib
-- mac
-- brew
+  - update_up
+  - clone_repos # Has to come before anything that needs the dot repo to exist on disk.
+  - dump_defaults # Should come before we've changed too much stuff.
+  - mac_volume # Should come before linking.
+  - link_dotfiles
+  - link_wrk_dotfiles
+  - computer_name
+  - touchid_sudo
+  - defaults
+  - defaults_gib
+  - mac
+  - brew
 
 inherit_env:
-- HOME # Current user's homedir (~), should be set by OS.
-- USER # Current user, should be set by OS.
-- PATH # TODO: don't pass this through.
-- TERM # Tells logger what terminal this is.
-- TERMINFO # If set by terminal, enables nice colouring.
-- SSH_AUTH_SOCK # Set by ssh agent.
-- HISTFILE # Used to backup zsh history.
-- TMPDIR # Write temp files to the expected place.
+  - HOME # Current user's homedir (~), should be set by OS.
+  - USER # Current user, should be set by OS.
+  - PATH # TODO: don't pass this through.
+  - TERM # Tells logger what terminal this is.
+  - TERMINFO # If set by terminal, enables nice colouring.
+  - SSH_AUTH_SOCK # Set by ssh agent.
+  - HISTFILE # Used to backup zsh history.
+  - TMPDIR # Write temp files to the expected place.
 
 env:
   dot_dir: "~/code/dot" # Directory to clone dotfiles to.

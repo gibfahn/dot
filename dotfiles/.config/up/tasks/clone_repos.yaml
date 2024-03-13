@@ -2,68 +2,68 @@
 run_lib: git
 needs_sudo: false
 data:
-- path: ~/.local/share/fzf
-  remotes:
-  - name: up
-    fetch_url: https://github.com/junegunn/fzf.git
-  prune: true
-- path: ~/.local/share/zsh/plugins/LS_COLORS
-  remotes:
-  - name: up
-    fetch_url: https://github.com/trapd00r/LS_COLORS
-  prune: true
-- path: ~/.local/share/zsh/plugins/fast-syntax-highlighting
-  remotes:
-  - name: up
-    fetch_url: https://github.com/zdharma-continuum/fast-syntax-highlighting
-  prune: true
-- path: ~/.local/share/zsh/plugins/powerlevel10k
-  remotes:
-  - name: up
-    fetch_url: https://github.com/romkatv/powerlevel10k
-  prune: true
-- path: ~/.local/share/zsh/plugins/zsh-autosuggestions
-  remotes:
-  - name: up
-    fetch_url: https://github.com/zsh-users/zsh-autosuggestions
-  prune: true
-- path: ~/.local/share/zsh/plugins/zsh-completions
-  remotes:
-  - name: up
-    fetch_url: https://github.com/zsh-users/zsh-completions
-  prune: true
-- path: ~/.local/share/zsh/plugins/zsh-defer
-  remotes:
-  - name: up
-    fetch_url: https://github.com/romkatv/zsh-defer
-  prune: true
-- path: ~/code/dot
-  remotes:
-  - name: up
-    fetch_url: https://github.com/gibfahn/dot
-  prune: true
-- path: ~/code/me/brian_code
-  remotes:
-  - name: up
-    fetch_url: https://github.com/gibfahn/brian_code.git
-  prune: true
-- path: ~/code/me/codelets
-  remotes:
-  - name: up
-    fetch_url: https://github.com/gibfahn/codelets
-  prune: true
-- path: ~/code/me/fahn.co
-  remotes:
-  - name: up
-    fetch_url: https://gitlab.com/gib/fahn.co
-  prune: true
-- path: ~/code/me/homebrew-tap
-  remotes:
-  - name: up
-    fetch_url: https://github.com/gibfahn/homebrew-tap
-  prune: true
-- path: ~/code/me/up-rs
-  remotes:
-  - name: up
-    fetch_url: https://github.com/gibfahn/up-rs
-  prune: true
+  - path: ~/.local/share/fzf
+    remotes:
+      - name: up
+        fetch_url: https://github.com/junegunn/fzf.git
+    prune: true
+  - path: ~/.local/share/zsh/plugins/LS_COLORS
+    remotes:
+      - name: up
+        fetch_url: https://github.com/trapd00r/LS_COLORS
+    prune: true
+  - path: ~/.local/share/zsh/plugins/fast-syntax-highlighting
+    remotes:
+      - name: up
+        fetch_url: https://github.com/zdharma-continuum/fast-syntax-highlighting
+    prune: true
+  - path: ~/.local/share/zsh/plugins/powerlevel10k
+    remotes:
+      - name: up
+        fetch_url: https://github.com/romkatv/powerlevel10k
+    prune: true
+  - path: ~/.local/share/zsh/plugins/zsh-autosuggestions
+    remotes:
+      - name: up
+        fetch_url: https://github.com/zsh-users/zsh-autosuggestions
+    prune: true
+  - path: ~/.local/share/zsh/plugins/zsh-completions
+    remotes:
+      - name: up
+        fetch_url: https://github.com/zsh-users/zsh-completions
+    prune: true
+  - path: ~/.local/share/zsh/plugins/zsh-defer
+    remotes:
+      - name: up
+        fetch_url: https://github.com/romkatv/zsh-defer
+    prune: true
+  - path: ~/code/dot
+    remotes:
+      - name: up
+        fetch_url: https://github.com/gibfahn/dot
+    prune: true
+  - path: ~/code/me/brian_code
+    remotes:
+      - name: up
+        fetch_url: https://github.com/gibfahn/brian_code.git
+    prune: true
+  - path: ~/code/me/codelets
+    remotes:
+      - name: up
+        fetch_url: https://github.com/gibfahn/codelets
+    prune: true
+  - path: ~/code/me/fahn.co
+    remotes:
+      - name: up
+        fetch_url: https://gitlab.com/gib/fahn.co
+    prune: true
+  - path: ~/code/me/homebrew-tap
+    remotes:
+      - name: up
+        fetch_url: https://github.com/gibfahn/homebrew-tap
+    prune: true
+  - path: ~/code/me/up-rs
+    remotes:
+      - name: up
+        fetch_url: https://github.com/gibfahn/up-rs
+    prune: true

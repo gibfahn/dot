@@ -4,4 +4,4 @@ run_lib: link
 
 data:
   from_dir: $dotfile_dir
-  to_dir: '~'
+  to_dir: "~"
