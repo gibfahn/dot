@@ -1,0 +1,3 @@
+run_if_cmd: ["/bin/sh", "-cex", '[ "$(uname)" = Darwin  -a "$(uname -m)" == arm64 ] || exit 204']
+needs_sudo: true
+run_cmd: ["sudo", "softwareupdate", "--install-rosetta", "--agree-to-license"]
