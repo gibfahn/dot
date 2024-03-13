@@ -2,4 +2,5 @@
 
 set -euo pipefail
 
+mkdir -p $XDG_CACHE_HOME/zsh/
 ${commands[gdircolors]+g}dircolors -b $HOME/.local/share/zsh/plugins/LS_COLORS/LS_COLORS > $XDG_CACHE_HOME/zsh/ls_colors.zsh
