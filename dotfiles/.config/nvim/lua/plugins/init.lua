@@ -577,7 +577,7 @@ return {
   {
     "apple/pkl-neovim",
     lazy = true,
-    event = "BufReadPre *.pkl",
+    ft = "pkl",
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
       "L3MON4D3/LuaSnip",
