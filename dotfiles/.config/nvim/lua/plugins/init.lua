@@ -238,6 +238,19 @@ return {
             },
           },
         },
+        -- https://github.com/rcjsuen/dockerfile-language-server?tab=readme-ov-file#language-server-settings
+        dockerls = {
+          settings = {
+            docker = {
+              languageserver = {
+                formatter = {
+                  -- Formatter doesn't handle inline multiline shell commands well (because it's hard).
+                  ignoreMultilineInstructions = true,
+                },
+              },
+            },
+          },
+        },
       },
     },
   },
