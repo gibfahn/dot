@@ -575,6 +575,22 @@ return {
   },
 
   {
+    "apple/pkl-neovim",
+    lazy = true,
+    event = "BufReadPre *.pkl",
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      "L3MON4D3/LuaSnip",
+    },
+    build = function()
+      vim.cmd("TSInstall! pkl")
+    end,
+    config = function()
+      require("luasnip.loaders.from_snipmate").lazy_load()
+    end,
+  },
+
+  {
     "kylechui/nvim-surround", -- Add/change/remove surrounding pairs of characters.
     version = "*",
     event = "VeryLazy",
