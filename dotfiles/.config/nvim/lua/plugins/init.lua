@@ -1,16 +1,8 @@
 return {
-  -- the colorscheme should be available when starting Neovim
   {
-    "gibfahn/gib-noir.nvim",
-    lazy = false, -- make sure we load this during startup if it is your main colorscheme
-    priority = 1000, -- make sure to load this before all the other start plugins
-    config = function()
-      -- load the colorscheme here
-      vim.cmd([[colorscheme gib-noir]])
-    end,
+    "LazyVim/LazyVim", -- Prebuilt setup configuring many many plugins for you.
+    version = false, -- Use latest main not latest release.
   },
-
-  { "LazyVim/LazyVim", version = false }, -- Use latest main not latest release.
   -- Disable lazyvim plugins I don't use.
   -- https://www.lazyvim.org/configuration/plugins#-disabling-plugins
   { "catppuccin", enabled = false }, -- I have my own colorscheme.
@@ -21,91 +13,46 @@ return {
   { "nvim-neo-tree/neo-tree.nvim", enabled = false }, -- I use oil.nvim instead.
   { "nvimdev/dashboard-nvim", enabled = false }, -- Don't use the splash/start screen.
 
-  { "echasnovski/mini.splitjoin", config = true },
-
   {
-    "stevearc/oil.nvim",
+    "akinsho/bufferline.nvim", -- Show buffers in the tab line.
     opts = {
-      -- Id is automatically added at the beginning, and name at the end
-      -- See :help oil-columns
-      columns = {
-        "icon",
-        "permissions",
-        "size",
-        "mtime",
-      },
-      -- Buffer-local options to use for oil buffers
-      buf_options = {
-        buflisted = true, -- Show buffer in bar.
-      },
-      -- Send deleted files to the trash instead of permanently deleting them (:help oil-trash)
-      delete_to_trash = true,
-      -- Keymaps in oil buffer. Can be any value that `vim.keymap.set` accepts OR a table of keymap
-      -- options with a `callback` (e.g. { callback = function() ... end, desc = "", mode = "n" })
-      -- Additionally, if it is a string that matches "actions.<name>",
-      -- it will use the mapping at require("oil.actions").<name>
-      -- Set to `false` to remove a keymap
-      -- See :help oil-actions for a list of all available actions
-      keymaps = {
-        ["+"] = {
-          callback = function()
-            vim.cmd([[s/. \zs\([r-][w-]\).\([r-][w-]\).\([r-][w-]\)./\1x\2x\3x/]])
-            vim.cmd("nohl")
-          end,
-          desc = "Make file executable.",
+      options = {
+        -- style_preset = require("bufferline").style_preset.minimal,
+        indicator = {
+          style = "none",
         },
-      },
-      view_options = {
-        -- Show files and directories that start with "."
-        show_hidden = true,
+        show_buffer_icons = false,
+        show_buffer_close_icons = false,
+        show_close_icon = true,
+        themeable = true,
+        numbers = "ordinal",
+        -- separator_style = { "", "" },
       },
     },
-    -- Optional dependencies
-    dependencies = { "nvim-tree/nvim-web-devicons" },
   },
 
   {
-    "nvim-telescope/telescope.nvim",
-    opts = {
-      defaults = {
-        mappings = {
-          i = {
-            -- Open all selected files <https://github.com/nvim-telescope/telescope.nvim/issues/814#issuecomment-1759190643>
-            -- Not set to <CR> to avoid conflicting with e.g. running code actions.
-            ["<C-o>"] = function(p_bufnr)
-              require("telescope.actions").send_selected_to_qflist(p_bufnr)
-              vim.cmd.cfdo("edit")
-            end,
-            -- Select all <https://github.com/nvim-telescope/telescope.nvim/pull/931>
-            ["<C-a>"] = function(p_bufnr)
-              require("telescope.actions").toggle_all(p_bufnr)
-            end,
-          },
-        },
-      },
-    },
-    keys = {
-      {
-        -- Make this search cwd not a guessed root directory.
-        "<leader><space>",
-        require("lazyvim.util").telescope("files", { cwd = false }),
-        desc = "Find Files (cwd)",
-      },
-    },
+    "apple/pkl-neovim", -- Support for the Pkl language https://pkl-lang.org
+    lazy = true,
+    ft = "pkl",
     dependencies = {
-      {
-        "nvim-telescope/telescope-ui-select.nvim",
-        config = function()
-          require("lazyvim.util").on_load("telescope.nvim", function()
-            require("telescope").load_extension("ui-select")
-          end)
-        end,
-      },
+      "nvim-treesitter/nvim-treesitter",
+      "L3MON4D3/LuaSnip",
     },
+    build = function()
+      vim.cmd("TSInstall! pkl")
+    end,
+    config = function()
+      require("luasnip.loaders.from_snipmate").lazy_load()
+    end,
   },
 
+  "chrisbra/Recover.vim", -- add a diff option when a swap file is found.
+
+  "coderifous/textobj-word-column.vim", -- Adds ic/ac and iC/aC motions to block select word column in paragraph.
+
   {
-    "echasnovski/mini.ai",
+    "echasnovski/mini.ai", -- a and i operators, e.g. vaL selects the current line.
     opts = {
       -- <https://www.reddit.com/r/neovim/comments/wa819w/comment/ilfpkbd/?utm_source=share&utm_medium=web2x&context=3>
       custom_textobjects = {
@@ -145,8 +92,9 @@ return {
       },
     },
   },
+
   {
-    "echasnovski/mini.operators",
+    "echasnovski/mini.operators", -- operators like `gsip` to sort current paragraph
     opts = {
       -- Replace text with register
       replace = {
@@ -155,20 +103,208 @@ return {
     },
   },
 
+  { "echasnovski/mini.splitjoin", config = true }, -- gS to split something over multiple lines.
+
+  "fladson/vim-kitty", -- Syntax highlighting for kitty.conf file.
+
   {
-    "nvimtools/none-ls.nvim",
-    optional = true,
+    "folke/flash.nvim", -- Quickly jump anywhere you can see.
+    event = "VeryLazy",
+    opts = { -- https://github.com/folke/flash.nvim#%EF%B8%8F-configuration
+      labels = "arstdhneioqwfpgjluyzxcvbkm1234567890", -- Colemak order, include numbers
+      jump = {
+        autojump = true, -- automatically jump when there is only one match
+      },
+      label = {
+        -- flash tries to re-use labels that were already assigned to a position,
+        -- when typing more characters. By default only lower-case labels are re-used.
+        reuse = "lowercase", ---@type "lowercase" | "all" | "none"
+      },
+      modes = {
+        search = {
+          enabled = false, -- off by default
+        },
+      },
+    },
+    keys = {
+      {
+        "s",
+        mode = { "n" },
+        function()
+          require("flash").jump()
+        end,
+        desc = "Flash",
+      },
+      {
+        "S",
+        mode = { "n", "x", "o" },
+        function()
+          require("flash").jump()
+        end,
+        desc = "Flash",
+      },
+      {
+        "<a-s>",
+        mode = { "n", "x", "o" },
+        function()
+          require("flash").treesitter()
+        end,
+        desc = "Flash Treesitter",
+      },
+      {
+        "r",
+        mode = "o",
+        function()
+          require("flash").remote()
+        end,
+        desc = "Remote Flash",
+      },
+      {
+        "R",
+        mode = { "o", "x" },
+        function()
+          require("flash").treesitter_search()
+        end,
+        desc = "Treesitter Search",
+      },
+      {
+        "<c-s>",
+        mode = { "c" },
+        function()
+          require("flash").toggle()
+        end,
+        desc = "Toggle Flash Search",
+      },
+    },
+  },
+
+  {
+    "folke/noice.nvim", -- Fancier UI for messages, cmdline, popups
+    event = "VeryLazy",
+    opts = {
+      presets = {
+        long_message_to_split = true, -- long messages will be sent to a split
+      },
+    },
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+      "rcarriga/nvim-notify",
+    },
+  },
+
+  {
+    "folke/trouble.nvim", -- better diagnostics list and others
+    opts = {
+      position = "right", -- Open trouble windows on the right.
+      -- Use 1/3 of the nvim window width or 100, whichever is smaller.
+      width = math.min(math.floor(vim.api.nvim_win_get_width(0) / 3), 100), -- width of the list when position is left or right
+    },
+    keys = {
+      -- Swap these so we default to whole workspace diagnostics.
+      { "<leader>xX", "<cmd>TroubleToggle document_diagnostics<cr>", desc = "Document Diagnostics (Trouble)" },
+      { "<leader>xx", "<cmd>TroubleToggle workspace_diagnostics<cr>", desc = "Workspace Diagnostics (Trouble)" },
+    },
+  },
+
+  {
+    "folke/which-key.nvim", -- Show help when typing keys.
+    event = "VeryLazy",
+    init = function()
+      vim.o.timeout = true
+      vim.o.timeoutlen = 300
+    end,
+    -- https://github.com/folke/which-key.nvim#%EF%B8%8F-configuration
     opts = function(_, opts)
-      local nls = require("null-ls")
-      opts.sources = vim.list_extend(opts.sources or {}, {
-        nls.builtins.diagnostics.buildifier,
-        nls.builtins.formatting.isort,
-        nls.builtins.diagnostics.pylint,
-      })
+      opts.defaults["<leader>l"] = { name = "+lazy" }
+      -- Remove lazyvim <Leader>w = window prefix.
+      opts.defaults["<leader>w"] = nil
+      return opts
     end,
   },
+
+  "fweep/vim-zsh-path-completion", -- Nicer file browser plugin.
+
   {
-    "mfussenegger/nvim-lint",
+    "gibfahn/gib-noir.nvim", -- My colorscheme.
+    lazy = false, -- make sure we load this during startup if it is your main colorscheme
+    -- the colorscheme should be available when starting Neovim
+    priority = 1000, -- make sure to load this before all the other start plugins
+    config = function()
+      -- load the colorscheme here
+      vim.cmd([[colorscheme gib-noir]])
+    end,
+  },
+
+  { "godlygeek/tabular", cmd = "Tabularize" }, -- Make tables easier (:help Tabular).
+
+  "junegunn/vim-peekaboo", -- Pop up register list when pasting/macroing.
+
+  {
+    "kdheepak/lazygit.nvim", -- Wrapper around the lazygit CLI.
+    -- optional for floating window border decoration
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
+  },
+
+  {
+    "kylechui/nvim-surround", -- Add/change/remove surrounding pairs of characters.
+    version = "*",
+    event = "VeryLazy",
+    opts = {
+      -- Use z for surround because s is for flash.
+      keymaps = {
+        normal = "ys",
+        normal_cur = "yss",
+        normal_line = "yZ",
+        normal_cur_line = "yZZ",
+        visual = "s",
+        visual_line = "gz",
+        delete = "ds",
+        change = "cs",
+      },
+      surrounds = {
+        -- Surround with markdown code block, triple backticks.
+        -- <https://github.com/kylechui/nvim-surround/issues/88>
+        ["~"] = {
+          add = function()
+            local config = require("nvim-surround.config")
+            local result = config.get_input("Markdown code block language: ")
+            return {
+              { "```" .. result, "" },
+              { "", "```" },
+            }
+          end,
+        },
+        -- Add markdown link with link as contents of system clipboard.
+        -- <https://github.com/kylechui/nvim-surround/discussions/53#discussioncomment-3134891>
+        ["l"] = {
+          add = function()
+            local clipboard = vim.fn.getreg("+"):gsub("\n", "")
+            return {
+              { "[" },
+              { "](" .. clipboard .. ")" },
+            }
+          end,
+          find = "%b[]%b()",
+          delete = "^(%[)().-(%]%b())()$",
+          change = {
+            target = "^()()%b[]%((.-)()%)$",
+            replacement = function()
+              local clipboard = vim.fn.getreg("+"):gsub("\n", "")
+              return {
+                { "" },
+                { clipboard },
+              }
+            end,
+          },
+        },
+      },
+    },
+  },
+
+  {
+    "mfussenegger/nvim-lint", -- Pluggable linter framework.
     optional = true,
     opts = {
       linters_by_ft = {
@@ -202,18 +338,13 @@ return {
       },
     },
   },
+
+  { "mzlogin/vim-markdown-toc", ft = "markdown", cmd = "GenTocGFM" }, -- Markdown Table of Contents.
+
+  { "nanotee/zoxide.vim", cmd = "Zi" }, -- Use zoxide to quickly jump to directories.
+
   {
-    "stevearc/conform.nvim",
-    optional = true,
-    opts = {
-      formatters_by_ft = {
-        bzl = { "buildifier" },
-        python = { "isort", "black" },
-      },
-    },
-  },
-  {
-    "neovim/nvim-lspconfig",
+    "neovim/nvim-lspconfig", -- Configure language servers.
     opts = {
       servers = {
         rust_analyzer = {
@@ -254,67 +385,6 @@ return {
       },
     },
   },
-
-  -- better diagnostics list and others
-  {
-    "folke/trouble.nvim",
-    opts = {
-      position = "right", -- Open trouble windows on the right.
-      -- Use 1/3 of the nvim window width or 100, whichever is smaller.
-      width = math.min(math.floor(vim.api.nvim_win_get_width(0) / 3), 100), -- width of the list when position is left or right
-    },
-    keys = {
-      -- Swap these so we default to whole workspace diagnostics.
-      { "<leader>xX", "<cmd>TroubleToggle document_diagnostics<cr>", desc = "Document Diagnostics (Trouble)" },
-      { "<leader>xx", "<cmd>TroubleToggle workspace_diagnostics<cr>", desc = "Workspace Diagnostics (Trouble)" },
-    },
-  },
-
-  {
-    "Saecki/crates.nvim",
-    opts = {
-      -- Make code actions show up in Cargo.toml
-      -- <https://github.com/Saecki/crates.nvim/wiki/Documentation-v0.4.0#code-actions>
-      null_ls = {
-        enabled = true,
-      },
-    },
-  },
-
-  {
-    "akinsho/bufferline.nvim",
-    opts = {
-      options = {
-        -- style_preset = require("bufferline").style_preset.minimal,
-        indicator = {
-          style = "none",
-        },
-        show_buffer_icons = false,
-        show_buffer_close_icons = false,
-        show_close_icon = true,
-        themeable = true,
-        numbers = "ordinal",
-        -- separator_style = { "", "" },
-      },
-    },
-  },
-
-  "fladson/vim-kitty", -- Syntax highlighting for kitty.conf file.
-  "chrisbra/Recover.vim", -- add a diff option when a swap file is found.
-  "coderifous/textobj-word-column.vim", -- Adds ic/ac and iC/aC motions to block select word column in paragraph.
-  "fweep/vim-zsh-path-completion", -- Nicer file browser plugin.
-  "junegunn/vim-peekaboo", -- Pop up register list when pasting/macroing.
-  "simnalamburt/vim-mundo", -- Graphical undo tree (updated fork of Gundo).
-  "tpope/vim-fugitive", -- Git commands in vim.
-  "tpope/vim-repeat", -- Allows you to use . with plugin mappings.
-  "tpope/vim-rhubarb", -- GitHub support.
-  "tpope/vim-rsi", -- Insert/commandline readline-style mappings, e.g. C-a for beginning of line.
-  { "godlygeek/tabular", cmd = "Tabularize" }, -- Make tables easier (:help Tabular).
-  { "mzlogin/vim-markdown-toc", ft = "markdown", cmd = "GenTocGFM" }, -- Markdown Table of Contents.
-  { "nanotee/zoxide.vim", cmd = "Zi" }, -- Use zoxide to quickly jump to directories.
-  { "pechorin/any-jump.nvim" }, -- Go to definition that doesn't require a language server.
-  { "subnut/nvim-ghost.nvim", build = ":call nvim_ghost#installer#install()" }, -- Edit browser text areas in Neovim (:h ghost). Disabled until https://github.com/subnut/nvim-ghost.nvim/issues/50 is fixed.
-  { "tpope/vim-abolish", cmd = { "Abolish", "Subvert", "S" } }, -- Work with variants of words (replacing, capitalizing etc).
 
   {
     "nvim-lualine/lualine.nvim", -- Statusline plugin.
@@ -474,6 +544,61 @@ return {
   },
 
   {
+    "nvim-telescope/telescope.nvim", -- Easily jump to buffers etc.
+    opts = {
+      defaults = {
+        mappings = {
+          i = {
+            -- Open all selected files <https://github.com/nvim-telescope/telescope.nvim/issues/814#issuecomment-1759190643>
+            -- Not set to <CR> to avoid conflicting with e.g. running code actions.
+            ["<C-o>"] = function(p_bufnr)
+              require("telescope.actions").send_selected_to_qflist(p_bufnr)
+              vim.cmd.cfdo("edit")
+            end,
+            -- Select all <https://github.com/nvim-telescope/telescope.nvim/pull/931>
+            ["<C-a>"] = function(p_bufnr)
+              require("telescope.actions").toggle_all(p_bufnr)
+            end,
+          },
+        },
+      },
+    },
+    keys = {
+      {
+        -- Make this search cwd not a guessed root directory.
+        "<leader><space>",
+        require("lazyvim.util").telescope("files", { cwd = false }),
+        desc = "Find Files (cwd)",
+      },
+    },
+    dependencies = {
+      {
+        "nvim-telescope/telescope-ui-select.nvim",
+        config = function()
+          require("lazyvim.util").on_load("telescope.nvim", function()
+            require("telescope").load_extension("ui-select")
+          end)
+        end,
+      },
+    },
+  },
+
+  {
+    "nvimtools/none-ls.nvim", -- Make anything a languageserver.
+    optional = true,
+    opts = function(_, opts)
+      local nls = require("null-ls")
+      opts.sources = vim.list_extend(opts.sources or {}, {
+        nls.builtins.diagnostics.buildifier,
+        nls.builtins.formatting.isort,
+        nls.builtins.diagnostics.pylint,
+      })
+    end,
+  },
+
+  { "pechorin/any-jump.nvim" }, -- Go to definition that doesn't require a language server.
+
+  {
     "rcarriga/nvim-notify", -- Notification plugin used by noice.
     event = "VeryLazy",
     opts = {
@@ -482,183 +607,75 @@ return {
   },
 
   {
-    "folke/noice.nvim", -- Fancier UI for messages, cmdline, popups
-    event = "VeryLazy",
+    "Saecki/crates.nvim", -- Linting, completions etc. for Cargo.toml
     opts = {
-      presets = {
-        long_message_to_split = true, -- long messages will be sent to a split
-      },
-    },
-    dependencies = {
-      "MunifTanjim/nui.nvim",
-      "rcarriga/nvim-notify",
-    },
-  },
-
-  {
-    "kdheepak/lazygit.nvim",
-    -- optional for floating window border decoration
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-    },
-  },
-
-  {
-    "folke/flash.nvim",
-    event = "VeryLazy",
-    opts = { -- https://github.com/folke/flash.nvim#%EF%B8%8F-configuration
-      labels = "arstdhneioqwfpgjluyzxcvbkm1234567890", -- Colemak order, include numbers
-      jump = {
-        autojump = true, -- automatically jump when there is only one match
-      },
-      label = {
-        -- flash tries to re-use labels that were already assigned to a position,
-        -- when typing more characters. By default only lower-case labels are re-used.
-        reuse = "lowercase", ---@type "lowercase" | "all" | "none"
-      },
-      modes = {
-        search = {
-          enabled = false, -- off by default
-        },
-      },
-    },
-    keys = {
-      {
-        "s",
-        mode = { "n" },
-        function()
-          require("flash").jump()
-        end,
-        desc = "Flash",
-      },
-      {
-        "S",
-        mode = { "n", "x", "o" },
-        function()
-          require("flash").jump()
-        end,
-        desc = "Flash",
-      },
-      {
-        "<a-s>",
-        mode = { "n", "x", "o" },
-        function()
-          require("flash").treesitter()
-        end,
-        desc = "Flash Treesitter",
-      },
-      {
-        "r",
-        mode = "o",
-        function()
-          require("flash").remote()
-        end,
-        desc = "Remote Flash",
-      },
-      {
-        "R",
-        mode = { "o", "x" },
-        function()
-          require("flash").treesitter_search()
-        end,
-        desc = "Treesitter Search",
-      },
-      {
-        "<c-s>",
-        mode = { "c" },
-        function()
-          require("flash").toggle()
-        end,
-        desc = "Toggle Flash Search",
+      -- Make code actions show up in Cargo.toml
+      -- <https://github.com/Saecki/crates.nvim/wiki/Documentation-v0.4.0#code-actions>
+      null_ls = {
+        enabled = true,
       },
     },
   },
 
-  {
-    "apple/pkl-neovim",
-    lazy = true,
-    ft = "pkl",
-    dependencies = {
-      "nvim-treesitter/nvim-treesitter",
-      "L3MON4D3/LuaSnip",
-    },
-    build = function()
-      vim.cmd("TSInstall! pkl")
-    end,
-    config = function()
-      require("luasnip.loaders.from_snipmate").lazy_load()
-    end,
-  },
+  "simnalamburt/vim-mundo", -- Graphical undo tree (updated fork of Gundo).
 
   {
-    "kylechui/nvim-surround", -- Add/change/remove surrounding pairs of characters.
-    version = "*",
-    event = "VeryLazy",
+    "stevearc/conform.nvim", -- Formatter framework (format on save).
+    optional = true,
     opts = {
-      -- Use z for surround because s is for flash.
+      formatters_by_ft = {
+        bzl = { "buildifier" },
+        python = { "isort", "black" },
+      },
+    },
+  },
+
+  {
+    "stevearc/oil.nvim", -- File browser (create, move, rename files etc.)
+    opts = {
+      -- Id is automatically added at the beginning, and name at the end
+      -- See :help oil-columns
+      columns = {
+        "icon",
+        "permissions",
+        "size",
+        "mtime",
+      },
+      -- Buffer-local options to use for oil buffers
+      buf_options = {
+        buflisted = true, -- Show buffer in bar.
+      },
+      -- Send deleted files to the trash instead of permanently deleting them (:help oil-trash)
+      delete_to_trash = true,
+      -- Keymaps in oil buffer. Can be any value that `vim.keymap.set` accepts OR a table of keymap
+      -- options with a `callback` (e.g. { callback = function() ... end, desc = "", mode = "n" })
+      -- Additionally, if it is a string that matches "actions.<name>",
+      -- it will use the mapping at require("oil.actions").<name>
+      -- Set to `false` to remove a keymap
+      -- See :help oil-actions for a list of all available actions
       keymaps = {
-        normal = "ys",
-        normal_cur = "yss",
-        normal_line = "yZ",
-        normal_cur_line = "yZZ",
-        visual = "s",
-        visual_line = "gz",
-        delete = "ds",
-        change = "cs",
+        ["+"] = {
+          callback = function()
+            vim.cmd([[s/. \zs\([r-][w-]\).\([r-][w-]\).\([r-][w-]\)./\1x\2x\3x/]])
+            vim.cmd("nohl")
+          end,
+          desc = "Make file executable.",
+        },
       },
-      surrounds = {
-        -- Surround with markdown code block, triple backticks.
-        -- <https://github.com/kylechui/nvim-surround/issues/88>
-        ["~"] = {
-          add = function()
-            local config = require("nvim-surround.config")
-            local result = config.get_input("Markdown code block language: ")
-            return {
-              { "```" .. result, "" },
-              { "", "```" },
-            }
-          end,
-        },
-        -- Add markdown link with link as contents of system clipboard.
-        -- <https://github.com/kylechui/nvim-surround/discussions/53#discussioncomment-3134891>
-        ["l"] = {
-          add = function()
-            local clipboard = vim.fn.getreg("+"):gsub("\n", "")
-            return {
-              { "[" },
-              { "](" .. clipboard .. ")" },
-            }
-          end,
-          find = "%b[]%b()",
-          delete = "^(%[)().-(%]%b())()$",
-          change = {
-            target = "^()()%b[]%((.-)()%)$",
-            replacement = function()
-              local clipboard = vim.fn.getreg("+"):gsub("\n", "")
-              return {
-                { "" },
-                { clipboard },
-              }
-            end,
-          },
-        },
+      view_options = {
+        -- Show files and directories that start with "."
+        show_hidden = true,
       },
     },
+    -- Optional dependencies
+    dependencies = { "nvim-tree/nvim-web-devicons" },
   },
 
-  {
-    "folke/which-key.nvim", -- Show help when typing keys.
-    event = "VeryLazy",
-    init = function()
-      vim.o.timeout = true
-      vim.o.timeoutlen = 300
-    end,
-    -- https://github.com/folke/which-key.nvim#%EF%B8%8F-configuration
-    opts = function(_, opts)
-      opts.defaults["<leader>l"] = { name = "+lazy" }
-      -- Remove lazyvim <Leader>w = window prefix.
-      opts.defaults["<leader>w"] = nil
-      return opts
-    end,
-  },
+  { "subnut/nvim-ghost.nvim", build = ":call nvim_ghost#installer#install()" }, -- Edit browser text areas in Neovim (:h ghost). Disabled until https://github.com/subnut/nvim-ghost.nvim/issues/50 is fixed.
+
+  { "tpope/vim-abolish", cmd = { "Abolish", "Subvert", "S" } }, -- Work with variants of words (replacing, capitalizing etc).
+  "tpope/vim-fugitive", -- Git commands in vim.
+  "tpope/vim-repeat", -- Allows you to use . with plugin mappings.
+  "tpope/vim-rhubarb", -- GitHub support.
+  "tpope/vim-rsi", -- Insert/commandline readline-style mappings, e.g. C-a for beginning of line.
 }
