@@ -1,0 +1,36 @@
+#!/usr/bin/env zsh
+
+# Script to open all apps. Used to make sure all the initial notification prompts, access prompts,
+# and splash screens can be done in one fell swoop.
+
+set -euo pipefail
+
+# Things we don't need to open because they (blessedly) don't need initial configuration.
+ignored=(
+  'Keyboard Cleaner.app'
+  'Chess.app'
+  'TextEdit.app'
+  'Stickies.app'
+  'Preview.app'
+  'Photo Booth.app'
+  'QuickTime Player.app'
+  'Calculator.app'
+  'Chrysalis.app'
+  'Dark Reader for Safari.app'
+  '1Password for Safari.app'
+  'GhostText.app'
+  'SF Symbols.app'
+  'Font Book.app'
+  'Image Capture.app'
+  'Visual Studio Code.app'
+  'Automator.app'
+  'Clock.app'
+  'Music.app'
+)
+
+ignored_args=()
+for arg in ${ignored[@]}; do
+  ignored_args+=(-e $arg)
+done
+
+ls -1d {,/System}/Applications/*.app | grep -v ${ignored_args[@]} | tr '\n' '\0' | xargs -0 -n 1 open -a
