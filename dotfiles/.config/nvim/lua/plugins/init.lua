@@ -339,6 +339,8 @@ return {
     },
   },
 
+  { "mtdl9/vim-log-highlighting", ft = "log" }, -- Log file syntax highlighting.
+
   { "mzlogin/vim-markdown-toc", ft = "markdown", cmd = "GenTocGFM" }, -- Markdown Table of Contents.
 
   { "nanotee/zoxide.vim", cmd = "Zi" }, -- Use zoxide to quickly jump to directories.
