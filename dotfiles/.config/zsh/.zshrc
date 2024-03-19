@@ -38,6 +38,7 @@ export HISTSIZE=200000 SAVEHIST=200000 HISTFILE="$XDG_STATE_HOME/zsh/history" # 
 export CARGO_HOME="$XDG_DATA_HOME/cargo" # Cargo goes here.
 export VOLTA_HOME="$XDG_CACHE_HOME/volta" # Set directory to use for volta install.
 export GOPATH="$HOME/code/go"
+export PYENV_ROOT="$XDG_DATA_HOME/pyenv" # Set directory to use for Python install.
 
 # }}} Environment Variables
 
@@ -54,7 +55,7 @@ path=(
   ${VIRTUAL_ENV:+$VIRTUAL_ENV/bin} # Virtual env needs to be in front of /usr/local/bin.
 
   $HOME/bin # Put random binaries you want to run in here.
-  $HOME/.local/bin
+  $HOME/.local/bin # XDG equivalent of ~/bin.
 
 # /usr/local/opt/ccache/libexec # Add ccache to the path if installed (macOS).
 # /usr/lib/ccache # Add ccache to the path if installed (Linux).
@@ -62,6 +63,7 @@ path=(
   # Overrides the version in ${brew_prefix}/bin.
   ${CARGO_HOME:+$CARGO_HOME/bin} # Rust packages.
   ${VOLTA_HOME:+$VOLTA_HOME/bin} # Node.js and packages.
+  ${PYENV_ROOT}/shims # Python and packages
 
   ${XDG_DATA_HOME}/bob/nvim-bin # Bob nvim manager nvim directory, comes before brew.
 

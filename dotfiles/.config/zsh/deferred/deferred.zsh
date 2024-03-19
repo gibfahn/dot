@@ -339,7 +339,7 @@ source $XDG_DATA_HOME/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 source $XDG_DATA_HOME/zsh/plugins/zsh-completions/zsh-completions.plugin.zsh
 
 # Source completions that need to be directly run.
-for _gib_file in $XDG_DATA_HOME/zsh/completions/*(N); do
+for _gib_file in $XDG_DATA_HOME/zsh/completions/*(N) /opt/homebrew/Cellar/pyenv/*/completions/pyenv.zsh(N); do
   echo $_gib_file
   source $_gib_file
 done
