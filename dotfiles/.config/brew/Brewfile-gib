@@ -44,6 +44,7 @@ brew "grep"                              # GNU version of grep.
 brew "hyperfine"                         # Benchmark commands (time but a benchmarking suite).
 brew "lazygit"                           # Git TUI wrapper, has some staging niceties etc.
 brew "jq"                                # Makes it easy to deal with JSON on the command line.
+brew "ijq"                               # Interactive jq
 brew "kubectx"                           # Easily change Kubernetes context or namespace.
 brew "kubernetes-cli"                    # Manage your docker clusters with kube.
 brew "make"                              # GNU version of make.
@@ -69,6 +70,7 @@ brew "wget"                              # Alternative to curl for downloading f
 # cask "microsoft-teams"                   # Microsoft Teams
 # cask "onedrive"                          # Microsoft OneDrive.
 cask "1password-cli"                     # CLI way to access 1Password credentials.
+cask "arc"                               # Nicer browser.
 cask "chrysalis"                         # Used to flash my KeyboardIO Model 01.
 cask "daisydisk"                         # See what's using disk space and easily clean it up.
 cask "docker"                            # Build and run docker images.
