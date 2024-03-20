@@ -28,7 +28,6 @@ brew "cargo-nextest"                     # Parallel test runner framework.
 brew "cobalt"                            # Static site generator (https://cobalt-org.github.io/).
 brew "dfu-programmer"                    # QMK dependency used for flashing my Ergodox Infinity.
 brew "dfu-util"                          # QMK dependency used for flashing my Ergodox Infinity.
-brew "pipx"                              # Install Python binaries (https://pipx.pypa.io).
 brew "diffutils"                         # GNU versions of diff and related tools.
 brew "findutils"                         # GNU versions of find, locate, updatedb, xargs.
 brew "fswatch"                           # See which files are opened on the system (`fswatch /`).
@@ -42,14 +41,16 @@ brew "gnu-which"                         # GNU version of which.
 brew "go"                                # Go progamming language.
 brew "grep"                              # GNU version of grep.
 brew "hyperfine"                         # Benchmark commands (time but a benchmarking suite).
-brew "lazygit"                           # Git TUI wrapper, has some staging niceties etc.
-brew "jq"                                # Makes it easy to deal with JSON on the command line.
 brew "ijq"                               # Interactive jq
+brew "jq"                                # Makes it easy to deal with JSON on the command line.
 brew "kubectx"                           # Easily change Kubernetes context or namespace.
 brew "kubernetes-cli"                    # Manage your docker clusters with kube.
+brew "lazygit"                           # Git TUI wrapper, has some staging niceties etc.
 brew "make"                              # GNU version of make.
 brew "moreutils"                         # GNU tools like parallel and sponge.
+brew "pipx"                              # Install Python binaries (https://pipx.pypa.io).
 brew "protobuf"                          # Serialization format.
+brew "pyenv"                             # Python version manager.
 brew "ruby"                              # Newer version of Ruby.
 brew "shellcheck"                        # Linter for bash.
 brew "shfmt"                             # Shell script formatter.
