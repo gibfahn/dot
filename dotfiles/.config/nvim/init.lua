@@ -304,6 +304,7 @@ vim.keymap.set("n", "<Leader>e", "<C-w>q", { desc = "Close current split" }) -- 
 vim.keymap.set("n", "<Leader>fx", '<Cmd>grep -F "XXX(gib)"<CR>', { desc = "Search for XXX comments" })
 vim.keymap.set("n", "<Leader>gG", ":Resolve<CR>|:Gcd<CR>", { desc = "Chdir to root of git directory current file is in" })
 vim.keymap.set("n", "<Leader>gQ", "<Cmd>set fo+=t<CR><Cmd>set fo?<CR>", { desc = "Auto-add newline for long lines" })
+vim.keymap.set("n", "<Leader>gb", "<Cmd>GBrowse!<CR>", { desc = "Copy github URL" })
 vim.keymap.set("n", "<Leader>gc", "<Cmd>cd %:p:h<CR>", { desc = "Change to current file's dirname" }) -- e.g. for <space>f, :e
 vim.keymap.set("n", "<Leader>gd", "<Cmd>DiffOrig<CR>", { desc = "Diff between saved file and buffer" })
 vim.keymap.set("n", "<Leader>gf", "<Cmd>call DupBuffer()<CR>gF", { desc = "Open path:row:col in last window" })
@@ -365,6 +366,7 @@ vim.keymap.set("v", "//", [[y/\V<C-r>=escape(@",'/\')<CR><CR>]], { desc = "Searc
 vim.keymap.set("v", "<A-Down>", ":m '>+1<cr>gv=gv", { desc = "Move line down" })
 vim.keymap.set("v", "<A-Up>", ":m '<-2<cr>gv=gv", { desc = "Move line up" })
 vim.keymap.set("v", "<Leader>d", '"+d', { desc = "Cut from clipboard (visual mode)" })
+vim.keymap.set("v", "<Leader>gb", ":GBrowse!<CR>", { desc = "Copy github URL" })
 vim.keymap.set("v", "<Leader>p", '"+p', { desc = "Paste from clipboard" })
 vim.keymap.set("v", "<Leader>y", '"+y', { desc = "Copy from clipboard" })
 vim.keymap.set("v", "g//", [[y/\V<C-R>=&ic?'\c':'\C'<CR><C-r>=escape(@",'/\')<CR><CR>]], { desc = "Search for selected text case-insensitively" })
