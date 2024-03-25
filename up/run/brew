@@ -56,7 +56,7 @@ fi
 
 if [[ -n $copyq_outdated ]]; then
   # Workaround from https://github.com/hluk/CopyQ/issues/2637#issuecomment-2004117038
-  xattr -d com.apple.quarantine /Applications/CopyQ.app
+  xattr -d com.apple.quarantine /Applications/CopyQ.app || true
   codesign --force --deep --sign - /Applications/CopyQ.app
 
   echo "ERROR: CopyQ version changed, you need to manually untick and retick System Preferences -> Security & Privacy -> Accessibility -> CopyQ.app"
