@@ -43,7 +43,7 @@ brew tap Homebrew/bundle
   || brewfiles=("$XDG_CONFIG_HOME"/brew/Brewfile)
 
 if ! brew bundle --file =(cat ${brewfiles[@]}) check >/dev/null; then
-  brew bundle --file =(cat ${brewfiles[@]}) | grep -Evx "Using [-_/0-9a-zA-Z ]+"
+  brew bundle --file =(cat ${brewfiles[@]})
 fi
 
 # Only run this expensive step if stdout and stderr are ttys (script is being run interactively).
