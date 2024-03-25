@@ -342,6 +342,7 @@ data:
 
     # Silent clicking
     ActuationStrength: 0
+    Clicking: true
 
   com.apple.TextInputMenu:
     # Keyboard > Input Sources > Show Input menu in menu bar.
