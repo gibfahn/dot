@@ -1,0 +1,7 @@
+#!/bin/sh
+
+set -eux
+
+[ -d /Library/Apple/usr/libexec/oah ] && exit 204
+
+[ "$(uname)" = Darwin -a "$(uname -m)" == arm64 ] || exit 204
