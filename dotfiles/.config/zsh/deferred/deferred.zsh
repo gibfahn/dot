@@ -314,10 +314,6 @@ command mkdir -p ${HISTFILE:h} # Create HISTFILE dir if necessary.
 
 # ulimit -c unlimited # Uncomment to allow saving of coredumps.
 
-# Don't send SIGTTOU to background jobs that write to the tty. Theoretically fixes this in busy commands:
-# [1]  + 82656 suspended (tty output)  cargo run
-# stty -tostop
-
 # Set key repeat rate if available (Linux only). You probably want something less excessive here, like rate 250 30.
 if [[ $OSTYPE = linux* ]]; then
   (( $+commands[xset] )) && xset r rate 120 45
