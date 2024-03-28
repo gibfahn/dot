@@ -304,6 +304,15 @@ chpwd() { # Commands to run after changing directory (via cd or pushd).
   # Add new entries to the zoxide database.
   # Anything started with /Volumes/Shared-Data/ is a shared mount, see up/run/mac_volume
   zoxide add -- "${PWD#/Volumes/Shared-Data}"
+
+  # Source a venv if present
+  # https://stackoverflow.com/questions/45216663/how-to-automatically-activate-virtualenvs-when-cding-into-a-directory
+  if [[ -d .venv ]]; then
+    source ./.venv/bin/activate
+  # Deactivate if no longer in venv dir or a subdir of it.
+  elif [[ -n "$VIRTUAL_ENV" && "$(pwd -P)"/ != "$(dirname $VIRTUAL_ENV)"/* ]]; then
+    deactivate
+  fi
 }
 
 # }}} Functions
