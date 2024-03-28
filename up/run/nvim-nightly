@@ -11,6 +11,12 @@ old_nightly_dir="${XDG_DATA_HOME:-$HOME/.local/share}"/nvim-nightly
 
 bob_bin_dir="${XDG_DATA_HOME:-$HOME/.local/share}"/bob/nvim-bin
 
+if [[ -f ~/.netrc ]]; then
+  { set +x; } 2>/dev/null
+  export GITHUB_TOKEN=$(grep -xA 2 'machine github.com' ~/.netrc | awk '{ if ($1 == "password") { print $2 } }')
+  set -x
+fi
+
 if [[ ! -d "$bob_bin_dir" ]]; then
   bob use nightly
   bob install stable
