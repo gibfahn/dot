@@ -8,8 +8,6 @@ end)
 local home_dir = os.getenv("HOME")
 local user = os.getenv("USER")
 
-require("hidutil")
-
 local isWrkMachine = false
 for file in hs.fs.dir(home_dir) do
   if file == "wrk" then
@@ -35,9 +33,6 @@ if user == "gib" or user == "brian" then
   end
 end
 require("window-management")
-
--- Always remap keys on first loading hammerspoon.
-RemapKeys()
 
 -- Always connect to VPN on first loading Hammerspoon.
 if isWrkMachine then
