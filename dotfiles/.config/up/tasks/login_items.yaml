@@ -3,7 +3,7 @@ run_if_cmd: ["/bin/sh", "-cex", '[ "$(uname)" = Darwin ] || exit 204']
 
 run_cmd:
   - "${dot_dir}/up/run/login_items"
-  - /Applications/CopyQ.app
+  - /Applications/Maccy.app
   - /Applications/Hammerspoon.app
   - /Applications/Time Out.app
   - /Applications/Dato.app
