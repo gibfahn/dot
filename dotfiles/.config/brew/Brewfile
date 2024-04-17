@@ -14,7 +14,7 @@ brew "gnupg"                             # gpg command line.
 cask "kitty"                             # GPU Accelerated cross-platform Terminal Emulator.
 cask "font-hasklug-nerd-font"            # Nice programming font Hasklig (Source Code Pro + Ligatures) + Nerd Font extensions.
 cask "hammerspoon"                       # Scriptable automator for macOS.
-cask "copyq"                             # Clipboard manager with history (needs manual setup).
+cask "maccy"                             # Clipboard manager with history.
 brew "neovim"                            # New and improved vim.
 brew "watch"                             # Rerun a command every n seconds.
 brew "pstree"                            # Hierarchical tree of processes, `pstree -g 3`.

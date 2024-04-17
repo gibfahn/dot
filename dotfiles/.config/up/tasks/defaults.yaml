@@ -580,15 +580,14 @@ data:
     showAddEventButtonInMenu: false
     showTimeInMenu: false
 
-  # https://github.com/hluk/CopyQ
-  com.copyq.copyq:
-    Options.clipboard_notification_lines: 3
-    Options.always_on_top: true
-    Options.tray_items: 10
-    Options.activate_item_with_single_click: true
-    Options.confirm_exit: false
-    Options.item_popup_interval: 3
-    Options.maxitems: 9999
+    # https://maccy.app
+    org.p0deje.Maccy:
+      # Add a clipboard
+      menuIcon: clipboard
+      # Mixed search mode (https://github.com/p0deje/Maccy/issues/184#issuecomment-1399554270).
+      searchMode: mixed
+      # Use max allowed history (https://github.com/p0deje/Maccy/issues/310).
+      historySize: 999
 
     # Two tabs, second one called Images
     Tabs.2.name: Images

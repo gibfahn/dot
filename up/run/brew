@@ -31,16 +31,17 @@ export PATH=/opt/homebrew/bin:/opt/brew/bin:$PATH
 # Disable quarantine for casks.
 export HOMEBREW_CASK_OPTS=--no-quarantine
 
-copyq_outdated=$(brew outdated homebrew/cask/copyq || echo true)
-
 # Upgrade everything, even things that weren't in your Brewfile.
 brew upgrade # You may occasionally want to run `brew upgrade --greedy` in case built-in cask updaters aren't working.
 
 # brew install things. Edit config/Brewfile to adjust.
 brew tap Homebrew/bundle
 
-[[ $USER == gib ]] && brewfiles=("$XDG_CONFIG_HOME"/brew/*) \
-  || brewfiles=("$XDG_CONFIG_HOME"/brew/Brewfile)
+if [[ $USER == gib ]]; then
+  brewfiles=("$XDG_CONFIG_HOME"/brew/*)
+else
+  brewfiles=("$XDG_CONFIG_HOME"/brew/Brewfile)
+fi
 
 if ! brew bundle --file =(cat ${brewfiles[@]}) check >/dev/null; then
   brew bundle --file =(cat ${brewfiles[@]})
@@ -52,13 +53,4 @@ if [[ -t 1 && -t 2 ]]; then
   echo "Brew packages that would be cleaned up, run this to actually clean:
     brew bundle cleanup --force --file =(cat ${brewfiles[@]})"
   brew bundle cleanup --file =(cat ${brewfiles[@]})
-fi
-
-if [[ -n $copyq_outdated ]]; then
-  # Workaround from https://github.com/hluk/CopyQ/issues/2637#issuecomment-2004117038
-  xattr -d com.apple.quarantine /Applications/CopyQ.app || true
-  codesign --force --deep --sign - /Applications/CopyQ.app
-
-  echo "ERROR: CopyQ version changed, you need to manually untick and retick System Preferences -> Security & Privacy -> Accessibility -> CopyQ.app"
-  open /System/Library/PreferencePanes/Security.prefPane
 fi
