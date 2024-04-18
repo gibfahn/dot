@@ -14,7 +14,6 @@ rust_crates=(
 
 linux_rust_crates=(
   bat           # Nicer cat with syntax highlighting etc.
-  cargo-edit    # Gives `cargo {add,rm,upgrade}` commands.
   cargo-nextest # Parallel test runner framework.
   cobalt-bin    # Static site generator (https://cobalt-org.github.io/).
   hyperfine     # Benchmark commands (time but a benchmarking suite).

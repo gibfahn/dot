@@ -4,8 +4,8 @@ linker = "x86_64-linux-musl-gcc"
 # https://doc.rust-lang.org/cargo/reference/config.html
 # Alias cargo commands. `b`, `c`, `d`, `r`, `t` are built-in (build, check, doc, test, release).
 [alias]
-ta = "test -- --ignored"  # Run all tests.
-tar = "test --release --ignored"  # Run all tests in --release mode.
+ta = "test -- --ignored"         # Run all tests.
+tar = "test --release --ignored" # Run all tests in --release mode.
 
 # https://nexte.st -> `cargo install cargo-nextest`
 nt = "nextest"
@@ -23,14 +23,14 @@ nl = "new --lib"
 in = "init"
 inl = "init --lib"
 cn = "clean"
-cnl = "clean --target x86_64-unknown-linux-musl"  # Clean linux target.
+cnl = "clean --target x86_64-unknown-linux-musl" # Clean linux target.
 
 i = "install"
 
 cl = "clippy"
 f = "fmt"
-fa = "fixall" # Custom command, see cargo-fixall in this repo.
-a = "add"  # From cargo-edit
+fa = "fixall"  # Custom command, see cargo-fixall in this repo.
+a = "add"
 ud = "update"
 ug = "upgrade"
 
