@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-set -euo pipefail
+set -euxo pipefail
 
 # OS is darwin or we don't run.
 [[ $OSTYPE == darwin* ]] || exit 204
@@ -8,13 +8,27 @@ set -euo pipefail
 changed=
 
 # Set up login items.
-IFS=$'\n' current_login_items=($(osascript -e 'tell application "System Events" to get login items' | sed -e 's/login item //g' -e 's/, /\n/g'))
-for item_path in "${@}"; do
-  item=$(basename "${item_path%.app}")
+IFS=$'\n' current_login_items=($(osascript -e 'tell application "System Events" to get the path of every login item' | sed -e 's/, /\n/g'))
+
+wanted_login_items=()
+for file_path in ${XDG_CONFIG_HOME:-$HOME/.config}/login_items/*; do
+  wanted_login_items+=("${(@f)"$(<$file_path)"}")
+done
+declare -p current_login_items wanted_login_items
+
+for item in "${wanted_login_items[@]}"; do
   if ! (( ${current_login_items[(I)$item]} )); then
     changed=true
     echo "Adding login item $item" >&2
-    osascript -e "tell application \"System Events\" to make login item at end with properties {path:\"$item_path\", hidden:false}"
+    osascript -e "tell application \"System Events\" to make login item at end with properties {path:\"$item\", hidden:false}"
+  fi
+done
+
+for item in "${current_login_items[@]}"; do
+  if ! (( ${wanted_login_items[(I)$item]} )); then
+    changed=true
+    echo "Removing login item $item" >&2
+    osascript -e "tell application \"System Events\" to delete login items whose path is \"$item\""
   fi
 done
 
