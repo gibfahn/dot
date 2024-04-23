@@ -288,7 +288,7 @@ vim.keymap.set("n", "<Leader>;", "@:", { desc = "Repeat last :command" })
 vim.keymap.set("n", "<Leader><", '<Cmd>exe "vertical resize ".(winwidth(0) * 2/3)<CR>', { silent = true, desc = "Decrease window width to 2/3" })
 vim.keymap.set("n", "<Leader>>", '<Cmd>exe "vertical resize ".(winwidth(0) * 3/2)<CR>', { silent = true, desc = "Increase window width to 3/2" })
 vim.keymap.set("n", "<Leader>D", "<Cmd>%d<CR>", { desc = "Delete all text in buffer" })
-vim.keymap.set("n", "<Leader>E", "<C-W>z:cclose<CR>:lclose<CR>:helpclose<CR>", { desc = "Close preview windows" }) -- e.g. language server definitions
+vim.keymap.set("n", "<Leader>E", "<C-W>z:cclose<CR>:lclose<CR>:helpclose<CR>:Noice dismiss<CR>", { desc = "Close preview windows" }) -- e.g. language server definitions
 vim.keymap.set("n", "<Leader>F", ":grep ", { desc = "Search file contents for file" })
 vim.keymap.set("n", "<Leader>P", '"+P', { desc = "Paste from system clipboard before cursor" })
 vim.keymap.set("n", "<Leader>R", ":/ce <bar> up<Home>cfdo %s/", { desc = "Replace in all quickfix files" }) -- use after gr
