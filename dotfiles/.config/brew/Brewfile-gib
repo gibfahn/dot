@@ -48,6 +48,7 @@ brew "kubernetes-cli"                    # Manage your docker clusters with kube
 brew "lazygit"                           # Git TUI wrapper, has some staging niceties etc.
 brew "make"                              # GNU version of make.
 brew "moreutils"                         # GNU tools like parallel and sponge.
+brew "pkl"                               # Pkl config language (https://pkl-lang.org).
 brew "pipx"                              # Install Python binaries (https://pipx.pypa.io).
 brew "protobuf"                          # Serialization format.
 brew "pyenv"                             # Python version manager.
