@@ -1,0 +1,6 @@
+amends "pkl:settings"
+
+// Custom URL scheme to make gF work in Neovim.
+editor = (Editor) {
+  urlScheme = "%{path}:%{line}:%{column}"
+}
