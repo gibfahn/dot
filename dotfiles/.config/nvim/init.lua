@@ -171,32 +171,24 @@ require("lazy").setup({
         },
       },
     },
+    -- See available extras at <http://www.lazyvim.org/extras>.
 
-    -- { import = "lazyvim.plugins.extras.coding.yanky" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/coding/yanky.lua>
-    { import = "lazyvim.plugins.extras.dap.core" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/dap/core.lua>
-    -- { import = "lazyvim.plugins.extras.dap.nlua" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/dap/nlua.lua>
-    { import = "lazyvim.plugins.extras.editor.navic" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/editor/navic.lua>
-    { import = "lazyvim.plugins.extras.formatting.black" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/formatting/black.lua>
-    { import = "lazyvim.plugins.extras.formatting.prettier" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/formatting/prettier.lua>
-    -- { import = "lazyvim.plugins.extras.lang.clangd" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/lang/clangd.lua>
-    -- { import = "lazyvim.plugins.extras.lang.cmake" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/lang/cmake.lua>
-    { import = "lazyvim.plugins.extras.lang.docker" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/lang/docker.lua>
-    { import = "lazyvim.plugins.extras.lang.go" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/lang/go.lua>
-    { import = "lazyvim.plugins.extras.lang.java" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/lang/java.lua>
-    { import = "lazyvim.plugins.extras.lang.json" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/lang/json.lua>
-    { import = "lazyvim.plugins.extras.lang.markdown" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/lang/markdown.lua>
-    -- { import = "lazyvim.plugins.extras.lang.python" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/lang/python.lua>
-    -- { import = "lazyvim.plugins.extras.lang.ruby" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/lang/ruby.lua>
-    { import = "lazyvim.plugins.extras.lang.rust" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/lang/rust.lua>
-    -- { import = "lazyvim.plugins.extras.lang.tex" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/lang/tex.lua>
-    -- { import = "lazyvim.plugins.extras.lang.typescript" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/lang/typescript.lua>
-    { import = "lazyvim.plugins.extras.lang.yaml" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/lang/yaml.lua>
-    { import = "lazyvim.plugins.extras.lsp.none-ls" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/lsp/none-ls.lua>
-    { import = "lazyvim.plugins.extras.test.core" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/test/core.lua>
-    -- { import = "lazyvim.plugins.extras.ui.alpha" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/ui/alpha.lua>
-    -- { import = "lazyvim.plugins.extras.ui.edgy" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/ui/edgy.lua>
-    { import = "lazyvim.plugins.extras.util.mini-hipatterns" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/util/mini-hipatterns.lua>
-    -- { import = "lazyvim.plugins.extras.vscode" }, -- <https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/vscode.lua>
+    { import = "lazyvim.plugins.extras.dap.core" }, -- Debug adaptor protocol
+    { import = "lazyvim.plugins.extras.editor.mini-diff" }, -- Visualise git diff.
+    { import = "lazyvim.plugins.extras.editor.navic" }, -- Show function, class, etc in the statusline
+    { import = "lazyvim.plugins.extras.formatting.black" }, -- Python black formatter
+    { import = "lazyvim.plugins.extras.formatting.prettier" }, -- JS/Markdown prettier formatter
+    { import = "lazyvim.plugins.extras.lang.docker" }, -- Docker linting
+    { import = "lazyvim.plugins.extras.lang.go" }, -- Golang
+    { import = "lazyvim.plugins.extras.lang.java" }, -- Java
+    { import = "lazyvim.plugins.extras.lang.json" }, -- JSON
+    { import = "lazyvim.plugins.extras.lang.markdown" }, -- Markdown
+    { import = "lazyvim.plugins.extras.lang.rust" }, -- Rust
+    { import = "lazyvim.plugins.extras.lang.yaml" }, -- Yaml
+    { import = "lazyvim.plugins.extras.lsp.none-ls" }, -- Other langservers
+    { import = "lazyvim.plugins.extras.test.core" }, -- Run tests from within neovim (e.g. rust tests).
+    { import = "lazyvim.plugins.extras.util.dot" }, -- Shell linting (shfmt and shellcheck) and syntax highlighting.
+    { import = "lazyvim.plugins.extras.util.mini-hipatterns" }, -- Adds some highlighting patterns for things.
 
     { import = "plugins" }, -- Everything in ~/.config/nvim/lua/plugins/
   },
@@ -246,7 +238,6 @@ vim.keymap.set("n", "<A-C>", vim.diagnostic.goto_prev, { desc = "Prev Diagnostic
 vim.keymap.set("n", "<A-Down>", "<cmd>m .+1<cr>==", { desc = "Move line down" })
 vim.keymap.set("n", "<A-E>", "<cmd>resize -1<cr>", { desc = "Decrease window height" })
 vim.keymap.set("n", "<A-Enter>", vim.lsp.codelens.run, { noremap = false, desc = "CodeLens actions" })
-vim.keymap.set("n", "<A-G>", function() require("gitsigns").prev_hunk() end, { noremap = false, desc = "Prev changed git hunk" })
 vim.keymap.set("n", "<A-H>", "<cmd>vertical resize -1<cr>", { desc = "Decrease window width" })
 vim.keymap.set("n", "<A-I>", "<cmd>vertical resize +1<cr>", { desc = "Increase window width" })
 vim.keymap.set("n", "<A-L>", "<Cmd>lprev<CR>", { desc = "Go to previous location list item" })
@@ -261,7 +252,6 @@ vim.keymap.set("n", "<A-Up>", "<cmd>m .-2<cr>==", { desc = "Move line up" })
 vim.keymap.set("n", "<A-c>", vim.diagnostic.goto_next, { desc = "Next Diagnostic" })
 vim.keymap.set("n", "<A-d>", "<Cmd>tabclose<CR>", { desc = "Close tab" })
 vim.keymap.set("n", "<A-e>", "<C-w>k", { desc = "Switch up a window" })
-vim.keymap.set("n", "<A-g>", function() require("gitsigns").next_hunk() end, { noremap = false, desc = "Prev changed git hunk" })
 vim.keymap.set("n", "<A-h>", "<C-w>h", { desc = "Switch left a window," })
 vim.keymap.set("n", "<A-i>", "<C-w>l", { desc = "Switch right a window" })
 vim.keymap.set("n", "<A-l>", "<Cmd>lnext<CR>", { desc = "Go to next location list item" })
@@ -304,7 +294,6 @@ vim.keymap.set("n", "<Leader>e", "<C-w>q", { desc = "Close current split" }) -- 
 vim.keymap.set("n", "<Leader>fx", '<Cmd>grep -F "XXX(gib)"<CR>', { desc = "Search for XXX comments" })
 vim.keymap.set("n", "<Leader>gG", ":Resolve<CR>|:Gcd<CR>", { desc = "Chdir to root of git directory current file is in" })
 vim.keymap.set("n", "<Leader>gQ", "<Cmd>set fo+=t<CR><Cmd>set fo?<CR>", { desc = "Auto-add newline for long lines" })
-vim.keymap.set("n", "<Leader>gb", "<Cmd>GBrowse!<CR>", { desc = "Copy github URL" })
 vim.keymap.set("n", "<Leader>gc", "<Cmd>cd %:p:h<CR>", { desc = "Change to current file's dirname" }) -- e.g. for <space>f, :e
 vim.keymap.set("n", "<Leader>gd", "<Cmd>DiffOrig<CR>", { desc = "Diff between saved file and buffer" })
 vim.keymap.set("n", "<Leader>gf", "<Cmd>call DupBuffer()<CR>gF", { desc = "Open path:row:col in last window" })
@@ -313,6 +302,7 @@ vim.keymap.set("n", "<Leader>gn", "<Cmd>set number!<CR>", { desc = "Toggle line 
 vim.keymap.set("n", "<Leader>gp", "`[v`]", { desc = "Visually select last copied/pasted text" })
 vim.keymap.set("n", "<Leader>gq", "<Cmd>set fo-=t<CR><Cmd>set fo?<CR>", { desc = "Don't auto-add newline for long lines" })
 vim.keymap.set("n", "<Leader>gt", "<Cmd>set et!<CR>:set et?<CR>", { desc = "Toggle tabs/spaces" })
+vim.keymap.set("n", "<Leader>gu", "<Cmd>GBrowse!<CR>", { desc = "Copy github URL" })
 vim.keymap.set("n", "<Leader>ht", "ITODO(gib): <Esc>gcc$", { desc = "Insert a TODO" }) -- Write todo, then `<Space>ht`
 vim.keymap.set("n", "<Leader>hx", "IXXX(gib): <Esc>gcc$", { desc = "Insert an XXX" }) -- Write todo, then `<Space>hx`
 vim.keymap.set("n", "<Leader>i", "<Cmd>vsp<CR><C-w>h:bp<CR>", { desc = "Open vertical split" })
@@ -330,6 +320,7 @@ vim.keymap.set("n", "<Leader>y", '"+y', { desc = "Copy to clipboard" })
 vim.keymap.set("n", "<Leader>z", "za", { desc = "Fold current line" })
 vim.keymap.set("n", "<S-Tab>", "<Cmd>bp<CR>", { desc = "Go to previous buffer" })
 vim.keymap.set("n", "<Tab>", "<Cmd>bn<CR>", { desc = "Go to next buffer" })
+vim.keymap.set("n", "<leader>gb", function() require("lazyvim.util").lazygit.blame_line() end, { desc = "Git Blame Line" })
 vim.keymap.set("n", "<leader>gl", "<Cmd>LazyGit<CR>", { desc = "Lazygit" })
 vim.keymap.set("n", "<leader>lL", function() require("lazyvim.util").news.changelog() end, { desc = "LazyVim Changelog" })
 vim.keymap.set("n", "<leader>uF", function() require("lazyvim.util").format.toggle(true) end, { desc = "Toggle auto format (buffer)" })
@@ -366,7 +357,7 @@ vim.keymap.set("v", "//", [[y/\V<C-r>=escape(@",'/\')<CR><CR>]], { desc = "Searc
 vim.keymap.set("v", "<A-Down>", ":m '>+1<cr>gv=gv", { desc = "Move line down" })
 vim.keymap.set("v", "<A-Up>", ":m '<-2<cr>gv=gv", { desc = "Move line up" })
 vim.keymap.set("v", "<Leader>d", '"+d', { desc = "Cut from clipboard (visual mode)" })
-vim.keymap.set("v", "<Leader>gb", ":GBrowse!<CR>", { desc = "Copy github URL" })
+vim.keymap.set("v", "<Leader>gu", ":GBrowse!<CR>", { desc = "Copy github URL" })
 vim.keymap.set("v", "<Leader>p", '"+p', { desc = "Paste from clipboard" })
 vim.keymap.set("v", "<Leader>y", '"+y', { desc = "Copy from clipboard" })
 vim.keymap.set("v", "g//", [[y/\V<C-R>=&ic?'\c':'\C'<CR><C-r>=escape(@",'/\')<CR><CR>]], { desc = "Search for selected text case-insensitively" })

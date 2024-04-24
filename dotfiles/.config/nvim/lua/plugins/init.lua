@@ -94,6 +94,20 @@ return {
   },
 
   {
+    "echasnovski/mini.diff", -- visualise git diffs, stage/reset/delete hunks, jump between hunks.
+    opts = { -- https://github.com/echasnovski/mini.diff?tab=readme-ov-file#default-config
+      mappings = {
+        goto_prev = "<A-G>",
+        goto_next = "<A-g>",
+      },
+      options = {
+        -- Whether to wrap around edges during hunk navigation
+        wrap_goto = true,
+      },
+    },
+  },
+
+  {
     "echasnovski/mini.operators", -- operators like `gsip` to sort current paragraph
     opts = {
       -- Replace text with register
