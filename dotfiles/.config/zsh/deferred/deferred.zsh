@@ -472,9 +472,13 @@ zle -N gib-fzf-history-widget
 
 # " Fake quote for syntax highlighting plugin issue.
 
-# Copy whole buffer to system clipboard.
+# Copy whole buffer to system clipboard, or if nothing in buffer copy current $PWD.
 gib-yank-all() {
-  printf "%s" "$BUFFER" | "${aliases[cpy]}"
+  if [[ -z "$BUFFER" ]]; then
+    printf "%s" "$PWD" | "${aliases[cpy]}"
+  else
+    printf "%s" "$BUFFER" | "${aliases[cpy]}"
+  fi
 }
 zle -N gib-yank-all
 
