@@ -398,6 +398,28 @@ return {
             },
           },
         },
+
+        yamlls = {
+          settings = {
+            yaml = {
+              schemas = {
+                ["https://github.com/gibfahn/up-rs/releases/latest/download/up-task-schema.json"] = "**/up/tasks/*.yaml",
+              },
+            },
+          },
+          on_new_config = function(new_config)
+            new_config.settings.yaml.schemas = vim.tbl_deep_extend(
+              "force",
+              new_config.settings.yaml.schemas or {},
+              require("schemastore").yaml.schemas({
+                ignore = {
+                  -- Conflicts with tasks schema above.
+                  "Ansible Tasks File",
+                },
+              })
+            )
+          end,
+        },
       },
     },
   },

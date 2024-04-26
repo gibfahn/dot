@@ -1,5 +1,3 @@
-# yaml-language-server: $schema=https://does-not-yet-exist.json
-
 # Login Items that should be added to System Preferences -> Users & Groups -> Login Items
 run_if_cmd: ["/bin/sh", "-cex", '[ "$(uname)" = Darwin ] || exit 204']
 
