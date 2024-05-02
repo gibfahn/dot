@@ -20,6 +20,7 @@ tap "gibfahn/tap", "https://github.com/gibfahn/homebrew-tap" # My personal tap f
 # cask "grandperspective"                  # Alternative to disk-inventory-x, shows disk space usage.
 brew "bat"                               # Nicer cat with syntax highlighting etc.
 brew "binutils"                          # GNU versions of tools for interacting with binaries (nm, strings etc).
+brew "black"                             # Python code formatter.
 brew "bob"                               # Neovim version manager.
 brew "buildifier"                        # Bazel code formatter.
 brew "buildozer"                         # Automatically apply fixes to bazel files.
@@ -48,10 +49,12 @@ brew "kubernetes-cli"                    # Manage your docker clusters with kube
 brew "lazygit"                           # Git TUI wrapper, has some staging niceties etc.
 brew "make"                              # GNU version of make.
 brew "moreutils"                         # GNU tools like parallel and sponge.
-brew "pkl"                               # Pkl config language (https://pkl-lang.org).
+brew "mypy"                              # Python code typechecker.
 brew "pipx"                              # Install Python binaries (https://pipx.pypa.io).
+brew "pkl"                               # Pkl config language (https://pkl-lang.org).
 brew "protobuf"                          # Serialization format.
 brew "pyenv"                             # Python version manager.
+brew "pylint"                            # Python code linter.
 brew "ruby"                              # Newer version of Ruby.
 brew "shellcheck"                        # Linter for bash.
 brew "shfmt"                             # Shell script formatter.
