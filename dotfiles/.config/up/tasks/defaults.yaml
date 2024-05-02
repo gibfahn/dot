@@ -593,6 +593,18 @@ data:
     # Paste when you hit the Enter key
     # Settings > Behavior > Paste Automatically
     pasteByDefault: true
+    # Set image preview height to max (max: 200).
+    imageMaxHeight: 200
+    # Show this many chars of the text in the list (max: 200)
+    maxMenuItemLength: 200
+    # Show all menu items.
+    maxMenuItems: 0
+    # Popup window in center of window rather than at cursor.
+    popupPosition: center
+    # Popup window in currently-active window.
+    popupScreen: 0
+    # Delay in ms before showing the preview (min: 200)
+    previewDelay: 200
 
   com.apple.universalaccess:
     # System Settings > Accessibility > Zoom > Use scroll gesture with modifer keys to zoom > Enabled
