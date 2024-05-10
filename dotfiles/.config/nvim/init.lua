@@ -292,6 +292,7 @@ vim.keymap.set("n", "<Leader>cd", vim.diagnostic.open_float, { desc = "Line Diag
 vim.keymap.set("n", "<Leader>cq", '<Cmd>cexpr getreg("+")<CR>', { desc = "Open clipboard in Quickfix" })
 vim.keymap.set("n", "<Leader>e", "<C-w>q", { desc = "Close current split" }) -- keeps buffer
 vim.keymap.set("n", "<Leader>fx", '<Cmd>grep -F "XXX(gib)"<CR>', { desc = "Search for XXX comments" })
+vim.keymap.set("n", "<Leader>g/", [[/^\(|||||||\|=======\|>>>>>>>\|<<<<<<<\)<CR>]], { desc = "Search for conflict markers" })
 vim.keymap.set("n", "<Leader>gG", ":Resolve<CR>|:Gcd<CR>", { desc = "Chdir to root of git directory current file is in" })
 vim.keymap.set("n", "<Leader>gQ", "<Cmd>set fo+=t<CR><Cmd>set fo?<CR>", { desc = "Auto-add newline for long lines" })
 vim.keymap.set("n", "<Leader>gc", "<Cmd>cd %:p:h<CR>", { desc = "Change to current file's dirname" }) -- e.g. for <space>f, :e

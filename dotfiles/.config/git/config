@@ -218,6 +218,9 @@
 [apply]
   whitespace = fix # Fix whitespace when applying patches.
 
+[branch]
+  sort = -committerdate # Sort branches by date they were last committed to.
+
 [clone]
   defaultRemoteName = "up"
 
@@ -285,25 +288,27 @@
 
 [fetch]
   prune = true             # Delete local tracking branches if remote is gone.
+  prunetags = true         # Delete local tracking tags if remote is gone.
   fsckObjects = true
   writeCommitGraph = true  # Cache commit graph to speed up graph log / push operations on fetch.
 [format]
   pretty = fuller          # Shows author and committer.
 [help]
-  autocorrect = 1          # Autocorrect nonexistant commands after 0.1s.
+  autocorrect = prompt     # Prompt to autocorrect nonexistent commands after 0.1s.
 [init]
   defaultBranch = main     # Use 'main' as the default branch when you `git init`.
 [interactive]
   singleKey = true       # Don't require Enter to confirm, e.g. for `git add -p` press y not y⏎.
 [log]
   follow = true            # Log tracks file move/rename.
+  date = iso               # Display dates as ISO-8601 (`2023-05-25 13:54:51` instead of `Thu May 25 13:54:51 2023`)
 [merge]
   conflictstyle = zdiff3   # Show common ancestor in diffs (initially confusing, but very helpful).
-  tool = vimdiff           # Use vimdiff (actually neovim's vimdiff) to view and fix merge conflicts (instead of `g mc`).
+  tool = nvimdiff           # Use vimdiff (actually neovim's vimdiff) to view and fix merge conflicts (instead of `g mc`).
 [mergetool]
   prompt = false           # Don't confirm that I want to open the difftool every time.
-[mergetool "vimdiff"]
-  cmd = nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+  keepBackup = false       # Don't save original file with conflict markers with .orig extension.
+  writeToTemp = true       # Write temporary BASE, LOCAL, and REMOTE versions of conflicting files to tempdir not worktree.
 [protocol]
   version = 2              # https://github.blog/changelog/2018-11-08-git-protocol-v2-support/.
 [pull]
@@ -313,6 +318,7 @@
 [rebase]
   autosquash = true        # Squash/fixup commits starting with squash!/fixup! + commit subject.
   missingCommitsCheck = warn # Print a warning if a rebase removes commits.
+  updateRefs = true        # Allow rebasing a stack of branches at the same time.
 [receive]
   fsckObjects = true
 [remote]
