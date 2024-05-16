@@ -353,6 +353,35 @@ return {
     },
   },
 
+  {
+    "mrcjkb/rustaceanvim",
+    opts = {
+      server = {
+        default_settings = {
+          -- rust-analyzer language server configuration
+          ["rust-analyzer"] = {
+            -- https://github.com/rust-analyzer/rust-analyzer/issues/3627
+            rustfmt = {
+              extraArgs = { "+nightly" },
+            },
+            -- Docs: https://github.com/fannheyward/coc-rust-analyzer#configurations
+            check = {
+              -- If your client supports the colorDiagnosticOutput experimental capability, you can use --message-format=json-diagnostic-rendered-ansi.
+              overrideCommand = {
+                "cargo",
+                "+nightly",
+                "clippy",
+                "--workspace",
+                "--message-format=json",
+                "--all-targets",
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+
   { "mtdl9/vim-log-highlighting", ft = "log" }, -- Log file syntax highlighting.
 
   { "mzlogin/vim-markdown-toc", ft = "markdown", cmd = "GenTocGFM" }, -- Markdown Table of Contents.
@@ -363,28 +392,6 @@ return {
     "neovim/nvim-lspconfig", -- Configure language servers.
     opts = {
       servers = {
-        rust_analyzer = {
-          settings = {
-            ["rust-analyzer"] = {
-              -- https://github.com/rust-analyzer/rust-analyzer/issues/3627
-              rustfmt = {
-                extraArgs = { "+nightly" },
-              },
-              -- Docs: https://github.com/fannheyward/coc-rust-analyzer#configurations
-              check = {
-                -- If your client supports the colorDiagnosticOutput experimental capability, you can use --message-format=json-diagnostic-rendered-ansi.
-                overrideCommand = {
-                  "cargo",
-                  "+nightly",
-                  "clippy",
-                  "--workspace",
-                  "--message-format=json",
-                  "--all-targets",
-                },
-              },
-            },
-          },
-        },
         -- https://github.com/rcjsuen/dockerfile-language-server?tab=readme-ov-file#language-server-settings
         dockerls = {
           settings = {
