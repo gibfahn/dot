@@ -6,7 +6,6 @@ return {
   -- Disable lazyvim plugins I don't use.
   -- https://www.lazyvim.org/configuration/plugins#-disabling-plugins
   { "catppuccin", enabled = false }, -- I have my own colorscheme.
-  { "echasnovski/mini.surround", enabled = false }, -- I use kylechui/nvim-surround instead.
   { "folke/persistence.nvim", enabled = false }, -- I don't use sessions.
   { "folke/tokyonight.nvim", enabled = false }, -- I have my own colorscheme.
   { "lukas-reineke/headlines.nvim", enabled = false }, -- Don't need fancy markdown highlighting.

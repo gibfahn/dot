@@ -173,6 +173,7 @@ require("lazy").setup({
     },
     -- See available extras at <http://www.lazyvim.org/extras>.
 
+    { import = "lazyvim.plugins.extras.coding.mini-ai" }, -- Better text-objects.
     { import = "lazyvim.plugins.extras.dap.core" }, -- Debug adaptor protocol
     { import = "lazyvim.plugins.extras.editor.mini-diff" }, -- Visualise git diff.
     { import = "lazyvim.plugins.extras.editor.navic" }, -- Show function, class, etc in the statusline
@@ -187,6 +188,7 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.lang.yaml" }, -- Yaml
     { import = "lazyvim.plugins.extras.lsp.none-ls" }, -- Other langservers
     { import = "lazyvim.plugins.extras.test.core" }, -- Run tests from within neovim (e.g. rust tests).
+    { import = "lazyvim.plugins.extras.ui.mini-indentscope" }, -- Active indent guide and indent text objects.
     { import = "lazyvim.plugins.extras.util.dot" }, -- Shell linting (shfmt and shellcheck) and syntax highlighting.
     { import = "lazyvim.plugins.extras.util.mini-hipatterns" }, -- Adds some highlighting patterns for things.
 
@@ -260,7 +262,7 @@ vim.keymap.set("n", "<A-q>", "<Cmd>cnext<CR>", { desc = "Go to next quickfix ite
 vim.keymap.set("n", "<A-r>", function() require("trouble").next({skip_groups = true, jump = true}) end, { desc = "Go to next Trouble item" })
 vim.keymap.set("n", "<A-s>", "]s", { desc = "Go to next spelling mistake" })
 vim.keymap.set("n", "<A-t>", "<Cmd>tabnext<CR>", { desc = "Go to next tab" })
-vim.keymap.set("n", "<A-x>", function(n) require("mini.bufremove").delete(n, false) end, { desc = "Close current buffer", noremap = false })
+vim.keymap.set("n", "<A-x>", function(n) require("lazyvim.util").ui.bufremove(n, false) end, { desc = "Delete buffer", noremap = false })
 vim.keymap.set("n", "<A-z>", "<Cmd>Zi<CR>", { desc = "Switch to different directory" })
 vim.keymap.set("n", "<C-p>", "<C-i>", { desc = "Go to next jump" }) -- <C-o> = go to previous jump, <C-p> is go to next (normally <C-i>, but that == Tab, used above)
 vim.keymap.set("n", "<Leader>+", '<Cmd>exe "resize ".(winheight(0) * 3/2)<CR>', { silent = true, desc = "Increase window height to 3/2" })
