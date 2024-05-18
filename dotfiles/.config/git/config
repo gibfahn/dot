@@ -9,7 +9,6 @@
   code-changes = "!git log --format=format: --name-only | egrep -v '^$' | sort | uniq -c | sort -rg | head -${1:-10} #" # Show $1 most changed files.
   default-branch = "!(git symbolic-ref --short refs/remotes/$1/HEAD || { git remote set-head --auto $1 && git symbolic-ref --short refs/remotes/$1/HEAD; }) | sed \"s|^$1/||\" #" # Default branch for remote. `g default-branch up` -> master
   head-branch = symbolic-ref --short HEAD # e.g. master.
-  lfs-setup = "! git config core.hooksPath .git/hooks && git lfs install --local && git lfs fetch && git lfs checkout #" # Set up local git-lfs.
   up-remote-branch = "!git rev-parse --abbrev-ref --symbolic-full-name @{u}" # e.g. origin/master.
   up-remote = "!git rev-parse --abbrev-ref --symbolic-full-name @{u} | cut -d '/' -f 1" # e.g. origin.
   up-branch = "!git rev-parse --abbrev-ref --symbolic-full-name @{u} | cut -d '/' -f 2-" # e.g. master.
@@ -108,6 +107,15 @@
   la  = log --graph --decorate --oneline --all                          # Graph log of all commits.
   las = log --graph --decorate --oneline --all --simplify-by-decoration # Graph log of tag/branch/labelled commits.
   ll  = log --color --graph --pretty=format:'%C(214)%h%C(reset)%C(196)%d%C(reset) %s %C(35)(%ci)%C(27) <%an>%C(reset)'
+
+  # Setting `core.hooksPath` (to have personal hooks in dotfiles) as I do elsewhere in this file
+  # makes git-lfs write its hooks in there. And git doesn't support multiple hook directories. This
+  # means if you `git lfs install`, you get lfs setup in your global hooks, thus applied to every
+  # repo, which causes errors in e.g. brew repos. Workaround is to locally set core.hooksPath to
+  # .git/hooks in the repo's .git/config when you want to use git-lfs in a repo. This unfortunately
+  # means your global hooks will no longer apply in this repo.
+  lfs-install = "! git config core.hooksPath .git/hooks && git lfs install --local && git lfs fetch && git lfs checkout #" # Set up local git-lfs.
+
   # Interactive log of $@.
   li = "!git log --graph --color=always --format=\"%C(auto)%h%d %s %C(black)%C(bold)<%an> %ci%C(auto)\" \"$@\" \
     | fzf --ansi -m --no-sort --reverse --tiebreak=index \
@@ -256,7 +264,7 @@
 
 [core]
   pager = delta # Uses the theme from the BAT_THEME env var.
-  # To use local hooks, run: `git config core.hooksPath .git/hooks`
+  # To use git lfs with this, see `lfs-install` in this file.
   hooksPath = "~/.config/git/hooks" # Put global git hooks here.
   # Below is disabled because it doesn't seem to work properly.
   # commentChar = auto # Allow editing commits that didn't use '#' as the comment character.
