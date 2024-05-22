@@ -173,7 +173,6 @@ require("lazy").setup({
     },
     -- See available extras at <http://www.lazyvim.org/extras>.
 
-    { import = "lazyvim.plugins.extras.coding.mini-ai" }, -- Better text-objects.
     { import = "lazyvim.plugins.extras.dap.core" }, -- Debug adaptor protocol
     { import = "lazyvim.plugins.extras.editor.mini-diff" }, -- Visualise git diff.
     { import = "lazyvim.plugins.extras.editor.navic" }, -- Show function, class, etc in the statusline
