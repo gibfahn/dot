@@ -40,7 +40,8 @@ remap_gib() {
   # Apple Keyboards.
   # ISO_BACKSLASH becomes GRAVE_TILDE
   # GRAVE_TILDE becomees hyper
-  /usr/bin/hidutil property --matching '[{"VendorID":0x5ac},{"VendorID":0x0,"ProductID":0x0},{"VendorID":0x4c}]' --set "{\"UserKeyMapping\":[
+  # `{"PrimaryUsagePage":1,"PrimaryUsage":6}` means the built-in keyboard.
+  /usr/bin/hidutil property --matching '[{"VendorID":0x5ac},{"PrimaryUsagePage":1,"PrimaryUsage":6},{"VendorID":0x4c}]' --set "{\"UserKeyMapping\":[
   {$FROM: $CAPS_LOCK,             $TO: $LEFT_SHIFT},
   {$FROM: $LEFT_SHIFT,             $TO: $LEFT_CTRL},
   {$FROM: $GRAVE_TILDE,             $TO: $F17},
