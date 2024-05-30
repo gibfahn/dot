@@ -271,7 +271,7 @@ return {
         normal_cur = "yss",
         normal_line = "yZ",
         normal_cur_line = "yZZ",
-        visual = "s",
+        visual = "z",
         visual_line = "gz",
         delete = "ds",
         change = "cs",
