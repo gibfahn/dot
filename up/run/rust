@@ -24,21 +24,21 @@ if ! exists rustup || ! exists cargo; then # Install/set up rust.
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | RUSTUP_HOME="$XDG_DATA_HOME"/rustup CARGO_HOME="$XDG_DATA_HOME"/cargo sh -s -- -y --no-modify-path
 
   export PATH="$XDG_DATA_HOME/cargo/bin:$PATH"
-
-  # Install stable and nightly.
-  rustup install nightly
-  rustup install stable # Should be a no-op.
-
-  # Install ARM64 Darwin toolchain.
-  rustup target add x86_64-apple-darwin
-  rustup target add aarch64-apple-darwin
-
-  # Make sure we have useful components:
-  rustup component add --toolchain stable rust-analysis rust-src clippy rustfmt
-  rustup component add --toolchain nightly rust-analysis rust-src clippy rustfmt
-else
-  rustup update
 fi
+
+# Install stable and nightly.
+rustup install nightly
+rustup install stable # Should be a no-op.
+
+# Install ARM64 Darwin toolchain.
+rustup target add x86_64-apple-darwin
+rustup target add aarch64-apple-darwin
+
+# Make sure we have useful components:
+rustup component add --toolchain stable rust-src clippy rustfmt rust-analyzer
+rustup component add --toolchain nightly rust-src clippy rustfmt rust-analyzer
+
+rustup update
 
 # Set default toolchain to stable.
 rustup default stable
