@@ -148,8 +148,7 @@ clean_fork() {
 
 # Usage: exit message [rc]
 error() {
-  # printf "${fg[red]}Error:${reset_color} %s\n" "$1"
-  echo -e "${fg[red]}Error:${reset_color} $1"
+  echo -e "${fg[red]}Error:${reset_color} $1" >&2
   exit "${2:-1}"
 }
 
