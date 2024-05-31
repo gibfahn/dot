@@ -194,8 +194,6 @@
   stm = "!git stash push -m \"$(</dev/null vipe)\" #"
   stp = stash pop
   std = stash drop
-  sw  = switch # New way to checkout branches.
-  su  = "!git switch -c $1 && git btu ${2:-up/$(git default-branch up)} #" # Create new PR branch $1, pulls from upstream, pushes to fork (due to remote.pushDefault).
 
   sm   = submodule                             # For when you get bored of typing the word "submodule"
   sme  = submodule foreach                     # Run a command in all submodules, e.g. `g sme git status`, can be used recursively.

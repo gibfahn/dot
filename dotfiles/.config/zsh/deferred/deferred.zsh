@@ -372,13 +372,13 @@ _gib_git_f() {
     --preview 'git diff -- {-1} | delta' | cut -c4- | sed 's/.* -> //'
 }
 
-# Fzf git branches.
+# Fzf git branches (returns local branch name, not remote one).
 _gib_git_b() {
   git branch -a --color=always --sort=committerdate --sort=-refname:rstrip=2 \
   | fzf "$@" --border --ansi --multi --tac --preview-window right:70% \
   --preview "git l --color=always \$(awk '{if (\$1 == \"*\") { print \$2 } else { print \$1 } }' <<< {})" \
   --bind "ctrl-o:execute: git li \$(awk '{if (\$1 == \"*\") { print \$2 } else { print \$1 } }' <<< {})" \
-  | awk '{if ($1 == "*") { print $2 } else { print $1 } }' | sed 's#^remotes/##'
+  | awk '{if ($1 == "*") { print $2 } else { print $1 } }' | sed -E 's#^remotes/[^/]+/##'
 }
 
 # Fzf git tags.

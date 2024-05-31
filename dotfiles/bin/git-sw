@@ -1,0 +1,66 @@
+#!/usr/bin/env zsh
+
+set -euo pipefail
+
+usage() {
+echo "$(tput bold; tput setaf 74)$ZSH_ARGZERO [-h|--help] $(tput sgr0)
+
+git sw: switch to a branch, or create it, setting the upstream correctly.
+"
+}
+
+main() {
+  [[ ${1:-} =~ ^(--help|-h)$ ]] && { usage; exit; }
+  [[ ${1:-} =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
+
+  # If --detach passed, just run the command directly.
+  if (($@[(Ie)-d])) || (($@[(Ie)--detach])); then
+    git switch $@
+    return
+  fi
+
+  local_branches=$(git branch --list | wc -l)
+  if (($@[(Ie)-c])) || (($@[(Ie)--create])) || (($@[(Ie)-C])) || (($@[(Ie)--force-create])); then
+    created=1
+    git switch $@
+  # If switching to the branch fails, assume we just created it
+  elif ! git switch $@ 2>/dev/null; then
+    created=1
+    git switch -c $@
+  fi
+  # If there are more branches now than there were before, we created a branch.
+  if [[ $local_branches != $(git branch --list | wc -l) ]]; then
+    created=1
+  fi
+
+  # If we just created the branch and it's based on a fork branch, then update
+  if [[ ${created:-} == 1 ]]; then
+    up_remote=$(up_remote || echo fork)
+    if [[ ${up_remote} == *fork* ]]; then
+      up_remote=$(up_remote_for_fork $up_remote)
+      git branch -u $(default_remote_branch $up_remote)
+    fi
+  fi
+
+}
+
+# Works out the up remote for the specified fork remote. I use `fork` for the fork of `up`,
+# otherwise I append `fork`, e.g. `pub` -> `pubfork`.
+up_remote_for_fork() {
+  if [[ $1 == fork ]]; then
+    echo up
+  else
+    echo ${1%fork}
+  fi
+}
+
+# Default branch for remote. `default_branch up` -> master
+default_remote_branch() {
+  git symbolic-ref --short refs/remotes/$1/HEAD || { git remote set-head --auto $1 && git symbolic-ref --short refs/remotes/$1/HEAD; }
+}
+
+up_remote() {
+  git rev-parse --abbrev-ref --symbolic-full-name @{u} | cut -d '/' -f 1
+}
+
+main $@
