@@ -184,7 +184,7 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.lang.json" }, -- JSON language support
     { import = "lazyvim.plugins.extras.lang.markdown" }, -- Markdown language support
     { import = "lazyvim.plugins.extras.lang.rust" }, -- Rust language support
-    { import = "lazyvim.plugins.extras.lang.toml" }, -- Rust language support
+    { import = "lazyvim.plugins.extras.lang.toml" }, -- Toml language support
     { import = "lazyvim.plugins.extras.lang.yaml" }, -- Yaml language support
     { import = "lazyvim.plugins.extras.lsp.none-ls" }, -- Other langservers
     { import = "lazyvim.plugins.extras.test.core" }, -- Run tests from within neovim (e.g. rust tests).

@@ -208,14 +208,18 @@ return {
   {
     "folke/trouble.nvim", -- better diagnostics list and others
     opts = {
-      position = "right", -- Open trouble windows on the right.
-      -- Use 1/3 of the nvim window width or 100, whichever is smaller.
-      width = math.min(math.floor(vim.api.nvim_win_get_width(0) / 3), 100), -- width of the list when position is left or right
-    },
-    keys = {
-      -- Swap these so we default to whole workspace diagnostics.
-      { "<leader>xX", "<cmd>TroubleToggle document_diagnostics<cr>", desc = "Document Diagnostics (Trouble)" },
-      { "<leader>xx", "<cmd>TroubleToggle workspace_diagnostics<cr>", desc = "Workspace Diagnostics (Trouble)" },
+      auto_open = true, -- Automatically open whene there are diagnostics.
+      auto_close = true, -- Automatically close when there are no more diagnostics.
+      focus = true, -- Automatically move focus to window when opened.
+      win = {
+        type = "split", -- Open in a real split you can jump to.
+        position = "right", -- Open trouble windows on the right.
+        size = {
+          -- Use 1/3 of the nvim window width or 100, whichever is smaller.
+          width = math.min(math.floor(vim.api.nvim_win_get_width(0) / 3), 100), -- width of the list when position is left or right
+          height = 0.8,
+        },
+      },
     },
   },
 
