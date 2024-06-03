@@ -110,6 +110,9 @@ end
 
 -- Fix markdown indentation settings (copied from lazyvim).
 vim.g.markdown_recommended_style = 0
+
+-- }}} Vim options
+
 -- {{{ Package Manager Setup
 -- variable that is only set if we're bootstrapping (Packer hasn't been installed).
 
@@ -217,6 +220,29 @@ require("lazy").setup({
 
 -- }}} Package Manager Setup
 
+-- {{{ Lua Functions
+
+function DupBuffer()
+  local pos = vim.fn.getpos(".")
+  local buff = vim.fn.bufnr("%") -- Save buffer number of current buffer.
+  vim.cmd("wincmd p") -- Change to previous buffer
+  vim.cmd("b " .. buff) -- Open saved buffer
+  vim.fn.setpos(".", pos) --  Set cursor position to what is was before.
+end
+
+-- Convert buffer to its realpath (resolving symlinks).
+-- https://github.com/tpope/vim-fugitive/pull/814#issuecomment-446767081
+function Resolve()
+  local current = vim.fn.expand("%") -- Full path of current buffer.
+  local resolved = vim.fn.resolve(current) -- realpath of current buffer.
+  if current ~= resolved then
+    vim.cmd("keepalt file " .. vim.fn.fnameescape(resolved))
+    vim.cmd("edit")
+  end
+end
+
+-- }}} Lua Functions
+
 -- {{{ Mappings
 --
 -- (see http://vim.wikia.com/wiki/Unused_keys for unused keys)
@@ -224,6 +250,7 @@ require("lazy").setup({
 -- Allow long lines here so I can sort mappings easily.
 -- stylua: ignore start
 
+-- Opens current buffer in previous split (at the same position but centered).
 vim.keymap.set("c", "<A-/>", "<C-R>=expand('%:p:h') . '/'<CR>", { desc = "Insert dirname of current file" })
 vim.keymap.set("i", ",", ",<c-g>u", { desc = "Set undo breakpoint on ," })
 vim.keymap.set("i", ".", ".<c-g>u", { desc = "Set undo breakpoint on ." })
@@ -253,29 +280,29 @@ vim.keymap.set("n", "<A-T>", "<Cmd>tabprev<CR>", { desc = "Prev tab" })
 vim.keymap.set("n", "<A-Up>", "<cmd>m .-2<cr>==", { desc = "Move line up" })
 vim.keymap.set("n", "<A-c>", vim.diagnostic.goto_next, { desc = "Next Diagnostic" })
 vim.keymap.set("n", "<A-d>", "<Cmd>tabclose<CR>", { desc = "Close tab" })
-vim.keymap.set("n", "<A-e>", "<C-w>k", { desc = "Switch up a window" })
-vim.keymap.set("n", "<A-h>", "<C-w>h", { desc = "Switch left a window," })
-vim.keymap.set("n", "<A-i>", "<C-w>l", { desc = "Switch right a window" })
+vim.keymap.set("n", "<A-e>", function() vim.cmd("wincmd k") end, { desc = "Switch up a window" })
+vim.keymap.set("n", "<A-h>", function() vim.cmd("wincmd h") end, { desc = "Switch left a window," })
+vim.keymap.set("n", "<A-i>", function() vim.cmd("wincmd l") end, { desc = "Switch right a window" })
 vim.keymap.set("n", "<A-l>", "<Cmd>lnext<CR>", { desc = "Go to next location list item" })
-vim.keymap.set("n", "<A-n>", "<C-w>j", { desc = "Switch down a window," })
+vim.keymap.set("n", "<A-n>", function() vim.cmd("wincmd j") end, { desc = "Switch down a window," })
 vim.keymap.set("n", "<A-q>", "<Cmd>cnext<CR>", { desc = "Go to next quickfix item" })
 vim.keymap.set("n", "<A-r>", function() require("trouble").next({skip_groups = true, jump = true}) end, { desc = "Go to next Trouble item" })
 vim.keymap.set("n", "<A-s>", "]s", { desc = "Go to next spelling mistake" })
 vim.keymap.set("n", "<A-t>", "<Cmd>tabnext<CR>", { desc = "Go to next tab" })
-vim.keymap.set("n", "<A-x>", function(n) require("lazyvim.util").ui.bufremove(n, false) end, { desc = "Delete buffer", noremap = false })
+vim.keymap.set("n", "<A-x>", function(n) require("lazyvim.util").ui.bufremove(n) end, { desc = "Delete buffer", noremap = false })
 vim.keymap.set("n", "<A-z>", "<Cmd>Zi<CR>", { desc = "Switch to different directory" })
 vim.keymap.set("n", "<C-p>", "<C-i>", { desc = "Go to next jump" }) -- <C-o> = go to previous jump, <C-p> is go to next (normally <C-i>, but that == Tab, used above)
 vim.keymap.set("n", "<Leader>+", '<Cmd>exe "resize ".(winheight(0) * 3/2)<CR>', { silent = true, desc = "Increase window height to 3/2" })
 vim.keymap.set("n", "<Leader>-", '<Cmd>exe "resize ".(winheight(0) * 2/3)<CR>', { silent = true, desc = "Reduce window height to 2/3" })
-vim.keymap.set("n", "<Leader>1", '<cmd>lua require("bufferline").go_to_buffer(1, true)<cr>', { silent = true, desc = "Go to 1st buffer" })
-vim.keymap.set("n", "<Leader>2", '<cmd>lua require("bufferline").go_to_buffer(2, true)<cr>', { silent = true, desc = "Go to 2nd buffer" })
-vim.keymap.set("n", "<Leader>3", '<cmd>lua require("bufferline").go_to_buffer(3, true)<cr>', { silent = true, desc = "Go to 3rd buffer" })
-vim.keymap.set("n", "<Leader>4", '<cmd>lua require("bufferline").go_to_buffer(4, true)<cr>', { silent = true, desc = "Go to 4th buffer" })
-vim.keymap.set("n", "<Leader>5", '<cmd>lua require("bufferline").go_to_buffer(5, true)<cr>', { silent = true, desc = "Go to 5th buffer" })
-vim.keymap.set("n", "<Leader>6", '<cmd>lua require("bufferline").go_to_buffer(6, true)<cr>', { silent = true, desc = "Go to 6th buffer" })
-vim.keymap.set("n", "<Leader>7", '<cmd>lua require("bufferline").go_to_buffer(7, true)<cr>', { silent = true, desc = "Go to 7th buffer" })
-vim.keymap.set("n", "<Leader>8", '<cmd>lua require("bufferline").go_to_buffer(8, true)<cr>', { silent = true, desc = "Go to 8th buffer" })
-vim.keymap.set("n", "<Leader>9", '<cmd>lua require("bufferline").go_to_buffer(-1, true)<cr>', { silent = true, desc = "Go to last buffer" })
+vim.keymap.set("n", "<Leader>1", function() require("bufferline").go_to(1, true) end, { silent = true, desc = "Go to 1st buffer" })
+vim.keymap.set("n", "<Leader>2", function() require("bufferline").go_to(2, true) end, { silent = true, desc = "Go to 2nd buffer" })
+vim.keymap.set("n", "<Leader>3", function() require("bufferline").go_to(3, true) end, { silent = true, desc = "Go to 3rd buffer" })
+vim.keymap.set("n", "<Leader>4", function() require("bufferline").go_to(4, true) end, { silent = true, desc = "Go to 4th buffer" })
+vim.keymap.set("n", "<Leader>5", function() require("bufferline").go_to(5, true) end, { silent = true, desc = "Go to 5th buffer" })
+vim.keymap.set("n", "<Leader>6", function() require("bufferline").go_to(6, true) end, { silent = true, desc = "Go to 6th buffer" })
+vim.keymap.set("n", "<Leader>7", function() require("bufferline").go_to(7, true) end, { silent = true, desc = "Go to 7th buffer" })
+vim.keymap.set("n", "<Leader>8", function() require("bufferline").go_to(8, true) end, { silent = true, desc = "Go to 8th buffer" })
+vim.keymap.set("n", "<Leader>9", function() require("bufferline").go_to(-1, true) end, { silent = true, desc = "Go to last buffer" })
 vim.keymap.set("n", "<Leader>;", "@:", { desc = "Repeat last :command" })
 vim.keymap.set("n", "<Leader><", '<Cmd>exe "vertical resize ".(winwidth(0) * 2/3)<CR>', { silent = true, desc = "Decrease window width to 2/3" })
 vim.keymap.set("n", "<Leader>>", '<Cmd>exe "vertical resize ".(winwidth(0) * 3/2)<CR>', { silent = true, desc = "Increase window width to 3/2" })
@@ -295,12 +322,13 @@ vim.keymap.set("n", "<Leader>cq", '<Cmd>cexpr getreg("+")<CR>', { desc = "Open c
 vim.keymap.set("n", "<Leader>e", "<C-w>q", { desc = "Close current split" }) -- keeps buffer
 vim.keymap.set("n", "<Leader>fx", '<Cmd>grep -F "XXX(gib)"<CR>', { desc = "Search for XXX comments" })
 vim.keymap.set("n", "<Leader>g/", [[/^\(|||||||\|=======\|>>>>>>>\|<<<<<<<\)<CR>]], { desc = "Search for conflict markers" })
-vim.keymap.set("n", "<Leader>gG", ":Resolve<CR>|:Gcd<CR>", { desc = "Chdir to root of git directory current file is in" })
+vim.keymap.set("n", "<Leader>gD", "<Cmd>DiffOrig<CR>", { desc = "Diff between saved file and buffer" })
+vim.keymap.set("n", "<Leader>gG", function() Resolve(); vim.cmd("Gcd") end, { desc = "Chdir to root of git directory current file is in" })
 vim.keymap.set("n", "<Leader>gQ", "<Cmd>set fo+=t<CR><Cmd>set fo?<CR>", { desc = "Auto-add newline for long lines" })
 vim.keymap.set("n", "<Leader>gc", "<Cmd>cd %:p:h<CR>", { desc = "Change to current file's dirname" }) -- e.g. for <space>f, :e
-vim.keymap.set("n", "<Leader>gd", "<Cmd>DiffOrig<CR>", { desc = "Diff between saved file and buffer" })
-vim.keymap.set("n", "<Leader>gf", "<Cmd>call DupBuffer()<CR>gF", { desc = "Open path:row:col in last window" })
-vim.keymap.set("n", "<Leader>gg", ":Resolve<CR>|:tab Git<CR>", { desc = "Open fugitive in a new tab" })
+vim.keymap.set("n", "<Leader>gd", function() DupBuffer(); require("telescope.builtin").lsp_definitions({ reuse_win = true }) end, { desc = "Go to definition in last window" })
+vim.keymap.set("n", "<Leader>gf", function() DupBuffer(); vim.api.nvim_feedkeys("gF", 'n', false) end, { desc = "Open path:row:col in last window" })
+vim.keymap.set("n", "<Leader>gg", function() Resolve(); vim.cmd("tab Git") end, { desc = "Open fugitive in a new tab" })
 vim.keymap.set("n", "<Leader>gn", "<Cmd>set number!<CR>", { desc = "Toggle line numbers" })
 vim.keymap.set("n", "<Leader>gp", "`[v`]", { desc = "Visually select last copied/pasted text" })
 vim.keymap.set("n", "<Leader>gq", "<Cmd>set fo-=t<CR><Cmd>set fo?<CR>", { desc = "Don't auto-add newline for long lines" })
@@ -351,10 +379,10 @@ vim.keymap.set("n", "]w", function() vim.diagnostic.goto_prev({severity = "WARN"
 vim.keymap.set("n", "n", "'Nn'[v:searchforward].'zv'", { expr = true, desc = "Next search result" }) -- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
 vim.keymap.set("o", "N", "'nN'[v:searchforward]", { expr = true, desc = "Prev search result" })
 vim.keymap.set("o", "n", "'Nn'[v:searchforward]", { expr = true, desc = "Next search result" })
-vim.keymap.set("t", "<A-e>", [[<C-\><C-n><C-w>k]], { desc = "Switch up a window" }) -- in terminal
-vim.keymap.set("t", "<A-h>", [[<C-\><C-n><C-w>h]], { desc = "Switch left a window" }) -- in terminal
-vim.keymap.set("t", "<A-i>", [[<C-\><C-n><C-w>l]], { desc = "Switch right a window" }) -- in terminal
-vim.keymap.set("t", "<A-n>", [[<C-\><C-n><C-w>j]], { desc = "Switch down a window" }) -- in terminal
+vim.keymap.set("t", "<A-e>", function() vim.cmd("wincmd k") end, { desc = "Switch up a window" }) -- in terminal
+vim.keymap.set("t", "<A-h>", function() vim.cmd("wincmd h") end, { desc = "Switch left a window" }) -- in terminal
+vim.keymap.set("t", "<A-i>", function() vim.cmd("wincmd l") end, { desc = "Switch right a window" }) -- in terminal
+vim.keymap.set("t", "<A-n>", function() vim.cmd("wincmd j") end, { desc = "Switch down a window" }) -- in terminal
 vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], { desc = "Go to normal mode" }) -- in terminal
 vim.keymap.set("v", "//", [[y/\V<C-r>=escape(@",'/\')<CR><CR>]], { desc = "Search for selected text" }) -- very no-magic mode, searches for exactly what you select
 vim.keymap.set("v", "<A-Down>", ":m '>+1<cr>gv=gv", { desc = "Move line down" })
@@ -418,36 +446,6 @@ vim.api.nvim_create_user_command("DiffOrig", function()
 end, {})
 
 -- }}} User Commands
-
--- {{{ Vimscript Commands and Functions
-vim.cmd([[
-  " Opens current buffer in previous split (at the same position but centered).
-  function! DupBuffer()
-    let pos = getpos(".") " Save cursor position.
-    let buff = bufnr('%') " Save buffer number of current buffer.
-    execute "normal! \<c-w>p:b " buff "\<CR>"| " Change to previous buffer and open saved buffer.
-    call setpos('.', pos) " Set cursor position to what is was before.
-  endfunction
-
-  " Convert buffer to its realpath (resolving symlinks).
-  " https://github.com/tpope/vim-fugitive/pull/814#issuecomment-446767081
-  function! s:Resolve() abort
-    let current = expand('%')
-    let resolved = resolve(current)
-    if current !~# '[\/][\/]' && current !=# resolved
-      silent execute 'keepalt file' fnameescape(resolved)
-      return 'edit'
-    endif
-    return ''
-  endfunction
-
-  command! W :execute ':silent w !sudo tee % > /dev/null' | :edit!| " :W writes as sudo.
-
-  " https://github.com/tpope/vim-fugitive/pull/814#issuecomment-446767081
-  command! -bar Resolve execute s:Resolve()
-]])
-
--- }}} Vimscript Commands and Functions
 
 -- {{{ Autocommands
 
