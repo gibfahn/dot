@@ -16,6 +16,11 @@ data:
   ~/Library/Preferences/ByHost/.GlobalPreferences.${UP_HARDWARE_UUID}.plist:
     # Enable Tap to Click for the current user.
     com.apple.mouse.tapBehavior: 1
+    # Fit more items in the menu bar.
+    # https://flaky.build/built-in-workaround-for-applications-hiding-under-the-macbook-pro-notch
+    # Apply with `ps -A | grep Core | awk '{ print $1 }' | xargs kill -9`
+    NSStatusItemSpacing: 6
+    NSStatusItemSelectionPadding: 12
 
   ~/Library/Preferences/ByHost/com.apple.ImageCapture.${UP_HARDWARE_UUID}.plist:
     # Prevent Photos from opening automatically when devices are plugged in
