@@ -320,6 +320,7 @@ vim.keymap.set("n", "<Leader>Z", [[&foldlevel ? 'zM' :'zR']], { expr = true, des
 vim.keymap.set("n", "<Leader>a", "@a", { desc = "Apply macro a" }) -- add with qa or yank to a reg with "ay
 vim.keymap.set("n", "<Leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
 vim.keymap.set("n", "<Leader>cq", '<Cmd>cexpr getreg("+")<CR>', { desc = "Open clipboard in Quickfix" })
+vim.keymap.set("n", "<Leader>cr", vim.lsp.buf.rename, { desc = "Rename" })
 vim.keymap.set("n", "<Leader>e", "<C-w>q", { desc = "Close current split" }) -- keeps buffer
 vim.keymap.set("n", "<Leader>fx", '<Cmd>grep -F "XXX(gib)"<CR>', { desc = "Search for XXX comments" })
 vim.keymap.set("n", "<Leader>g/", [[/^\(|||||||\|=======\|>>>>>>>\|<<<<<<<\)<CR>]], { desc = "Search for conflict markers" })
