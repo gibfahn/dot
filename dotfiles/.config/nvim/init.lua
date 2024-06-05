@@ -186,6 +186,7 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.lang.java" }, -- Java language support
     { import = "lazyvim.plugins.extras.lang.json" }, -- JSON language support
     { import = "lazyvim.plugins.extras.lang.markdown" }, -- Markdown language support
+    { import = "lazyvim.plugins.extras.lang.python" }, -- Python language support
     { import = "lazyvim.plugins.extras.lang.rust" }, -- Rust language support
     { import = "lazyvim.plugins.extras.lang.toml" }, -- Toml language support
     { import = "lazyvim.plugins.extras.lang.yaml" }, -- Yaml language support
