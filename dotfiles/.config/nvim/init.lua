@@ -403,6 +403,10 @@ vim.keymap.set("x", "p", "P") -- Don't overwrite clipboard when pasting over tex
 vim.keymap.set({ "i", "n" }, "<Esc>", "<cmd>noh<cr><Esc>", { desc = "Escape and clear hlsearch" })
 vim.keymap.set({ "i", "x", "n", "s" }, "<A-w>", "<cmd>w<cr><esc>", { desc = "Save file" })
 vim.keymap.set({ "n", "v", "i" }, "<A-Space>", vim.lsp.buf.code_action, { desc = "Code Action" })
+vim.keymap.set({ "n", "v", "i" }, "<S-ScrollWheelLeft>", "<S-ScrollWheelRight>", { desc = "Fix inverted horizontal scroll" })
+vim.keymap.set({ "n", "v", "i" }, "<S-ScrollWheelRight>", "<S-ScrollWheelLeft>", { desc = "Fix inverted horizontal scroll" })
+vim.keymap.set({ "n", "v", "i" }, "<ScrollWheelLeft>", "<ScrollWheelRight>", { desc = "Fix inverted horizontal scroll" })
+vim.keymap.set({ "n", "v", "i" }, "<ScrollWheelRight>", "<ScrollWheelLeft>", { desc = "Fix inverted horizontal scroll" })
 
 -- stylua: ignore end
 
