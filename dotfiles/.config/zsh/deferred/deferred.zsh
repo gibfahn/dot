@@ -433,30 +433,29 @@ _gib_path_run() {
 # Fzf with multi-select from https://github.com/junegunn/fzf/pull/2098
 # CTRL-R - Paste the selected command from history into the command line
 gib-fzf-history-widget() {
-  local selected num selected_line selected_line_arr
+  local selected num
   setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
-
-  # Read history lines (split on newline) into selected array.
-  selected=(
-    "${(@f)$(fc -rl 1 | awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, "", cmd); if (!seen[cmd]++) print $0 }' |
-    FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort,ctrl-z:ignore $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} -m" $(__fzfcmd))}"
-  )
+  # Ensure the associative history array, which maps event numbers to the full
+  # history lines, is loaded, and that Perl is installed for multi-line output.
+  if zmodload -F zsh/parameter p:history 2>/dev/null && (( ${#commands[perl]} )); then
+    # Read history line numbers (split on newline) into selected array.
+    selected=("${(@f)$(printf '%1$s\t%2$s\000' "${(vk)history[@]}" |
+      perl -0 -ne 'if (!$seen{(/^\s*[0-9]+\**\s+(.*)/, $1)}++) { s/\n/\n\t/gm; print; }' |
+      FZF_DEFAULT_OPTS=$(__fzf_defaults "" "-n2..,.. --scheme=history --bind=ctrl-r:toggle-sort --highlight-line ${FZF_CTRL_R_OPTS-} --query=${(qqq)LBUFFER} -m --read0") \
+      FZF_DEFAULT_OPTS_FILE='' $(__fzfcmd) --print0 | perl -0 -l012 -ne 'print((split("\t", $_))[0])')}")
+  else
+    selected=("${(@f)$(fc -rl 1 | awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, "", cmd); if (!seen[cmd]++) print $0 }' |
+      FZF_DEFAULT_OPTS=$(__fzf_defaults "" "-n2..,.. --scheme=history --bind=ctrl-r:toggle-sort --highlight-line ${FZF_CTRL_R_OPTS-} --query=${(qqq)LBUFFER} -m") \
+      FZF_DEFAULT_OPTS_FILE='' $(__fzfcmd) --print0 | perl -0 -l012 -ne 'print((split("\t", $_))[0])')}")
+  fi
   local ret=$?
-
-  # Remove empty elements, converting ('') to ().
-  selected=($selected)
   if [[ "${#selected[@]}" -ne 0 ]]; then
     local -a history_lines=()
-    for selected_line in "${selected[@]}"; do
-      # Split each history line on spaces, and take the 1st value (history line number).
-      selected_line_arr=($=selected_line)
-      num=$selected_line_arr[1]
-      if [[ -n "$num" ]]; then
-        # Add history at line $num to history_lines array.
-        zle vi-fetch-history -n $num
-        history_lines+=("$BUFFER")
-        BUFFER=
-      fi
+    for num in "${selected[@]}"; do
+      # Add history at line $num to history_lines array.
+      zle vi-fetch-history -n $num
+      history_lines+=("$BUFFER")
+      BUFFER=
     done
     # Set input buffer to newline-separated list of history lines.
     # Use echo to unescape, e.g. \n to newline, \t to tab.
@@ -464,7 +463,6 @@ gib-fzf-history-widget() {
     # Move cursor to end of buffer.
     CURSOR=$#BUFFER
   fi
-
   zle reset-prompt
   return $ret
 }
