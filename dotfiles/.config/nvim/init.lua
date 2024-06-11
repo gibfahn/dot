@@ -182,6 +182,7 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.formatting.black" }, -- Python black formatter
     { import = "lazyvim.plugins.extras.formatting.prettier" }, -- JS/Markdown prettier formatter
     { import = "lazyvim.plugins.extras.lang.docker" }, -- Dockerfile language support
+    { import = "lazyvim.plugins.extras.lang.git" }, -- Git config/commit/rebase/ignore/attribute file support
     { import = "lazyvim.plugins.extras.lang.go" }, -- Golang language support
     { import = "lazyvim.plugins.extras.lang.java" }, -- Java language support
     { import = "lazyvim.plugins.extras.lang.json" }, -- JSON language support
@@ -195,6 +196,7 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.ui.mini-indentscope" }, -- Active indent guide and indent text objects.
     { import = "lazyvim.plugins.extras.util.dot" }, -- Shell linting (shfmt and shellcheck) and syntax highlighting.
     { import = "lazyvim.plugins.extras.util.mini-hipatterns" }, -- Adds some highlighting patterns for things.
+    { import = "lazyvim.plugins.extras.util.octo" }, -- GitHub support.
 
     { import = "plugins" }, -- Everything in ~/.config/nvim/lua/plugins/
   },
@@ -251,7 +253,6 @@ end
 -- Allow long lines here so I can sort mappings easily.
 -- stylua: ignore start
 
--- Opens current buffer in previous split (at the same position but centered).
 vim.keymap.set("c", "<A-/>", "<C-R>=expand('%:p:h') . '/'<CR>", { desc = "Insert dirname of current file" })
 vim.keymap.set("i", ",", ",<c-g>u", { desc = "Set undo breakpoint on ," })
 vim.keymap.set("i", ".", ".<c-g>u", { desc = "Set undo breakpoint on ." })
@@ -353,6 +354,7 @@ vim.keymap.set("n", "<Leader>y", '"+y', { desc = "Copy to clipboard" })
 vim.keymap.set("n", "<Leader>z", "za", { desc = "Fold current line" })
 vim.keymap.set("n", "<S-Tab>", "<Cmd>bp<CR>", { desc = "Go to previous buffer" })
 vim.keymap.set("n", "<Tab>", "<Cmd>bn<CR>", { desc = "Go to next buffer" })
+vim.keymap.set("n", "<leader>gB", function() require("lazyvim.util").lazygit.browse() end, { desc = "Git Browse" })
 vim.keymap.set("n", "<leader>gb", function() require("lazyvim.util").lazygit.blame_line() end, { desc = "Git Blame Line" })
 vim.keymap.set("n", "<leader>gl", "<Cmd>LazyGit<CR>", { desc = "Lazygit" })
 vim.keymap.set("n", "<leader>lL", function() require("lazyvim.util").news.changelog() end, { desc = "LazyVim Changelog" })
@@ -378,6 +380,8 @@ vim.keymap.set("n", "[w", function() vim.diagnostic.goto_prev({severity = "WARN"
 vim.keymap.set("n", "]<Space>", function() vim.cmd("put =repeat(nr2char(10), v:count1)|silent '[-") end, { desc = "Add newline below" })
 vim.keymap.set("n", "]e", function() vim.diagnostic.goto_prev({severity = "ERROR"}) end, { desc = "Next Error" })
 vim.keymap.set("n", "]w", function() vim.diagnostic.goto_prev({severity = "WARN"}) end, { desc = "Next Warning" })
+vim.keymap.set("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Above" })
+vim.keymap.set("n", "gco", "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Below" })
 vim.keymap.set("n", "n", "'Nn'[v:searchforward].'zv'", { expr = true, desc = "Next search result" }) -- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
 vim.keymap.set("o", "N", "'nN'[v:searchforward]", { expr = true, desc = "Prev search result" })
 vim.keymap.set("o", "n", "'Nn'[v:searchforward]", { expr = true, desc = "Next search result" })
