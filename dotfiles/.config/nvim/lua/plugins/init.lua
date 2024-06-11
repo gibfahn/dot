@@ -208,12 +208,6 @@ return {
   {
     "folke/trouble.nvim", -- better diagnostics list and others
     opts = {
-      modes = {
-        diagnostics = {
-          auto_open = true, -- Automatically open whene there are diagnostics.
-        },
-      },
-      auto_close = true, -- Automatically close when there are no more diagnostics.
       focus = true, -- Automatically move focus to window when opened.
       win = {
         type = "split", -- Open in a real split you can jump to.
