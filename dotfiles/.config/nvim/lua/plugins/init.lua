@@ -615,7 +615,7 @@ return {
       {
         -- Make this search cwd not a guessed root directory.
         "<leader><space>",
-        require("lazyvim.util").telescope("files", { cwd = false }),
+        require("lazyvim.util").pick("files", { root = false }),
         desc = "Find Files (cwd)",
       },
     },
