@@ -590,7 +590,7 @@ data:
     # Add a clipboard
     menuIcon: clipboard
     # Mixed search mode (https://github.com/p0deje/Maccy/issues/184#issuecomment-1399554270).
-    searchMode: mixed
+    searchMode: regexp
     # Use max allowed history (https://github.com/p0deje/Maccy/issues/310).
     historySize: 999
     # Settings > General > Open > ⇧⌘v
