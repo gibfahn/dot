@@ -252,6 +252,21 @@ return {
 
   { "godlygeek/tabular", cmd = "Tabularize" }, -- Make tables easier (:help Tabular).
 
+  {
+    "ibhagwan/fzf-lua",
+    -- <https://github.com/ibhagwan/fzf-lua?tab=readme-ov-file#default-options>
+    opts = {
+      winopts = {
+        width = 1.00, -- Make fzf-lua always full-screen
+        height = 1.00,
+      },
+      defaults = {
+        file_icons = false, -- No icons means Ctrl-y fzf mapping doesn't copy icons too.
+        git_icons = false,
+      },
+    },
+  },
+
   "junegunn/vim-peekaboo", -- Pop up register list when pasting/macroing.
 
   {
@@ -587,46 +602,6 @@ return {
         },
       }
     end,
-  },
-
-  {
-    "nvim-telescope/telescope.nvim", -- Easily jump to buffers etc.
-    opts = {
-      defaults = {
-        mappings = {
-          i = {
-            -- Open all selected files <https://github.com/nvim-telescope/telescope.nvim/issues/814#issuecomment-1759190643>
-            -- Not set to <CR> to avoid conflicting with e.g. running code actions.
-            ["<C-o>"] = function(p_bufnr)
-              require("telescope.actions").send_selected_to_qflist(p_bufnr)
-              vim.cmd.cfdo("edit")
-            end,
-            -- Select all <https://github.com/nvim-telescope/telescope.nvim/pull/931>
-            ["<C-a>"] = function(p_bufnr)
-              require("telescope.actions").toggle_all(p_bufnr)
-            end,
-          },
-        },
-      },
-    },
-    keys = {
-      {
-        -- Make this search cwd not a guessed root directory.
-        "<leader><space>",
-        require("lazyvim.util").pick("files", { root = false }),
-        desc = "Find Files (cwd)",
-      },
-    },
-    dependencies = {
-      {
-        "nvim-telescope/telescope-ui-select.nvim",
-        config = function()
-          require("lazyvim.util").on_load("telescope.nvim", function()
-            require("telescope").load_extension("ui-select")
-          end)
-        end,
-      },
-    },
   },
 
   {

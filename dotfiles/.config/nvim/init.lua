@@ -10,10 +10,6 @@
 if not vim.env.PATH:find("/usr/local/bin") then
   vim.env.PATH = "/usr/local/bin:" .. vim.env.PATH
 end
-if vim.fn.filereadable("/opt/homebrew/bin/python3") == 1 then
-  -- Speed up startup by not looking for python3 every time.
-  vim.g.python3_host_prog = "/opt/homebrew/bin/python3"
-end
 
 vim.env.XDG_CACHE_HOME = vim.env.XDG_CACHE_HOME or vim.env.HOME .. "/.cache"
 vim.env.XDG_CONFIG_HOME = vim.env.XDG_CONFIG_HOME or vim.env.HOME .. "/.config"
@@ -37,6 +33,7 @@ vim.g.mundo_right = 1 -- vim-mundo undo window on right.
 vim.g.peekaboo_window = "vert bo 50new" -- Increase vim-peekaboo window width to 50.
 vim.g.terminal_scrollback_buffer_size = 100000 -- Store lots of terminal history (neovim-only).
 vim.g.zoxide_use_select = true -- <https://github.com/nanotee/zoxide.vim/issues/5>
+vim.g.lazyvim_picker = "fzf" -- Use fzf-lua not telescope as a file picker
 
 -- }}} Global variables
 
@@ -177,6 +174,7 @@ require("lazy").setup({
     -- See available extras at <http://www.lazyvim.org/extras>.
 
     { import = "lazyvim.plugins.extras.dap.core" }, -- Debug adaptor protocol
+    { import = "lazyvim.plugins.extras.editor.fzf" }, -- Enable fzf-lua telescope alternative.
     { import = "lazyvim.plugins.extras.editor.mini-diff" }, -- Visualise git diff.
     { import = "lazyvim.plugins.extras.editor.navic" }, -- Show function, class, etc in the statusline
     { import = "lazyvim.plugins.extras.formatting.black" }, -- Python black formatter
@@ -329,7 +327,7 @@ vim.keymap.set("n", "<Leader>gD", "<Cmd>DiffOrig<CR>", { desc = "Diff between sa
 vim.keymap.set("n", "<Leader>gG", function() Resolve(); vim.cmd("Gcd") end, { desc = "Chdir to root of git directory current file is in" })
 vim.keymap.set("n", "<Leader>gQ", "<Cmd>set fo+=t<CR><Cmd>set fo?<CR>", { desc = "Auto-add newline for long lines" })
 vim.keymap.set("n", "<Leader>gc", "<Cmd>cd %:p:h<CR>", { desc = "Change to current file's dirname" }) -- e.g. for <space>f, :e
-vim.keymap.set("n", "<Leader>gd", function() DupBuffer(); require("telescope.builtin").lsp_definitions({ reuse_win = true }) end, { desc = "Go to definition in last window" })
+vim.keymap.set("n", "<Leader>gd", function() DupBuffer(); require("fzf-lua").lsp_definitions({ jump_to_single_result=true, ignore_current_line=true }) end, { desc = "Go to definition in last window" })
 vim.keymap.set("n", "<Leader>gf", function() DupBuffer(); vim.api.nvim_feedkeys("gF", 'n', false) end, { desc = "Open path:row:col in last window" })
 vim.keymap.set("n", "<Leader>gg", function() Resolve(); vim.cmd("tab Git") end, { desc = "Open fugitive in a new tab" })
 vim.keymap.set("n", "<Leader>gn", "<Cmd>set number!<CR>", { desc = "Toggle line numbers" })
@@ -398,7 +396,7 @@ vim.keymap.set("v", "<Leader>gu", ":GBrowse!<CR>", { desc = "Copy github URL" })
 vim.keymap.set("v", "<Leader>p", '"+p', { desc = "Paste from clipboard" })
 vim.keymap.set("v", "<Leader>y", '"+y', { desc = "Copy from clipboard" })
 vim.keymap.set("v", "g//", [[y/\V<C-R>=&ic?'\c':'\C'<CR><C-r>=escape(@",'/\')<CR><CR>]], { desc = "Search for selected text case-insensitively" })
-vim.keymap.set("v", "gr", [[<Cmd>exec 'Telescope grep_string default_text=' . escape(@z, ' ')<cr>]], { noremap = false, desc = "Telescope search for selection" })
+vim.keymap.set("v", "gr", require('lazyvim.util').pick("grep_visual", { root = false }), { noremap = false, desc = "Grep for selection" })
 vim.keymap.set("x", "<Leader>j", ":AnyJumpVisual<CR>", { desc = "Jump to definition" })
 vim.keymap.set("x", "N", "'nN'[v:searchforward]", { expr = true, desc = "Prev search result" })
 vim.keymap.set("x", "P", "p", { desc = "Paste and update clipboard" })
