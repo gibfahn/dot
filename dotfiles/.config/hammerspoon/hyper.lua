@@ -31,7 +31,6 @@ if hs.eventtap.isSecureInputEnabled() then
     .new({
       title = "Hammerspoon",
       informativeText = "⚠️  Secure input is enabled.",
-      withdrawAfter = 0,
       otherButtonTitle = "Okay",
     })
     :send()
@@ -85,7 +84,6 @@ KillAll = function(killArgs, opts)
         .new({
           title = "Killed all " .. table.concat(killArgs, " ") .. "...",
           informativeText = exitCode .. " " .. stdOut .. " " .. stdErr,
-          withdrawAfter = 3,
         })
         :send()
     end, killArgs)
@@ -241,7 +239,7 @@ end)
 -- {{{ Hyper-⇧-w -> Restart Wi-Fi
 HyperMode:bind({ "alt" }, "w", function()
   log.d("Restarting Wi-Fi...")
-  hs.notify.new({ title = "Restarting Wi-Fi...", withdrawAfter = 3 }):send()
+  hs.notify.new({ title = "Restarting Wi-Fi..." }):send()
   hs.wifi.setPower(false)
   hs.wifi.setPower(true)
 end)
@@ -294,7 +292,6 @@ HyperMode:bind({ "cmd" }, "m", function()
           title = "Toggling menu bar hide/show...",
           informativeText = exitCode .. " " .. stdOut,
           stdErr,
-          withdrawAfter = 3,
         })
         :send()
     end)
@@ -320,7 +317,6 @@ HyperMode:bind({}, "return", function()
           subTitle = clipboard,
           informativeText = exitCode .. " " .. stdOut,
           stdErr,
-          withdrawAfter = 3,
         })
         :send()
     end, { clipboard })
@@ -340,7 +336,6 @@ HyperMode:bind({}, "\\", function()
           subTitle = frontmostApplicationName,
           informativeText = exitCode,
           stdErr,
-          withdrawAfter = 3,
         })
         :send()
     end, {
@@ -362,7 +357,6 @@ HyperMode:bind({ "alt" }, "\\", function()
         .new({
           title = "Sudo refreshed ...",
           informativeText = exitCode .. " " .. stdOut .. " " .. stdErr,
-          withdrawAfter = 3,
         })
         :send()
     end, { "--validate" })

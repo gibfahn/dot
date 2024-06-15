@@ -12,7 +12,6 @@ RemapKeys = function()
           .new({
             title = "✅ Key Remap succeeded",
             informativeText = exitCode .. " " .. stdOut .. " " .. stdErr,
-            withdrawAfter = 3,
           })
           :send()
       else
@@ -20,7 +19,6 @@ RemapKeys = function()
           .new({
             title = "❌ Key Remap failed",
             informativeText = exitCode .. " " .. stdOut .. " " .. stdErr,
-            withdrawAfter = 20,
           })
           :send()
       end
