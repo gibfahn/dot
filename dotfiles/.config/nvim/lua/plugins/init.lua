@@ -447,6 +447,16 @@ return {
     },
   },
 
+  -- LSP keymaps
+  {
+    "neovim/nvim-lspconfig",
+    opts = function()
+      local keys = require("lazyvim.plugins.lsp.keymaps").get()
+      -- Disable overriding of my a-n keymap.
+      keys[#keys + 1] = { "<a-n>", false }
+    end,
+  },
+
   {
     "nvim-lualine/lualine.nvim", -- Statusline plugin.
     dependencies = { "nvim-tree/nvim-web-devicons" },
