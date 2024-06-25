@@ -513,7 +513,6 @@ zle -N accept-line # Redefine accept-line to insert last input if empty (Enter k
 _gib_fzf-gp-widget() { local result=$(_gib_path_run); zle reset-prompt; LBUFFER+="$result " }
 zle -N _gib_fzf-gp-widget
 
-
 # Bind git shortcuts to <c-g><c-$@> (see above functions for more info).
 bindkey -r -M viins "^G" # Remove list-expand binding so we can use <C-g> for git.
 
@@ -528,6 +527,15 @@ _gib_join_lines() { local item; while read -r item; do echo -n "${(q)item} "; do
   done
 } f b t r h a # Bind <C-g><C-{f,b,t,r,h,s}> to fuzzy-find show {files,branches,tags,reflog,hashes,stashes}.
 
+# Clipboard multiple entry combiner.
+# <https://github.com/p0deje/Maccy/issues/239>
+gib-combine-clipboard() {
+  sqlite3 "$HOME/Library/Containers/org.p0deje.Maccy/Data/Library/Application Support/Maccy/Storage.sqlite" \
+    "SELECT ZVALUE FROM ZHISTORYITEMCONTENT WHERE ZTYPE = 'public.utf8-plain-text' ORDER BY Z_PK DESC;" \
+    | sed '/^$/d' | uniq | fzf --layout=reverse | pbcopy
+}
+zle -N gib-combine-clipboard
+
 autoload -Uz select-word-style
 select-word-style shell # "Word" means a shell argument, so Ctrl-w will delete one shell arg.
 
@@ -537,6 +545,7 @@ bindkey -M vicmd '^Y' gib-yank-all # Ctrl-y copies everything to the system clip
 
 bindkey -M viins "^[[A" history-beginning-search-backward-end # Up: backwards history search.
 bindkey -M viins "^[[B" history-beginning-search-forward-end # Down: forwards history search.
+bindkey -M viins '\em' gib-combine-clipboard # Alt-m combines clipboard history using Maccy.
 bindkey -M viins '^G^P' _gib_fzf-gp-widget # Ctrl-g-p: search all binaries in the $PATH.
 bindkey -M viins '^R' gib-fzf-history-widget # Ctrl-r: multi-select for history search.
 bindkey -M viins '^Y' gib-yank-all # Ctrl-y: copy everything to the system clipboard.
