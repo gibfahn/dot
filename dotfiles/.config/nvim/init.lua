@@ -345,7 +345,6 @@ vim.keymap.set("n", "<Leader>o", function() vim.ui.open(vim.fn.expand("<cfile>")
 vim.keymap.set("n", "<Leader>p", '"+p', { desc = "Paste from clipboard" })
 vim.keymap.set("n", "<Leader>q", "<Cmd>qa<CR>", { desc = "Quit if no unsaved changes" }) -- for single file use <Space>d instead
 vim.keymap.set("n", "<Leader>r", ":%s/", { desc = "Replace in buffer" })
-vim.keymap.set("n", "<Leader>t", "<Cmd>vsplit term://$SHELL<CR>i", { desc = "Open terminal in new split" })
 vim.keymap.set("n", "<Leader>uu", "<Cmd>MundoToggle<CR>", { desc = "Show/hide undo tree" })
 vim.keymap.set("n", "<Leader>w", "<Cmd>update<CR>", { desc = "Write if changes" })
 vim.keymap.set("n", "<Leader>y", '"+y', { desc = "Copy to clipboard" })
