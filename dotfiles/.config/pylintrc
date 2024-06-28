@@ -1,0 +1,10 @@
+# Example: https://github.com/pylint-dev/pylint/blob/main/pylintrc
+[MAIN]
+disable =
+  # Don't complain about f-strings in logging, we don't care about the performance impact.
+  logging-fstring-interpolation,
+  logging-not-lazy,
+  # UTF-8 is the default on the platforms we care about.
+  unspecified-encoding,
+
+max-line-length=200
