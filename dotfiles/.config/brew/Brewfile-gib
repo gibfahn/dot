@@ -60,6 +60,7 @@ brew "shellcheck"                        # Linter for bash.
 brew "shfmt"                             # Shell script formatter.
 brew "tidy-html5"                        # HTML5 linter.
 brew "tokei"                             # Counts lines of code in a project.
+brew "typos-cli"                         # Detect typos in code.
 brew "wget"                              # Alternative to curl for downloading files.
 
 # Brew formulae from taps.

@@ -1,0 +1,10 @@
+# https://github.com/crate-ci/typos/blob/master/docs/reference.md
+
+[default.extend-identifiers]
+# I use this an abbreviation.
+wrk = "wrk"
+iterm2 = "iterm2"
+
+[default.extend-words]
+# I use this an abbreviation.
+wrk = "wrk"
