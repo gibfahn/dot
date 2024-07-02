@@ -2,6 +2,9 @@
 
 set -euo pipefail
 
+REMOTE_PRIMARY_NAME=${REMOTE_PRIMARY_NAME:-up}
+REMOTE_FORK_NAME=${REMOTE_FORK_NAME:-fork}
+
 usage() {
 echo "$(tput bold; tput setaf 74)$ZSH_ARGZERO [-h|--help] $(tput sgr0)
 
@@ -10,6 +13,7 @@ git sw: switch to a branch, or create it, setting the upstream correctly.
 }
 
 main() {
+  [[ ${1:-} == "" ]] && { echo "one argument required." ; usage; exit; }
   [[ ${1:-} =~ ^(--help|-h)$ ]] && { usage; exit; }
   [[ ${1:-} =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
 
@@ -35,8 +39,8 @@ main() {
 
   # If we just created the branch and it's based on a fork branch, then update
   if [[ ${created:-} == 1 ]]; then
-    up_remote=$(up_remote || echo fork)
-    if [[ ${up_remote} == *fork* ]]; then
+    up_remote=$(up_remote || echo $REMOTE_FORK_NAME)
+    if [[ ${up_remote} == *${REMOTE_FORK_NAME}* ]]; then
       up_remote=$(up_remote_for_fork $up_remote)
       git branch -u $(default_remote_branch $up_remote)
     fi
@@ -47,10 +51,10 @@ main() {
 # Works out the up remote for the specified fork remote. I use `fork` for the fork of `up`,
 # otherwise I append `fork`, e.g. `pub` -> `pubfork`.
 up_remote_for_fork() {
-  if [[ $1 == fork ]]; then
-    echo up
+  if [[ $1 == $REMOTE_FORK_NAME ]]; then
+    echo $REMOTE_PRIMARY_NAME
   else
-    echo ${1%fork}
+    echo ${1%$REMOTE_FORK_NAME}
   fi
 }
 
