@@ -2,18 +2,31 @@
 
 set -euo pipefail
 
+autoload -U colors && colors
+
 REMOTE_PRIMARY_NAME=${REMOTE_PRIMARY_NAME:-up}
 REMOTE_FORK_NAME=${REMOTE_FORK_NAME:-fork}
 
 usage() {
-echo "$(tput bold; tput setaf 74)$ZSH_ARGZERO [-h|--help] $(tput sgr0)
+echo "$(tput bold; tput setaf 74)$ZSH_ARGZERO [-h|--help] branch_name $(tput sgr0)
 
 git sw: switch to a branch, or create it, setting the upstream correctly.
+
+ENVIRONMENT VARIABLES:
+
+REMOTE_PRIMARY_NAME:
+    Name of the default remote. Usually the upstream remote vs a forked remote.
+    Default: up
+
+REMOTE_FORK_NAME:
+    Name of the forked remote (fork of the primary remote). Also applied as a prefix to
+    any forks of a non-primary remote. e.g. the fork of 'pub' would be 'pubfork'.
+    Default: fork
 "
 }
 
 main() {
-  [[ ${1:-} == "" ]] && { echo "one argument required." ; usage; exit; }
+  [[ ${1:-} == "" ]] && { usage; error "branch_name argument is required"; }
   [[ ${1:-} =~ ^(--help|-h)$ ]] && { usage; exit; }
   [[ ${1:-} =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
 
@@ -65,6 +78,12 @@ default_remote_branch() {
 
 up_remote() {
   git rev-parse --abbrev-ref --symbolic-full-name @{u} | cut -d '/' -f 1
+}
+
+# Usage: exit message [rc]
+error() {
+  echo -e "${fg[red]}Error:${reset_color} $1" >&2
+  exit "${2:-1}"
 }
 
 main $@
