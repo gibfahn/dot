@@ -229,12 +229,12 @@ return {
       vim.o.timeoutlen = 300
     end,
     -- https://github.com/folke/which-key.nvim#%EF%B8%8F-configuration
-    opts = function(_, opts)
-      opts.defaults["<leader>l"] = { name = "+lazy" }
-      -- Remove lazyvim <Leader>w = window prefix.
-      opts.defaults["<leader>w"] = nil
-      return opts
-    end,
+    opts = {
+      spec = {
+        { "<leader>l", group = "lazy" },
+        { "<leader>h", group = "insert todos" },
+      },
+    },
   },
 
   "fweep/vim-zsh-path-completion", -- Nicer file browser plugin.
