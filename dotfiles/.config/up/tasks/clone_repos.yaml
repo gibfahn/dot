@@ -47,6 +47,11 @@ data:
       - name: up
         fetch_url: https://github.com/gibfahn/brian_code.git
     prune: true
+  - path: ~/code/me/clap_config
+    remotes:
+      - name: up
+        fetch_url: https://github.com/gibfahn/clap_config.git
+    prune: true
   - path: ~/code/me/codelets
     remotes:
       - name: up
