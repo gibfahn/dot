@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -eux
+set -eu
 
 # Ensure `git maintenance` CRON is set up.
 # <https://git-scm.com/docs/git-maintenance>
@@ -19,7 +19,7 @@ for config_file in ~/.config/git/maintenance-wrk.config ~/.config/git/maintenanc
 done
 
 # Run commands that act on each repo.
-DEBUG=1 "${dot_dir}"/dotfiles/bin/git-each "${dot_dir}"/up/run/git-each-repo
+"${dot_dir}"/dotfiles/bin/git-each "${dot_dir}"/up/run/git-each-repo
 
 # Delete repos that are no longer present.
 for config_file in ~/.config/git/maintenance-wrk.config ~/.config/git/maintenance.config; do

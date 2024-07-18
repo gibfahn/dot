@@ -43,6 +43,7 @@ rustup update
 # Set default toolchain to stable.
 rustup default stable
 
+# If you get libgit2 errors, see <https://github.com/nabijaczleweli/cargo-update/issues/243>.
 exists cargo-install-update || cargo install cargo-update
 
 case $(uname) in

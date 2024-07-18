@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -eux
+set -eu
 
 # Things that I want to do to every git repository, every time.
 
@@ -20,3 +20,6 @@ if ! grep -qF "$current_dir" "$config_file"; then
     exit 1
   fi
 fi
+
+# Check for unpushed branches or uncommitted changes.
+git unpushed
