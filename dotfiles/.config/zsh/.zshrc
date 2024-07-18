@@ -112,7 +112,7 @@ setopt no_list_ambiguous # Show menu on first tab if multiple matches (don't wai
 setopt no_list_beep # Don't beep if tab-complete has multiple choices, only if no such file.
 setopt no_notify # Print job updates just before a prompt (not mid-execution).
 setopt prompt_percent # Allow variables and functions to be used in the prompt.
-setopt prompt_subst # Perform expansion and subsitution on PROMPT and RPROMPT.
+setopt prompt_subst # Perform expansion and substitution on PROMPT and RPROMPT.
 setopt pushd_ignore_dups # Don't push multiple copies onto the directory stack.
 setopt pushd_minus # Make `cd -2` be two dirs ago rather than `cd +2`.
 setopt pushd_silent # Don't print pushd stack after pushd or cd (unless in CDPATH).
@@ -190,6 +190,11 @@ vt() {
     mkdir -p ~/tmp/drafts/archive/
     mv $file_path ~/tmp/drafts/archive/
   fi
+}
+
+# Use the latest development version of up instead of latest release (in interactive shells).
+up() {
+  genv -C $HOME/code/me/up-rs/ cargo run -- $@
 }
 
 # ^D with contents clears the buffer, without contents exits (sends an actual ^D).
