@@ -252,6 +252,29 @@ return {
 
   { "godlygeek/tabular", cmd = "Tabularize" }, -- Make tables easier (:help Tabular).
 
+  -- auto completion
+  {
+    "hrsh7th/nvim-cmp",
+    ---@param opts cmp.ConfigSchema
+    opts = function(_, opts)
+      local cmp = require("cmp")
+
+      -- Modify
+      -- <https://github.com/LazyVim/LazyVim/tree/main/lua/lazyvim/plugins/coding.lua> keymaps
+      -- See <https://github.com/LazyVim/LazyVim/issues/2533> for other options.
+
+      -- <Enter> inserts a newline (ignoring completions).
+      opts.mapping["<CR>"] = function(fallback)
+        cmp.abort()
+        fallback()
+      end
+      -- <Shift-Enter> accepts the current suggestion
+      opts.mapping["<S-CR>"] = cmp.mapping.confirm({ select = true })
+      -- <Ctrl-Enter> replaces the current text with the suggestion.
+      opts.mapping["<C-CR>"] = LazyVim.cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace })
+    end,
+  },
+
   {
     "ibhagwan/fzf-lua",
     -- <https://github.com/ibhagwan/fzf-lua?tab=readme-ov-file#default-options>
