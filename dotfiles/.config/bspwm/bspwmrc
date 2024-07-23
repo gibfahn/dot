@@ -19,7 +19,7 @@ bspc config initial_polarity second_child
 
 # Too many desktops is too confusing, let's have 2 per desktop.
 for i in $(bspc query -M --names); do
-        bspc monitor $i -d I II
+  bspc monitor $i -d I II
 done
 
 bspc config border_width 2

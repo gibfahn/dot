@@ -9,17 +9,7 @@ max_line_length = 100
 indent_style = space
 trim_trailing_whitespace = true
 
-# Extra files are needed for shfmt until https://github.com/mvdan/sh/issues/664 is fixed.
-[{*.sh,.zshrc,link,bspwmrc,git-*,pre-*,post-*,dotfiles/bin/*,dotfiles/.config/git/hooks/*}]
-indent_size = 2
-## Read by shfmt
-# Indent the options to case statements.
-switch_case_indent = true
-# Lines can start with && or ||
-binary_next_line = true
-
-# Duplicate block seems to be needed for helpers/setup.sh to be formatted properly.
-[*.sh]
+[[shell]]
 indent_size = 2
 ## Read by shfmt
 # Indent the options to case statements.

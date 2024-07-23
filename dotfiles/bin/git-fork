@@ -6,7 +6,10 @@ autoload -U colors && colors
 
 usage() {
   setopt local_options posix_argzero
-  echo "$(tput bold; tput setaf 74)$ZSH_ARGZERO [-h|--help] [-v|--version] [OPTIONS] $(tput sgr0)
+  echo "$(
+    tput bold
+    tput setaf 74
+  )$ZSH_ARGZERO [-h|--help] [-v|--version] [OPTIONS] $(tput sgr0)
 
 $(tput bold)git fork$(tput sgr0)
 
@@ -40,23 +43,57 @@ fork_branch=forkmain
 parallelism=10
 
 while [[ $# != 0 ]]; do
-  [[ ${1:-} =~ ^(--help|-h)$ ]] && { usage; exit; }
+  [[ ${1:-} =~ ^(--help|-h)$ ]] && {
+    usage
+    exit
+  }
 
-  [[ ${1:-} =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
+  [[ ${1:-} =~ ^(--version|-v)$ ]] && {
+    echo "main"
+    exit
+  }
 
-  [[ ${1:-} =~ ^(--clean|-c)$ ]] && { action=clean; shift; continue; }
+  [[ ${1:-} =~ ^(--clean|-c)$ ]] && {
+    action=clean
+    shift
+    continue
+  }
 
-  [[ ${1:-} =~ ^--up-remote$ ]] && { up_remote=$2; shift 2; continue; }
+  [[ ${1:-} =~ ^--up-remote$ ]] && {
+    up_remote=$2
+    shift 2
+    continue
+  }
 
-  [[ ${1:-} =~ ^--fork-remote$ ]] && { fork_remote=$2; shift 2; continue; }
+  [[ ${1:-} =~ ^--fork-remote$ ]] && {
+    fork_remote=$2
+    shift 2
+    continue
+  }
 
-  [[ ${1:-} =~ ^--up-branch$ ]] && { up_branch=$2; shift 2; continue; }
+  [[ ${1:-} =~ ^--up-branch$ ]] && {
+    up_branch=$2
+    shift 2
+    continue
+  }
 
-  [[ ${1:-} =~ ^--fork-branch$ ]] && { fork_branch=$2; shift 2; continue; }
+  [[ ${1:-} =~ ^--fork-branch$ ]] && {
+    fork_branch=$2
+    shift 2
+    continue
+  }
 
-  [[ ${1:-} =~ ^--parallelism$ ]] && { parallelism=$2; shift 2; continue; }
+  [[ ${1:-} =~ ^--parallelism$ ]] && {
+    parallelism=$2
+    shift 2
+    continue
+  }
 
-  [[ $# != 0 ]] && { echo "Too many args"; usage; exit 1; }
+  [[ $# != 0 ]] && {
+    echo "Too many args"
+    usage
+    exit 1
+  }
 done
 
 main() {
@@ -117,7 +154,7 @@ default_branch() {
   (
     git symbolic-ref --short refs/remotes/$1/HEAD || {
       git remote set-head --auto $1 \
-        && git symbolic-ref --short refs/remotes/$1/HEAD;
+        && git symbolic-ref --short refs/remotes/$1/HEAD
     }
   ) | sed "s|^$1/||"
 }

@@ -27,8 +27,11 @@ main() {
   # Set FORCE_HID=1 to force hid to run.
   if [[ -z ${FORCE_HID:-} ]]; then
     case $(hostname) in
-      Gib*|Eve*|Brian*) ;;
-      *) echo "Shared machine, skipping remap..."; exit 0 ;;
+      Gib* | Eve* | Brian*) ;;
+      *)
+        echo "Shared machine, skipping remap..."
+        exit 0
+        ;;
     esac
   fi
   [[ -d /Users/eve ]] && remap_eve || remap_gib

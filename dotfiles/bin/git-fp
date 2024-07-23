@@ -3,7 +3,10 @@
 set -eu
 
 usage() {
-echo "$(tput bold; tput setaf 74)$ZSH_ARGZERO [OPTIONS] [pr number] $(tput sgr0)
+  echo "$(
+    tput bold
+    tput setaf 74
+  )$ZSH_ARGZERO [OPTIONS] [pr number] $(tput sgr0)
 
 git fetch pr: fetch and set up a PR branch.
 
@@ -26,19 +29,43 @@ OPTIONS:
 up_remote=
 
 while [[ $# != 0 ]]; do
-  [[ ${1:-} =~ ^(--help|-h)$ ]] && { usage; exit; }
+  [[ ${1:-} =~ ^(--help|-h)$ ]] && {
+    usage
+    exit
+  }
 
-  [[ ${1:-} =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
+  [[ ${1:-} =~ ^(--version|-v)$ ]] && {
+    echo "main"
+    exit
+  }
 
-  [[ ${1:-} =~ ^(--quiet|-q)$ ]] && { QUIET=true; shift; }
+  [[ ${1:-} =~ ^(--quiet|-q)$ ]] && {
+    QUIET=true
+    shift
+  }
 
-  [[ ${1:-} =~ ^(--quiet|-q)$ ]] && { QUIET=true; shift; }
+  [[ ${1:-} =~ ^(--quiet|-q)$ ]] && {
+    QUIET=true
+    shift
+  }
 
-  [[ ${1:-} =~ ^--up-remote$ ]] && { up_remote=$2; shift 2; continue; }
+  [[ ${1:-} =~ ^--up-remote$ ]] && {
+    up_remote=$2
+    shift 2
+    continue
+  }
 
-  [[ $# != 0 ]] && { pr_number=$1; shift; continue; }
+  [[ $# != 0 ]] && {
+    pr_number=$1
+    shift
+    continue
+  }
 
-  [[ $# != 0 ]] && { echo "Too many args"; usage; exit 1; }
+  [[ $# != 0 ]] && {
+    echo "Too many args"
+    usage
+    exit 1
+  }
 done
 
 main() {
