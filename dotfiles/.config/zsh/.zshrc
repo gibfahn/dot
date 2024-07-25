@@ -125,16 +125,26 @@ setopt share_history # Do show history from other open tabs.
 
 # Better ls commands.
 # l->full detail + hidden, la->no detail + hidden, ll->full detail no hidden, md->create dir.
-alias ls="${commands[gls]+g}ls --color=auto" l='ls -lAh' la='ls -A' ll='ls -l'
+alias ls="${commands[gls]+g}ls --color=auto"
+alias l='ls -lAh'
+alias la='ls -A'
+alias ll='ls -l'
 
 # We want this to expand when defined.
-alias ..="cd .." ...="cd ../.." ....="cd ../../.." .....="cd ../../../.." ......="cd ../../../../.."
+# .. = up 1 dir, ... = up 2 dirs, .... = up 3 dirs (etc.). - = go to last dir.
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+alias ......="cd ../../../../.."
 # shellcheck disable=SC2139 # We want this to expand when defined.
 alias -- -="cd -"
 alias cg='cd $(git rev-parse --show-toplevel)' # Change to top level of git dir.
-alias g=git md="mkdir -p" lg=lazygit
+alias g=git md="mkdir -p"
+alias lg=lazygit
 # x->close terminal, g->git, h->history, path->print $PATH,
-alias path='echo $PATH | tr : "\n"' dt="date +%Y-%m-%d"
+alias path='echo $PATH | tr : "\n"'
+alias dt="date +%Y-%m-%d"
 alias s="TERM=xterm-256color ssh" # Reset cursor to block and ssh.
 
 # }}} Early Completion Keybindings
@@ -147,14 +157,28 @@ _gib_vim=
 export VISUAL=$_gib_vim EDITOR=$_gib_vim # Set vim/nvim as the default editor.
 unset _gib_vim
 
-alias v="$=VISUAL" xv="xargs $=VISUAL"
-alias k=kubectl kx=kubectx kn='kubectl config set-context --current --namespace' # Build tools.
+alias v="$=VISUAL"
+alias xv="xargs $=VISUAL"
+alias k=kubectl
+alias kx=kubectx
+alias kn='kubectl config set-context --current --namespace' # Build tools.
 
 # Cross-platform copy/paste/open/ldd/delete terminal commands (used later via ${aliases[cpy]}.).
 # OSTYPE set by zsh: https://zsh.sourceforge.io/Doc/Release/Parameters.html#Parameters-Set-By-The-Shell
 case $OSTYPE in
-  darwin*) alias cpy="pbcopy" pst="pbpaste" ldd="otool -L" o=open dl=trash ;;
-  linux*) alias cpy="xclip -selection clipboard" pst="xclip -selection clipboard -o" o=xdg-open dl="gio trash" ;;
+  darwin*)
+    alias cpy="pbcopy"
+    alias pst="pbpaste"
+    alias ldd="otool -L"
+    alias o=open
+    alias dl=trash
+    ;;
+  linux*)
+    alias cpy="xclip -selection clipboard"
+    alias pst="xclip -selection clipboard -o"
+    alias o=xdg-open
+    alias dl="gio trash"
+    ;;
 esac
 
 # }}} Early Aliases

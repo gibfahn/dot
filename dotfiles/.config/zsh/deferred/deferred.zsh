@@ -66,7 +66,7 @@ alias help=run-help # `help export` for help on the export builtin.
 (( $+commands[gsed] )) && alias sed=gsed
 # fda is find all (don't ignore anything).
 (( $+commands[fd] )) && alias fda='fd --no-ignore --hidden --exclude=.git' || fd() { find . -iname "*$**"; } # Find by filename (case insensitive).
-(( $+commands[rg] )) && alias rg='rg --smart-case' rga='rg --smart-case --hidden --no-ignore --glob=!.git' # rga is grep all (don't ignore anything).
+(( $+commands[rg] )) && alias rg='rg --smart-case' && alias rga='rg --smart-case --hidden --no-ignore --glob=!.git' # rga is grep all (don't ignore anything).
 # Footgun, means your shell has sudo privileges forever, make sure you only use this for a single command, after that exit the shell.
 # e.g. sudo_later; sleep 1000; sudo halt
 alias sudo_later="sudo -v; (while sudo -v; do sleep 60; done) &" # Preserve sudo for a command you'll run later.
@@ -75,10 +75,9 @@ alias pstree="pstree -g 3" # Use the nicest pstree output (unicode).
 # Run command every $1 seconds until it succeeds, e.g. `every 60 curl https://example.com`
 every() { local delay=${1?}; shift; while ! "$@"; do sleep $delay; echo "❯ $*"; done; }
 
-alias c=cargo ru=rustup  # Rust commands (try `c b`, `c r`, `c t`).
+alias c=cargo # Rust commands (try `c b`, `c r`, `c t`).
+alias ru=rustup
 rs() { for i in "$@"; do rustc "${i%.rs}.rs"; ./"${i%.rs}"; done; } # Compile/run (rs a.rs b).
-# .. = up 1 dir, ... = up 2 dirs, .... = up 3 dirs (etc.). - = go to last dir.
-alias next='git next && git show' # Useful for demos.
 alias gm='wait; git mf' # After cd'ing into a repo, fetch will run as a background job. Use this to wait for it to finish then mf.
 alias we="watchexec" # Shortcut for "run this command when something changes".
 
@@ -135,7 +134,7 @@ alias y2j="python3 -c 'import sys, yaml, json; json.dump(yaml.safe_load(sys.stdi
 alias y2y="python3 -c 'import sys, yaml; yaml.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2)'"
 alias t2j="python3 -c 'import sys, toml, json; json.dump(toml.load(sys.stdin), sys.stdout, indent=2)'"
 # Markdown to html (rich text).
-alias mth="pbpaste | pandoc --from markdown --to html | textutil -convert rtf -stdin -stdout -format html |  pbcopy -Prefer rtf"
+alias markdown_to_html="pbpaste | pandoc --from markdown --to html | textutil -convert rtf -stdin -stdout -format html |  pbcopy -Prefer rtf"
 # Url encode and decode stdin or first argument.
 alias url_encode='python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read().rstrip(\"\n\")))"'
 alias url_decode='python3 -c "import urllib.parse, sys; print(urllib.parse.unquote(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read().rstrip(\"\n\")))"'
@@ -443,6 +442,23 @@ _gib_path_run() {
   ) | fzf --preview 'unbuffer man {} || unbuffer {} --help'
 }
 
+# Fzf run gib command: interactively decide what function or alias to run.
+# Greps through my functions and aliases, and uses fzf to allow choosing and previewing.
+# Requires one `alias` command per alias.
+_gib_func_alias_run() {
+  local _gib_zsh_files=(~/.config/zsh/.zshrc ~/.config/zsh/deferred/*.zsh)
+  rg --vimgrep \
+    --only-matching \
+    -e '\b(?<fnname>[a-zA-Z][a-zA-Z0-9_:-]+)\(\) \{' \
+    -e '\balias (?:-- )?(?<aliasname>[a-zA-Z0-9_:-]+)=' \
+    --replace '${fnname}${aliasname}' \
+    "${_gib_zsh_files[@]}" \
+    | sort \
+    | fzf -d : --with-nth=4 \
+      --preview 'fzf-bat-preview {1} {2}' \
+    | cut -d : -f 4
+}
+
 # Fzf with multi-select from https://github.com/junegunn/fzf/pull/2098
 # CTRL-R - Paste the selected command from history into the command line
 gib-fzf-history-widget() {
@@ -526,6 +542,10 @@ zle -N accept-line # Redefine accept-line to insert last input if empty (Enter k
 _gib_fzf-gp-widget() { local result=$(_gib_path_run); zle reset-prompt; LBUFFER+="$result " }
 zle -N _gib_fzf-gp-widget
 
+# Bind ^g^g to "interactively choose which function or alias to run.
+_gib_fzf-gibfuncalias-widget() { local result=$(_gib_func_alias_run); zle reset-prompt; LBUFFER+="$result " }
+zle -N _gib_fzf-gibfuncalias-widget
+
 # Bind git shortcuts to <c-g><c-$@> (see above functions for more info).
 bindkey -r -M viins "^G" # Remove list-expand binding so we can use <C-g> for git.
 
@@ -560,6 +580,7 @@ bindkey -M viins "^[[A" history-beginning-search-backward-end # Up: backwards hi
 bindkey -M viins "^[[B" history-beginning-search-forward-end # Down: forwards history search.
 bindkey -M viins '\em' gib-combine-clipboard # Alt-m combines clipboard history using Maccy.
 bindkey -M viins '^G^P' _gib_fzf-gp-widget # Ctrl-g-p: search all binaries in the $PATH.
+bindkey -M viins '^G^G' _gib_fzf-gibfuncalias-widget # Ctrl-g-g: list my own functions and aliases.
 bindkey -M viins '^R' gib-fzf-history-widget # Ctrl-r: multi-select for history search.
 bindkey -M viins '^Y' gib-yank-all # Ctrl-y: copy everything to the system clipboard.
 bindkey -M viins '^[^M' self-insert-unmeta # Alt-Enter: insert a literal enter (newline char).
