@@ -189,6 +189,19 @@ tabs_to_spaces() {
   fd --hidden --exclude=.git --type f -x bash -c "gexpand -i -t $spaces_per_tab {} | sponge {}"
 }
 
+# Generate a URL with a text fragment link.
+# <https://developer.mozilla.org/en-US/docs/Web/Text_fragments>
+# Args:
+#   $1: base URL
+#   $2: plain text (unencoded).
+# URL will be sent to stdout and copied.
+url_text_fragment() {
+  local url
+  url="${1}#:~:text=$(url_encode "$2")"
+  cpy <<<$url
+  echo $url
+}
+
 # Get the App Bundle ID of a macOS/iOS/etc app, using an app store link, or an app on the system.
 # Useful for adding to 1Password: https://www.reddit.com/r/1Password/comments/hk02p7/suggestions_in_apps_for_1password_for_macos/.
 # Refs: StackOverflow (https://stackoverflow.com/questions/27509838/how-to-get-bundle-id-of-ios-app-either-using-ipa-file-or-app-installed-on-iph)
