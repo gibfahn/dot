@@ -8,7 +8,7 @@ REMOTE_PRIMARY_NAME=${REMOTE_PRIMARY_NAME:-up}
 REMOTE_FORK_NAME=${REMOTE_FORK_NAME:-fork}
 
 usage() {
-echo "$(tput bold; tput setaf 74)$ZSH_ARGZERO [-h|--help] branch_name $(tput sgr0)
+echo "$(tput bold; tput setaf 74)$ZSH_ARGZERO [-h|--help] branch_name [git switch args...] $(tput sgr0)
 
 git sw: switch to a branch, or create it, setting the upstream correctly.
 
