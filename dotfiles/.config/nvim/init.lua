@@ -44,6 +44,7 @@ vim.cmd("colorscheme habamax") -- Default colorscheme in case plugins don't load
 vim.opt.breakindent = true -- Nicer line wrapping for long lines.
 vim.opt.completeopt = "menu,menuone,noselect" -- Nicer completion behaviour.
 vim.opt.confirm = true -- Ask if you want to save unsaved files instead of failing.
+vim.opt.diffopt:append("algorithm:histogram") -- Slower but better diff algorithm.
 vim.opt.diffopt:append("vertical") -- Always use vertical diffs.
 vim.opt.expandtab = true -- Use spaces instead of tabs
 vim.opt.fileformats = "unix" -- Force Unix line endings (\n) (always show \r (^M), never autoinsert them).
@@ -64,9 +65,9 @@ vim.opt.mouse = "a" -- Mouse in all modes (mac: Fn+drag = copy).
 vim.opt.number = false -- Don't show line numbers by default.
 vim.opt.shiftround = true -- Round indent to multiple of 'shiftwidth'. Applies to > and < commands.
 vim.opt.shiftwidth = 2 -- Size of an indent
+vim.opt.shortmess:append({ I = true, c = true, C = true }) -- Avoid some "hit-enter" prompts
 vim.opt.showbreak = "↳   " -- Nicer line wrapping for long lines.
 vim.opt.showmode = false -- Don't show when in insert mode (set in lualine).
-vim.opt.shortmess:append({ I = true, c = true, C = true }) -- Avoid some "hit-enter" prompts
 vim.opt.sidescrolloff = 8 -- Keep 8 columns of context either side (horizontally) of the cursor.
 vim.opt.signcolumn = "auto" -- Resize the sign column automatically.
 vim.opt.smartcase = true -- Do not ignore case with capitals
