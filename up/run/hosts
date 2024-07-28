@@ -27,16 +27,19 @@ changed=
 
 for host_name in ${hosts[@]}; do
   for host in $host_name www.$host_name; do
-    matching_line="127.0.0.1 $host"
-    if ! (($hosts_lines[(Ie)$matching_line])); then
-      if [[ -z $changed ]] && ! (($hosts_lines[(Ie)$heading_line])); then
-        hosts_lines+=("$heading_line")
-        hosts_lines+=()
+    # Need IPv4 and IPv6 <https://stackoverflow.com/a/73720696/2799191>
+    for localhost in 127.0.0.1 ::1; do
+      matching_line="$localhost	$host"
+      if ! (($hosts_lines[(Ie)$matching_line])); then
+        if [[ -z $changed ]] && ! (($hosts_lines[(Ie)$heading_line])); then
+          hosts_lines+=("$heading_line")
+          hosts_lines+=()
+        fi
+        changed=true
+        echo >&2 "Adding $host to /etc/hosts"
+        hosts_lines+=("$matching_line")
       fi
-      changed=true
-      echo >&2 "Adding $host to /etc/hosts"
-      hosts_lines+=("$matching_line")
-    fi
+    done
   done
 done
 
@@ -44,7 +47,10 @@ if [[ -n $changed ]]; then
   sudo tee <<<"${(@F)hosts_lines}" /etc/hosts >/dev/null
 
   case $OSTYPE in
-    darwin*) dscacheutil -flushcache ;;
+    darwin*)
+      dscacheutil -flushcache
+      sudo killall -HUP mDNSResponder
+      ;;
     *) echo "Not yet supported, fix $0" && exit 1 ;;
   esac
 else
