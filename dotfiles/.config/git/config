@@ -311,8 +311,9 @@
   conflictstyle = zdiff3   # Show common ancestor in diffs (initially confusing, but very helpful).
   tool = nvimdiff           # Use vimdiff (actually neovim's vimdiff) to view and fix merge conflicts (instead of `g mc`).
 [mergetool]
-  prompt = false           # Don't confirm that I want to open the difftool every time.
+  hideResolved = true      # Don't show merge conflicts that have already been resolved by git in the mergetool diff.
   keepBackup = false       # Don't save original file with conflict markers with .orig extension.
+  prompt = false           # Don't confirm that I want to open the difftool every time.
   writeToTemp = true       # Write temporary BASE, LOCAL, and REMOTE versions of conflicting files to tempdir not worktree.
 [protocol]
   version = 2              # https://github.blog/changelog/2018-11-08-git-protocol-v2-support/.
