@@ -17,6 +17,8 @@ hosts=(
 
   # Block Twitter
   twitter.com
+  # Block Reddit
+  reddit.com
 )
 
 heading_line="# Added by gib dot host blocking script."
