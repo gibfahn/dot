@@ -52,7 +52,14 @@
       {"code": 8, "label": {"base": "e", "shifted": "E"}},
       {"code": 21, "label": {"base": "r", "shifted": "R"}},
       {"code": 23, "label": {"base": "t", "shifted": "T"}},
-      {"code": 43, "label": {"base": "Tab"}},
+      {
+        "code": 20545,
+        "label": {
+          "hint": {"full": "Mouse Button", "1u": "M.Btn"},
+          "base": "Left"
+        },
+        "categories": ["mousekeys"]
+      },
       {
         "code": 225,
         "label": {"base": "Shift"},
@@ -460,9 +467,12 @@
         "categories": ["blanks"]
       },
       {
-        "code": 65535,
-        "label": {"base": {"full": "Transparent", "1u": " "}},
-        "categories": ["blanks"]
+        "code": 20546,
+        "label": {
+          "hint": {"full": "Mouse Button", "1u": "M.Btn"},
+          "base": "Right"
+        },
+        "categories": ["mousekeys"]
       },
       {
         "code": 65535,
