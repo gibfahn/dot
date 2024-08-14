@@ -156,6 +156,9 @@ data:
     target: file
     # Default to a screen recording not a screenshot.
     video: true
+    # Don't show the thumbnail before saving the screenshot.
+    # Avoids the delay before the file shows up on disk.
+    show-thumbnail: false
 
   # Change Sogou keyboard layout to Colemak:
   # ⚙ -> 偏好号设置 -> 按键 -> 键盘布局 -> 其他键盘 -> Colemak
