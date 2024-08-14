@@ -28,7 +28,10 @@ RemapKeys = function()
     :start()
 end
 
--- Always re-remap keys on some events.
+-- Always re-remap keys when the computer wakes from sleep.
+-- <https://www.hammerspoon.org/docs/hs.caffeinate.watcher.html>
+-- This is useful because when you reconnect a new keyboard (and wired and bluetooth count as different keyboards for
+-- Apple keyboards) it won't be covered by existing hidutil commands.
 RemapKeyWatcher = hs.caffeinate.watcher.new(function(event)
   local eventsToMatch = {
     [hs.caffeinate.watcher.systemDidWake] = true, -- 0
