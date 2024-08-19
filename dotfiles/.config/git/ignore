@@ -25,3 +25,6 @@ bazel-out
 
 # Temp cache of Bazel queries.
 .fzf-bazel-query-cache
+
+# Personal folder in the root for misc stuff.
+/_perso/
