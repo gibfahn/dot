@@ -107,6 +107,7 @@
   la  = log --graph --decorate --oneline --all                          # Graph log of all commits.
   las = log --graph --decorate --oneline --all --simplify-by-decoration # Graph log of tag/branch/labelled commits.
   ll  = log --color --graph --pretty=format:'%C(214)%h%C(reset)%C(196)%d%C(reset) %s %C(35)(%ci)%C(27) <%an>%C(reset)'
+  lla = log --color --graph --pretty=format:'%C(214)%h%C(reset)%C(196)%d%C(reset) %s %C(35)(%ci)%C(27) <%an>%C(reset)' --all
 
   # Setting `core.hooksPath` (to have personal hooks in dotfiles) as I do elsewhere in this file
   # makes git-lfs write its hooks in there. And git doesn't support multiple hook directories. This
