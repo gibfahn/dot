@@ -231,6 +231,23 @@ mac_recent_audio_notifications() {
   log show --info --last 30m --predicate 'senderImagePath = "/usr/sbin/systemsoundserverd"' --style compact | awk '/Incoming Request/ {print $1 ":" $2 " " $14}'
 }
 
+# Save the current clipboard to a png file, copy the path to the clipboard, and show the file
+# in Finder. This allows you to easily drag the file, or paste it with a ⇧⌘g in a file
+# picker window.
+clipboard_to_png() {
+  local screenshot_path
+  screenshot_path=$HOME/tmp/screen_shot_recording/screenshot_$(date "+%Y-%m-%d_%H-%M-%S").png
+  osascript -e "set png_data to the clipboard as «class PNGf»
+	set the_file to open for access POSIX path of (POSIX file \"$screenshot_path\") with write permission
+	write png_data to the_file
+	close access the_file"
+
+  echo "Created $screenshot_path"
+  pbcopy <<<$screenshot_path
+  # Reveal in Finder.
+  open -R $screenshot_path
+}
+
 # Extract an OCI Archive to a local directory for debugging (doesn't handle everything).
 oci_extract() {
   setopt local_options err_return no_unset
