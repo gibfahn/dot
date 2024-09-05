@@ -110,7 +110,7 @@ main() {
     export GH_REPO=$(remote_url "$up_remote")
     export GH_HOST=$(remote_host "$up_remote")
     # Fork the repo.
-    gh repo fork --clone=false --remote=true --remote-name=$fork_remote
+    gh repo fork --clone=false --remote=true --remote-name=$fork_remote --default-branch-only
 
     # Print remotes.
     git remote -v
@@ -125,7 +125,7 @@ main() {
   git push $fork_remote ${up_remote}/${up_branch}:refs/heads/${fork_branch}
   change_branch $fork_remote $fork_branch
   default_branch $fork_remote
-  clean_fork $fork_remote $fork_branch $parallelism
+  git push -d $fork_remote $up_branch
 }
 
 remote_url() {
