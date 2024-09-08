@@ -2,9 +2,7 @@
 
 # Brew taps
 
-# tap "homebrew/cask-versions"             # Allows installing other versions of casks.
 tap "homebrew/bundle"                    # Allows you to use Brewfiles.
-tap "homebrew/cask"                      # `brew cask` for GUI apps.
 
 # Bootstrapping.
 
