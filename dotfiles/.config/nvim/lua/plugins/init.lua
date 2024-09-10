@@ -456,6 +456,18 @@ return {
           },
         },
 
+        -- Swift support.
+        -- <https://www.swift.org/documentation/articles/zero-to-swift-nvim.html>
+        sourcekit = {
+          capabilities = {
+            workspace = {
+              didChangeWatchedFiles = {
+                dynamicRegistration = true,
+              },
+            },
+          },
+        },
+
         yamlls = {
           settings = {
             yaml = {
