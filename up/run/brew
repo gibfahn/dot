@@ -57,5 +57,7 @@ if [[ -t 1 && -t 2 ]]; then
   # Useful to see what you need to add to your Brewfiles.
   echo "Brew packages that would be cleaned up, run this to actually clean:
     brew bundle cleanup --force --file =(cat ${brewfiles[@]})"
-  brew bundle cleanup --file =(cat ${brewfiles[@]})
+  # Command returns 1 exit code if anything would be cleaned up.
+  # <https://github.com/homebrew/homebrew-bundle/commit/34e39886a92e5f14d46fa014d5ed8712934d5820>
+  brew bundle cleanup --file =(cat ${brewfiles[@]}) || true
 fi
