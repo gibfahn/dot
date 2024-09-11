@@ -399,6 +399,13 @@ return {
             }
           end,
         },
+        ["markdownlint-cli2"] = {
+          args = {
+            -- By default there isn't a global configuration option for markdownlint-cli2.
+            "--config",
+            vim.fn.expand("~") .. ".config/markdownlint-cli2/markdownlint.yaml",
+          },
+        },
       },
     },
   },

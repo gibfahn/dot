@@ -1,0 +1,61 @@
+# markdownlint-cli2 config
+# Not applied by default, must be passed via `--config <path>`.
+# Keep me in sync with ../../.markdownlintrc
+# Project: <https://github.com/DavidAnson/markdownlint>
+# Rules: <https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md>
+
+# Include default lints.
+default: true
+
+MD001: true # MD001/heading-increment
+MD003: true # MD003/heading-style
+MD004: true # MD004/ul-style
+MD005: true # MD005/list-indent
+MD007: false # MD007/ul-indent: Allow arbitrary indentation for lists. Don't want to force one indent depth globally.
+MD009: true # MD009/no-trailing-spaces
+MD010: true # MD010/no-hard-tabs
+MD011: true # MD011/no-reversed-links
+MD012: true # MD012/no-multiple-blanks
+MD013: false # MD013/line-length: Disable line length checking.
+MD014: true # MD014/commands-show-output
+MD018: true # MD018/no-missing-space-atx
+MD019: true # MD019/no-multiple-space-atx
+MD020: true # MD020/no-missing-space-closed-atx
+MD021: true # MD021/no-multiple-space-closed-atx
+MD022: true # MD022/blanks-around-headings
+MD023: true # MD023/heading-start-left
+MD024: false # MD024/no-duplicate-heading: It's okay to have multiple `### Foo` headings in a doc.
+MD025: true # MD025/single-title
+MD026: true # MD026/no-trailing-punctuation
+MD027: true # MD027/no-multiple-space-blockquote
+MD028: true # MD028/no-blanks-blockquote
+MD029: true # MD029/ol-prefix
+MD030: true # MD030/list-marker-space
+MD031: false # MD031/blanks-around-fences: Allow code blocks right next to code. Useful for bullet lists, e.g.:
+MD032: true # MD032/blanks-around-lists
+MD033: false # MD033/no-inline-html: allow inline html elements in Markdown.
+MD034: false # MD034/no-bare-urls: URLs don't need to be <surrounded> in docusaurus 3 https://docusaurus.io/docs/migration/v3#bad-usage-of-gfm-autolink
+MD035: true # MD035/hr-style
+MD036: true # MD036/no-emphasis-as-heading
+MD037: true # MD037/no-space-in-emphasis
+MD038: true # MD038/no-space-in-code
+MD039: true # MD039/no-space-in-links
+MD040: true # MD040/fenced-code-language
+MD041: true # MD041/first-line-heading
+MD042: true # MD042/no-empty-links
+MD043: true # MD043/required-headings
+MD044: true # MD044/proper-names
+MD045: true # MD045/no-alt-text
+MD046: # MD046/code-block-style: code blocks should use backticks not indent
+  style: fenced
+MD047: true # MD047/single-trailing-newline
+MD048: true # MD048/code-fence-style
+MD049: true # MD049/emphasis-style
+MD050: true # MD050/strong-style
+MD051: true # MD051/link-fragments
+MD052: true # MD052/reference-links-images
+MD053: true # MD053/link-image-reference-definitions
+MD054: true # MD054/link-image-style
+MD055: true # MD055/table-pipe-style
+MD056: true # MD056/table-column-count
+MD058: true # MD058/blanks-around-tables

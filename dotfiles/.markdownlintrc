@@ -1,3 +1,5 @@
+# Configuration for markdownlint-cli (v1).
+# Keep me in sync with ./.config/markdownlint-cli2/markdownlint.yaml
 # Rules: https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
 # Example: https://github.com/DavidAnson/markdownlint/blob/main/schema/.markdownlint.jsonc
 # Ini format info: https://github.com/igorshubovych/markdownlint-cli/issues/317
@@ -14,7 +16,7 @@ MD007 = false
 # MD013/line-length - Line length
 MD013 = false
 
-# It's okay to have multiple `### Foo` headings in a doc.
+# MD024/no-duplicate-heading - It's okay to have multiple `### Foo` headings in a doc.
 MD024 = false
 
 # Allow code blocks right next to code. Useful for bullet lists, e.g.:
