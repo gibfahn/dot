@@ -597,8 +597,8 @@ data:
     # Settings > General > Open > ⇧⌘v
     KeyboardShortcuts_popup: '{"carbonModifiers":768,"carbonKeyCode":9}'
     # Delete highlighted item.
-    # Settings > General > Delete > ⇧⌘⌫
-    KeyboardShortcuts_delete: '{"carbonModifiers":2304,"carbonKeyCode":51}'
+    # Settings > General > Delete > ⌥⌫
+    KeyboardShortcuts_delete: '{"carbonModifiers":2048,"carbonKeyCode":51}'
     # Paste when you hit the Enter key
     # Settings > Behavior > Paste Automatically
     pasteByDefault: true
