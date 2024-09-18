@@ -4,6 +4,8 @@ log.d("Loading module")
 hs.hotkey.bind({ "ctrl" }, "`", nil, function()
   hs.reload()
 end)
+hs.console.darkMode(true)
+hs.dockIcon(false)
 
 local home_dir = os.getenv("HOME")
 local user = os.getenv("USER")
@@ -31,6 +33,7 @@ if user == "gib" or user == "brian" then
   require("control-escape")
 
   if isWrkMachine then
+    -- Uses the HyperMode global from hyper.lua required above.
     require("wrk")
   end
 end
