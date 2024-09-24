@@ -234,7 +234,7 @@ mac_recent_audio_notifications() {
 # Save the current clipboard to a png file, copy the path to the clipboard, and show the file
 # in Finder. This allows you to easily drag the file, or paste it with a ⇧⌘g in a file
 # picker window.
-clipboard_to_png() {
+save_clipboard_image() {
   local screenshot_path
   screenshot_path=$HOME/tmp/screen_shot_recording/screenshot_$(date "+%Y-%m-%d_%H-%M-%S").png
   osascript -e "set png_data to the clipboard as «class PNGf»
