@@ -218,7 +218,11 @@ vt() {
 
 # Use the latest development version of up instead of latest release (in interactive shells).
 up() {
-  genv -C $HOME/code/me/up-rs/ cargo run -- $@
+  if command -v cargo >/dev/null; then
+    genv -C $HOME/code/me/up-rs/ cargo run -- $@
+  else
+    command up $@
+  fi
 }
 
 # ^D with contents clears the buffer, without contents exits (sends an actual ^D).
