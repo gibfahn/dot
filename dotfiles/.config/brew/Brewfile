@@ -47,7 +47,6 @@ cask "google-chrome"                     # You probably want/have Chrome.
 cask "keyboard-cleaner"                  # Block all keystrokes except ⌘-q so you can wipe your keyboard.
 cask "spotify"                           # Music.
 cask "time-out"                          # Reminds you to take breaks.
-cask "visual-studio-code"                # Used to teach Brian to code.
 cask "vlc"                               # Nice video player.
 cask "wechat"                            # Chinese chat client.
 cask "whatsapp"                          # Whatsapp client.

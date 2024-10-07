@@ -39,7 +39,7 @@ brew "git-lfs"                           # Git Large File Storage. Use with `git
 brew "gnu-tar"                           # GNU version of tar.
 brew "gnu-time"                          # GNU version of time.
 brew "gnu-which"                         # GNU version of which.
-brew "go"                                # Go progamming language.
+brew "go"                                # Go programming language.
 brew "grep"                              # GNU version of grep.
 brew "hyperfine"                         # Benchmark commands (time but a benchmarking suite).
 brew "ijq"                               # Interactive jq
@@ -83,6 +83,7 @@ cask "docker"                            # Build and run docker images.
 cask "keycastr"                          # Shows keystrokes in corner of screen (great for casting/demos).
 cask "obsidian"                          # Markdown-based note-taking app.
 cask "slack"                             # Everyone uses Slack right?
+cask "visual-studio-code"                # Used to teach Brian to code.
 cask "zoom"                              # Zoom web meetings client.
 
 # Mac App Store Apps (some paid). `mas list` to see what you've already installed.
