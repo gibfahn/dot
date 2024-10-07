@@ -1,0 +1,4 @@
+cask "visual-studio-code" # Editor brian uses.
+cask "firefox"
+
+# vi: filetype=conf

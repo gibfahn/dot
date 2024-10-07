@@ -42,10 +42,14 @@ brew upgrade # You may occasionally want to run `brew upgrade --greedy` in case 
 # brew install things. Edit config/Brewfile to adjust.
 brew tap Homebrew/bundle
 
-if [[ $USER == gib ]]; then
-  brewfiles=("$XDG_CONFIG_HOME"/brew/*)
-else
-  brewfiles=("$XDG_CONFIG_HOME"/brew/Brewfile)
+brewfiles=("$XDG_CONFIG_HOME"/brew/Brewfile)
+
+if [[ -e "$XDG_CONFIG_HOME"/brew/Brewfile-wrk ]]; then
+  brewfiles+=("$XDG_CONFIG_HOME"/brew/Brewfile-wrk)
+fi
+
+if [[ -e "$XDG_CONFIG_HOME"/brew/Brewfile-$(whoami) ]]; then
+  brewfiles+=("$XDG_CONFIG_HOME"/brew/Brewfile-$(whoami))
 fi
 
 if ! brew bundle --file =(cat ${brewfiles[@]}) check >/dev/null; then
