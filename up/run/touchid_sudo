@@ -7,14 +7,36 @@ set -euo pipefail
 
 [[ $OSTYPE == darwin* ]] || exit 204 # Don't run if not Darwin.
 
-# Use work override script if present.
-if [[ -d ${wrk_dot_dir:-} ]]; then
-  "$wrk_dot_dir"/up/run/touchid_sudo
-  exit
-fi
+pamd_local_path=/etc/pam.d/sudo_local
+sudo_local_touch_id_line="auth       sufficient     pam_tid.so"
 
-# The fixed string, with touchid added as the second option.
-fixed="# sudo: auth account password session
+main() {
+  # Use work override script if present.
+  if [[ -d ${wrk_dot_dir:-} ]]; then
+    "$wrk_dot_dir"/up/run/touchid_sudo
+    exit
+  fi
+
+  current=$(</etc/pam.d/sudo)
+
+  fix_old
+
+  fix_new
+
+}
+
+fix_new() {
+  # What comes in macOS Sonoma and onwards by default.
+  unchanged="# sudo: auth account password session
+auth       include        sudo_local
+auth       sufficient     pam_smartcard.so
+auth       required       pam_opendirectory.so
+account    required       pam_permit.so
+password   required       pam_deny.so
+session    required       pam_permit.so"
+
+  # The fixed string for macOS pre-Sonoma, with touchid added as the second option.
+  fixed="# sudo: auth account password session
 auth       sufficient     pam_smartcard.so
 auth       sufficient     pam_tid.so
 auth       required       pam_opendirectory.so
@@ -22,30 +44,56 @@ account    required       pam_permit.so
 password   required       pam_deny.so
 session    required       pam_permit.so"
 
-current=$(</etc/pam.d/sudo)
+  # Bail out if the contents don't match what we expected to see.
+  if [[ "$current" != "$unchanged" ]]; then
+    echo -e "Error: unexpected contents of /etc/pam.d/sudo:
 
-# Skip if /etc/pam.d/sudo is already the fixed version.
-[[ "$current" == "$fixed" ]] && exit 204
+Actual:
+---$current---
 
-# What comes in macOS by default.
-unchanged="# sudo: auth account password session
+Expected:
++++$unchanged+++
+" >&2
+    exit 7
+  fi
+
+  if [[ ! -f $pamd_local_path ]]; then
+    echo >&2 "Adding Touch ID sudo line to ${pamd_local_path}"
+    sudo tee "$pamd_local_path" <<<"${sudo_local_touch_id_line}" >/dev/null
+  elif grep -Fx "$sudo_local_touch_id_line" "$pamd_local_path" >/dev/null; then
+    echo >&2 "Touch ID line already present in ${pamd_local_path}, skipping..."
+    exit 204
+  else
+    echo >&2 "ERROR: Unexpected contents of $pamd_local_path}"
+    exit 9
+  fi
+}
+
+fix_old() {
+  # What comes in macOS pre-Sonoma by default.
+  old_unchanged="# sudo: auth account password session
 auth       sufficient     pam_smartcard.so
 auth       required       pam_opendirectory.so
 account    required       pam_permit.so
 password   required       pam_deny.so
 session    required       pam_permit.so"
 
-# Bail out if the contents don't match what we expected to see.
-if [[ "$unchanged" != "$current" ]]; then
-  echo -e "Error: unexpected contents of /etc/pam.d/sudo:
+  # The fixed string for macOS pre-Sonoma, with touchid added as the second option.
+  old_fixed="# sudo: auth account password session
+auth       sufficient     pam_smartcard.so
+auth       sufficient     pam_tid.so
+auth       required       pam_opendirectory.so
+account    required       pam_permit.so
+password   required       pam_deny.so
+session    required       pam_permit.so"
 
-Actual:
----$current---
+  # Skip if /etc/pam.d/sudo is already the fixed version.
+  [[ "$current" == "$old_fixed" ]] && exit 204
 
-Expected:
-+++$unchanged+++" >&2
-  exit 7
-fi
+  if [[ "$current" == "$old_unchanged" ]]; then
+    # Insert `auth       sufficient     pam_tid.so` on line 3 of /etc/pam.d/sudo
+    sudo tee /etc/pam.d/sudo <<<"${old_fixed}" >/dev/null
+  fi
+}
 
-# Insert `auth       sufficient     pam_tid.so` on line 3 of /etc/pam.d/sudo
-sudo tee /etc/pam.d/sudo <<<"${fixed}" >/dev/null
+main "$@"
