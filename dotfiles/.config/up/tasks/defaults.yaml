@@ -481,6 +481,12 @@ data:
     # Safari > Advanced > Show full website address
     ShowFullURLInSmartSearchField: true
 
+    # Make Safari’s search banners default to Contains instead of Starts With
+    FindOnPageMatchesWordStartsOnly: false
+
+    # Safari > Preferences > General > Safari opens with: All non-private windows from last session.
+    OpenPrivateWindowWhenNotRestoringSessionAtLaunch: false
+
     # Hides the toolbar when Safari is full-screen (hide everything but the page).
     # Safari > View > Always show toolbar in Full Screen > Unchecked
     AutoShowToolbarInFullScreen: true
@@ -496,6 +502,16 @@ data:
     # Safari > View > Show Status bar
     # Toggle it with ⌘-/
     ShowOverlayStatusBar: true
+
+  com.apple.loginwindow:
+    # Skip the "want to reopen apps?" prompt when computer restarts unexpectedly.
+    # "You shut down your computer because of a problem. If you want to open the applications that
+    # were open when you shut down, click Open" -> clicks Open (there's no way to click Cancel).
+    # You can manually skip by holding the shift key down just after hitting return at the login
+    # window.
+    SkipRestartTALWarning: true
+    # Default to no for "Reopen windows when logging back in?" reboot prompt.
+    TALLogoutSavesState: false
 
   # Set Menu Bar date format: https://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table
   # Note that only some formats are allowed. This shows: day of the week, date, time with seconds.
@@ -552,6 +568,29 @@ data:
   com.apple.Maps:
     # Avoid tolls by default.
     MapsDefaultAvoidTollsKey: true
+
+  com.apple.MobileSMS:
+    # Messages > Preferences > Keep messages: Forever.
+    KeepMessageForDays: 0
+
+  # Defaults for ⌘-⇧-5 screen recording.
+  com.apple.screencapture:
+    # Save files to this directory.
+    location: ~/tmp/screen_shot_recording
+    location-last: ~/tmp/screen_shot_recording
+    # Show clicks in screen recording.
+    showsClicks: true
+    # Show cursor in screen recording.
+    showsCursor: true
+    # Record whole display.
+    style: display
+    # Save to file.
+    target: file
+    # Default to a screen recording not a screenshot.
+    video: true
+    # Don't show the thumbnail before saving the screenshot.
+    # Avoids the delay before the file shows up on disk.
+    show-thumbnail: false
 
   com.apple.Siri:
     # Don't show Siri icon in the menu bar.

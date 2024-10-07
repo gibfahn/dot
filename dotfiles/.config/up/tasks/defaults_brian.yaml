@@ -1,0 +1,64 @@
+run_if_cmd: ["/bin/sh", "-cex", '[ "$(whoami)" = brian -a "$(uname)" = Darwin ] || exit 204']
+run_lib: defaults
+data:
+  NSGlobalDomain:
+    # Use Dark mode.
+    AppleInterfaceStyle: Dark
+    # Don't brighten window contents (better contrast in Dark Mode).
+    # System Settings > General > Allow wallpaper tinting in windows (true here means uncheck the tickbox).
+    AppleReduceDesktopTinting: true
+
+    # Auto-hide menu bar.
+    _HIHideMenuBar: true
+
+    # Hide menu bar even in full-screen apps.
+    AppleMenuBarVisibleInFullscreen: false
+
+    # Add a context menu item for showing the Web Inspector in web views
+    WebKitDeveloperExtras: true
+
+    # Disable the animations for opening Quick Look windows
+    QLPanelAnimationDuration: 0.0
+
+    # Set sidebar icon size to medium
+    NSTableViewDefaultSizeMode: 2
+
+    # Increase window resize speed for Cocoa applications
+    NSWindowResizeTime: 0.001
+
+    NSUserKeyEquivalents:
+      # Create global shortcut "Merge all windows" ⌘-M
+      "Merge All Windows": "@$m"
+
+  com.apple.dock:
+    # Auto-hide dock.
+    autohide: true
+
+    # Have the Dock only show apps currently running.
+    static-only: true
+
+    # Make the dock appear instantly.
+    # https://simcityltd.medium.com/how-to-get-the-perfect-macos-dock-b2593f9c0f0b
+    autohide-delay: 0.0
+    autohide-time-modifier: 0.25
+
+    # Speed up Mission Control animations
+    expose-animation-duration: 0.1
+
+    # Don’t animate opening applications from the Dock
+    # launchanim: false
+
+  com.apple.ActivityMonitor:
+    # Show all processes in Activity Monitor
+    ShowCategory: 0
+
+  com.apple.HIToolbox:
+    # Enable dictation with double-tap of Fn button (1 to enable).
+    AppleDictationAutoEnable: 0
+    # System Settings > Keyboard > Press Function key to: (disable to make it change input source).
+    AppleFnUsageType: 1
+
+  # Change Sogou keyboard layout to Colemak:
+  # ⚙ -> 偏好号设置 -> 按键 -> 键盘布局 -> 其他键盘 -> Colemak
+  "/Users/gib/Library/Application Support/Sogou/InputMethod/SogouPY/UserPreferences.plist":
+    keyboardSelected: com.apple.keylayout.Colemak

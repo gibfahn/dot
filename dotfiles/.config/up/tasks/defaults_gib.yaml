@@ -63,10 +63,6 @@ data:
     # System Settings > Keyboard > Press Function key to: (disable to make it change input source).
     AppleFnUsageType: 1
 
-  com.apple.MobileSMS:
-    # Messages > Preferences > Keep messages: Forever.
-    KeepMessageForDays: 0
-
   com.apple.Safari:
     # Enable Safari’s debug menu
     IncludeInternalDebugMenu: true
@@ -75,10 +71,6 @@ data:
     AutoOpenSafeDownloads: false
     # Default to saving files in ~/tmp.
     NSNavLastRootDirectory: "~/tmp"
-    # Safari > Preferences > General > Safari opens with: All non-private windows from last session.
-    OpenPrivateWindowWhenNotRestoringSessionAtLaunch: false
-    # Make Safari’s search banners default to Contains instead of Starts With
-    FindOnPageMatchesWordStartsOnly: false
     # Settings > Tabs > Tab Layout > Compact
     ShowStandaloneTabBar: false
     # Settings > Tabs > Always show website titles in tabs > Checked
@@ -130,35 +122,6 @@ data:
         name: MENU_WEBSEARCH
       - enabled: false
         name: MENU_SPOTLIGHT_SUGGESTIONS
-
-  com.apple.loginwindow:
-    # Skip the "want to reopen apps?" prompt when computer restarts unexpectedly.
-    # "You shut down your computer because of a problem. If you want to open the applications that
-    # were open when you shut down, click Open" -> clicks Open (there's no way to click Cancel).
-    # You can manually skip by holding the shift key down just after hitting return at the login
-    # window.
-    SkipRestartTALWarning: true
-    # Default to no for "Reopen windows when logging back in?" reboot prompt.
-    TALLogoutSavesState: false
-
-  # Defaults for ⌘-⇧-5 screen recording.
-  com.apple.screencapture:
-    # Save files to this directory.
-    location: ~/tmp/screen_shot_recording
-    location-last: ~/tmp/screen_shot_recording
-    # Show clicks in screen recording.
-    showsClicks: true
-    # Show cursor in screen recording.
-    showsCursor: true
-    # Record whole display.
-    style: display
-    # Save to file.
-    target: file
-    # Default to a screen recording not a screenshot.
-    video: true
-    # Don't show the thumbnail before saving the screenshot.
-    # Avoids the delay before the file shows up on disk.
-    show-thumbnail: false
 
   # Change Sogou keyboard layout to Colemak:
   # ⚙ -> 偏好号设置 -> 按键 -> 键盘布局 -> 其他键盘 -> Colemak
