@@ -3,7 +3,7 @@
 set -eux
 
 [ "$(uname)" = Darwin ] || exit 204
-[ "$(whoami)" = gib ] || [ "$(whoami)" = brian ] || exit 204
+[ "$(whoami)" = gib ] || exit 204
 
 # Run if the desktop background is not already the one we set.
 backgrounds="$(osascript -e '
