@@ -642,3 +642,7 @@ data:
   com.apple.driver.AppleBluetoothMultitouch.mouse:
     # Settings > Mouse > Secondary Click > Click Right Side
     MouseButtonMode: TwoButton
+
+  com.apple.WindowManager:
+    # Settings > Desktop & Dock > Window Tiling > Tiled windows have margins > off
+    EnableTiledWindowMargins: false
