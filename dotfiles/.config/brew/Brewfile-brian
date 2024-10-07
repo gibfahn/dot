@@ -1,4 +1,9 @@
 cask "visual-studio-code" # Editor brian uses.
 cask "firefox"
 
+# School software
+
+cask "microsoft-onenote"
+cask "microsoft-teams"
+
 # vi: filetype=conf
