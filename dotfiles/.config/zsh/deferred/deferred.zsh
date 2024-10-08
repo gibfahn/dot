@@ -344,6 +344,21 @@ chpwd() { # Commands to run after changing directory (via cd or pushd).
   fi
 }
 
+# Get docker labels from an image tag or @sha256: digest.
+# Usage:
+#   $0 [registry]/<org>/<repo>@sha256:<sha>
+# docker_labels gibfahn/myimage:latest
+# docker_labels docker.io/rust@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+docker_labels() {
+  skopeo inspect docker://${1?1st argument should be a docker image} | jq '.Labels'
+}
+
+# Get docker sha256 repo digest (not the image ID) from an image tag.
+# docker_sha gibfahn/myimage:latest
+docker_sha() {
+  skopeo inspect docker://${1?1st argument should be a docker image} | jq -r '.Digest' | sed 's/^sha256://'
+}
+
 # }}} Functions
 
 # {{{ Run commands
