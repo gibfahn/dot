@@ -140,11 +140,11 @@ alias ......="cd ../../../../.."
 # shellcheck disable=SC2139 # We want this to expand when defined.
 alias -- -="cd -"
 alias cg='cd $(git rev-parse --show-toplevel)' # Change to top level of git dir.
-alias g=git md="mkdir -p"
-alias lg=lazygit
-# x->close terminal, g->git, h->history, path->print $PATH,
-alias path='echo $PATH | tr : "\n"'
 alias dt="date +%Y-%m-%d"
+alias g=git
+alias lg=lazygit
+alias md="mkdir -p" # Recursive mkdir.
+alias path='echo $PATH | tr : "\n"' # Print out path, newline-separated.
 alias s="TERM=xterm-256color ssh" # Reset cursor to block and ssh.
 
 # }}} Early Completion Keybindings
@@ -157,11 +157,11 @@ _gib_vim=
 export VISUAL=$_gib_vim EDITOR=$_gib_vim # Set vim/nvim as the default editor.
 unset _gib_vim
 
+alias k=kubectl
+alias kn='kubectl config set-context --current --namespace' # Build tools.
+alias kx=kubectx
 alias v="$=VISUAL"
 alias xv="xargs $=VISUAL"
-alias k=kubectl
-alias kx=kubectx
-alias kn='kubectl config set-context --current --namespace' # Build tools.
 
 # Cross-platform copy/paste/open/ldd/delete terminal commands (used later via ${aliases[cpy]}.).
 # OSTYPE set by zsh: https://zsh.sourceforge.io/Doc/Release/Parameters.html#Parameters-Set-By-The-Shell
@@ -184,6 +184,35 @@ esac
 # }}} Early Aliases
 
 # {{{ Early Keybindings
+
+# ^D with contents clears the buffer, without contents exits (sends an actual ^D).
+_gib_clear_exit() { [[ -n $BUFFER ]] && zle kill-buffer || zle self-insert-unmeta; }
+zle -N _gib_clear_exit
+
+# ⌥-n with contents inserts, without contents cd's to matching directory.
+_gib_fzfz_cd() {
+  local selected_dir
+  local orig_buffer_len=${#${(z)BUFFER}}
+  selected_dir=$(zoxide query --list | fzf --reverse --keep-right --filepath-word --tiebreak=end,index)
+  local ret=$?
+  LBUFFER="${LBUFFER}${selected_dir:q}"
+  zle redisplay
+  typeset -f zle-line-init >/dev/null && zle zle-line-init
+  if [[ $ret -eq 0 && -n "$BUFFER" && $orig_buffer_len == 0 ]]; then
+    zle .accept-line
+  fi
+  return $ret
+}
+zle -N _gib_fzfz_cd
+
+# Use the latest development version of up instead of latest release (in interactive shells).
+up() {
+  if command -v cargo >/dev/null; then
+    genv -C $HOME/code/me/up-rs/ cargo run -- $@
+  else
+    command up $@
+  fi
+}
 
 # vim temp: Edit a scratch file (allows vim history preservation).
 vt() {
@@ -215,35 +244,6 @@ vt() {
     mv $file_path ~/tmp/drafts/archive/
   fi
 }
-
-# Use the latest development version of up instead of latest release (in interactive shells).
-up() {
-  if command -v cargo >/dev/null; then
-    genv -C $HOME/code/me/up-rs/ cargo run -- $@
-  else
-    command up $@
-  fi
-}
-
-# ^D with contents clears the buffer, without contents exits (sends an actual ^D).
-_gib_clear_exit() { [[ -n $BUFFER ]] && zle kill-buffer || zle self-insert-unmeta; }
-zle -N _gib_clear_exit
-
-# ⌥-n with contents inserts, without contents cd's to matching directory.
-_gib_fzfz_cd() {
-  local selected_dir
-  local orig_buffer_len=${#${(z)BUFFER}}
-  selected_dir=$(zoxide query --list | fzf --reverse --keep-right --filepath-word --tiebreak=end,index)
-  local ret=$?
-  LBUFFER="${LBUFFER}${selected_dir:q}"
-  zle redisplay
-  typeset -f zle-line-init >/dev/null && zle zle-line-init
-  if [[ $ret -eq 0 && -n "$BUFFER" && $orig_buffer_len == 0 ]]; then
-    zle .accept-line
-  fi
-  return $ret
-}
-zle -N _gib_fzfz_cd
 
 # Changes the cursor shape. KEYMAP is set when called by zsh keymap change.
 # If normal mode then 'vicmd', if insert mode then 'main' or 'viins'.
@@ -277,9 +277,8 @@ zle -N zle-line-init     # Bind zle-line-init() above to be called when the line
 bindkey -v # Enable vi-mode.
 
 bindkey -M vicmd ' ' edit-command-line # <Space> in cmd mode opens editor.
-bindkey -M vicmd '^D' _gib_clear_exit
 bindkey -M vicmd '\ez' _gib_fzfz_cd # Alt-z switches to a commonly-used directory.
-
+bindkey -M vicmd '^D' _gib_clear_exit
 bindkey -M viins "^A" beginning-of-line # Ctrl-A = Go to beginning of line (Emacs default).
 bindkey -M viins "^E" end-of-line       # Ctrl-E = Go to end of line (Emacs default).
 bindkey -M viins ' ' magic-space # <Space> = do history expansion

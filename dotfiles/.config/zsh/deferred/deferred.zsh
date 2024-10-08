@@ -72,14 +72,216 @@ alias help=run-help # `help export` for help on the export builtin.
 alias sudo_later="sudo -v; (while sudo -v; do sleep 60; done) &" # Preserve sudo for a command you'll run later.
 alias bounce="echo -n '\a'" # Ring the terminal bell (bounce the dock icon in macOS).
 alias pstree="pstree -g 3" # Use the nicest pstree output (unicode).
-# Run command every $1 seconds until it succeeds, e.g. `every 60 curl https://example.com`
-every() { local delay=${1?}; shift; while ! "$@"; do sleep $delay; echo "❯ $*"; done; }
 
 alias c=cargo # Rust commands (try `c b`, `c r`, `c t`).
 alias ru=rustup
-rs() { for i in "$@"; do rustc "${i%.rs}.rs"; ./"${i%.rs}"; done; } # Compile/run (rs a.rs b).
 alias gm='wait; git mf' # After cd'ing into a repo, fetch will run as a background job. Use this to wait for it to finish then mf.
 alias we="watchexec" # Shortcut for "run this command when something changes".
+
+# Copy last command.
+alias clc="fc -ln -1 | sed -e 's/\\\\n/\\n/g' -e 's/\\\\t/\\t/g' | ${=aliases[cpy]}" # "
+# Run last command and copy the command and its output.
+cr() { local a=$(r 2>&1); ${=aliases[cpy]} <<<"❯ $a"; }
+
+# Yaml to json, e.g. "y2j <t.yml | jq .". Requires a `pip install pyyaml`.
+alias j2y="python3 -c 'import sys, yaml, json; yaml.dump(json.load(sys.stdin), sys.stdout, indent=2)'"
+alias y2j="python3 -c 'import sys, yaml, json; json.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2)'"
+alias y2y="python3 -c 'import sys, yaml; yaml.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2)'"
+alias t2j="python3 -c 'import sys, toml, json; json.dump(toml.load(sys.stdin), sys.stdout, indent=2)'"
+# Markdown to html (rich text).
+alias markdown_to_html="pbpaste | pandoc --from markdown-smart --to html | textutil -convert rtf -stdin -stdout -format html |  pbcopy -Prefer rtf"
+# Url encode and decode stdin or first argument.
+alias url_encode='python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read().rstrip(\"\n\")))"'
+alias url_decode='python3 -c "import urllib.parse, sys; print(urllib.parse.unquote(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read().rstrip(\"\n\")))"'
+# Convert from UTF-16 to UTF-8
+alias utf16_decode='python3 -c "import sys; sys.stdin.reconfigure(encoding=\"utf-16\"); print(sys.stdin.read())"'
+
+if (( $+commands[kitty] )); then
+  alias icat="kitty +kitten icat" # Kitty terminal specific: https://sw.kovidgoyal.net/kitty/kittens/icat.html
+fi
+[[ -x "/Applications/IntelliJ IDEA CE.app/Contents/MacOS/idea" ]] && alias idea="/Applications/IntelliJ IDEA CE.app/Contents/MacOS/idea" # IntelliJ CE
+alias curl="noglob curl" # Don't match on ? [] etc in curl URLs, avoids needing to quote URL args.
+
+(( $+commands[ggrep] )) && alias grep='ggrep --color=auto'
+
+# }}} Aliases
+
+# {{{ Functions
+
+# Add a trailing newline to all files in the current directory.
+add_trailing_newline() {
+  fd --hidden --exclude=.git --type f "$@" -x gsed -i -e '$a\' '{}'
+}
+
+# Get the App Bundle ID of a macOS/iOS/etc app, using an app store link, or an app on the system.
+# Useful for adding to 1Password: https://www.reddit.com/r/1Password/comments/hk02p7/suggestions_in_apps_for_1password_for_macos/.
+# Refs: StackOverflow (https://stackoverflow.com/questions/27509838/how-to-get-bundle-id-of-ios-app-either-using-ipa-file-or-app-installed-on-iph)
+# Usage:
+#   apple_app_bundleid https://apps.apple.com/us/app/watch/id1069511734
+#   apple_app_bundleid https://apps.apple.com/gb/app/clubspark-booker/id1028325841
+#   apple_app_bundleid /Applications/kitty.app
+apple_app_bundleid() {
+  case $1 in;
+    https://*) # Assume URL (Google for the app, copy URL).
+      country=$(sed -E 's;https://apps.apple.com/([^/]+)/.*;\1;' <<<"$1")
+      # Assumes links like https://apps.apple.com/us/app/magic-the-gathering-arena/id1496227521#?platform=ipad
+      id=$(sed -E 's;.*/id([0-9]+).*;\1;' <<<"$1")
+      curl "https://itunes.apple.com/${country}/lookup?id=${id}" | jq -r '"app://\(.results[0].bundleId)"'
+      ;;
+    *) # Assume App Name / Path.
+      id=$1
+      echo "app://$(osascript -e "id of app \"$1\"")"
+      ;;
+  esac
+}
+
+chpwd() { # Commands to run after changing directory (via cd or pushd).
+  [[ -t 1 ]] || return # Exit if stdout is not a tty.
+  setopt local_options no_monitor # This only disables the "job start", not the "job complete".
+  # I know I set the ls alias earlier, so use that.
+  ${=aliases[ls]} -A 1>&2 # Show dir contents.
+  [[ -d .git ]] && git fetch --all --quiet & # Fetch git remotes.
+  # Add new entries to the zoxide database.
+  # Anything started with /Volumes/Shared-Data/ is a shared mount, see up/run/mac_volume
+  zoxide add -- "${PWD#/Volumes/Shared-Data}"
+
+  # Source a venv if present
+  # https://stackoverflow.com/questions/45216663/how-to-automatically-activate-virtualenvs-when-cding-into-a-directory
+  if [[ -d .venv ]]; then
+    source ./.venv/bin/activate
+  # Deactivate if no longer in venv dir or a subdir of it.
+  elif [[ -n "$VIRTUAL_ENV" && "$(pwd -P)"/ != "$(dirname $VIRTUAL_ENV)"/* ]]; then
+    deactivate
+  fi
+}
+
+# Save the current clipboard to a png file, copy the path to the clipboard, and show the file
+# in Finder. This allows you to easily drag the file, or paste it with a ⇧⌘g in a file
+# picker window.
+clipboard_image_save() {
+  local screenshot_path
+  screenshot_path=$HOME/tmp/screen_shot_recording/screenshot_$(date "+%Y-%m-%d_%H-%M-%S").png
+  osascript -e "set png_data to the clipboard as «class PNGf»
+	set the_file to open for access POSIX path of (POSIX file \"$screenshot_path\") with write permission
+	write png_data to the_file
+	close access the_file"
+
+  echo "Created $screenshot_path"
+  pbcopy <<<$screenshot_path
+  # Reveal in Finder.
+  open -R $screenshot_path
+}
+
+cpm() { command mkdir -p "${@: -1}" && cp "$@"; } # Mkdir then cp to dir (`cpm foo bar` = `md bar && cp foo bar`).
+
+# Interactive move to trash..
+# dli -> interactive delete files in current directory.
+# dli foo/* bar/* -> interactive delete files in foo and bar subdirectories.
+dli() {
+  { [[ $# == 0 ]] && fd -0d 1 || print -N $@; } | fzf --reverse --read0 --print0 | xargs -0 ${=aliases[dl]}
+}
+
+# Get docker labels from an image tag or @sha256: digest.
+# Usage:
+#   $0 [registry]/<org>/<repo>@sha256:<sha>
+# docker_labels gibfahn/myimage:latest
+# docker_labels docker.io/rust@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+docker_labels() {
+  skopeo inspect docker://${1?1st argument should be a docker image} | jq '.Labels'
+}
+
+# Get docker sha256 repo digest (not the image ID) from an image tag.
+# docker_sha gibfahn/myimage:latest
+docker_sha() {
+  skopeo inspect docker://${1?1st argument should be a docker image} | jq -r '.Digest' | sed 's/^sha256://'
+}
+
+# Run command every $1 seconds until it succeeds, e.g. `every 60 curl https://example.com`
+every() { local delay=${1?}; shift; while ! "$@"; do sleep $delay; echo "❯ $*"; done; }
+
+# Clone repo and cd into path (can't be in git config as we cd).
+gcl() {
+  local clone_dir ret
+  clone_dir="$(set -o pipefail; git cl --progress "$@" 3>&1 1>&2 2>&3 3>&- | tee /dev/stderr | awk -F \' '/Cloning into/ {print $2}' | head -1)"
+  ret="$?"
+  [[ -d "$clone_dir" ]] && echo "cd $clone_dir" && cd "$clone_dir" || return 1
+  return $ret
+}
+
+# Show which apps made a noise in the last 30 minutes.
+# Refs:
+# - <https://dreness.com/blog/archives/155773>
+# - <https://gist.github.com/dreness/1de1def13c83d19630ab0646ba8f0597>
+mac_recent_audio_notifications() {
+  log show --info --last 30m --predicate 'senderImagePath = "/usr/sbin/systemsoundserverd"' --style compact | awk '/Incoming Request/ {print $1 ":" $2 " " $14}'
+}
+
+# Edit a file on the system.
+mdc() { command mkdir -p "$@"; { [[ $# == 1 ]] && cd "$1"; } || true; } # Mkdir then cd to dir (`mdc foo` = `mkdir foo && cd foo`).
+mvm() { command mkdir -p "${@: -1}" && mv "$@"; } # Mkdir then mv to dir (`mvm foo bar` = `md bar && mv foo bar`).
+
+# Extract an OCI Archive to a local directory for debugging (doesn't handle everything).
+oci_extract() {
+  setopt local_options err_return no_unset
+  tarball=${1:?Missing argument #1: docker tarball}
+  local tempdir=$(mktemp -d) exit_code=0
+
+  tar -xzf $tarball -C $tempdir
+  cd $tempdir
+  mkdir root
+
+  cat manifest.json | jq -r '.[].Layers[]' | while read layer; do
+    if ! tar -xzf $layer -C root; then
+      echo "Encountered error while extracting layer - continuing on best-effort basis"
+      exit_code=1
+    fi
+  done
+
+  echo "Docker image extracted in: $tempdir/root"
+  return $exit_code
+}
+
+# Generate an alphanumeric password $1 characters long.
+password_gen() {
+  cat /dev/urandom | LC_ALL=C tr -dc '[:alnum:]' | fold -w ${1?Missing argument 1: password length} | head -1 | tr -d '\n'
+}
+
+pth() { # Returns absolute path to each file or dir arg.
+  local i
+  for i in "$@"; do
+    if [[ -d "$i" ]]; then (pushd "$i" >/dev/null || return 1; pwd) # dir.
+    elif [[ -f "$i" ]]; then  # file.
+      case $i in
+        */*) echo "$(pushd "${i%/*}" >/dev/null || return 1; pwd)/${i##*/}" ;;
+          *) echo "$PWD/$i" ;;
+      esac
+    fi
+  done
+}
+
+# Remove trailing whitespace from all files in the current directory.
+remove_trailing_whitespace() {
+  fd --hidden --exclude=.git --type f "$@" -x gsed -i -e 's/\s\+$//' '{}'
+}
+
+rs() { for i in "$@"; do rustc "${i%.rs}.rs"; ./"${i%.rs}"; done; } # Compile/run (rs a.rs b).
+
+# Open vim with the results of the last rg/rga command in the quickfix list.
+rv() {
+  local cmd history_line
+  history_line=$(fc -lr -100 | awk '$2 == "rg" || $2 == "rga" { print $1; exit; }')
+  [[ -z "$history_line" ]] && { echo "No rg in the last 100 history commands."; return 1; }
+  eval cmd="($history[$history_line])"
+  # Remove 1st item (rg or rga) and replace with rg + flags, then the rest of the cmd array.
+  if [[ ${cmd[1]} == rga ]]; then
+    cmd=(rg --hidden --no-ignore --glob=!.git --smart-case --vimgrep "${(@)cmd[2,$#cmd]}")
+  else
+    cmd=(rg --glob=!.git --smart-case --vimgrep "${(@)cmd[2,$#cmd]}")
+  fi
+
+  # Use =() not <() to work around https://github.com/neovim/neovim/issues/21756
+  "$=VISUAL" -q =("${cmd[@]}")
+}
 
 # Find-replace everything in the current directory. Use `--` to pass args to fd.
 # e.g. 'sda s/foo/bar/g', 'sda --hidden -- s/foo/bar/g'
@@ -123,64 +325,6 @@ sdr() {
   done
 }
 
-# Copy last command.
-alias clc="fc -ln -1 | sed -e 's/\\\\n/\\n/g' -e 's/\\\\t/\\t/g' | ${=aliases[cpy]}" # "
-# Run last command and copy the command and its output.
-cr() { local a=$(r 2>&1); ${=aliases[cpy]} <<<"❯ $a"; }
-
-# Yaml to json, e.g. "y2j <t.yml | jq .". Requires a `pip install pyyaml`.
-alias j2y="python3 -c 'import sys, yaml, json; yaml.dump(json.load(sys.stdin), sys.stdout, indent=2)'"
-alias y2j="python3 -c 'import sys, yaml, json; json.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2)'"
-alias y2y="python3 -c 'import sys, yaml; yaml.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2)'"
-alias t2j="python3 -c 'import sys, toml, json; json.dump(toml.load(sys.stdin), sys.stdout, indent=2)'"
-# Markdown to html (rich text).
-alias markdown_to_html="pbpaste | pandoc --from markdown-smart --to html | textutil -convert rtf -stdin -stdout -format html |  pbcopy -Prefer rtf"
-# Url encode and decode stdin or first argument.
-alias url_encode='python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read().rstrip(\"\n\")))"'
-alias url_decode='python3 -c "import urllib.parse, sys; print(urllib.parse.unquote(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read().rstrip(\"\n\")))"'
-# Convert from UTF-16 to UTF-8
-alias utf16_decode='python3 -c "import sys; sys.stdin.reconfigure(encoding=\"utf-16\"); print(sys.stdin.read())"'
-
-if (( $+commands[kitty] )); then
-  alias icat="kitty +kitten icat" # Kitty terminal specific: https://sw.kovidgoyal.net/kitty/kittens/icat.html
-fi
-[[ -x "/Applications/IntelliJ IDEA CE.app/Contents/MacOS/idea" ]] && alias idea="/Applications/IntelliJ IDEA CE.app/Contents/MacOS/idea" # IntelliJ CE
-alias curl="noglob curl" # Don't match on ? [] etc in curl URLs, avoids needing to quote URL args.
-
-(( $+commands[ggrep] )) && alias grep='ggrep --color=auto'
-
-# }}} Aliases
-
-# {{{ Functions
-
-# Edit a file on the system.
-mdc() { command mkdir -p "$@"; { [[ $# == 1 ]] && cd "$1"; } || true; } # Mkdir then cd to dir (`mdc foo` = `mkdir foo && cd foo`).
-cpm() { command mkdir -p "${@: -1}" && cp "$@"; } # Mkdir then cp to dir (`cpm foo bar` = `md bar && cp foo bar`).
-mvm() { command mkdir -p "${@: -1}" && mv "$@"; } # Mkdir then mv to dir (`mvm foo bar` = `md bar && mv foo bar`).
-
-pth() { # Returns absolute path to each file or dir arg.
-  local i
-  for i in "$@"; do
-    if [[ -d "$i" ]]; then (pushd "$i" >/dev/null || return 1; pwd) # dir.
-    elif [[ -f "$i" ]]; then  # file.
-      case $i in
-        */*) echo "$(pushd "${i%/*}" >/dev/null || return 1; pwd)/${i##*/}" ;;
-          *) echo "$PWD/$i" ;;
-      esac
-    fi
-  done
-}
-
-# Add a trailing newline to all files in the current directory.
-add_trailing_newline() {
-  fd --hidden --exclude=.git --type f "$@" -x gsed -i -e '$a\' '{}'
-}
-
-# Remove trailing whitespace from all files in the current directory.
-remove_trailing_whitespace() {
-  fd --hidden --exclude=.git --type f "$@" -x gsed -i -e 's/\s\+$//' '{}'
-}
-
 # Convert tabs to spaces for all files in the current directory.
 # $1: spaces per tab, defaults to 4.
 tabs_to_spaces() {
@@ -201,110 +345,9 @@ url_text_fragment() {
   echo $url
 }
 
-# Get the App Bundle ID of a macOS/iOS/etc app, using an app store link, or an app on the system.
-# Useful for adding to 1Password: https://www.reddit.com/r/1Password/comments/hk02p7/suggestions_in_apps_for_1password_for_macos/.
-# Refs: StackOverflow (https://stackoverflow.com/questions/27509838/how-to-get-bundle-id-of-ios-app-either-using-ipa-file-or-app-installed-on-iph)
-# Usage:
-#   apple_app_bundleid https://apps.apple.com/us/app/watch/id1069511734
-#   apple_app_bundleid https://apps.apple.com/gb/app/clubspark-booker/id1028325841
-#   apple_app_bundleid /Applications/kitty.app
-apple_app_bundleid() {
-  case $1 in;
-    https://*) # Assume URL (Google for the app, copy URL).
-      country=$(sed -E 's;https://apps.apple.com/([^/]+)/.*;\1;' <<<"$1")
-      # Assumes links like https://apps.apple.com/us/app/magic-the-gathering-arena/id1496227521#?platform=ipad
-      id=$(sed -E 's;.*/id([0-9]+).*;\1;' <<<"$1")
-      curl "https://itunes.apple.com/${country}/lookup?id=${id}" | jq -r '"app://\(.results[0].bundleId)"'
-      ;;
-    *) # Assume App Name / Path.
-      id=$1
-      echo "app://$(osascript -e "id of app \"$1\"")"
-      ;;
-  esac
-}
-
-# Show which apps made a noise in the last 30 minutes.
-# Refs:
-# - <https://dreness.com/blog/archives/155773>
-# - <https://gist.github.com/dreness/1de1def13c83d19630ab0646ba8f0597>
-mac_recent_audio_notifications() {
-  log show --info --last 30m --predicate 'senderImagePath = "/usr/sbin/systemsoundserverd"' --style compact | awk '/Incoming Request/ {print $1 ":" $2 " " $14}'
-}
-
-# Save the current clipboard to a png file, copy the path to the clipboard, and show the file
-# in Finder. This allows you to easily drag the file, or paste it with a ⇧⌘g in a file
-# picker window.
-clipboard_image_save() {
-  local screenshot_path
-  screenshot_path=$HOME/tmp/screen_shot_recording/screenshot_$(date "+%Y-%m-%d_%H-%M-%S").png
-  osascript -e "set png_data to the clipboard as «class PNGf»
-	set the_file to open for access POSIX path of (POSIX file \"$screenshot_path\") with write permission
-	write png_data to the_file
-	close access the_file"
-
-  echo "Created $screenshot_path"
-  pbcopy <<<$screenshot_path
-  # Reveal in Finder.
-  open -R $screenshot_path
-}
-
-# Extract an OCI Archive to a local directory for debugging (doesn't handle everything).
-oci_extract() {
-  setopt local_options err_return no_unset
-  tarball=${1:?Missing argument #1: docker tarball}
-  local tempdir=$(mktemp -d) exit_code=0
-
-  tar -xzf $tarball -C $tempdir
-  cd $tempdir
-  mkdir root
-
-  cat manifest.json | jq -r '.[].Layers[]' | while read layer; do
-    if ! tar -xzf $layer -C root; then
-      echo "Encountered error while extracting layer - continuing on best-effort basis"
-      exit_code=1
-    fi
-  done
-
-  echo "Docker image extracted in: $tempdir/root"
-  return $exit_code
-}
-
-# Clone repo and cd into path (can't be in git config as we cd).
-gcl() {
-  local clone_dir ret
-  clone_dir="$(set -o pipefail; git cl --progress "$@" 3>&1 1>&2 2>&3 3>&- | tee /dev/stderr | awk -F \' '/Cloning into/ {print $2}' | head -1)"
-  ret="$?"
-  [[ -d "$clone_dir" ]] && echo "cd $clone_dir" && cd "$clone_dir" || return 1
-  return $ret
-}
-
-# Open vim with the results of the last rg/rga command in the quickfix list.
-rv() {
-  local cmd history_line
-  history_line=$(fc -lr -100 | awk '$2 == "rg" || $2 == "rga" { print $1; exit; }')
-  [[ -z "$history_line" ]] && { echo "No rg in the last 100 history commands."; return 1; }
-  eval cmd="($history[$history_line])"
-  # Remove 1st item (rg or rga) and replace with rg + flags, then the rest of the cmd array.
-  if [[ ${cmd[1]} == rga ]]; then
-    cmd=(rg --hidden --no-ignore --glob=!.git --smart-case --vimgrep "${(@)cmd[2,$#cmd]}")
-  else
-    cmd=(rg --glob=!.git --smart-case --vimgrep "${(@)cmd[2,$#cmd]}")
-  fi
-
-  # Use =() not <() to work around https://github.com/neovim/neovim/issues/21756
-  "$=VISUAL" -q =("${cmd[@]}")
-}
-
 # vim quickfix: copy a set of file:line lines then run to populate the quickfix list.
 vq() {
   ${=aliases[v]} +copen +"cexpr(getreg('+'))"
-}
-
-# Interactive move to trash..
-# dli -> interactive delete files in current directory.
-# dli foo/* bar/* -> interactive delete files in foo and bar subdirectories.
-dli() {
-  { [[ $# == 0 ]] && fd -0d 1 || print -N $@; } | fzf --reverse --read0 --print0 | xargs -0 ${=aliases[dl]}
 }
 
 # Backup watch function for machines that don't (yet) have it installed.
@@ -319,46 +362,6 @@ if ! type watch &>/dev/null; then
   }
 fi
 
-# Generate an alphanumeric password $1 characters long.
-password_gen() {
-  cat /dev/urandom | LC_ALL=C tr -dc '[:alnum:]' | fold -w ${1?Missing argument 1: password length} | head -1 | tr -d '\n'
-}
-
-chpwd() { # Commands to run after changing directory (via cd or pushd).
-  [[ -t 1 ]] || return # Exit if stdout is not a tty.
-  setopt local_options no_monitor # This only disables the "job start", not the "job complete".
-  # I know I set the ls alias earlier, so use that.
-  ${=aliases[ls]} -A 1>&2 # Show dir contents.
-  [[ -d .git ]] && git fetch --all --quiet & # Fetch git remotes.
-  # Add new entries to the zoxide database.
-  # Anything started with /Volumes/Shared-Data/ is a shared mount, see up/run/mac_volume
-  zoxide add -- "${PWD#/Volumes/Shared-Data}"
-
-  # Source a venv if present
-  # https://stackoverflow.com/questions/45216663/how-to-automatically-activate-virtualenvs-when-cding-into-a-directory
-  if [[ -d .venv ]]; then
-    source ./.venv/bin/activate
-  # Deactivate if no longer in venv dir or a subdir of it.
-  elif [[ -n "$VIRTUAL_ENV" && "$(pwd -P)"/ != "$(dirname $VIRTUAL_ENV)"/* ]]; then
-    deactivate
-  fi
-}
-
-# Get docker labels from an image tag or @sha256: digest.
-# Usage:
-#   $0 [registry]/<org>/<repo>@sha256:<sha>
-# docker_labels gibfahn/myimage:latest
-# docker_labels docker.io/rust@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-docker_labels() {
-  skopeo inspect docker://${1?1st argument should be a docker image} | jq '.Labels'
-}
-
-# Get docker sha256 repo digest (not the image ID) from an image tag.
-# docker_sha gibfahn/myimage:latest
-docker_sha() {
-  skopeo inspect docker://${1?1st argument should be a docker image} | jq -r '.Digest' | sed 's/^sha256://'
-}
-
 # }}} Functions
 
 # {{{ Run commands
@@ -367,7 +370,7 @@ command mkdir -p ${HISTFILE:h} # Create HISTFILE dir if necessary.
 
 # ulimit -c unlimited # Uncomment to allow saving of coredumps.
 
-# Set key repeat rate if available (Linux only). You probably want something less excessive here, like rate 250 30.
+# Set key repeat rate if available (Linux only). Something less excessive would be `rate 250 30`.
 if [[ $OSTYPE = linux* ]]; then
   (( $+commands[xset] )) && xset r rate 120 45
 fi
@@ -607,12 +610,11 @@ select-word-style shell # "Word" means a shell argument, so Ctrl-w will delete o
 # More expensive keybindings, with deferred loading. Immediately loaded ones are in zshrc.
 
 bindkey -M vicmd '^Y' gib-yank-all # Ctrl-y copies everything to the system clipboard.
-
 bindkey -M viins "^[[A" history-beginning-search-backward-end # Up: backwards history search.
 bindkey -M viins "^[[B" history-beginning-search-forward-end # Down: forwards history search.
 bindkey -M viins '\em' gib-combine-clipboard # Alt-m combines clipboard history using Maccy.
-bindkey -M viins '^G^P' _gib_fzf-gp-widget # Ctrl-g-p: search all binaries in the $PATH.
 bindkey -M viins '^G^G' _gib_fzf-gibfuncalias-widget # Ctrl-g-g: list my own functions and aliases.
+bindkey -M viins '^G^P' _gib_fzf-gp-widget # Ctrl-g-p: search all binaries in the $PATH.
 bindkey -M viins '^R' gib-fzf-history-widget # Ctrl-r: multi-select for history search.
 bindkey -M viins '^Y' gib-yank-all # Ctrl-y: copy everything to the system clipboard.
 bindkey -M viins '^[^M' self-insert-unmeta # Alt-Enter: insert a literal enter (newline char).
