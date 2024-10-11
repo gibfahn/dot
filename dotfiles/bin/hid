@@ -24,16 +24,6 @@ autoload -U colors && colors
 
 main() {
   set_env_vars
-  # Set FORCE_HID=1 to force hid to run.
-  if [[ -z ${FORCE_HID:-} ]]; then
-    case $(hostname) in
-      Gib* | Eve* | Brian*) ;;
-      *)
-        echo "Shared machine, skipping remap..."
-        exit 0
-        ;;
-    esac
-  fi
   [[ -d /Users/eve ]] && remap_eve || remap_gib
 
   echo "Hidutil remap successful."
