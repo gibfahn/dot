@@ -24,16 +24,17 @@ end
 
 vim.g.any_jump_disable_default_keybindings = 1 -- Conflicts with other useful bindings.
 vim.g.is_posix = 1 -- Assume shell for syntax highlighting.
+vim.g.lazyvim_picker = "fzf" -- Use fzf-lua not telescope as a file picker
 vim.g.loaded_netrw = 1 -- Skip loading netrw file browser (use vim-readdir instead).
 vim.g.loaded_netrwPlugin = 1 -- Don't use the built-in file browser (use vim-readdir instead).
 vim.g.mapleader = " " -- use space as a the leader key
 vim.g.minipairs_disable = true -- Disable mini.pairs (autopairs) by default. Enable via <Leader>up below.
 vim.g.mundo_preview_bottom = 1 -- vim-mundo undo diff preview on bottom.
 vim.g.mundo_right = 1 -- vim-mundo undo window on right.
+vim.g.nvim_ghost_autostart = 0 -- Don't start nvim-ghost by default
 vim.g.peekaboo_window = "vert bo 50new" -- Increase vim-peekaboo window width to 50.
 vim.g.terminal_scrollback_buffer_size = 100000 -- Store lots of terminal history (neovim-only).
 vim.g.zoxide_use_select = true -- <https://github.com/nanotee/zoxide.vim/issues/5>
-vim.g.lazyvim_picker = "fzf" -- Use fzf-lua not telescope as a file picker
 
 -- }}} Global variables
 
