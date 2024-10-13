@@ -17,6 +17,9 @@
 # exec 3>&2 2>$logfile
 # setopt XTRACE
 
+# https://apple.stackexchange.com/questions/199520/suspended-tty-output-when-launching-editors-like-vim-vi-emacs-or-nano
+stty -tostop # Don't pause jobs that write to stdout while in the background.
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block, everything else may go below.
