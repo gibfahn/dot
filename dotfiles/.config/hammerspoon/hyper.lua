@@ -147,6 +147,7 @@ local hyperModeAppMappings = {
   { key = "w", app = "WorkFlowy" },
   { key = "x", app = "Messenger", mods = { "alt" } },
   { key = "x", app = "Messages" },
+  { key = "r", app = "Reminders", mods = { "alt" } },
 }
 -- Add in wrk mappings if present.
 if WrkHyperModeAppMappings ~= nil then
