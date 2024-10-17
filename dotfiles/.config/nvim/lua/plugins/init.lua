@@ -256,21 +256,49 @@ return {
     "hrsh7th/nvim-cmp",
     ---@param opts cmp.ConfigSchema
     opts = function(_, opts)
-      local cmp = require("cmp")
+      local cmp = require("cmp") -- This plugin.
+      local luasnip = require("luasnip") -- "L3MON4D3/LuaSnip" plugin below.
 
       -- Modify
       -- <https://github.com/LazyVim/LazyVim/tree/main/lua/lazyvim/plugins/coding.lua> keymaps
       -- See <https://github.com/LazyVim/LazyVim/issues/2533> for other options.
+      -- This is adapted from the SuperTab mapping option at
+      -- <https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#luasnip>
 
-      -- <Enter> inserts a newline (ignoring completions).
+      -- <Enter> always inserts a newline.
+      -- There's nothing more irritating than typing out text and having newlines instead complete some unwanted
+      -- completion.
       opts.mapping["<CR>"] = function(fallback)
         cmp.abort()
         fallback()
       end
-      -- <Shift-Enter> accepts the current suggestion
-      opts.mapping["<S-CR>"] = cmp.mapping.confirm({ select = true })
-      -- <Ctrl-Enter> replaces the current text with the suggestion.
-      opts.mapping["<C-CR>"] = LazyVim.cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace })
+
+      -- Tab expands a snippet, goes to the next insert point, selects the current completion, or falls back to newline.
+      -- You can move between completions using the arrow keys.
+      opts.mapping["<Tab>"] = cmp.mapping(function(fallback)
+        if cmp.visible() then
+          if luasnip.expandable() then
+            luasnip.expand()
+          elseif luasnip.locally_jumpable(1) then
+            luasnip.jump(1)
+          else
+            cmp.confirm({
+              select = true,
+            })
+          end
+        else
+          fallback()
+        end
+      end, { "i", "s" })
+
+      -- Shift-Tab goes to the previous jump, or falls back to default behaviour..
+      opts.mapping["<S-Tab>"] = cmp.mapping(function(fallback)
+        if luasnip.locally_jumpable(-1) then
+          luasnip.jump(-1)
+        else
+          fallback()
+        end
+      end, { "i", "s" })
     end,
   },
 
@@ -353,6 +381,15 @@ return {
         },
       },
     },
+  },
+
+  -- Disable default Tab Key mappings in LuaSnip so we can set them in nvim-cmp above.
+  -- See <https://github.com/LazyVim/LazyVim/issues/2533> for other options.
+  {
+    "L3MON4D3/LuaSnip",
+    keys = function()
+      return {}
+    end,
   },
 
   {
