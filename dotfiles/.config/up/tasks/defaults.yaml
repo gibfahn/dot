@@ -386,7 +386,7 @@ data:
 
   org.hammerspoon.Hammerspoon:
     # Write hammerspoon config to alternate location.
-    # TODO(gib): make sure we're not escaping the ~ once it's allowed by up-rs.
+    # TODO(gib): make sure we're not escaping the ~ once it's allowed by up.
     MJConfigFile: ~/.config/hammerspoon/init.lua
 
   # https://github.com/dexterleng/vimac/

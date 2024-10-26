@@ -211,7 +211,7 @@ zle -N _gib_fzfz_cd
 # Use the latest development version of up instead of latest release (in interactive shells).
 up() {
   if command -v cargo >/dev/null; then
-    genv -C $HOME/code/me/up-rs/ cargo run -- $@
+    genv -C $HOME/code/me/up/ cargo run -- $@
   else
     command up $@
   fi

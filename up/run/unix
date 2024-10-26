@@ -66,6 +66,6 @@ exists rbenv && ln -sf "$XDG_DATA_HOME/rbenv/completions/rbenv.zsh" "$XDG_DATA_H
 
 # _up
 if exists up; then
-  # Completion for up-rs
+  # Completion for up
   up completions zsh >"$XDG_DATA_HOME/zsh/completions/_up"
 fi

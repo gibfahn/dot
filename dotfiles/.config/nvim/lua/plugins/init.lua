@@ -516,7 +516,7 @@ return {
           settings = {
             yaml = {
               schemas = {
-                ["https://github.com/gibfahn/up-rs/releases/latest/download/up-task-schema.json"] = "**/up/tasks/*.yaml",
+                ["https://github.com/gibfahn/up/releases/latest/download/up-task-schema.json"] = "**/up/tasks/*.yaml",
               },
             },
           },

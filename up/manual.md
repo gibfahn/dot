@@ -7,7 +7,7 @@ You will probably have different things you want/need to set up.
 
 ### PreReqs
 
-While running `up-rs` for the first time, you will need to ensure you set up gpg and ssh keys you
+While running `up` for the first time, you will need to ensure you set up gpg and ssh keys you
 need in later steps.
 
 ### System Preferences
