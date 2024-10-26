@@ -142,7 +142,7 @@ chpwd() { # Commands to run after changing directory (via cd or pushd).
   ${=aliases[ls]} -A 1>&2 # Show dir contents.
   [[ -d .git ]] && git fetch --all --quiet & # Fetch git remotes.
   # Add new entries to the zoxide database.
-  # Anything started with /Volumes/Shared-Data/ is a shared mount, see up/run/mac_volume
+  # Anything started with /Volumes/Shared-Data/ is a shared mount, see scripts/run/mac_volume
   zoxide add -- "${PWD#/Volumes/Shared-Data}"
 
   # Source a venv if present

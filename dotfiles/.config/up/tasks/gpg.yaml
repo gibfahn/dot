@@ -1,2 +1,2 @@
-run_if_cmd: ["${dot_dir}/up/run_if/gpg"]
-run_cmd: ["${dot_dir}/up/run/gpg"]
+run_if_cmd: ["${dot_dir}/scripts/run_if/gpg"]
+run_cmd: ["${dot_dir}/scripts/run/gpg"]

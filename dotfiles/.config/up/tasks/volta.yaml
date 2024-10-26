@@ -1,2 +1,2 @@
 run_if_cmd: ["/bin/sh", "-cex", '[ "$(which volta)" -a ! -d "$VOLTA_HOME"/bin/volta ] || exit 204']
-run_cmd: ["${dot_dir}/up/run/volta"]
+run_cmd: ["${dot_dir}/scripts/run/volta"]

@@ -1,2 +1,2 @@
-run_if_cmd: ["${dot_dir}/up/run_if/wallpaper"]
-run_cmd: ["${dot_dir}/up/run/wallpaper"]
+run_if_cmd: ["${dot_dir}/scripts/run_if/wallpaper"]
+run_cmd: ["${dot_dir}/scripts/run/wallpaper"]

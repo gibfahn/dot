@@ -13,7 +13,7 @@ sudo_local_touch_id_line="auth       sufficient     pam_tid.so"
 main() {
   # Use work override script if present.
   if [[ -d ${wrk_dot_dir:-} ]]; then
-    "$wrk_dot_dir"/up/run/touchid_sudo
+    "$wrk_dot_dir"/scripts/run/touchid_sudo
     exit
   fi
 

@@ -1,2 +1,2 @@
 run_if_cmd: ["/bin/sh", "-cex", '[ "$(whoami)" = gib ] || exit 204']
-run_cmd: ["${dot_dir}/up/run/rust"]
+run_cmd: ["${dot_dir}/scripts/run/rust"]
