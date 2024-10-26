@@ -44,8 +44,10 @@ rustup update
 # Set default toolchain to stable.
 rustup default stable
 
-# If you get libgit2 errors, see <https://github.com/nabijaczleweli/cargo-update/issues/243>.
-exists cargo-install-update || cargo install cargo-update
+# If you get libgit2 errors, see <https://github.com/nabijaczleweli/cargo-update/issues/243> and
+# run:
+#   cargo install cargo-update --force --features vendored-libgit2
+exists cargo-install-update || cargo install --features vendored-libgit2 cargo-update
 
 case $(uname) in
   # These are installed and updated through brew on Darwin.
