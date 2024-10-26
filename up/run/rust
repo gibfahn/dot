@@ -9,6 +9,7 @@ set -x
 rust_crates=(
   cargo-expand   # Expand macros and see generated code.
   cargo-sweep    # Clean out old target directories.
+  faketty        # Run commands inside a fake tty vs the current terminal's tty.
   proximity-sort # Sort paths by proximity to a directory.
 )
 

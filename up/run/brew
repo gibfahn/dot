@@ -5,11 +5,6 @@ set -ex
 # Force color on in brew output, even though not writing to a tty.
 export HOMEBREW_COLOR=1
 
-# Work around <https://github.com/orgs/Homebrew/discussions/5528>
-brew() {
-  script -q /dev/null "$(command -v brew)" "$@"
-}
-
 # Install brew and Xcode Command Line Tools.
 if ! command -v brew >/dev/null; then
   # Should only exist if we're on a work machine.
@@ -22,6 +17,18 @@ if ! command -v brew >/dev/null; then
     set -x
   fi
 fi
+
+# Work around <https://github.com/orgs/Homebrew/discussions/5528>, where brew revokes sudo for the
+# whole terminal.
+# Can't use script as per that issue because it messes up up's indicatif-powered terminal output.
+brew() {
+  # faketty is installed in the `rust` task, so can't guarantee it is present at this point.
+  if command -v faketty >/dev/null; then
+    faketty brew "$@"
+  else
+    command brew "$@"
+  fi
+}
 
 # Install xcode command line tools (should have already been brew installed).
 # If these are messed up run `xcode-select -p`. It will normally print one of:
