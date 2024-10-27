@@ -275,9 +275,16 @@ return {
 
       -- Tab expands a snippet, goes to the next insert point, selects the current completion, or falls back to newline.
       -- You can move between completions using the arrow keys.
+      -- If you want to accept the current completion you can use Shift-Enter.
       opts.mapping["<Tab>"] = cmp.mapping(function(fallback)
         if cmp.visible() then
-          if luasnip.expandable() then
+          -- Native snippets, including those added by <https://github.com/garymjr/nvim-snippets>.
+          if vim.snippet.active({ direction = 1 }) then
+            vim.schedule(function()
+              vim.snippet.jump(1)
+            end)
+          -- luasnip is used by pkl only at the moment.
+          elseif luasnip.expandable() then
             luasnip.expand()
           elseif luasnip.locally_jumpable(1) then
             luasnip.jump(1)
