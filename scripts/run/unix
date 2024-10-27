@@ -56,10 +56,13 @@ log_get "Updating ZSH Completions"
 mkdir -p "$XDG_DATA_HOME/zsh/completions"
 
 # _rustup and _cargo
-exists rustup && {
+if exists rustup; then
   rustup completions zsh >"$XDG_DATA_HOME/zsh/completions/_rustup"
   # Creates "$XDG_DATA_HOME/zsh/completions/_cargo"
   ln -sf "$(realpath "$(dirname "$(rustup which cargo)")"/../share/zsh/site-functions)"/* "$XDG_DATA_HOME/zsh/completions/"
-}
+fi
+
 # _rbenv
-exists rbenv && ln -sf "$XDG_DATA_HOME/rbenv/completions/rbenv.zsh" "$XDG_DATA_HOME/zsh/completions/_rbenv"
+if exists rbenv; then
+  ln -sf "$XDG_DATA_HOME/rbenv/completions/rbenv.zsh" "$XDG_DATA_HOME/zsh/completions/_rbenv"
+fi
