@@ -101,21 +101,29 @@ local function switchToApp(apps)
     return
   end
 
+  local currentIndex = nil
   -- See https://www.hammerspoon.org/docs/hs.window.html#application
   -- This gives the path - /path/to/<application>.app.
-  local focusedWindowPath = hs.window.focusedWindow():application():path()
-  -- Extract <application> from the path. This isn't the same as the name the application gives
-  -- itself.
-  local focusedApp = string.lower(string.gsub(focusedWindowPath, ".*/([^/]*).app", "%1"))
+  local focusedWindow = hs.window.focusedWindow()
+  if focusedWindow ~= nil then
+    local focusedWindowApplication = focusedWindow:application()
+    if focusedWindowApplication ~= nil then
+      local focusedWindowPath = focusedWindowApplication:path()
+      if focusedWindowPath ~= nil then
+        -- Extract <application> from the path. This isn't the same as the name the application gives
+        -- itself.
+        local focusedApp = string.lower(string.gsub(focusedWindowPath, ".*/([^/]*).app", "%1"))
 
-  local currentIndex = nil
-  for i, v in ipairs(apps) do
-    if string.lower(v) == focusedApp then
-      currentIndex = i
-      break
+        for i, v in ipairs(apps) do
+          if string.lower(v) == focusedApp then
+            currentIndex = i
+            break
+          end
+        end
+        log.df("Focused app: %s, currentIndex: %s, focusedWindowPath: %s", focusedApp, currentIndex, focusedWindowPath)
+      end
     end
   end
-  log.df("Focused app: %s, currentIndex: %s, focusedWindowPath: %s", focusedApp, currentIndex, focusedWindowPath)
 
   -- If none of the apps in the list are currently focused, select the first app from the list.
   if currentIndex == nil then
