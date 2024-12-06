@@ -187,13 +187,13 @@ dli() {
 # docker_labels gibfahn/myimage:latest
 # docker_labels docker.io/rust@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 docker_labels() {
-  skopeo inspect docker://${1?1st argument should be a docker image} | jq '.Labels'
+  skopeo inspect --override-os=linux docker://${1?1st argument should be a docker image} | jq '.Labels'
 }
 
 # Get docker sha256 repo digest (not the image ID) from an image tag.
 # docker_sha gibfahn/myimage:latest
 docker_sha() {
-  skopeo inspect docker://${1?1st argument should be a docker image} | jq -r '.Digest' | sed 's/^sha256://'
+  skopeo inspect --override-os=linux docker://${1?1st argument should be a docker image} | jq -r '.Digest' | sed 's/^sha256://'
 }
 
 # Run command every $1 seconds until it succeeds, e.g. `every 60 curl https://example.com`
