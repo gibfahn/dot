@@ -291,7 +291,7 @@ vim.keymap.set("n", "<A-q>", "<Cmd>cnext<CR>", { desc = "Go to next quickfix ite
 vim.keymap.set("n", "<A-r>", function() require("trouble").next({skip_groups = true, jump = true}) end, { desc = "Go to next Trouble item" })
 vim.keymap.set("n", "<A-s>", "]s", { desc = "Go to next spelling mistake" })
 vim.keymap.set("n", "<A-t>", "<Cmd>tabnext<CR>", { desc = "Go to next tab" })
-vim.keymap.set("n", "<A-x>", function(n) require("lazyvim.util").ui.bufremove(n) end, { desc = "Delete buffer", noremap = false })
+vim.keymap.set("n", "<A-x>", function() Snacks.bufdelete() end, { desc = "Delete buffer", noremap = false })
 vim.keymap.set("n", "<A-z>", "<Cmd>Zi<CR>", { desc = "Switch to different directory" })
 vim.keymap.set("n", "<C-p>", "<C-i>", { desc = "Go to next jump" }) -- <C-o> = go to previous jump, <C-p> is go to next (normally <C-i>, but that == Tab, used above)
 vim.keymap.set("n", "<Leader>+", '<Cmd>exe "resize ".(winheight(0) * 3/2)<CR>', { silent = true, desc = "Increase window height to 3/2" })
@@ -353,22 +353,22 @@ vim.keymap.set("n", "<Leader>y", '"+y', { desc = "Copy to clipboard" })
 vim.keymap.set("n", "<Leader>z", "za", { desc = "Fold current line" })
 vim.keymap.set("n", "<S-Tab>", "<Cmd>bp<CR>", { desc = "Go to previous buffer" })
 vim.keymap.set("n", "<Tab>", "<Cmd>bn<CR>", { desc = "Go to next buffer" })
-vim.keymap.set("n", "<leader>gB", function() require("lazyvim.util").lazygit.browse() end, { desc = "Git Browse" })
-vim.keymap.set("n", "<leader>gb", function() require("lazyvim.util").lazygit.blame_line() end, { desc = "Git Blame Line" })
+vim.keymap.set("n", "<leader>gB", function() Snacks.lazygit.open() end, { desc = "Git Browse" })
+vim.keymap.set("n", "<leader>gb", function() Snacks.git.blame_line() end, { desc = "Git Blame Line" })
 vim.keymap.set("n", "<leader>gl", "<Cmd>LazyGit<CR>", { desc = "Lazygit" })
 vim.keymap.set("n", "<leader>lL", function() require("lazyvim.util").news.changelog() end, { desc = "LazyVim Changelog" })
 vim.keymap.set("n", "<leader>uF", function() require("lazyvim.util").format.toggle(true) end, { desc = "Toggle auto format (buffer)" })
-vim.keymap.set("n", "<leader>uL", function() require("lazyvim.util").toggle("relativenumber") end, { desc = "Toggle Relative Line Numbers" })
+vim.keymap.set("n", "<leader>uL", function() Snacks.toggle.option("relativenumber"):toggle() end, { desc = "Toggle Relative Line Numbers" })
 vim.keymap.set("n", "<leader>uT", function() if vim.b.ts_highlight then vim.treesitter.stop() else vim.treesitter.start() end end, { desc = "Toggle Treesitter Highlight" })
-vim.keymap.set("n", "<leader>uc", function() require("lazyvim.util").toggle("conceallevel", false, { 0, 3 }) end, { desc = "Toggle Conceal" })
-vim.keymap.set("n", "<leader>ud", function() require("lazyvim.util").toggle.diagnostics() end, { desc = "Toggle Diagnostics" })
+vim.keymap.set("n", "<leader>uc", function() Snacks.toggle.option("conceallevel", {off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 3}):toggle() end, { desc = "Toggle Conceal" })
+vim.keymap.set("n", "<leader>ud", function() Snacks.toggle.diagnostics():toggle() end, { desc = "Toggle Diagnostics" })
 vim.keymap.set("n", "<leader>uf", function() require("lazyvim.util").format.toggle() end, { desc = "Toggle auto format (global)" })
-vim.keymap.set("n", "<leader>uh", function() require("lazyvim.util").toggle.inlay_hints() end, { desc = "Toggle Inlay Hints" })
+vim.keymap.set("n", "<leader>uh", function() Snacks.toggle.inlay_hints():toggle() end, { desc = "Toggle Inlay Hints" })
 vim.keymap.set("n", "<leader>ui", vim.show_pos, { desc = "Inspect Pos" })
-vim.keymap.set("n", "<leader>ul", function() require("lazyvim.util").toggle.number() end, { desc = "Toggle Line Numbers" })
+vim.keymap.set("n", "<leader>ul", function() Snacks.toggle.line_number():toggle() end, { desc = "Toggle Line Numbers" })
 vim.keymap.set("n", "<leader>ur", "<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><CR>", { desc = "Redraw / clear hlsearch / diff update" }) -- taken from runtime/lua/_editor.lua
-vim.keymap.set("n", "<leader>us", function() require("lazyvim.util").toggle("spell") end, { desc = "Toggle Spelling" })
-vim.keymap.set("n", "<leader>uw", function() require("lazyvim.util").toggle("wrap") end, { desc = "Toggle Word Wrap" })
+vim.keymap.set("n", "<leader>us", function() Snacks.toggle.option("spell"):toggle() end, { desc = "Toggle Spelling" })
+vim.keymap.set("n", "<leader>uw", function() Snacks.toggle.option("wrap"):toggle() end, { desc = "Toggle Word Wrap" })
 vim.keymap.set("n", "<leader>xl", "<cmd>lopen<cr>", { desc = "Location List" })
 vim.keymap.set("n", "<leader>xq", "<cmd>copen<cr>", { desc = "Quickfix List" })
 vim.keymap.set("n", "N", "'nN'[v:searchforward].'zv'", { expr = true, desc = "Prev search result" })
@@ -555,7 +555,7 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
     if event.match:match("^%w%w+://") then
       return
     end
-    local file = vim.loop.fs_realpath(event.match) or event.match
+    local file = vim.uv.fs_realpath(event.match) or event.match
     vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
   end,
   group = gib_autogroup,
@@ -567,7 +567,7 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
     if event.match:match("^%w%w+://") then
       return
     end
-    local file = vim.loop.fs_realpath(event.match) or event.match
+    local file = vim.uv.fs_realpath(event.match) or event.match
     vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
   end,
   group = gib_autogroup,

@@ -4,7 +4,9 @@
 # I use this an abbreviation.
 wrk = "wrk"
 iterm2 = "iterm2"
+noice = "noice"
 
 [default.extend-words]
 # I use this an abbreviation.
 wrk = "wrk"
+noice = "noice"
