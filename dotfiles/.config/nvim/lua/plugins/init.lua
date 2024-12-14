@@ -9,7 +9,6 @@ return {
   { "folke/persistence.nvim", enabled = false }, -- I don't use sessions.
   { "folke/tokyonight.nvim", enabled = false }, -- I have my own colorscheme.
   { "nvim-neo-tree/neo-tree.nvim", enabled = false }, -- I use oil.nvim instead.
-  { "nvimdev/dashboard-nvim", enabled = false }, -- Don't use the splash/start screen.
 
   {
     "akinsho/bufferline.nvim", -- Show buffers in the tab line.
@@ -205,6 +204,25 @@ return {
   },
 
   {
+    "folke/snacks.nvim",
+    opts = {
+      ---@class snacks.dashboard.Config
+      dashboard = {
+        enabled = false, -- I don't use the dashboard.
+      },
+      ---@class snacks.indent.Config
+      indent = {
+        enabled = true,
+        -- Ideally enable indent_at_cursor if <https://github.com/folke/snacks.nvim/issues/282> is implemented.
+      },
+      ---@class snacks.scroll.Config
+      scroll = {
+        enabled = false, -- Scrolling is visual noise for me.
+      },
+    },
+  },
+
+  {
     "folke/trouble.nvim", -- better diagnostics list and others
     opts = {
       focus = true, -- Automatically move focus to window when opened.
@@ -229,6 +247,7 @@ return {
     end,
     -- https://github.com/folke/which-key.nvim#%EF%B8%8F-configuration
     opts = {
+      preset = "modern", -- helix doesn't show everything by default
       spec = {
         { "<leader>l", group = "lazy" },
         { "<leader>h", group = "insert todos" },
@@ -250,64 +269,6 @@ return {
   },
 
   { "godlygeek/tabular", cmd = "Tabularize" }, -- Make tables easier (:help Tabular).
-
-  -- auto completion
-  {
-    "hrsh7th/nvim-cmp",
-    ---@param opts cmp.ConfigSchema
-    opts = function(_, opts)
-      local cmp = require("cmp") -- This plugin.
-      local luasnip = require("luasnip") -- "L3MON4D3/LuaSnip" plugin below.
-
-      -- Modify
-      -- <https://github.com/LazyVim/LazyVim/tree/main/lua/lazyvim/plugins/coding.lua> keymaps
-      -- See <https://github.com/LazyVim/LazyVim/issues/2533> for other options.
-      -- This is adapted from the SuperTab mapping option at
-      -- <https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#luasnip>
-
-      -- <Enter> always inserts a newline.
-      -- There's nothing more irritating than typing out text and having newlines instead complete some unwanted
-      -- completion.
-      opts.mapping["<CR>"] = function(fallback)
-        cmp.abort()
-        fallback()
-      end
-
-      -- Tab expands a snippet, goes to the next insert point, selects the current completion, or falls back to newline.
-      -- You can move between completions using the arrow keys.
-      -- If you want to accept the current completion you can use Shift-Enter.
-      opts.mapping["<Tab>"] = cmp.mapping(function(fallback)
-        if cmp.visible() then
-          -- Native snippets, including those added by <https://github.com/garymjr/nvim-snippets>.
-          if vim.snippet.active({ direction = 1 }) then
-            vim.schedule(function()
-              vim.snippet.jump(1)
-            end)
-          -- luasnip is used by pkl only at the moment.
-          elseif luasnip.expandable() then
-            luasnip.expand()
-          elseif luasnip.locally_jumpable(1) then
-            luasnip.jump(1)
-          else
-            cmp.confirm({
-              select = true,
-            })
-          end
-        else
-          fallback()
-        end
-      end, { "i", "s" })
-
-      -- Shift-Tab goes to the previous jump, or falls back to default behaviour..
-      opts.mapping["<S-Tab>"] = cmp.mapping(function(fallback)
-        if luasnip.locally_jumpable(-1) then
-          luasnip.jump(-1)
-        else
-          fallback()
-        end
-      end, { "i", "s" })
-    end,
-  },
 
   {
     "ibhagwan/fzf-lua",

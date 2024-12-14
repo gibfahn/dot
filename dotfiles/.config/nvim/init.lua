@@ -24,7 +24,6 @@ end
 
 vim.g.any_jump_disable_default_keybindings = 1 -- Conflicts with other useful bindings.
 vim.g.is_posix = 1 -- Assume shell for syntax highlighting.
-vim.g.lazyvim_picker = "fzf" -- Use fzf-lua not telescope as a file picker
 vim.g.loaded_netrw = 1 -- Skip loading netrw file browser (use vim-readdir instead).
 vim.g.loaded_netrwPlugin = 1 -- Don't use the built-in file browser (use vim-readdir instead).
 vim.g.mapleader = " " -- use space as a the leader key
@@ -176,9 +175,9 @@ require("lazy").setup({
     -- See available extras at <http://www.lazyvim.org/extras>.
 
     { import = "lazyvim.plugins.extras.dap.core" }, -- Debug adaptor protocol
-    { import = "lazyvim.plugins.extras.editor.fzf" }, -- Enable fzf-lua telescope alternative.
     { import = "lazyvim.plugins.extras.editor.mini-diff" }, -- Visualise git diff.
     { import = "lazyvim.plugins.extras.editor.navic" }, -- Show function, class, etc in the statusline
+    { import = "lazyvim.plugins.extras.editor.inc-rename" }, -- Incremental LSP renaming based on Neovim's command-preview feature
     { import = "lazyvim.plugins.extras.formatting.black" }, -- Python black formatter
     { import = "lazyvim.plugins.extras.formatting.prettier" }, -- JS/Markdown prettier formatter
     { import = "lazyvim.plugins.extras.lang.docker" }, -- Dockerfile language support
@@ -188,12 +187,12 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.lang.json" }, -- JSON language support
     { import = "lazyvim.plugins.extras.lang.markdown" }, -- Markdown language support
     { import = "lazyvim.plugins.extras.lang.python" }, -- Python language support
+    { import = "lazyvim.plugins.extras.lang.ruby" }, -- Ruby language support
     { import = "lazyvim.plugins.extras.lang.rust" }, -- Rust language support
     { import = "lazyvim.plugins.extras.lang.toml" }, -- Toml language support
     { import = "lazyvim.plugins.extras.lang.yaml" }, -- Yaml language support
     { import = "lazyvim.plugins.extras.lsp.none-ls" }, -- Other langservers
     { import = "lazyvim.plugins.extras.test.core" }, -- Run tests from within neovim (e.g. rust tests).
-    { import = "lazyvim.plugins.extras.ui.mini-indentscope" }, -- Active indent guide and indent text objects.
     { import = "lazyvim.plugins.extras.util.dot" }, -- Shell linting (shfmt and shellcheck) and syntax highlighting.
     { import = "lazyvim.plugins.extras.util.mini-hipatterns" }, -- Adds some highlighting patterns for things.
     { import = "lazyvim.plugins.extras.util.octo" }, -- GitHub support.
