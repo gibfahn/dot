@@ -52,7 +52,6 @@ brew "moreutils"                         # GNU tools like parallel and sponge.
 brew "mypy"                              # Python code typechecker.
 brew "pkl"                               # Pkl config language (https://pkl-lang.org).
 brew "protobuf"                          # Serialization format.
-brew "pyenv"                             # Python version manager.
 brew "pylint"                            # Python code linter.
 brew "ruby"                              # Newer version of Ruby.
 brew "shellcheck"                        # Linter for bash.

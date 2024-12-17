@@ -1,2 +1,0 @@
-run_if_cmd: ["/bin/sh", "-cex", "which pyenv || exit 204"]
-run_cmd: ["/bin/zsh", "-cex", "pyenv rehash"]
