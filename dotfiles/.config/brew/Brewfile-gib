@@ -50,7 +50,6 @@ brew "lazygit"                           # Git TUI wrapper, has some staging nic
 brew "make"                              # GNU version of make.
 brew "moreutils"                         # GNU tools like parallel and sponge.
 brew "mypy"                              # Python code typechecker.
-brew "pipx"                              # Install Python binaries (https://pipx.pypa.io).
 brew "pkl"                               # Pkl config language (https://pkl-lang.org).
 brew "protobuf"                          # Serialization format.
 brew "pyenv"                             # Python version manager.
@@ -61,6 +60,7 @@ brew "shfmt"                             # Shell script formatter.
 brew "tidy-html5"                        # HTML5 linter.
 brew "tokei"                             # Counts lines of code in a project.
 brew "typos-cli"                         # Detect typos in code.
+brew "uv"                                # Python wrapper for doing python stuff.
 brew "wget"                              # Alternative to curl for downloading files.
 
 # Brew formulae from taps.
