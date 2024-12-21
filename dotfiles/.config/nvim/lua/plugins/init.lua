@@ -706,6 +706,28 @@ return {
     },
   },
 
+  {
+    "saghen/blink.cmp",
+    ---@module 'blink.cmp'
+    ---@type blink.cmp.Config
+    opts = {
+      completion = {
+        ghost_text = {
+          enabled = true,
+        },
+      },
+
+      -- experimental signature help support
+      signature = { enabled = true },
+
+      -- Don't use Enter preset as that conflicts with Enter for a newline.
+      -- <https://cmp.saghen.dev/configuration/keymap.html#super-tab>
+      keymap = {
+        preset = "super-tab",
+      },
+    },
+  },
+
   "simnalamburt/vim-mundo", -- Graphical undo tree (updated fork of Gundo).
 
   {
