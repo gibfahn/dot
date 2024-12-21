@@ -21,5 +21,15 @@ if ! grep -qF "$current_dir" "$config_file"; then
   fi
 fi
 
+# Sync the remote branch of any fork repo to the upstream.
+# This prevents git pushes to your fork taking a long time if much git history has been pushed since
+# you last pushed fork/forkmain.
+# This assumes that your fork main branch is called `forkmain`, which mine always are.
+for remote in $(git remote | grep fork); do
+  if [[ $(git remote get-url "$remote") == *github*gib* ]]; then
+    GH_HOST=$(git remote-host "$remote") gh repo sync "$(git remote-org "$remote")/$(git remote-repo "$remote")" --branch forkmain
+  fi
+done
+
 # Check for unpushed branches or uncommitted changes.
 git unpushed
