@@ -1,0 +1,37 @@
+# vi:ft=conf
+#
+# https://github.com/mitchellh/ghostty/blob/main/src/config/Config.zig
+#
+# `ls /Applications/Ghostty.app/Contents/Resources/ghostty/themes` for the list
+
+adjust-cursor-thickness = 300%
+confirm-close-surface = true
+copy-on-select = clipboard
+cursor-color = "#6BF549"
+focus-follows-mouse = true
+font-family = "Hasklug Nerd Font"
+font-size = 15
+font-thicken = true
+macos-non-native-fullscreen = true
+macos-option-as-alt = true
+macos-titlebar-style = "tabs"
+quit-after-last-window-closed = true
+scrollback-limit = 25_000_000
+shell-integration = zsh
+theme = "Pro"
+unfocused-split-opacity = 0.7
+
+# Missing from Ghostty (that I have in kitty):
+# - `url_prefixes` -> can't set custom prefixes (maybe `link:` is the way to do this?)
+# - `window_alert_on_bell` -> `echo -n '\a'` doesn't seem to do anything in Ghostty
+# - `confirm_os_window_close` -> if you restart the computer Ghostty just loses your work
+# - `tab_activity_symbol` -> no activity indicator
+# - `active_border_color` / inactive_border_color: can't get visible borders (they seem to be black on all the black screens, vs the defaults in kitty)
+# - Inline comments in this file?
+# - ⌘-9 to go to "last tab" not "9th tab" (as in Safari)
+# - Remappings:
+#   - Open scrollback in less: `scrollback_pager env LESS= less --tabs=4 --ignore-case --RAW-CONTROL-CHARS --quit-if-one-screen --LONG-PROMPT --window=-4 --jump-target=1 --pattern=^❯ +INPUT_LINE_NUMBER`
+#   - Open scrollback in nvim
+
+# Nice in Ghostty:
+# - Native emoji entry with ⌘-⌃-Space
