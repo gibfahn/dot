@@ -2,7 +2,7 @@
 #
 # https://github.com/mitchellh/ghostty/blob/main/src/config/Config.zig
 #
-# `ls /Applications/Ghostty.app/Contents/Resources/ghostty/themes` for the list
+# `ghostty +list-themes` for a list of them
 
 adjust-cursor-thickness = 300%
 confirm-close-surface = true
@@ -12,6 +12,8 @@ focus-follows-mouse = true
 font-family = "Hasklug Nerd Font"
 font-size = 15
 font-thicken = true
+keybind = super+f=write_scrollback_file:paste
+keybind = super+physical:nine=last_tab
 macos-non-native-fullscreen = true
 macos-option-as-alt = true
 macos-titlebar-style = "tabs"
@@ -28,7 +30,6 @@ unfocused-split-opacity = 0.7
 # - `tab_activity_symbol` -> no activity indicator
 # - `active_border_color` / inactive_border_color: can't get visible borders (they seem to be black on all the black screens, vs the defaults in kitty)
 # - Inline comments in this file?
-# - ⌘-9 to go to "last tab" not "9th tab" (as in Safari)
 # - Remappings:
 #   - Open scrollback in less: `scrollback_pager env LESS= less --tabs=4 --ignore-case --RAW-CONTROL-CHARS --quit-if-one-screen --LONG-PROMPT --window=-4 --jump-target=1 --pattern=^❯ +INPUT_LINE_NUMBER`
 #   - Open scrollback in nvim
