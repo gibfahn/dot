@@ -150,6 +150,9 @@ data:
     # First "on" value wins.
     NSUserDictionaryReplacementItems:
       - ... # Keep existing shortcuts at higher priority (only append if missing).
+      - replace: ->
+        on: 1
+        with: →
       - replace: "!pmt"
         on: 1
         with: ❯
