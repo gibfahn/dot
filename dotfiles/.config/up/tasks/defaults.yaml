@@ -153,6 +153,9 @@ data:
       - replace: ->
         on: 1
         with: →
+      - replace: "!yuan"
+        on: 1
+        with: ¥
       - replace: "!pmt"
         on: 1
         with: ❯
