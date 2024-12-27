@@ -62,6 +62,11 @@ data:
   - name: up
     fetch_url: https://gitlab.com/gib/fahn.co
   prune: true
+- path: ~/code/me/g4_sort
+  remotes:
+  - name: up
+    fetch_url: https://github.com/gibfahn/g4_sort.git
+  prune: true
 - path: ~/code/me/homebrew-tap
   remotes:
   - name: up
