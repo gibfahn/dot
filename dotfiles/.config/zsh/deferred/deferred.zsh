@@ -12,8 +12,6 @@ export FZF_CTRL_R_OPTS="--height=100% --preview-window=down:30%:noborder --previ
 export FZF_CTRL_T_COMMAND='fd --type f --hidden --follow --exclude .git'
 export FZF_CTRL_T_OPTS="--height=100% --preview-window=right:60%:noborder"
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git' # Use fd for fuzzy finding if available.
-# Ctrl-a -> select/deselect all, Ctrl-y -> copy line, Alt-s -> sneak to line, Alt-Shift-s -> sneak to line + enter, Ctrl-p is open/close preview window.
-export FZF_DEFAULT_OPTS="--select-1 --exit-0 --preview-window=right:50% --preview 'file-preview {}' -m --bind='ctrl-o:execute(\$VISUAL {} </dev/tty >/dev/tty),ctrl-a:toggle-all,ctrl-s:toggle-sort,alt-w:toggle-preview-wrap,alt-s:jump,alt-up:half-page-up,alt-down:half-page-down,alt-S:jump-accept,ctrl-p:toggle-preview,ctrl-y:execute(${aliases[cpy]} <<< {})'"
 export GNUPGHOME="$XDG_DATA_HOME"/gnupg # Gpg data.
 export GRADLE_USER_HOME="$XDG_DATA_HOME"/gradle # Also contains gradle.properties (symlink from XDG_CONFIG_HOME).
 export HELM_HOME="$XDG_DATA_HOME/helm" # Move Helm data dir from ~.
@@ -35,6 +33,25 @@ export RUSTUP_HOME="$XDG_DATA_HOME/rustup" # Rustup goes here.
 export SCCACHE_DIR="$XDG_CACHE_HOME/sccache" # sccache cache dir.
 export TIME_STYLE=long-iso # See `man gls` on macOS, sets the time style for `ls -l`.
 export VIRTUAL_ENV_DISABLE_PROMPT=1 # Add the virtualenv prompt myself.
+
+# Mappings:
+# alt-s: sneak to line
+# alt-shift-s: sneak to line + enter
+# ctrl-y: copy line
+export FZF_DEFAULT_OPTS="--select-1 --exit-0 --preview-window=right:50% --preview 'file-preview {}' -m \
+--bind='\
+alt-S:jump-accept,\
+alt-down:half-page-down,\
+alt-o:execute(open {}),\
+alt-s:jump,\
+alt-up:half-page-up,\
+alt-w:toggle-preview-wrap,\
+ctrl-a:toggle-all,\
+ctrl-o:execute(\$VISUAL {} </dev/tty >/dev/tty),\
+ctrl-p:toggle-preview,\
+ctrl-s:toggle-sort,\
+ctrl-y:execute(${aliases[cpy]} <<< {})\
+'"
 
 _LESS=(
   --tabs=4 # tab is 4 spaces
