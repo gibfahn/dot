@@ -146,8 +146,7 @@ alias g=git
 alias lg=lazygit
 alias md="mkdir -p" # Recursive mkdir.
 alias path='echo $PATH | tr : "\n"' # Print out path, newline-separated.
-alias s="TERM=xterm-256color ssh" # Reset cursor to block and ssh.
-
+alias s=ssh
 # }}} Early Completion Keybindings
 
 # {{{ Early Aliases
