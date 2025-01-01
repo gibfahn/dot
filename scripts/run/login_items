@@ -2,8 +2,10 @@
 
 set -euxo pipefail
 
+EXIT_CODE_SKIPPED=204 # up treats this exit code as "skipped"
+
 # OS is darwin or we don't run.
-[[ $OSTYPE == darwin* ]] || exit 204
+[[ $OSTYPE == darwin* ]] || exit "$EXIT_CODE_SKIPPED"
 
 changed=
 
@@ -33,4 +35,6 @@ for item in "${current_login_items[@]}"; do
 done
 
 # If we didn't change anything, mark the task as skipped.
-[[ -n $changed ]] || exit 204
+if [[ -z $changed ]]; then
+  exit "$EXIT_CODE_SKIPPED"
+fi

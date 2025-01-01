@@ -6,6 +6,8 @@ set -euo pipefail
 
 set -x
 
+EXIT_CODE_SKIPPED="$EXIT_CODE_SKIPPED" # up treats this exit code as "skipped"
+
 shared_name=Shared-Data
 shared_volume=/Volumes/$shared_name
 
@@ -21,7 +23,7 @@ dirs_to_move=(
   ~/src
 )
 
-did_stuff=
+work_done=
 for dir in $dirs_to_move; do
   [[ -L $dir ]] && continue
 
@@ -31,7 +33,7 @@ for dir in $dirs_to_move; do
   # If directory not present skip it.
   if [[ ! -d $dir ]]; then
     if [[ -d $shared_dir ]]; then
-      did_stuff=yes
+      work_done=true
       ln -s $shared_dir $dir || sudo ln -s $shared_dir $dir
       continue
     else
@@ -39,7 +41,7 @@ for dir in $dirs_to_move; do
     fi
   fi
 
-  did_stuff=yes
+  work_done=true
   mkdir -p $(dirname $shared_dir)
   # If dir is owned by root (e.g. /opt/homebrew) then mv will complete, but deleting old dir will
   # fail, so delete just that empty dir (if it's truly empty) with `sudo rm -d`
@@ -48,5 +50,6 @@ for dir in $dirs_to_move; do
   ln -s $shared_dir $dir || sudo ln -s $shared_dir $dir
 done
 
-# Exit 204 to mark "skipped" if we didn't do anything.
-[[ -z ${did_stuff:-} ]] && exit 204 || true
+if [[ -z ${work_done:-} ]]; then
+  exit "$EXIT_CODE_SKIPPED"
+fi

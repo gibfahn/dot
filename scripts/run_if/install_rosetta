@@ -2,6 +2,8 @@
 
 set -eux
 
-[ -d /Library/Apple/usr/libexec/oah ] && exit 204
+EXIT_CODE_SKIPPED=204 # up treats this exit code as "skipped"
 
-[ "$(uname)" = Darwin -a "$(uname -m)" == arm64 ] || exit 204
+[ -d /Library/Apple/usr/libexec/oah ] && exit "$EXIT_CODE_SKIPPED"
+
+[ "$(uname)" = Darwin ] && [ "$(uname -m)" = arm64 ] || exit "$EXIT_CODE_SKIPPED"

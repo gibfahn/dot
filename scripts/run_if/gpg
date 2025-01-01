@@ -2,9 +2,11 @@
 
 set -eux
 
-which gpg || exit 204
+EXIT_CODE_SKIPPED=204 # up treats this exit code as "skipped"
+
+which gpg || exit "$EXIT_CODE_SKIPPED"
 
 # Run if gpg home missing, or gpg agent conf doesn't contain the expected values.
 if [ -d "$GNUPGHOME" ] && grep -q 'pinentry-program .*/pinentry-mac' "$GNUPGHOME"/gpg-agent.conf; then
-  exit 204
+  exit "$EXIT_CODE_SKIPPED"
 fi

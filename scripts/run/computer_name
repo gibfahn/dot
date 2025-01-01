@@ -4,6 +4,8 @@ set -euo pipefail
 
 set -x
 
+EXIT_CODE_SKIPPED=204 # up treats this exit code as "skipped"
+
 if [[ -n ${1:-} ]]; then
   mac_name=$1
 
@@ -32,17 +34,18 @@ year=$(grep -oE '[0-9]{4}' <<<$product_name)
 
 mac_name=$User-$mac_type-$year
 
-did_stuff= # Did we change anything?
+work_done= # Did we change anything?
 
 if [[ $(scutil --get LocalHostName) != $User-* ]]; then
-  did_stuff=yes
+  work_done=true
   scutil --set LocalHostName $mac_name
 fi
 
 if [[ $(scutil --get ComputerName) != $User-* ]]; then
-  did_stuff=yes
+  work_done=true
   scutil --set ComputerName $mac_name
 fi
 
-# Exit 204 to mark "skipped" if we didn't do anything.
-[[ -z ${did_stuff:-} ]] && exit 204 || true
+if [[ -z ${work_done:-} ]]; then
+  exit $EXIT_CODE_SKIPPED
+fi

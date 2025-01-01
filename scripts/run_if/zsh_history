@@ -1,3 +1,5 @@
 #!/bin/sh
 
-[ "$(uname)" = Darwin -a -e "$HISTFILE" -a -e "$ZSH_CLOUD_HISTFILE" ] && which zsh || exit 204
+EXIT_CODE_SKIPPED=204 # up treats this exit code as "skipped"
+
+[ "$(uname)" = Darwin ] && [ -e "$HISTFILE" ] && [ -e "$ZSH_CLOUD_HISTFILE" ] && which zsh || exit "$EXIT_CODE_SKIPPED"

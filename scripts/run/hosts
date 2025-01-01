@@ -6,7 +6,9 @@ set -euo pipefail
 
 set -x
 
-[[ $USER == gib ]] || exit 204 # User is gib or we don't run.
+EXIT_CODE_SKIPPED=204 # up treats this exit code as "skipped"
+
+[[ $USER == gib ]] || exit "$EXIT_CODE_SKIPPED" # User is gib or we don't run.
 
 hosts=(
   # Block YouTube
@@ -56,5 +58,5 @@ if [[ -n $changed ]]; then
     *) echo "Not yet supported, fix $0" && exit 1 ;;
   esac
 else
-  exit 204
+  exit "$EXIT_CODE_SKIPPED"
 fi
