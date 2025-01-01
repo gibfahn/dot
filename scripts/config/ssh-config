@@ -1,59 +1,38 @@
-# ssh (or my alias `s`) accepts a bunch of cool options:
-# - Use a different ssh key: s -i ~/.ssh/alternative_id_rsa host
-# - Use a different username: s gib@host
+# ssh accepts a bunch of cool options:
+# - Use a different ssh key: ssh -i ~/.ssh/alternative_id_rsa host
+# - Use a different username: ssh gib@host
 # - Don't use ssh key (force password): s gib:@host
-# However if you don't want to specify them every time, set them in here.
+# If you don't want to specify them every time, set them in here.
 # See `man ssh_config` for more information.
 
+# {{{ Defaults for all hosts
 
-# Defaults for all hosts
 Host *
-# Consider getting a shiny new modern key.
-   IdentityFile ~/.ssh/id_ed25519
-# You'll want an old-style key for older machines though (see README).
-   IdentityFile ~/.ssh/id_rsa
-# Ask about host keys.
-   StrictHostKeyChecking=ask
-# Stops servers closing the connection because you didn't use it.
-   ServerAliveInterval 120
-# Uncomment this if your default user on remote machines != `whoami` on this one.
-#   User gib
-# Use macOS keychain to store ssh key passwords so you don't have to type your SSH Key password every time you restart.
+# Don't error if ssh is too old (or wrong platform) to recognise the UseKeychain option.
   IgnoreUnknown UseKeychain
+# Use macOS keychain to store ssh key passwords so you don't have to type your SSH Key password every time you restart.
   UseKeychain yes
+# Add SSH Key to agent when you use it. Means you don't have to type your password every time you ssh.
+  AddKeysToAgent yes
+# Stops servers closing the connection because you didn't use it.
 # Ping the server every 120s to see if the connection is live.
 # Stops you being kicked if you don't use the connection for a while.
   ServerAliveInterval 120
-# Add SSH Key to agent when you use it. Means you don't have to type your password every time you ssh.
-  AddKeysToAgent yes
-# Restrict ciphers to a modern and hopefully more-secure (and hardware-acceleratable) subset.
-  Ciphers aes128-ctr,aes128-gcm@openssh.com,aes192-ctr,aes256-ctr,aes256-gcm@openssh.com,chacha20-poly1305@openssh.com
+  StrictHostKeyChecking=no
+  # Other machines terminfo databases often hardcode this value to do 256 colour support.
+  SetEnv TERM=xterm-256color
 
-###########################
-#  Sample Machine Config  #
-###########################
+# }}} Defaults for all hosts
 
-# Modify as appropriate.
-# You can define multiple hosts on one line.
-# The Host is the shortcut (`s host1` or `s c` to ssh in).
-# The Hostname is something you can ping (DNSable hostname or IP address).
-#   %h is what you typed in `Host`.
-# Other fields are optional.
-# User is your account on that machine.
-# Port defaults to 22 (ssh port).
-# IdentityFile for a non-standard IdentityFile.
+# {{{ Gib's Personal machines
 
-#Host host1 host2 a b c 1 2 3
-#  Hostname prefix-%h-suffix.mydomain.org
-#  User git
-#  Port 518
-#  IdentityFile ~/.ssh/dragons_id
+# Anything that wasn't already matched.
+Host *
+# Consider getting a shiny new modern key.
+   IdentityFile ~/.ssh/gibfahn_id_rsa
+   IdentityFile ~/.ssh/id_rsa
+   IdentityFile ~/.ssh/gibfahn_id_ed25519
 
-###########################
-# Gib's Personal machines #
-###########################
+# }}} Gib's Personal machines
 
-
-###########################
-#  Gib's Work  Machines   #
-###########################
+# vi: foldmethod=marker
