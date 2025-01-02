@@ -2,10 +2,8 @@
 
 set -eux
 
-EXIT_CODE_SKIPPED=204 # up treats this exit code as "skipped"
-
-[ "$(uname)" = Darwin ] || exit "$EXIT_CODE_SKIPPED"
-[ "$(whoami)" = gib ] || exit "$EXIT_CODE_SKIPPED"
+[ "$(uname)" = Darwin ] || exit "$UP_EXIT_CODE_SKIPPED"
+[ "$(whoami)" = gib ] || exit "$UP_EXIT_CODE_SKIPPED"
 
 # Run if the desktop background is not already the one we set.
 backgrounds="$(osascript -e '
@@ -17,4 +15,4 @@ backgrounds="$(osascript -e '
 
 [ -z "$backgrounds" ] && exit 1
 
-echo "$backgrounds" | grep "$MAC_DESKTOP_BACKGROUND" && exit "$EXIT_CODE_SKIPPED" || exit 0
+echo "$backgrounds" | grep "$MAC_DESKTOP_BACKGROUND" && exit "$UP_EXIT_CODE_SKIPPED" || exit 0

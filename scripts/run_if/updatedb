@@ -2,12 +2,11 @@
 
 set -eux
 
-EXIT_CODE_SKIPPED=204 # up treats this exit code as "skipped"
 
-[ "$(uname)" = Darwin ] || exit "$EXIT_CODE_SKIPPED"
+[ "$(uname)" = Darwin ] || exit "$UP_EXIT_CODE_SKIPPED"
 
 # If it doesn't exist, create it.
 [ -e /var/db/locate.database ] || exit 0
 
 # Run if the db is less than an hour old.
-((($(date +%s) - $(stat -L -f '%m' /var/db/locate.database)) > (1 * 60 * 60))) || exit "$EXIT_CODE_SKIPPED"
+((($(date +%s) - $(stat -L -f '%m' /var/db/locate.database)) > (1 * 60 * 60))) || exit "$UP_EXIT_CODE_SKIPPED"

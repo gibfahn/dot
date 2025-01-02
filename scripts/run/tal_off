@@ -2,18 +2,17 @@
 
 set -euo pipefail
 
-EXIT_CODE_SKIPPED=204 # up treats this exit code as "skipped"
 
 set -x
 
 # OS is darwin or we don't run.
-[[ $OSTYPE == darwin* ]] || exit "$EXIT_CODE_SKIPPED"
+[[ $OSTYPE == darwin* ]] || exit "$UP_EXIT_CODE_SKIPPED"
 
 loginwindow_prefs=~/Library/Preferences/ByHost/com.apple.loginwindow*
 
 # If we can't find the file, we probably already nuked the preferences.
 if [[ ! -f $loginwindow_prefs ]]; then
-  exit "$EXIT_CODE_SKIPPED"
+  exit "$UP_EXIT_CODE_SKIPPED"
 fi
 
 sudo chown root ~/Library/Preferences/ByHost/com.apple.loginwindow*

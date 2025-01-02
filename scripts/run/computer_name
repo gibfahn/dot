@@ -4,8 +4,6 @@ set -euo pipefail
 
 set -x
 
-EXIT_CODE_SKIPPED=204 # up treats this exit code as "skipped"
-
 if [[ -n ${1:-} ]]; then
   mac_name=$1
 
@@ -47,5 +45,5 @@ if [[ $(scutil --get ComputerName) != $User-* ]]; then
 fi
 
 if [[ -z ${work_done:-} ]]; then
-  exit $EXIT_CODE_SKIPPED
+  exit $UP_EXIT_CODE_SKIPPED
 fi

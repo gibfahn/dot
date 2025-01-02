@@ -2,10 +2,9 @@
 
 set -euxo pipefail
 
-EXIT_CODE_SKIPPED=204 # up treats this exit code as "skipped"
 
 # OS is darwin or we don't run.
-[[ $OSTYPE == darwin* ]] || exit "$EXIT_CODE_SKIPPED"
+[[ $OSTYPE == darwin* ]] || exit "$UP_EXIT_CODE_SKIPPED"
 
 changed=
 
@@ -36,5 +35,5 @@ done
 
 # If we didn't change anything, mark the task as skipped.
 if [[ -z $changed ]]; then
-  exit "$EXIT_CODE_SKIPPED"
+  exit "$UP_EXIT_CODE_SKIPPED"
 fi

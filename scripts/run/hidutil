@@ -7,8 +7,6 @@
 
 set -euxo pipefail
 
-EXIT_CODE_SKIPPED=204 # up treats this exit code as "skipped"
-
 work_done=
 
 from_path_hid=$dotfile_dir/bin/hid
@@ -44,5 +42,5 @@ if ! sudo launchctl list | grep -Fw co.fahn.gib.hidutil; then
 fi
 
 if [[ -z $work_done ]]; then
-  exit "$EXIT_CODE_SKIPPED"
+  exit "$UP_EXIT_CODE_SKIPPED"
 fi

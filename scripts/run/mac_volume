@@ -6,8 +6,6 @@ set -euo pipefail
 
 set -x
 
-EXIT_CODE_SKIPPED="$EXIT_CODE_SKIPPED" # up treats this exit code as "skipped"
-
 shared_name=Shared-Data
 shared_volume=/Volumes/$shared_name
 
@@ -51,5 +49,5 @@ for dir in $dirs_to_move; do
 done
 
 if [[ -z ${work_done:-} ]]; then
-  exit "$EXIT_CODE_SKIPPED"
+  exit "$UP_EXIT_CODE_SKIPPED"
 fi
