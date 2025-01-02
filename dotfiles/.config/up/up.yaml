@@ -22,6 +22,7 @@ inherit_env:
   - SSH_AUTH_SOCK # Set by ssh agent.
   - HISTFILE # Used to backup zsh history.
   - TMPDIR # Write temp files to the expected place.
+  - VISUAL # In case interactive scripts want to use the system editor.
 
 env:
   dot_dir: "~/code/dot" # Directory to clone dotfiles to.
