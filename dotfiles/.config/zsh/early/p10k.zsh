@@ -28,10 +28,10 @@
   typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
     # =========================[ Line #1 ]=========================
     # os_icon               # os identifier
-    # dir                     # current directory
-    # vcs                     # git status
+    dir                     # current directory
+    vcs                     # git status
     # =========================[ Line #2 ]=========================
-    # newline                 # \n
+    newline                 # \n
     prompt_char             # prompt symbol
   )
 
@@ -41,20 +41,18 @@
   # last prompt line gets hidden if it would overlap with left prompt.
   typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
     # =========================[ Line #1 ]=========================
-    time                  # current time
-
     status                  # exit code of the last command
     command_execution_time  # duration of the last command
     background_jobs         # presence of background jobs
-    # direnv                  # direnv status (https://direnv.net/)
-    # asdf                    # asdf version manager (https://github.com/asdf-vm/asdf)
+    direnv                  # direnv status (https://direnv.net/)
+    asdf                    # asdf version manager (https://github.com/asdf-vm/asdf)
     virtualenv              # python virtual environment (https://docs.python.org/3/library/venv.html)
-    # anaconda                # conda environment (https://conda.io/)
-    # pyenv                   # python environment (https://github.com/pyenv/pyenv)
-    # goenv                   # go environment (https://github.com/syndbg/goenv)
-    # nodenv                  # node.js version from nodenv (https://github.com/nodenv/nodenv)
-    # nvm                     # node.js version from nvm (https://github.com/nvm-sh/nvm)
-    # nodeenv                 # node.js environment (https://github.com/ekalinin/nodeenv)
+    anaconda                # conda environment (https://conda.io/)
+    pyenv                   # python environment (https://github.com/pyenv/pyenv)
+    goenv                   # go environment (https://github.com/syndbg/goenv)
+    nodenv                  # node.js version from nodenv (https://github.com/nodenv/nodenv)
+    nvm                     # node.js version from nvm (https://github.com/nvm-sh/nvm)
+    nodeenv                 # node.js environment (https://github.com/ekalinin/nodeenv)
     # node_version          # node.js version
     # go_version            # go version (https://golang.org)
     # rust_version          # rustc version (https://www.rust-lang.org)
@@ -63,56 +61,55 @@
     # laravel_version       # laravel php framework version (https://laravel.com/)
     # java_version          # java version (https://www.java.com/)
     # package               # name@version from package.json (https://docs.npmjs.com/files/package.json)
-    # rbenv                   # ruby version from rbenv (https://github.com/rbenv/rbenv)
-    # rvm                     # ruby version from rvm (https://rvm.io)
-    # fvm                     # flutter version management (https://github.com/leoafarias/fvm)
-    # luaenv                  # lua version from luaenv (https://github.com/cehoffman/luaenv)
-    # jenv                    # java version from jenv (https://github.com/jenv/jenv)
-    # plenv                   # perl version from plenv (https://github.com/tokuhirom/plenv)
-    # perlbrew                # perl version from perlbrew (https://github.com/gugod/App-perlbrew)
-    # phpenv                  # php version from phpenv (https://github.com/phpenv/phpenv)
-    # scalaenv                # scala version from scalaenv (https://github.com/scalaenv/scalaenv)
-    # haskell_stack           # haskell version from stack (https://haskellstack.org/)
+    rbenv                   # ruby version from rbenv (https://github.com/rbenv/rbenv)
+    rvm                     # ruby version from rvm (https://rvm.io)
+    fvm                     # flutter version management (https://github.com/leoafarias/fvm)
+    luaenv                  # lua version from luaenv (https://github.com/cehoffman/luaenv)
+    jenv                    # java version from jenv (https://github.com/jenv/jenv)
+    plenv                   # perl version from plenv (https://github.com/tokuhirom/plenv)
+    perlbrew                # perl version from perlbrew (https://github.com/gugod/App-perlbrew)
+    phpenv                  # php version from phpenv (https://github.com/phpenv/phpenv)
+    scalaenv                # scala version from scalaenv (https://github.com/scalaenv/scalaenv)
+    haskell_stack           # haskell version from stack (https://haskellstack.org/)
     kubecontext             # current kubernetes context (https://kubernetes.io/)
-    # terraform               # terraform workspace (https://www.terraform.io)
+    terraform               # terraform workspace (https://www.terraform.io)
     # terraform_version     # terraform version (https://www.terraform.io)
-    # aws                     # aws profile (https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html)
-    # aws_eb_env              # aws elastic beanstalk environment (https://aws.amazon.com/elasticbeanstalk/)
-    # azure                   # azure account name (https://docs.microsoft.com/en-us/cli/azure)
-    # gcloud                  # google cloud cli account and project (https://cloud.google.com/)
-    # google_app_cred         # google application credentials (https://cloud.google.com/docs/authentication/production)
-    # toolbox                 # toolbox name (https://github.com/containers/toolbox)
+    aws                     # aws profile (https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html)
+    aws_eb_env              # aws elastic beanstalk environment (https://aws.amazon.com/elasticbeanstalk/)
+    azure                   # azure account name (https://docs.microsoft.com/en-us/cli/azure)
+    gcloud                  # google cloud cli account and project (https://cloud.google.com/)
+    google_app_cred         # google application credentials (https://cloud.google.com/docs/authentication/production)
+    toolbox                 # toolbox name (https://github.com/containers/toolbox)
     context                 # user@hostname
-    # nordvpn                 # nordvpn connection status, linux only (https://nordvpn.com/)
-    # ranger                  # ranger shell (https://github.com/ranger/ranger)
-    # nnn                     # nnn shell (https://github.com/jarun/nnn)
-    # lf                      # lf shell (https://github.com/gokcehan/lf)
-    # xplr                    # xplr shell (https://github.com/sayanarijit/xplr)
+    nordvpn                 # nordvpn connection status, linux only (https://nordvpn.com/)
+    ranger                  # ranger shell (https://github.com/ranger/ranger)
+    yazi                    # yazi shell (https://github.com/sxyazi/yazi)
+    nnn                     # nnn shell (https://github.com/jarun/nnn)
+    lf                      # lf shell (https://github.com/gokcehan/lf)
+    xplr                    # xplr shell (https://github.com/sayanarijit/xplr)
     vim_shell               # vim shell indicator (:sh)
-    # midnight_commander      # midnight commander shell (https://midnight-commander.org/)
-    # nix_shell               # nix shell (https://nixos.org/nixos/nix-pills/developing-with-nix-shell.html)
-    # chezmoi_shell           # chezmoi shell (https://www.chezmoi.io/)
+    midnight_commander      # midnight commander shell (https://midnight-commander.org/)
+    nix_shell               # nix shell (https://nixos.org/nixos/nix-pills/developing-with-nix-shell.html)
+    chezmoi_shell           # chezmoi shell (https://www.chezmoi.io/)
     # vpn_ip                # virtual private network indicator
     # load                  # CPU load
     # disk_usage            # disk usage
     # ram                   # free RAM
     # swap                  # used swap
-    # todo                    # todo items (https://github.com/todotxt/todo.txt-cli)
-    # timewarrior             # timewarrior tracking status (https://timewarrior.net/)
-    # taskwarrior             # taskwarrior task count (https://taskwarrior.org/)
+    todo                    # todo items (https://github.com/todotxt/todo.txt-cli)
+    timewarrior             # timewarrior tracking status (https://timewarrior.net/)
+    taskwarrior             # taskwarrior task count (https://taskwarrior.org/)
+    per_directory_history   # Oh My Zsh per-directory-history local/global indicator
     # cpu_arch              # CPU architecture
     # time                  # current time
     # =========================[ Line #2 ]=========================
-    # newline
+    newline
     # ip                    # ip address and bandwidth usage for a specified network interface
     # public_ip             # public IP address
     # proxy                 # system-wide http/https/ftp proxy
     # battery               # internal battery
     # wifi                  # wifi speed
     # example               # example user-defined segment (see prompt_example function below)
-
-    vcs                     # git status
-    dir                     # current directory
   )
 
   # Defines character set used by powerlevel10k. It's best to let `p10k configure` set it for you.
@@ -142,7 +139,7 @@
   typeset -g POWERLEVEL9K_ICON_BEFORE_CONTENT=true
 
   # Add an empty line before each prompt.
-  typeset -g POWERLEVEL9K_PROMPT_ADD_NEWLINE=false
+  typeset -g POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
 
   # Connect left prompt lines with these symbols.
   typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=
@@ -161,8 +158,8 @@
   # Ruler, a.k.a. the horizontal line before each prompt. If you set it to true, you'll
   # probably want to set POWERLEVEL9K_PROMPT_ADD_NEWLINE=false above and
   # POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_CHAR=' ' below.
-  typeset -g POWERLEVEL9K_SHOW_RULER=true
-  typeset -g POWERLEVEL9K_RULER_CHAR='▁'        # reasonable alternative: '·'
+  typeset -g POWERLEVEL9K_SHOW_RULER=false
+  typeset -g POWERLEVEL9K_RULER_CHAR='─'        # reasonable alternative: '·'
   typeset -g POWERLEVEL9K_RULER_FOREGROUND=240
 
   # Filler between left and right prompt on the first prompt line. You can set it to '·' or '─'
@@ -239,7 +236,8 @@
     .java-version
     .perl-version
     .php-version
-    .tool-version
+    .tool-versions
+    .mise.toml
     .shorten_folder_marker
     .svn
     .terraform
@@ -280,7 +278,7 @@
   # opening a directory in the file manager simply by clicking the link.
   # Can also be handy when the directory is shortened, as it allows you to see
   # the full directory that was used in previous commands.
-  typeset -g POWERLEVEL9K_DIR_HYPERLINK=true
+  typeset -g POWERLEVEL9K_DIR_HYPERLINK=false
 
   # Enable special styling for non-writable and non-existent directories. See POWERLEVEL9K_LOCK_ICON
   # and POWERLEVEL9K_DIR_CLASSES below.
@@ -373,8 +371,8 @@
     if (( $1 )); then
       # Styling for up-to-date Git status.
       local       meta='%f'     # default foreground
-      local      clean='%70F'   # green foreground
-      local   modified='%220F'  # yellow foreground
+      local      clean='%76F'   # green foreground
+      local   modified='%178F'  # yellow foreground
       local  untracked='%39F'   # blue foreground
       local conflicted='%196F'  # red foreground
     else
@@ -406,7 +404,7 @@
       # If tag name is at most 32 characters long, show it in full.
       # Otherwise show the first 12 … the last 12.
       # Tip: To always show tag name in full without truncation, delete the next line.
-      # (( $#tag > 32 )) && tag[13,-13]="…"  # <-- this line
+      (( $#tag > 32 )) && tag[13,-13]="…"  # <-- this line
       res+="${meta}#${clean}${tag//\%/%%}"
     fi
 
@@ -415,10 +413,10 @@
     [[ -z $VCS_STATUS_LOCAL_BRANCH && -z $VCS_STATUS_TAG ]] &&  # <-- this line
       res+="${meta}@${clean}${VCS_STATUS_COMMIT[1,8]}"
 
-    # # Show tracking branch name if it differs from local branch.
-    # if [[ -n ${VCS_STATUS_REMOTE_BRANCH:#$VCS_STATUS_LOCAL_BRANCH} ]]; then
-    #   res+="${meta}:${clean}${(V)VCS_STATUS_REMOTE_BRANCH//\%/%%}"
-    # fi
+    # Show tracking branch name if it differs from local branch.
+    if [[ -n ${VCS_STATUS_REMOTE_BRANCH:#$VCS_STATUS_LOCAL_BRANCH} ]]; then
+      res+="${meta}:${clean}${(V)VCS_STATUS_REMOTE_BRANCH//\%/%%}"
+    fi
 
     # Display "wip" if the latest commit's summary contains "wip" or "WIP".
     if [[ $VCS_STATUS_COMMIT_SUMMARY == (|*[^[:alnum:]])(wip|WIP)(|[^[:alnum:]]*) ]]; then
@@ -431,9 +429,9 @@
       # ⇡42 if ahead of the remote; no leading space if also behind the remote: ⇣42⇡42.
       (( VCS_STATUS_COMMITS_AHEAD && !VCS_STATUS_COMMITS_BEHIND )) && res+=" "
       (( VCS_STATUS_COMMITS_AHEAD  )) && res+="${clean}⇡${VCS_STATUS_COMMITS_AHEAD}"
-    elif [[ -z $VCS_STATUS_REMOTE_BRANCH ]]; then
-      # Show pin if no upstream branch set.
-      res+=" ${clean}📍"
+    elif [[ -n $VCS_STATUS_REMOTE_BRANCH ]]; then
+      # Tip: Uncomment the next line to display '=' if up to date with the remote.
+      # res+=" ${clean}="
     fi
 
     # ⇠42 if behind the push remote.
@@ -526,7 +524,7 @@
 
   # Status when it's just an error code (e.g., '1'). No need to show it if prompt_char is enabled as
   # it will signify error by turning red.
-  typeset -g POWERLEVEL9K_STATUS_ERROR=true
+  typeset -g POWERLEVEL9K_STATUS_ERROR=false
   typeset -g POWERLEVEL9K_STATUS_ERROR_FOREGROUND=160
   typeset -g POWERLEVEL9K_STATUS_ERROR_VISUAL_IDENTIFIER_EXPANSION='✘'
 
@@ -559,7 +557,7 @@
 
   #######################[ background_jobs: presence of background jobs ]#######################
   # Don't show the number of background jobs.
-  typeset -g POWERLEVEL9K_BACKGROUND_JOBS_VERBOSE=true
+  typeset -g POWERLEVEL9K_BACKGROUND_JOBS_VERBOSE=false
   # Background jobs color.
   typeset -g POWERLEVEL9K_BACKGROUND_JOBS_FOREGROUND=70
   # Custom icon.
@@ -725,6 +723,12 @@
   typeset -g POWERLEVEL9K_RANGER_FOREGROUND=178
   # Custom icon.
   # typeset -g POWERLEVEL9K_RANGER_VISUAL_IDENTIFIER_EXPANSION='⭐'
+  
+  ####################[ yazi: yazi shell (https://github.com/sxyazi/yazi) ]#####################
+  # Yazi shell color.
+  typeset -g POWERLEVEL9K_YAZI_FOREGROUND=178
+  # Custom icon.
+  # typeset -g POWERLEVEL9K_YAZI_VISUAL_IDENTIFIER_EXPANSION='⭐'
 
   ######################[ nnn: nnn shell (https://github.com/jarun/nnn) ]#######################
   # Nnn shell color.
@@ -867,6 +871,19 @@
 
   # Custom icon.
   # typeset -g POWERLEVEL9K_TASKWARRIOR_VISUAL_IDENTIFIER_EXPANSION='⭐'
+
+  ######[ per_directory_history: Oh My Zsh per-directory-history local/global indicator ]#######
+  # Color when using local/global history.
+  typeset -g POWERLEVEL9K_PER_DIRECTORY_HISTORY_LOCAL_FOREGROUND=135
+  typeset -g POWERLEVEL9K_PER_DIRECTORY_HISTORY_GLOBAL_FOREGROUND=130
+
+  # Tip: Uncomment the next two lines to hide "local"/"global" text and leave just the icon.
+  # typeset -g POWERLEVEL9K_PER_DIRECTORY_HISTORY_LOCAL_CONTENT_EXPANSION=''
+  # typeset -g POWERLEVEL9K_PER_DIRECTORY_HISTORY_GLOBAL_CONTENT_EXPANSION=''
+
+  # Custom icon.
+  # typeset -g POWERLEVEL9K_PER_DIRECTORY_HISTORY_LOCAL_VISUAL_IDENTIFIER_EXPANSION='⭐'
+  # typeset -g POWERLEVEL9K_PER_DIRECTORY_HISTORY_GLOBAL_VISUAL_IDENTIFIER_EXPANSION='⭐'
 
   ################################[ cpu_arch: CPU architecture ]################################
   # CPU architecture color.
@@ -1211,7 +1228,7 @@
   #############[ kubecontext: current kubernetes context (https://kubernetes.io/) ]#############
   # Show kubecontext only when the command you are typing invokes one of these tools.
   # Tip: Remove the next line to always show kubecontext.
-  typeset -g POWERLEVEL9K_KUBECONTEXT_SHOW_ON_COMMAND='kubectl|helm|kubens|kubectx|oc|istioctl|kogito|k9s|helmfile|flux|fluxctl|stern|kubeseal|skaffold|kubent|kubecolor|cmctl|sparkctl|just'
+  typeset -g POWERLEVEL9K_KUBECONTEXT_SHOW_ON_COMMAND='kubectl|helm|kubens|kubectx|oc|istioctl|kogito|k9s|helmfile|flux|fluxctl|stern|kubeseal|skaffold|kubent|kubecolor|cmctl|sparkctl'
 
   # Kubernetes context classes for the purpose of using different colors, icons and expansions with
   # different contexts.
@@ -1337,7 +1354,7 @@
   #[ aws: aws profile (https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html) ]#
   # Show aws only when the command you are typing invokes one of these tools.
   # Tip: Remove the next line to always show aws.
-  typeset -g POWERLEVEL9K_AWS_SHOW_ON_COMMAND='aws|awless|terraform|pulumi|terragrunt'
+  typeset -g POWERLEVEL9K_AWS_SHOW_ON_COMMAND='aws|awless|cdk|terraform|pulumi|terragrunt'
 
   # POWERLEVEL9K_AWS_CLASSES is an array with even number of elements. The first element
   # in each pair defines a pattern against which the current AWS profile gets matched.
@@ -1385,10 +1402,39 @@
   # Show azure only when the command you are typing invokes one of these tools.
   # Tip: Remove the next line to always show azure.
   typeset -g POWERLEVEL9K_AZURE_SHOW_ON_COMMAND='az|terraform|pulumi|terragrunt'
+
+  # POWERLEVEL9K_AZURE_CLASSES is an array with even number of elements. The first element
+  # in each pair defines a pattern against which the current azure account name gets matched.
+  # More specifically, it's P9K_CONTENT prior to the application of context expansion (see below)
+  # that gets matched. If you unset all POWERLEVEL9K_AZURE_*CONTENT_EXPANSION parameters,
+  # you'll see this value in your prompt. The second element of each pair in
+  # POWERLEVEL9K_AZURE_CLASSES defines the account class. Patterns are tried in order. The
+  # first match wins.
+  #
+  # For example, given these settings:
+  #
+  #   typeset -g POWERLEVEL9K_AZURE_CLASSES=(
+  #     '*prod*'  PROD
+  #     '*test*'  TEST
+  #     '*'       OTHER)
+  #
+  # If your current azure account is "company_test", its class is TEST because "company_test"
+  # doesn't match the pattern '*prod*' but does match '*test*'.
+  #
+  # You can define different colors, icons and content expansions for different classes:
+  #
+  #   typeset -g POWERLEVEL9K_AZURE_TEST_FOREGROUND=28
+  #   typeset -g POWERLEVEL9K_AZURE_TEST_VISUAL_IDENTIFIER_EXPANSION='⭐'
+  #   typeset -g POWERLEVEL9K_AZURE_TEST_CONTENT_EXPANSION='> ${P9K_CONTENT} <'
+  typeset -g POWERLEVEL9K_AZURE_CLASSES=(
+      # '*prod*'  PROD    # These values are examples that are unlikely
+      # '*test*'  TEST    # to match your needs. Customize them as needed.
+      '*'         OTHER)
+
   # Azure account name color.
-  typeset -g POWERLEVEL9K_AZURE_FOREGROUND=32
+  typeset -g POWERLEVEL9K_AZURE_OTHER_FOREGROUND=32
   # Custom icon.
-  # typeset -g POWERLEVEL9K_AZURE_VISUAL_IDENTIFIER_EXPANSION='⭐'
+  # typeset -g POWERLEVEL9K_AZURE_OTHER_VISUAL_IDENTIFIER_EXPANSION='⭐'
 
   ##########[ gcloud: google cloud account and project (https://cloud.google.com/) ]###########
   # Show gcloud only when the command you are typing invokes one of these tools.
@@ -1586,9 +1632,9 @@
 
   ####################################[ time: current time ]####################################
   # Current time color.
-  typeset -g POWERLEVEL9K_TIME_FOREGROUND=232
-  # Format for the current time: 2021-07-10 09:51:02. See `man 3 strftime`.
-  typeset -g POWERLEVEL9K_TIME_FORMAT='%D{%F %H:%M:%S}'
+  typeset -g POWERLEVEL9K_TIME_FOREGROUND=66
+  # Format for the current time: 09:51:02. See `man 3 strftime`.
+  typeset -g POWERLEVEL9K_TIME_FORMAT='%D{%H:%M:%S}'
   # If set to true, time will update when you hit enter. This way prompts for the past
   # commands will contain the start times of their commands as opposed to the default
   # behavior where they contain the end times of their preceding commands.
@@ -1609,7 +1655,7 @@
 
   # User-defined prompt segments may optionally provide an instant_prompt_* function. Its job
   # is to generate the prompt segment for display in instant prompt. See
-  # https://github.com/romkatv/powerlevel10k/blob/master/README.md#instant-prompt.
+  # https://github.com/romkatv/powerlevel10k#instant-prompt.
   #
   # Powerlevel10k will call instant_prompt_* at the same time as the regular prompt_* function
   # and will record all `p10k segment` calls it makes. When displaying instant prompt, Powerlevel10k
@@ -1645,7 +1691,7 @@
   #              it incompatible with your zsh configuration files.
   #   - quiet:   Enable instant prompt and don't print warnings when detecting console output
   #              during zsh initialization. Choose this if you've read and understood
-  #              https://github.com/romkatv/powerlevel10k/blob/master/README.md#instant-prompt.
+  #              https://github.com/romkatv/powerlevel10k#instant-prompt.
   #   - verbose: Enable instant prompt and print a warning when detecting console output during
   #              zsh initialization. Choose this if you've never tried instant prompt, haven't
   #              seen the warning, or if you are unsure what this all means.
