@@ -28,7 +28,6 @@ brew "git-delta"                         # Nicer git diff viewer.
 brew "gnu-sed"                           # A sed that actually supports `sed -i`.
 brew "htop"                              # Terminal activity monitor.
 brew "less"                              # Fixes -RX issue.
-brew "macos-trash"                       # Move to Trash, aliased to `dl` in zshrc.
 brew "mas"                               # Mac App Store third-party cli.
 brew "node"                              # Node.js programming language.
 brew "pinentry-mac"                      # Gpg password Keychain integration.
