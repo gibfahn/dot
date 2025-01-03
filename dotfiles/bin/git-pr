@@ -20,7 +20,7 @@ OPTIONS:
 
 --version: prints the script version
 
---edit: updates an existing pull request body after force pushing (to add the new commit range)
+--edit: update an existing pull request body
 
 --open: opens the pull request URL for the current branch in the browser
 
@@ -29,6 +29,10 @@ OPTIONS:
 --draft: creates a draft pull request (only applies when creating a new PR)
 "
 }
+
+if [[ -n ${DEBUG:-} ]]; then
+  set -x
+fi
 
 action=create
 
@@ -53,7 +57,7 @@ main() {
   up_org=$(remote_org $up_remote)
   up_repo=$(remote_repo $up_remote)
 
-  commit_block_title="## Commits _(oldest to newest)_"
+  commit_count=$(git rev-list --count @{upstream}..@) # Number of commits in PR.
 
   # TODO: stop setting this once `gh` gains decent up/push branch recognition.
   export GH_REPO=$(remote_url "$up_remote")
@@ -66,34 +70,46 @@ main() {
   esac
 }
 
+# Creates a PR with a user-specified commit message.
 pr_create() {
-  file=$(pr_file)
+  file=$(create_pr_temp_file)
+
+  # Don't write template file if already non-empty.
+  if file_empty $file; then
+    # Write the PR message file based on the PR Template (if defined) and the git commit log.
+    pr_message > "$file"
+  fi
+
+  edit_file $file
+
   gh pr create --repo $up_org/$up_repo \
     --title "$(
       # Remove the leading "# " from the title.
       head -1 "$file" | cut -c 3-
     )" \
-    --body "$(
-      # Make the Commits heading less visible.
-      tail +3 "$file" | sed 's/^## Commits/#### Commits/'
-    )" \
+    --body "$(tail +3 "$file")" \
     --base "$up_branch" ${draft:+--draft}
 
-  rm "$file"
+  rm $file
 
   # Now open the PR in the browser.
   pr_open
 }
 
+# Lets the user edit the PR's existing commit message.
 pr_edit() {
   pr_number=$(get_pr_number)
   old_pr_body=$(gh api --method=GET repos/$up_org/$up_repo/pulls/$pr_number --jq ".body")
 
-  if [[ $old_pr_body != *"$commit_block_title"* ]]; then
-    new_pr_body=$(<<<"$old_pr_body" && echo && <<<"$commit_block_title" && echo && pr_log)
-  else
-    new_pr_body=$(sed "/$commit_block_title/q" <<<"$old_pr_body" && echo && pr_log)
+  file=$(pr_file)
+
+  # Don't write template file if already non-empty.
+  if file_empty $file; then
+    # Write the old PR body into the file.
+    >$file <<<$old_pr_body
   fi
+
+  new_pr_body=$(<$file)
 
   if [[ $new_pr_body == $old_pr_body ]]; then
     echo "Nothing to do..."
@@ -105,7 +121,9 @@ pr_edit() {
   echo $old_pr_body > $TMPDIR/old_pr_body
   git diff --color=always --no-index $TMPDIR/old_pr_body $TMPDIR/new_pr_body && true
 
-  gh pr edit $pr_number --body "$new_pr_body"
+  gh pr edit $pr_number --body $new_pr_body
+
+  rm $file
 }
 
 pr_open() {
@@ -159,42 +177,83 @@ remote_repo() {
   git remote get-url $1 | sed -e 's|/$||' -e 's|.*/||' -e 's/.git$//'
 }
 
-# Write the PR message file based on the PR Template (if defined) and the git commit log.
-pr_file() {
-  # /path/to/git/repo @ branch -> '/tmp/_path_to_git_repo branch.md'
-  file="$TMPDIR/$(git rev-parse --show-toplevel | sed 's;/;_;g') $(git branch --show-current | sed 's;/;_;g').md"
+# Create a temp file for the PR and return it.
+create_pr_temp_file() {
+  # /path/to/git/repo @ my/branch -> '/tmp/_path_to_git_repo my_branch.md'
+  local file="$TMPDIR/$(git rev-parse --show-toplevel | sed 's;/;_;g') $(git branch --show-current | sed 's;/;_;g').md"
+  echo $file
+}
 
-  # Don't write template file if already non-empty.
-  if [[ ! -s $file ]]; then
-    pr_message > "$file"
+# Returns 0 if file is empty.
+file_empty() {
+  local file=$1
+  [[ ! -s $file ]]
+}
+
+# Allow user to edit PR message.
+edit_file() {
+  local file=$1
+  ${VISUAL:-$EDITOR} "$file" >$(tty) <$(tty) && true
+  local rc=$?
+  # If the user exited their editor non-zero, then we should throw away the file as well as
+  # erroring.
+  if [[ $rc != 0 ]]; then
+    rm $file
   fi
-  ${VISUAL:-$EDITOR} "$file" >$(tty) <$(tty)
-  echo "$file"
+  return $rc
 }
 
 # Generates a default PR message.
-# The cat will fail if no template exists, that's okay.
 pr_message() {
+  local pr_template
+  # Use repo's configured pull request template if present.
+  # Ignore cat failure if no template exists.
+  pr_template=$(cat $(git rev-parse --show-toplevel)/{.github/,,docs/}PULL_REQUEST_TEMPLATE{,.md} 2>/dev/null || true)
+
+  if [[ -n $pr_template ]]; then
+    # add gap between template and commits.
+    pr_template+="
+
+"
+  fi
+
+  if [[ $commit_count != 1 ]]; then
+    separator="---
+
+"
+  else
+    separator=""
+  fi
+
   cat <<EOF
 # $(pr_title)
-$(cat $(git rev-parse --show-toplevel)/{.github/,,docs/}PULL_REQUEST_TEMPLATE{,.md} 2>/dev/null && echo)
----
 
-$commit_block_title
-
-$(pr_log)
+${pr_template}${separator}$(pr_log)
 EOF
 }
 
+# If there is only one commit, use its subject line as the PR title.
 pr_title() {
-  if [[ $(git rev-list --count @{upstream}..@) == 1 ]]; then
+  if [[ $commit_count == 1 ]]; then
      git log -1 --format="%s" && echo
   fi
 }
 
+# Log pr commits in a suitable format.
 pr_log() {
-  # The sed removes duplicate newlines <https://unix.stackexchange.com/a/131228>
-  git log -s --reverse --format='%h %s%n%n%b%n<br/>%n' @{upstream}..@ | sed -e '/./b' -e :n -e 'N;s/\n$//;tn'
+  if [[ $commit_count == 1 ]]; then
+    # Commit body
+    format='%b%n'
+  else
+    # Commit subject
+    #
+    # Commit body
+    #
+    # <br/>
+    #
+    format='%s%n%n%b<br/>%n'
+  fi
+  git log -s --reverse --format=$format @{upstream}..@
 }
 
 # Usage: exit message [rc]
@@ -203,14 +262,7 @@ error() {
   exit "${2:-1}"
 }
 
-prompt_to_confirm() {
-  read "user_input?$1
-  Press Enter to continue, type anything or press Ctrl-C to cancel: "
-  if [[ -n ${user_input:-} ]]; then
-    error "User entered text."
-  fi
-}
-
+# Copy to clipboard.
 cpy() {
   case $OSTYPE in
     darwin*) pbcopy $@ ;;
