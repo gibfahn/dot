@@ -3,7 +3,8 @@
 
 # Brew taps
 
-tap "gibfahn/tap" # My personal tap for misc things.
+# TODO(gib): re-enable once https://github.com/Homebrew/homebrew-bundle/pull/1550 lands.
+# tap "gibfahn/tap" # My personal tap for misc things.
 
 # Brew formulae
 
@@ -64,8 +65,8 @@ brew "wget"                              # Alternative to curl for downloading f
 
 # Brew formulae from taps.
 
-# brew "gibfahn/tap/check-sieve"           # Linter for sieve email filter files.
-brew "gibfahn/tap/up"                    # Handles updating everything (installed here for man pages and completions).
+# TODO(gib): re-enable once https://github.com/Homebrew/homebrew-bundle/pull/1550 lands.
+# brew "gibfahn/tap/up"                    # Handles updating everything (installed here for man pages and completions).
 
 
 # Brew casks
