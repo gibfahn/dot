@@ -22,6 +22,7 @@ scrollback-limit = 25_000_000
 shell-integration = zsh
 theme = "Pro"
 unfocused-split-opacity = 0.7
+window-colorspace = display-p3
 
 # Missing from Ghostty (that I have in kitty):
 # - `url_prefixes` -> can't set custom prefixes (maybe `link:` is the way to do this?)
