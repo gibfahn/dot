@@ -59,6 +59,14 @@ main() {
 
   commit_count=$(git rev-list --count @{upstream}..@) # Number of commits in PR.
 
+  scissors="# ------------------------ >8 ------------------------"
+  scissors_text="
+$scissors
+# Do not modify or remove the line above.
+# Everything below it will be ignored.
+
+"
+
   # TODO: stop setting this once `gh` gains decent up/push branch recognition.
   export GH_REPO=$(remote_url "$up_remote")
   export GH_HOST=$(remote_host "$up_remote")
@@ -101,17 +109,22 @@ pr_edit() {
   pr_number=$(get_pr_number)
   old_pr_body=$(gh api --method=GET repos/$up_org/$up_repo/pulls/$pr_number --jq ".body")
 
-  file=$(pr_file)
+  file=$(create_pr_temp_file)
 
   # Don't write template file if already non-empty.
   if file_empty $file; then
     # Write the old PR body into the file.
     >$file <<<$old_pr_body
+    >>$file <<<$scissors_text
+    >>$file pr_log
   fi
 
-  new_pr_body=$(<$file)
+  edit_file $file
 
-  if [[ $new_pr_body == $old_pr_body ]]; then
+  new_pr_body=$(<$file)
+  new_pr_body=${new_pr_body%$scissors*}
+
+  if [[ -z $new_pr_body || $new_pr_body == $old_pr_body ]]; then
     echo "Nothing to do..."
     return
   fi
