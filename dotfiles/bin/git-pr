@@ -107,7 +107,7 @@ pr_create() {
 # Lets the user edit the PR's existing commit message.
 pr_edit() {
   pr_number=$(get_pr_number)
-  old_pr_body=$(gh api --method=GET repos/$up_org/$up_repo/pulls/$pr_number --jq ".body")
+  old_pr_body=$(gh api --method=GET repos/$up_org/$up_repo/pulls/$pr_number --jq ".body" | tr -d '\r')
 
   file=$(create_pr_temp_file)
 
@@ -256,17 +256,14 @@ pr_title() {
 pr_log() {
   if [[ $commit_count == 1 ]]; then
     # Commit body
-    format='%b%n'
+    git log -s --reverse --format='%b%n' @{upstream}..@
   else
-    # Commit subject
+    # - Commit subject
     #
-    # Commit body
+    #   Commit body
     #
-    # <br/>
-    #
-    format='%s%n%n%b<br/>%n'
+    git log -s --reverse --format='- %s%n%n%b' @{upstream}..@ | sed 's/^\([^-]\)/\t\1/'
   fi
-  git log -s --reverse --format=$format @{upstream}..@
 }
 
 # Usage: exit message [rc]
