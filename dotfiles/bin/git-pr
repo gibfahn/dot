@@ -258,11 +258,11 @@ pr_log() {
     # Commit body
     git log -s --reverse --format='%b%n' @{upstream}..@
   else
-    # - Commit subject
+    # * Commit subject
     #
-    #   Commit body
+    # 	Commit body
     #
-    git log -s --reverse --format='- %s%n%n%b' @{upstream}..@ | sed 's/^\([^-]\)/\t\1/'
+    git log -s --reverse --format='* %s%n%n%b' @{upstream}..@ | sed 's/^\([^*]\)/\t\1/'
   fi
 }
 
