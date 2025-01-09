@@ -260,7 +260,7 @@ oci_extract() {
 
 # Generate an alphanumeric password $1 characters long.
 password_gen() {
-  cat /dev/urandom | LC_ALL=C tr -dc '[:alnum:]' | fold -w ${1?Missing argument 1: password length} | head -1 | tr -d '\n'
+  head -c $(($1 * 10)) /dev/urandom | LC_ALL=C tr -dc '[:alnum:]' | LC_ALL=C tr -sc '[:alnum:]' | fold -w ${1?Missing argument 1: password length} | head -1 | tr -d '\n'
 }
 
 pth() { # Returns absolute path to each file or dir arg.
