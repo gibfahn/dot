@@ -171,18 +171,6 @@ change_branch() {
   git remote set-head --auto $fork
 }
 
-# Removes all branches and tags from remote "$1" except "$2" (default: forkmain).
-# For massive remotes you may want to increase the parallelism "$3" beyond the default of 10.
-clean_fork() {
-  local fork=${1:-fork}
-  local branch=${2:-forkmain}
-  local parallelism=${3:-10}
-  git ls-remote --heads --tags $fork \
-    | awk '!/\^\{\}/ && !/refs\/heads\/'"$branch"'/ {print $NF}' \
-    | xargs -n $parallelism git push --delete $fork
-  git remote prune $fork
-}
-
 # Usage: exit message [rc]
 error() {
   echo -e "${fg[red]}Error:${reset_color} $1" >&2
