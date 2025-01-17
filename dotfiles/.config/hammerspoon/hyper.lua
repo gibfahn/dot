@@ -145,6 +145,7 @@ local hyperModeAppMappings = {
   -- Keys used in work config: r, shift-r
   { key = "/", app = "Finder" },
   { key = "a", app = "Activity Monitor" },
+  { key = "b", app = "Safari", mods = { "alt" } },
   { key = "c", apps = { "Slack", "Slack Web" } },
   { key = "f", app = "Firefox" },
   { key = "k", app = "Calendar" },
