@@ -9,6 +9,7 @@ return {
   { "folke/persistence.nvim", enabled = false }, -- I don't use sessions.
   { "folke/tokyonight.nvim", enabled = false }, -- I have my own colorscheme.
   { "nvim-neo-tree/neo-tree.nvim", enabled = false }, -- I use oil.nvim instead.
+  { "MeanderingProgrammer/render-markdown.nvim", enabled = false }, -- Super-slow.
 
   {
     "akinsho/bufferline.nvim", -- Show buffers in the tab line.
