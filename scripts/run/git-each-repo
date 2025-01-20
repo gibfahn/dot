@@ -27,6 +27,10 @@ fi
 # This assumes that your fork main branch is called `forkmain`, which mine always are.
 for remote in $(git remote | grep fork); do
   if [[ $(git remote get-url "$remote") == *github*gib* ]]; then
+    # If this fails with:
+    # HTTP 404: Not Found (https://github.com/api/v3/repos/upstream-org/upstream-repo/git/refs/heads/forkmain)
+    # Then try it in the UI, that usually fails with "forkmain has commits not in upstream" (which
+    # you can fix in the UI by discarding those commits).
     GH_HOST=$(git remote-host "$remote") gh repo sync "$(git remote-org "$remote")/$(git remote-repo "$remote")" --branch forkmain
   fi
 done
