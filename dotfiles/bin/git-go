@@ -1,0 +1,62 @@
+#!/usr/bin/env zsh
+
+set -euo pipefail
+
+autoload -U colors && colors
+
+[[ -z ${DEBUG:-} ]] || set -x
+
+REMOTE_PRIMARY_NAME=${REMOTE_PRIMARY_NAME:-up}
+REMOTE_FORK_NAME=${REMOTE_FORK_NAME:-fork}
+
+usage() {
+echo "$(tput bold; tput setaf 74)$ZSH_ARGZERO [-h|--help] [git go args...] $(tput sgr0)
+
+git go: ensure all changes are pushed remotely so you can leave your machine.
+
+Assumes you use @{fork} and @{upstream} for your fork and upstream-tracking branches.
+"
+}
+
+main() {
+  [[ ${1:-} =~ ^(--help|-h)$ ]] && { usage; exit; }
+  [[ ${1:-} =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
+
+  # Check for uncommitted code.
+  if ! git diff --exit-code --quiet; then
+  fi
+
+  # Check untracked files.
+  untracked+=$(git ls-files . --exclude-standard --others | head)
+  if [[ -n $untracked ]]; then
+    error "Unable to deal with untracked files:\n${untracked}"
+  fi
+
+}
+
+# Works out the up remote for the specified fork remote. I use `fork` for the fork of `up`,
+# otherwise I append `fork`, e.g. `pub` -> `pubfork`.
+up_remote_for_fork() {
+  if [[ $1 == $REMOTE_FORK_NAME ]]; then
+    echo $REMOTE_PRIMARY_NAME
+  else
+    echo ${1%$REMOTE_FORK_NAME}
+  fi
+}
+
+# Default branch for remote. `default_branch up` -> master
+default_remote_branch() {
+  git symbolic-ref --short refs/remotes/$1/HEAD || { git remote set-head --auto $1 && git symbolic-ref --short refs/remotes/$1/HEAD; }
+}
+
+up_remote() {
+  git rev-parse --abbrev-ref --symbolic-full-name @{u} | cut -d '/' -f 1
+}
+
+# Usage: exit message [rc]
+error() {
+  echo -e "${fg[red]}Error:${reset_color} $1" >&2
+  exit "${2:-1}"
+}
+
+main $@

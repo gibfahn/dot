@@ -77,6 +77,7 @@
   cpa = cherry-pick --abort            # Bail out of cherry-pick.
   cpc = cherry-pick --continue         # Accept current changes and continue to next commit.
   cpq = cherry-pick --quit             # Only undo last commit (that failed) not all of them.
+
   d   = "!git diff \"${@:-HEAD}\" #"                   # diff of staged and unstaged..
   de  = "!git diff --name-only \"${@:-HEAD}\" | tr '\\n' '\\0' | xargs -0 $VISUAL # " # Open files changed since last commit in editor.
   dni  = diff --no-index
@@ -103,6 +104,9 @@
   fixup = "!  hash=$(git rev-parse "$1") \
            && git commit --fixup=$hash ${@:2} \
            && EDITOR=true git rebase -i --autostash --autosquash $hash^ #"
+
+  g = go
+  ga = each git go
 
   h = help
 
