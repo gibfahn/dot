@@ -402,15 +402,13 @@ source $XDG_CONFIG_HOME/zsh/deferred/macos-setdir.zsh
 [[ -e /Applications/iTerm.app/Contents/Resources/iterm2_shell_integration.zsh ]] && source /Applications/iTerm.app/Contents/Resources/iterm2_shell_integration.zsh
 
 # Source known completions
-source $XDG_DATA_HOME/fzf/shell/completion.zsh
-source $XDG_DATA_HOME/fzf/shell/key-bindings.zsh
+source <(fzf --zsh) # # Set up fzf key bindings and fuzzy completion for the fzf version we're using.
 source $XDG_DATA_HOME/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
 source $XDG_DATA_HOME/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 source $XDG_DATA_HOME/zsh/plugins/zsh-completions/zsh-completions.plugin.zsh
 
 # Source completions that need to be directly run.
 for _gib_file in $XDG_DATA_HOME/zsh/completions/*(N); do
-  echo $_gib_file
   source $_gib_file
 done
 unset _gib_file
@@ -513,20 +511,22 @@ _gib_func_alias_run() {
 
 # Fzf with multi-select from https://github.com/junegunn/fzf/pull/2098
 # CTRL-R - Paste the selected command from history into the command line
+# Supports pasting multiple items.
 gib-fzf-history-widget() {
   local selected num
-  setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases noglob 2> /dev/null
-  # Ensure the associative history array, which maps event numbers to the full
-  # history lines, is loaded, and that Perl is installed for multi-line output.
-  if zmodload -F zsh/parameter p:history 2>/dev/null && (( ${#commands[perl]} )); then
+  setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases noglob nobash_rematch 2> /dev/null
+  # Ensure the module is loaded if not already, and the required features, such
+  # as the associative 'history' array, which maps event numbers to full history
+  # lines, are set. Also, make sure Perl is installed for multi-line output.
+  if zmodload -F zsh/parameter p:{commands,history} 2>/dev/null && (( ${+commands[perl]} )); then
     # Read history line numbers (split on newline) into selected array.
-    selected=("${(@f)$(printf '%1$s\t%2$s\000' "${(vk)history[@]}" |
-      perl -0 -ne 'if (!$seen{(/^\s*[0-9]+\**\s+(.*)/, $1)}++) { s/\n/\n\t/gm; print; }' |
-      FZF_DEFAULT_OPTS=$(__fzf_defaults "" "-n2..,.. --scheme=history --bind=ctrl-r:toggle-sort --highlight-line ${FZF_CTRL_R_OPTS-} --query=${(qqq)LBUFFER} -m --read0") \
+    selected=("${(@f)$(printf '%s\t%s\000' "${(kv)history[@]}" |
+      perl -0 -ne 'if (!$seen{(/^\s*[0-9]+\**\t(.*)/s, $1)}++) { s/\n/\n\t/g; print; }' |
+      FZF_DEFAULT_OPTS=$(__fzf_defaults "" "-n2..,.. --scheme=history --bind=ctrl-r:toggle-sort --wrap-sign '\t↳ ' --highlight-line ${FZF_CTRL_R_OPTS-} --query=${(qqq)LBUFFER} -m --read0") \
       FZF_DEFAULT_OPTS_FILE='' $(__fzfcmd) --print0 | perl -0 -l012 -ne 'print((split("\t", $_))[0])')}")
   else
     selected=("${(@f)$(fc -rl 1 | awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, "", cmd); if (!seen[cmd]++) print $0 }' |
-      FZF_DEFAULT_OPTS=$(__fzf_defaults "" "-n2..,.. --scheme=history --bind=ctrl-r:toggle-sort --highlight-line ${FZF_CTRL_R_OPTS-} --query=${(qqq)LBUFFER} -m") \
+      FZF_DEFAULT_OPTS=$(__fzf_defaults "" "-n2..,.. --scheme=history --bind=ctrl-r:toggle-sort --wrap-sign '\t↳ ' --highlight-line ${FZF_CTRL_R_OPTS-} --query=${(qqq)LBUFFER} -m") \
       FZF_DEFAULT_OPTS_FILE='' $(__fzfcmd) --print0 | perl -0 -l012 -ne 'print((split("\t", $_))[0])')}")
   fi
   local ret=$?
@@ -539,7 +539,6 @@ gib-fzf-history-widget() {
       BUFFER=
     done
     # Set input buffer to newline-separated list of history lines.
-    # Use echo to unescape, e.g. \n to newline, \t to tab.
     BUFFER="${(F)history_lines}"
     # Move cursor to end of buffer.
     CURSOR=$#BUFFER
