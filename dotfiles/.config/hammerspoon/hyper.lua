@@ -25,15 +25,18 @@ log.d("Loading module")
 
 local home_dir = os.getenv("HOME")
 
-if hs.eventtap.isSecureInputEnabled() then
-  hs.notify
-    .new({
-      title = "Hammerspoon",
-      informativeText = "⚠️  Secure input is enabled.",
-      otherButtonTitle = "Okay",
-    })
-    :send()
+AlertIfSecureInputEnabled = function()
+  if hs.eventtap.isSecureInputEnabled() then
+    hs.notify
+      .new({
+        title = "Hammerspoon",
+        informativeText = "⚠️  Secure input is enabled.",
+        otherButtonTitle = "Okay",
+      })
+      :send()
+  end
 end
+AlertIfSecureInputEnabled()
 
 -- {{{ F17 -> Hyper Key
 

@@ -53,6 +53,7 @@ RemapKeyWatcher = hs.caffeinate.watcher.new(function(event)
     log.d("RemapKeyWatcher found matching event: " .. event)
     RemapKeys()
   end
+  AlertIfSecureInputEnabled()
 end)
 RemapKeyWatcher:start()
 
