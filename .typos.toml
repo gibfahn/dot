@@ -10,3 +10,9 @@ noice = "noice"
 # I use this an abbreviation.
 wrk = "wrk"
 noice = "noice"
+
+# https://github.com/crate-ci/typos/blob/master/docs/reference.md#example-configurations
+default.extend-ignore-re = [
+  "(?Rm)^.*(#|//)\\s*spellchecker:disable-line$",                      # Ignore a line ending in comment char plus `spellchecker:disable-line`
+  "(?s)(#|//)\\s*spellchecker:off.*?\\n\\s*(#|//)\\s*spellchecker:on", # Ignore anything between lines starting with (optional whitespace then) comment char plus `spellchecker:<on|off>`
+]
