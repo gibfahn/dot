@@ -4,13 +4,17 @@ set -euo pipefail
 
 autoload -U colors && colors
 
+[[ -z ${DEBUG:-} ]] || set -x
+
 REMOTE_PRIMARY_NAME=${REMOTE_PRIMARY_NAME:-up}
 REMOTE_FORK_NAME=${REMOTE_FORK_NAME:-fork}
 
 usage() {
 echo "$(tput bold; tput setaf 74)$ZSH_ARGZERO [-h|--help] branch_name [git switch args...] $(tput sgr0)
 
-git sw: switch to a branch, or create it, setting the upstream correctly.
+git sw: switch to a branch, or create it, setting the upstream tracking everything correctly.
+
+If you specify an existing remote branch, then we check it out in detached mode.
 
 ENVIRONMENT VARIABLES:
 
@@ -36,17 +40,35 @@ main() {
     return
   fi
 
-  local_branches=$(git branch --list | wc -l)
+  # The last argument that doesn't start with `-`
+  git_branch_arg=""
+  for arg in "$@"; do
+    if [[ $arg != -* ]]; then
+      git_branch_arg=$arg
+    fi
+  done
+  local_branch_count=$(git branch --list --no-color | wc -l)
   if (($@[(Ie)-c])) || (($@[(Ie)--create])) || (($@[(Ie)-C])) || (($@[(Ie)--force-create])); then
+    # We're explicitly trying to create a new branch.
     created=1
     git switch $@
-  # If switching to the branch fails, assume we just created it
-  elif ! git switch $@ 2>/dev/null; then
+  elif [[ -n $(git branch --no-color --list "$git_branch_arg") ]]; then
+    # We're trying to switch to an existing local branch. Use normal `git switch`.
+    git switch $@
+  elif [[ -n $(git branch --all --no-color --list "$git_branch_arg") ]]; then
+    # User is specifying a remote branch directly, so switch to it in detached mode.
+    git switch -d $@
+  elif [[ -n $(git branch --all --no-color --list "*/$git_branch_arg") ]]; then
+    # The branch we're trying to switch to exists in a remote but not locally.
+    # Use normal `git switch`, which will use the `--guess` flag.
     created=1
+    git switch $@
+  else
+    # Branch doesn't exist locally or remotely, create it.
     git switch -c $@
   fi
   # If there are more branches now than there were before, we created a branch.
-  if [[ $local_branches != $(git branch --list | wc -l) ]]; then
+  if [[ $local_branch_count != $(git branch --list --no-color | wc -l) ]]; then
     created=1
   fi
 
