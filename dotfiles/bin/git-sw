@@ -52,6 +52,9 @@ main() {
     # We're explicitly trying to create a new branch.
     created=1
     git switch $@
+  elif [[ -z $git_branch_arg ]]; then
+    # Didn't find a branch name (e.g. `git sw -`), just run the switch.
+    git switch $@
   elif [[ -n $(git branch --no-color --list "$git_branch_arg") ]]; then
     # We're trying to switch to an existing local branch. Use normal `git switch`.
     git switch $@
