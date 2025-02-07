@@ -423,6 +423,13 @@ return {
         default_settings = {
           -- rust-analyzer language server configuration
           ["rust-analyzer"] = {
+
+            -- Suggest imports like `crate::path::to::item` not `super::to::item`.
+            -- https://github.com/rust-lang/rust-analyzer/discussions/18520
+            imports = {
+              prefix = "crate",
+            },
+
             -- https://github.com/rust-analyzer/rust-analyzer/issues/3627
             rustfmt = {
               extraArgs = { "+nightly" },
