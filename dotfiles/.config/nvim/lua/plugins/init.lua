@@ -520,6 +520,8 @@ return {
       local keys = require("lazyvim.plugins.lsp.keymaps").get()
       -- Disable overriding of my a-n keymap.
       keys[#keys + 1] = { "<a-n>", false }
+      -- Disable overriding of my a-p keymap.
+      keys[#keys + 1] = { "<a-p>", false }
     end,
   },
 
