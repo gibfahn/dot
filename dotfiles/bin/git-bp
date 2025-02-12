@@ -68,6 +68,7 @@ if (( ${branches_to_prune[(I)$current_branch]} )); then
     default_branch=$(git default-branch "$up_remote" 2>/dev/null)
     if git rev-parse "$default_branch" &>/dev/null; then
       git checkout --quiet "$default_branch"
+      git merge --ff-only
     else
       git checkout --quiet -b "$default_branch" "$up_remote/$default_branch"
     fi
