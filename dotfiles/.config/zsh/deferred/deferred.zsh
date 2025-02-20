@@ -658,7 +658,8 @@ _gib_prompt_precmd() {
 _gib_prompt_preexec() {
   printf '\e[4 q' # Cursor is an underline (_) while command is running.
   # Set window title to first 40 chars of command we're about to run.
-  title="$(print -Pn "%1~") ❯ $1"
+  # Replace newline with `; `, remove whitespace at start and end of line.
+  title="$(print -Pn "%1~") ❯ $(sed -e ':a;N;$!ba;s/ *\n\+[ \t]*/; /g' -e 's/; $//' <<<$1)"
   if [[ $TERM_PROGRAM == iTerm.app ]]; then
     printf "\033];%s\007" "${title:0:60}"
   else
