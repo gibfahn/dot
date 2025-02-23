@@ -629,9 +629,10 @@ data:
     timeZonesInMenuBackup: []
     showDateInMenuBar: true
     timeZonesInMenu:
-      - "{\"timeZone\":\"Asia\\/Shanghai\",\"menuBarTitle\":\"\",\"id\":\"6F4DAB8E-524A-45BB-BB97-EBD1AEB547EE\",\"notes\":\"\",\"isInMenuBar\":false,\"timeFormat\":\"system\",\"name\":\"🇨🇳 China\",\"originalName\":\"Beijing\"}"
-      - "{\"timeZone\":\"America\\/New_York\",\"menuBarTitle\":\"\",\"id\":\"5D935EF6-867C-4634-B346-D53E3313D065\",\"notes\":\"\",\"isInMenuBar\":false,\"timeFormat\":\"system\",\"name\":\"🗽 New York City\",\"originalName\":\"New York City\"}"
-      - "{\"timeZone\":\"America\\/Los_Angeles\",\"menuBarTitle\":\"\",\"id\":\"45987DD3-E7DF-4329-8516-85462AC0B8B1\",\"notes\":\"\",\"isInMenuBar\":false,\"timeFormat\":\"system\",\"name\":\"🌁 San Francisco\",\"originalName\":\"San Francisco\"}"
+      - '{"hide":"never","id":"45987DD3-E7DF-4329-8516-85462AC0B8B1","isInMenuBar":false,"menuBarShowWeekdayWhenInDifferentDay":true,"menuBarTitle":"","menuBarTitleOnSeparateLine":false,"name":"🌁 San Francisco","notes":"","originalName":"San Francisco","showInMenu":true,"showMinutesInMenuBar":true,"timeFormat":"system","timeZone":"America\/Los_Angeles"}'
+      - '{"hide":"never","id":"5D935EF6-867C-4634-B346-D53E3313D065","isInMenuBar":false,"menuBarShowWeekdayWhenInDifferentDay":true,"menuBarTitle":"","menuBarTitleOnSeparateLine":false,"name":"🗽 New York City","notes":"","originalName":"New York City","showInMenu":true,"showMinutesInMenuBar":true,"timeFormat":"system","timeZone":"America\/New_York"}'
+      - '{"hide":"never","id":"94F82BF5-A382-4A84-8463-E03840D6D09E","isInMenuBar":false,"menuBarShowWeekdayWhenInDifferentDay":true,"menuBarTitle":"","menuBarTitleOnSeparateLine":false,"name":"🇬🇧 London","notes":"","originalName":"London","showInMenu":true,"showMinutesInMenuBar":true,"timeFormat":"system","timeZone":"Europe\/London"}'
+      - '{"hide":"never","id":"6F4DAB8E-524A-45BB-BB97-EBD1AEB547EE","isInMenuBar":false,"menuBarShowWeekdayWhenInDifferentDay":true,"menuBarTitle":"","menuBarTitleOnSeparateLine":false,"name":"🇨🇳 China","notes":"","originalName":"Beijing","showInMenu":true,"showMinutesInMenuBar":true,"timeFormat":"system","timeZone":"Asia\/Shanghai"}'
     showAddEventButtonInMenu: false
     showTimeInMenu: false
 
