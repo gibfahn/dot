@@ -386,9 +386,14 @@ data:
     # Don't show Desktop icons (hide the desktop view).
     CreateDesktop: false
 
+  # Apple Calendar.app
   com.apple.iCal:
     # Set default time for new events to 25 minutes not 60 minutes.
     Default duration in minutes for new event: 25
+    # Settings > Advanced > Turn on time zone support
+    TimeZone support enabled: true
+    # Settings > Advanced > Show week numbers
+    Show Week Numbers: true
 
   org.hammerspoon.Hammerspoon:
     # Write hammerspoon config to alternate location.
