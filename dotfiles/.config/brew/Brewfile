@@ -15,6 +15,7 @@ cask "maccy"                             # Clipboard manager with history.
 brew "neovim"                            # New and improved vim.
 brew "watch"                             # Rerun a command every n seconds.
 brew "pstree"                            # Hierarchical tree of processes, `pstree -g 3`.
+brew "gh"                                # GitHub CLI.
 
 # Brew formulae
 
@@ -33,7 +34,6 @@ brew "node"                              # Node.js programming language.
 brew "pinentry-mac"                      # Gpg password Keychain integration.
 brew "python"                            # Python 3
 brew "ripgrep"                           # Super-fast version of grep.
-brew "terminal-notifier"                 # Log notifications from the terminal.
 brew "tree"                              # Recursive ls.
 brew "volta"                             # Node version manager.
 brew "watchexec"                         # Run commands when files change.
@@ -42,19 +42,11 @@ brew "zsh"                               # Nicer interactive shell.
 
 # Brew casks (GUI Applications):
 
+# cask "vlc"                               # Nice video player.
 cask "google-chrome"                     # You probably want/have Chrome.
 cask "keyboard-cleaner"                  # Block all keystrokes except ⌘-q so you can wipe your keyboard.
 cask "spotify"                           # Music.
 cask "time-out"                          # Reminds you to take breaks.
-cask "vlc"                               # Nice video player.
 cask "wechat"                            # Chinese chat client.
 cask "whatsapp"                          # Whatsapp client.
 cask "workflowy"                         # Infinitely nested bullet point list app.
-
-# Mac App Store Apps (some paid). `mas list` to see what you've already installed.
-
-# mas "Runcat", id: 1429033973             # Show CPU usage in menu bar.
-mas "Dato", id: 1470584107
-mas "Pages", id: 409201541               # Edit docx and pages files.
-mas "1Password for Safari", id: 1569813296 # 1Password browser extension.
-mas "Dark Reader for Safari", id: 1438243180 # Dark mode in every website.

@@ -3,22 +3,10 @@
 
 # Brew taps
 
-# TODO(gib): re-enable once https://github.com/Homebrew/homebrew-bundle/pull/1550 lands.
-# tap "gibfahn/tap" # My personal tap for misc things.
+tap "gibfahn/tap" # My personal tap for misc things.
 
 # Brew formulae
 
-# brew "asciinema"                         # Screen recorder for the terminal.
-# brew "bandwhich"                         # See what's using bandwidth on your machine.
-# brew "exercism"                          # Learn coding languages.
-# brew "graphviz"                          # Gives you the `dot` tool for generating diagrams.
-# brew "hexyl"                             # Hex viewer in Rust.
-# brew "pv"                                # Show data flow through bash pipes.
-# brew "xsv"                               # csv manipulator.
-# cask "balenaetcher"                      # Flash disk images (e.g. Linux bootable USB sticks).
-# cask "disk-inventory-x"                  # Graphical view of what's taking up disk space.
-# cask "geektool"                          # Display things on Desktop (I have a todo list).
-# cask "grandperspective"                  # Alternative to disk-inventory-x, shows disk space usage.
 brew "bat"                               # Nicer cat with syntax highlighting etc.
 brew "binutils"                          # GNU versions of tools for interacting with binaries (nm, strings etc).
 brew "black"                             # Python code formatter.
@@ -34,7 +22,6 @@ brew "diffutils"                         # GNU versions of diff and related tool
 brew "findutils"                         # GNU versions of find, locate, updatedb, xargs.
 brew "fswatch"                           # See which files are opened on the system (`fswatch /`).
 brew "gawk"                              # GNU versions of awk.
-brew "gh"                                # New GitHub CLI (will eventually replace hub).
 brew "git-cliff"                         # Changelog generator.
 brew "git-lfs"                           # Git Large File Storage. Use with `git lfs`.
 brew "gnu-tar"                           # GNU version of tar.
@@ -65,8 +52,7 @@ brew "wget"                              # Alternative to curl for downloading f
 
 # Brew formulae from taps.
 
-# TODO(gib): re-enable once https://github.com/Homebrew/homebrew-bundle/pull/1550 lands.
-# brew "gibfahn/tap/up"                    # Handles updating everything (installed here for man pages and completions).
+brew "gibfahn/tap/up"                    # Handles updating everything (installed here for man pages and completions).
 
 
 # Brew casks
