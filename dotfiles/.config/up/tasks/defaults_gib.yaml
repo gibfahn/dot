@@ -76,53 +76,6 @@ data:
     # Settings > Tabs > Always show website titles in tabs > Checked
     EnableNarrowTabs: false
 
-  com.apple.Spotlight:
-    orderedItems:
-      - enabled: true
-        name: APPLICATIONS # Open Applications.
-      - enabled: true
-        name: SYSTEM_PREFS # Open System Settings panes.
-      - enabled: true
-        name: BOOKMARKS # Open Safari Bookmarks and History.
-      - enabled: true
-        name: MENU_DEFINITION # Define words.
-      - enabled: true
-        name: MENU_EXPRESSION # Inline Calculator.
-      - enabled: true
-        name: MENU_CONVERSION # Currency Conversion.
-      - enabled: false
-        name: DIRECTORIES
-      - enabled: false
-        name: PDF
-      - enabled: false
-        name: FONTS
-      - enabled: false
-        name: DOCUMENTS
-      - enabled: false
-        name: MESSAGES
-      - enabled: false
-        name: CONTACT
-      - enabled: false
-        name: EVENT_TODO
-      - enabled: false
-        name: IMAGES
-      - enabled: false
-        name: MUSIC
-      - enabled: false
-        name: MOVIES
-      - enabled: false
-        name: PRESENTATIONS
-      - enabled: false
-        name: SPREADSHEETS
-      - enabled: false
-        name: SOURCE
-      - enabled: false
-        name: MENU_OTHER
-      - enabled: false
-        name: MENU_WEBSEARCH
-      - enabled: false
-        name: MENU_SPOTLIGHT_SUGGESTIONS
-
   # Change Sogou keyboard layout to Colemak:
   # ⚙ -> 偏好号设置 -> 按键 -> 键盘布局 -> 其他键盘 -> Colemak
   "~/Library/Application Support/Sogou/InputMethod/SogouPY/UserPreferences.plist":
