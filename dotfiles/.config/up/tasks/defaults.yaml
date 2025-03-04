@@ -50,9 +50,9 @@ data:
     NSAutomaticDashSubstitutionEnabled: false
     NSAutomaticQuoteSubstitutionEnabled: false
 
-    # System Settings > Keyboard > Shortcuts > Full Keyboard Access
-    # Full Keyboard Access: In Windows and Dialogs, press Tab to move keyboard
-    # focus between:
+    # System Settings > Keyboard > Keyboard navigation
+    # Use keyboard navigation to move focus between controls. Press the Tab key to move focus
+    # forwards and Shift Tab to move focus backwards.
     #   0: Text Boxes and Lists only
     #   2: All controls
     # Set it to 2 because that's much nicer (you can close confirmation prompts
