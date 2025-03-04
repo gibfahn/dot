@@ -2,6 +2,14 @@
 
 set -eu
 
+# Zoxide should ignore inputs that don't exist, so put lots of things here.
+zoxide add \
+  ~/Library/Logs/co.fahn.up/ \
+  ~/Library/Logs/*gib*/ \
+  /opt/homebrew/Library/Taps/*/* \
+  /private/var/tmp \
+  ~/tmp/*
+
 # Ensure `git maintenance` CRON is set up.
 # <https://git-scm.com/docs/git-maintenance>
 for f in org.git-scm.git.daily.plist org.git-scm.git.hourly.plist org.git-scm.git.weekly.plist; do
