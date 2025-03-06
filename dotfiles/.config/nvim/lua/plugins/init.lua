@@ -362,13 +362,6 @@ return {
   },
 
   {
-    "MeanderingProgrammer/markdown.nvim", -- Markdown preview in nvim.
-    opts = {
-      enabled = false, -- Off by default.
-    },
-  },
-
-  {
     "mfussenegger/nvim-lint", -- Pluggable linter framework.
     optional = true,
     opts = {
