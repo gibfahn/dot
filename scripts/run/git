@@ -2,13 +2,18 @@
 
 set -eu
 
+zoxide_dirs=(
+  /opt/homebrew/Library/Taps/*/* # Brew taps.
+  /private/var/tmp
+  ~/.local/share/nvim/lazy/*/    # Neovim plugins.
+  ~/.local/share/zsh/plugins/*/  # Zsh plugins.
+  ~/Library/Caches/*{gib,fahn}*/ # Caches for my tools.
+  ~/Library/Logs/*{gib,fahn}*/   # Logs for my tools.
+  ~/tmp/*/                       # My temporary subdirectories.
+)
+
 # Zoxide should ignore inputs that don't exist, so put lots of things here.
-zoxide add \
-  ~/Library/Logs/co.fahn.up/ \
-  ~/Library/Logs/*gib*/ \
-  /opt/homebrew/Library/Taps/*/* \
-  /private/var/tmp \
-  ~/tmp/*
+zoxide add "${zoxide_dirs[@]}"
 
 # Ensure `git maintenance` CRON is set up.
 # <https://git-scm.com/docs/git-maintenance>
