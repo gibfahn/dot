@@ -1,3 +1,7 @@
+[absorb]
+  # `brew install git-absorb`
+  autoStageIfNothingStaged = true # Don't make me `git add`.
+
 [alias]
   # Commits: @=HEAD, -=last commit.
   # N.B. # at end of func allows parsing $1 args.
