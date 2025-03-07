@@ -18,18 +18,6 @@ if ! command -v brew >/dev/null; then
   fi
 fi
 
-# Work around <https://github.com/orgs/Homebrew/discussions/5528>, where brew revokes sudo for the
-# whole terminal.
-# Can't use script as per that issue because it messes up up's indicatif-powered terminal output.
-brew() {
-  # faketty is installed in the `rust` task, so can't guarantee it is present at this point.
-  if command -v faketty >/dev/null; then
-    faketty brew "$@"
-  else
-    command brew "$@"
-  fi
-}
-
 # Install xcode command line tools (should have already been brew installed).
 # If these are messed up run `xcode-select -p`. It will normally print one of:
 # - /Library/Developer/CommandLineTools
@@ -44,10 +32,10 @@ export PATH=/opt/homebrew/bin:/opt/brew/bin:$PATH
 export HOMEBREW_CASK_OPTS=--no-quarantine
 
 # Upgrade everything, even things that weren't in your Brewfile.
-brew upgrade # You may occasionally want to run `brew upgrade --greedy` in case built-in cask updaters aren't working.
+up faketty brew upgrade # You may occasionally want to run `brew upgrade --greedy` in case built-in cask updaters aren't working.
 
 # brew install things. Edit config/Brewfile to adjust.
-brew tap Homebrew/bundle
+up faketty brew tap Homebrew/bundle
 
 brewfiles=("$XDG_CONFIG_HOME"/brew/Brewfile)
 
@@ -65,7 +53,7 @@ if [[ -e "$XDG_CONFIG_HOME"/brew/Brewfile-mas ]]; then
 fi
 
 if ! brew bundle --file =(cat ${brewfiles[@]}) check >/dev/null; then
-  brew bundle --file =(cat ${brewfiles[@]})
+  up faketty brew bundle --file =(cat ${brewfiles[@]})
 fi
 
 # Only run this expensive step if stdout and stderr are ttys (script is being run interactively).
@@ -75,5 +63,5 @@ if [[ -t 1 && -t 2 ]]; then
     brew bundle cleanup --force --file =(cat ${brewfiles[@]})"
   # Command returns 1 exit code if anything would be cleaned up.
   # <https://github.com/homebrew/homebrew-bundle/commit/34e39886a92e5f14d46fa014d5ed8712934d5820>
-  brew bundle cleanup --file =(cat ${brewfiles[@]}) || true
+  up faketty brew bundle cleanup --file =(cat ${brewfiles[@]}) || true
 fi
