@@ -6,15 +6,17 @@ tap "homebrew/bundle"                    # Allows you to use Brewfiles.
 
 # Bootstrapping.
 
-cask "1password"                         # Password manager, installed first so I can log into things.
-brew "gnupg"                             # gpg command line.
+brew "watch"                             # Rerun a command every n seconds.
+brew "pstree"                            # Hierarchical tree of processes, `pstree -g 3`.
+
 cask "kitty"                             # GPU Accelerated cross-platform Terminal Emulator.
 cask "font-hasklug-nerd-font"            # Nice programming font Hasklig (Source Code Pro + Ligatures) + Nerd Font extensions.
 cask "hammerspoon"                       # Scriptable automator for macOS.
 cask "maccy"                             # Clipboard manager with history.
 brew "neovim"                            # New and improved vim.
-brew "watch"                             # Rerun a command every n seconds.
-brew "pstree"                            # Hierarchical tree of processes, `pstree -g 3`.
+
+cask "1password"                         # Password manager, installed first so I can log into things.
+brew "gnupg"                             # gpg command line.
 brew "gh"                                # GitHub CLI.
 
 # Brew formulae
