@@ -20,6 +20,8 @@
 --   |---|---|---|---|---|   |---|---|---|---|---|---|
 --   | z | ✓ | ✓ | ✓ | ✓ |   | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 --   '---'---'---'---'---'   '---'---'---'---'---'---'
+
+local statusMessage = require("status-message")
 local log = hs.logger.new("hyper.lua", "debug")
 log.d("Loading module")
 
@@ -394,5 +396,69 @@ for _, hotkey in ipairs({
   end
 end
 -- }}} Hyper-{h,n,e,i} -> Arrow Keys
+
+-- Run a webex menu action that isn't global by switching to Webex, running the action, and switching back.
+-- This doesn't seem to work when sharing one's screen unfortunately.
+local function webexMenuAction(menuItem, message, switchBack)
+  local current = hs.application.frontmostApplication()
+  local webexApp = hs.application.find("Webex")
+  local webexWindow = webexApp:mainWindow()
+  if not webexApp then
+    statusMessage.new("⚠ " .. message .. " failed: couldn't find Webex"):notify()
+    return
+  end
+  if not webexWindow:focus() then
+    statusMessage.new("⚠ " .. message .. " failed: failed to switch to Webex"):notify()
+    return
+  end
+
+  if not webexApp:findMenuItem(menuItem).enabled then
+    for _, window in ipairs(webexApp:allWindows()) do
+      if webexApp:findMenuItem(menuItem).enabled then
+        break
+      end
+      window:focus()
+    end
+  end
+  if not webexApp:findMenuItem(menuItem).enabled then
+    statusMessage.new("⚠ " .. message .. " failed: failed to find menu item: " .. menuItem):notify()
+    return
+  end
+
+  if not webexApp:selectMenuItem(menuItem) then
+    statusMessage.new("⚠ " .. message .. " failed: failed to run menu item: " .. menuItem):notify()
+    return
+  end
+
+  if switchBack then
+    if not current:activate() then
+      statusMessage.new("⚠ " .. message .. " failed: failed to switch back"):notify()
+      return
+    end
+  end
+
+  statusMessage.new(message .. " success"):notify()
+end
+
+HyperMode:bind({}, ".", function()
+  log.d("Muting/Unmuting Webex...")
+  -- Assumes you already bound this as a global shortcut in Webex.
+  hs.eventtap.keyStroke({ "cmd", "alt", "ctrl", "shift" }, "m") -- Doc me
+end)
+
+HyperMode:bind({ "alt" }, ".", function()
+  log.d("Raising/lowering hand...")
+  webexMenuAction("Raise or lower your hand", "✋ raise/lower hand", true)
+end)
+
+HyperMode:bind({}, ",", function()
+  log.d("Starting/Stopping Webex video...")
+  webexMenuAction("Start or stop video on a call", "📹 video toggle", true)
+end)
+
+HyperMode:bind({ "alt" }, ",", function()
+  log.d("Sharing Webex content...")
+  webexMenuAction("Share content", "⛶ share content", false)
+end)
 
 -- vim: foldmethod=marker
