@@ -300,6 +300,13 @@ HyperMode:bind({}, "return", function()
 end)
 -- }}} Hyper-Enter -> Open clipboard contents.
 
+-- {{{ Hyper-Space -> Start Dictation.
+HyperMode:bind({}, "space", function()
+  log.d("Starting dictation...")
+  hs.eventtap.keyStroke({ "cmd", "alt", "ctrl", "shift" }, "d")
+end)
+-- }}} Hyper-Space -> Start Dictation.
+
 -- {{{ Hyper-<mods>-\ -> Quit things.
 HyperMode:bind({}, "\\", function()
   local date = os.date("%Y-%m-%d %H-%M-%S")

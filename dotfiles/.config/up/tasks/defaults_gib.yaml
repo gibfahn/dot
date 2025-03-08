@@ -59,8 +59,9 @@ data:
 
   com.apple.HIToolbox:
     # Enable dictation with double-tap of Fn button (1 to enable).
-    AppleDictationAutoEnable: 0
+    AppleDictationAutoEnable: 1
     # System Settings > Keyboard > Press Function key to: (disable to make it change input source).
+    # This makes it switch language.
     AppleFnUsageType: 1
 
   com.apple.Safari:
@@ -90,3 +91,11 @@ data:
   com.googlecode.iterm2:
     # Tell iTerm2 to load configs from my dotfiles.
     PrefsCustomFolder: /Users/gib/code/dot/config/iTerm2
+
+  # Settings > Keyboard > Dictation
+  com.apple.speech.recognition.AppleSpeechRecognition.prefs:
+    # Cmd-Alt-Ctrl-Shift-d (⌘⌥⌃⇧d) to trigger. Set in Hammerspoon.
+    CustomizedDictationHotKey:
+      keyChar: 100
+      virtualKey: 5
+      modifiers: 1966080
