@@ -1,0 +1,35 @@
+#!/usr/bin/env zsh
+
+set -euxo pipefail
+
+# Ensure well-known
+
+work_done=
+
+# Zoxide should ignore inputs that don't exist, so put lots of things here.
+to_add=(
+  /opt/homebrew/Library/Taps/*/*/ # Brew taps.
+  /opt/homebrew/Library/Taps/*/ # Brew taps.
+  /private/var/tmp
+  ~/.local/share/nvim/lazy/*/    # Neovim plugins.
+  ~/.local/share/zsh/plugins/*/  # Zsh plugins.
+  ~/Library/Caches/*{gib,fahn}*/ # Caches for my tools.
+  ~/Library/Logs/*{gib,fahn}*/   # Logs for my tools.
+  ~/tmp/*/                       # My temporary subdirectories.
+)
+
+existing=(${(f)"$(zoxide query --list)"}) # "
+
+# TODO: once available, use a flag for this:
+# https://github.com/ajeetdsouza/zoxide/issues/1010
+for dir in "${to_add[@]}"; do
+  dir=${dir%/}
+  if ! (($existing[(Ie)$dir])); then
+    work_done=true
+    zoxide add "${dir}"
+  fi
+done
+
+if [[ -z $work_done ]]; then
+  exit "$UP_EXIT_CODE_SKIPPED"
+fi
