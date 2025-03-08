@@ -5,32 +5,66 @@
 
 set -euo pipefail
 
-# Things we don't need to open because they (blessedly) don't need initial configuration.
-ignored=(
-  'Keyboard Cleaner.app'
-  'Chess.app'
-  'TextEdit.app'
-  'Stickies.app'
-  'Preview.app'
-  'Photo Booth.app'
-  'QuickTime Player.app'
-  'Calculator.app'
-  'Chrysalis.app'
-  'Dark Reader for Safari.app'
-  '1Password for Safari.app'
-  'GhostText.app'
-  'SF Symbols.app'
-  'Font Book.app'
-  'Image Capture.app'
-  'Visual Studio Code.app'
-  'Automator.app'
-  'Clock.app'
-  'Music.app'
-)
+main() {
+  case ${1:-} in
+    --really) open_apps ;;
+    --extensions) open_extensions ;;
+    *)
+    echo "Not opening apps unless you pass --really, to prevent accidental opening..."
+    exit 1
+    ;;
+  esac
+}
 
-ignored_args=()
-for arg in ${ignored[@]}; do
-  ignored_args+=(-e $arg)
-done
+open_apps() {
+  echo "Opening all apps..."
+  # Things we don't need to open because they (blessedly) don't need initial configuration.
+  ignored=(
 
-ls -1d {,/System}/Applications/*.app | grep -v ${ignored_args[@]} | tr '\n' '\0' | xargs -0 -n 1 open -a
+    '1Password for Safari.app'
+    'Automator.app'
+    'Calculator.app'
+    'Chess.app'
+    'Chrysalis.app'
+    'Clock.app'
+    'Dark Reader for Safari.app'
+    'Dictionary.app'
+    'Font Book.app'
+    'GhostText.app'
+    'Image Capture.app'
+    'Image Playground.app'
+    'Keyboard Cleaner.app'
+    'Music.app'
+    'News.app'
+    'Photo Booth.app'
+    'Preview.app'
+    'QuickTime Player.app'
+    'SF Symbols.app'
+    'Shortcuts.app'
+    'Stickies.app'
+    'Stocks.app'
+    'TV.app'
+    'TextEdit.app'
+    'Visual Studio Code.app'
+
+  )
+
+  ignored_args=()
+  for arg in ${ignored[@]}; do
+    ignored_args+=(-e $arg)
+  done
+
+  ls -1d {,/System}/Applications/*.app | grep -v ${ignored_args[@]} | tr '\n' '\0' | xargs -0 -n 1 open -a
+}
+
+open_extensions() {
+  chrome_extensions=(
+    https://chromewebstore.google.com/detail/1password-%E2%80%93-password-mana/aeblfdkhhhdcdjpifhhbdiojplfjncoa
+    https://chromewebstore.google.com/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh
+    https://chromewebstore.google.com/detail/zhongwen-chinese-english/kkmlkkjojmombglmlpbpapmhcaljjkde
+    https://chromewebstore.google.com/detail/refined-github/hlepfoohegkhhmjieoechaddaejaokhf
+    https://chromewebstore.google.com/detail/empty-title/niloccemoadcdkdjlinkgdfekeahmflj # Save to Pocket
+  )
+}
+
+main $@
