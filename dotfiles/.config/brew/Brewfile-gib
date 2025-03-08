@@ -57,22 +57,22 @@ brew "gibfahn/tap/up"                    # Handles updating everything (installe
 
 # Brew casks
 
+# cask "docker"                            # Build and run docker images.
 # cask "gimp"                              # Heavyweight photo editor.
 # cask "intellij-idea-ce"                  # Java-oriented IDE (good for debugging).
 # cask "meld"                              # Visual file diffing tool.
 # cask "messenger"                         # Facebook Messenger native app.
 # cask "microsoft-teams"                   # Microsoft Teams
 # cask "onedrive"                          # Microsoft OneDrive.
+# cask "zoom"                              # Zoom web meetings client.
 cask "1password-cli"                     # CLI way to access 1Password credentials.
 cask "arc"                               # Nicer browser.
 cask "chrysalis"                         # Used to flash my KeyboardIO Model 01.
 cask "daisydisk"                         # See what's using disk space and easily clean it up.
-cask "docker"                            # Build and run docker images.
 cask "keycastr"                          # Shows keystrokes in corner of screen (great for casting/demos).
 cask "obsidian"                          # Markdown-based note-taking app.
 cask "slack"                             # Everyone uses Slack right?
 cask "visual-studio-code"                # Used to teach Brian to code.
-cask "zoom"                              # Zoom web meetings client.
 
 # Mac App Store Apps (some paid). `mas list` to see what you've already installed.
 
