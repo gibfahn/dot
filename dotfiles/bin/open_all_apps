@@ -65,6 +65,8 @@ open_extensions() {
     https://chromewebstore.google.com/detail/refined-github/hlepfoohegkhhmjieoechaddaejaokhf
     https://chromewebstore.google.com/detail/empty-title/niloccemoadcdkdjlinkgdfekeahmflj # Save to Pocket
   )
+
+  open ${chrome_extensions[@]}
 }
 
 main $@
