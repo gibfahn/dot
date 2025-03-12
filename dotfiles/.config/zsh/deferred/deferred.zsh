@@ -634,6 +634,7 @@ fi
 
 # Run before the prompt is displayed.
 _gib_prompt_precmd() {
+  local title
   # Set window title to current directory.
   title="$(print -Pn "%1~")"
   if [[ $TERM_PROGRAM == iTerm.app ]]; then
@@ -647,10 +648,14 @@ _gib_prompt_precmd() {
 
 # Run between user hitting Enter key, and command being run.
 _gib_prompt_preexec() {
+  local title
   printf '\e[4 q' # Cursor is an underline (_) while command is running.
   # Set window title to first 40 chars of command we're about to run.
-  # Replace newline with `; `, remove whitespace at start and end of line.
-  title="$(print -Pn "%1~") ❯ $(sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/; /g' -e 's/; $//' <<<$1)"
+  # Do the following replacements:
+  # - replace newline with `; `
+  # - remove `\;`
+  # - remove whitespace at start and end of line
+  title="$(print -Pn "%1~") ❯ $(sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/; /g' -e 's/\\;//g' -e 's/; $//' <<<$1)"
   if [[ $TERM_PROGRAM == iTerm.app ]]; then
     printf "\033];%s\007" "${title:0:60}"
   else
