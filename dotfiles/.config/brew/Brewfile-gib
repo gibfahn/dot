@@ -39,6 +39,7 @@ brew "make"                              # GNU version of make.
 brew "moreutils"                         # GNU tools like parallel and sponge.
 brew "mypy"                              # Python code typechecker.
 brew "pkl"                               # Pkl config language (https://pkl-lang.org).
+brew "pkl-lsp"                           # Language server for the Pkl config language (https://pkl-lang.org).
 brew "protobuf"                          # Serialization format.
 brew "pylint"                            # Python code linter.
 brew "ruby"                              # Newer version of Ruby.
