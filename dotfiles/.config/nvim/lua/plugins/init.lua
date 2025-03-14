@@ -449,8 +449,6 @@ return {
 
   { "mzlogin/vim-markdown-toc", ft = "markdown", cmd = "GenTocGFM" }, -- Markdown Table of Contents.
 
-  { "nanotee/zoxide.vim", cmd = "Zi" }, -- Use zoxide to quickly jump to directories.
-
   {
     "neovim/nvim-lspconfig", -- Configure language servers.
     opts = {
