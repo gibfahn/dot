@@ -1,9 +1,5 @@
 # Basic things I'd install on any machine.
 
-# Brew taps
-
-tap "homebrew/bundle"                    # Allows you to use Brewfiles.
-
 # Bootstrapping.
 
 brew "watch"                             # Rerun a command every n seconds.

@@ -34,9 +34,6 @@ export HOMEBREW_CASK_OPTS=--no-quarantine
 # Upgrade everything, even things that weren't in your Brewfile.
 up faketty brew upgrade # You may occasionally want to run `brew upgrade --greedy` in case built-in cask updaters aren't working.
 
-# brew install things. Edit config/Brewfile to adjust.
-up faketty brew tap Homebrew/bundle
-
 brewfiles=("$XDG_CONFIG_HOME"/brew/Brewfile)
 
 if [[ -e "$XDG_CONFIG_HOME"/brew/Brewfile-wrk ]]; then
