@@ -8,11 +8,12 @@ work_done=
 
 # Zoxide should ignore inputs that don't exist, so put lots of things here.
 to_add=(
+  /opt/homebrew/Library/Taps/*/ # Brew tap groups.
   /opt/homebrew/Library/Taps/*/*/ # Brew taps.
-  /opt/homebrew/Library/Taps/*/ # Brew taps.
   /private/var/tmp
   ~/.local/share/nvim/lazy/*/    # Neovim plugins.
   ~/.local/share/zsh/plugins/*/  # Zsh plugins.
+  ~/.ssh/                        # SSH configs.
   ~/Library/Caches/*{gib,fahn}*/ # Caches for my tools.
   ~/Library/Logs/*{gib,fahn}*/   # Logs for my tools.
   ~/tmp/*/                       # My temporary subdirectories.
