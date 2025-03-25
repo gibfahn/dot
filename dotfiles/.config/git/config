@@ -124,8 +124,8 @@
   # Interactive log of $@.
   li = "!git log --graph --color=always --format=\"%C(auto)%h%d %s %C(black)%C(bold)<%an> %ci%C(auto)\" \"$@\" \
     | fzf --ansi -m --no-sort --reverse --tiebreak=index \
-    --preview \"git show --color=always \\$(grep -oE '[a-f0-9]{7,}' <<< {} | head -1) | delta \" \
-    --bind \"ctrl-o:execute: git shi \\$(grep -oE '[a-f0-9]{7,}' <<< {} | head -1)\" \
+    --preview \"git show --color=always \\\"\\$(grep -oE '[a-f0-9]{7,}' <<< {} | head -1)\\\" | delta \" \
+    --bind \"ctrl-o:execute: git shi \\\"\\$(grep -oE '[a-f0-9]{7,}' <<< {} | head -1)\\\"\" \
     | grep -oE '[a-f0-9]{7,}' #"
   lia = li --all
   lpr = "log -s --reverse --format='%h %s%n%n%b%n<br/>%n' @{upstream}..@" # Log to paste into a PR comment.
