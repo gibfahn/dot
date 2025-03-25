@@ -237,9 +237,6 @@ data:
       - replace: omw
         on: 1
         with: on my way
-      - replace: asn
-        on: 1
-        with: alexia.soulioti@nhs.net
       - replace: iirc
         on: 1
         with: if I recall correctly
