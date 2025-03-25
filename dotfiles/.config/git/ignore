@@ -16,9 +16,11 @@
 # I think coc.nvim specific.
 /.vim/
 
-# Bazel build dependencies (no leading slash as you can multiple bazel projects in one repo).
+# Symlink prefix set Bazel build dependencies (no leading slash as you can multiple bazel projects in one repo).
 .bazel/
 bazel-out
+# Non-symlink-prefixed Bazel build directories.
+/bazel-*
 
 # Any dotdir in the root that has a secrets subdir.
 /.*/secrets/
