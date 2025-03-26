@@ -220,6 +220,29 @@ return {
       scroll = {
         enabled = false, -- Scrolling is visual noise for me.
       },
+
+      ---@class snacks.picker.Config
+      picker = {
+        win = {
+          input = {
+            keys = {
+              -- <Alt-y> copies content to the clipboard.
+              ["<a-y>"] = {
+                "copy_content",
+                mode = { "n", "i" },
+              },
+              -- lazyvim already adds <Alt-c> action to toggle cwd
+            },
+          },
+        },
+        actions = {
+          -- Copies currently focused picker line to clipboard.
+          ---@param picker snacks.Picker
+          copy_content = function(picker)
+            vim.fn.setreg("+", picker:current({ resolve = false }).text, "c")
+          end,
+        },
+      },
     },
   },
 
