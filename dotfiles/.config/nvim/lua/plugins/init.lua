@@ -226,8 +226,8 @@ return {
         win = {
           input = {
             keys = {
-              -- <Alt-y> copies content to the clipboard.
-              ["<a-y>"] = {
+              -- <Ctrl-y> copies content to the clipboard.
+              ["<c-y>"] = {
                 "copy_content",
                 mode = { "n", "i" },
               },
