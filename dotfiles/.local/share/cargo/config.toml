@@ -12,8 +12,9 @@ nt = "nextest"
 nr = "nextest run"
 nra = "nextest run --run-ignored=all"
 
-ba = "build --all-targets" # Build tests too.
+ba = "build --all-targets"            # Build tests too.
 br = "build --release"
+bra = "build --release --all-targets"
 rr = "run --release"
 tr = "test --release"
 h = "help"
@@ -23,7 +24,6 @@ nl = "new --lib"
 in = "init"
 inl = "init --lib"
 cn = "clean"
-cnl = "clean --target x86_64-unknown-linux-musl" # Clean linux target.
 
 i = "install"
 
