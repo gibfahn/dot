@@ -263,6 +263,15 @@ return {
             self.opts.formatters.file.truncate = width - 6
           end,
         },
+        layouts = {
+          default = {
+            layout = {
+              -- Make the default popup window use 100% of screen not 80%.
+              width = 0,
+              height = 0,
+            },
+          },
+        },
       },
     },
   },
