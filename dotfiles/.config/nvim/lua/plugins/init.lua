@@ -234,12 +234,33 @@ return {
               -- lazyvim already adds <Alt-c> action to toggle cwd
             },
           },
+          -- Make file truncation consider window width.
+          -- <https://github.com/folke/snacks.nvim/issues/1217#issuecomment-2661465574>
+          list = {
+            on_buf = function(self)
+              self:execute("calculate_file_truncate_width")
+            end,
+          },
+          preview = {
+            on_buf = function(self)
+              self:execute("calculate_file_truncate_width")
+            end,
+            on_close = function(self)
+              self:execute("calculate_file_truncate_width")
+            end,
+          },
         },
         actions = {
           -- Copies currently focused picker line to clipboard.
           ---@param picker snacks.Picker
           copy_content = function(picker)
             vim.fn.setreg("+", picker:current({ resolve = false }).text, "c")
+          end,
+          -- Make file truncation consider window width.
+          -- <https://github.com/folke/snacks.nvim/issues/1217#issuecomment-2661465574>
+          calculate_file_truncate_width = function(self)
+            local width = self.list.win:size().width
+            self.opts.formatters.file.truncate = width - 6
           end,
         },
       },
