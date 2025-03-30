@@ -96,8 +96,7 @@
   dun = diff --name-only @{u}                          # diff between working tree and upstream branch file names.
   dus = diff --staged @{u}                             # diff between working tree and upstream branch.
 
-  f = fetch            # Fetch one remote.
-  fa = fetch --all     # Fetch from all the remotes.
+  f = fetch            # Git Fetch
   fix = commit --fixup # g fix SHA means rebasing will attach to that SHA.
   # Like commit --amend but for an arbitrary commit (`g fixup @~3.`).
   fixup = "!  hash=$(git rev-parse "$1") \
@@ -281,11 +280,13 @@
 #  helper = osxkeychain   # Store Git credentials in the macOS keychain.
 
 [diff]
-  wsErrorHighlight = all # diff and show show whitespace errors.
+  algorithm = histogram  # Better diffing algorithm.
+  colorMoved = zebra     # Highlight moved lines as oldMoved -> newMoved.
+  mnemonicPrefix = true  # Use better letters than a/ and b/ in diffs, e.g. (i)ndex, (w)ork tree, (c)ommit, (o)bject
   renames = copies       # Copies count as renames.
   submodule = log        # Show information about submodules in diffs and logs.
-  colorMoved = zebra     # Highlight moved lines as oldMoved -> newMoved.
   tool = vimdiff         # Use nvim vimdiff to view diffs (`git difftool`).
+  wsErrorHighlight = all # diff and show show whitespace errors.
 
 # Allows you to use tools to generate readable diffs for binary formats.
 # These are just for humans to read, and shouldn't be used to send diffs for others to apply.
@@ -298,53 +299,78 @@
   textconv = jq . # Use plutil to generate readable plist diffs.
 
 [fetch]
-  prune = true             # Delete local tracking branches if remote is gone.
+  all = true               # `git fetch` by itself does `git fetch --all`
   fsckObjects = true
+  prune = true             # Delete local tracking branches if remote is gone.
+  pruneTags = true         # Delete local tags if remote is gone.
   writeCommitGraph = true  # Cache commit graph to speed up graph log / push operations on fetch.
+
 [format]
   pretty = fuller          # Shows author and committer.
+
 [help]
   autocorrect = prompt     # Prompt to autocorrect nonexistent commands after 0.1s.
+
 [init]
   defaultBranch = main     # Use 'main' as the default branch when you `git init`.
+
 [interactive]
-  singleKey = true       # Don't require Enter to confirm, e.g. for `git add -p` press y not y⏎.
+  singleKey = true         # Don't require Enter to confirm, e.g. for `git add -p` press y not y⏎.
+
 [log]
   follow = true            # Log tracks file move/rename.
   date = iso               # Display dates as ISO-8601 (`2023-05-25 13:54:51` instead of `Thu May 25 13:54:51 2023`)
+
 [merge]
   conflictstyle = zdiff3   # Show common ancestor in diffs (initially confusing, but very helpful).
-  tool = nvimdiff           # Use vimdiff (actually neovim's vimdiff) to view and fix merge conflicts (instead of `g mc`).
+  tool = nvimdiff          # Use vimdiff (actually neovim's vimdiff) to view and fix merge conflicts (instead of `g mc`).
+
 [mergetool]
   hideResolved = true      # Don't show merge conflicts that have already been resolved by git in the mergetool diff.
   keepBackup = false       # Don't save original file with conflict markers with .orig extension.
   prompt = false           # Don't confirm that I want to open the difftool every time.
   writeToTemp = true       # Write temporary BASE, LOCAL, and REMOTE versions of conflicting files to tempdir not worktree.
+
 [protocol]
   version = 2              # https://github.blog/changelog/2018-11-08-git-protocol-v2-support/.
+
 [pull]
   rebase = true            # pull = fetch + rebase, not fetch + merge.
+
 [push]
   default = current        # Only push the branch I'm on (made less dangerous by remote.pushDefault).
+
 [rebase]
-  autosquash = true        # Squash/fixup commits starting with squash!/fixup! + commit subject.
+  autoSquash = true        # Squash/fixup commits starting with squash!/fixup! + commit subject.
+  autoStash = true         # Automatically stash changes before rebasing.
   missingCommitsCheck = warn # Print a warning if a rebase removes commits.
   updateRefs = true        # Allow rebasing a stack of branches at the same time.
+
 [receive]
   fsckObjects = true
+
 [remote]
   pushDefault = fork       # Push to the fork remote unless a pushRemote is specified. Prevents pushing to wrong branch by mistake.
+
 [rerere]
+  autoUpdate = true        # Auto-apply the recorded updates to the index.
   enabled = true           # Remember how I resolved the same merge conflict last time.
+
 [submodule]
   fetchJobs = 8            # Number of jobs to fetch when I submodule clone/update.
   recurse = true           # Make everything except clone recurse into submodules.
+
 [stash]
   showPatch = true         # Show the actual diffs in `git stash show`.
+
 [status]
   showStash = true         # Show the number of commits in the stash in `git status` output.
   relativePaths = true     # Always show relative paths from the repo root.
   submoduleSummary = true  # Show submodule status in `git status`.
+
+[tag]
+  sort = "version:refname" # Sort tags by version not just alphabetically.
+
 [transfer]
   fsckObjects = true
 
