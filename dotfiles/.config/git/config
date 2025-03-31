@@ -302,7 +302,7 @@
   all = true               # `git fetch` by itself does `git fetch --all`
   fsckObjects = true
   prune = true             # Delete local tracking branches if remote is gone.
-  pruneTags = true         # Delete local tags if remote is gone.
+  pruneTags = false        # Don't delete local tags if remote is gone (doesn't work with multiple remotes).
   writeCommitGraph = true  # Cache commit graph to speed up graph log / push operations on fetch.
 
 [format]
