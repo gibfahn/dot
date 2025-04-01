@@ -63,6 +63,7 @@ vim.opt.list = true -- Show some invisible characters (see listchars).
 vim.opt.listchars = { tab = "»·", trail = "·", nbsp = "☠" } -- Display extra whitespace.
 vim.opt.mouse = "a" -- Mouse in all modes (mac: Fn+drag = copy).
 vim.opt.number = false -- Don't show line numbers by default.
+vim.opt.relativenumber = false -- Don't show relative line numbers by default.
 vim.opt.shiftround = true -- Round indent to multiple of 'shiftwidth'. Applies to > and < commands.
 vim.opt.shiftwidth = 2 -- Size of an indent
 vim.opt.shortmess:append({ I = true, c = true, C = true }) -- Avoid some "hit-enter" prompts
@@ -369,7 +370,7 @@ vim.keymap.set("n", "<leader>ud", function() Snacks.toggle.diagnostics():toggle(
 vim.keymap.set("n", "<leader>uf", function() require("lazyvim.util").format.toggle() end, { desc = "Toggle auto format (global)" })
 vim.keymap.set("n", "<leader>uh", function() Snacks.toggle.inlay_hints():toggle() end, { desc = "Toggle Inlay Hints" })
 vim.keymap.set("n", "<leader>ui", vim.show_pos, { desc = "Inspect Pos" })
-vim.keymap.set("n", "<leader>ul", function() Snacks.toggle.line_number():toggle() end, { desc = "Toggle Line Numbers" })
+vim.keymap.set("n", "<leader>ul", function() Snacks.toggle.option("number"):toggle() end, { desc = "Toggle Line Numbers" })
 vim.keymap.set("n", "<leader>ur", "<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><CR>", { desc = "Redraw / clear hlsearch / diff update" }) -- taken from runtime/lua/_editor.lua
 vim.keymap.set("n", "<leader>us", function() Snacks.toggle.option("spell"):toggle() end, { desc = "Toggle Spelling" })
 vim.keymap.set("n", "<leader>uw", function() Snacks.toggle.option("wrap"):toggle() end, { desc = "Toggle Word Wrap" })
