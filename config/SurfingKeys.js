@@ -1,28 +1,33 @@
 /*
  * Chrome/Firefox SurfingKeys mappings. Set by:
+ *  - Install extension:
+ *    - Chrome: <https://chrome.google.com/webstore/detail/surfingkeys/gfbliohnnapiefjpjlpjnehglfpaknnc>
+ *    - Firefox: <https://addons.mozilla.org/en-US/firefox/addon/surfingkeys_ff/>
  *  - go to chrome://extensions or about:addons
- *  - SurfingKeys Preferences (after installing it)
- *  - Advanced mode
- *  - Load settings from: ~/code/dot/config/SurfingKeys.js
- *  - Save
- *  - Path should autocomplete to file:///path/to/SurfingKeys.js
+ *    - Enable Developer mode
+ *  - SurfingKeys > Details
+ *    - Allow access to file URLs
+ *  - Extension options
+ *    - Advanced mode
+ *    - Load settings from: /Users/gib/code/dot/config/SurfingKeys.js
+ *    - Save
  *
  *  For more info see: https://github.com/brookhong/Surfingkeys#edit-your-own-settings
-*/
+ */
 
 /*
  * My mappings
  */
 
-Hints.characters = 'qwertyuiopasdfghjklzxcvbnm'; // Use whole alphabet for Link Hints (f).
+api.Hints.characters = "arstdhneioqwfpgjluy;zxcvbkm,./"; // Use whole alphabet for Link Hints (f).
 settings.scrollStepSize = 140; // Double scroll size (for j/k), default 70.
-iunmap(":"); // Disable emoji suggestions.
+api.iunmap(":"); // Disable emoji suggestions.
 
-aceVimMap('kj', '<Esc>', 'insert'); // Remap kj to Esc in the insert mode Ace editor.
+// aceVimMap("kj", "<Esc>", "insert"); // Remap kj to Esc in the insert mode Ace editor.
 
-map('p', '<Alt-i>'); // Map p to toggle passthrough mode.
+api.map("p", "<Alt-i>"); // Map p to toggle passthrough mode.
 
-map('F', 'gf'); // Map F to open links in a new tab (like in Vimium).
+api.map("F", "gf"); // Map F to open links in a new tab (like in Vimium).
 
 // Turn off SurfingKeys on some sites (see commented line for example of regex with multiple sites).
 // settings.blacklistPattern = /.*quip-.*\.com.*|.*inbox.google.com.*|trello.com|duolingo.com|youtube.com|udemy.com/i;
