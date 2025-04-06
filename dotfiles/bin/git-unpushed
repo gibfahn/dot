@@ -4,6 +4,10 @@ set -eu
 
 autoload -U colors && colors
 
+if [[ -n ${DEBUG:-} ]]; then
+  set -x
+fi
+
 usage() {
   echo "$(
     tput bold
@@ -59,7 +63,7 @@ if [[ -n $untracked ]]; then
 fi
 
 # Plumbing version of 'git branch'.
-for branch in $(git for-each-ref refs/heads/ --format='%(refname:short)'); do
+for branch in $(git for-each-ref refs/heads/ --format='%(refname:lstrip=2)'); do
   branch_hash=$(git rev-parse "$branch")
 
   push_hash=$(git rev-parse "$branch@{push}" 2>/dev/null) && true
