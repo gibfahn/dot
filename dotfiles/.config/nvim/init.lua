@@ -311,7 +311,6 @@ vim.keymap.set("n", "<Leader>8", function() require("bufferline").go_to(8, true)
 vim.keymap.set("n", "<Leader>9", function() require("bufferline").go_to(-1, true) end, { silent = true, desc = "Go to last buffer" })
 vim.keymap.set("n", "<Leader>;", "@:", { desc = "Repeat last :command" })
 vim.keymap.set("n", "<Leader><", '<Cmd>exe "vertical resize ".(winwidth(0) * 2/3)<CR>', { silent = true, desc = "Decrease window width to 2/3" })
-vim.keymap.set("n", "<Leader><space>", function() require("lazyvim.util").pick("files", {root = false, hidden = true})() end, { desc = "Find Files (cwd)" }) -- Override <Leader><Leader> to work in cwd.
 vim.keymap.set("n", "<Leader>>", '<Cmd>exe "vertical resize ".(winwidth(0) * 3/2)<CR>', { silent = true, desc = "Increase window width to 3/2" })
 vim.keymap.set("n", "<Leader>D", "<Cmd>%d<CR>", { desc = "Delete all text in buffer" })
 vim.keymap.set("n", "<Leader>E", "<C-W>z:cclose<CR>:lclose<CR>:helpclose<CR>:Noice dismiss<CR>", { desc = "Close preview windows" }) -- e.g. language server definitions
