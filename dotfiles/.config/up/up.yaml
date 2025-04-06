@@ -14,14 +14,15 @@ bootstrap_tasks:
   - brew
 
 inherit_env:
+  - DEBUG # Enable debugging by passing through this env var.
+  - HISTFILE # Used to backup zsh history.
   - HOME # Current user's homedir (~), should be set by OS.
-  - USER # Current user, should be set by OS.
   - PATH # TODO: don't pass this through.
+  - SSH_AUTH_SOCK # Set by ssh agent.
   - TERM # Tells logger what terminal this is.
   - TERMINFO # If set by terminal, enables nice colouring.
-  - SSH_AUTH_SOCK # Set by ssh agent.
-  - HISTFILE # Used to backup zsh history.
   - TMPDIR # Write temp files to the expected place.
+  - USER # Current user, should be set by OS.
   - VISUAL # In case interactive scripts want to use the system editor.
 
 env:
