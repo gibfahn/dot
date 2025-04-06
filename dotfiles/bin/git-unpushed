@@ -64,7 +64,7 @@ fi
 
 # Plumbing version of 'git branch'.
 for branch in $(git for-each-ref refs/heads/ --format='%(refname:lstrip=2)'); do
-  branch_hash=$(git rev-parse "$branch")
+  branch_hash=$(git rev-parse "refs/heads/$branch")
 
   push_hash=$(git rev-parse "$branch@{push}" 2>/dev/null) && true
   has_push=$?
