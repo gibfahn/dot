@@ -189,11 +189,16 @@ DefaultBrowserBundleID = (function()
   if handlers == nil or handlers.LSHandlers == nil then
     return "com.apple.safari"
   end
+
+  -- Use the default web browser.
   for _, handler in ipairs(handlers.LSHandlers) do
-    if handler.LSHandlerURLScheme == "https" then
+    -- log.df("Handler: %s", handler.LSHandlerRoleAll)
+    -- Ignore Velja as it's not a real browser <https://sindresorhus.com/velja>
+    if handler.LSHandlerURLScheme == "https" and handler.LSHandlerRoleAll ~= "com.sindresorhus.velja" then
       return handler.LSHandlerRoleAll
     end
   end
+
   -- If we didn't find a matching handler, default to Safari.
   return "com.apple.safari"
 end)()
