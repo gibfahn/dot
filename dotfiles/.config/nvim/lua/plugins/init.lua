@@ -42,6 +42,10 @@ return {
     end,
     config = function()
       require("luasnip.loaders.from_snipmate").lazy_load()
+      vim.g.pkl_neovim = {
+        -- <https://github.com/apple/pkl-neovim/pull/24/>
+        start_command = { "pkl-lsp" },
+      }
     end,
   },
 
