@@ -491,19 +491,6 @@ vim.api.nvim_create_autocmd("FileType", {
   group = gib_autogroup,
 })
 
--- Experimental Pkl languageserver
--- <https://github.com/apple/pkl-lsp>
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "pkl" },
-  callback = function()
-    vim.lsp.start({
-      cmd = { "pkl-lsp" },
-      root_dir = vim.fn.getcwd(), -- Use PWD as project root dir.
-    })
-  end,
-  group = gib_autogroup,
-})
-
 -- https://github.com/tpope/vim-fugitive/issues/1926
 vim.api.nvim_create_autocmd(
   "FileType",
