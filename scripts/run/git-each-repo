@@ -40,5 +40,14 @@ for remote in $(git remote | grep fork); do
   fi
 done
 
+# Set a default repo if there's an obvious one present. I use `up` as my default upstream repo name,
+# so if it exists it's a good option. We only want to do this for github repos though.
+# stdout is empty for `gh repo set-default --view` when a default hasn't been set.
+if [[ -z $(gh repo set-default --view 2>/dev/null) && $(git remote get-url up) == *github* ]]; then
+  # We have to set GH_HOST as otherwise if there are two different versions of a repo (e.g.
+  # github.com/foo/bar and github.mycorp.com/foo/bar), gh will get confused.
+  GH_HOST=$(git remote-host up) gh repo set-default "$(git remote get-url up)"
+fi
+
 # Check for unpushed branches or uncommitted changes.
 git unpushed
