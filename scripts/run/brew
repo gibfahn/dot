@@ -18,6 +18,11 @@ if ! command -v brew >/dev/null; then
   fi
 fi
 
+# Add to the default path, see `man path_helper` for more info.
+if [[ ! -f /etc/paths.d/10-brew ]]; then
+  echo "/opt/homebrew/bin" | sudo tee /etc/paths.d/10-brew
+fi
+
 # Install xcode command line tools (should have already been brew installed).
 # If these are messed up run `xcode-select -p`. It will normally print one of:
 # - /Library/Developer/CommandLineTools

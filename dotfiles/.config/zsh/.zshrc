@@ -50,6 +50,10 @@ export GOPATH="$HOME/code/go"
 # Script expects brew to be already in the path, e.g. by adding to /etc/paths.d with:
 #   echo "$(brew --prefix)/bin" | sudo tee /etc/paths.d/10-brew
 brew_prefix=${commands[brew]:+${commands[brew]:h:h}}
+# In case we're bootstrapping or didn't set this up, default to the standard AS location.
+if [[ -z ${brew_prefix:-} && -d /opt/homebrew/bin ]]; then
+  brew_prefix=/opt/homebrew
+fi
 
 typeset -U path # Don't allow duplicates in the path (keep left-most entry).
 
