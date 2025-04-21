@@ -6,6 +6,8 @@ set -euxo pipefail
 
 work_done=
 
+setopt null_glob # Ignore globs that don't match anything.
+
 # Zoxide should ignore inputs that don't exist, so put lots of things here.
 to_add=(
   /opt/homebrew/Library/Taps/*/ # Brew tap groups.
