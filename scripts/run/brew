@@ -31,6 +31,10 @@ export PATH=/opt/homebrew/bin:/opt/brew/bin:$PATH
 # Disable quarantine for casks.
 export HOMEBREW_CASK_OPTS=--no-quarantine
 
+# Handle bootstrapping issue where the first time we run up this directory isn't prefixed to the
+# PATH, but this is where the bootstrap version of up itself is installed.
+export PATH=$HOME/bin:$PATH
+
 # Upgrade everything, even things that weren't in your Brewfile.
 up faketty brew upgrade # You may occasionally want to run `brew upgrade --greedy` in case built-in cask updaters aren't working.
 
