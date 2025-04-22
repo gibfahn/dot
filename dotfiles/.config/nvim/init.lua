@@ -110,6 +110,12 @@ end
 -- Fix markdown indentation settings (copied from lazyvim).
 vim.g.markdown_recommended_style = 0
 
+vim.filetype.add({
+  pattern = {
+    ["*.bats"] = "sh", -- Bats is a shell test file.
+  },
+})
+
 -- }}} Vim options
 
 -- {{{ Package Manager Setup
@@ -464,12 +470,6 @@ end, {})
 
 -- AutoCmd group for my custom commands.
 local gib_autogroup = vim.api.nvim_create_augroup("gib_autogroup", { clear = true })
-
--- Bats is a shell test file type.
-vim.api.nvim_create_autocmd(
-  { "BufNewFile", "BufRead" },
-  { pattern = { "*.bats" }, command = "set filetype=sh", group = gib_autogroup }
-)
 
 -- Reload colorscheme on save.
 vim.api.nvim_create_autocmd("BufWritePost", {
