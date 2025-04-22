@@ -110,6 +110,12 @@ end
 -- Fix markdown indentation settings (copied from lazyvim).
 vim.g.markdown_recommended_style = 0
 
+-- Used by bazelrc_lsp language server.
+vim.filetype.add({
+  pattern = {
+    [".*.bazelrc"] = "bazelrc", -- Bazelrc is a Bazel config file.
+  },
+})
 vim.filetype.add({
   pattern = {
     ["*.bats"] = "sh", -- Bats is a shell test file.

@@ -513,6 +513,8 @@ return {
     "neovim/nvim-lspconfig", -- Configure language servers.
     opts = {
       servers = {
+        bazelrc_lsp = {}, -- .bazelrc file support (uses bazelrc filetype added in ../init.lua).
+
         -- https://github.com/rcjsuen/dockerfile-language-server?tab=readme-ov-file#language-server-settings
         dockerls = {
           settings = {
@@ -536,6 +538,23 @@ return {
                 dynamicRegistration = true,
               },
             },
+          },
+        },
+
+        -- Starlark support for Buck and Bazel. Hopefully doesn't conflict too much with starpls.
+        -- <https://github.com/facebookexperimental/starlark-rust/>
+        starlark_rust = {},
+
+        -- Another LSP for Starlark support.
+        -- <https://github.com/withered-magic/starpls#neovim-via-nvim-lspconfig>
+        starpls = {
+          -- Enable experimental features <https://github.com/withered-magic/starpls/blob/main/README.md#experimental-features>.
+          cmd = {
+            "starpls",
+            "server",
+            "--experimental_infer_ctx_attributes", -- Infer attributes on a rule implementation function's ctx parameter.
+            "--experimental_use_code_flow_analysis", -- Use code flow analysis to determine additional information about types.
+            "--experimental_enable_label_completions", -- Enables completions for labels within Bazel files
           },
         },
 
