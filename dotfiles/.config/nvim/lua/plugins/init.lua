@@ -424,7 +424,7 @@ return {
       linters_by_ft = {
         bzl = { "buildifier" },
         sieve = { "check_sieve" },
-        python = { "pylint", "mypy" },
+        python = { "pylint", "mypy", "ruff" },
         zsh = { "zsh" },
         bash = { "shellcheck" },
         -- Use the "*" filetype to run linters on all filetypes.
@@ -793,7 +793,11 @@ return {
     opts = {
       formatters_by_ft = {
         bzl = { "buildifier" },
-        python = { "isort", "black" },
+        python = {
+          "ruff_fix", -- Fix lint errors
+          "ruff_format", -- Format code
+          "ruff_organize_imports", -- Sort imports
+        },
       },
     },
   },

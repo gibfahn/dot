@@ -179,7 +179,6 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.editor.mini-diff" }, -- Visualise git diff.
     { import = "lazyvim.plugins.extras.editor.navic" }, -- Show function, class, etc in the statusline
     { import = "lazyvim.plugins.extras.editor.inc-rename" }, -- Incremental LSP renaming based on Neovim's command-preview feature
-    { import = "lazyvim.plugins.extras.formatting.black" }, -- Python black formatter
     { import = "lazyvim.plugins.extras.formatting.prettier" }, -- JS/Markdown prettier formatter
     { import = "lazyvim.plugins.extras.lang.docker" }, -- Dockerfile language support
     { import = "lazyvim.plugins.extras.lang.git" }, -- Git config/commit/rebase/ignore/attribute file support
