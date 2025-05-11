@@ -11,11 +11,11 @@
   change-branch = "! set -x; fork=${1:-fork} branch=${2:-forkmain} && GH_HOST=$(git remote-host $fork) gh api -XPATCH repos/$(git remote-org $fork)/$(git remote-repo $fork) -f name=$(git remote-repo $fork) -f default_branch=$branch --jq .default_branch && git remote set-head --auto $fork #"
   check-pr-branch = "! [[ $(git head-branch) != $(git up-branch) ]] || { printf \"\\033[0;31m  ERROR\\033[0m: Create a new branch before raising PR.\\n\" >&2 && exit 1; } #"
   code-changes = "!git log --format=format: --name-only | egrep -v '^$' | sort | uniq -c | sort -rg | head -${1:-10} #" # Show $1 most changed files.
-  default-branch = "!(git symbolic-ref --short refs/remotes/$1/HEAD || { git remote set-head --auto $1 && git symbolic-ref --short refs/remotes/$1/HEAD; }) | sed \"s|^$1/||\" #" # Default branch for remote. `g default-branch up` -> master
-  head-branch = symbolic-ref --short HEAD # e.g. master.
-  up-remote-branch = "!git rev-parse --abbrev-ref --symbolic-full-name @{u}" # e.g. origin/master.
+  default-branch = "!(git symbolic-ref --short refs/remotes/$1/HEAD || { git remote set-head --auto $1 && git symbolic-ref --short refs/remotes/$1/HEAD; }) | sed \"s|^$1/||\" #" # Default branch for remote. `g default-branch up` -> main
+  head-branch = symbolic-ref --short HEAD # e.g. main.
+  up-remote-branch = "!git rev-parse --abbrev-ref --symbolic-full-name @{u}" # e.g. origin/main.
   up-remote = "!git rev-parse --abbrev-ref --symbolic-full-name @{u} | cut -d '/' -f 1" # e.g. origin.
-  up-branch = "!git rev-parse --abbrev-ref --symbolic-full-name @{u} | cut -d '/' -f 2-" # e.g. master.
+  up-branch = "!git rev-parse --abbrev-ref --symbolic-full-name @{u} | cut -d '/' -f 2-" # e.g. main.
   push-branch = "!git rev-parse --abbrev-ref --symbolic-full-name @{push}" # What would be pushed to, pushRemote/$(git head-branch) if set, else @{u}.
   # Show the status of this branch relative to @{push}.
   push-status = "! push_branch=$(git push-branch 2>/dev/null) || { echo \"No push branch set.\" && exit 0; } \
@@ -130,15 +130,15 @@
   lpr = "log -s --reverse --format='%h %s%n%n%b%n<br/>%n' @{upstream}..@" # Log to paste into a PR comment.
 
   ma  = merge --abort
-  mb  = "!git merge-base ${1:-master} ${2:-HEAD} ${@:2} #" # Get commit this branch forked from.
+  mb  = "!git merge-base ${1:-main} ${2:-HEAD} ${@:2} #" # Get commit this branch forked from.
   mc  = "!git diff --name-only --diff-filter=U | tr '\\n' '\\0' | xargs -0 $VISUAL -c '/^\\(|||||||\\|=======\\|>>>>>>>\\|<<<<<<<\\)'" # Open merge conflicts in editor.
   mf  = "!git merge --ff-only $@ \
          && git submodule update --recursive --init #" # Update branch from other commit (default upstream) as long as other commit has HEAD as an ancestor.
   mfp = mf @{push} # Merge changes from the @{push} branch (useful when GitHub suggestions have been merged).
   mt  = mergetool # Alternative to `g mc`, `:h vimdiff` in nvim for more info (try `:dif[fupdate]`, `]c`, `do`, `dp`).
 
-  # Checkout next commit towards $1 (defaults to `master`). Opposite of `git checkout @~`. Skips "skipme" commits.
-  next = "!git -c advice.detachedHead=false checkout $(git log --reverse --ancestry-path @^..${1:-master} --oneline | grep -v skipme | head -2 | tail -1 | cut -d ' ' -f 1)"
+  # Checkout next commit towards $1 (defaults to `main`). Opposite of `git checkout @~`. Skips "skipme" commits.
+  next = "!git -c advice.detachedHead=false checkout $(git log --reverse --ancestry-path @^..${1:-main} --oneline | grep -v skipme | head -2 | tail -1 | cut -d ' ' -f 1)"
 
   p   = push                                                              # Push commits to a remote.
   pd  = "!git push -d ${1%%/*} ${1#*/} #"                                 # Delete a remote branch in the form remote/branch.
