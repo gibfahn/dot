@@ -15,6 +15,7 @@ echo "$(tput bold; tput setaf 74)$ZSH_ARGZERO [-h|--help] branch_name [git switc
 git sw: switch to a branch, or create it, setting the upstream tracking everything correctly.
 
 If you specify an existing remote branch, then we check it out in detached mode.
+If you don't specify a branch, we check out the default branch of the default remote.
 
 ENVIRONMENT VARIABLES:
 
@@ -30,7 +31,6 @@ REMOTE_FORK_NAME:
 }
 
 main() {
-  [[ ${1:-} == "" ]] && { usage; error "branch_name argument is required"; }
   [[ ${1:-} =~ ^(--help|-h)$ ]] && { usage; exit; }
   [[ ${1:-} =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
 
@@ -47,6 +47,14 @@ main() {
       git_branch_arg=$arg
     fi
   done
+
+  # `git sw` by itself checks out the default branch of the default remote.
+  if [[ -z $git_branch_arg ]]; then
+    remote_branch=$(default_remote_branch $REMOTE_PRIMARY_NAME)
+    git switch ${remote_branch#*/}
+    exit
+  fi
+
   local_branch_count=$(git branch --list --no-color | wc -l)
   if (($@[(Ie)-c])) || (($@[(Ie)--create])) || (($@[(Ie)-C])) || (($@[(Ie)--force-create])); then
     # We're explicitly trying to create a new branch.
@@ -77,10 +85,10 @@ main() {
 
   # If we just created the branch and it's based on a fork branch, then update
   if [[ ${created:-} == 1 ]]; then
-    up_remote=$(up_remote || echo $REMOTE_FORK_NAME)
-    if [[ ${up_remote} == *${REMOTE_FORK_NAME}* ]]; then
-      up_remote=$(up_remote_for_fork $up_remote)
-      git branch -u $(default_remote_branch $up_remote)
+    upstream_remote=$(upstream_remote_for_current_branch || echo $REMOTE_FORK_NAME)
+    if [[ ${upstream_remote} == *${REMOTE_FORK_NAME}* ]]; then
+      new_upstream_remote=$(up_remote_for_fork $upstream_remote)
+      git branch -u $(default_remote_branch $new_upstream_remote)
     fi
   fi
 
@@ -96,12 +104,12 @@ up_remote_for_fork() {
   fi
 }
 
-# Default branch for remote. `default_branch up` -> master
+# Default branch for remote. `default_branch up` -> up/main
 default_remote_branch() {
   git symbolic-ref --short refs/remotes/$1/HEAD || { git remote set-head --auto $1 && git symbolic-ref --short refs/remotes/$1/HEAD; }
 }
 
-up_remote() {
+upstream_remote_for_current_branch() {
   git rev-parse --abbrev-ref --symbolic-full-name @{u} | cut -d '/' -f 1
 }
 
