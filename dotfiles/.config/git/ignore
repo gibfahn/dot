@@ -30,3 +30,6 @@ bazel-out
 
 # Personal folder in the root for misc stuff.
 /_perso/
+
+# AI tooling testing.
+/.aider*
