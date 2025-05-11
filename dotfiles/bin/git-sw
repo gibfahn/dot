@@ -49,7 +49,7 @@ main() {
   done
 
   # `git sw` by itself checks out the default branch of the default remote.
-  if [[ -z $git_branch_arg ]]; then
+  if [[ $# == 0 ]]; then
     remote_branch=$(default_remote_branch $REMOTE_PRIMARY_NAME)
     git switch ${remote_branch#*/}
     exit
