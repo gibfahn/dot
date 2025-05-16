@@ -33,3 +33,6 @@ bazel-out
 
 # AI tooling testing.
 /.aider*
+
+# Pkl language server.
+/.pkl-lsp/
