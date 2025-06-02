@@ -4,13 +4,8 @@ set -eu
 
 # Things that I want to do to every git repository, every time.
 
-# Add repo to my zoxide search path.
-# TODO: this doesn't handle directories that are subsets of other directories, e.g. if you have
-# /tmp/foo and /tmp/foo-bar, and /tmp/foo-bar is already in the
-# https://github.com/ajeetdsouza/zoxide/issues/1010
-if [[ "$(zoxide query "$PWD" || true)" != "$PWD"* ]]; then
-  zoxide add "$PWD"
-fi
+# Add repo to my zoxide search path without increasing its score.
+zoxide add --score 0.0 "$PWD"
 
 [[ $PWD == */wrk/* ]] && config_file=~/.config/git/maintenance-wrk.config || config_file=~/.config/git/maintenance.config
 

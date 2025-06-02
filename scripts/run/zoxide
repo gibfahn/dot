@@ -2,9 +2,7 @@
 
 set -euxo pipefail
 
-# Ensure well-known
-
-work_done=
+# Ensure well-known directories are in the zoxide list of known directories.
 
 setopt null_glob # Ignore globs that don't match anything.
 
@@ -21,18 +19,5 @@ to_add=(
   ~/tmp/*/                       # My temporary subdirectories.
 )
 
-existing=(${(f)"$(zoxide query --list)"}) # "
-
-# TODO: once available, use a flag for this:
-# https://github.com/ajeetdsouza/zoxide/issues/1010
-for dir in "${to_add[@]}"; do
-  dir=${dir%/}
-  if ! (($existing[(Ie)$dir])); then
-    work_done=true
-    zoxide add "${dir}"
-  fi
-done
-
-if [[ -z $work_done ]]; then
-  exit "$UP_EXIT_CODE_SKIPPED"
-fi
+# Don't increment the score if already present.
+zoxide add --score 0.0 "${to_add[@]}"
