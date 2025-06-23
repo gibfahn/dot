@@ -13,4 +13,7 @@ build --repository_cache=~/.cache/bazel-repositories/
 # This includes a --server_javabase setting.
 try-import /Users/gib/.config/bazel/wrk.bazelrc
 
+# Clean up when the cache gets larger than this size.
+common --experimental_disk_cache_gc_max_size=200G
+
 # vim: filetype=conf
