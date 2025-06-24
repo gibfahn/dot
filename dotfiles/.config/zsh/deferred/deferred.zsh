@@ -209,9 +209,20 @@ docker_sha() {
 every() { local delay=${1?}; shift; while ! "$@"; do sleep $delay; echo "❯ $*"; done; }
 
 # Clone repo and cd into path (can't be in git config as we cd).
+# By default will clone into a subdirectory, e.g.
+# ssh://git@foo.com/~gibson_n_fahnestock/bar-baz.git -> foo.com/gibson_n_fahnestock/bar-baz/
+# https://github.com/gibfahn/dot -> github.com/gibfahn/dot/
 gcl() {
-  local clone_dir ret
-  clone_dir="$(set -o pipefail; git cl --progress "$@" 3>&1 1>&2 2>&3 3>&- | tee /dev/stderr | awk -F \' '/Cloning into/ {print $2}' | head -1)"
+  local clone_dir ret args
+  args=("$@")
+
+  # If no directory specified, use a subdir following the URL path.
+  if [[ $# == 1 ]]; then
+    subdir=$(sed -e 's|^https://||' -e 's|^ssh://||' -e 's|^git@||' -e 's|\.git$||' -e 's|:|/|' -e 's|[^/a-zA-Z0-9_.-]||g' <<<$1)
+    args+=("$subdir")
+  fi
+
+  clone_dir="$(set -o pipefail; git cl --progress "${args[@]}" 3>&1 1>&2 2>&3 3>&- | tee /dev/stderr | awk -F \' '/Cloning into/ {print $2}' | head -1)"
   ret="$?"
   [[ -d "$clone_dir" ]] && echo "cd $clone_dir" && cd "$clone_dir" || return 1
   return $ret
