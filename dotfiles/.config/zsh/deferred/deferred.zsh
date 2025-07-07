@@ -214,12 +214,23 @@ every() { local delay=${1?}; shift; while ! "$@"; do sleep $delay; echo "❯ $*"
 # https://github.com/gibfahn/dot -> github.com/gibfahn/dot/
 gcl() {
   local clone_dir ret args
+  local magenta='\033[0;35m' nc='\033[0m'
   args=("$@")
 
   # If no directory specified, use a subdir following the URL path.
+  # If we're in the home directory, guess the right subdir. Else clone into a subdir of the current
+  # directory.
   if [[ $# == 1 ]]; then
-    local url=$1
+    local url=$1 root_dir=$PWD
     subdir=$(sed -e 's|^https://||' -e 's|^ssh://||' -e 's|^git@||' -e 's|\.git$||' -e 's|:|/|' -e 's|[^/a-zA-Z0-9_.-]||g' <<<$url)
+
+    # Work stuff usually has apple in there somewhere.
+    if [[ $url == *apple* && $url != https://github.com/* ]]; then
+      root_dir=~/wrk/tmp/
+    else
+      root_dir=~/code/tmp/
+    fi
+    echo >&2 "${magenta}gcl:${nc} Using root dir: $root_dir"
 
     # If the user passes something like https://github.com/foo/bar/tree/main , then trim it to
     # https://github.com/foo/bar
@@ -227,11 +238,11 @@ gcl() {
       local orig_subdir=$subdir orig_url=$url
       subdir=$(sed -E 's|^([^/]+/[^/]+/[^/]+)/.*|\1|' <<<$subdir)
       url=$(sed -E 's|^https://([^/]+/[^/]+/[^/]+)/.*|https://\1|' <<<$url)
-      echo >&2 "Removed trailing dir fragments: $orig_subdir -> $subdir"
-      echo >&2 "Removed trailing URL fragments: $orig_url -> $url"
+      echo >&2 "${magenta}gcl:${nc} Removed trailing dir fragments: $orig_subdir -> $subdir"
+      echo >&2 "${magenta}gcl:${nc} Removed trailing URL fragments: $orig_url -> $url"
     fi
 
-    args=("$url" "$subdir")
+    args=("$url" "$root_dir/$subdir")
   fi
 
   clone_dir="$(set -o pipefail; git cl --progress "${args[@]}" 3>&1 1>&2 2>&3 3>&- | tee /dev/stderr | awk -F \' '/Cloning into/ {print $2}' | head -1)"
