@@ -218,8 +218,20 @@ gcl() {
 
   # If no directory specified, use a subdir following the URL path.
   if [[ $# == 1 ]]; then
-    subdir=$(sed -e 's|^https://||' -e 's|^ssh://||' -e 's|^git@||' -e 's|\.git$||' -e 's|:|/|' -e 's|[^/a-zA-Z0-9_.-]||g' <<<$1)
-    args+=("$subdir")
+    local url=$1
+    subdir=$(sed -e 's|^https://||' -e 's|^ssh://||' -e 's|^git@||' -e 's|\.git$||' -e 's|:|/|' -e 's|[^/a-zA-Z0-9_.-]||g' <<<$url)
+
+    # If the user passes something like https://github.com/foo/bar/tree/main , then trim it to
+    # https://github.com/foo/bar
+    if [[ $subdir == *github* && $subdir == */*/*/* ]]; then
+      local orig_subdir=$subdir orig_url=$url
+      subdir=$(sed -E 's|^([^/]+/[^/]+/[^/]+)/.*|\1|' <<<$subdir)
+      url=$(sed -E 's|^https://([^/]+/[^/]+/[^/]+)/.*|https://\1|' <<<$url)
+      echo >&2 "Removed trailing dir fragments: $orig_subdir -> $subdir"
+      echo >&2 "Removed trailing URL fragments: $orig_url -> $url"
+    fi
+
+    args=("$url" "$subdir")
   fi
 
   clone_dir="$(set -o pipefail; git cl --progress "${args[@]}" 3>&1 1>&2 2>&3 3>&- | tee /dev/stderr | awk -F \' '/Cloning into/ {print $2}' | head -1)"
