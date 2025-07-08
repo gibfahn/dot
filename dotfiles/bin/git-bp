@@ -29,6 +29,10 @@ log() {
   [[ -z $QUIET ]] && echo "${1:-}" >&2
 }
 
+warn() {
+  echo "${1:-}" >&2
+}
+
 while read branch up_branch; do
   # If no remote-tracking branch with the same name in any remote,
   if [[ -z $(for remote in $(git remote); do git rev-parse --verify --quiet "$remote/$branch" ; done) ]] &&
@@ -47,7 +51,7 @@ if [[ ${#branches_to_prune[@]} = 0 ]]; then
 fi
 
 if [[ -z $CHECK ]]; then
-  log "Deleting branches: ${branches_to_prune[*]}"
+  warn "Deleting branches: ${branches_to_prune[*]}"
 else
   # Prompt before deleting.
   echo "Branches to delete: ${branches_to_prune[*]}" >&2
@@ -73,7 +77,7 @@ if (( ${branches_to_prune[(I)$current_branch]} )); then
       git checkout --quiet -b "$default_branch" "$up_remote/$default_branch"
     fi
   else
-    log "Can't delete current branch '$current_branch' as it has uncommitted changes."
+    warn "Can't delete current branch '$current_branch' as it has uncommitted changes."
   fi
 fi
 
