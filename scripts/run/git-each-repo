@@ -44,5 +44,9 @@ if [[ -z $(gh repo set-default --view 2>/dev/null) && $(git remote get-url up) =
   GH_HOST=$(git remote-host up) gh repo set-default "$(git remote get-url up)"
 fi
 
+# Update repo and prune any merged branches.
+git fetch --all --quiet
+git bp --quiet
+
 # Check for unpushed branches or uncommitted changes.
 git unpushed
