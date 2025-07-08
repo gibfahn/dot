@@ -226,9 +226,9 @@ gcl() {
 
     # Work stuff usually has apple in there somewhere.
     if [[ $url == *apple* && $url != https://github.com/* ]]; then
-      root_dir=~/wrk/tmp/
+      root_dir=~/wrk/tmp
     else
-      root_dir=~/code/tmp/
+      root_dir=~/code/tmp
     fi
     echo >&2 "${magenta}gcl:${nc} Using root dir: $root_dir"
 
@@ -242,7 +242,15 @@ gcl() {
       echo >&2 "${magenta}gcl:${nc} Removed trailing URL fragments: $orig_url -> $url"
     fi
 
-    args=("$url" "$root_dir/$subdir")
+    dir=$root_dir/$subdir
+
+    if [[ -d "$dir" ]]; then
+      echo >&2 "${magenta}gcl:${nc} Directory already exists, changing to $dir"
+      cd "$dir"
+      return 0
+    fi
+
+    args=("$url" "$dir")
   fi
 
   clone_dir="$(set -o pipefail; git cl --progress "${args[@]}" 3>&1 1>&2 2>&3 3>&- | tee /dev/stderr | awk -F \' '/Cloning into/ {print $2}' | head -1)"
