@@ -804,6 +804,12 @@ return {
       -- <https://cmp.saghen.dev/configuration/keymap.html#super-tab>
       keymap = {
         preset = "super-tab",
+        -- Workaround for <https://github.com/LazyVim/LazyVim/issues/6185#issuecomment-3026219392>
+        ["<Tab>"] = {
+          require("blink.cmp.keymap.presets").get("super-tab")["<Tab>"][1],
+          require("lazyvim.util.cmp").map({ "snippet_forward", "ai_accept" }),
+          "fallback",
+        },
       },
     },
   },
