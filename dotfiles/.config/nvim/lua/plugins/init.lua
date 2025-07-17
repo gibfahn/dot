@@ -872,6 +872,13 @@ return {
     dependencies = { "nvim-tree/nvim-web-devicons" },
   },
 
+  -- This is only enabled upstream if Telescope is enabled, but we use it with fzf-lua.
+  {
+    "linux-cultist/venv-selector.nvim",
+    cmd = "VenvSelect",
+    enabled = true,
+  },
+
   { "subnut/nvim-ghost.nvim", build = ":call nvim_ghost#installer#install()", cmd = { "GhostTextStart" } }, -- Edit browser text areas in Neovim (:h ghost).
 
   { "tpope/vim-abolish", cmd = { "Abolish", "Subvert", "S" } }, -- Work with variants of words (replacing, capitalizing etc).
