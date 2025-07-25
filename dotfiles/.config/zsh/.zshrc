@@ -270,6 +270,9 @@ zle-line-init() {
 }
 zle -N zle-line-init     # Bind zle-line-init() above to be called when the line editor is initialized.
 
+# Ctrl-W (delete word backwards) should consider a colon as a word character.
+WORDCHARS+=':'
+
 # Immediately loaded keybindings (more expensive ones are in deferred.zsh).
 
 # Modes:
