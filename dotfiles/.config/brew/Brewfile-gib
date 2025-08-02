@@ -87,8 +87,6 @@ cask "visual-studio-code"                # Used to teach Brian to code.
 mas "GhostText", id: 1552641506 # Edit textboxes from neovim.
 mas "Keynote", id: 409183694
 mas "Numbers", id: 409203825
-mas "Pocket", id: 568494494
 mas "Refined GitHub", id: 1519867270     # Better GitHub interactions.
-mas "Save to Pocket", id: 1477385213
 
 # vi: filetype=conf

@@ -49,7 +49,12 @@ main() {
     output=$(cd "$repo_path" && "$@" 2>&1) && true
     rc=$?
     if [[ -n ${output:-} ]]; then
-      printf "${fg[magenta]}=> git-each: %s in $repo_path${reset_color}"$'\n' "$*"
+      if [[ $rc == 0 ]]; then
+        color=${fg[green]}
+      else
+        color=${fg[red]}
+      fi
+      printf "${color}=> git-each exited with $rc: %s in $repo_path${reset_color}"$'\n' "$*"
       printf "%s\n" "$(indent <<<"$output")"
     fi
     exit $rc
