@@ -561,8 +561,8 @@ data:
     NSUserKeyEquivalents:
       # Mail: ⌘-b moves to Archive.
       Archive: "@b"
-      # Mail: ⌘-u sends the message.
-      Send: "@u"
+      # Mail: ⌘-Enter sends the message.
+      Send: "@↩"
 
   com.apple.mail-shared:
     # Mail > Preferences > Composing > Mark addresses not ending with (checkbox):
