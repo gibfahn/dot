@@ -47,6 +47,7 @@ fi
 # Update repo and prune any merged branches.
 git fetch --all --quiet
 git bp --quiet
+git mf >&/dev/null || true
 
 # Check for unpushed branches or uncommitted changes.
 git unpushed
