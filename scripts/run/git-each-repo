@@ -39,10 +39,11 @@ main() {
   # Set a default repo if there's an obvious one present. I use `up` as my default upstream repo name,
   # so if it exists it's a good option. We only want to do this for github repos though.
   # stdout is empty for `gh repo set-default --view` when a default hasn't been set.
-  if [[ -z $(gh repo set-default --view 2>/dev/null) && $(git remote get-url up) == *github* ]]; then
-    # We have to set GH_HOST as otherwise if there are two different versions of a repo (e.g.
-    # github.com/foo/bar and github.mycorp.com/foo/bar), gh will get confused.
-    GH_HOST=$(git remote-host up) gh repo set-default "$(git remote get-url up)"
+  if [[ $(git remote get-url up) == *github* ]]; then
+    update_if_repo_url_changed
+    if [[ -z $(gh repo set-default --view 2>/dev/null) ]]; then
+      set_gh_default_repo
+    fi
   fi
 
   # Update repo and prune any merged branches.
@@ -52,6 +53,49 @@ main() {
 
   # Check for unpushed branches or uncommitted changes.
   git unpushed
+}
+
+# If the remote URL changes, e.g. from `https://github.com/oldorg/oldrepo` ->
+# `https://github.com/neworg/newrepo`, then we need to update the remote URL, and possibly move the
+# repo entirely.
+# This needs to be done before `gh repo set-default`, as that errors if the provided URL doesn't
+# match the renamed URL.
+update_if_repo_url_changed() {
+  current_up_url=$(git remote get-url up)
+  new_up_url=$(GH_HOST=$(git remote-host up) gh repo view --json url --jq .url "$current_up_url")
+
+  if [[ "${current_up_url%.git}" == "${new_up_url%.git}" ]]; then
+    return
+  fi
+
+  current_up_org_repo=$(git remote-org up)/$(git remote-repo up)
+
+  # Update repo URL.
+  git remote set-url up "$new_up_url"
+  new_up_org_repo=$(git remote-org up)/$(git remote-repo up)
+
+  # This means that the upstream repo name has changed and we should move it.
+  if [[ "$PWD" == *"${current_up_org_repo}" ]]; then
+    new_path=${PWD%"/$current_up_org_repo"}/"$new_up_org_repo"
+    mkdir -p "$(dirname "$new_path")"
+    mv -v "$PWD" "$new_path"
+    cd "$new_path"
+    echo "Fixed path to updated repo to ${new_path}"
+  fi
+}
+
+# Set the default repo for gh to work with.
+set_gh_default_repo() {
+  # We have to set GH_HOST as otherwise if there are two different versions of a repo (e.g.
+  # github.com/foo/bar and github.mycorp.com/foo/bar), gh will get confused.
+  GH_HOST=$(git remote-host up) gh repo set-default "$(git remote get-url up)"
+}
+
+# Usage: exit message [rc]
+error() {
+  local RED='\033[0;31m' NC='\033[0m'
+  echo -e "${RED}Error:${NC} $1"
+  exit "${2:-1}"
 }
 
 main "$@"
