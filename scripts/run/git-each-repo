@@ -4,50 +4,54 @@ set -eu
 
 # Things that I want to do to every git repository, every time.
 
-# Add repo to my zoxide search path without increasing its score.
-zoxide add --score 0.0 "$PWD"
+main() {
+  # Add repo to my zoxide search path without increasing its score.
+  zoxide add --score 0.0 "$PWD"
 
-[[ $PWD == */wrk/* ]] && config_file=~/.config/git/maintenance-wrk.config || config_file=~/.config/git/maintenance.config
+  [[ $PWD == */wrk/* ]] && config_file=~/.config/git/maintenance-wrk.config || config_file=~/.config/git/maintenance.config
 
-# Get realpath of current directory.
-current_dir=$(pwd -P)
+  # Get realpath of current directory.
+  current_dir=$(pwd -P)
 
-# Add git repo to maintenance list to be automatically kept up-to-date.
-if ! grep -qF "$current_dir" "$config_file"; then
-  echo "  repo = $current_dir" >>"$config_file"
+  # Add git repo to maintenance list to be automatically kept up-to-date.
   if ! grep -qF "$current_dir" "$config_file"; then
-    echo "Something went wrong, failed to add '$current_dir' to '$config_file'"
-    exit 1
+    echo "  repo = $current_dir" >>"$config_file"
+    if ! grep -qF "$current_dir" "$config_file"; then
+      echo "Something went wrong, failed to add '$current_dir' to '$config_file'"
+      exit 1
+    fi
   fi
-fi
 
-# Sync the remote branch of any fork repo to the upstream.
-# This prevents git pushes to your fork taking a long time if much git history has been pushed since
-# you last pushed fork/forkmain.
-# This assumes that your fork main branch is called `forkmain`, which mine always are.
-for remote in $(git remote | grep fork); do
-  if [[ $(git remote get-url "$remote") == *github*gib* ]]; then
-    # If this fails with:
-    # HTTP 404: Not Found (https://github.com/api/v3/repos/upstream-org/upstream-repo/git/refs/heads/forkmain)
-    # Then try it in the UI, that usually fails with "forkmain has commits not in upstream" (which
-    # you can fix in the UI by discarding those commits).
-    GH_HOST=$(git remote-host "$remote") gh repo sync "$(git remote-org "$remote")/$(git remote-repo "$remote")" --branch forkmain
+  # Sync the remote branch of any fork repo to the upstream.
+  # This prevents git pushes to your fork taking a long time if much git history has been pushed since
+  # you last pushed fork/forkmain.
+  # This assumes that your fork main branch is called `forkmain`, which mine always are.
+  for remote in $(git remote | grep fork); do
+    if [[ $(git remote get-url "$remote") == *github*gib* ]]; then
+      # If this fails with:
+      # HTTP 404: Not Found (https://github.com/api/v3/repos/upstream-org/upstream-repo/git/refs/heads/forkmain)
+      # Then try it in the UI, that usually fails with "forkmain has commits not in upstream" (which
+      # you can fix in the UI by discarding those commits).
+      GH_HOST=$(git remote-host "$remote") gh repo sync "$(git remote-org "$remote")/$(git remote-repo "$remote")" --branch forkmain
+    fi
+  done
+
+  # Set a default repo if there's an obvious one present. I use `up` as my default upstream repo name,
+  # so if it exists it's a good option. We only want to do this for github repos though.
+  # stdout is empty for `gh repo set-default --view` when a default hasn't been set.
+  if [[ -z $(gh repo set-default --view 2>/dev/null) && $(git remote get-url up) == *github* ]]; then
+    # We have to set GH_HOST as otherwise if there are two different versions of a repo (e.g.
+    # github.com/foo/bar and github.mycorp.com/foo/bar), gh will get confused.
+    GH_HOST=$(git remote-host up) gh repo set-default "$(git remote get-url up)"
   fi
-done
 
-# Set a default repo if there's an obvious one present. I use `up` as my default upstream repo name,
-# so if it exists it's a good option. We only want to do this for github repos though.
-# stdout is empty for `gh repo set-default --view` when a default hasn't been set.
-if [[ -z $(gh repo set-default --view 2>/dev/null) && $(git remote get-url up) == *github* ]]; then
-  # We have to set GH_HOST as otherwise if there are two different versions of a repo (e.g.
-  # github.com/foo/bar and github.mycorp.com/foo/bar), gh will get confused.
-  GH_HOST=$(git remote-host up) gh repo set-default "$(git remote get-url up)"
-fi
+  # Update repo and prune any merged branches.
+  git fetch --all --quiet
+  git bp --quiet
+  git mf >&/dev/null || true
 
-# Update repo and prune any merged branches.
-git fetch --all --quiet
-git bp --quiet
-git mf >&/dev/null || true
+  # Check for unpushed branches or uncommitted changes.
+  git unpushed
+}
 
-# Check for unpushed branches or uncommitted changes.
-git unpushed
+main "$@"
