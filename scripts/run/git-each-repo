@@ -46,6 +46,12 @@ main() {
     fi
   fi
 
+  # Run work script if present.
+  wrk_script=${wrk_dot_dir:-}/scripts/run/git-each-repo-wrk
+  if [[ -f ${wrk_dot_dir:-}/scripts/run/git-each-repo-wrk ]]; then
+    "$wrk_script"
+  fi
+
   # Update repo and prune any merged branches.
   git fetch --all --quiet
   git bp --quiet
