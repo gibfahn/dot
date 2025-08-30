@@ -8,7 +8,7 @@
 
   # Helper functions where a full name is easier:
   # Change the remote default branch to "$2" (default: "forkmain"), for remote $1 (default: "fork").
-  change-branch = "! set -x; fork=${1:-fork} branch=${2:-forkmain} && GH_HOST=$(git remote-host $fork) gh api -XPATCH repos/$(git remote-org $fork)/$(git remote-repo $fork) -f name=$(git remote-repo $fork) -f default_branch=$branch --jq .default_branch && git remote set-head --auto $fork #"
+  change-branch = "! set -x; fork=${1:-fork} branch=${2:-forkmain} && GH_HOST=$(git remote-host $fork) gh api -XPATCH repos/$(git remote-org-repo $fork) -f name=$(git remote-repo $fork) -f default_branch=$branch --jq .default_branch && git remote set-head --auto $fork #"
   check-pr-branch = "! [[ $(git head-branch) != $(git up-branch) ]] || { printf \"\\033[0;31m  ERROR\\033[0m: Create a new branch before raising PR.\\n\" >&2 && exit 1; } #"
   code-changes = "!git log --format=format: --name-only | egrep -v '^$' | sort | uniq -c | sort -rg | head -${1:-10} #" # Show $1 most changed files.
   default-branch = "!(git symbolic-ref --short refs/remotes/$1/HEAD || { git remote set-head --auto $1 && git symbolic-ref --short refs/remotes/$1/HEAD; }) | sed \"s|^$1/||\" #" # Default branch for remote. `g default-branch up` -> main
@@ -26,6 +26,7 @@
   quote-string = "!read -r l; sed -E -e 's/([\\\"])/\\\\\\1/g' -e 's/(.*)/\"!\\1 #\"/' <<<\"$l\" #"
   remote-org = "!git remote get-url $1 | awk -F ':|/' '{if ($NF) {print $(NF-1)} else {print $(NF-2)}}' #" # Github org for remote. `g remote-org up` -> gibfahn.
   remote-repo = "!git remote get-url $1 | sed -e 's|/$||' -e 's|.*/||' -e 's/.git$//' #" # Github repo for remote. `g remote-repo up` -> dot.
+  remote-org-repo = "!echo $(git remote-org $1)/$(git remote-repo $1) #" # Github org/repo for a remote. `g remote-org-repo up` -> gibfahn/dot.
   remote-host = "!git remote get-url ${1:?} | sed -e 's/^git@//' -e 's|https://||' -e 's/:.*//' -e 's|/.*||' #" # Used for setting GH_HOST.
   update-default-branch = "!git remote set-head --auto ${1:-up} && git symbolic-ref --short refs/remotes/${1:-up}/HEAD;  #" # Reset the default branch for a remote.
 
