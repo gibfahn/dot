@@ -6,7 +6,6 @@ autoload -U colors && colors
 
 [[ -z ${DEBUG:-} ]] || set -x
 
-REMOTE_PRIMARY_NAME=${REMOTE_PRIMARY_NAME:-up}
 REMOTE_FORK_NAME=${REMOTE_FORK_NAME:-fork}
 
 usage() {
@@ -21,7 +20,7 @@ ENVIRONMENT VARIABLES:
 
 REMOTE_PRIMARY_NAME:
     Name of the default remote. Usually the upstream remote vs a forked remote.
-    Default: up
+    Default: up (or origin if up is not present)
 
 REMOTE_FORK_NAME:
     Name of the forked remote (fork of the primary remote). Also applied as a prefix to
@@ -38,6 +37,17 @@ main() {
   if (($@[(Ie)-d])) || (($@[(Ie)--detach])); then
     git switch $@
     return
+  fi
+
+  if [[ -z ${REMOTE_PRIMARY_NAME:-} ]]; then
+    for possible_remote in up origin; do
+      if git remote | grep -qx $possible_remote; then
+        REMOTE_PRIMARY_NAME=$possible_remote
+        break
+      fi
+      # Default to up if neither was present.
+      REMOTE_PRIMARY_NAME=up
+    done
   fi
 
   # The last argument that doesn't start with `-`
