@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -eu
+set -euo pipefail
 
 # Things that I want to do to every git repository, every time.
 
@@ -63,6 +63,9 @@ main() {
 update_if_repo_url_changed() {
   current_up_url=$(git remote get-url up)
   new_up_url=$(GH_HOST=$(git remote-host up) gh repo view --json url --jq .url "$current_up_url")
+
+  # Ignore trailing slashes in URLs like https://github.com/gibfahn/dot/
+  current_up_url=${current_up_url%/}
 
   if [[ "${current_up_url%.git}" == "${new_up_url%.git}" ]]; then
     return
