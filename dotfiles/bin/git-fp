@@ -101,8 +101,8 @@ main() {
   else
     # Update current branch to latest PR head commit.
     pr_number=${head_branch%%-*}
-    pr_branch=${head_branch#*-}
-    git fetch --force --update-head-ok $up_remote pull/$pr_number/head:$head_branch
+    # Reset the existing local branch to the latest state of the pull request
+    gh pr checkout --force --branch $head_branch $pr_number
     echo "git-fp: Branch ${head_branch} updated to latest Pull Request ${pr_number}" >&2
   fi
 }
