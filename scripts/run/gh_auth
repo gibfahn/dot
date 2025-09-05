@@ -10,6 +10,12 @@ main() {
   # If gh isn't installed, skip.
   (( $+commands[gh] )) || exit 204
 
+  # If we're ssh'd in then we probably haven't unlocked the keychain, so the gh CLI won't see us as
+  # authenticated.
+  if [[ -n "$SSH_TTY" || -n "$SSH_CLIENT" ]]; then
+    exit 204
+  fi
+
   # Make sure we're not using the old-style hosts where the tokens are embedded (don't want to commit
   # these to dotfiles).
   if grep -q oauth_token ~/.config/gh/hosts.yml; then
@@ -23,7 +29,7 @@ main() {
   missing_auth=()
 
   for github in ${githubs[@]}; do
-    if ! gh auth token --hostname $github >/dev/null; then
+    if ! authed_to_github $github; then
       missing_auth+=$github
     fi
   done
@@ -34,9 +40,21 @@ main() {
 
   echo "Failed to authenticate to these GitHub servers: ${missing_auth[*]} run these commands to authenticate:"
   for github in ${missing_auth[@]}; do
-    echo "  gh auth login --hostname '$github' -p https"
+    error "Failed to login to $github, run manually to auth:\n  gh auth login --hostname '$github' -p https"
   done
   exit 1
+}
+
+# Returns true if we successfully return an auth token for github.
+authed_to_github() {
+  gh auth token --hostname ${1?Expected github as first arg} >/dev/null
+}
+
+# Usage: exit message [rc]
+error() {
+  local RED='\033[0;31m' NC='\033[0m'
+  echo -e "${RED}Error:${NC} $1"
+  exit "${2:-1}"
 }
 
 main "$@"
