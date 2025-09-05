@@ -259,6 +259,13 @@ gcl() {
   return $ret
 }
 
+# Set up things I commonly need when sshing into a machine.
+ssh_setup() {
+  # Login keychain is locked when you ssh in until you unlock it.
+  # This prompts for auth.
+  security unlock-keychain ~/Library/Keychains/login.keychain
+}
+
 # Show which apps made a noise in the last 30 minutes.
 # Refs:
 # - <https://dreness.com/blog/archives/155773>
