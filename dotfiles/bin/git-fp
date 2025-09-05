@@ -21,6 +21,8 @@ git ptp       -> push to the user's branch (in my git config as an alias).
 
 Creates and assumes local branches of the form pull/<PR Number>/<PR Branch Name>, e.g. pull/123/myfeaturebranch.
 
+If the PR author hasn't checked the 'maintainers can modify PR' checkbox, then the push branch won't be set up correctly.
+
 OPTIONS:
 
 --up-remote: name of the remote fetch the PR for, default 'up'
@@ -83,30 +85,34 @@ main() {
   fi
 
   if [[ -n ${pr_number:-} ]]; then
-    # Assuming new PR checkout.
-
-    # Convert a URL like 'https://github.com/org/repo/pull/485/files' into '485'
-    pr_number=$(sed -E 's;.*/([0-9]+)/?(files)?$;\1;' <<<$pr_number)
-
-    # TODO: stop setting this once `gh` gains decent up/push branch recognition.
-    export GH_REPO=$(remote_url "$up_remote")
-    export GH_HOST=$(remote_host "$up_remote")
-
-    # Checkout PR branch and save its name and remote.
-    only_log_failure gh pr checkout $pr_number
-    pr_branch=$(git branch --show-current)
-    push_remote=$(git config branch.$pr_branch.remote)
-
-    # Switch to better-named branch
-    head_branch=pull/$pr_number/$pr_branch
-    git switch --quiet -c $head_branch
-    git branch --quiet --delete $pr_branch
-    git branch --quiet --set-upstream-to=$(git symbolic-ref --short refs/remotes/$up_remote/HEAD)
-    git config branch.$head_branch.pushRemote $push_remote
-    echo "git-fp: Pull Request ${pr_number} fetched as branch ${head_branch}" >&2
+    checkout_pr
   else
     reset_branch
   fi
+}
+
+# Assuming new PR checkout.
+checkout_pr() {
+  # Convert a URL like 'https://github.com/org/repo/pull/485/files' into '485'
+  pr_number=$(sed -E 's;.*/([0-9]+)/?(files)?$;\1;' <<<$pr_number)
+
+  # TODO: stop setting this once `gh` gains decent up/push branch recognition.
+  export GH_REPO=$(remote_url "$up_remote")
+  export GH_HOST=$(remote_host "$up_remote")
+
+  # Checkout PR branch and save its name and remote.
+  only_log_failure gh pr checkout $pr_number
+  pr_branch=$(git branch --show-current)
+  push_remote=$(git config branch.$pr_branch.remote)
+
+  # Switch to better-named branch
+  head_branch=pull/$pr_number/$pr_branch
+  git switch --quiet -c $head_branch
+  git branch --quiet --delete $pr_branch
+  git branch --quiet --set-upstream-to=$(git symbolic-ref --short refs/remotes/$up_remote/HEAD)
+  git config branch.$head_branch.pushRemote $push_remote
+
+  echo "git-fp: Pull Request ${pr_number} fetched as branch ${head_branch}" >&2
 }
 
 # Update current branch to latest PR head commit.
