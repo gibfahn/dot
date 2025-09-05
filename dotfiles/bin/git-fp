@@ -2,6 +2,8 @@
 
 set -eu
 
+autoload -U colors && colors
+
 usage() {
   echo "$(
     tput bold
@@ -12,12 +14,12 @@ git fetch pr: fetch and set up a PR branch.
 
 Given no args, force updates the current branch to the relevant PR.
 
-git fp 123    -> Create a branch called '123-<PR branch name>' and set the push and upstream remotes accordingly.
-git fp --up-remote up 123 -> Create a branch called '123-<PR branch name>' and set the push and upstream remotes accordingly, looking at remote 'up'.
+git fp 123    -> Create a branch called 'pull/123/<PR branch name>' and set the push and upstream remotes accordingly.
+git fp --up-remote up 123 -> Create a branch called 'pull/123/<PR branch name>' and set the push and upstream remotes accordingly, looking at remote 'up'.
 git fp        -> Update the current branch (assumed to be a PR branch created by this script).
 git ptp       -> push to the user's branch (in my git config as an alias).
 
-Creates and assumes local branches of the form <PR Number>-<PR Branch Name>, e.g. 123-myfeaturebranch.
+Creates and assumes local branches of the form pull/<PR Number>/<PR Branch Name>, e.g. pull/123/myfeaturebranch.
 
 OPTIONS:
 
@@ -25,6 +27,10 @@ OPTIONS:
 
 "
 }
+
+if [[ -n ${DEBUG:-} ]]; then
+  set -x
+fi
 
 up_remote=
 
@@ -92,22 +98,37 @@ main() {
     push_remote=$(git config branch.$pr_branch.remote)
 
     # Switch to better-named branch
-    head_branch=$pr_number-$pr_branch
+    head_branch=pull/$pr_number/$pr_branch
     git switch --quiet -c $head_branch
     git branch --quiet --delete $pr_branch
     git branch --quiet --set-upstream-to=$(git symbolic-ref --short refs/remotes/$up_remote/HEAD)
     git config branch.$head_branch.pushRemote $push_remote
     echo "git-fp: Pull Request ${pr_number} fetched as branch ${head_branch}" >&2
   else
-    # Update current branch to latest PR head commit.
-    pr_number=${head_branch%%-*}
-    # Reset the existing local branch to the latest state of the pull request
-    gh pr checkout --force --branch $head_branch $pr_number
-    echo "git-fp: Branch ${head_branch} updated to latest Pull Request ${pr_number}" >&2
+    reset_branch
   fi
 }
 
+# Update current branch to latest PR head commit.
+reset_branch() {
+  if ! [[ $head_branch =~ "^pull/[0-9]+/.+" ]]; then
+    error "git-fp: Can't reset branch as not on a PR branch we understand.
+       Switch to a PR branch or provide a PR number as an argument to git fp"
+  fi
+  pr_number=${head_branch#pull/}
+  pr_number=${pr_number%%/*}
+  # Reset the existing local branch to the latest state of the pull request
+  gh pr checkout --force --branch $head_branch $pr_number
+  echo "git-fp: Branch ${head_branch} updated to latest Pull Request ${pr_number}" >&2
+}
+
 only_log_failure() {
+  # Don't only log failure if in debug mode.
+  if [[ -n ${DEBUG:-} ]]; then
+    "$@"
+    return
+  fi
+
   local output rc
   output=$("$@" 2>&1) && true
   rc=$?
@@ -123,6 +144,12 @@ remote_url() {
 # Remote hostname, used for setting GH_HOST.
 remote_host() {
   git remote get-url ${1:?} | sed -e 's/^git@//' -e 's|https://||' -e 's/:.*//' -e 's|/.*||'
+}
+
+# Usage: exit message [rc]
+error() {
+  echo -e "${fg[red]}Error:${reset_color} $1" >&2
+  exit "${2:-1}"
 }
 
 main "$@"
