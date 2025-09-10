@@ -418,6 +418,9 @@
 [includeIf "gitdir:~/wrk/**"]
   path = ~/.config/git/wrk-config
 
+[includeIf "hasconfig:remote.*.url:**/*apple.com/**"]
+  path = ~/.config/git/wrk-config
+
 # Work config for work repos.
 [includeIf "gitdir:/Volumes/Shared-Data/**/wrk/**"]
   path = ~/.config/git/wrk-config
