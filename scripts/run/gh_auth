@@ -12,7 +12,7 @@ main() {
 
   # If we're ssh'd in then we probably haven't unlocked the keychain, so the gh CLI won't see us as
   # authenticated.
-  if [[ -n "$SSH_TTY" || -n "$SSH_CLIENT" ]]; then
+  if [[ -n "${SSH_TTY:-}" || -n "${SSH_CLIENT:-}" ]]; then
     exit 204
   fi
 
