@@ -25,6 +25,10 @@ done
 
 branches_to_prune=()
 
+if [[ -n ${DEBUG:-} ]]; then
+  set -x
+fi
+
 log() {
   [[ -n $QUIET ]] || echo "${1:-}" >&2
 }
@@ -67,8 +71,8 @@ if (( ${branches_to_prune[(I)$current_branch]} )); then
   git update-index --refresh
   # If there are no uncommitted changes:
   if git diff-index --quiet HEAD --; then
-    # Take the first up or pub remote we find.
-    up_remote=$(git remote | grep -x 'up\|pub' | sort -r | head -1)
+    # Take the first known remote we find.
+    up_remote=$(git remote | grep -x 'up\|pub\|origin' | sort -r | head -1)
     default_branch=$(git default-branch "$up_remote" 2>/dev/null)
     if git rev-parse "$default_branch" &>/dev/null; then
       git checkout --quiet "$default_branch"
