@@ -54,7 +54,7 @@ return {
   "coderifous/textobj-word-column.vim", -- Adds ic/ac and iC/aC motions to block select word column in paragraph.
 
   {
-    "echasnovski/mini.ai", -- a and i operators, e.g. vaL selects the current line.
+    "nvim-mini/mini.ai", -- a and i operators, e.g. vaL selects the current line.
     opts = {
       -- <https://www.reddit.com/r/neovim/comments/wa819w/comment/ilfpkbd/?utm_source=share&utm_medium=web2x&context=3>
       custom_textobjects = {
@@ -96,8 +96,8 @@ return {
   },
 
   {
-    "echasnovski/mini.diff", -- visualise git diffs, stage/reset/delete hunks, jump between hunks.
-    opts = { -- https://github.com/echasnovski/mini.diff?tab=readme-ov-file#default-config
+    "nvim-mini/mini.diff", -- visualise git diffs, stage/reset/delete hunks, jump between hunks.
+    opts = { -- https://github.com/nvim-mini/mini.diff?tab=readme-ov-file#default-config
       mappings = {
         goto_prev = "<A-G>",
         goto_next = "<A-g>",
@@ -110,7 +110,7 @@ return {
   },
 
   {
-    "echasnovski/mini.operators", -- operators like `gsip` to sort current paragraph
+    "nvim-mini/mini.operators", -- operators like `gsip` to sort current paragraph
     opts = {
       -- Replace text with register
       replace = {
@@ -119,7 +119,7 @@ return {
     },
   },
 
-  { "echasnovski/mini.splitjoin", config = true }, -- gS to split something over multiple lines.
+  { "nvim-mini/mini.splitjoin", config = true }, -- gS to split something over multiple lines.
 
   "fladson/vim-kitty", -- Syntax highlighting for kitty.conf file.
 
