@@ -31,8 +31,11 @@ bazel-out
 # Personal folder in the root for misc stuff.
 /_perso/
 
-# AI tooling testing.
-/.aider*
-
 # Pkl language server.
 /.pkl-lsp/
+
+# AI things
+# Aider CLI
+/.aider*
+# Claude Code
+**/.claude/settings.local.json
