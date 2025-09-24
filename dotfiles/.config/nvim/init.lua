@@ -98,14 +98,8 @@ if vim.fn.has("nvim-0.10") == 1 then
   vim.opt.smoothscroll = true -- Scroll screen lines not real lines.
 end
 
--- TODO: causes freezes on <= 0.9, so only enable on >= 0.10 for now
--- Remove once 0.10 ships (copied from lazyvim).
-if vim.fn.has("nvim-0.10") == 1 then
-  vim.opt.foldmethod = "expr"
-  vim.opt.foldexpr = "v:lua.require'lazyvim.util'.ui.foldexpr()"
-else
-  vim.opt.foldmethod = "indent"
-end
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.require'lazyvim.util'.treesitter.foldexpr()"
 
 -- Fix markdown indentation settings (copied from lazyvim).
 vim.g.markdown_recommended_style = 0
