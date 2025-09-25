@@ -143,6 +143,7 @@
 
   p   = push                                                              # Push commits to a remote.
   pd  = "!git push -d ${1%%/*} ${1#*/} #"                                 # Delete a remote branch in the form remote/branch.
+  pda = "!for i in \"$@\"; do git pd $i; done #"                          # Delete multiple remote branches in the form remote/branch.
   pf  = push --force-with-lease                                           # Better version of push -f.
   pa  = "!curl -nL ${1%.patch}.patch | git am --whitespace=fix # "        # Patch Github PR.
   pap = "!curl -nL ${1%.patch}.patch | git am -3 --whitespace=fix  # "    # Please patch it.
