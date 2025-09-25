@@ -14,11 +14,9 @@ usage() {
 $(tput bold)git fork$(tput sgr0)
 
 Create a GitHub fork, or fetch an existing fork.
-If a new fork is created, it will be cleaned of all refs except a single branch.
+If a new fork is created, it will only include a single branch.
 
 OPTIONS:
-
---clean: cleans an existing fork
 
 --up-remote: name of the remote to fork, default 'up'
 
@@ -33,9 +31,12 @@ OPTIONS:
 "
 }
 
+if [[ -n ${DEBUG:-} ]]; then
+  set -x
+fi
+
 # Defaults
 
-action=clone
 up_remote=up
 fork_remote=fork
 up_branch=
@@ -51,12 +52,6 @@ while [[ $# != 0 ]]; do
   [[ ${1:-} =~ ^(--version|-v)$ ]] && {
     echo "main"
     exit
-  }
-
-  [[ ${1:-} =~ ^(--clean|-c)$ ]] && {
-    action=clean
-    shift
-    continue
   }
 
   [[ ${1:-} =~ ^--up-remote$ ]] && {
@@ -100,32 +95,32 @@ main() {
   # Set default here so we don't waste time calculating if the up remote was overridden.
   : ${up_branch:=$(default_branch $up_remote)}
 
-  if [[ $action == clone ]]; then
-    if git remote | grep -qx $fork_remote; then
-      echo >&2 "Fork remote already exists, skipping..."
-      exit 0
-    fi
+  if git remote | grep -qx $fork_remote; then
+    echo >&2 "Fork remote already exists, skipping..."
+    exit 0
+  fi
 
-    # TODO: stop setting this once `gh` gains decent up/push branch recognition.
-    export GH_REPO=$(remote_url "$up_remote")
-    export GH_HOST=$(remote_host "$up_remote")
-    # Fork the repo.
-    gh repo fork --clone=false --remote=true --remote-name=$fork_remote --default-branch-only
+  # TODO: stop setting this once `gh` gains decent up/push branch recognition.
+  export GH_REPO=$(remote_url "$up_remote")
+  export GH_HOST=$(remote_host "$up_remote")
+  # Fork the repo.
+  gh repo fork --clone=false --remote=true --remote-name=$fork_remote --default-branch-only
 
-    # Print remotes.
-    git remote -v
+  # Print remotes.
+  git remote -v
 
-    git fetch $fork_remote
-    if git show-ref --verify --quiet refs/remotes/$fork_remote/$fork_branch; then
-      echo >&2 "Fork already existed remotely and contains $fork_branch, skipping clean..."
-      exit 0
-    fi
+  git fetch $fork_remote
+  if git show-ref --verify --quiet refs/remotes/$fork_remote/$fork_branch; then
+    echo >&2 "Fork already existed remotely and contains $fork_branch, skipping clean..."
+    exit 0
   fi
 
   git push $fork_remote ${up_remote}/${up_branch}:refs/heads/${fork_branch}
   change_branch $fork_remote $fork_branch
   default_branch $fork_remote
-  git push -d $fork_remote $up_branch
+  if [[ -n "$(git ls-remote $fork_remote --branches $up_branch)" ]]; then
+    git push -d $fork_remote $up_branch
+  fi
 }
 
 remote_url() {
