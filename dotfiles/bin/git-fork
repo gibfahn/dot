@@ -18,7 +18,7 @@ If a new fork is created, it will only include a single branch.
 
 OPTIONS:
 
---up-remote: name of the remote to fork, default 'up'
+--up-remote: name of the remote to fork, default 'up', or 'origin' if 'up' is not present.
 
 --fork-remote: name of the forked remote, default 'fork'
 
@@ -37,7 +37,7 @@ fi
 
 # Defaults
 
-up_remote=up
+up_remote=
 fork_remote=fork
 up_branch=
 fork_branch=forkmain
@@ -92,6 +92,17 @@ while [[ $# != 0 ]]; do
 done
 
 main() {
+  if [[ -z ${up_remote:-} ]]; then
+    for possible_remote in up origin; do
+      if git remote | grep -qx $possible_remote; then
+        up_remote=$possible_remote
+        break
+      fi
+      # Default to up if neither was present.
+      up_remote=up
+    done
+  fi
+
   # Set default here so we don't waste time calculating if the up remote was overridden.
   : ${up_branch:=$(default_branch $up_remote)}
 
