@@ -1,5 +1,5 @@
 # Configuration for markdownlint-cli (v1).
-# Keep me in sync with ./.config/markdownlint-cli2/markdownlint.yaml
+# Keep me in sync with ./.config/markdownlint-cli2/.markdownlint.yaml
 # Rules: https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
 # Example: https://github.com/DavidAnson/markdownlint/blob/main/schema/.markdownlint.jsonc
 # Ini format info: https://github.com/igorshubovych/markdownlint-cli/issues/317

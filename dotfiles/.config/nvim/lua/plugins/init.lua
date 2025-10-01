@@ -462,7 +462,7 @@ return {
           args = {
             -- By default there isn't a global configuration option for markdownlint-cli2.
             "--config",
-            vim.fn.expand("~") .. ".config/markdownlint-cli2/markdownlint.yaml",
+            vim.fn.expand("~") .. "/.config/markdownlint-cli2/.markdownlint.yaml",
           },
         },
       },
@@ -752,19 +752,6 @@ return {
     end,
   },
 
-  {
-    "nvimtools/none-ls.nvim", -- Make anything a languageserver.
-    optional = true,
-    opts = function(_, opts)
-      local nls = require("null-ls")
-      opts.sources = vim.list_extend(opts.sources or {}, {
-        nls.builtins.diagnostics.buildifier,
-        nls.builtins.formatting.isort,
-        nls.builtins.diagnostics.pylint,
-      })
-    end,
-  },
-
   { "pechorin/any-jump.nvim" }, -- Go to definition that doesn't require a language server.
 
   {
@@ -772,17 +759,6 @@ return {
     event = "VeryLazy",
     opts = {
       top_down = false, -- Notifications start at the bottom to stay out of your way.
-    },
-  },
-
-  {
-    "Saecki/crates.nvim", -- Linting, completions etc. for Cargo.toml
-    opts = {
-      -- Make code actions show up in Cargo.toml
-      -- <https://github.com/Saecki/crates.nvim/wiki/Documentation-v0.4.0#code-actions>
-      null_ls = {
-        enabled = true,
-      },
     },
   },
 
