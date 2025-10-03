@@ -12,6 +12,7 @@
   check-pr-branch = "! [[ $(git head-branch) != $(git up-branch) ]] || { printf \"\\033[0;31m  ERROR\\033[0m: Create a new branch before raising PR.\\n\" >&2 && exit 1; } #"
   code-changes = "!git log --format=format: --name-only | egrep -v '^$' | sort | uniq -c | sort -rg | head -${1:-10} #" # Show $1 most changed files.
   default-branch = "!(git symbolic-ref --short refs/remotes/$1/HEAD || { git remote set-head --auto $1 && git symbolic-ref --short refs/remotes/$1/HEAD; }) | sed \"s|^$1/||\" #" # Default branch for remote. `g default-branch up` -> main
+  default-remote = "! git remote | grep -x up || git remote | grep -x origin #" # I use up, but automation like brew often uses origin.
   head-branch = symbolic-ref --short HEAD # e.g. main.
   up-remote-branch = "!git rev-parse --abbrev-ref --symbolic-full-name @{u}" # e.g. origin/main.
   up-remote = "!git rev-parse --abbrev-ref --symbolic-full-name @{u} | cut -d '/' -f 1" # e.g. origin.
@@ -41,7 +42,7 @@
   ba  = branch -a # Show all local and remote branches.
   bb  = bisect bad # Start a bisect by finding a good and bad commit and using `g bg` and `g bb` respectively to mark the starting points.
   bd  = branch -D # Delete branch.
-  bdd = "!lastBranch=$(git head-branch); git checkout - && [[ $(git head-branch) != $lastBranch ]] || git checkout $(git default-branch up); git branch -D $lastBranch #" # Delete current branch.
+  bdd = "!lastBranch=$(git head-branch); git checkout - && [[ $(git head-branch) != $lastBranch ]] || git checkout $(git default-branch $(git default-remote)); git branch -D $lastBranch #" # Delete current branch.
   bg  = bisect good
   # Sorted list of branches.
   # TODO(gib): Fix this to make it look nice (can also use git branch directly).
