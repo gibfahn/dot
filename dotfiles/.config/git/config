@@ -288,7 +288,7 @@
   mnemonicPrefix = true  # Use better letters than a/ and b/ in diffs, e.g. (i)ndex, (w)ork tree, (c)ommit, (o)bject
   renames = copies       # Copies count as renames.
   submodule = log        # Show information about submodules in diffs and logs.
-  tool = vimdiff         # Use nvim vimdiff to view diffs (`git difftool`).
+  tool = nvimdiff        # Use nvim vimdiff to view diffs (`git difftool`).
   wsErrorHighlight = all # diff and show show whitespace errors.
 
 # Allows you to use tools to generate readable diffs for binary formats.
@@ -329,7 +329,7 @@
 
 [merge]
   conflictstyle = zdiff3   # Show common ancestor in diffs (initially confusing, but very helpful).
-  tool = nvimdiff          # Use vimdiff (actually neovim's vimdiff) to view and fix merge conflicts (instead of `g mc`).
+  tool = nvimdiff          # Use nvimdiff (see `git help difftool`) to view and fix merge conflicts (instead of `g mc`).
 
 [mergetool]
   hideResolved = true      # Don't show merge conflicts that have already been resolved by git in the mergetool diff.
