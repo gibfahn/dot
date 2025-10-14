@@ -95,6 +95,9 @@ alias ru=rustup
 alias gm='wait; git mf' # After cd'ing into a repo, fetch will run as a background job. Use this to wait for it to finish then mf.
 alias we="watchexec" # Shortcut for "run this command when something changes".
 
+alias mv="mv -v" # Print out what copies we're doing.
+alias cp="cp -v" # Print out what moves we're doing.
+
 # Copy last command.
 alias clc="fc -ln -1 | sed -e 's/\\\\n/\\n/g' -e 's/\\\\t/\\t/g' | ${=aliases[cpy]}" # "
 # Run last command and copy the command and its output.
