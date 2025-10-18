@@ -5,4 +5,4 @@ run_if_cmd: ["${dot_dir}/scripts/run_if/updatedb"]
 
 # You can also have this run automatically in the background once a week by running:
 #   sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.locate.plist
-run_cmd: ["sudo", "-n", "/usr/libexec/locate.updatedb"]
+run_cmd: ["/bin/zsh", "-euxc", "sudo -n /usr/libexec/locate.updatedb"]
