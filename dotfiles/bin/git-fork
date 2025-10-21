@@ -26,7 +26,6 @@ OPTIONS:
 
 --fork-branch: name of the branch to leave or create on the fork remote, default 'forkmain'
 
---parallelism: number of delete operations to pass to each delete invocation, default '10'
 
 "
 }
@@ -41,7 +40,6 @@ up_remote=
 fork_remote=fork
 up_branch=
 fork_branch=forkmain
-parallelism=10
 
 while [[ $# != 0 ]]; do
   [[ ${1:-} =~ ^(--help|-h)$ ]] && {
@@ -74,12 +72,6 @@ while [[ $# != 0 ]]; do
 
   [[ ${1:-} =~ ^--fork-branch$ ]] && {
     fork_branch=$2
-    shift 2
-    continue
-  }
-
-  [[ ${1:-} =~ ^--parallelism$ ]] && {
-    parallelism=$2
     shift 2
     continue
   }
