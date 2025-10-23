@@ -150,7 +150,17 @@ pr_open() {
 }
 
 get_pr_number() {
-  local pr_number push_ref push_remote push_branch push_org
+  local pr_number push_ref push_remote push_branch push_org current_branch
+
+  # If we're already on a PR branch created by this script, get the number directly from the
+  # branch.
+  current_branch=$(git branch --show-current)
+  if [[ "$current_branch" =~ ^pull/[0-9]+/ ]]; then
+    pr_number=${current_branch#pull/}
+    pr_number=${pr_number%%/*}
+    echo $pr_number
+    return
+  fi
 
   push_ref=$(branch_ref "@{push}") # e.g. fork/my-pr-branch
   push_remote=${push_ref%%/*} # e.g. push
