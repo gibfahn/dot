@@ -347,6 +347,7 @@ return {
     keys = {
       { "<leader><space>", LazyVim.pick("files", { root = false, hidden = true }), desc = "Find Files (cwd)" }, -- Override <Leader><Leader> to work in cwd.
     },
+    cmd = { "FzfLua" },
   },
 
   "junegunn/vim-peekaboo", -- Pop up register list when pasting/macroing.
