@@ -407,25 +407,25 @@ end
 local function webexMenuAction(menuItem, message, switchBack)
   local current = hs.application.frontmostApplication()
   local webexApp = hs.application.find("Webex")
-  local webexWindow = webexApp:mainWindow()
+  hs.application.find("Webex"):mainWindow()
+  log.df("Current app: %s", current)
+  log.df("Webex app: %s", webexApp)
   if not webexApp then
-    statusMessage.new("⚠ " .. message .. " failed: couldn't find Webex"):notify()
-    return
-  end
-  if not webexWindow:focus() then
-    statusMessage.new("⚠ " .. message .. " failed: failed to switch to Webex"):notify()
+    statusMessage.new("⚠ " .. message .. " failed: couldn't find Webex app"):notify()
     return
   end
 
-  if not webexApp:findMenuItem(menuItem).enabled then
-    for _, window in ipairs(webexApp:allWindows()) do
-      if webexApp:findMenuItem(menuItem).enabled then
-        break
-      end
-      window:focus()
+  local webexWindow = nil
+  for windowIndex, window in ipairs(webexApp:allWindows()) do
+    log.df("Checking Webex window %s: %s", windowIndex, window)
+    window:focus()
+    if webexApp:findMenuItem(menuItem).enabled then
+      webexWindow = window
+      break
     end
   end
-  if not webexApp:findMenuItem(menuItem).enabled then
+
+  if not webexWindow then
     statusMessage.new("⚠ " .. message .. " failed: failed to find menu item: " .. menuItem):notify()
     return
   end
