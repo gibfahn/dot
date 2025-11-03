@@ -561,8 +561,10 @@ data:
     NSUserKeyEquivalents:
       # Mail: ⌘-b moves to Archive.
       Archive: "@b"
+      # Disabled due to macOS bug where custom keyboard shortcuts frequently don't work until you
+      # open the Menu Bar > Message.
       # Mail: ⌘-Enter sends the message.
-      Send: "@↩"
+      # Send: "@↩"
 
   com.apple.mail-shared:
     # Mail > Preferences > Composing > Mark addresses not ending with (checkbox):
