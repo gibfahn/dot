@@ -785,10 +785,17 @@ return {
       -- experimental signature help support
       signature = { enabled = true },
 
-      -- Don't use Enter preset as that conflicts with Enter for a newline.
-      -- <https://cmp.saghen.dev/configuration/keymap.html#super-tab>
       keymap = {
+        -- Don't use Enter preset as that conflicts with Enter for a newline.
+        -- <https://cmp.saghen.dev/configuration/keymap.html#super-tab>
         preset = "super-tab",
+        -- Use Alt-Space to trigger completion not Ctrl-Space
+        -- Ctrl-Space is used to switch input methods in macOS.
+        ["<A-Space>"] = {
+          function(cmp)
+            cmp.show()
+          end,
+        },
       },
     },
   },
