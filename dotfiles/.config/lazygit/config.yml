@@ -2,6 +2,6 @@
 # Lazygit config, docs: <https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md>
 git:
   # Use delta as the pager.
-  paging:
-    colorArg: always
-    pager: delta --dark --paging=never
+  pagers:
+    - colorArg: always
+      pager: delta --dark --paging=never
