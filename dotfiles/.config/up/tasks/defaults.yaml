@@ -474,11 +474,11 @@ data:
 
     ExcludePrivateWindowWhenRestoringSessionAtLaunch: true
 
-    # Safari > General > New windows open with > Empty page
-    NewTabBehavior: 1
+    # Safari > General > New windows open with > Start page
+    NewTabBehavior: 4
 
-    # Safari > General > New tabs open with > Empty page
-    NewWindowBehavior: 1
+    # Safari > General > New tabs open with > Start page
+    NewWindowBehavior: 4
 
     # Safari > General > Remove history items > Manually
     HistoryAgeInDaysLimit: 36500
