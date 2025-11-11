@@ -5,3 +5,6 @@ git:
   pagers:
     - colorArg: always
       pager: delta --dark --paging=never
+gui:
+  # Default to line-wise staging (the primay thing I use lazygit for)
+  useHunkModeInStagingView: false
