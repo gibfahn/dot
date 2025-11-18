@@ -22,6 +22,7 @@ brew "diffutils"                         # GNU versions of diff and related tool
 brew "findutils"                         # GNU versions of find, locate, updatedb, xargs.
 brew "fswatch"                           # See which files are opened on the system (`fswatch /`).
 brew "gawk"                              # GNU versions of awk.
+brew "git-absorb"                        # Easily absorb a change into the git commit that touched the same files.
 brew "git-cliff"                         # Changelog generator.
 brew "git-lfs"                           # Git Large File Storage. Use with `git lfs`.
 brew "gnu-tar"                           # GNU version of tar.
