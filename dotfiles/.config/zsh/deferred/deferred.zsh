@@ -23,7 +23,6 @@ export MINIKUBE_HOME="$XDG_CACHE_HOME/minikube" # https://github.com/kubernetes/
 export NCURSES_NO_UTF8_ACS=1 # Force UTF-8 in ncurses https://github.com/kovidgoyal/kitty/issues/7005#issuecomment-1945441687
 export NODE_REPL_HISTORY="$XDG_CACHE_HOME/node_repl_history" # Set node-gyp download location.
 export NPM_CONFIG_CACHE="$XDG_CACHE_HOME/npm" # Set npm cache location.
-export NPM_CONFIG_DEVDIR="$XDG_CACHE_HOME/node-gyp" # Set node-gyp download location.
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/config" # Set up my npm config location.
 export OP_BIOMETRIC_UNLOCK_ENABLED=true # https://developer.1password.com/docs/cli/app-integration/#set-the-biometric-unlock-environment-variable
 export PAGER=less
