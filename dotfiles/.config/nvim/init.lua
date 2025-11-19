@@ -414,8 +414,6 @@ vim.keymap.set({ "i", "n", "v" }, "<A-p>", '"+p', { desc = "Paste from system cl
 vim.keymap.set({ "i", "n", "v" }, "<A-q>", "<Cmd>cnext<CR>", { desc = "Go to next quickfix item" })
 vim.keymap.set({ "i", "n", "v" }, "<A-r>", function() require("trouble").next({skip_groups = true, jump = true}) end, { desc = "Go to next Trouble item" })
 vim.keymap.set({ "i", "n", "v" }, "<A-s>", "]s", { desc = "Go to next spelling mistake" })
-vim.keymap.set({ "i", "n", "v" }, "<A-t>", "<Cmd>tabnext<CR>", { desc = "Go to next tab" })
-vim.keymap.set({ "i", "n", "v" }, "<A-x>", function() Snacks.bufdelete() end, { desc = "Delete buffer", noremap = false })
 vim.keymap.set({ "i", "n", "v" }, "<A-y>", '"+y', { desc = "Copy to clipboard" })
 vim.keymap.set({ "i", "n", "v" }, "<A-z>", "<Cmd>FzfLua zoxide<CR>", { desc = "Switch to different directory" })
 vim.keymap.set({ "i", "n", "v" }, "<S-ScrollWheelLeft>", "<S-ScrollWheelRight>", { desc = "Fix inverted horizontal scroll" })
@@ -423,6 +421,8 @@ vim.keymap.set({ "i", "n", "v" }, "<S-ScrollWheelRight>", "<S-ScrollWheelLeft>",
 vim.keymap.set({ "i", "n", "v" }, "<ScrollWheelLeft>", "<ScrollWheelRight>", { desc = "Fix inverted horizontal scroll" })
 vim.keymap.set({ "i", "n", "v" }, "<ScrollWheelRight>", "<ScrollWheelLeft>", { desc = "Fix inverted horizontal scroll" })
 vim.keymap.set({ "n", "v" }, "<A-BS>", "<Cmd>exit<CR>", { desc = "Save and quit" }) -- Only saves if changes.
+vim.keymap.set({ "n", "v" }, "<A-t>", "<Cmd>tabnext<CR>", { desc = "Go to next tab" })
+vim.keymap.set({ "n", "v" }, "<A-x>", function() Snacks.bufdelete() end, { desc = "Delete buffer", noremap = false })
 
 -- stylua: ignore end
 
