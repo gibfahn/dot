@@ -89,6 +89,46 @@ vim.opt.visualbell = true -- Flash the screen instead of beeping when doing some
 vim.opt.wildignorecase = true -- Case insensitive file tab completion with :e.
 vim.opt.wildmode = "longest:full,full" -- Command-line completion mode, 1st tab completes longest common.
 
+-- Due to https://github.com/neovim/neovim/issues/29061 , can't extend the existing list, so instead copy it and comment
+-- out anything with an escaped comma like \\,
+-- See <https://vonheikemen.github.io/devlog/tools/configuring-neovim-using-lua/#types-of-data>
+vim.opt.errorformat = {
+
+  -- Original set minus anything with commas.
+  -- Get the default list by running `: = vim.opt.errorformat`
+
+  '%*[^"]"%f"%*\\D%l: %m',
+  '"%f"%*\\D%l: %m',
+  "%-Gg%\\?make[%*\\d]: *** [%f:%l:%m",
+  "%-Gg%\\?make: *** [%f:%l:%m",
+  "%-G%f:%l: (Each undeclared identifier is reported only once",
+  "%-G%f:%l: for each function it appears in.)",
+  "%-GIn file included from %f:%l:%c:",
+  -- "%-GIn file included from f:%l:%c\\,",
+  "%-GIn file included from %f:%l:%c",
+  "%-GIn file included from %f:%l",
+  "%-G%*[ ]from %f:%l:%c",
+  "%-G%*[ ]from %f:%l:",
+  -- "%-G%*[ ]from %f:%l\\,",
+  "%-G%*[ ]from %f:%l",
+  "%f:%l:%c:%m",
+  "%f(%l):%m",
+  "%f:%l:%m",
+  -- "\"%f\"\\, line %l%*\\D%c%*[^ ] %m",
+  "%D%*\\a[%*\\d]: Entering directory %*[`']%f'",
+  "%X%*\\a[%*\\d]: Leaving directory %*[`']%f'",
+  "%D%*\\a: Entering directory %*[`']%f'",
+  "%X%*\\a: Leaving directory %*[`']%f'",
+  "%DMaking %*\\a in %f",
+  "%f|%l| %m",
+
+  -- Added by me:
+
+  -- Markdownlint style format, e.g.:
+  --   foo.md:6 MD041/first-line-heading/first-line-h1 First line in a file should be a top-level heading [Context: "### My Heading"]
+  "%f:%l %m",
+}
+
 vim.opt.fillchars = {
   fold = " ", -- Don't show dots after a folded fold.
   foldsep = " ",
