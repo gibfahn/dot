@@ -102,14 +102,14 @@ alias clc="fc -ln -1 | sed -e 's/\\\\n/\\n/g' -e 's/\\\\t/\\t/g' | ${=aliases[cp
 # Run last command and copy the command and its output.
 cr() { local a=$(r 2>&1); ${=aliases[cpy]} <<<"❯ $a"; }
 
-# Convert between config formats, e.g. "yaml_to_json <t.yml | jq .". Requires a `pip install pyyaml`.
-alias csv_to_json="python3 -c 'import csv, json, sys; json.dump([row for row in csv.DictReader(sys.stdin)], sys.stdout, indent=2)'"
-alias json_to_yaml="python3 -c 'import sys, yaml, json; yaml.dump(json.load(sys.stdin), sys.stdout, indent=2)'"
-alias toml_to_json="python3 -c 'import sys, toml, json; json.dump(toml.load(sys.stdin), sys.stdout, indent=2)'"
-alias yaml_to_json="python3 -c 'import sys, yaml, json; json.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2)'"
-alias yaml_to_yaml="python3 -c 'import sys, yaml; yaml.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2)'"
+# Convert between config formats, e.g. "yaml_to_json t.yml | jq ."
+alias csv_to_json="python3 -c 'import csv, json, sys; json.dump([row for row in csv.reader(sys.stdin)], sys.stdout, indent=2)'"
+alias json_to_yaml="uv run --with pyyaml - <<<'import pathlib, sys, yaml, json; yaml.dump(json.loads(pathlib.Path(sys.argv[1]).read_text()), sys.stdout, indent=2)'"
+alias toml_to_json="uv run --with toml - <<<'import pathlib, sys, toml, json; json.dump(toml.loads(pathlib.Path(sys.argv[1]).read_text()), sys.stdout, indent=2)'"
+alias yaml_to_json="uv run --with pyyaml - <<<'import pathlib, sys, yaml, json; json.dump(yaml.safe_load(pathlib.Path(sys.argv[1]).read_text()), sys.stdout, indent=2)'"
+alias yaml_to_yaml="uv run --with pyyaml - <<<'import pathlib, sys, yaml; yaml.dump(yaml.safe_load(pathlib.Path(sys.argv[1]).read_text()), sys.stdout, indent=2)'"
 # Markdown to html (rich text).
-alias markdown_to_html="pbpaste | pandoc --from markdown-smart --to html | textutil -convert rtf -stdin -stdout -format html |  pbcopy -Prefer rtf"
+alias markdown_to_html="pbpaste | pandoc --from markdown-smart --to html | textutil -convert rtf -stdin -stdout -format html | pbcopy -Prefer rtf"
 # Url encode and decode stdin or first argument.
 alias url_encode='python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read().rstrip(\"\n\")))"'
 alias url_decode='python3 -c "import urllib.parse, sys; print(urllib.parse.unquote(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read().rstrip(\"\n\")))"'
