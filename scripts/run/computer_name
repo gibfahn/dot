@@ -8,6 +8,7 @@ if [[ -n ${1:-} ]]; then
   mac_name=$1
 
   scutil --set LocalHostName $mac_name
+  scutil --set HostName $mac_name
   scutil --set ComputerName $mac_name
   exit
 fi
