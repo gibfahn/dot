@@ -44,6 +44,8 @@ RemapKeys()
 
 -- Always connect to VPN on first loading Hammerspoon.
 if isWrkMachine then
+  require("audio") -- Only needed on my work Mac for now.
+
   CallVpn("corporate")
 end
 
