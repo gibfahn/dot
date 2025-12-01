@@ -1,3 +1,40 @@
+# vi:ft=conf
+
+# OVERVIEW
+#
+# Ghostty config, modified from the stock config for convenient git diff reasons.
+# Last generated from the ghostty 1.2.3 config using:
+#   ghostty +show-config --default --docs | sed 's/\s\+$//' > dotfiles/.config/ghostty/config
+#
+# Docs: https://ghostty.org/docs/config/reference
+# Source: https://github.com/mitchellh/ghostty/blob/main/src/config/Config.zig
+
+# NOTES
+#
+# Comments start with a `#` and are ONLY valid on their own line.
+#
+# `ghostty +list-themes` for a list of themes
+# `cmd+shift+,` reloads the config.
+# Regen this file with:
+# ghostty +show-config --default --docs >~/.config/ghostty/config
+
+# MISSING
+#
+# Missing from Ghostty (that I have in kitty):
+# - `url_prefixes` -> can't set custom prefixes (maybe `link:` is the way to do this?)
+# - `window_alert_on_bell` -> `echo -n '\a'` doesn't seem to do anything in Ghostty
+# - `tab_activity_symbol` -> no activity indicator
+# - `active_border_color` / inactive_border_color: can't get visible borders (they seem to be black on all the black screens, vs the defaults in kitty)
+# - Inline comments in this file?
+# - Remappings:
+#   - Open scrollback in less: `scrollback_pager env LESS= less --tabs=4 --ignore-case --RAW-CONTROL-CHARS --quit-if-one-screen --LONG-PROMPT --window=-4 --jump-target=1 --pattern=^❯ +INPUT_LINE_NUMBER`
+#   - Open scrollback in nvim
+
+# EXTRA
+#
+# Things that are nice in Ghostty and not in kitty:
+# - Native emoji entry with ⌘-⌃-Space
+
 # The font families to use.
 #
 # You can generate the list of valid values using the CLI:
@@ -46,7 +83,9 @@
 # this within config files if you want to clear previously set values in
 # configuration files or on the CLI if you want to clear values set on the
 # CLI.
-font-family =
+# font-family =
+# Don't use default prompt (see prompt character for a good check that it's set correctly)
+font-family = "Hasklug Nerd Font Mono"
 
 font-family-bold =
 font-family-italic =
@@ -140,7 +179,8 @@ font-feature =
 # On Linux with GTK, font size is scaled according to both display-wide and
 # text-specific scaling factors, which are often managed by your desktop
 # environment (e.g. the GNOME display scale and large text settings).
-font-size = 13
+# font-size = 13
+font-size = 15
 
 # A repeatable configuration to set one or more font variations values for
 # a variable font. A variable font is a single font, usually with a filename
@@ -185,7 +225,8 @@ font-codepoint-map =
 
 # Draw fonts with a thicker stroke, if supported.
 # This is currently only supported on macOS.
-font-thicken = false
+# font-thicken = false
+font-thicken = true
 
 # Strength of thickening when `font-thicken` is enabled.
 #
@@ -311,7 +352,8 @@ adjust-overline-thickness =
 
 # Thickness in pixels or percentage adjustment of the bar cursor and outlined rect cursor.
 # See the notes about adjustments in `adjust-cell-width`.
-adjust-cursor-thickness =
+# adjust-cursor-thickness =
+adjust-cursor-thickness = 300%
 
 # Height in pixels or percentage adjustment of the cursor. Currently applies to all cursor types:
 # bar, rect, and outlined rect.
@@ -443,15 +485,16 @@ freetype-load-flags = hinting,no-force-autohint,no-monochrome,autohint
 # be fixed in a future update:
 #
 #   - macOS: titlebar tabs style is not updated when switching themes.
-theme =
+# theme =
+theme = "Pro"
 
 # Background color for the window.
 # Specified as either hex (`#RRGGBB` or `RRGGBB`) or a named X11 color.
-background = #282c34
+# background = #282c34
 
 # Foreground color for the window.
 # Specified as either hex (`#RRGGBB` or `RRGGBB`) or a named X11 color.
-foreground = #ffffff
+# foreground = #ffffff
 
 # Background image for the terminal.
 #
@@ -883,7 +926,8 @@ palette = 255=#eeeeee
 #
 #   * `cell-background` - Match the cell background color.
 #     (Available since: 1.2.0)
-cursor-color =
+# cursor-color =
+cursor-color = "#6BF549"
 
 # The opacity level (opposite of transparency) of the cursor. A value of 1
 # is fully opaque and a value of 0 is fully transparent. A value less than 0
@@ -1285,7 +1329,8 @@ abnormal-command-exit-runtime = 250
 # This is a future planned feature.
 #
 # This can be changed at runtime but will only affect new terminal surfaces.
-scrollback-limit = 10000000
+# scrollback-limit = 10000000
+scrollback-limit = 25_000_000
 
 # Match a regular expression against the terminal text and associate clicking
 # it with an action. This can be used to match URLs, file paths, etc. Actions
@@ -1718,6 +1763,9 @@ keybind = super+digit_3=goto_tab:3
 keybind = super+ctrl+arrow_up=resize_split:up,10
 keybind = super+d=new_split:right
 
+# Gib additions
+keybind = super+f=write_scrollback_file:paste
+
 # Horizontal window padding. This applies padding between the terminal cells
 # and the left and right window borders. The value is in points, meaning that
 # it will be scaled appropriately for screen DPI.
@@ -1922,7 +1970,8 @@ window-theme = auto
 #   * `display-p3` - Interpret colors in the Display P3 color space.
 #
 # This setting is currently only supported on macOS.
-window-colorspace = srgb
+# window-colorspace = srgb
+window-colorspace = display-p3
 
 # The initial window size. This size is in terminal grid cells by default.
 # Both values must be set to take effect. If only one value is set, it is
@@ -2129,7 +2178,8 @@ resize-overlay-duration = 750ms
 # and bring the window to front.
 #
 # Default is false.
-focus-follows-mouse = false
+# focus-follows-mouse = false
+focus-follows-mouse = true
 
 # Whether to allow programs running in the terminal to read/write to the
 # system clipboard (OSC 52, for googling). The default is to allow clipboard
@@ -2270,7 +2320,8 @@ confirm-close-surface = true
 # On Linux, if this is `true`, Ghostty can delay quitting fully until a
 # configurable amount of time has passed after the last window is closed.
 # See the documentation of `quit-after-last-window-closed-delay`.
-quit-after-last-window-closed = false
+# quit-after-last-window-closed = false
+quit-after-last-window-closed = true
 
 # Controls how long Ghostty will stay running after the last open surface has
 # been closed. This only has an effect if `quit-after-last-window-closed` is
@@ -2952,7 +3003,8 @@ app-notifications = clipboard-copy,config-reload
 # Changing this option at runtime works, but will only apply to the next
 # time the window is made fullscreen. If a window is already fullscreen,
 # it will retain the previous setting until fullscreen is exited.
-macos-non-native-fullscreen = false
+# macos-non-native-fullscreen = false
+macos-non-native-fullscreen = true
 
 # Whether the window buttons in the macOS titlebar are visible. The window
 # buttons are the colored buttons in the upper left corner of most macOS apps,
@@ -3085,7 +3137,8 @@ macos-dock-drop-behavior = new-tab
 #
 # The values `left` or `right` enable this for the left or right *Option*
 # key, respectively.
-macos-option-as-alt =
+# macos-option-as-alt =
+macos-option-as-alt = true
 
 # Whether to enable the macOS window shadow. The default value is true.
 # With some window managers and window transparency settings, you may
@@ -3505,7 +3558,7 @@ async-backend = auto
 # preference stored in the standard user defaults (`defaults(1)`).
 #
 # Changing this value at runtime works after a small delay.
-auto-update =
+auto-update = "download"
 
 # The release channel to use for auto-updates.
 #
