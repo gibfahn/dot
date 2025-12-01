@@ -1763,8 +1763,38 @@ keybind = super+digit_3=goto_tab:3
 keybind = super+ctrl+arrow_up=resize_split:up,10
 keybind = super+d=new_split:right
 
-# Gib additions
+# GIB ADDITIONS
+# https://ghostty.org/docs/config/keybind/reference
+
+# Move tab backward
+keybind = super+a=move_tab:-1
+# View scrollback in less.
+# TODO: Needs https://github.com/ghostty-org/ghostty/issues/2504 to work nicely.
+# Open scrollback in editor
 keybind = super+f=write_scrollback_file:paste
+# Open screen in editor
+keybind = super+shift+f=write_screen_file:paste
+# Vim up key: vertical split
+keybind = super+e=new_split:right
+# Vim left key: left a tab.
+keybind = super+h=previous_tab
+# Vim right key: right a tab.
+keybind = super+i=next_tab
+# Vim down key: horizontal split.
+keybind = super+n=new_split:down
+# Move tab forward
+keybind = super+s=move_tab:1
+
+# Create with vim arrow keys, move with real arrow keys.
+keybind = super+arrow_left=goto_split:left
+keybind = super+arrow_right=goto_split:right
+keybind = super+arrow_down=goto_split:down
+keybind = super+arrow_up=goto_split:up
+
+keybind = super+shift+h=resize_split:left,10
+keybind = super+shift+n=resize_split:down,10
+keybind = super+shift+e=resize_split:up,10
+keybind = super+shift+i=resize_split:right,10
 
 # Horizontal window padding. This applies padding between the terminal cells
 # and the left and right window borders. The value is in points, meaning that

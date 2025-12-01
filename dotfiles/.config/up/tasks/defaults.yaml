@@ -606,6 +606,12 @@ data:
     # Don't show Siri icon in the menu bar.
     StatusMenuVisible: false
 
+  # Ghostty terminal
+  com.mitchellh.ghostty:
+    NSUserKeyEquivalents:
+      # Free up ⌘-h by remapping "Hide Ghostty" to something obscure.
+      "Hide Ghostty": '~^$\U00a7'
+
   # https://sindresorhus.com/dato
   com.sindresorhus.Dato:
     enabledCalendars: []
@@ -682,6 +688,7 @@ data:
     # com.apple.custommenu.apps: ["<com.apple.app>"]`). You don't need to add NSGlobalDomain.
     com.apple.custommenu.apps:
       - com.apple.mail
+      - com.mitchellh.ghostty
       - ... # Preserve existing entries.
 
   # An Apple mouse plugged directly in to the machine.
