@@ -13,6 +13,7 @@ cask "maccy"                             # Clipboard manager with history.
 brew "neovim"                            # New and improved vim.
 
 cask "1password"                         # Password manager, installed first so I can log into things.
+cask "1password-cli"                     # CLI way to access 1Password credentials.
 brew "gnupg"                             # gpg command line.
 brew "gh"                                # GitHub CLI.
 
