@@ -156,6 +156,7 @@ local hyperModeAppMappings = {
   { key = "k", app = "Calendar" },
   { key = "m", app = "Mail" },
   { key = "s", app = "Spotify" },
+  { key = "t", app = "Ghostty", mods = { "alt" } },
   { key = "t", app = "kitty" },
   { key = "w", app = "Webex", mods = { "shift" } },
   { key = "w", app = "WorkFlowy" },
