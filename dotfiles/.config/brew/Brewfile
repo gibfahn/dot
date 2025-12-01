@@ -6,6 +6,7 @@ brew "watch"                             # Rerun a command every n seconds.
 brew "pstree"                            # Hierarchical tree of processes, `pstree -g 3`.
 
 cask "kitty"                             # GPU Accelerated cross-platform Terminal Emulator.
+cask "font-hasklig"                      # Nice programming font Hasklig (Source Code Pro + Ligatures).
 cask "font-hasklug-nerd-font"            # Nice programming font Hasklig (Source Code Pro + Ligatures) + Nerd Font extensions.
 cask "hammerspoon"                       # Scriptable automator for macOS.
 cask "maccy"                             # Clipboard manager with history.
