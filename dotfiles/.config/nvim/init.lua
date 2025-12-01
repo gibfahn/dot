@@ -58,6 +58,7 @@ vim.opt.hidden = true -- Enable background buffers
 vim.opt.history = 1000 -- More command/search history.
 vim.opt.ignorecase = true -- Ignore case for lowercase searches (re-enable with \C in pattern),
 vim.opt.inccommand = "split" -- Show search and replace in a split as you type.
+vim.opt.iskeyword:append({ "-", "@-@" }) -- Include these as "word characters" for things like * and Ctrl-W (@-@ is a raw @)
 vim.opt.joinspaces = false -- No double spaces with join
 vim.opt.list = true -- Show some invisible characters (see listchars).
 vim.opt.listchars = { tab = "»·", trail = "·", nbsp = "☠" } -- Display extra whitespace.
