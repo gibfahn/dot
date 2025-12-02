@@ -81,7 +81,7 @@ cask "visual-studio-code"                # Used to teach Brian to code.
 # mas "Final Cut Pro", id: 424389933
 # mas "GarageBand", id: 682658836
 # mas "Logic Pro X", id: 634148309
-# mas "Refined GitHub", id: 1519867270     # Better GitHub interactions (broken: https://github.com/refined-github/refined-github/issues/8405).
+mas "Refined GitHub", id: 1519867270     # Better GitHub interactions (broken on GHE: https://github.com/refined-github/refined-github/issues/8405).
 # mas "Xcode", id: 497799835 # Needed to compile llvm (among other things).
 # mas "iMovie", id: 408981434
 
