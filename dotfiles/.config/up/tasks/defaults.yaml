@@ -170,7 +170,7 @@ data:
         with: applefeedback://inbox?make_visible=1
       - replace: adr
         on: 1
-        with: 19 Woodside Grange Road, North Finchley, London, N12 8TW
+        with: 19 Woodside Grange Road, London, N12 8TW
       - replace: adrs
         on: 1
         with: Flat 49, Shrewsbury House, 42 Cheyne Walk, London, SW3 5LW
