@@ -169,6 +169,7 @@
   ri  = rebase -i --autosquash                               # Interactive rebase (defaults to upstream commit @{u}).
   rip = rebase -i --autosquash @{push}                       # Interactive rebase on push branch.
   rim = "!git rebase -i --autosquash $(git merge-base ${1:-main} ${2:-HEAD} ${@:2}) # " # Rebase all commits since you forked the branch.
+  ro  = "!open $(git remote get-url $(git default-remote)) # " # Open remote in browser.
   rr  = remote rename                                        # Change name of remote `g rr origin up`.
   rs = "!git remote set-url \"$@\" && git remote set-url --push \"$@\" #" # Set both push and fetch remotes.
   rsf = remote set-url                                       # Change fetch URL of remote `g rs up hsg:dot`.
