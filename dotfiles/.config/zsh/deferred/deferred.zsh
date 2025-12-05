@@ -96,6 +96,7 @@ alias we="watchexec" # Shortcut for "run this command when something changes".
 
 alias mv="mv -v" # Print out what copies we're doing.
 alias cp="cp -v" # Print out what moves we're doing.
+alias rm="rm -v" # Print out what deletes we're doing.
 
 # Copy last command.
 alias clc="fc -ln -1 | sed -e 's/\\\\n/\\n/g' -e 's/\\\\t/\\t/g' | ${=aliases[cpy]}" # "
