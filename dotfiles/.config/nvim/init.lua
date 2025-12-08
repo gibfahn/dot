@@ -443,7 +443,7 @@ vim.keymap.set({ "i", "n", "v" }, "<A-S-Up>", "<cmd>resize -1<cr>", { desc = "De
 vim.keymap.set({ "i", "n", "v" }, "<A-S>", "[s", { desc = "Go to previous spelling mistake" })
 vim.keymap.set({ "i", "n", "v" }, "<A-T>", "<Cmd>tabprev<CR>", { desc = "Prev tab" })
 vim.keymap.set({ "i", "n", "v" }, "<A-Up>", "<cmd>m .-2<cr>==", { desc = "Move line up" })
-vim.keymap.set({ "i", "n", "v" }, "<A-Y>", '"+yy', { desc = "Copy line to clipboard" })
+vim.keymap.set({ "i", "n", "v" }, "<A-Y>", 'mQ^"+y$`Q', { desc = "Copy line to clipboard" })
 vim.keymap.set({ "i", "n", "v" }, "<A-c>", function() vim.diagnostic.jump({count= 1,float = true}) end, { desc = "Next Diagnostic" })
 vim.keymap.set({ "i", "n", "v" }, "<A-d>", "<Cmd>tabclose<CR>", { desc = "Close tab" })
 vim.keymap.set({ "i", "n", "v" }, "<A-e>", function() vim.cmd("wincmd k") end, { desc = "Switch up a window" })
