@@ -390,11 +390,11 @@ vim.keymap.set("n", "<leader>xq", "<cmd>copen<cr>", { desc = "Quickfix List" })
 vim.keymap.set("n", "N", "'nN'[v:searchforward].'zv'", { expr = true, desc = "Prev search result" })
 vim.keymap.set("n", "Q", "<nop>", { desc = "unused" }) -- disabled to avoid accidental triggering
 vim.keymap.set("n", "[<Space>", function() vim.cmd("put! =repeat(nr2char(10), v:count1)|silent ']+") end, { desc = "Add newline above" }) -- Taken from <https://github.com/tummetott/unimpaired.nvim/blob/792404dc39a754ef17c4aca964762fa7cb880baa/lua/unimpaired/functions.lua>
-vim.keymap.set("n", "[e", function() vim.diagnostic.goto_prev({severity = "ERROR"}) end, { desc = "Prev Error" })
-vim.keymap.set("n", "[w", function() vim.diagnostic.goto_prev({severity = "WARN"}) end, { desc = "Prev Warning" })
+vim.keymap.set("n", "[e", function() vim.diagnostic.jump({count= -1, float = true, severity = vim.diagnostic.severity.ERROR}) end, { desc = "Prev Error" })
+vim.keymap.set("n", "[w", function() vim.diagnostic.jump({count= -1, float = true, severity = vim.diagnostic.severity.WARN}) end, { desc = "Prev Warning" })
 vim.keymap.set("n", "]<Space>", function() vim.cmd("put =repeat(nr2char(10), v:count1)|silent '[-") end, { desc = "Add newline below" })
-vim.keymap.set("n", "]e", function() vim.diagnostic.goto_prev({severity = "ERROR"}) end, { desc = "Next Error" })
-vim.keymap.set("n", "]w", function() vim.diagnostic.goto_prev({severity = "WARN"}) end, { desc = "Next Warning" })
+vim.keymap.set("n", "]e", function() vim.diagnostic.jump({count= 1, float = true, severity = vim.diagnostic.severity.ERROR}) end, { desc = "Next Error" })
+vim.keymap.set("n", "]w", function() vim.diagnostic.jump({count= 1, float = true, severity = vim.diagnostic.severity.WARN}) end, { desc = "Next Warning" })
 vim.keymap.set("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Above" })
 vim.keymap.set("n", "gco", "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Below" })
 vim.keymap.set("n", "n", "'Nn'[v:searchforward].'zv'", { expr = true, desc = "Next search result" }) -- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
@@ -422,7 +422,7 @@ vim.keymap.set("x", "n", "'Nn'[v:searchforward]", { expr = true, desc = "Next se
 vim.keymap.set("x", "p", "P") -- Don't overwrite clipboard when pasting over text <https://vi.stackexchange.com/questions/39149/how-to-stop-neovim-from-yanking-text-on-pasting-over-selection>
 vim.keymap.set({ "i", "n" }, "<Esc>", "<cmd>noh<cr><Esc>", { desc = "Escape and clear hlsearch" })
 vim.keymap.set({ "i", "n", "s", "x" }, "<A-w>", "<cmd>w<cr><esc>", { desc = "Save file" })
-vim.keymap.set({ "i", "n", "v" }, "<A-C>", vim.diagnostic.goto_prev, { desc = "Prev Diagnostic" })
+vim.keymap.set({ "i", "n", "v" }, "<A-C>", function() vim.diagnostic.jump({count= -1,float = true}) end, { desc = "Prev Diagnostic" })
 vim.keymap.set({ "i", "n", "v" }, "<A-Down>", "<cmd>m .+1<cr>==", { desc = "Move line down" })
 vim.keymap.set({ "i", "n", "v" }, "<A-E>", function() vim.cmd("wincmd 10 k") end, { desc = "Switch to topmost window" })
 vim.keymap.set({ "i", "n", "v" }, "<A-Enter>", vim.lsp.buf.code_action, { desc = "Code Action" })
@@ -444,7 +444,7 @@ vim.keymap.set({ "i", "n", "v" }, "<A-S>", "[s", { desc = "Go to previous spelli
 vim.keymap.set({ "i", "n", "v" }, "<A-T>", "<Cmd>tabprev<CR>", { desc = "Prev tab" })
 vim.keymap.set({ "i", "n", "v" }, "<A-Up>", "<cmd>m .-2<cr>==", { desc = "Move line up" })
 vim.keymap.set({ "i", "n", "v" }, "<A-Y>", '"+yy', { desc = "Copy line to clipboard" })
-vim.keymap.set({ "i", "n", "v" }, "<A-c>", vim.diagnostic.goto_next, { desc = "Next Diagnostic" })
+vim.keymap.set({ "i", "n", "v" }, "<A-c>", function() vim.diagnostic.jump({count= 1,float = true}) end, { desc = "Next Diagnostic" })
 vim.keymap.set({ "i", "n", "v" }, "<A-d>", "<Cmd>tabclose<CR>", { desc = "Close tab" })
 vim.keymap.set({ "i", "n", "v" }, "<A-e>", function() vim.cmd("wincmd k") end, { desc = "Switch up a window" })
 vim.keymap.set({ "i", "n", "v" }, "<A-h>", function() vim.cmd("wincmd h") end, { desc = "Switch left a window," })
