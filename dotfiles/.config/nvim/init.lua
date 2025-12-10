@@ -473,13 +473,14 @@ vim.keymap.set({ "n", "v" }, "<A-x>", function() Snacks.bufdelete() end, { desc 
 
 -- :PU asynchronously updates plugins.
 vim.api.nvim_create_user_command("PU", function(_)
-  require("lazy").sync()
-  if vim.fn.exists(":TSUpdateSync") ~= 0 then
-    vim.cmd("TSUpdateSync")
-  end
-  if vim.fn.exists(":MasonUpdate") ~= 0 then
-    vim.cmd("MasonUpdate")
-  end
+  print("Updating lazy.nvim plugins...")
+  require("lazy").sync({ wait = true, show = true })
+
+  print("Updating treesitter plugins...")
+  require("nvim-treesitter").update():wait(300000)
+
+  print("Updating Mason packages...")
+  vim.cmd("MasonUpdateAll")
 end, { desc = "Updating plugins..." })
 
 -- Run :Trim to trim trailing whitespace in this file.

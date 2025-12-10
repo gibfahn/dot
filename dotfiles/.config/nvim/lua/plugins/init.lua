@@ -772,6 +772,11 @@ return {
   },
 
   {
+    "RubixDev/mason-update-all", -- Update all mason packages.
+    config = true,
+  },
+
+  {
     "saghen/blink.cmp",
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config

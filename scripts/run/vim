@@ -4,7 +4,13 @@ set -euo pipefail
 
 set -x
 
-nvim --headless "+Lazy! sync" +:TSUpdateSync +:MasonUpdate +qa
+# Update lazy.nvim plugins, then TreeSitter plugins, then Mason dependencies.
+nvim \
+  --headless \
+  -c "Lazy! sync" \
+  -c 'lua require("nvim-treesitter").update():wait(300000)' \
+  -c 'autocmd User MasonUpdateAllComplete quitall' \
+  -c 'MasonUpdateAll'
 
 # Work around https://github.com/Maxattax97/coc-ccls/issues/2
 existing=~/.config/coc/extensions/node_modules/coc-ccls/node_modules/ws/lib/extension.js
@@ -27,7 +33,8 @@ bob_bin_dir="${XDG_DATA_HOME:-$HOME/.local/share}"/bob/nvim-bin
 
 if [[ -f ~/.netrc ]]; then
   { set +x; } 2>/dev/null
-  export GITHUB_TOKEN=$(grep -xA 2 'machine github.com' ~/.netrc | awk '{ if ($1 == "password") { print $2 } }')
+  export GITHUB_TOKEN
+  GITHUB_TOKEN=$(grep -xA 2 'machine github.com' ~/.netrc | awk '{ if ($1 == "password") { print $2 } }')
   set -x
 fi
 
