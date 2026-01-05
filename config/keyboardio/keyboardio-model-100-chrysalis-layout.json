@@ -67,7 +67,12 @@
         "categories": ["modifier"]
       },
       {"code": 44, "label": {"base": "Space"}},
-      {"code": 40, "label": {"base": "Enter"}},
+      {
+        "code": 6922,
+        "label": {"hint": {"full": "Hyper+", "1u": "H+"}, "base": "g"},
+        "categories": ["with-modifiers", "ctrl", "shift", "alt", "gui"],
+        "baseCode": 10
+      },
       {"code": 28, "label": {"base": "y", "shifted": "Y"}},
       {"code": 24, "label": {"base": "u", "shifted": "U"}},
       {"code": 12, "label": {"base": "i", "shifted": "I"}},
@@ -2790,6 +2795,14 @@
     {"r": 0, "g": 0, "b": 0, "rgb": "rgb(0, 0, 0)"},
     {"r": 0, "g": 0, "b": 0, "rgb": "rgb(0, 0, 0)"},
     {"r": 0, "g": 0, "b": 0, "rgb": "rgb(0, 0, 0)"},
-    {"r": 0, "g": 0, "b": 0, "rgb": "rgb(0, 0, 0)"}
+    {"r": 0, "g": 0, "b": 0, "rgb": "rgb(0, 0, 0)"},
+    {"r": 0, "g": 0, "b": 0, "rgb": "rgb(0, 0, 0)"},
+    {"r": 0, "g": 0, "b": 0, "rgb": "rgb(0, 0, 0)"},
+    {"r": 0, "g": 0, "b": 0, "rgb": "rgb(0, 0, 0)"},
+    {"r": 0, "g": 0, "b": 0, "rgb": "rgb(0, 0, 0)"},
+    {"r": 0, "g": 0, "b": 0, "rgb": "rgb(0, 0, 0)"},
+    {"r": 0, "g": 0, "b": 0, "rgb": "rgb(0, 0, 0)"},
+    {"r": 0, "g": 0, "b": 0, "rgb": "rgb(0, 0, 0)"},
+    {"r": 255, "g": 0, "b": 0, "rgb": "rgb(255, 0, 0)"}
   ]
 }
