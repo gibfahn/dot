@@ -95,6 +95,8 @@ data:
   # Settings > Keyboard > Dictation
   com.apple.speech.recognition.AppleSpeechRecognition.prefs:
     # Cmd-Alt-Ctrl-Shift-d (⌘⌥⌃⇧d) to trigger. Set in Hammerspoon.
+    # For some painful reason this doesn't take effect on new machines unless you go into System Settings > Keyboard
+    # and select the customized key manually.
     CustomizedDictationHotKey:
       keyChar: 100
       virtualKey: 5
