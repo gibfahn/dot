@@ -99,30 +99,36 @@ main() {
   : ${up_branch:=$(default_branch $up_remote)}
 
   if git remote | grep -qx $fork_remote; then
-    echo >&2 "Fork remote already exists, skipping..."
-    exit 0
-  fi
-
+    log "Fork remote already exists, skipping..."
+  else
   # TODO: stop setting this once `gh` gains decent up/push branch recognition.
   export GH_REPO=$(remote_url "$up_remote")
   export GH_HOST=$(remote_host "$up_remote")
   # Fork the repo.
   gh repo fork --clone=false --remote=true --remote-name=$fork_remote --default-branch-only
+  fi
 
   # Print remotes.
   git remote -v
 
   git fetch $fork_remote
   if git show-ref --verify --quiet refs/remotes/$fork_remote/$fork_branch; then
-    echo >&2 "Fork already existed remotely and contains $fork_branch, skipping clean..."
-    exit 0
+    log "Fork already contains $fork_branch, skipping creation..."
+  else
+    git push $fork_remote ${up_remote}/${up_branch}:refs/heads/${fork_branch}
   fi
 
-  git push $fork_remote ${up_remote}/${up_branch}:refs/heads/${fork_branch}
-  change_branch $fork_remote $fork_branch
-  default_branch $fork_remote
+  if [[ $(default_branch $fork_remote) == $fork_branch ]]; then
+    log "Fork default branch is already $fork_branch, skipping default setting..."
+  else
+    change_branch $fork_remote $fork_branch
+    default_branch $fork_remote
+  fi
+
   if [[ -n "$(git ls-remote $fork_remote --branches $up_branch)" ]]; then
     git push -d $fork_remote $up_branch
+  else
+    log "Fork no longer has $up_branch, skipping deletion..."
   fi
 }
 
@@ -167,6 +173,10 @@ change_branch() {
     -f default_branch=$branch \
     --jq .default_branch
   git remote set-head --auto $fork
+}
+
+log() {
+  echo >&2 "${fg[cyan]}git-fork:${reset_color} ${1}"
 }
 
 # Usage: exit message [rc]
