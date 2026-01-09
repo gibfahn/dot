@@ -92,9 +92,9 @@
       {"code": 10, "label": {"base": "g", "shifted": "G"}},
       {"code": 41, "label": {"base": "Esc"}},
       {
-        "code": 231,
+        "code": 227,
         "label": {"base": {"full": "Command", "1u": "Cmd", "short": "Cm"}},
-        "location": "right",
+        "location": "left",
         "categories": ["modifier"]
       },
       {"code": 42, "label": {"base": {"full": "Backspace", "1u": "Bksp"}}},
