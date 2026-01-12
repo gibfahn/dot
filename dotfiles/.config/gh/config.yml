@@ -2,8 +2,4 @@
 git_protocol: https
 # What editor gh should run when creating issues, pull requests, etc. If blank, will refer to environment.
 editor:
-# Aliases allow you to create nicknames for gh commands
-aliases:
-  co: pr checkout
-  p: '!gh pr create --title="$(git show --format=%s -s)" --body="$(git pr-message)" --base="${2:-$(git up-branch)}" --repo="$(git remote-org-repo ${1:-$(git up-remote)})"'
 version: "1"

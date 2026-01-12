@@ -163,7 +163,7 @@ vim.filetype.add({
 -- variable that is only set if we're bootstrapping (Packer hasn't been installed).
 
 -- Always require the wrk.lua config if ~/wrk exists.
-if vim.fn.isdirectory(home_dir .. "/wrk") ~= 0 then
+if vim.fn.isdirectory(home_dir .. "/code/dotfiles-apple") ~= 0 then
   require("wrk")
 end
 

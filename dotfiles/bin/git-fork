@@ -85,14 +85,7 @@ done
 
 main() {
   if [[ -z ${up_remote:-} ]]; then
-    for possible_remote in up origin; do
-      if git remote | grep -qx $possible_remote; then
-        up_remote=$possible_remote
-        break
-      fi
-      # Default to up if neither was present.
-      up_remote=up
-    done
+    up_remote=$(default_remote)
   fi
 
   # Set default here so we don't waste time calculating if the up remote was overridden.
@@ -161,6 +154,21 @@ default_branch() {
         && git symbolic-ref --short refs/remotes/$1/HEAD
     }
   ) | sed "s|^$1/||"
+}
+
+# Get the default "main" remote for a repo. I use `up` where possible, else `origin`.
+# See `git default-remote` for more info.
+default_remote() {
+  for possible_remote in up origin; do
+    if git remote | grep -qx $possible_remote; then
+      up_remote=$possible_remote
+      break
+    fi
+    # Default to up if neither was present.
+    up_remote=up
+  done
+
+  echo $up_remote
 }
 
 # Change the remote default branch to "$2" (default: "forkmain"), for remote $1 (default: "fork").

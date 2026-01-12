@@ -17,7 +17,6 @@ fi
 
 dirs_to_move=(
   ~/code
-  ~/wrk
   ~/src
 )
 

@@ -8,7 +8,7 @@
 
   # Helper functions where a full name is easier:
   # Change the remote default branch to "$2" (default: "forkmain"), for remote $1 (default: "fork").
-  change-branch = "! set -x; fork=${1:-fork} branch=${2:-forkmain} && GH_HOST=$(git remote-host $fork) gh api -XPATCH repos/$(git remote-org-repo $fork) -f name=$(git remote-repo $fork) -f default_branch=$branch --jq .default_branch && git remote set-head --auto $fork #"
+  change-branch = "! set -x; fork=${1:-fork} branch=${2:-forkmain} && GH_HOST=$(git parse-url --segment host --remote $fork) gh api -XPATCH repos/$(git parse-url --segment org-repo $fork) -f name=$(git parse-url --segment repo --remote $fork) -f default_branch=$branch --jq .default_branch && git remote set-head --auto $fork #"
   check-pr-branch = "! [[ $(git head-branch) != $(git up-branch) ]] || { printf \"\\033[0;31m  ERROR\\033[0m: Create a new branch before raising PR.\\n\" >&2 && exit 1; } #"
   code-changes = "!git log --format=format: --name-only | egrep -v '^$' | sort | uniq -c | sort -rg | head -${1:-10} #" # Show $1 most changed files.
   default-branch = "!(git symbolic-ref --short refs/remotes/$1/HEAD || { git remote set-head --auto $1 && git symbolic-ref --short refs/remotes/$1/HEAD; }) | sed \"s|^$1/||\" #" # Default branch for remote. `g default-branch up` -> main
@@ -25,10 +25,6 @@
     || echo \"Your branch is ${both%%	*} commit(s) ahead and ${both##*	} commit(s) behind push branch $push_branch.\" #"
   # Quote an alias you want to save here (quotes \ and ", and wraps in "! #" to handle args).
   quote-string = "!read -r l; sed -E -e 's/([\\\"])/\\\\\\1/g' -e 's/(.*)/\"!\\1 #\"/' <<<\"$l\" #"
-  remote-org = "!git remote get-url $1 | awk -F ':|/' '{if ($NF) {print $(NF-1)} else {print $(NF-2)}}' #" # Github org for remote. `g remote-org up` -> gibfahn.
-  remote-repo = "!git remote get-url $1 | sed -e 's|/$||' -e 's|.*/||' -e 's/.git$//' #" # Github repo for remote. `g remote-repo up` -> dot.
-  remote-org-repo = "!echo $(git remote-org $1)/$(git remote-repo $1) #" # Github org/repo for a remote. `g remote-org-repo up` -> gibfahn/dot.
-  remote-host = "!git remote get-url ${1:?} | sed -e 's/^git@//' -e 's|https://||' -e 's/:.*//' -e 's|/.*||' #" # Used for setting GH_HOST.
   update-default-branch = "!git remote set-head --auto ${1:-up} && git symbolic-ref --short refs/remotes/${1:-up}/HEAD;  #" # Reset the default branch for a remote.
 
   a   = add           # Add files to index.
@@ -69,7 +65,7 @@
   # Fallback that searches the GitHub API for specified username ($1). Useful
   # if they haven't committed to this repo, but many users don't show their
   # emails in their account.
-  cabb = "!user=${1?}; GH_HOST=$(git remote-host $(git up-remote)) gh api graphql -f query=\"query { search(type:USER, query: \\\"$user\\\", first: 10) { userCount edges { node { ... on User { name, email, } } } } }\" \
+  cabb = "!user=${1?}; GH_HOST=$(git parse-url --segment host --remote $(git up-remote)) gh api graphql -f query=\"query { search(type:USER, query: \\\"$user\\\", first: 10) { userCount edges { node { ... on User { name, email, } } } } }\" \
     | jq -r '.data.search.edges[] | \"Co-authored-by: \\(.node.name) <\\(.node.email)>\"' | fzf #"
   can = commit --amend --no-edit -a # Add changed files and commit with the same message.
   caw = "! git commit -a -m \"WIP! at $(date '+%Y-%m-%d %H:%M:%S') on $(hostname)\" \"$@\" #" # work in progress commit to be squashed
@@ -216,9 +212,9 @@
   # To sort by repo not org, swap the `--key` sort options.
   unsubscribe = "!gh api --paginate user/subscriptions --jq '.[].full_name' | sort --field-separator=/ --key=1 --key=2 | fzf --reverse --multi --track --no-sort | sed 's|.*|repos/&/subscription|' | xargs -t -n 1 -J% gh api --method DELETE % #"
   # Search the github API for a user and return their username.
-  user = "!user=${1?}; GH_HOST=$(git remote-host $(git up-remote)) gh api graphql -f query=\"query { search(type:USER, query: \\\"$user\\\", first:10) { userCount edges { node { ... on User { login, name, email, } } } } }\" | jq -r '.data.search.edges[] | .node | \"@\\(.login) - \\(.name)<\\(.email)>\"' | fzf | awk '{print $1}' #"
+  user = "!user=${1?}; GH_HOST=$(git parse-url --segment host --remote $(git up-remote)) gh api graphql -f query=\"query { search(type:USER, query: \\\"$user\\\", first:10) { userCount edges { node { ... on User { login, name, email, } } } } }\" | jq -r '.data.search.edges[] | .node | \"@\\(.login) - \\(.name)<\\(.email)>\"' | fzf | awk '{print $1}' #"
   # Same, but returns all matches. Useful in vim when wanting to mention people, e.g. `V:!git users "<firstname lastname>"<CR>
-  users = "!user=${1?}; GH_HOST=$(git remote-host $(git up-remote)) gh api graphql -f query=\"query { search(type:USER, query: \\\"$user\\\", first:10) { userCount edges { node { ... on User { login, name, email, } } } } }\" | jq -r '.data.search.edges[] | .node | \"@\\(.login) - \\(.name)<\\(.email)>\"' #"
+  users = "!user=${1?}; GH_HOST=$(git parse-url --segment host --remote $(git up-remote)) gh api graphql -f query=\"query { search(type:USER, query: \\\"$user\\\", first:10) { userCount edges { node { ... on User { login, name, email, } } } } }\" | jq -r '.data.search.edges[] | .node | \"@\\(.login) - \\(.name)<\\(.email)>\"' #"
 
   # `git wa` to check out `main` to `~/tmp/worktrees/<repo name>`, `git wa dev` to check out the `dev` branch instead.
   wa   = "! dir=${2:-~/tmp/worktrees/\"$(basename \"$(git rev-parse --show-toplevel)\")\"}; git worktree add \"$dir\" \"${1:-main}\" && zoxide add \"$dir\" #"
@@ -414,16 +410,10 @@
 [include]
   path = ~/.config/git/my-config
   path = ~/.config/git/maintenance.config
-  # We want to run wrk maintenance even if not currently in a work directory.
-  path = ~/.config/git/maintenance-wrk.config
 
 # Work config for work repos.
-[includeIf "gitdir:~/wrk/**"]
+[includeIf "gitdir:~/*apple*/**"]
   path = ~/.config/git/wrk-config
 
 [includeIf "hasconfig:remote.*.url:**/*apple.com/**"]
-  path = ~/.config/git/wrk-config
-
-# Work config for work repos.
-[includeIf "gitdir:/Volumes/Shared-Data/**/wrk/**"]
   path = ~/.config/git/wrk-config

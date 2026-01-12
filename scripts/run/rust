@@ -75,5 +75,4 @@ cargo install-update -ia "${rust_crates[@]}" # Update everything installed with 
 #   CARGO_LOG=cargo::core::compiler::fingerprint=trace cargo build
 
 # Clean up cargo build artifacts from versions of rust that are no longer installed.
-# [[ -d "$HOME/wrk" ]] && cargo sweep --installed -r "$HOME/wrk"
 # [[ -d "$HOME/code" ]] && cargo sweep --installed -r "$HOME/code"

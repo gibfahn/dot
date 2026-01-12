@@ -12,13 +12,18 @@ local user = os.getenv("USER")
 
 require("hidutil")
 
-local isWrkMachine = false
-for file in hs.fs.dir(home_dir) do
-  if file == "wrk" then
-    log.d("Requiring work config as ~/wrk present.")
-    isWrkMachine = true
+local function checkIsWrkMachine(home_dir)
+  local wrk_dot_dir = home_dir .. "/code/dotfiles-apple"
+  local mode, err = hs.fs.attributes(wrk_dot_dir, "mode")
+  log.df("mode: %s, err: %s", mode, err)
+  if mode == "directory" then
+    log.df("Requiring work config as %s present.", wrk_dot_dir)
+    return true
   end
+  log.df("Not requiring work config as %s not present.", wrk_dot_dir)
+  return false
 end
+local isWrkMachine = checkIsWrkMachine(home_dir)
 
 if user == "gib" or user == "brian" then
   log.d("Loading " .. user .. " configuration...")

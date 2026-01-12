@@ -1,0 +1,158 @@
+#!/usr/bin/env zsh
+
+set -eu
+
+autoload -U colors && colors
+
+usage() {
+echo "$(tput bold; tput setaf 74)$ZSH_ARGZERO [-h|--help] [-v|--version] [--repo] [--remote] [url]$(tput sgr0)
+
+git parse-url: parse the segments from a git URL.
+
+Takes a repo URL, or a path to a git repo to parse. Defaults to assuming the current directory is a git repo.
+
+Only one of host, org, repo can be printed.
+
+OPTIONS:
+
+--repo: read the remote from the provided repo path.
+
+--remote: name of the remote to parse the URL for, default 'up', or 'origin' if 'up' is not present. Only used if --path is passed.
+
+--segment: set the segment to one of: host, org, repo, org-repo, host-org-repo
+"
+}
+
+remote=
+
+url=
+repo_path=
+segment=
+
+main() {
+  if [[ -n ${DEBUG:-} ]]; then
+    set -x
+  fi
+
+  while [[ $# != 0 ]]; do
+    [[ ${1:-} =~ ^(--help|-h)$ ]] && { usage; exit; }
+
+    [[ ${1:-} =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
+
+    [[ ${1:-} =~ ^(--check|-c)$ ]] && { CHECK=true; shift; }
+
+    [[ ${1:-} =~ ^(--quiet|-q)$ ]] && { QUIET=true; shift; }
+
+    [[ ${1:-} =~ ^--remote$ ]] && {
+      remote=$2
+      shift 2
+      continue
+    }
+
+    [[ ${1:-} =~ ^--repo$ ]] && {
+      repo_path=$2
+      shift 2
+      continue
+    }
+
+    [[ ${1:-} =~ ^--segment$ ]] && {
+      [[ -z ${segment:-} ]] || error "Can't specify multiple segments, already specified: $segment"
+      segment=$2
+      shift 2
+      continue
+    }
+
+    # If it doesn't match, assume it's a repo.
+    [[ -z ${url:-} ]] || error "Can't specify multiple URLs, already specified: $url"
+    url=$1
+    shift
+  done
+
+  [[ -n ${segment:-} ]] || error "No segment specified"
+  [[ -z ${repo_path:-} || -z ${url:-} ]] || error "Can't pass both repo path '$repo_path' and URL '$url'"
+
+  # Default to current working directory.
+  if [[ -z ${repo_path:-} && -z ${url:-} ]]; then
+    repo_path=$PWD
+  fi
+
+  if [[ -z ${url:-} ]]; then
+    cd $repo_path
+    remote=${remote:-$(default_remote)}
+    url=$(remote_url $remote)
+    cd -
+  fi
+
+  # If the user passes something like https://github.com/foo/bar/tree/main , then trim it to
+  # https://github.com/foo/bar
+  if [[ $url == *github* && $url == https://* ]]; then
+    local orig_url=$url
+    url=$(
+      sed -E \
+        -e 's|^https://([^/]+/[^/]+/[^/]+)/.*|https://\1|' \
+        -e 's|\?.*||' \
+        <<<$url
+    )
+
+    if [[ $orig_url != $url ]]; then
+      log "Removed trailing URL fragments: $orig_url -> $url"
+    fi
+  fi
+
+  log "Parsing $segment from <$url>..."
+
+  case $segment in
+    host) remote_host $url ;;
+    org) remote_org $url ;;
+    repo) remote_repo $url ;;
+    org-repo) echo $(remote_org $url)/$(remote_repo $url) ;;
+    host-org-repo) echo $(remote_host $url)/$(remote_org $url)/$(remote_repo $url) ;;
+    *) error "Unknown segment '$segment'"
+  esac
+}
+
+log() {
+  [[ -z ${QUIET:-} ]] || return 0
+  echo >&2 "${fg[cyan]}git-parse-url:${reset_color} ${1}"
+}
+
+remote_url() {
+  git remote get-url "$1"
+}
+
+# Remote hostname
+remote_host() {
+  echo $1 | sed -e 's/^git@//' -e 's|https://||' -e 's/:.*//' -e 's|/.*||'
+}
+
+# Github org for remote.
+remote_org() {
+  echo $1 | awk -F ':|/' '{if ($NF) {print $(NF-1)} else {print $(NF-2)}}'
+}
+
+# Github repo for remote.
+remote_repo() {
+  echo $1 | sed -e 's|/$||' -e 's|.*/||' -e 's/.git$//'
+}
+
+# Get the default "main" remote for a repo. I use `up` where possible, else `origin`.
+default_remote() {
+  for possible_remote in up origin; do
+    if git remote | grep -qx $possible_remote; then
+      remote=$possible_remote
+      break
+    fi
+    # Default to up if neither was present.
+    remote=up
+  done
+
+  echo $remote
+}
+
+# Usage: exit message [rc]
+error() {
+  echo -e "${fg[red]}Error:${reset_color} $1" >&2
+  exit "${2:-1}"
+}
+
+main "$@"

@@ -1,0 +1,93 @@
+#!/usr/bin/env zsh
+
+set -eu
+
+autoload -U colors && colors
+
+usage() {
+echo "$(tput bold; tput setaf 74)$ZSH_ARGZERO [-h|--help] [-v|--version] <repo paths...>$(tput sgr0)
+
+git move-repo: move a repo to the canonical location under a directory.
+
+Takes a list of repo paths, and moves each of them to the proper location.
+
+OPTIONS:
+
+--remote: name of the remote to fork, default 'up', or 'origin' if 'up' is not present.
+
+--root: name of the root directory to move the repo under, default '$HOME/code'
+"
+}
+
+remote=
+
+root=$HOME/code
+
+repos=()
+
+while [[ $# != 0 ]]; do
+  [[ ${1:-} =~ ^(--help|-h)$ ]] && { usage; exit; }
+
+  [[ ${1:-} =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
+
+  [[ ${1:-} =~ ^(--check|-c)$ ]] && { CHECK=true; shift; }
+
+  [[ ${1:-} =~ ^(--quiet|-q)$ ]] && { QUIET=true; shift; }
+
+  [[ ${1:-} =~ ^--remote$ ]] && {
+    remote=$2
+    shift 2
+    continue
+  }
+
+  [[ ${1:-} =~ ^--root$ ]] && {
+    root=$2
+    shift 2
+    continue
+  }
+
+  # If it doesn't match, assume it's a repo.
+  repos+=$1
+  shift
+
+done
+
+if [[ -n ${DEBUG:-} ]]; then
+  set -x
+fi
+
+main() {
+  for repo_path in ${repos[@]}; do
+    parse_url_cmd=(git parse-url --repo $repo_path --segment host-org-repo)
+    if [[ -n ${remote:-} ]]; then
+      parse_url_cmd+=(--remote $remote)
+    fi
+
+    new_repo=$root/$(${parse_url_cmd[@]})
+
+    log "Moving $repo_path to $new_repo"
+
+    mkdir -p $(dirname $new_repo)
+
+    if [[ $repo_path == $new_repo ]]; then
+      error "Repo path is already $repo_path so nothing to move"
+    fi
+    if [[ -d $new_repo ]]; then
+      error "New repo path '$new_repo' already exists, cannot move to it"
+    fi
+
+    mv -v $repo_path $new_repo
+  done
+}
+
+log() {
+  echo >&2 "${fg[cyan]}git-move-repo:${reset_color} ${1}"
+}
+
+# Usage: exit message [rc]
+error() {
+  echo -e "${fg[red]}Error:${reset_color} $1" >&2
+  exit "${2:-1}"
+}
+
+main "$@"

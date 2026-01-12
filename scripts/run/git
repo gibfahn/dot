@@ -12,21 +12,18 @@ for f in org.git-scm.git.daily.plist org.git-scm.git.hourly.plist org.git-scm.gi
 done
 
 # Create maintenance files if not present.
-for config_file in ~/.config/git/maintenance-wrk.config ~/.config/git/maintenance.config; do
-  if [[ ! -f $config_file ]]; then
-    echo "[maintenance]" >"$config_file"
-  fi
-done
+config_file=~/.config/git/maintenance.config
+if [[ ! -f $config_file ]]; then
+  echo "[maintenance]" >"$config_file"
+fi
 
 # Run commands that act on each repo.
 "${dot_dir}"/dotfiles/bin/git-each "${dot_dir}"/scripts/run/git-each-repo
 
 # Delete repos that are no longer present.
-for config_file in ~/.config/git/maintenance-wrk.config ~/.config/git/maintenance.config; do
-  for repo in $(awk '$1 == "repo" { print $3 }' "$config_file"); do
-    if [[ ! -e $repo/.git ]]; then
-      sed -i.bak "\\:$repo:d" "$config_file"
-      rm "$config_file".bak
-    fi
-  done
+for repo in $(awk '$1 == "repo" { print $3 }' "$config_file"); do
+  if [[ ! -e $repo/.git ]]; then
+    sed -i.bak "\\:$repo:d" "$config_file"
+    rm "$config_file".bak
+  fi
 done

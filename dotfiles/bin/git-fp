@@ -15,7 +15,7 @@ git fetch pr: fetch and set up a PR branch.
 Given no args, force updates the current branch to the relevant PR.
 
 git fp 123    -> Create a branch called 'pull/123/<PR branch name>' and set the push and upstream remotes accordingly.
-git fp --up-remote up 123 -> Create a branch called 'pull/123/<PR branch name>' and set the push and upstream remotes accordingly, looking at remote 'up'.
+git fp --remote up 123 -> Create a branch called 'pull/123/<PR branch name>' and set the push and upstream remotes accordingly, looking at remote 'up'.
 git fp        -> Update the current branch (assumed to be a PR branch created by this script).
 git ptp       -> push to the user's branch (in my git config as an alias).
 
@@ -25,7 +25,7 @@ If the PR author hasn't checked the 'maintainers can modify PR' checkbox, then t
 
 OPTIONS:
 
---up-remote: name of the remote fetch the PR for, default 'up'
+--remote: name of the remote fetch the PR for, default 'up'
 
 "
 }
@@ -57,7 +57,7 @@ while [[ $# != 0 ]]; do
     shift
   }
 
-  [[ ${1:-} =~ ^--up-remote$ ]] && {
+  [[ ${1:-} =~ ^--remote$ ]] && {
     up_remote=$2
     shift 2
     continue

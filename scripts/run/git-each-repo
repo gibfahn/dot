@@ -8,7 +8,7 @@ main() {
   # Add repo to my zoxide search path without increasing its score.
   zoxide add --score 0.0 "$PWD"
 
-  [[ $PWD == */wrk/* ]] && config_file=~/.config/git/maintenance-wrk.config || config_file=~/.config/git/maintenance.config
+  config_file=~/.config/git/maintenance.config
 
   # Get realpath of current directory.
   current_dir=$(pwd -P)
@@ -32,7 +32,7 @@ main() {
       # HTTP 404: Not Found (https://github.com/api/v3/repos/upstream-org/upstream-repo/git/refs/heads/forkmain)
       # Then try it in the UI, that usually fails with "forkmain has commits not in upstream" (which
       # you can fix in the UI by discarding those commits).
-      GH_HOST=$(git remote-host "$remote") gh repo sync "$(git remote-org-repo "$remote")" --branch forkmain
+      GH_HOST=$(git parse-url --quiet --remote "$remote" --segment host) gh repo sync "$(git parse-url --quiet --remote "$remote" --segment org-repo)" --branch forkmain
     fi
   done
 
@@ -68,7 +68,7 @@ main() {
 # match the renamed URL.
 update_if_repo_url_changed() {
   current_up_url=$(git remote get-url up)
-  new_up_url=$(GH_HOST=$(git remote-host up) gh repo view --json url --jq .url "$current_up_url")
+  new_up_url=$(GH_HOST=$(git parse-url --quiet --segment host) gh repo view --json url --jq .url "$current_up_url")
 
   # Ignore trailing slashes in URLs like https://github.com/gibfahn/dot/
   current_up_url=${current_up_url%/}
@@ -77,11 +77,11 @@ update_if_repo_url_changed() {
     return
   fi
 
-  current_up_org_repo=$(git remote-org-repo up)
+  current_up_org_repo=$(git parse-url --quiet --segment org-repo)
 
   # Update repo URL.
   git remote set-url up "$new_up_url"
-  new_up_org_repo=$(git remote-org-repo up)
+  new_up_org_repo=$(git parse-url --quiet --segment org-repo)
 
   # This means that the upstream repo name has changed and we should move it.
   if [[ "$PWD" == *"${current_up_org_repo}" ]]; then
@@ -97,7 +97,7 @@ update_if_repo_url_changed() {
 set_gh_default_repo() {
   # We have to set GH_HOST as otherwise if there are two different versions of a repo (e.g.
   # github.com/foo/bar and github.mycorp.com/foo/bar), gh will get confused.
-  GH_HOST=$(git remote-host up) gh repo set-default "$(git remote get-url up)"
+  GH_HOST=$(git parse-url --quiet --segment host) gh repo set-default "$(git remote get-url up)"
 }
 
 # Usage: exit message [rc]
