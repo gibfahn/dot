@@ -225,6 +225,7 @@ gcl() {
   # directory.
   if [[ $# == 1 ]]; then
     local url=$1 root_dir=$PWD
+    url=$(git parse-url --segment url $url)
     subdir=$(git parse-url --segment host-org-repo $url)
 
     root_dir=~/code

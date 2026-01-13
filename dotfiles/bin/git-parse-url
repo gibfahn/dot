@@ -11,7 +11,9 @@ git parse-url: parse the segments from a git URL.
 
 Takes a repo URL, or a path to a git repo to parse. Defaults to assuming the current directory is a git repo.
 
-Only one of host, org, repo can be printed.
+Only one segment can be printed.
+
+The URL will be trimmed if it matches a known pattern and has trailing characters.
 
 OPTIONS:
 
@@ -19,7 +21,7 @@ OPTIONS:
 
 --remote: name of the remote to parse the URL for, default 'up', or 'origin' if 'up' is not present. Only used if --path is passed.
 
---segment: set the segment to one of: host, org, repo, org-repo, host-org-repo
+--segment: set the segment to one of: host, org, repo, org-repo, host-org-repo, url
 "
 }
 
@@ -107,6 +109,7 @@ main() {
     repo) remote_repo $url ;;
     org-repo) echo $(remote_org $url)/$(remote_repo $url) ;;
     host-org-repo) echo $(remote_host $url)/$(remote_org $url)/$(remote_repo $url) ;;
+    url) echo $url ;;
     *) error "Unknown segment '$segment'"
   esac
 }
