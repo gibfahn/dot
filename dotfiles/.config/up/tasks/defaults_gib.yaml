@@ -72,8 +72,8 @@ data:
     AutoOpenSafeDownloads: false
     # Default to saving files in ~/tmp.
     NSNavLastRootDirectory: "~/tmp"
-    # Settings > Tabs > Tab Layout > Compact
-    ShowStandaloneTabBar: false
+    # Settings > Tabs > Tab Layout > Separate (not Compact)
+    ShowStandaloneTabBar: true
     # Settings > Tabs > Always show website titles in tabs > Checked
     EnableNarrowTabs: false
 
