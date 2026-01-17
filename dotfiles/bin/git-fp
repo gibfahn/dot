@@ -104,6 +104,7 @@ checkout_pr() {
   only_log_failure gh pr checkout $pr_number
   pr_branch=$(git branch --show-current)
   push_remote=$(git config branch.$pr_branch.remote)
+  merge_branch=$(git config branch.$pr_branch.merge)
 
   # Switch to better-named branch
   head_branch=pull/$pr_number/$pr_branch
@@ -111,6 +112,7 @@ checkout_pr() {
   git branch --quiet --delete $pr_branch
   git branch --quiet --set-upstream-to=$(git symbolic-ref --short refs/remotes/$up_remote/HEAD)
   git config branch.$head_branch.pushRemote $push_remote
+  git config branch.$head_branch.merge $merge_branch
 
   echo "git-fp: Pull Request ${pr_number} fetched as branch ${head_branch}" >&2
 }
