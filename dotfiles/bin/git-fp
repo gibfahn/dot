@@ -102,17 +102,32 @@ checkout_pr() {
 
   # Checkout PR branch and save its name and remote.
   only_log_failure gh pr checkout $pr_number
-  pr_branch=$(git branch --show-current)
-  push_remote=$(git config branch.$pr_branch.remote)
-  merge_branch=$(git config branch.$pr_branch.merge)
+  # `gh pr checkout` will generate a `.git/config` entry like this:
+  # ```
+  # [branch "myfeaturebranch"]
+  # 	remote = https://github.com/gibfahn/dot.git
+  # 	pushRemote = https://github.com/pr-author/dot.git
+  # 	merge = refs/heads/myfeaturebranch
+  # ```
+
+  # If the user sets their PR branch as `main`, then `gh pr checkout` will set the branch as
+  # `gibfahn/main`, not just `main`. So we can't use the `gh pr checkout` generated branch name as
+  # the branch to merge to. At the same time, we want to have the upstream remote and branch working
+  # correctly, and that means we need to set `branch.<branch>.remote` and `branch.<branch>.merge` to the upstream value, and use the new branch name to store the user's PR branch name.
+  gh_pr_branch=$(git branch --show-current)
+  push_remote=$(git config branch.$gh_pr_branch.remote)
+  pr_branch=$(git config branch.$gh_pr_branch.merge)
+  pr_branch=${pr_branch#refs/heads/}
 
   # Switch to better-named branch
   head_branch=pull/$pr_number/$pr_branch
   git switch --quiet -c $head_branch
-  git branch --quiet --delete $pr_branch
+  # Delete the old branch
+  git branch --quiet --delete $gh_pr_branch
+  # Set the upstream correctly so we can e.g. rebase
   git branch --quiet --set-upstream-to=$(git symbolic-ref --short refs/remotes/$up_remote/HEAD)
+  # Set the pushRemote so we can push to the branch with git ptp`
   git config branch.$head_branch.pushRemote $push_remote
-  git config branch.$head_branch.merge $merge_branch
 
   echo "git-fp: Pull Request ${pr_number} fetched as branch ${head_branch}" >&2
 }

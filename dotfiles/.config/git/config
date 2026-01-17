@@ -150,7 +150,7 @@
   pro = pr --open --markdown                                              # Open the PR pointed to by the current branch.
   prm = "!gh pr view --json=title,url,number \"${1:-$(pbpaste)}\" | jq -r '\":pr-open: [\\(.url | capture(\"^https://.*/(?<repo>[^/]+/[^/]+)/pull/[0-9]+$\") .repo)#\\(.number)](\\(.url)) \\(.title)\"' | tr -d '\n' | pbcopy #" # Get markdown for PR.
   # Push to PR branch, works with the `git-fp` script in this repo.
-  ptp = "!set -x; branch=$(git branch --show-current); git push $(git config branch.${branch}.pushRemote) @:$(git config branch.${branch}.merge) $@ #"
+  ptp = "!set -x; branch=$(git branch --show-current); git push $(git config branch.${branch}.pushRemote) @:$(sed -E 's;^pull/[0-9]+/;;' <<<${branch}) $@ #"
   pt  = "!git push -u $1 $(git head-branch) #"                            # g pt origin sets branch to track up + pushes.
   pl  = pull
 
