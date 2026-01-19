@@ -213,35 +213,11 @@ every() { local delay=${1?}; shift; while ! "$@"; do sleep $delay; echo "❯ $*"
 
 # Clone repo and cd into path (can't be in git config as we cd).
 # By default will clone into a subdirectory, e.g.
-# ssh://git@foo.com/~gibson_n_fahnestock/bar-baz.git -> foo.com/gibson_n_fahnestock/bar-baz/
-# https://github.com/gibfahn/dot -> github.com/gibfahn/dot/
+# ssh://git@foo.com/~bar/baz.git -> ~/code/foo.com/bar/baz/
+# https://github.com/gibfahn/dot -> ~/code/github.com/gibfahn/dot/
 gcl() {
-  local clone_dir ret args
-  local magenta='\033[0;35m' nc='\033[0m'
-  args=("$@")
-
-  # If no directory specified, use a subdir following the URL path.
-  # If we're in the home directory, guess the right subdir. Else clone into a subdir of the current
-  # directory.
-  if [[ $# == 1 ]]; then
-    local url=$1 root_dir=$PWD
-    url=$(git parse-url --segment url $url)
-    subdir=$(git parse-url --segment host-org-repo $url)
-
-    root_dir=~/code
-
-    dir=$root_dir/$subdir
-
-    if [[ -d "$dir" ]]; then
-      echo >&2 "${magenta}gcl:${nc} Directory already exists, changing to $dir"
-      cd "$dir"
-      return 0
-    fi
-
-    args=("$url" "$dir")
-  fi
-
-  clone_dir="$(set -o pipefail; git cl --progress "${args[@]}" 3>&1 1>&2 2>&3 3>&- | tee /dev/stderr | awk -F \' '/Cloning into/ {print $2}' | head -1)"
+  local clone_dir ret
+  clone_dir="$(git cl $@)"
   ret="$?"
   [[ -d "$clone_dir" ]] && echo "cd $clone_dir" && cd "$clone_dir" || return 1
   return $ret

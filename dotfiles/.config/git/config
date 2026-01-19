@@ -110,8 +110,6 @@
   caw = "! git commit -a -m \"WIP! at $(date '+%Y-%m-%d %H:%M:%S') on $(hostname)\" \"$@\" #"
   # Remove anything that's untracked (DANGER).
   cn  = clean -ffdx
-  # Always include submodules.
-  cl  = clone --recurse-submodules
   # Apply commit hash(es) to current branch.
   cp  = cherry-pick
   # Bail out of cherry-pick.

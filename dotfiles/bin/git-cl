@@ -1,0 +1,71 @@
+#!/usr/bin/env zsh
+
+set -eu
+
+autoload -U colors && colors
+
+usage() {
+  echo "$(
+    tput bold
+    tput setaf 74
+  )$ZSH_ARGZERO [OPTIONS] [pr number] $(tput sgr0)
+
+git cl: clone a repo to a standard location
+
+Unless a directory is passed, will clone to the standard location on disk, e.g. ~/code/github.com/gibfahn/dot
+
+The path to the directory where we clone the repo is returned on the stdout.
+If the target directory already exists, we return it on the stdout instead of cloning.
+
+Other options are passed through to 'git clone'
+
+By default we recurse into submodules.
+
+EXAMPLES:
+
+cd \$(git cl https://github.com/gibfahn/dot)
+"
+}
+
+if [[ -n ${DEBUG:-} ]]; then
+  set -x
+fi
+
+root=$HOME/code
+
+main() {
+
+  local clone_dir ret args
+  args=("$@")
+
+  # If no directory specified, use a subdir following the URL path.
+  # If we're in the home directory, guess the right subdir. Else clone into a subdir of the current
+  # directory.
+  if [[ $# == 1 ]]; then
+    local url=$1
+    url=$(git parse-url --segment url $url)
+    subdir=$(git parse-url --segment host-org-repo $url)
+
+    dir=$root/$subdir
+
+    if [[ -d "$dir" ]]; then
+      log "Directory already exists: $dir"
+      echo "$dir"
+      return 0
+    fi
+
+    args=("$url" "$dir")
+  fi
+
+  clone_dir="$(set -o pipefail; git clone --recurse-submodules --progress "${args[@]}" 3>&1 1>&2 2>&3 3>&- | tee /dev/stderr | awk -F \' '/Cloning into/ {print $2}' | head -1)"
+  ret="$?"
+  [[ -d "$clone_dir" ]] && echo "$clone_dir" || return 1
+  return $ret
+
+}
+
+log() {
+  echo >&2 "${fg[cyan]}git-cl:${reset_color} ${1}"
+}
+
+main $@
