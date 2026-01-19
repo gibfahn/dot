@@ -101,3 +101,17 @@ data:
       keyChar: 100
       virtualKey: 5
       modifiers: 1966080
+
+  # https://goodsnooze.gumroad.com/l/macwhisper
+  com.goodsnooze.MacWhisper:
+    # Hold right ⌘ key for dictation.
+    dictationKeyboardButton: '"rightCmd"'
+    # App only in menu bar.
+    appVisibilityMode: menubarOnly
+    # Enable dictation
+    dictationEnabled: true
+    # Already onboarded to dictation
+    openedDictationOnboarding: true
+    pauseAudioDuringDictation: false
+    dictationSoundsEnabled: true
+    shouldPersistDictations: false

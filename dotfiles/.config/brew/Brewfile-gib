@@ -72,6 +72,7 @@ cask "chrysalis"                         # Used to flash my KeyboardIO Model 01.
 cask "daisydisk"                         # See what's using disk space and easily clean it up.
 cask "ghostty"                           # Backup terminal for when I have issues with kitty.
 cask "keycastr"                          # Shows keystrokes in corner of screen (great for casting/demos).
+cask "macwhisper"                        # Speech recognition tool.
 cask "obsidian"                          # Markdown-based note-taking app.
 cask "slack"                             # Everyone uses Slack right?
 cask "visual-studio-code"                # Used to teach Brian to code.
