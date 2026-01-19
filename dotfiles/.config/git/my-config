@@ -1,6 +1,6 @@
-# vi filetype=gitconfig
-
 [user]
-  # Needs to match gpg signing email.
   name = Gibson Fahnestock
+  # Needs to match gpg signing email.
   email = gibfahn@gmail.com
+
+# vim: filetype=gitconfig

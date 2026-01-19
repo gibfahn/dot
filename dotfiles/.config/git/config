@@ -1,23 +1,37 @@
+# Git Config
+# Don't use inline comments as GitPython can't parse it. Check there are no literal comment chars in:
+#   uv run --with GitPython - <<< "import git, pprint; reader = git.Repo('.').config_reader(); [pprint.pp(item, width=1000) for section in reader.sections() for item in reader.items_all(section)]"
+
 [absorb]
   # `brew install git-absorb`
-  autoStageIfNothingStaged = true # Don't make me `git add`.
+  # Don't make me `git add`.
+  autoStageIfNothingStaged = true
 
 [alias]
   # Commits: @=HEAD, -=last commit.
-  # N.B. # at end of func allows parsing $1 args.
+  # N.B. # at end of string allows parsing $1 args.
 
   # Helper functions where a full name is easier:
   # Change the remote default branch to "$2" (default: "forkmain"), for remote $1 (default: "fork").
   change-branch = "! set -x; fork=${1:-fork} branch=${2:-forkmain} && GH_HOST=$(git parse-url --segment host --remote $fork) gh api -XPATCH repos/$(git parse-url --segment org-repo $fork) -f name=$(git parse-url --segment repo --remote $fork) -f default_branch=$branch --jq .default_branch && git remote set-head --auto $fork #"
+  # Check that I created a PR branch before I try to file a PR.
   check-pr-branch = "! [[ $(git head-branch) != $(git up-branch) ]] || { printf \"\\033[0;31m  ERROR\\033[0m: Create a new branch before raising PR.\\n\" >&2 && exit 1; } #"
-  code-changes = "!git log --format=format: --name-only | egrep -v '^$' | sort | uniq -c | sort -rg | head -${1:-10} #" # Show $1 most changed files.
-  default-branch = "!(git symbolic-ref --short refs/remotes/$1/HEAD || { git remote set-head --auto $1 && git symbolic-ref --short refs/remotes/$1/HEAD; }) | sed \"s|^$1/||\" #" # Default branch for remote. `g default-branch up` -> main
-  default-remote = "! git remote | grep -x up || git remote | grep -x origin #" # I use up, but automation like brew often uses origin.
-  head-branch = symbolic-ref --short HEAD # e.g. main.
-  up-remote-branch = "!git rev-parse --abbrev-ref --symbolic-full-name @{u}" # e.g. origin/main.
-  up-remote = "!git rev-parse --abbrev-ref --symbolic-full-name @{u} | cut -d '/' -f 1" # e.g. origin.
-  up-branch = "!git rev-parse --abbrev-ref --symbolic-full-name @{u} | cut -d '/' -f 2-" # e.g. main.
-  push-branch = "!git rev-parse --abbrev-ref --symbolic-full-name @{push}" # What would be pushed to, pushRemote/$(git head-branch) if set, else @{u}.
+  # Show $1 most changed files.
+  code-changes = "!git log --format=format: --name-only | egrep -v '^$' | sort | uniq -c | sort -rg | head -${1:-10} #"
+  # Default branch for remote. `g default-branch up` -> main
+  default-branch = "!(git symbolic-ref --short refs/remotes/$1/HEAD || { git remote set-head --auto $1 && git symbolic-ref --short refs/remotes/$1/HEAD; }) | sed \"s|^$1/||\" #"
+  # I use up, but automation like brew often uses origin.
+  default-remote = "! git remote | grep -x up || git remote | grep -x origin #"
+  # e.g. main.
+  head-branch = symbolic-ref --short HEAD
+  # e.g. origin/main.
+  up-remote-branch = "!git rev-parse --abbrev-ref --symbolic-full-name @{u}"
+  # e.g. origin.
+  up-remote = "!git rev-parse --abbrev-ref --symbolic-full-name @{u} | cut -d '/' -f 1"
+  # e.g. main.
+  up-branch = "!git rev-parse --abbrev-ref --symbolic-full-name @{u} | cut -d '/' -f 2-"
+  # What would be pushed to, pushRemote/$(git head-branch) if set, else @{u}.
+  push-branch = "!git rev-parse --abbrev-ref --symbolic-full-name @{push}"
   # Show the status of this branch relative to @{push}.
   push-status = "! push_branch=$(git push-branch 2>/dev/null) || { echo \"No push branch set.\" && exit 0; } \
     ; both=$(git rev-list --left-right --count HEAD...@{push}) \
@@ -25,24 +39,37 @@
     || echo \"Your branch is ${both%%	*} commit(s) ahead and ${both##*	} commit(s) behind push branch $push_branch.\" #"
   # Quote an alias you want to save here (quotes \ and ", and wraps in "! #" to handle args).
   quote-string = "!read -r l; sed -E -e 's/([\\\"])/\\\\\\1/g' -e 's/(.*)/\"!\\1 #\"/' <<<\"$l\" #"
-  update-default-branch = "!git remote set-head --auto ${1:-up} && git symbolic-ref --short refs/remotes/${1:-up}/HEAD;  #" # Reset the default branch for a remote.
+  # Reset the default branch for a remote.
+  update-default-branch = "!git remote set-head --auto ${1:-up} && git symbolic-ref --short refs/remotes/${1:-up}/HEAD;  #"
 
-  a   = add           # Add files to index.
-  ap  = add -p        # Adds files in hunks (only add some of the changes you made).
-  aa  = add -A        # Adds everything.
-  ama = am --abort    # Bail out of an am (apply patch) session.
-  amc = am --continue # Include an empty commit as a patch.
-  ams = am --skip     # Skip the current commit you're patching.
+  # Add files to index.
+  a   = add
+  # Adds files in hunks (only add some of the changes you made).
+  ap  = add -p
+  # Adds everything.
+  aa  = add -A
+  # Bail out of an am (apply patch) session.
+  ama = am --abort
+  # Include an empty commit as a patch.
+  amc = am --continue
+  # Skip the current commit you're patching.
+  ams = am --skip
 
+  # Shows current branch.
   b   = branch
-  ba  = branch -a # Show all local and remote branches.
-  bb  = bisect bad # Start a bisect by finding a good and bad commit and using `g bg` and `g bb` respectively to mark the starting points.
-  bd  = branch -D # Delete branch.
-  bdd = "!lastBranch=$(git head-branch); git checkout - && [[ $(git head-branch) != $lastBranch ]] || git checkout $(git default-branch $(git default-remote)); git branch -D $lastBranch #" # Delete current branch.
+  # Show all local and remote branches.
+  ba  = branch -a
+  # Start a bisect by finding a good and bad commit and using `g bg` and `g bb` respectively to mark the starting points.
+  bb  = bisect bad
+  # Delete branch.
+  bd  = branch -D
+  # Delete current branch.
+  bdd = "!lastBranch=$(git head-branch); git checkout - && [[ $(git head-branch) != $lastBranch ]] || git checkout $(git default-branch $(git default-remote)); git branch -D $lastBranch #"
   bg  = bisect good
   # Sorted list of branches.
   # TODO(gib): Fix this to make it look nice (can also use git branch directly).
-  bh  = for-each-ref --sort=committerdate refs/heads/ --format='%(committerdate:short) %(color: 178)%(refname:short)' # Branch history.
+  # Branch history.
+  bh  = for-each-ref --sort=committerdate refs/heads/ --format='%(committerdate:short) %(color: 178)%(refname:short)'
 
   br  = bisect reset
   brs = !git for-each-ref --sort=-committerdate refs/heads/ \
@@ -50,33 +77,53 @@
         | column -ts '|'
   bs  = bisect
   bss = bisect start
-  bsr = "!set -x; good=${1?} bad=${2?} && git bisect reset && git bisect start --first-parent $bad $good && shift 2 && git bisect run \"$@\" #" # git bsr <good> <bad> <cmd args...>
-  btu = "!git branch -u ${1:-up/$(git default-branch up)} #" # g btu remote/branch (defaults to up/HEAD).
-  btp = "!git config branch.$(git head-branch).pushRemote ${1:-fork} #" # `g btp up` sets push remote for this branch to up, useful when pushing directly to 'up'.
-  btpa = "!git config remote.pushDefault $1 #" # Set push remote for all future branches in this repo. Use this when you have a repo you don't want to fork.
+  # git bsr <good> <bad> <cmd args...>
+  bsr = "!set -x; good=${1?} bad=${2?} && git bisect reset && git bisect start --first-parent $bad $good && shift 2 && git bisect run \"$@\" #"
+  # g btu remote/branch (defaults to up/HEAD).
+  btu = "!git branch -u ${1:-up/$(git default-branch up)} #"
+  # `g btp up` sets push remote for this branch to up, useful when pushing directly to 'up'.
+  btp = "!git config branch.$(git head-branch).pushRemote ${1:-fork} #"
+  # Set push remote for all future branches in this repo. Use this when you have a repo you don't
+  # want to fork.
+  btpa = "!git config remote.pushDefault $1 #"
 
-  ce  = config --global --edit         # Open this file with $VISUAL.
-  c   = commit -v                   # Commit with gpg signing.
-  ca  = commit -a -v                # Commit all changed files with gpg.
-  cm  = commit --amend -v           # Amend the previous commit.
-  cmn = commit --amend --no-edit    # Amend the previous commit but don't change the message.
+  # Open this file with $VISUAL.
+  ce  = config --global --edit
+  # Commit with gpg signing.
+  c   = commit -v
+  # Commit all changed files with gpg.
+  ca  = commit -a -v
+  # Amend the previous commit.
+  cm  = commit --amend -v
+  # Amend the previous commit but don't change the message.
+  cmn = commit --amend --no-edit
   # Output Co-authored-by: lines for users who have committed to this repo before.
-  cab = "!git log --all --pretty='Co-authored-by: %an <%ae>' | sort -u | fzf # "
+  cab = "!git log --all --pretty='Co-authored-by: %an <%ae>' | sort -u | fzf #"
   # Fallback that searches the GitHub API for specified username ($1). Useful
   # if they haven't committed to this repo, but many users don't show their
   # emails in their account.
   cabb = "!user=${1?}; GH_HOST=$(git parse-url --segment host --remote $(git up-remote)) gh api graphql -f query=\"query { search(type:USER, query: \\\"$user\\\", first: 10) { userCount edges { node { ... on User { name, email, } } } } }\" \
     | jq -r '.data.search.edges[] | \"Co-authored-by: \\(.node.name) <\\(.node.email)>\"' | fzf #"
-  can = commit --amend --no-edit -a # Add changed files and commit with the same message.
-  caw = "! git commit -a -m \"WIP! at $(date '+%Y-%m-%d %H:%M:%S') on $(hostname)\" \"$@\" #" # work in progress commit to be squashed
-  cn  = clean -ffdx                    # Remove anything that's untracked (DANGER).
-  cl  = clone --recurse-submodules     # Always include submodules.
-  cp  = cherry-pick                    # Apply commit hash(es) to current branch.
-  cpa = cherry-pick --abort            # Bail out of cherry-pick.
-  cpc = cherry-pick --continue         # Accept current changes and continue to next commit.
-  cpq = cherry-pick --quit             # Only undo last commit (that failed) not all of them.
-  d   = "!git diff \"${@:-HEAD}\" #"                   # diff of staged and unstaged..
-  de  = "!git diff --name-only \"${@:-HEAD}\" | tr '\\n' '\\0' | xargs -0 $VISUAL # " # Open files changed since last commit in editor.
+  # Add changed files and commit with the same message.
+  can = commit --amend --no-edit -a
+  # work in progress commit to be squashed
+  caw = "! git commit -a -m \"WIP! at $(date '+%Y-%m-%d %H:%M:%S') on $(hostname)\" \"$@\" #"
+  # Remove anything that's untracked (DANGER).
+  cn  = clean -ffdx
+  # Always include submodules.
+  cl  = clone --recurse-submodules
+  # Apply commit hash(es) to current branch.
+  cp  = cherry-pick
+  # Bail out of cherry-pick.
+  cpa = cherry-pick --abort
+  # Accept current changes and continue to next commit.
+  cpc = cherry-pick --continue
+  # Only undo last commit (that failed) not all of them.
+  cpq = cherry-pick --quit
+  # diff of staged and unstaged..
+  d   = "!git diff \"${@:-HEAD}\" #"
+  # Open files changed since last commit in editor.
+  de  = "!git diff --name-only \"${@:-HEAD}\" | tr '\\n' '\\0' | xargs -0 $VISUAL #"
   dni  = diff --no-index
   # Interactively show files in $@, one line per file.
   di = "!set -x; git diff --color=always --stat=1000 --format=\"\" \"${@:-@}\" \
@@ -84,18 +131,29 @@
     --bind=\"alt-a:execute(git add {1})+down\" \
     --preview \"git diff ${*:-@} -- \\$(sed -E -e 's/^\\s*([^\\|]*)\\s*\\|.*/\\1/' -e 's/(.*)\\{(.*) => (.*)\\}(.*)/\\1\\2\\4 \\1\\3\\4/' <<< {}) | delta \" \
     | awk '{print $1}' #"
-  dn  = "!git diff --name-only \"${@:-HEAD}\" #"                # diff of staged and unstaged file names.
-  dp  = diff @{push}                                   # diff between working tree and upstream branch.
-  dpn = diff --name-only @{push}                       # diff between working tree and upstream branch file names.
-  dps = diff --staged @{push}                          # diff between working tree and upstream branch.
-  ds  = diff --staged                                  # Diff of staged files (`git diff` for unstaged).
-  dt  = difftool                                       # Nicer way to view diffs in vim.
-  du  = diff @{u}                                      # diff between working tree and upstream branch.
-  dun = diff --name-only @{u}                          # diff between working tree and upstream branch file names.
-  dus = diff --staged @{u}                             # diff between working tree and upstream branch.
+  # diff of staged and unstaged file names.
+  dn  = "!git diff --name-only \"${@:-HEAD}\" #"
+  # diff between working tree and upstream branch.
+  dp  = diff @{push}
+  # diff between working tree and upstream branch file names.
+  dpn = diff --name-only @{push}
+  # diff between working tree and upstream branch.
+  dps = diff --staged @{push}
+  # Diff of staged files (`git diff` for unstaged).
+  ds  = diff --staged
+  # Nicer way to view diffs in vim.
+  dt  = difftool
+  # diff between working tree and upstream branch.
+  du  = diff @{u}
+  # diff between working tree and upstream branch file names.
+  dun = diff --name-only @{u}
+  # diff between working tree and upstream branch.
+  dus = diff --staged @{u}
 
-  f = fetch            # Git Fetch
-  fix = commit --fixup # g fix SHA means rebasing will attach to that SHA.
+  # Git Fetch
+  f = fetch
+  # g fix SHA means rebasing will attach to that SHA.
+  fix = commit --fixup
   # Like commit --amend but for an arbitrary commit (`g fixup @~3.`).
   fixup = "!  hash=$(git rev-parse "$1") \
            && git commit --fixup=$hash ${@:2} \
@@ -104,9 +162,12 @@
   h = help
 
   # `l` gives you history of current branch, `la` is all commits in repo, `las` is a shortlist of the important commits, `ll` shows you who and when.
-  l   = log --graph --decorate --oneline                                # Graph log.
-  la  = log --graph --decorate --oneline --all                          # Graph log of all commits.
-  las = log --graph --decorate --oneline --all --simplify-by-decoration # Graph log of tag/branch/labelled commits.
+  # Graph log.
+  l   = log --graph --decorate --oneline
+  # Graph log of all commits.
+  la  = log --graph --decorate --oneline --all
+  # Graph log of tag/branch/labelled commits.
+  las = log --graph --decorate --oneline --all --simplify-by-decoration
   ll  = log --color --graph --pretty=format:'%C(214)%h%C(reset)%C(196)%d%C(reset) %s %C(35)(%ci)%C(27) <%an>%C(reset)'
   lla = log --color --graph --pretty=format:'%C(214)%h%C(reset)%C(196)%d%C(reset) %s %C(35)(%ci)%C(27) <%an>%C(reset)' --all
 
@@ -116,7 +177,8 @@
   # repo, which causes errors in e.g. brew repos. Workaround is to locally set core.hooksPath to
   # .git/hooks in the repo's .git/config when you want to use git-lfs in a repo. This unfortunately
   # means your global hooks will no longer apply in this repo.
-  lfs-install = "! git config core.hooksPath .git/hooks && git lfs install --local && git lfs fetch && git lfs checkout #" # Set up local git-lfs.
+  # Set up local git-lfs.
+  lfs-install = "! git config core.hooksPath .git/hooks && git lfs install --local && git lfs fetch && git lfs checkout #"
 
   # Interactive log of $@.
   li = "!git log --graph --color=always --format=\"%C(auto)%h%d %s %C(black)%C(bold)<%an> %ci%C(auto)\" \"$@\" \
@@ -125,69 +187,112 @@
     --bind \"ctrl-o:execute: git shi \\\"\\$(grep -oE '[a-f0-9]{7,}' <<< {} | head -1)\\\"\" \
     | grep -oE '[a-f0-9]{7,}' #"
   lia = li --all
-  lpr = "log -s --reverse --format='%h %s%n%n%b%n<br/>%n' @{upstream}..@" # Log to paste into a PR comment.
+  # Log to paste into a PR comment.
+  lpr = "log -s --reverse --format='%h %s%n%n%b%n<br/>%n' @{upstream}..@"
 
   ma  = merge --abort
-  mb  = "!git merge-base ${1:-main} ${2:-HEAD} ${@:2} #" # Get commit this branch forked from.
-  mc  = "!git diff --name-only --diff-filter=U | tr '\\n' '\\0' | xargs -0 $VISUAL -c '/^\\(|||||||\\|=======\\|>>>>>>>\\|<<<<<<<\\)'" # Open merge conflicts in editor.
+  # Get commit this branch forked from.
+  mb  = "!git merge-base ${1:-main} ${2:-HEAD} ${@:2} #"
+  # Open merge conflicts in editor.
+  mc  = "!git diff --name-only --diff-filter=U | tr '\\n' '\\0' | xargs -0 $VISUAL -c '/^\\(|||||||\\|=======\\|>>>>>>>\\|<<<<<<<\\)'"
+  # Update branch from other commit (default upstream) as long as other commit has HEAD as an ancestor.
   mf  = "!git merge --ff-only $@ \
-         && git submodule update --recursive --init #" # Update branch from other commit (default upstream) as long as other commit has HEAD as an ancestor.
-  mfp = mf @{push} # Merge changes from the @{push} branch (useful when GitHub suggestions have been merged).
-  mt  = mergetool # Alternative to `g mc`, `:h vimdiff` in nvim for more info (try `:dif[fupdate]`, `]c`, `do`, `dp`).
+         && git submodule update --recursive --init #"
+  # Merge changes from the @{push} branch (useful when GitHub suggestions have been merged).
+  mfp = mf @{push}
+  # Alternative to `g mc`, `:h vimdiff` in nvim for more info (try `:dif[fupdate]`, `]c`, `do`, `dp`).
+  mt  = mergetool
 
   # Checkout next commit towards $1 (defaults to `main`). Opposite of `git checkout @~`. Skips "skipme" commits.
   next = "!git -c advice.detachedHead=false checkout $(git log --reverse --ancestry-path @^..${1:-main} --oneline | grep -v skipme | head -2 | tail -1 | cut -d ' ' -f 1)"
 
-  p   = push                                                              # Push commits to a remote.
-  pd  = "!git push -d ${1%%/*} ${1#*/} #"                                 # Delete a remote branch in the form remote/branch.
-  pda = "!for i in \"$@\"; do git pd $i; done #"                          # Delete multiple remote branches in the form remote/branch.
-  pf  = push --force-with-lease                                           # Better version of push -f.
-  pa  = "!curl -nL ${1%.patch}.patch | git am --whitespace=fix # "        # Patch Github PR.
-  pap = "!curl -nL ${1%.patch}.patch | git am -3 --whitespace=fix  # "    # Please patch it.
-  paw = "!curl -nL ${1%.patch}.patch | git am -3 --whitespace=warn # "    # Patch but don't fix whitespace.
-  ppr = "!git check-pr-branch && git push && git pr --markdown # "        # Push and raise PR at the same time.
-  pre = pr --edit                                                         # Update the PR description.
-  pro = pr --open --markdown                                              # Open the PR pointed to by the current branch.
-  prm = "!gh pr view --json=title,url,number \"${1:-$(pbpaste)}\" | jq -r '\":pr-open: [\\(.url | capture(\"^https://.*/(?<repo>[^/]+/[^/]+)/pull/[0-9]+$\") .repo)#\\(.number)](\\(.url)) \\(.title)\"' | tr -d '\n' | pbcopy #" # Get markdown for PR.
+  # Push commits to a remote.
+  p   = push
+  # Delete a remote branch in the form remote/branch.
+  pd  = "!git push -d ${1%%/*} ${1#*/} #"
+  # Delete multiple remote branches in the form remote/branch.
+  pda = "!for i in \"$@\"; do git pd $i; done #"
+  # Better version of push -f.
+  pf  = push --force-with-lease
+  # Patch Github PR.
+  pa  = "!curl -nL ${1%.patch}.patch | git am --whitespace=fix #"
+  # Please patch it.
+  pap = "!curl -nL ${1%.patch}.patch | git am -3 --whitespace=fix  #"
+  # Patch but don't fix whitespace.
+  paw = "!curl -nL ${1%.patch}.patch | git am -3 --whitespace=warn #"
+  # Push and raise PR at the same time.
+  ppr = "!git check-pr-branch && git push && git pr --markdown #"
+  # Update the PR description.
+  pre = pr --edit
+  # Open the PR pointed to by the current branch.
+  pro = pr --open --markdown
+  # Get markdown for PR.
+  prm = "!gh pr view --json=title,url,number \"${1:-$(pbpaste)}\" | jq -r '\":pr-open: [\\(.url | capture(\"^https://.*/(?<repo>[^/]+/[^/]+)/pull/[0-9]+$\") .repo)#\\(.number)](\\(.url)) \\(.title)\"' | tr -d '\n' | pbcopy #"
   # Push to PR branch, works with the `git-fp` script in this repo.
   ptp = "!set -x; branch=$(git branch --show-current); git push $(git config branch.${branch}.pushRemote) @:$(sed -E 's;^pull/[0-9]+/;;' <<<${branch}) $@ #"
-  pt  = "!git push -u $1 $(git head-branch) #"                            # g pt origin sets branch to track up + pushes.
+  # g pt origin sets branch to track up + pushes.
+  pt  = "!git push -u $1 $(git head-branch) #"
   pl  = pull
 
-  ra  = remote add                                           # Add new remote by url.
-  rb  = rebase                                               # Rebase
-  rba = rebase --abort                                       # Bail on the rebase session.
-  rbc = rebase --continue                                    # Accept the current commit.
-  rbs = rebase --skip                                        # Skip current commit you're rebasing on.
-  rhu = reset --hard @{u}                                    # Reset hard to the upstream commit.
-  rhp = reset --hard @{push}                                 # Reset hard to the push commit.
-  rh  = reset --hard                                         # Reset hard (to HEAD by default).
-  ri  = rebase -i --autosquash                               # Interactive rebase (defaults to upstream commit @{u}).
-  rip = rebase -i --autosquash @{push}                       # Interactive rebase on push branch.
-  rim = "!git rebase -i --autosquash $(git merge-base ${1:-main} ${2:-HEAD} ${@:2}) # " # Rebase all commits since you forked the branch.
-  ro  = "!open $(git remote get-url $(git default-remote)) # " # Open remote in browser.
-  rr  = remote rename                                        # Change name of remote `g rr origin up`.
-  rs = "!git remote set-url \"$@\" && git remote set-url --push \"$@\" #" # Set both push and fetch remotes.
-  rsf = remote set-url                                       # Change fetch URL of remote `g rs up hsg:dot`.
-  rsp = remote set-url --push                                # Change push URL of remote (`g rs up hhg:dot && g rsp up hsg:dot` to use https for fetch and ssh for push, which is faster).
-  rt  = restore                                              # Restore working tree from ref (git checkout was split into this).
-  rtp = restore -p                                           # Selectively undo some of the changes you made.
-  rth = "!git checkout $(git default-branch ${1:-up}) #"     # Checkout default branch for remote $1 (default: up).
-  rv  = remote -v                                            # Show remotes (with URLs).
+  # Add new remote by url.
+  ra  = remote add
+  # Rebase
+  rb  = rebase
+  # Bail on the rebase session.
+  rba = rebase --abort
+  # Accept the current commit.
+  rbc = rebase --continue
+  # Skip current commit you're rebasing on.
+  rbs = rebase --skip
+  # Reset hard to the upstream commit.
+  rhu = reset --hard @{u}
+  # Reset hard to the push commit.
+  rhp = reset --hard @{push}
+  # Reset hard (to HEAD by default).
+  rh  = reset --hard
+  # Interactive rebase (defaults to upstream commit @{u}).
+  ri  = rebase -i --autosquash
+  # Interactive rebase on push branch.
+  rip = rebase -i --autosquash @{push}
+  # Rebase all commits since you forked the branch.
+  rim = "!git rebase -i --autosquash $(git merge-base ${1:-main} ${2:-HEAD} ${@:2}) #"
+  # Open remote in browser.
+  ro  = "!open $(git remote get-url $(git default-remote)) #"
+  # Change name of remote `g rr origin up`.
+  rr  = remote rename
+  # Set both push and fetch remotes.
+  rs = "!git remote set-url \"$@\" && git remote set-url --push \"$@\" #"
+  # Change fetch URL of remote `g rs up hsg:dot`.
+  rsf = remote set-url
+  # Change push URL of remote (`g rs up hhg:dot && g rsp up hsg:dot` to use https for fetch and ssh for push, which is faster).
+  rsp = remote set-url --push
+  # Restore working tree from ref (git checkout was split into this).
+  rt  = restore
+  # Selectively undo some of the changes you made.
+  rtp = restore -p
+  # Checkout default branch for remote $1 (default: up).
+  rth = "!git checkout $(git default-branch ${1:-up}) #"
+  # Show remotes (with URLs).
+  rv  = remote -v
 
-  s   = "!git status && git push-status #" # Status including diff from @{push}.
+  # Status including diff from @{push}.
+  s   = "!git status && git push-status #"
   ss  = status --short --branch
   sh  = show
-  she = "!git show --pretty="" --name-only $@ | tr '\\n' '\\0' | xargs -0 $VISUAL #" # Open files changed in last commit in editor.
-  shde = "!{ git show --pretty="" --name-only; git diff HEAD --name-only; } | sort | uniq | tr '\\n' '\\0' | xargs -0 $VISUAL #" # Combines `g de` and `g she` files in editor.
-  shn = show --pretty="" --name-only # Show names of files changed only.
+  # Open files changed in last commit in editor.
+  she = "!git show --pretty="" --name-only $@ | tr '\\n' '\\0' | xargs -0 $VISUAL #"
+  # Combines `g de` and `g she` files in editor.
+  shde = "!{ git show --pretty="" --name-only; git diff HEAD --name-only; } | sort | uniq | tr '\\n' '\\0' | xargs -0 $VISUAL #"
+  # Show names of files changed only.
+  shn = show --pretty="" --name-only
   # Interactively show files in $@, one line per file.
   shi = "!git show --color=always --stat=1000 --format=\"\" \"${@:-@}\" \
     | fzf --ansi -m --no-sort --reverse --tiebreak=index \
     --preview \"git show ${@:-@} -- \\$(sed -E -e 's/^\\s*([^\\|]*)\\s*\\|.*/\\1/' -e 's/(.*)\\{(.*) => (.*)\\}(.*)/\\1\\2\\4 \\1\\3\\4/' <<< {}) | delta \" \
     | awk '{print $1}' #"
   st  = stash
-  sta = stash --include-untracked # Like `add -A` but with stash.
+  # Like `add -A` but with stash.
+  sta = stash --include-untracked
   # Interactive log of $@.
   sti = "!git stash list --color=always \"$@\" \
     | fzf --ansi -m --no-sort --reverse --tiebreak=index \
@@ -199,12 +304,16 @@
   stp = stash pop
   std = stash drop
 
-  sm   = submodule                             # For when you get bored of typing the word "submodule"
-  sme  = submodule foreach                     # Run a command in all submodules, e.g. `g sme git status`, can be used recursively.
+  # For when you get bored of typing the word "submodule"
+  sm   = submodule
+  # Run a command in all submodules, e.g. `g sme git status`, can be used recursively.
+  sme  = submodule foreach
   # `g smh`: Like git rhh (above), but resets every submodule to upstream commit. Hopefully someone will upstream an easier way at some point.
   smh  = "! git submodule foreach --quiet --recursive 'git reset --quiet --hard && git clean --quiet -fdx' && git submodule sync --quiet --recursive && git submodule update --quiet --init --recursive"
-  smi  = submodule update --init --recursive   # Update to main repo upstream branch's submodule versions (make submodules match parent's HEADs).
-  smu  = submodule update --remote             # Update submodules to submodule repos latest versions (make submodules match submodule upstream HEADs).
+  # Update to main repo upstream branch's submodule versions (make submodules match parent's HEADs).
+  smi  = submodule update --init --recursive
+  # Update submodules to submodule repos latest versions (make submodules match submodule upstream HEADs).
+  smu  = submodule update --remote
 
   # Interactively unsubscribe to repos you don't want to follow (faster version of https://github.com/watching).
   # e.g. GH_HOST=github.mycorp.com git unsubscribe
@@ -226,10 +335,12 @@
   za  = "!git la --color=always $* | grep -v '^\\.\\.\\.\\s\\+$' | fzf +s -m --ansi | sed 's/^\\W\\+\\(\\w\\+\\)\\s\\+.*/\\1/' #"
 
 [apply]
-  whitespace = fix # Fix whitespace when applying patches.
+  # Fix whitespace when applying patches.
+  whitespace = fix
 
 [branch]
-  sort = -committerdate # Sort branches by date they were last committed to.
+  # Sort branches by date they were last committed to.
+  sort = -committerdate
 
 [clone]
   defaultRemoteName = "up"
@@ -240,36 +351,54 @@
 
 # Change the colours for `git branch`.
 [color "branch"]
-  current = 33      # The branch you're currently on.
-  local = normal    # Other normal branches.
-  remote = 180      # Local-tracking branches for your remotes.
-  upstream = 214 ul # No idea what this is (make it orange to find out).
-  plain = normal ul # No idea what this is (underline it to find out).
+  # The branch you're currently on.
+  current = 33
+  # Other normal branches.
+  local = normal
+  # Local-tracking branches for your remotes.
+  remote = 180
+  # No idea what this is (make it orange to find out).
+  upstream = 214 ul
+  # No idea what this is (underline it to find out).
+  plain = normal ul
 
 # Change colours for `git status`.
 [color "status"]
-  localBranch = 27  # Only used in status --short.
-  remoteBranch = 27 # Only used in status --short.
-  nobranch = red    # IDK when this is used.
-  header = 8        # Standard git waffle.
-  branch = 27       # Current branch.
-  added = 35        # Files added to index (ready to commit).
-  changed = 172     # Files not added, but tracked by git.
-  untracked = 197   # Files git knows nothing about.
-  unmerged = 196    # Files that have conflicts in git rebase.
+  # Only used in status --short.
+  localBranch = 27
+  # Only used in status --short.
+  remoteBranch = 27
+  # IDK when this is used.
+  nobranch = red
+  # Standard git waffle.
+  header = 8
+  # Current branch.
+  branch = 27
+  # Files added to index (ready to commit).
+  added = 35
+  # Files not added, but tracked by git.
+  changed = 172
+  # Files git knows nothing about.
+  untracked = 197
+  # Files that have conflicts in git rebase.
+  unmerged = 196
 
 [commit]
-  gpgsign = true # Always sign commits, available since Git 2.0.
+  # Always sign commits, available since Git 2.0.
+  gpgsign = true
   # Use the >8 marker to delimit commit endings.
   # Means '#' lines before the scissors will be included in your commit message.
   cleanup = "scissors"
 
 [core]
-  pager = delta # Uses the theme from the BAT_THEME env var.
+  # Uses the theme from the BAT_THEME env var.
+  pager = delta
   # To use git lfs with this, see `lfs-install` in this file.
-  hooksPath = "~/.config/git/hooks" # Put global git hooks here.
+  # Put global git hooks here.
+  hooksPath = "~/.config/git/hooks"
   # Below is disabled because it doesn't seem to work properly.
-  # commentChar = auto # Allow editing commits that didn't use '#' as the comment character.
+  # Allow editing commits that didn't use '#' as the comment character.
+  # commentChar = auto
 
 [credential]
   helper =
@@ -277,16 +406,24 @@
 
 # To use the macOS keychain for a non-github git instance:
 # [credential "https://github.com"]
-#  helper = osxkeychain   # Store Git credentials in the macOS keychain.
+# Store Git credentials in the macOS keychain.
+#  helper = osxkeychain
 
 [diff]
-  algorithm = histogram  # Better diffing algorithm.
-  colorMoved = zebra     # Highlight moved lines as oldMoved -> newMoved.
-  mnemonicPrefix = true  # Use better letters than a/ and b/ in diffs, e.g. (i)ndex, (w)ork tree, (c)ommit, (o)bject
-  renames = copies       # Copies count as renames.
-  submodule = log        # Show information about submodules in diffs and logs.
-  tool = nvimdiff        # Use nvim vimdiff to view diffs (`git difftool`).
-  wsErrorHighlight = all # diff and show show whitespace errors.
+  # Better diffing algorithm.
+  algorithm = histogram
+  # Highlight moved lines as oldMoved -> newMoved.
+  colorMoved = zebra
+  # Use better letters than a/ and b/ in diffs, e.g. (i)ndex, (w)ork tree, (c)ommit, (o)bject
+  mnemonicPrefix = true
+  # Copies count as renames.
+  renames = copies
+  # Show information about submodules in diffs and logs.
+  submodule = log
+  # Use nvim vimdiff to view diffs (`git difftool`).
+  tool = nvimdiff
+  # diff and show show whitespace errors.
+  wsErrorHighlight = all
 
 # Allows you to use tools to generate readable diffs for binary formats.
 # These are just for humans to read, and shouldn't be used to send diffs for others to apply.
@@ -297,95 +434,130 @@
 #   textconv = wasm2wat --enable-all --generate-names # Use wasm2wat to generate readable wasm diffs.
 
 [diff "plist"]
-  textconv = plutil -p # Use plutil to generate readable plist diffs.
+  # Use plutil to generate readable plist diffs.
+  textconv = plutil -p
 [diff "jq"]
-  textconv = jq . # Use plutil to generate readable plist diffs.
+  # Use plutil to generate readable plist diffs.
+  textconv = jq .
 
 [fetch]
-  all = true               # `git fetch` by itself does `git fetch --all`
+  # `git fetch` by itself does `git fetch --all`
+  all = true
   fsckObjects = true
-  prune = true             # Delete local tracking branches if remote is gone.
-  pruneTags = false        # Don't delete local tags if remote is gone (doesn't work with multiple remotes).
-  writeCommitGraph = true  # Cache commit graph to speed up graph log / push operations on fetch.
+  # Delete local tracking branches if remote is gone.
+  prune = true
+  # Don't delete local tags if remote is gone (doesn't work with multiple remotes).
+  pruneTags = false
+  # Cache commit graph to speed up graph log / push operations on fetch.
+  writeCommitGraph = true
 
 [format]
-  pretty = fuller          # Shows author and committer.
+  # Shows author and committer.
+  pretty = fuller
 
 [help]
-  autocorrect = prompt     # Prompt to autocorrect nonexistent commands after 0.1s.
+  # Prompt to autocorrect nonexistent commands after 0.1s.
+  autocorrect = prompt
 
 [init]
-  defaultBranch = main     # Use 'main' as the default branch when you `git init`.
+  # Use 'main' as the default branch when you `git init`.
+  defaultBranch = main
 
 [interactive]
-  singleKey = true         # Don't require Enter to confirm, e.g. for `git add -p` press y not y⏎.
+  # Don't require Enter to confirm, e.g. for `git add -p` press y not y⏎.
+  singleKey = true
 
 [log]
-  follow = true            # Log tracks file move/rename.
-  date = iso               # Display dates as ISO-8601 (`2023-05-25 13:54:51` instead of `Thu May 25 13:54:51 2023`)
+  # Log tracks file move/rename.
+  follow = true
+  # Display dates as ISO-8601 (`2023-05-25 13:54:51` instead of `Thu May 25 13:54:51 2023`)
+  date = iso
 
 [merge]
-  conflictstyle = zdiff3   # Show common ancestor in diffs (initially confusing, but very helpful).
-  tool = nvimdiff          # Use nvimdiff (see `git help difftool`) to view and fix merge conflicts (instead of `g mc`).
+  # Show common ancestor in diffs (initially confusing, but very helpful).
+  conflictstyle = zdiff3
+  # Use nvimdiff (see `git help difftool`) to view and fix merge conflicts (instead of `g mc`).
+  tool = nvimdiff
 
 [mergetool]
-  hideResolved = true      # Don't show merge conflicts that have already been resolved by git in the mergetool diff.
-  keepBackup = false       # Don't save original file with conflict markers with .orig extension.
-  prompt = false           # Don't confirm that I want to open the difftool every time.
-  writeToTemp = true       # Write temporary BASE, LOCAL, and REMOTE versions of conflicting files to tempdir not worktree.
+  # Don't show merge conflicts that have already been resolved by git in the mergetool diff.
+  hideResolved = true
+  # Don't save original file with conflict markers with .orig extension.
+  keepBackup = false
+  # Don't confirm that I want to open the difftool every time.
+  prompt = false
+  # Write temporary BASE, LOCAL, and REMOTE versions of conflicting files to tempdir not worktree.
+  writeToTemp = true
 
 [protocol]
-  version = 2              # https://github.blog/changelog/2018-11-08-git-protocol-v2-support/.
+  # https://github.blog/changelog/2018-11-08-git-protocol-v2-support/.
+  version = 2
 
 [pull]
-  rebase = true            # pull = fetch + rebase, not fetch + merge.
+  # pull = fetch + rebase, not fetch + merge.
+  rebase = true
 
 [push]
-  default = current        # Only push the branch I'm on (made less dangerous by remote.pushDefault).
+  # Only push the branch I'm on (made less dangerous by remote.pushDefault).
+  default = current
 
 [rebase]
-  autoSquash = true        # Squash/fixup commits starting with squash!/fixup! + commit subject.
-  autoStash = true         # Automatically stash changes before rebasing.
-  missingCommitsCheck = warn # Print a warning if a rebase removes commits.
-  updateRefs = true        # Allow rebasing a stack of branches at the same time.
+  # Squash/fixup commits starting with squash!/fixup! + commit subject.
+  autoSquash = true
+  # Automatically stash changes before rebasing.
+  autoStash = true
+  # Print a warning if a rebase removes commits.
+  missingCommitsCheck = warn
+  # Allow rebasing a stack of branches at the same time.
+  updateRefs = true
 
 [receive]
   fsckObjects = true
 
 [remote]
-  pushDefault = fork       # Push to the fork remote unless a pushRemote is specified. Prevents pushing to wrong branch by mistake.
+  # Push to the fork remote unless a pushRemote is specified. Prevents pushing to wrong branch by mistake.
+  pushDefault = fork
 
 [rerere]
-  autoUpdate = true        # Auto-apply the recorded updates to the index.
-  enabled = true           # Remember how I resolved the same merge conflict last time.
+  # Auto-apply the recorded updates to the index.
+  autoUpdate = true
+  # Remember how I resolved the same merge conflict last time.
+  enabled = true
 
 [submodule]
-  fetchJobs = 8            # Number of jobs to fetch when I submodule clone/update.
-  recurse = true           # Make everything except clone recurse into submodules.
+  # Number of jobs to fetch when I submodule clone/update.
+  fetchJobs = 8
+  # Make everything except clone recurse into submodules.
+  recurse = true
 
 [stash]
-  showPatch = true         # Show the actual diffs in `git stash show`.
+  # Show the actual diffs in `git stash show`.
+  showPatch = true
 
 [status]
-  showStash = true         # Show the number of commits in the stash in `git status` output.
+  # Show the number of commits in the stash in `git status` output.
+  showStash = true
   # Disabled because it means you can't copy paths and use them when not in repo root.
   # relativePaths = true     # Always show relative paths from the repo root.
-  submoduleSummary = true  # Show submodule status in `git status`.
+  # Show submodule status in `git status`.
+  submoduleSummary = true
 
 [tag]
-  sort = "version:refname" # Sort tags by version not just alphabetically.
+  # Sort tags by version not just alphabetically.
+  sort = "version:refname"
 
 [transfer]
   fsckObjects = true
 
 # Personal config for non-work repos.
 [include]
-  path = ~/.config/git/my-config
   path = ~/.config/git/maintenance.config
+  path = ~/.config/git/my-config
 
 # Work config for work repos.
 [includeIf "gitdir:~/*apple*/**"]
   path = ~/.config/git/wrk-config
 
+# Default to work config for repos with a work remote.
 [includeIf "hasconfig:remote.*.url:**/*apple.com/**"]
   path = ~/.config/git/wrk-config
