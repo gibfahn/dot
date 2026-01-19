@@ -378,34 +378,6 @@
 [transfer]
   fsckObjects = true
 
-# Try `g cl hh:nodejs/node`.
-[url "https://bitbucket.org/"]
-  insteadOf = bb:
-
-[url "https://github.com/"]
-  insteadOf = hh:                 # Hub https.
-  # Enable this to use HTTPS instead of SSH.
-  # insteadOf = git@github.com:
-  # insteadOf = ssh://git@github.com/
-[url "git@github.com:"]
-  insteadOf = hs:                 # Hub ssh.
-[url "https://github.com/gibfahn/"]
-  insteadOf = hhg:                # Hub https gibfahn.
-[url "git@github.com:gibfahn/"]
-  insteadOf = hsg:                # Hub ssh gibfahn.
-
-[url "https://gist.github.com/"]
-  insteadOf = gist:
-
-[url "https://gitlab.com/"]
-  insteadOf = lh:                 # Lab https.
-[url "git@gitlab.com:"]
-  insteadOf = ls:                 # Lab ssh.
-[url "https://gitlab.com/gib/"]
-  insteadOf = lhg:                # Lab https gib.
-[url "git@gitlab.com:gib/"]
-  insteadOf = lsg:                # Lab ssh gib.
-
 # Personal config for non-work repos.
 [include]
   path = ~/.config/git/my-config
