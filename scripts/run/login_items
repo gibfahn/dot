@@ -18,6 +18,10 @@ done
 declare -p current_login_items wanted_login_items
 
 for item in "${wanted_login_items[@]}"; do
+  if [[ ! -e $item ]]; then
+    echo "Not adding missing login item $item" >&2
+    continue
+  fi
   if ! (( ${current_login_items[(I)$item]} )); then
     changed=true
     echo "Adding login item $item" >&2
