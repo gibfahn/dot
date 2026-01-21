@@ -448,6 +448,9 @@
   pruneTags = false
   # Cache commit graph to speed up graph log / push operations on fetch.
   writeCommitGraph = true
+  # Max number of fetch operations to be run in parallel at a time (submodules, or remotes when the --multiple option of git-fetch(1) is in effect).
+  # A value of 0 will give some reasonable default. If unset, it defaults to 1.
+  parallel = 0
 
 [format]
   # Shows author and committer.
