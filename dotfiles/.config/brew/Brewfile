@@ -34,7 +34,7 @@ brew "pinentry-mac"                      # Gpg password Keychain integration.
 brew "python"                            # Python 3
 brew "ripgrep"                           # Super-fast version of grep.
 brew "tree"                              # Recursive ls.
-brew "volta"                             # Node version manager.
+brew "mise"                              # Version manager.
 brew "watchexec"                         # Run commands when files change.
 brew "zoxide"                            # Z (for changing directory) but in Rust.
 brew "zsh"                               # Nicer interactive shell.

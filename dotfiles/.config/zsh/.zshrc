@@ -68,7 +68,7 @@ path=(
 
   # Overrides the version in ${brew_prefix}/bin.
   ${CARGO_HOME:+$CARGO_HOME/bin} # Rust packages.
-  ${VOLTA_HOME:+$VOLTA_HOME/bin} # Node.js and packages.
+  $HOME/.local/share/mise/shims # Mise shims
 
   ${XDG_DATA_HOME}/bob/nvim-bin # Bob nvim manager nvim directory, comes before brew.
 
