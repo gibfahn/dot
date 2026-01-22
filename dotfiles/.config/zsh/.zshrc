@@ -49,6 +49,7 @@ export GOPATH="$HOME/code/go"
 # Where brew is on the system if it's installed.
 # Script expects brew to be already in the path, e.g. by adding to /etc/paths.d with:
 #   echo "$(brew --prefix)/bin" | sudo tee /etc/paths.d/10-brew
+# Note: `$brew_prefix` is used later in deferred.zsh
 brew_prefix=${commands[brew]:+${commands[brew]:h:h}}
 # In case we're bootstrapping or didn't set this up, default to the standard AS location.
 if [[ -z ${brew_prefix:-} && -d /opt/homebrew/bin ]]; then
