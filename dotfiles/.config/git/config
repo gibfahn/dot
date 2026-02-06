@@ -220,12 +220,14 @@
   paw = "!curl -nL ${1%.patch}.patch | git am -3 --whitespace=warn #"
   # Push and raise PR at the same time.
   ppr = "!git check-pr-branch && git push && git pr --markdown #"
+  # Copy markdown for PR.
+  prc = "!gh pr view --json=title,url,number \"${1:-$(pbpaste)}\" | jq -r '\":pr-open: [\\(.url | capture(\"^https://.*/(?<repo>[^/]+/[^/]+)/pull/[0-9]+$\") .repo)#\\(.number)](\\(.url)) \\(.title)\"' | tr -d '\n' | pbcopy #"
   # Update the PR description.
   pre = pr --edit
+  # Set PR to auto-merge and delete local branch.
+  prm = "!gh pr merge --auto --delete-branch #"
   # Open the PR pointed to by the current branch.
   pro = pr --open --markdown
-  # Get markdown for PR.
-  prm = "!gh pr view --json=title,url,number \"${1:-$(pbpaste)}\" | jq -r '\":pr-open: [\\(.url | capture(\"^https://.*/(?<repo>[^/]+/[^/]+)/pull/[0-9]+$\") .repo)#\\(.number)](\\(.url)) \\(.title)\"' | tr -d '\n' | pbcopy #"
   # Push to PR branch, works with the `git-fp` script in this repo.
   ptp = "!set -x; branch=$(git branch --show-current); git push $(git config branch.${branch}.pushRemote) @:$(sed -E 's;^pull/[0-9]+/;;' <<<${branch}) $@ #"
   # g pt origin sets branch to track up + pushes.
