@@ -7,6 +7,11 @@ set -euxo pipefail
 [[ $USER == gib ]] || exit "$UP_EXIT_CODE_SKIPPED" # User is gib or we don't run.
 
 main() {
+  if [[ $(hostname) == Gib-Studio-* ]]; then
+    echo "Not replacing hosts on desktop."
+    exit $UP_EXIT_CODE_SKIPPED
+  fi
+
   hosts=(
     # Block YouTube
     # https://apple.stackexchange.com/questions/373190/block-youtube-on-safari-in-hosts-file
