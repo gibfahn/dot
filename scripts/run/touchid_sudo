@@ -93,6 +93,7 @@ session    required       pam_permit.so"
   if [[ "$current" == "$old_unchanged" ]]; then
     # Insert `auth       sufficient     pam_tid.so` on line 3 of /etc/pam.d/sudo
     sudo tee /etc/pam.d/sudo <<<"${old_fixed}" >/dev/null
+    exit 0
   fi
 }
 
