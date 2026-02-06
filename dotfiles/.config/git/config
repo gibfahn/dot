@@ -434,8 +434,8 @@
 [diff "plist"]
   # Use plutil to generate readable plist diffs.
   textconv = plutil -p
-[diff "jq"]
-  # Use plutil to generate readable plist diffs.
+[diff "json"]
+  # Use jq to generate readable json diffs.
   textconv = jq .
 
 [fetch]
