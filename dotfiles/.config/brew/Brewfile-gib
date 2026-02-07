@@ -67,7 +67,7 @@ brew "gibfahn/tap/up"                    # Handles updating everything (installe
 # cask "microsoft-teams"                   # Microsoft Teams
 # cask "onedrive"                          # Microsoft OneDrive.
 # cask "zoom"                              # Zoom web meetings client.
-cask "arc"                               # Nicer browser.
+# cask "arc"                               # Nicer browser.
 cask "chrysalis"                         # Used to flash my KeyboardIO Model 01.
 cask "daisydisk"                         # See what's using disk space and easily clean it up.
 cask "ghostty"                           # Backup terminal for when I have issues with kitty.
