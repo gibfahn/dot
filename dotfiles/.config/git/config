@@ -224,7 +224,7 @@
   # Update the PR description.
   pre = pr --edit
   # Set PR to auto-merge and delete local branch.
-  prm = "!gh pr merge --auto --delete-branch #"
+  prm = "!gh pr merge --auto --delete-branch"
   # Open the PR pointed to by the current branch.
   pro = pr --open --markdown
   # Push to PR branch, works with the `git-fp` script in this repo.
