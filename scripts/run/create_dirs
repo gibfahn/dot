@@ -1,0 +1,15 @@
+#!/usr/bin/env zsh
+
+set -eux
+
+set -eux
+
+dirs=(
+  ~/.ssh                      # SSH configs
+  ~/tmp/nuke                  # Stuff that can be immediately deleted.
+  ~/tmp/screen_shot_recording # Set as default location for these files
+)
+
+for dir in ${dirs[@]}; do
+  mkdir -p $dir
+done

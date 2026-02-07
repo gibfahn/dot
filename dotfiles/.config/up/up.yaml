@@ -5,6 +5,7 @@ bootstrap_tasks:
   - mac_volume # Should come before linking.
   - link_dotfiles
   - link_wrk_dotfiles
+  - create_dirs
   - computer_name
   - touchid_sudo
   - install_rosetta

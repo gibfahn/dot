@@ -1,0 +1,18 @@
+#!/usr/bin/env zsh
+
+# Run if any of these directories don't exist.
+
+set -eux
+
+dirs=(
+  ~/.ssh
+  ~/tmp/nuke
+  ~/tmp/screen_shot_recording
+)
+
+for dir in ${dirs}; do
+  [[ -d $dir ]] || exit 0
+done
+
+# Skip.
+exit 204
