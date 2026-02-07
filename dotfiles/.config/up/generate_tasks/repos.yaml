@@ -10,4 +10,4 @@ data:
       ]
     excludes: ["apple"]
     prune: true
-    remote_order: ["up", "fork"]
+    remote_order: ["origin", "fork"]

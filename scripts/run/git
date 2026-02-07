@@ -18,7 +18,11 @@ if [[ ! -f $config_file ]]; then
 fi
 
 # Run commands that act on each repo.
-"${dot_dir}"/dotfiles/bin/git-each "${dot_dir}"/scripts/run/git-each-repo
+GIT_EACH_DIRS="$HOME/wrk
+$HOME/code
+${XDG_DATA_HOME}/zsh/plugins
+${XDG_DATA_HOME}/hammerspoon
+" "${dot_dir}"/dotfiles/bin/git-each "${dot_dir}"/scripts/run/git-each-repo
 
 # Delete repos that are no longer present.
 for repo in $(awk '$1 == "repo" { print $3 }' "$config_file"); do

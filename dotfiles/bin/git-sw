@@ -20,7 +20,7 @@ ENVIRONMENT VARIABLES:
 
 REMOTE_PRIMARY_NAME:
     Name of the default remote. Usually the upstream remote vs a forked remote.
-    Default: up (or origin if up is not present)
+    Default: origin
 
 REMOTE_FORK_NAME:
     Name of the forked remote (fork of the primary remote). Also applied as a prefix to
@@ -39,16 +39,7 @@ main() {
     return
   fi
 
-  if [[ -z ${REMOTE_PRIMARY_NAME:-} ]]; then
-    for possible_remote in up origin; do
-      if git remote | grep -qx $possible_remote; then
-        REMOTE_PRIMARY_NAME=$possible_remote
-        break
-      fi
-      # Default to up if neither was present.
-      REMOTE_PRIMARY_NAME=up
-    done
-  fi
+  REMOTE_PRIMARY_NAME=${REMOTE_PRIMARY_NAME:-origin}
 
   # The last argument that doesn't start with `-`
   git_branch_arg=""
@@ -104,7 +95,7 @@ main() {
 
 }
 
-# Works out the up remote for the specified fork remote. I use `fork` for the fork of `up`,
+# Works out the upstream remote for the specified fork remote. I use `fork` for the fork of `origin`,
 # otherwise I append `fork`, e.g. `pub` -> `pubfork`.
 up_remote_for_fork() {
   if [[ $1 == $REMOTE_FORK_NAME ]]; then
@@ -114,7 +105,7 @@ up_remote_for_fork() {
   fi
 }
 
-# Default branch for remote. `default_branch up` -> up/main
+# Default branch for remote. `default_branch origin` -> origin/main
 default_remote_branch() {
   git symbolic-ref --short refs/remotes/$1/HEAD || { git remote set-head --auto $1 && git symbolic-ref --short refs/remotes/$1/HEAD; }
 }

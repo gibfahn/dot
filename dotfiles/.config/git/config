@@ -18,10 +18,8 @@
   check-pr-branch = "! [[ $(git head-branch) != $(git up-branch) ]] || { printf \"\\033[0;31m  ERROR\\033[0m: Create a new branch before raising PR.\\n\" >&2 && exit 1; } #"
   # Show $1 most changed files.
   code-changes = "!git log --format=format: --name-only | egrep -v '^$' | sort | uniq -c | sort -rg | head -${1:-10} #"
-  # Default branch for remote. `g default-branch up` -> main
+  # Default branch for remote. `g default-branch origin` -> main
   default-branch = "!(git symbolic-ref --short refs/remotes/$1/HEAD || { git remote set-head --auto $1 && git symbolic-ref --short refs/remotes/$1/HEAD; }) | sed \"s|^$1/||\" #"
-  # I use up, but automation like brew often uses origin.
-  default-remote = "! git remote | grep -x up || git remote | grep -x origin #"
   # e.g. main.
   head-branch = symbolic-ref --short HEAD
   # e.g. origin/main.
@@ -40,7 +38,7 @@
   # Quote an alias you want to save here (quotes \ and ", and wraps in "! #" to handle args).
   quote-string = "!read -r l; sed -E -e 's/([\\\"])/\\\\\\1/g' -e 's/(.*)/\"!\\1 #\"/' <<<\"$l\" #"
   # Reset the default branch for a remote.
-  update-default-branch = "!git remote set-head --auto ${1:-up} && git symbolic-ref --short refs/remotes/${1:-up}/HEAD;  #"
+  update-default-branch = "!git remote set-head --auto ${1:-origin} && git symbolic-ref --short refs/remotes/${1:-origin}/HEAD;  #"
 
   # Add files to index.
   a   = add
@@ -64,7 +62,7 @@
   # Delete branch.
   bd  = branch -D
   # Delete current branch.
-  bdd = "!lastBranch=$(git head-branch); git checkout - && [[ $(git head-branch) != $lastBranch ]] || git checkout $(git default-branch $(git default-remote)); git branch -D $lastBranch #"
+  bdd = "!lastBranch=$(git head-branch); git checkout - && [[ $(git head-branch) != $lastBranch ]] || git checkout $(git default-branch origin); git branch -D $lastBranch #"
   bg  = bisect good
   # Sorted list of branches.
   # TODO(gib): Fix this to make it look nice (can also use git branch directly).
@@ -79,9 +77,10 @@
   bss = bisect start
   # git bsr <good> <bad> <cmd args...>
   bsr = "!set -x; good=${1?} bad=${2?} && git bisect reset && git bisect start --first-parent $bad $good && shift 2 && git bisect run \"$@\" #"
-  # g btu remote/branch (defaults to up/HEAD).
-  btu = "!git branch -u ${1:-up/$(git default-branch up)} #"
-  # `g btp up` sets push remote for this branch to up, useful when pushing directly to 'up'.
+  # g btu remote/branch (defaults to origin/HEAD).
+  btu = "!git branch -u ${1:-origin/$(git default-branch origin)} #"
+  # `g btp origin` sets push remote for this branch to origin, useful when pushing directly to
+  # 'origin'.
   btp = "!git config branch.$(git head-branch).pushRemote ${1:-fork} #"
   # Set push remote for all future branches in this repo. Use this when you have a repo you don't
   # want to fork.
@@ -230,7 +229,7 @@
   pro = pr --open --markdown
   # Push to PR branch, works with the `git-fp` script in this repo.
   ptp = "!set -x; branch=$(git branch --show-current); git push $(git config branch.${branch}.pushRemote) @:$(sed -E 's;^pull/[0-9]+/;;' <<<${branch}) $@ #"
-  # g pt origin sets branch to track up + pushes.
+  # g pt origin sets branch to track upstream + pushes.
   pt  = "!git push -u $1 $(git head-branch) #"
   pl  = pull
 
@@ -257,21 +256,21 @@
   # Rebase all commits since you forked the branch.
   rim = "!git rebase -i --autosquash $(git merge-base ${1:-main} ${2:-HEAD} ${@:2}) #"
   # Open remote in browser.
-  ro  = "!open $(git remote get-url $(git default-remote)) #"
-  # Change name of remote `g rr origin up`.
+  ro  = "!open $(git remote get-url origin) #"
+  # Change name of remote `g rr origin origin`.
   rr  = remote rename
   # Set both push and fetch remotes.
   rs = "!git remote set-url \"$@\" && git remote set-url --push \"$@\" #"
-  # Change fetch URL of remote `g rs up hsg:dot`.
+  # Change fetch URL of remote `g rs origin hsg:dot`.
   rsf = remote set-url
-  # Change push URL of remote (`g rs up hhg:dot && g rsp up hsg:dot` to use https for fetch and ssh for push, which is faster).
+  # Change push URL of remote (`g rs origin hhg:dot && g rsp origin hsg:dot` to use https for fetch and ssh for push, which is faster).
   rsp = remote set-url --push
   # Restore working tree from ref (git checkout was split into this).
   rt  = restore
   # Selectively undo some of the changes you made.
   rtp = restore -p
-  # Checkout default branch for remote $1 (default: up).
-  rth = "!git checkout $(git default-branch ${1:-up}) #"
+  # Checkout default branch for remote $1 (default: origin).
+  rth = "!git checkout $(git default-branch ${1:-origin}) #"
   # Show remotes (with URLs).
   rv  = remote -v
 
@@ -342,8 +341,9 @@
   # Sort branches by date they were last committed to.
   sort = -committerdate
 
-[clone]
-  defaultRemoteName = "up"
+# # Set this to change the default remote name on `git clone`
+# [clone]
+#   defaultRemoteName = "up"
 
 # Color options: normal, black, red, green, yellow, blue, magenta, cyan, or white (or 0-255).
 # Highlight options: bold, dim, ul (underline), blink, and reverse (swap fg and bg).

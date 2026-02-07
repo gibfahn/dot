@@ -51,8 +51,8 @@ while [[ $# != 0 ]]; do
 done
 
 main() {
-  up_ref=$(branch_ref "@{upstream}") # e.g. up/main
-  up_remote=${up_ref%%/*} # e.g. up
+  up_ref=$(branch_ref "@{upstream}") # e.g. origin/main
+  up_remote=${up_ref%%/*} # e.g. origin
   up_branch=${up_ref#*/} # e.g. main
   up_org=$(remote_org $up_remote)
   up_repo=$(remote_repo $up_remote)
@@ -67,7 +67,7 @@ $scissors
 
 "
 
-  # TODO: stop setting this once `gh` gains decent up/push branch recognition.
+  # TODO: stop setting this once `gh` gains decent upstream/push branch recognition.
   export GH_REPO=$(remote_url "$up_remote")
   export GH_HOST=$(remote_host "$up_remote")
 
@@ -190,12 +190,12 @@ remote_host() {
   git remote get-url ${1:?} | sed -e 's/^git@//' -e 's|https://||' -e 's/:.*//' -e 's|/.*||'
 }
 
-# Github org for remote. `remote_org up` -> gibfahn.
+# Github org for remote. `remote_org origin` -> gibfahn.
 remote_org() {
   git remote get-url $1 | awk -F ':|/' '{if ($NF) {print $(NF-1)} else {print $(NF-2)}}'
 }
 
-# Github repo for remote. `remote_repo up` -> dot.
+# Github repo for remote. `remote_repo origin` -> dot.
 remote_repo() {
   git remote get-url $1 | sed -e 's|/$||' -e 's|.*/||' -e 's/.git$//'
 }

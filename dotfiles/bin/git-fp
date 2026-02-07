@@ -25,7 +25,7 @@ If the PR author hasn't checked the 'maintainers can modify PR' checkbox, then t
 
 OPTIONS:
 
---remote: name of the remote fetch the PR for, default 'up'
+--remote: name of the remote fetch the PR for, defaults to the git @{upstream} remote for the current branch.
 
 "
 }
@@ -96,7 +96,7 @@ checkout_pr() {
   # Convert a URL like 'https://github.com/org/repo/pull/485/files' into '485'
   pr_number=$(sed -E 's;.*/([0-9]+)/?(files)?$;\1;' <<<$pr_number)
 
-  # TODO: stop setting this once `gh` gains decent up/push branch recognition.
+  # TODO: stop setting this once `gh` gains decent upstream/push branch recognition.
   export GH_REPO=$(remote_url "$up_remote")
   export GH_HOST=$(remote_host "$up_remote")
 

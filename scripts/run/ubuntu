@@ -138,9 +138,9 @@ if [[ $USER == gib && ! -d "$XKB".git ]]; then # Set up xkb key remapping.
     exit 1
   }
   git init
-  git remote add up https://github.com/gibfahn/xkb.git
+  git remote add origin https://github.com/gibfahn/xkb.git
   git fetch --all
-  git reset up/master
+  git reset origin/master
   if [ "$(git status --porcelain)" ]; then
     echo "ERROR: $XKB didn't match git version, resolve manually!"
     echo 'Fix conflicts then do: `git checkout gibLayout; sudo dpkg-reconfigure xkb-data`'

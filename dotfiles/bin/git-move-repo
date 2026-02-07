@@ -13,7 +13,7 @@ Takes a list of repo paths, and moves each of them to the proper location.
 
 OPTIONS:
 
---remote: name of the remote to fork, default 'up', or 'origin' if 'up' is not present.
+--remote: name of the remote to fork, default origin.
 
 --root: name of the root directory to move the repo under, default '$HOME/code'
 "

@@ -19,7 +19,7 @@ OPTIONS:
 
 --repo: read the remote from the provided repo path.
 
---remote: name of the remote to parse the URL for, default 'up', or 'origin' if 'up' is not present. Only used if --path is passed.
+--remote: name of the remote to parse the URL for, default 'origin'. Only used if --path is passed.
 
 --segment: set the segment to one of: host, org, repo, org-repo, host-org-repo, url
 "
@@ -80,7 +80,7 @@ main() {
 
   if [[ -z ${url:-} ]]; then
     cd $repo_path
-    remote=${remote:-$(default_remote)}
+    remote=${remote:-origin}
     url=$(remote_url $remote)
     cd -
   fi
@@ -136,20 +136,6 @@ remote_org() {
 # Github repo for remote.
 remote_repo() {
   echo $1 | sed -e 's|/$||' -e 's|.*/||' -e 's/.git$//'
-}
-
-# Get the default "main" remote for a repo. I use `up` where possible, else `origin`.
-default_remote() {
-  for possible_remote in up origin; do
-    if git remote | grep -qx $possible_remote; then
-      remote=$possible_remote
-      break
-    fi
-    # Default to up if neither was present.
-    remote=up
-  done
-
-  echo $remote
 }
 
 # Usage: exit message [rc]

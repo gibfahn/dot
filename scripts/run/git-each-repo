@@ -22,6 +22,15 @@ main() {
     fi
   fi
 
+  # Rename any legacy `up` remotes to `origin`
+  if git remote | grep -qx up; then
+    if git remote | grep -qx origin; then
+      error "Can't rename up remote -> origin as origin also exists!"
+    fi
+    echo "Changed remote up -> origin"
+    git remote rename up origin
+  fi
+
   # Sync the remote branch of any fork repo to the upstream.
   # This prevents git pushes to your fork taking a long time if much git history has been pushed since
   # you last pushed fork/forkmain.
@@ -36,10 +45,10 @@ main() {
     fi
   done
 
-  # Set a default repo if there's an obvious one present. I use `up` as my default upstream repo name,
+  # Set a default repo if there's an obvious one present. I use `origin` as my default upstream repo name,
   # so if it exists it's a good option. We only want to do this for github repos though.
   # stdout is empty for `gh repo set-default --view` when a default hasn't been set.
-  if [[ $(git remote get-url up) == *github* ]]; then
+  if [[ $(git remote get-url origin) == *github* ]]; then
     update_if_repo_url_changed
     if [[ -z $(gh repo set-default --view 2>/dev/null) ]]; then
       set_gh_default_repo
@@ -67,25 +76,25 @@ main() {
 # This needs to be done before `gh repo set-default`, as that errors if the provided URL doesn't
 # match the renamed URL.
 update_if_repo_url_changed() {
-  current_up_url=$(git remote get-url up)
-  new_up_url=$(GH_HOST=$(git parse-url --quiet --segment host) gh repo view --json url --jq .url "$current_up_url")
+  current_origin_url=$(git remote get-url origin)
+  new_origin_url=$(GH_HOST=$(git parse-url --quiet --segment host) gh repo view --json url --jq .url "$current_origin_url")
 
   # Ignore trailing slashes in URLs like https://github.com/gibfahn/dot/
-  current_up_url=${current_up_url%/}
+  current_origin_url=${current_origin_url%/}
 
-  if [[ "${current_up_url%.git}" == "${new_up_url%.git}" ]]; then
+  if [[ "${current_origin_url%.git}" == "${new_origin_url%.git}" ]]; then
     return
   fi
 
-  current_up_org_repo=$(git parse-url --quiet --segment org-repo)
+  current_origin_org_repo=$(git parse-url --quiet --segment org-repo)
 
   # Update repo URL.
-  git remote set-url up "$new_up_url"
-  new_up_org_repo=$(git parse-url --quiet --segment org-repo)
+  git remote set-url origin "$new_origin_url"
+  new_origin_org_repo=$(git parse-url --quiet --segment org-repo)
 
   # This means that the upstream repo name has changed and we should move it.
-  if [[ "$PWD" == *"${current_up_org_repo}" ]]; then
-    new_path=${PWD%"/$current_up_org_repo"}/"$new_up_org_repo"
+  if [[ "$PWD" == *"${current_origin_org_repo}" ]]; then
+    new_path=${PWD%"/$current_origin_org_repo"}/"$new_origin_org_repo"
     mkdir -p "$(dirname "$new_path")"
     mv -v "$PWD" "$new_path"
     cd "$new_path"
@@ -97,7 +106,7 @@ update_if_repo_url_changed() {
 set_gh_default_repo() {
   # We have to set GH_HOST as otherwise if there are two different versions of a repo (e.g.
   # github.com/foo/bar and github.mycorp.com/foo/bar), gh will get confused.
-  GH_HOST=$(git parse-url --quiet --segment host) gh repo set-default "$(git remote get-url up)"
+  GH_HOST=$(git parse-url --quiet --segment host) gh repo set-default "$(git remote get-url origin)"
 }
 
 # Usage: exit message [rc]

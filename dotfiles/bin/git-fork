@@ -18,7 +18,7 @@ If a new fork is created, it will only include a single branch.
 
 OPTIONS:
 
---up-remote: name of the remote to fork, default 'up', or 'origin' if 'up' is not present.
+--up-remote: name of the remote to fork, default 'origin'
 
 --fork-remote: name of the forked remote, default 'fork'
 
@@ -84,9 +84,7 @@ while [[ $# != 0 ]]; do
 done
 
 main() {
-  if [[ -z ${up_remote:-} ]]; then
-    up_remote=$(default_remote)
-  fi
+  up_remote=${up_remote:-origin}
 
   # Set default here so we don't waste time calculating if the up remote was overridden.
   : ${up_branch:=$(default_branch $up_remote)}
@@ -94,7 +92,7 @@ main() {
   if git remote | grep -qx $fork_remote; then
     log "Fork remote already exists, skipping..."
   else
-  # TODO: stop setting this once `gh` gains decent up/push branch recognition.
+  # TODO: stop setting this once `gh` gains decent upstream/push branch recognition.
   export GH_REPO=$(remote_url "$up_remote")
   export GH_HOST=$(remote_host "$up_remote")
   # Fork the repo.
@@ -134,17 +132,17 @@ remote_host() {
   git remote get-url ${1:?} | sed -e 's/^git@//' -e 's|https://||' -e 's/:.*//' -e 's|/.*||'
 }
 
-# Github org for remote. `remote_org up` -> gibfahn.
+# Github org for remote. `remote_org origin` -> gibfahn.
 remote_org() {
   git remote get-url $1 | awk -F ':|/' '{if ($NF) {print $(NF-1)} else {print $(NF-2)}}'
 }
 
-# Github repo for remote. `remote_repo up` -> dot.
+# Github repo for remote. `remote_repo origin` -> dot.
 remote_repo() {
   git remote get-url $1 | sed -e 's|/$||' -e 's|.*/||' -e 's/.git$//'
 }
 
-# Default branch for remote. `g default-branch up` -> master
+# Default branch for remote. `g default-branch origin` -> master
 default_branch() {
   # Fetch the remote to make sure the upstream ref exists.
   git fetch $1
@@ -154,21 +152,6 @@ default_branch() {
         && git symbolic-ref --short refs/remotes/$1/HEAD
     }
   ) | sed "s|^$1/||"
-}
-
-# Get the default "main" remote for a repo. I use `up` where possible, else `origin`.
-# See `git default-remote` for more info.
-default_remote() {
-  for possible_remote in up origin; do
-    if git remote | grep -qx $possible_remote; then
-      up_remote=$possible_remote
-      break
-    fi
-    # Default to up if neither was present.
-    up_remote=up
-  done
-
-  echo $up_remote
 }
 
 # Change the remote default branch to "$2" (default: "forkmain"), for remote $1 (default: "fork").
