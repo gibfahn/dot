@@ -47,6 +47,8 @@ require("window-management")
 
 -- Always remap keys on first loading hammerspoon.
 RemapKeys()
+-- Always set brightness on first loading hammerspoon.
+LGSetBrightness()
 
 -- Always connect to VPN on first loading Hammerspoon.
 if isWrkMachine then

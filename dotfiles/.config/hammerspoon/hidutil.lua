@@ -28,6 +28,23 @@ RemapKeys = function()
     :start()
 end
 
+-- LG 5K Displays have an issue where sometimes when you unlock the machine, the display shows as dimmed (around 75%)
+-- but it thinks it is 100%. What I normally do is hit the brightness down key once, which actually makes the screen
+-- brighter, and then hit the brightness up key. This attempts to automate that.
+function LGSetBrightness()
+  log.i("Setting brightness for LG displays...")
+  for _, screen in ipairs(hs.screen.allScreens()) do
+    local name = screen:name()
+    local brightness = screen:getBrightness()
+    log.d("Checking screen:", name, "with brightness: ", brightness)
+    if name:find("LG UltraFine") and brightness == 1 then
+      log.d("Setting brightness for display:", name)
+      screen:setBrightness(0.49)
+      screen:setBrightness(1.00)
+    end
+  end
+end
+
 -- Always re-remap keys when the computer wakes from sleep.
 -- <https://www.hammerspoon.org/docs/hs.caffeinate.watcher.html>
 -- This is useful because when you reconnect a new keyboard (and wired and bluetooth count as different keyboards for
@@ -52,6 +69,7 @@ RemapKeyWatcher = hs.caffeinate.watcher.new(function(event)
   if eventsToMatch[event] then
     log.d("RemapKeyWatcher found matching event: " .. event)
     RemapKeys()
+    LGSetBrightness()
   end
   AlertIfSecureInputEnabled()
 end)
