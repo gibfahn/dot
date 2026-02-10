@@ -13,6 +13,8 @@ main() {
   # Get realpath of current directory.
   current_dir=$(pwd -P)
 
+  check_dir
+
   # Add git repo to maintenance list to be automatically kept up-to-date.
   if ! grep -qF "$current_dir" "$config_file"; then
     echo "  repo = $current_dir" >>"$config_file"
@@ -107,6 +109,19 @@ set_gh_default_repo() {
   # We have to set GH_HOST as otherwise if there are two different versions of a repo (e.g.
   # github.com/foo/bar and github.mycorp.com/foo/bar), gh will get confused.
   GH_HOST=$(git parse-url --quiet --segment host) gh repo set-default "$(git remote get-url origin)"
+}
+
+# Check that we're not in a git repo inside another git repo.
+check_dir() {
+  local cur_dir=$PWD
+  while [[ "$cur_dir" != / ]]; do
+    cur_dir=$(dirname "$cur_dir")
+    if [[ -d "$cur_dir"/.git/ ]]; then
+      # We're in a git repo inside a git repo, so assume it is managed by the parent and don't do
+      # anything.
+      exit 0
+    fi
+  done
 }
 
 # Usage: exit message [rc]

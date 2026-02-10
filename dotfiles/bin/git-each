@@ -67,8 +67,8 @@ $HOME/code"}}")
         git_each_dirs+=("${dir}")
       fi
     done
-    # Call self with each dir.
-    fd --hidden --type directory '^\.git$' "${git_each_dirs[@]}" -x "$this_script" '--each-dir={//}' "$@" && true
+    # Call self with each dir. Ignore `.ignore` files because they may include `.git` directories.
+    fd --hidden --no-ignore --ignore-vcs --type directory '^\.git$' "${git_each_dirs[@]}" -x "$this_script" '--each-dir={//}' "$@" && true
     rc=$?
     if [[ $rc != 0 ]]; then
       error "${fg[magenta]}One or more git-each commands failed ($rc) ⬆⬆⬆.${reset_color}" "$rc"
