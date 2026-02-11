@@ -78,16 +78,9 @@ cask "slack"                             # Everyone uses Slack right?
 cask "visual-studio-code"                # Used to teach Brian to code.
 
 # Mac App Store Apps (some paid). `mas list` to see what you've already installed.
-
-# mas "Final Cut Pro", id: 424389933
-# mas "GarageBand", id: 682658836
-# mas "Logic Pro X", id: 634148309
-mas "Refined GitHub", id: 1519867270     # Better GitHub interactions (broken on GHE: https://github.com/refined-github/refined-github/issues/8405).
+# mas "Refined GitHub", id: 1519867270     # Better GitHub interactions (broken on GHE: https://github.com/refined-github/refined-github/issues/8405).
+mas "Dark Reader for Safari", id: 1438243180 # Dark mode in every website.
 # mas "Xcode", id: 497799835 # Needed to compile llvm (among other things).
-# mas "iMovie", id: 408981434
-
-mas "GhostText", id: 1552641506 # Edit textboxes from neovim.
-mas "Keynote", id: 409183694
-mas "Numbers", id: 409203825
+# mas "GhostText", id: 1552641506 # Edit textboxes from neovim.
 
 # vi: filetype=conf

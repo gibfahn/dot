@@ -1,6 +1,7 @@
 # Mac App Store Apps (some paid). `mas list` to see what you've already installed.
 
-mas "Dato", id: 1470584107
-mas "Pages", id: 409201541               # Edit docx and pages files.
 mas "1Password for Safari", id: 1569813296 # 1Password browser extension.
-mas "Dark Reader for Safari", id: 1438243180 # Dark mode in every website.
+mas "Dato", id: 1470584107
+mas "Keynote", id: 361285480
+mas "Numbers", id: 361304891
+mas "Pages", id: 361309726               # Edit docx and pages files.
