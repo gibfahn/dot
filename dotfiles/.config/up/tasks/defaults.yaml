@@ -391,6 +391,9 @@ data:
     TimeZone support enabled: true
     # Settings > Advanced > Show week numbers
     Show Week Numbers: true
+    # Change the highlight colour of the selected calendar in the sidebar from red to blue.
+    # Makes it look less like there was an error in the selected calendar.
+    AppleAccentColor: 4
 
   org.hammerspoon.Hammerspoon:
     # Write hammerspoon config to alternate location.
