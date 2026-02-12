@@ -27,14 +27,15 @@ open_apps() {
     'Chess.app'
     'Chrysalis.app'
     'Clock.app'
+    'DaisyDisk.app'
     'Dark Reader for Safari.app'
     'Dictionary.app'
     'Finder.app'
-    'Games.app'
-    'Google Chrome.app'
     'Font Book.app'
-    'Ghostty.app' # Doesn't require any config.
+    'Games.app'
     'GhostText.app'
+    'Ghostty.app' # Doesn't require any config.
+    'Google Chrome.app'
     'Image Capture.app'
     'Image Playground.app'
     'Keyboard Cleaner.app'
@@ -48,11 +49,13 @@ open_apps() {
     'Shortcuts.app'
     'Stickies.app'
     'Stocks.app'
-    'Time Machine.app'
-    'Tips.app'
     'TV.app'
     'TextEdit.app'
+    'Time Machine.app'
+    'Tips.app'
     'Visual Studio Code.app'
+    'WeChat.app'
+    'iPhone Mirroring.app'
 
   )
 
