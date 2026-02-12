@@ -27,7 +27,12 @@ main() {
   # Rename any legacy `up` remotes to `origin`
   if git remote | grep -qx up; then
     if git remote | grep -qx origin; then
-      error "Can't rename up remote -> origin as origin also exists!"
+      if [[ "$(git remote get-url up)" == "$(git remote get-url origin)" ]]; then
+        echo "up and origin remotes both exist and point to the same remote, deleting..."
+        git remote rm up
+      else
+        error "Can't rename up remote -> origin as origin also exists!"
+      fi
     fi
     echo "Changed remote up -> origin"
     git remote rename up origin

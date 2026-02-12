@@ -39,6 +39,6 @@ data:
   prune: true
 - path: ~/code/github.com/gibfahn/up
   remotes:
-  - name: up
+  - name: origin
     fetch_url: https://github.com/gibfahn/up
   prune: true
