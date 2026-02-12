@@ -7,10 +7,12 @@ set -euxo pipefail
 [[ $USER == gib ]] || exit "$UP_EXIT_CODE_SKIPPED" # User is gib or we don't run.
 
 main() {
-  if [[ $(hostname) == Gib-Studio-* ]]; then
+  case "$(hostname)" in
+    Gib-Studio-*|Gib-iMac-*)
     echo "Not replacing hosts on desktop."
     exit $UP_EXIT_CODE_SKIPPED
-  fi
+    ;;
+  esac
 
   hosts=(
     # Block YouTube
