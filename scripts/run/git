@@ -6,7 +6,10 @@ set -euo pipefail
 # <https://git-scm.com/docs/git-maintenance>
 for f in org.git-scm.git.daily.plist org.git-scm.git.hourly.plist org.git-scm.git.weekly.plist; do
   if [[ ! -f ~/Library/LaunchAgents/$f ]]; then
-    git -C "${dot_dir}" maintenance start
+    # This command sets up the LaunchAgents to run maintenance, but also writes a maintenance entry
+    # for the current repo into my git config, which I don't want. So change XDG_CONFIG_HOME so it
+    # writes into a throwaway dir instead.
+    XDG_CONFIG_HOME=$TMPDIR git -C "${dot_dir}" maintenance start
     break
   fi
 done
