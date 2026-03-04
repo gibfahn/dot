@@ -364,18 +364,15 @@ return {
     "kylechui/nvim-surround", -- Add/change/remove surrounding pairs of characters.
     version = "*",
     event = "VeryLazy",
+    -- keymaps moved to keys below per nvim-surround v4 (no longer configured via setup()).
+    keys = {
+      -- Use yZ/yZZ for line surround, z/gz for visual surround (s is for flash).
+      { "yZ", "<Plug>(nvim-surround-normal-line)", mode = "n", desc = "Add surrounding to end of line" },
+      { "yZZ", "<Plug>(nvim-surround-normal-cur-line)", mode = "n", desc = "Add surrounding to current line" },
+      { "z", "<Plug>(nvim-surround-visual)", mode = "x", desc = "Add surrounding (visual)" },
+      { "gz", "<Plug>(nvim-surround-visual-line)", mode = "x", desc = "Add surrounding to line (visual)" },
+    },
     opts = {
-      -- Use z for surround because s is for flash.
-      keymaps = {
-        normal = "ys",
-        normal_cur = "yss",
-        normal_line = "yZ",
-        normal_cur_line = "yZZ",
-        visual = "z",
-        visual_line = "gz",
-        delete = "ds",
-        change = "cs",
-      },
       surrounds = {
         -- Surround with markdown code block, triple backticks.
         -- <https://github.com/kylechui/nvim-surround/issues/88>
