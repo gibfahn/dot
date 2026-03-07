@@ -529,10 +529,9 @@ data:
   com.apple.menuextra.clock:
     DateFormat: "EEE d MMM  HH:mm:ss"
 
-    # Show the smallest clock we can, as we use Dato for time.
-    ShowDayOfWeek: false
-    ShowDayOfMonth: false
-    IsAnalog: true
+    ShowDayOfWeek: true
+    ShowDayOfMonth: true
+    IsAnalog: false
 
     # Force the clock to a specific date and time.
     # Refs: https://robservatory.com/a-problem-of-time-with-big-sur-screencasts/
@@ -614,36 +613,6 @@ data:
     NSUserKeyEquivalents:
       # Free up ⌘-h by remapping "Hide Ghostty" to something obscure.
       "Hide Ghostty": '~^$\U00a7'
-
-  # https://sindresorhus.com/dato
-  com.sindresorhus.Dato:
-    enabledCalendars: []
-    iconInMenuBar: none
-    menuShowJoinVideoCallButton: false
-    showAmPm: false
-    showCalendarInMenu: false
-    showDateInMenu: false
-    showDayOfWeekInMenu: false
-    showMonthInMenuBar: true
-    showSecondsInMenuBar: true
-    showTimeInMenuBar: true
-    showTimeZonesInMenu: true
-    showWeekDayInMenuBar: true
-    showWeekNumberInMenu: false
-    showWeekNumberInMenuBar: false
-    # See https://nsdateformatter.com for docs.
-    # e.g. 2021-11-12 Fri 13:43:02
-    dateTimeFormat: "yyyy-MM-dd E HH:mm:ss"
-    timeZonesInMenuBackup: []
-    showDateInMenuBar: true
-    timeZonesInMenu:
-      - '{"hide":"never","id":"45987DD3-E7DF-4329-8516-85462AC0B8B1","isInMenuBar":false,"menuBarShowWeekdayWhenInDifferentDay":true,"menuBarTitle":"","menuBarTitleOnSeparateLine":false,"name":"🌁 San Francisco","notes":"","originalName":"San Francisco","showInMenu":true,"showMinutesInMenuBar":true,"timeFormat":"system","timeZone":"America\/Los_Angeles"}'
-      - '{"hide":"never","id":"5D935EF6-867C-4634-B346-D53E3313D065","isInMenuBar":false,"menuBarShowWeekdayWhenInDifferentDay":true,"menuBarTitle":"","menuBarTitleOnSeparateLine":false,"name":"🗽 New York City","notes":"","originalName":"New York City","showInMenu":true,"showMinutesInMenuBar":true,"timeFormat":"system","timeZone":"America\/New_York"}'
-      - '{"hide":"never","id":"90487F1F-FE8F-49FF-A3AC-718C9C83DDE7","isInMenuBar":false,"menuBarShowWeekdayWhenInDifferentDay":true,"menuBarTitle":"","menuBarTitleOnSeparateLine":false,"name":"UTC","notes":"","originalName":"UTC","showInMenu":true,"showMinutesInMenuBar":true,"timeFormat":"system","timeZone":"Africa\/Abidjan"}'
-      - '{"hide":"never","id":"94F82BF5-A382-4A84-8463-E03840D6D09E","isInMenuBar":false,"menuBarShowWeekdayWhenInDifferentDay":true,"menuBarTitle":"","menuBarTitleOnSeparateLine":false,"name":"🇬🇧 London","notes":"","originalName":"London","showInMenu":true,"showMinutesInMenuBar":true,"timeFormat":"system","timeZone":"Europe\/London"}'
-      - '{"hide":"never","id":"6F4DAB8E-524A-45BB-BB97-EBD1AEB547EE","isInMenuBar":false,"menuBarShowWeekdayWhenInDifferentDay":true,"menuBarTitle":"","menuBarTitleOnSeparateLine":false,"name":"🇨🇳 China","notes":"","originalName":"Beijing","showInMenu":true,"showMinutesInMenuBar":true,"timeFormat":"system","timeZone":"Asia\/Shanghai"}'
-    showAddEventButtonInMenu: false
-    showTimeInMenu: false
 
   # https://maccy.app
   org.p0deje.Maccy:
