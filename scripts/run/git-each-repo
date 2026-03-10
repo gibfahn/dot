@@ -54,7 +54,7 @@ main() {
 
   # Update the default branch for each repo remote in case it has changed.
   for remote in $(git remote); do
-    git remote set-head --auto "$remote"
+    run_only_output_if_error git remote set-head --auto "$remote"
   done
 
   # Set a default repo if there's an obvious one present. I use `origin` as my default upstream repo name,
@@ -112,6 +112,17 @@ update_if_repo_url_changed() {
     cd "$new_path"
     echo "Fixed path to updated repo to ${new_path}"
   fi
+}
+
+# Run a command and swallow the stdout/stderr unless it failed.
+run_only_output_if_error() {
+  local output
+  output=$("$@" 2>&1) && true
+  rc=$?
+  if [[ $rc == 0 ]]; then
+    return 0
+  fi
+  error "Command failed: $*\nOutput:\n<<<\n$output\n>>>"
 }
 
 # Set the default repo for gh to work with.
