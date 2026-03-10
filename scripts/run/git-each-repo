@@ -52,6 +52,11 @@ main() {
     fi
   done
 
+  # Update the default branch for each repo remote in case it has changed.
+  for remote in $(git remote); do
+    git remote set-head --auto "$remote"
+  done
+
   # Set a default repo if there's an obvious one present. I use `origin` as my default upstream repo name,
   # so if it exists it's a good option. We only want to do this for github repos though.
   # stdout is empty for `gh repo set-default --view` when a default hasn't been set.
