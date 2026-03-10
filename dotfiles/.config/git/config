@@ -325,9 +325,9 @@
   users = "!user=${1?}; GH_HOST=$(git parse-url --segment host --remote $(git up-remote)) gh api graphql -f query=\"query { search(type:USER, query: \\\"$user\\\", first:10) { userCount edges { node { ... on User { login, name, email, } } } } }\" | jq -r '.data.search.edges[] | .node | \"@\\(.login) - \\(.name)<\\(.email)>\"' #"
 
   # `git wa` to check out `main` to `~/tmp/worktrees/<repo name>`, `git wa dev` to check out the `dev` branch instead.
-  wa   = "! dir=${2:-~/tmp/worktrees/\"$(basename \"$(git rev-parse --show-toplevel)\")\"}; git worktree add \"$dir\" \"${1:-main}\" && zoxide add \"$dir\" #"
+  wa   = "! branch=${1:-main}; dir=${2:-~/tmp/worktrees/\"$(basename \"$(git rev-parse --show-toplevel)\")/$branch\"}; git worktree add \"$dir\" \"${branch}\" && zoxide add \"$dir\" && echo \"Worktree created: $dir\" #"
   # `git wr` to clean up a worktree created with `git wa`.
-  wr   = "! git worktree remove ${1:-~/tmp/worktrees/\"$(basename \"$(git rev-parse --show-toplevel)\")\"} #"
+  wr   = "! git worktree remove ${1:-\"$PWD\"} #"
 
   # z is fuzzy log (fuzzy search through `git log $*`, za is the same with la (try g sh `g z`).
   z   = "!git l --color=always $* | grep -v '^\\.\\.\\.\\s\\+$' | fzf +s -m --ansi | sed 's/^\\W\\+\\(\\w\\+\\)\\s\\+.*/\\1/' #"
