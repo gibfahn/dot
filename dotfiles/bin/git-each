@@ -17,6 +17,8 @@ GIT_EACH_DIRS=\"\$HOME/wrk
 Set the DEBUG env var to get 'set -x' logging output.
 Set the QUIET env var to hide all output except from the script you run and any error messages.
 
+Does not recurse into nested git repos.
+
 Requires: fd CLI (https://github.com/sharkdp/fd).
   brew install fd
 "
@@ -46,6 +48,8 @@ main() {
     if [[ $repo_path == */go/* ]]; then
       exit 0 # Skip go directories.
     fi
+
+    check_dir
 
     output=$(cd "$repo_path" && "$@" 2>&1) && true
     rc=$?
@@ -93,6 +97,19 @@ indent() {
   # Replace \ with \\ so e.g. literal \n in the output doesn't get read as an escape code.
   # Indent each line by 8 spaces.
   sed -e 's/\\/\\\\/g' -e "s/^/    /"
+}
+
+# Skip (exit) if we're in a git repo inside another git repo.
+check_dir() {
+  local cur_dir=$repo_path
+  while [[ "$cur_dir" != / ]]; do
+    cur_dir=$(dirname "$cur_dir")
+    if [[ -d "$cur_dir"/.git/ ]]; then
+      # We're in a git repo inside a git repo, so assume it is managed by the parent and don't do
+      # anything.
+      exit 0
+    fi
+  done
 }
 
 main "$@"
