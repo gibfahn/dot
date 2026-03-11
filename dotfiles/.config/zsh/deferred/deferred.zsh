@@ -190,7 +190,12 @@ cpm() { command mkdir -p "${@: -1}" && cp "$@"; } # Mkdir then cp to dir (`cpm f
 # dli -> interactive delete files in current directory.
 # dli foo/* bar/* -> interactive delete files in foo and bar subdirectories.
 dli() {
-  { [[ $# == 0 ]] && fd -0d 1 || print -N $@; } | fzf --reverse --read0 --print0 | xargs -0 ${=aliases[dl]}
+  { [[ $# == 0 ]] && fd -0d 1 || print -N $@; } | fzf --reverse --read0 --print0 | xargs --null --verbose --max-args 1 ${=aliases[dl]}
+}
+
+# Interactively prune repos I probably don't need any more.
+dl_repos() {
+  QUIET=1 git each pwd | fzf --reverse --print0 | xargs --verbose --null --max-args 1 ${=aliases[dl]}
 }
 
 # Get docker labels from an image tag or @sha256: digest.
