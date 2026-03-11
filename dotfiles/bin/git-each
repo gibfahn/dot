@@ -15,6 +15,7 @@ GIT_EACH_DIRS=\"\$HOME/wrk
 \$HOME/code\"
 
 Set the DEBUG env var to get 'set -x' logging output.
+Set the QUIET env var to hide all output except from the script you run and any error messages.
 
 Requires: fd CLI (https://github.com/sharkdp/fd).
   brew install fd
@@ -54,8 +55,12 @@ main() {
       else
         color=${fg[red]}
       fi
-      printf "${color}=> git-each exited with $rc: %s in $repo_path${reset_color}"$'\n' "$*"
-      printf "%s\n" "$(indent <<<"$output")"
+      if [[ -n ${QUIET:-} ]]; then
+        printf "%s\n" "$output"
+      else
+        printf "${color}=> git-each exited with $rc: %s in $repo_path${reset_color}"$'\n' "$*"
+        printf "%s\n" "$(indent <<<"$output")"
+      fi
     fi
     exit $rc
   else
