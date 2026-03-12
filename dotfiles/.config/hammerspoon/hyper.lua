@@ -16,11 +16,12 @@
 --   |---|---|---|---|---|   |---|---|---|---|---|---,
 --   | ✓ | ✓ | ✓ | ✓ | g |   | ✓ | ✓ | ✓ | ✓ | ✓ | - |
 --   |---|---|---|---|---|   |---|---|---|---|---|---|
---   | ✓ | ✓ | ✓ | ✓ | ✓ |   | ✓ | ✓ | ✓ | ✓ | o | ✓ |
+--   | ✓ | ✓ | ✓ | ✓ | ✓ |   | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 --   |---|---|---|---|---|   |---|---|---|---|---|---|
 --   | z | ✓ | ✓ | ✓ | ✓ |   | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 --   '---'---'---'---'---'   '---'---'---'---'---'---'
 
+local appLauncher = require("app-launcher")
 local statusMessage = require("status-message")
 local log = hs.logger.new("hyper.lua", "debug")
 log.d("Loading module")
@@ -212,6 +213,13 @@ end)
 -- {{{ Hyper-; -> lock screen
 HyperMode:bind({}, ";", hs.caffeinate.lockScreen)
 -- }}} Hyper-; -> lock screen
+
+-- {{{ Hyper-o -> App Launcher
+HyperMode:bind({}, "o", function()
+  HyperMode:exit()
+  appLauncher.toggle()
+end)
+-- }}} Hyper-o -> App Launcher
 
 -- {{{ Hyper-⌥-q -> Force Quit Webex
 -- Quit webex without spending an age trying to find the button.
