@@ -2,6 +2,7 @@
 local log = hs.logger.new("app-launcher.lua", "debug")
 log.d("Loading module")
 
+-- Get list of directories to search for applications.
 local function buildAppDirs()
   local dirs = {
     "/Applications",
@@ -10,7 +11,7 @@ local function buildAppDirs()
     "/System/Applications/Utilities",
     os.getenv("HOME") .. "/Applications",
   }
-  -- Add /*/Applications/ (e.g. /Users/gib/Applications, /Volumes/Foo/Applications)
+  -- Add /*/Applications/ (e.g. /Foo/Applications)
   local iter, state = hs.fs.dir("/")
   if iter then
     for entry in iter, state do
@@ -57,6 +58,21 @@ local function getApps()
   return apps
 end
 
+local cachedApps = getApps()
+
+-- Refresh the cache whenever any watched app directory changes.
+local watchers = {}
+for _, dir in ipairs(appDirs) do
+  local w = hs.pathwatcher.new(dir, function()
+    log.d("App directory changed, refreshing app list...")
+    cachedApps = getApps()
+  end)
+  if w then
+    w:start()
+    watchers[#watchers + 1] = w
+  end
+end
+
 local chooser = nil
 
 AppLauncher = {}
@@ -67,8 +83,6 @@ AppLauncher.toggle = function()
     return
   end
 
-  local apps = getApps()
-
   chooser = hs.chooser.new(function(choice)
     if choice then
       log.df("Launching app: %s", choice.text)
@@ -76,7 +90,7 @@ AppLauncher.toggle = function()
     end
   end)
 
-  chooser:choices(apps)
+  chooser:choices(cachedApps)
   -- Don't search app full path, just app name.
   chooser:searchSubText(false)
   chooser:show()
