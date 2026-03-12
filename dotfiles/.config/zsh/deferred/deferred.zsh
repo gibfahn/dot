@@ -228,6 +228,12 @@ gcl() {
   return $ret
 }
 
+# Switch to a branch, create a worktree, cd to that directory.
+gsw() {
+  dir=$(g sw --worktree $@)
+  cd $dir
+}
+
 # Set up things I commonly need when sshing into a machine.
 ssh_setup() {
   # Login keychain is locked when you ssh in until you unlock it.

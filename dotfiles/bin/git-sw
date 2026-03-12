@@ -16,6 +16,10 @@ git sw: switch to a branch, or create it, setting the upstream tracking everythi
 If you specify an existing remote branch, then we check it out in detached mode.
 If you don't specify a branch, we check out the default branch of the default remote.
 
+Args are passed to \`git switch\`, except for the following (must be the first arg):
+
+--worktree: create a worktree and switch to it with the specified branch
+
 ENVIRONMENT VARIABLES:
 
 REMOTE_PRIMARY_NAME:
@@ -32,10 +36,11 @@ REMOTE_FORK_NAME:
 main() {
   [[ ${1:-} =~ ^(--help|-h)$ ]] && { usage; exit; }
   [[ ${1:-} =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
+  [[ ${1:-} =~ ^(--worktree)$ ]] && { shift 1; WORKTREE=1; }
 
   # If --detach passed, just run the command directly.
   if (($@[(Ie)-d])) || (($@[(Ie)--detach])); then
-    git switch $@
+    git switch $@ >&2
     return
   fi
 
@@ -49,10 +54,16 @@ main() {
     fi
   done
 
+  # We don't want anything here to write to stdout, only the worktree dir should be written.
+  run_switch $@ >&2
+
+  handle_worktree
+}
+
+run_switch() {
   # `git sw` by itself checks out the default branch of the default remote.
   if [[ $# == 0 ]]; then
-    remote_branch=$(default_remote_branch $REMOTE_PRIMARY_NAME)
-    git switch ${remote_branch#*/}
+    git switch $(default_branch)
     exit
   fi
 
@@ -92,7 +103,23 @@ main() {
       git branch -u $(default_remote_branch $new_upstream_remote)
     fi
   fi
+}
 
+# If the user passed --worktree, create and print it.
+handle_worktree() {
+  if [[ -n ${WORKTREE:-} ]]; then
+    branch=$(git branch --show-current)
+    git switch $(default_branch) >&2
+    dir=~/tmp/worktrees/"$(basename "$(git rev-parse --show-toplevel)")/$branch"
+    git worktree add "$dir" "${branch}" >&2
+
+    if (( $+commands[zoxide] )); then
+      zoxide add "$dir" >&2
+    fi
+
+    echo >&2 "Worktree created"
+    echo "$dir" # Echo dir to stdout for shell wrapper scripts.
+  fi
 }
 
 # Works out the upstream remote for the specified fork remote. I use `fork` for the fork of `origin`,
@@ -103,6 +130,12 @@ up_remote_for_fork() {
   else
     echo ${1%$REMOTE_FORK_NAME}
   fi
+}
+
+# Default branch for primary remote, e.g. `main` if `origin/HEAD` -> `origin/main`
+default_branch() {
+    remote_branch=$(default_remote_branch $REMOTE_PRIMARY_NAME)
+    echo ${remote_branch#*/}
 }
 
 # Default branch for remote. `default_branch origin` -> origin/main
