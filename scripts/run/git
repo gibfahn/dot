@@ -22,10 +22,11 @@ fi
 
 # Run commands that act on each repo.
 git_each_dirs=(
-  "$HOME/wrk"                    # No longer used directory for work-specific repos.
-  "$HOME/code"                   # Generally used code.
-  "${XDG_DATA_HOME}/zsh/plugins" # Zsh plugins.
-  "${XDG_DATA_HOME}/hammerspoon" # Hammerspoon plugins.
+  "$HOME/wrk"                          # No longer used directory for work-specific repos.
+  "$HOME/code"                         # Generally used code.
+  "${XDG_DATA_HOME}/zsh/plugins"       # Zsh plugins.
+  "${XDG_DATA_HOME}/hammerspoon"       # Hammerspoon plugins.
+  "$HOME/.claude/plugins/marketplaces" # Claude Code Marketplaces
 )
 
 # Dirs scanned by git-each
