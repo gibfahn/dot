@@ -103,6 +103,8 @@ update_if_repo_url_changed() {
   new_origin_org_repo=$(git parse-url --quiet --segment org-repo)
 
   # This means that the upstream repo name has changed and we should move it.
+  # This doesn't use my `git move-repo` command because that might move it to a different place,
+  # e.g. ${XDG_DATA_HOME}/hammerspoon -> ~/code/
   if [[ "$PWD" == *"${current_origin_org_repo}" ]]; then
     new_path=${PWD%"/$current_origin_org_repo"}/"$new_origin_org_repo"
     mkdir -p "$(dirname "$new_path")"
