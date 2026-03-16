@@ -292,6 +292,10 @@ pth() { # Returns absolute path to each file or dir arg.
   done
 }
 
+pc() { # Copy path to provided args
+  pth $@ | "${aliases[cpy]}"
+}
+
 # Remove trailing whitespace from all files in the current directory.
 remove_trailing_whitespace() {
   fd --hidden --exclude=.git --type f "$@" -x gsed -i -e 's/\s\+$//' '{}'
