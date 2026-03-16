@@ -49,6 +49,15 @@ return {
     end,
   },
 
+  {
+    "cajames/copy-reference.nvim", -- Copy path with line number for AI use.
+    opts = {}, -- optional configuration
+    keys = {
+      { "yr", "<cmd>CopyReference file<cr>", mode = { "n", "v" }, desc = "Copy file path" },
+      { "yrr", "<cmd>CopyReference line<cr>", mode = { "n", "v" }, desc = "Copy file:line reference" },
+    },
+  },
+
   "chrisbra/Recover.vim", -- add a diff option when a swap file is found.
 
   "coderifous/textobj-word-column.vim", -- Adds ic/ac and iC/aC motions to block select word column in paragraph.
