@@ -33,6 +33,7 @@ local function getApps()
   local seen = {}
 
   for _, dir in ipairs(appDirs) do
+    if hs.fs.attributes(dir, "mode") ~= "directory" then goto continue end
     local iter, state = hs.fs.dir(dir)
     if iter then
       for entry in iter, state do
@@ -50,6 +51,7 @@ local function getApps()
         end
       end
     end
+    ::continue::
   end
 
   table.sort(apps, function(a, b)
@@ -63,6 +65,7 @@ local cachedApps = getApps()
 -- Refresh the cache whenever any watched app directory changes.
 local watchers = {}
 for _, dir in ipairs(appDirs) do
+  if hs.fs.attributes(dir, "mode") ~= "directory" then goto continue end
   local w = hs.pathwatcher.new(dir, function()
     log.d("App directory changed, refreshing app list...")
     cachedApps = getApps()
@@ -71,6 +74,7 @@ for _, dir in ipairs(appDirs) do
     w:start()
     watchers[#watchers + 1] = w
   end
+  ::continue::
 end
 
 local chooser = nil
