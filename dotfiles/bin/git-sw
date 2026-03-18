@@ -110,7 +110,7 @@ handle_worktree() {
   if [[ -n ${WORKTREE:-} ]]; then
     branch=$(git branch --show-current)
     git switch $(default_branch) >&2
-    dir=~/tmp/worktrees/"$(basename "$(git rev-parse --show-toplevel)")/$branch"
+    dir=~/code/worktrees/"$(git parse-url --segment host-org-repo)/$branch"
     git worktree add "$dir" "${branch}" >&2
 
     if (( $+commands[zoxide] )); then
