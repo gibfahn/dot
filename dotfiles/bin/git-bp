@@ -35,6 +35,8 @@ main() {
 
   find_gh_merged_pr_branches_to_delete
 
+  find_gh_pr_checkout_branches_to_delete
+
   skip_if_nothing_to_prune
 
   confirm_we_can_prune
@@ -95,6 +97,27 @@ find_gh_merged_pr_branches_to_delete() {
       remote_branches_to_delete+=("$remote/$remote_branch")
     fi
   done <<<"$(git for-each-ref refs/heads --format='%(refname:short) %(push:short)')"
+}
+
+# Delete branches like pull/<number>/<name> if the PR is not open.
+# These are created by my dotfiles/bin/git-fp script.
+find_gh_pr_checkout_branches_to_delete() {
+  if ! command -v gh &>/dev/null; then
+    return
+  fi
+
+  while read branch; do
+    [[ "$branch" =~ ^pull/([0-9]+)/ ]] || continue
+
+    # Skip branches already queued for pruning.
+    (( ${local_branches_to_delete[(I)$branch]} )) && continue
+
+    pr_number="${match[1]}"
+    pr_state=$(gh pr view "$pr_number" --json state --jq '.state' 2>/dev/null) || continue
+    if [[ "$pr_state" != "OPEN" ]]; then
+      local_branches_to_delete+=("$branch")
+    fi
+  done <<<"$(git for-each-ref refs/heads --format='%(refname:short)')"
 }
 
 # If we have nothing to do, early exit.
