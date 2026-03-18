@@ -279,8 +279,11 @@ password_gen() {
   head -c $(($1 * 10)) /dev/urandom | LC_ALL=C tr -dc '[:alnum:]' | LC_ALL=C tr -sc '[:alnum:]' | fold -w ${1?Missing argument 1: password length} | head -1 | tr -d '\n'
 }
 
-pth() { # Returns absolute path to each file or dir arg.
+pth() { # Returns absolute path to each file or dir arg (defaulting to current directory).
   local i
+  if [[ $# == 0 ]]; then
+    pwd
+  fi
   for i in "$@"; do
     if [[ -d "$i" ]]; then (pushd "$i" >/dev/null || return 1; pwd) # dir.
     elif [[ -f "$i" ]]; then  # file.
