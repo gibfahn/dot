@@ -100,6 +100,11 @@ pr_create() {
 
   rm $file
 
+  # Enable auto-merge if possible.
+  if [[ -z ${draft:-} ]]; then
+    gh pr merge --auto --delete-branch || true
+  fi
+
   # Now open the PR in the browser.
   pr_open
 }
