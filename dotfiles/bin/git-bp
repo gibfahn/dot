@@ -23,11 +23,136 @@ while [[ $# != 0 ]]; do
   [[ ${1:-} =~ ^(--quiet|-q)$ ]] && { QUIET=true; shift; }
 done
 
-branches_to_prune=()
-
 if [[ -n ${DEBUG:-} ]]; then
   set -x
 fi
+
+main() {
+  local_branches_to_delete=()
+  remote_branches_to_delete=()
+
+  find_local_branches_to_delete
+
+  find_gh_merged_pr_branches_to_delete
+
+  skip_if_nothing_to_prune
+
+  confirm_we_can_prune
+
+  switch_current_branch_if_pruning_it
+
+  delete_local_remote_branches
+}
+
+# Delete local branches where the remote was deleted and the changes have been merged.
+find_local_branches_to_delete() {
+  while read branch up_branch; do
+    # If no remote-tracking branch with the same name in any remote,
+    if [[ -z $(for remote in $(git remote); do git rev-parse --verify --quiet "$remote/$branch" ; done) ]] &&
+      # and upstream branch exists,
+      [[ -n "$up_branch" ]] &&
+      # and upstream branch contains all the commits in fork branch.
+      ! git cherry -v "$up_branch" "$branch" | grep -q '^+'; then
+      # then we should delete the branch.
+      local_branches_to_delete+=("$branch")
+    fi
+  done <<<"$(git for-each-ref refs/heads --format='%(refname:short) %(upstream:short)')"
+}
+
+# Use gh CLI to check if the @{push} branch for each local branch has a merged PR.
+# Silently ignore failures (e.g. non-GitHub repos, gh not installed).
+find_gh_merged_pr_branches_to_delete() {
+  if !command -v gh &>/dev/null; then
+    return
+  fi
+
+  local head
+  local remote_heads=()
+  for r in $(git remote); do
+    head=$(git symbolic-ref "refs/remotes/$r/HEAD")
+    if [[ -n $head ]]; then
+      remote_heads+=("${head#refs/remotes/$r/}")
+    fi
+  done
+
+  while read branch push_ref; do
+    [[ -z "$push_ref" ]] && continue
+
+    # Skip branches already queued for pruning.
+    (( ${local_branches_to_delete[(I)$branch]} )) && continue
+
+    # push_ref is e.g. "origin/my-feature"; extract remote and remote branch name.
+    remote="${push_ref%%/*}"
+    remote_branch="${push_ref#*/}"
+
+    # Never delete a branch that is the HEAD (default) branch of any remote.
+    (( ${remote_heads[(I)$branch]} )) && continue
+
+    # Check for a merged PR owned by me targeting this branch (suppress all errors).
+    merged=$(gh pr list --head "$remote_branch" --author @me --state merged --json number --jq '.[].number' --limit 1) || continue
+    if [[ -n "$merged" ]]; then
+      local_branches_to_delete+=("$branch")
+      remote_branches_to_delete+=("$remote/$remote_branch")
+    fi
+  done <<<"$(git for-each-ref refs/heads --format='%(refname:short) %(push:short)')"
+}
+
+# If we have nothing to do, early exit.
+skip_if_nothing_to_prune() {
+  if [[ ${#local_branches_to_delete[@]} = 0 && ${#remote_branches_to_delete[@]} = 0 ]]; then
+    log "Nothing to prune."
+    exit 0
+  fi
+
+}
+
+# If confirmation is on, prompt before deleting.
+confirm_we_can_prune() {
+  if [[ -z $CHECK ]]; then
+    warn "Deleting branches: ${local_branches_to_delete[*]} ${remote_branches_to_delete[*]}"
+  else
+    # Prompt before deleting.
+    echo "Branches to delete: ${local_branches_to_delete[*]} ${remote_branches_to_delete[*]}" >&2
+    read "choice?Continue? [Y/n] "
+    case $choice in
+      N|n|no|No|NO) echo "Exiting..."; exit 1 ;;
+    esac
+  fi
+}
+
+# We can't delete the checked out branch, so if we need to delete it first switch to main branch.
+switch_current_branch_if_pruning_it() {
+  current_branch=$(git branch --show-current)
+  if (( ${local_branches_to_delete[(I)$current_branch]} )); then
+    # Go back to up HEAD branch.
+    git update-index --refresh
+    # If there are no uncommitted changes:
+    if git diff-index --quiet HEAD --; then
+      default_branch=$(git default-branch origin 2>/dev/null)
+      if git rev-parse "$default_branch" &>/dev/null; then
+        git checkout --quiet "$default_branch"
+        git merge --ff-only
+      else
+        git checkout --quiet -b "$default_branch" "origin/$default_branch"
+      fi
+    else
+      warn "Can't delete current branch '$current_branch' as it has uncommitted changes."
+    fi
+  fi
+}
+
+# Delete local and remote branches.
+delete_local_remote_branches() {
+  git branch -D "${local_branches_to_delete[@]}"
+
+  # Delete remote push branches identified via gh as merged.
+  for entry in "${remote_branches_to_delete[@]}"; do
+    remote="${entry%%/*}"
+    remote_branch="${entry#*/}"
+    log "Deleting remote branch: $remote/$remote_branch"
+    git push "$remote" --delete "$remote_branch" 2>/dev/null
+  done
+}
 
 log() {
   [[ -n $QUIET ]] || echo "${1:-}" >&2
@@ -37,50 +162,4 @@ warn() {
   echo "${1:-}" >&2
 }
 
-while read branch up_branch; do
-  # If no remote-tracking branch with the same name in any remote,
-  if [[ -z $(for remote in $(git remote); do git rev-parse --verify --quiet "$remote/$branch" ; done) ]] &&
-    # and upstream branch exists,
-    [[ -n "$up_branch" ]] &&
-    # and upstream branch contains all the commits in fork branch.
-    ! git cherry -v "$up_branch" "$branch" | grep -q '^+'; then
-    # then we should delete the branch.
-    branches_to_prune+=("$branch")
-  fi
-done <<<"$(git for-each-ref refs/heads --format='%(refname:short) %(upstream:short)')"
-
-if [[ ${#branches_to_prune[@]} = 0 ]]; then
-  log "Nothing to prune."
-  exit 0
-fi
-
-if [[ -z $CHECK ]]; then
-  warn "Deleting branches: ${branches_to_prune[*]}"
-else
-  # Prompt before deleting.
-  echo "Branches to delete: ${branches_to_prune[*]}" >&2
-  read "choice?Continue? [Y/n] "
-  case $choice in
-    N|n|no|No|NO) echo "Exiting..."; exit 1 ;;
-  esac
-fi
-
-current_branch=$(git branch --show-current)
-if (( ${branches_to_prune[(I)$current_branch]} )); then
-  # Go back to up HEAD branch.
-  git update-index --refresh
-  # If there are no uncommitted changes:
-  if git diff-index --quiet HEAD --; then
-    default_branch=$(git default-branch origin 2>/dev/null)
-    if git rev-parse "$default_branch" &>/dev/null; then
-      git checkout --quiet "$default_branch"
-      git merge --ff-only
-    else
-      git checkout --quiet -b "$default_branch" "origin/$default_branch"
-    fi
-  else
-    warn "Can't delete current branch '$current_branch' as it has uncommitted changes."
-  fi
-fi
-
-git branch -D "${branches_to_prune[@]}"
+main $@
