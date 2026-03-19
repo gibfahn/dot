@@ -463,7 +463,7 @@ _gib_git_b() {
   | fzf "$@" --border --ansi --multi --tac --preview-window right:70% \
   --preview "git l --color=always \$(awk '{if (\$1 == \"*\") { print \$2 } else { print \$1 } }' <<< {})" \
   --bind "ctrl-o:execute: git li \$(awk '{if (\$1 == \"*\") { print \$2 } else { print \$1 } }' <<< {})" \
-  | awk '{if ($1 == "*") { print $2 } else { print $1 } }' | sed -E 's#^remotes/[^/]+/##'
+  | sed 's/^ *[\*+] *//' | awk '{ print $1 }' | sed -E 's#^remotes/[^/]+/##'
 }
 
 # Fzf git tags.
