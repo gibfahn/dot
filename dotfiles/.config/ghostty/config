@@ -1,3 +1,42 @@
+# vi:ft=conf
+
+# OVERVIEW
+#
+# Ghostty config, modified from the stock config for convenient git diff reasons.
+# Last generated from the ghostty 1.2.3 config using:
+#   ghostty +show-config --default --docs --no-pager | sed 's/\s\+$//' > dotfiles/.config/ghostty/config
+#
+# Docs: https://ghostty.org/docs/config/reference
+# Source: https://github.com/mitchellh/ghostty/blob/main/src/config/Config.zig
+
+# NOTES
+#
+# Comments start with a `#` and are ONLY valid on their own line.
+#
+# `ghostty +list-themes` for a list of themes
+# `cmd+shift+,` reloads the config.
+# Regen this file with:
+# ghostty +show-config --default --docs >~/.config/ghostty/config
+
+# MISSING
+#
+# Missing from Ghostty (that I have in kitty):
+# - `url_prefixes` -> can't set custom prefixes (maybe `link:` is the way to do this?)
+# - `window_alert_on_bell` -> `echo -n '\a'` doesn't seem to do anything in Ghostty
+# - `tab_activity_symbol` -> no activity indicator
+# - `active_border_color` / inactive_border_color: can't get visible borders (they seem to be black on all the black screens, vs the defaults in kitty)
+# - Inline comments in this file?
+# - Remappings:
+#   - Open scrollback in less: `scrollback_pager env LESS= less --tabs=4 --ignore-case --RAW-CONTROL-CHARS --quit-if-one-screen --LONG-PROMPT --window=-4 --jump-target=1 --pattern=^❯ +INPUT_LINE_NUMBER`
+#   - Open scrollback in nvim
+
+# EXTRA
+#
+# Things that are nice in Ghostty and not in kitty:
+# - Native emoji entry with ⌘-⌃-Space
+
+# === GIB END ===
+
 # Set Ghostty's graphical user interface language to a language other than the
 # system default language. For example:
 #
@@ -66,7 +105,9 @@ language =
 # this within config files if you want to clear previously set values in
 # configuration files or on the CLI if you want to clear values set on the
 # CLI.
-font-family =
+#font-family =
+# Don't use default prompt (see prompt character for a good check that it's set correctly)
+font-family = "Hasklug Nerd Font Mono"
 
 font-family-bold =
 font-family-italic =
@@ -160,7 +201,8 @@ font-feature =
 # On Linux with GTK, font size is scaled according to both display-wide and
 # text-specific scaling factors, which are often managed by your desktop
 # environment (e.g. the GNOME display scale and large text settings).
-font-size = 13
+# font-size = 13
+font-size = 14
 
 # A repeatable configuration to set one or more font variations values for
 # a variable font. A variable font is a single font, usually with a filename
@@ -229,7 +271,8 @@ clipboard-codepoint-map =
 
 # Draw fonts with a thicker stroke, if supported.
 # This is currently only supported on macOS.
-font-thicken = false
+# font-thicken = false
+font-thicken = true
 
 # Strength of thickening when `font-thicken` is enabled.
 #
@@ -355,7 +398,8 @@ adjust-overline-thickness =
 
 # Thickness in pixels or percentage adjustment of the bar cursor and outlined rect cursor.
 # See the notes about adjustments in `adjust-cell-width`.
-adjust-cursor-thickness =
+# adjust-cursor-thickness =
+adjust-cursor-thickness = 300%
 
 # Height in pixels or percentage adjustment of the cursor. Currently applies to all cursor types:
 # bar, rect, and outlined rect.
@@ -492,15 +536,16 @@ freetype-load-flags = hinting,no-force-autohint,no-monochrome,autohint,light
 # be fixed in a future update:
 #
 #   - macOS: titlebar tabs style is not updated when switching themes.
-theme =
+# theme =
+theme = "Pro"
 
 # Background color for the window.
 # Specified as either hex (`#RRGGBB` or `RRGGBB`) or a named X11 color.
-background = #282c34
+# background = #282c34
 
 # Foreground color for the window.
 # Specified as either hex (`#RRGGBB` or `RRGGBB`) or a named X11 color.
-foreground = #ffffff
+# foreground = #ffffff
 
 # Background image for the terminal.
 #
@@ -1005,7 +1050,8 @@ palette-harmonious = false
 #
 #   * `cell-background` - Match the cell background color.
 #     (Available since: 1.2.0)
-cursor-color =
+# cursor-color =
+cursor-color = "#6BF549"
 
 # The opacity level (opposite of transparency) of the cursor. A value of 1
 # is fully opaque and a value of 0 is fully transparent. A value less than 0
@@ -1539,7 +1585,8 @@ abnormal-command-exit-runtime = 250
 # This is a future planned feature.
 #
 # This can be changed at runtime but will only affect new terminal surfaces.
-scrollback-limit = 10000000
+# scrollback-limit = 10000000
+scrollback-limit = 25_000_000
 
 # Control when the scrollbar is shown to scroll the scrollback buffer.
 #
@@ -2161,6 +2208,37 @@ keybind = alt+arrow_right=esc:f
 # This configuration can be repeated to specify multiple remaps.
 key-remap =
 
+# GIB ADDITIONS
+# https://ghostty.org/docs/config/keybind/reference
+
+# Move tab backward
+keybind = super+a=move_tab:-1
+# View scrollback in less.
+# TODO: Needs https://github.com/ghostty-org/ghostty/issues/2504 to work nicely.
+# Open scrollback in editor
+keybind = super+alt+f=write_scrollback_file:paste
+# Vim up key: vertical split
+keybind = super+e=new_split:right
+# Vim left key: left a tab.
+keybind = super+h=previous_tab
+# Vim right key: right a tab.
+keybind = super+i=next_tab
+# Vim down key: horizontal split.
+keybind = super+n=new_split:down
+# Move tab forward
+keybind = super+s=move_tab:1
+
+# Create with vim arrow keys, move with real arrow keys.
+keybind = super+arrow_left=goto_split:left
+keybind = super+arrow_right=goto_split:right
+keybind = super+arrow_down=goto_split:down
+keybind = super+arrow_up=goto_split:up
+
+# keybind = super+shift+h=resize_split:left,10
+# keybind = super+shift+n=resize_split:down,10
+# keybind = super+shift+e=resize_split:up,10
+# keybind = super+shift+i=resize_split:right,10
+
 # Horizontal window padding. This applies padding between the terminal cells
 # and the left and right window borders. The value is in points, meaning that
 # it will be scaled appropriately for screen DPI.
@@ -2384,7 +2462,8 @@ window-theme = auto
 #   * `display-p3` - Interpret colors in the Display P3 color space.
 #
 # This setting is currently only supported on macOS.
-window-colorspace = srgb
+# window-colorspace = srgb
+window-colorspace = display-p3
 
 # The initial window size. This size is in terminal grid cells by default.
 # Both values must be set to take effect. If only one value is set, it is
@@ -2591,7 +2670,8 @@ resize-overlay-duration = 750ms
 # and bring the window to front.
 #
 # Default is false.
-focus-follows-mouse = false
+# focus-follows-mouse = false
+focus-follows-mouse = true
 
 # Whether to allow programs running in the terminal to read/write to the
 # system clipboard (OSC 52, for googling). The default is to allow clipboard
@@ -2734,7 +2814,8 @@ confirm-close-surface = true
 # On Linux, if this is `true`, Ghostty can delay quitting fully until a
 # configurable amount of time has passed after the last window is closed.
 # See the documentation of `quit-after-last-window-closed-delay`.
-quit-after-last-window-closed = false
+# quit-after-last-window-closed = false
+quit-after-last-window-closed = true
 
 # Controls how long Ghostty will stay running after the last open surface has
 # been closed. This only has an effect if `quit-after-last-window-closed` is
@@ -3114,94 +3195,95 @@ shell-integration-features = cursor,no-sudo,title,no-ssh-env,no-ssh-terminfo,pat
 # ```
 #
 # Available since: 1.2.0
-command-palette-entry = title:"Change Tab Title\xe2\x80\xa6",description:"Prompt for a new title for the current tab.",action:"prompt_tab_title"
-command-palette-entry = title:"Change Terminal Title\xe2\x80\xa6",description:"Prompt for a new title for the current terminal.",action:"prompt_surface_title"
-command-palette-entry = title:"Check for Updates",description:"Check for updates to the application.",action:"check_for_updates"
-command-palette-entry = title:"Clear Screen",description:"Clear the screen and scrollback.",action:"clear_screen"
-command-palette-entry = title:"Close All Windows",description:"Close all windows.",action:"close_all_windows"
-command-palette-entry = title:"Close Other Tabs",description:"Close all tabs in this window except the current one.",action:"close_tab:other"
-command-palette-entry = title:"Close Tab",description:"Close the current tab.",action:"close_tab:this"
-command-palette-entry = title:"Close Tabs to the Right",description:"Close all tabs to the right of the current one.",action:"close_tab:right"
-command-palette-entry = title:"Close Terminal",description:"Close the current terminal.",action:"close_surface"
-command-palette-entry = title:"Close Window",description:"Close the current window.",action:"close_window"
-command-palette-entry = title:"Copy Screen as ANSI Sequences to Temporary File and Copy Path",description:"Copy the screen contents as ANSI escape sequences to a temporary file and copy the path to the clipboard.",action:"write_screen_file:copy,vt"
-command-palette-entry = title:"Copy Screen as ANSI Sequences to Temporary File and Open",description:"Copy the screen contents as ANSI escape sequences to a temporary file and open it.",action:"write_screen_file:open,vt"
-command-palette-entry = title:"Copy Screen as ANSI Sequences to Temporary File and Paste Path",description:"Copy the screen contents as ANSI escape sequences to a temporary file and paste the path to the file.",action:"write_screen_file:paste,vt"
-command-palette-entry = title:"Copy Screen as HTML to Temporary File and Copy Path",description:"Copy the screen contents as HTML to a temporary file and copy the path to the clipboard.",action:"write_screen_file:copy,html"
-command-palette-entry = title:"Copy Screen as HTML to Temporary File and Open",description:"Copy the screen contents as HTML to a temporary file and open it.",action:"write_screen_file:open,html"
-command-palette-entry = title:"Copy Screen as HTML to Temporary File and Paste Path",description:"Copy the screen contents as HTML to a temporary file and paste the path to the file.",action:"write_screen_file:paste,html"
-command-palette-entry = title:"Copy Screen to Temporary File and Copy Path",description:"Copy the screen contents to a temporary file and copy the path to the clipboard.",action:"write_screen_file:copy,plain"
-command-palette-entry = title:"Copy Screen to Temporary File and Open",description:"Copy the screen contents to a temporary file and open it.",action:"write_screen_file:open,plain"
-command-palette-entry = title:"Copy Screen to Temporary File and Paste Path",description:"Copy the screen contents to a temporary file and paste the path to the file.",action:"write_screen_file:paste,plain"
-command-palette-entry = title:"Copy Selection as ANSI Sequences to Clipboard",description:"Copy the selected text as ANSI escape sequences to the clipboard.",action:"copy_to_clipboard:vt"
-command-palette-entry = title:"Copy Selection as ANSI Sequences to Temporary File and Copy Path",description:"Copy the selection contents as ANSI escape sequences to a temporary file and copy the path to the clipboard.",action:"write_selection_file:copy,vt"
-command-palette-entry = title:"Copy Selection as ANSI Sequences to Temporary File and Open",description:"Copy the selection contents as ANSI escape sequences to a temporary file and open it.",action:"write_selection_file:open,vt"
-command-palette-entry = title:"Copy Selection as ANSI Sequences to Temporary File and Paste Path",description:"Copy the selection contents as ANSI escape sequences to a temporary file and paste the path to the file.",action:"write_selection_file:paste,vt"
-command-palette-entry = title:"Copy Selection as HTML to Clipboard",description:"Copy the selected text as HTML to the clipboard.",action:"copy_to_clipboard:html"
-command-palette-entry = title:"Copy Selection as HTML to Temporary File and Copy Path",description:"Copy the selection contents as HTML to a temporary file and copy the path to the clipboard.",action:"write_selection_file:copy,html"
-command-palette-entry = title:"Copy Selection as HTML to Temporary File and Open",description:"Copy the selection contents as HTML to a temporary file and open it.",action:"write_selection_file:open,html"
-command-palette-entry = title:"Copy Selection as HTML to Temporary File and Paste Path",description:"Copy the selection contents as HTML to a temporary file and paste the path to the file.",action:"write_selection_file:paste,html"
-command-palette-entry = title:"Copy Selection as Plain Text to Clipboard",description:"Copy the selected text as plain text to the clipboard.",action:"copy_to_clipboard:plain"
-command-palette-entry = title:"Copy Selection to Temporary File and Copy Path",description:"Copy the selection contents to a temporary file and copy the path to the clipboard.",action:"write_selection_file:copy,plain"
-command-palette-entry = title:"Copy Selection to Temporary File and Open",description:"Copy the selection contents to a temporary file and open it.",action:"write_selection_file:open,plain"
-command-palette-entry = title:"Copy Selection to Temporary File and Paste Path",description:"Copy the selection contents to a temporary file and paste the path to the file.",action:"write_selection_file:paste,plain"
-command-palette-entry = title:"Copy Terminal Title to Clipboard",description:"Copy the terminal title to the clipboard. If the terminal title is not set this has no effect.",action:"copy_title_to_clipboard"
-command-palette-entry = title:"Copy to Clipboard",description:"Copy the selected text to the clipboard in both plain and styled formats.",action:"copy_to_clipboard:mixed"
-command-palette-entry = title:"Copy URL to Clipboard",description:"Copy the URL under the cursor to the clipboard.",action:"copy_url_to_clipboard"
-command-palette-entry = title:"Decrease Font Size",description:"Decrease the font size by 1 point.",action:"decrease_font_size:1"
-command-palette-entry = title:"End Search",description:"End the current search if any and hide any GUI elements.",action:"end_search"
-command-palette-entry = title:"Equalize Splits",description:"Equalize the size of all splits.",action:"equalize_splits"
-command-palette-entry = title:"Focus Split: Down",description:"Focus the split below, if it exists.",action:"goto_split:down"
-command-palette-entry = title:"Focus Split: Left",description:"Focus the split to the left, if it exists.",action:"goto_split:left"
-command-palette-entry = title:"Focus Split: Next",description:"Focus the next split, if any.",action:"goto_split:next"
-command-palette-entry = title:"Focus Split: Previous",description:"Focus the previous split, if any.",action:"goto_split:previous"
-command-palette-entry = title:"Focus Split: Right",description:"Focus the split to the right, if it exists.",action:"goto_split:right"
-command-palette-entry = title:"Focus Split: Up",description:"Focus the split above, if it exists.",action:"goto_split:up"
-command-palette-entry = title:"Focus Window: Next",description:"Focus the next window, if any.",action:"goto_window:next"
-command-palette-entry = title:"Focus Window: Previous",description:"Focus the previous window, if any.",action:"goto_window:previous"
-command-palette-entry = title:"Ghostty",description:"Put a little Ghostty in your terminal.",action:"text:\xf0\x9f\x91\xbb"
-command-palette-entry = title:"Increase Font Size",description:"Increase the font size by 1 point.",action:"increase_font_size:1"
-command-palette-entry = title:"Move Tab Left",description:"Move the current tab to the left.",action:"move_tab:-1"
-command-palette-entry = title:"Move Tab Right",description:"Move the current tab to the right.",action:"move_tab:1"
-command-palette-entry = title:"New Tab",description:"Open a new tab.",action:"new_tab"
-command-palette-entry = title:"New Window",description:"Open a new window.",action:"new_window"
-command-palette-entry = title:"Next Search Result",description:"Navigate to the next search result, if any.",action:"navigate_search:next"
-command-palette-entry = title:"Open Config",description:"Open the config file.",action:"open_config"
-command-palette-entry = title:"Paste from Clipboard",description:"Paste the contents of the main clipboard.",action:"paste_from_clipboard"
-command-palette-entry = title:"Paste from Selection",description:"Paste the contents of the selection clipboard.",action:"paste_from_selection"
-command-palette-entry = title:"Previous Search Result",description:"Navigate to the previous search result, if any.",action:"navigate_search:previous"
-command-palette-entry = title:"Quit",description:"Quit the application.",action:"quit"
-command-palette-entry = title:"Redo",description:"Redo the last undone action.",action:"redo"
-command-palette-entry = title:"Reload Config",description:"Reload the config file.",action:"reload_config"
-command-palette-entry = title:"Reset Font Size",description:"Reset the font size to the default.",action:"reset_font_size"
-command-palette-entry = title:"Reset Terminal",description:"Reset the terminal to a clean state.",action:"reset"
-command-palette-entry = title:"Reset Window Size",description:"Reset the window size to the default.",action:"reset_window_size"
-command-palette-entry = title:"Scroll Page Down",description:"Scroll the screen down by a page.",action:"scroll_page_down"
-command-palette-entry = title:"Scroll Page Up",description:"Scroll the screen up by a page.",action:"scroll_page_up"
-command-palette-entry = title:"Scroll to Bottom",description:"Scroll to the bottom of the screen.",action:"scroll_to_bottom"
-command-palette-entry = title:"Scroll to Selection",description:"Scroll to the selected text.",action:"scroll_to_selection"
-command-palette-entry = title:"Scroll to Top",description:"Scroll to the top of the screen.",action:"scroll_to_top"
-command-palette-entry = title:"Search Selection",description:"Start a search for the current text selection.",action:"search_selection"
-command-palette-entry = title:"Select All",description:"Select all text on the screen.",action:"select_all"
-command-palette-entry = title:"Show On-Screen Keyboard",description:"Show the on-screen keyboard if present.",action:"show_on_screen_keyboard"
-command-palette-entry = title:"Show the GTK Inspector",description:"Show the GTK inspector.",action:"show_gtk_inspector"
-command-palette-entry = title:"Split Down",description:"Split the terminal down.",action:"new_split:down"
-command-palette-entry = title:"Split Left",description:"Split the terminal to the left.",action:"new_split:left"
-command-palette-entry = title:"Split Right",description:"Split the terminal to the right.",action:"new_split:right"
-command-palette-entry = title:"Split Up",description:"Split the terminal up.",action:"new_split:up"
-command-palette-entry = title:"Start Search",description:"Start a search if one isn't already active.",action:"start_search"
-command-palette-entry = title:"Toggle Background Opacity",description:"Toggle the background opacity of a window that started transparent.",action:"toggle_background_opacity"
-command-palette-entry = title:"Toggle Float on Top",description:"Toggle the float on top state of the current window.",action:"toggle_window_float_on_top"
-command-palette-entry = title:"Toggle Fullscreen",description:"Toggle the fullscreen state of the current window.",action:"toggle_fullscreen"
-command-palette-entry = title:"Toggle Inspector",description:"Toggle the inspector.",action:"inspector:toggle"
-command-palette-entry = title:"Toggle Maximize",description:"Toggle the maximized state of the current window.",action:"toggle_maximize"
-command-palette-entry = title:"Toggle Mouse Reporting",description:"Toggle whether mouse events are reported to terminal applications.",action:"toggle_mouse_reporting"
-command-palette-entry = title:"Toggle Read-Only Mode",description:"Toggle read-only mode for the current surface.",action:"toggle_readonly"
-command-palette-entry = title:"Toggle Secure Input",description:"Toggle secure input mode.",action:"toggle_secure_input"
-command-palette-entry = title:"Toggle Split Zoom",description:"Toggle the zoom state of the current split.",action:"toggle_split_zoom"
-command-palette-entry = title:"Toggle Tab Overview",description:"Toggle the tab overview.",action:"toggle_tab_overview"
-command-palette-entry = title:"Toggle Window Decorations",description:"Toggle the window decorations.",action:"toggle_window_decorations"
-command-palette-entry = title:"Undo",description:"Undo the last action.",action:"undo"
+# GIB: commented out all of these as they are broken in ghostty, see https://github.com/ghostty-org/ghostty/discussions/8699#discussioncomment-16476485
+# command-palette-entry = title:"Change Tab Title\xe2\x80\xa6",description:"Prompt for a new title for the current tab.",action:"prompt_tab_title"
+# command-palette-entry = title:"Change Terminal Title\xe2\x80\xa6",description:"Prompt for a new title for the current terminal.",action:"prompt_surface_title"
+# command-palette-entry = title:"Check for Updates",description:"Check for updates to the application.",action:"check_for_updates"
+# command-palette-entry = title:"Clear Screen",description:"Clear the screen and scrollback.",action:"clear_screen"
+# command-palette-entry = title:"Close All Windows",description:"Close all windows.",action:"close_all_windows"
+# command-palette-entry = title:"Close Other Tabs",description:"Close all tabs in this window except the current one.",action:"close_tab:other"
+# command-palette-entry = title:"Close Tab",description:"Close the current tab.",action:"close_tab:this"
+# command-palette-entry = title:"Close Tabs to the Right",description:"Close all tabs to the right of the current one.",action:"close_tab:right"
+# command-palette-entry = title:"Close Terminal",description:"Close the current terminal.",action:"close_surface"
+# command-palette-entry = title:"Close Window",description:"Close the current window.",action:"close_window"
+# command-palette-entry = title:"Copy Screen as ANSI Sequences to Temporary File and Copy Path",description:"Copy the screen contents as ANSI escape sequences to a temporary file and copy the path to the clipboard.",action:"write_screen_file:copy,vt"
+# command-palette-entry = title:"Copy Screen as ANSI Sequences to Temporary File and Open",description:"Copy the screen contents as ANSI escape sequences to a temporary file and open it.",action:"write_screen_file:open,vt"
+# command-palette-entry = title:"Copy Screen as ANSI Sequences to Temporary File and Paste Path",description:"Copy the screen contents as ANSI escape sequences to a temporary file and paste the path to the file.",action:"write_screen_file:paste,vt"
+# command-palette-entry = title:"Copy Screen as HTML to Temporary File and Copy Path",description:"Copy the screen contents as HTML to a temporary file and copy the path to the clipboard.",action:"write_screen_file:copy,html"
+# command-palette-entry = title:"Copy Screen as HTML to Temporary File and Open",description:"Copy the screen contents as HTML to a temporary file and open it.",action:"write_screen_file:open,html"
+# command-palette-entry = title:"Copy Screen as HTML to Temporary File and Paste Path",description:"Copy the screen contents as HTML to a temporary file and paste the path to the file.",action:"write_screen_file:paste,html"
+# command-palette-entry = title:"Copy Screen to Temporary File and Copy Path",description:"Copy the screen contents to a temporary file and copy the path to the clipboard.",action:"write_screen_file:copy,plain"
+# command-palette-entry = title:"Copy Screen to Temporary File and Open",description:"Copy the screen contents to a temporary file and open it.",action:"write_screen_file:open,plain"
+# command-palette-entry = title:"Copy Screen to Temporary File and Paste Path",description:"Copy the screen contents to a temporary file and paste the path to the file.",action:"write_screen_file:paste,plain"
+# command-palette-entry = title:"Copy Selection as ANSI Sequences to Clipboard",description:"Copy the selected text as ANSI escape sequences to the clipboard.",action:"copy_to_clipboard:vt"
+# command-palette-entry = title:"Copy Selection as ANSI Sequences to Temporary File and Copy Path",description:"Copy the selection contents as ANSI escape sequences to a temporary file and copy the path to the clipboard.",action:"write_selection_file:copy,vt"
+# command-palette-entry = title:"Copy Selection as ANSI Sequences to Temporary File and Open",description:"Copy the selection contents as ANSI escape sequences to a temporary file and open it.",action:"write_selection_file:open,vt"
+# command-palette-entry = title:"Copy Selection as ANSI Sequences to Temporary File and Paste Path",description:"Copy the selection contents as ANSI escape sequences to a temporary file and paste the path to the file.",action:"write_selection_file:paste,vt"
+# command-palette-entry = title:"Copy Selection as HTML to Clipboard",description:"Copy the selected text as HTML to the clipboard.",action:"copy_to_clipboard:html"
+# command-palette-entry = title:"Copy Selection as HTML to Temporary File and Copy Path",description:"Copy the selection contents as HTML to a temporary file and copy the path to the clipboard.",action:"write_selection_file:copy,html"
+# command-palette-entry = title:"Copy Selection as HTML to Temporary File and Open",description:"Copy the selection contents as HTML to a temporary file and open it.",action:"write_selection_file:open,html"
+# command-palette-entry = title:"Copy Selection as HTML to Temporary File and Paste Path",description:"Copy the selection contents as HTML to a temporary file and paste the path to the file.",action:"write_selection_file:paste,html"
+# command-palette-entry = title:"Copy Selection as Plain Text to Clipboard",description:"Copy the selected text as plain text to the clipboard.",action:"copy_to_clipboard:plain"
+# command-palette-entry = title:"Copy Selection to Temporary File and Copy Path",description:"Copy the selection contents to a temporary file and copy the path to the clipboard.",action:"write_selection_file:copy,plain"
+# command-palette-entry = title:"Copy Selection to Temporary File and Open",description:"Copy the selection contents to a temporary file and open it.",action:"write_selection_file:open,plain"
+# command-palette-entry = title:"Copy Selection to Temporary File and Paste Path",description:"Copy the selection contents to a temporary file and paste the path to the file.",action:"write_selection_file:paste,plain"
+# command-palette-entry = title:"Copy Terminal Title to Clipboard",description:"Copy the terminal title to the clipboard. If the terminal title is not set this has no effect.",action:"copy_title_to_clipboard"
+# command-palette-entry = title:"Copy to Clipboard",description:"Copy the selected text to the clipboard in both plain and styled formats.",action:"copy_to_clipboard:mixed"
+# command-palette-entry = title:"Copy URL to Clipboard",description:"Copy the URL under the cursor to the clipboard.",action:"copy_url_to_clipboard"
+# command-palette-entry = title:"Decrease Font Size",description:"Decrease the font size by 1 point.",action:"decrease_font_size:1"
+# command-palette-entry = title:"End Search",description:"End the current search if any and hide any GUI elements.",action:"end_search"
+# command-palette-entry = title:"Equalize Splits",description:"Equalize the size of all splits.",action:"equalize_splits"
+# command-palette-entry = title:"Focus Split: Down",description:"Focus the split below, if it exists.",action:"goto_split:down"
+# command-palette-entry = title:"Focus Split: Left",description:"Focus the split to the left, if it exists.",action:"goto_split:left"
+# command-palette-entry = title:"Focus Split: Next",description:"Focus the next split, if any.",action:"goto_split:next"
+# command-palette-entry = title:"Focus Split: Previous",description:"Focus the previous split, if any.",action:"goto_split:previous"
+# command-palette-entry = title:"Focus Split: Right",description:"Focus the split to the right, if it exists.",action:"goto_split:right"
+# command-palette-entry = title:"Focus Split: Up",description:"Focus the split above, if it exists.",action:"goto_split:up"
+# command-palette-entry = title:"Focus Window: Next",description:"Focus the next window, if any.",action:"goto_window:next"
+# command-palette-entry = title:"Focus Window: Previous",description:"Focus the previous window, if any.",action:"goto_window:previous"
+# command-palette-entry = title:"Ghostty",description:"Put a little Ghostty in your terminal.",action:"text:\xf0\x9f\x91\xbb"
+# command-palette-entry = title:"Increase Font Size",description:"Increase the font size by 1 point.",action:"increase_font_size:1"
+# command-palette-entry = title:"Move Tab Left",description:"Move the current tab to the left.",action:"move_tab:-1"
+# command-palette-entry = title:"Move Tab Right",description:"Move the current tab to the right.",action:"move_tab:1"
+# command-palette-entry = title:"New Tab",description:"Open a new tab.",action:"new_tab"
+# command-palette-entry = title:"New Window",description:"Open a new window.",action:"new_window"
+# command-palette-entry = title:"Next Search Result",description:"Navigate to the next search result, if any.",action:"navigate_search:next"
+# command-palette-entry = title:"Open Config",description:"Open the config file.",action:"open_config"
+# command-palette-entry = title:"Paste from Clipboard",description:"Paste the contents of the main clipboard.",action:"paste_from_clipboard"
+# command-palette-entry = title:"Paste from Selection",description:"Paste the contents of the selection clipboard.",action:"paste_from_selection"
+# command-palette-entry = title:"Previous Search Result",description:"Navigate to the previous search result, if any.",action:"navigate_search:previous"
+# command-palette-entry = title:"Quit",description:"Quit the application.",action:"quit"
+# command-palette-entry = title:"Redo",description:"Redo the last undone action.",action:"redo"
+# command-palette-entry = title:"Reload Config",description:"Reload the config file.",action:"reload_config"
+# command-palette-entry = title:"Reset Font Size",description:"Reset the font size to the default.",action:"reset_font_size"
+# command-palette-entry = title:"Reset Terminal",description:"Reset the terminal to a clean state.",action:"reset"
+# command-palette-entry = title:"Reset Window Size",description:"Reset the window size to the default.",action:"reset_window_size"
+# command-palette-entry = title:"Scroll Page Down",description:"Scroll the screen down by a page.",action:"scroll_page_down"
+# command-palette-entry = title:"Scroll Page Up",description:"Scroll the screen up by a page.",action:"scroll_page_up"
+# command-palette-entry = title:"Scroll to Bottom",description:"Scroll to the bottom of the screen.",action:"scroll_to_bottom"
+# command-palette-entry = title:"Scroll to Selection",description:"Scroll to the selected text.",action:"scroll_to_selection"
+# command-palette-entry = title:"Scroll to Top",description:"Scroll to the top of the screen.",action:"scroll_to_top"
+# command-palette-entry = title:"Search Selection",description:"Start a search for the current text selection.",action:"search_selection"
+# command-palette-entry = title:"Select All",description:"Select all text on the screen.",action:"select_all"
+# command-palette-entry = title:"Show On-Screen Keyboard",description:"Show the on-screen keyboard if present.",action:"show_on_screen_keyboard"
+# command-palette-entry = title:"Show the GTK Inspector",description:"Show the GTK inspector.",action:"show_gtk_inspector"
+# command-palette-entry = title:"Split Down",description:"Split the terminal down.",action:"new_split:down"
+# command-palette-entry = title:"Split Left",description:"Split the terminal to the left.",action:"new_split:left"
+# command-palette-entry = title:"Split Right",description:"Split the terminal to the right.",action:"new_split:right"
+# command-palette-entry = title:"Split Up",description:"Split the terminal up.",action:"new_split:up"
+# command-palette-entry = title:"Start Search",description:"Start a search if one isn't already active.",action:"start_search"
+# command-palette-entry = title:"Toggle Background Opacity",description:"Toggle the background opacity of a window that started transparent.",action:"toggle_background_opacity"
+# command-palette-entry = title:"Toggle Float on Top",description:"Toggle the float on top state of the current window.",action:"toggle_window_float_on_top"
+# command-palette-entry = title:"Toggle Fullscreen",description:"Toggle the fullscreen state of the current window.",action:"toggle_fullscreen"
+# command-palette-entry = title:"Toggle Inspector",description:"Toggle the inspector.",action:"inspector:toggle"
+# command-palette-entry = title:"Toggle Maximize",description:"Toggle the maximized state of the current window.",action:"toggle_maximize"
+# command-palette-entry = title:"Toggle Mouse Reporting",description:"Toggle whether mouse events are reported to terminal applications.",action:"toggle_mouse_reporting"
+# command-palette-entry = title:"Toggle Read-Only Mode",description:"Toggle read-only mode for the current surface.",action:"toggle_readonly"
+# command-palette-entry = title:"Toggle Secure Input",description:"Toggle secure input mode.",action:"toggle_secure_input"
+# command-palette-entry = title:"Toggle Split Zoom",description:"Toggle the zoom state of the current split.",action:"toggle_split_zoom"
+# command-palette-entry = title:"Toggle Tab Overview",description:"Toggle the tab overview.",action:"toggle_tab_overview"
+# command-palette-entry = title:"Toggle Window Decorations",description:"Toggle the window decorations.",action:"toggle_window_decorations"
+# command-palette-entry = title:"Undo",description:"Undo the last action.",action:"undo"
 
 # Sets the reporting format for OSC sequences that request color information.
 # Ghostty currently supports OSC 10 (foreground), OSC 11 (background), and
@@ -3498,7 +3580,8 @@ app-notifications = clipboard-copy,config-reload
 # Changing this option at runtime works, but will only apply to the next
 # time the window is made fullscreen. If a window is already fullscreen,
 # it will retain the previous setting until fullscreen is exited.
-macos-non-native-fullscreen = false
+# macos-non-native-fullscreen = false
+macos-non-native-fullscreen = true
 
 # Whether the window buttons in the macOS titlebar are visible. The window
 # buttons are the colored buttons in the upper left corner of most macOS apps,
@@ -3631,7 +3714,8 @@ macos-dock-drop-behavior = new-tab
 #
 # The values `left` or `right` enable this for the left or right *Option*
 # key, respectively.
-macos-option-as-alt =
+# macos-option-as-alt =
+macos-option-as-alt = true
 
 # Whether to enable the macOS window shadow. The default value is true.
 # With some window managers and window transparency settings, you may
@@ -4080,7 +4164,7 @@ async-backend = auto
 # preference stored in the standard user defaults (`defaults(1)`).
 #
 # Changing this value at runtime works after a small delay.
-auto-update =
+auto-update = "download"
 
 # The release channel to use for auto-updates.
 #
