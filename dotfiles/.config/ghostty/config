@@ -1,42 +1,3 @@
-# vi:ft=conf
-
-# OVERVIEW
-#
-# Ghostty config, modified from the stock config for convenient git diff reasons.
-# Last generated from the ghostty 1.2.3 config using:
-#   ghostty +show-config --default --docs --no-pager | sed 's/\s\+$//' > dotfiles/.config/ghostty/config
-#
-# Docs: https://ghostty.org/docs/config/reference
-# Source: https://github.com/mitchellh/ghostty/blob/main/src/config/Config.zig
-
-# NOTES
-#
-# Comments start with a `#` and are ONLY valid on their own line.
-#
-# `ghostty +list-themes` for a list of themes
-# `cmd+shift+,` reloads the config.
-# Regen this file with:
-# ghostty +show-config --default --docs >~/.config/ghostty/config
-
-# MISSING
-#
-# Missing from Ghostty (that I have in kitty):
-# - `url_prefixes` -> can't set custom prefixes (maybe `link:` is the way to do this?)
-# - `window_alert_on_bell` -> `echo -n '\a'` doesn't seem to do anything in Ghostty
-# - `tab_activity_symbol` -> no activity indicator
-# - `active_border_color` / inactive_border_color: can't get visible borders (they seem to be black on all the black screens, vs the defaults in kitty)
-# - Inline comments in this file?
-# - Remappings:
-#   - Open scrollback in less: `scrollback_pager env LESS= less --tabs=4 --ignore-case --RAW-CONTROL-CHARS --quit-if-one-screen --LONG-PROMPT --window=-4 --jump-target=1 --pattern=^❯ +INPUT_LINE_NUMBER`
-#   - Open scrollback in nvim
-
-# EXTRA
-#
-# Things that are nice in Ghostty and not in kitty:
-# - Native emoji entry with ⌘-⌃-Space
-
-# === GIB END ===
-
 # Set Ghostty's graphical user interface language to a language other than the
 # system default language. For example:
 #
@@ -55,7 +16,7 @@
 #
 # GTK only.
 # Available since 1.3.0.
-language =
+# language =
 
 # The font families to use.
 #
@@ -105,13 +66,11 @@ language =
 # this within config files if you want to clear previously set values in
 # configuration files or on the CLI if you want to clear values set on the
 # CLI.
-#font-family =
-# Don't use default prompt (see prompt character for a good check that it's set correctly)
-font-family = "Hasklug Nerd Font Mono"
+# font-family =
 
-font-family-bold =
-font-family-italic =
-font-family-bold-italic =
+# font-family-bold =
+# font-family-italic =
+# font-family-bold-italic =
 # The named font style to use for each of the requested terminal font styles.
 # This looks up the style based on the font style string advertised by the
 # font itself. For example, "Iosevka Heavy" has a style of "Heavy".
@@ -124,11 +83,11 @@ font-family-bold-italic =
 # These are only valid if its corresponding font-family is also specified. If
 # no font-family is specified, then the font-style is ignored unless you're
 # disabling the font style.
-font-style = default
+# font-style = default
 
-font-style-bold = default
-font-style-italic = default
-font-style-bold-italic = default
+# font-style-bold = default
+# font-style-italic = default
+# font-style-bold-italic = default
 # Control whether Ghostty should synthesize a style if the requested style is
 # not available in the specified font-family.
 #
@@ -159,7 +118,7 @@ font-style-bold-italic = default
 # explicitly disable it. You cannot partially disable `bold-italic`.
 #
 # By default, synthetic styles are enabled.
-font-synthetic-style = bold,italic,bold-italic
+# font-synthetic-style = bold,italic,bold-italic
 
 # Apply a font feature. To enable multiple font features you can repeat
 # this multiple times or use a comma-separated list of feature settings.
@@ -183,7 +142,7 @@ font-synthetic-style = bold,italic,bold-italic
 # [fontdrop.info](https://fontdrop.info).
 #
 # To generally disable most ligatures, use `-calt, -liga, -dlig`.
-font-feature =
+# font-feature =
 
 # Font size in points. This value can be a non-integer and the nearest integer
 # pixel size will be selected. If you have a high dpi display where 1pt = 2px
@@ -202,7 +161,6 @@ font-feature =
 # text-specific scaling factors, which are often managed by your desktop
 # environment (e.g. the GNOME display scale and large text settings).
 # font-size = 13
-font-size = 14
 
 # A repeatable configuration to set one or more font variations values for
 # a variable font. A variable font is a single font, usually with a filename
@@ -222,11 +180,11 @@ font-size = 14
 #
 # Common axes are: `wght` (weight), `slnt` (slant), `ital` (italic), `opsz`
 # (optical size), `wdth` (width), `GRAD` (gradient), etc.
-font-variation =
+# font-variation =
 
-font-variation-bold =
-font-variation-italic =
-font-variation-bold-italic =
+# font-variation-bold =
+# font-variation-italic =
+# font-variation-bold-italic =
 # Force one or a range of Unicode codepoints to map to a specific named font.
 # This is useful if you want to support special symbols or if you want to use
 # specific glyphs that render better for your specific font.
@@ -243,7 +201,7 @@ font-variation-bold-italic =
 #
 # Changing this configuration at runtime will only affect new terminals,
 # i.e. new windows, tabs, etc.
-font-codepoint-map =
+# font-codepoint-map =
 
 # Map specific Unicode codepoints to replacement values when copying text
 # to clipboard.
@@ -267,12 +225,11 @@ font-codepoint-map =
 # ranges.
 #
 # Note: This only applies to text copying operations, not URL copying.
-clipboard-codepoint-map =
+# clipboard-codepoint-map =
 
 # Draw fonts with a thicker stroke, if supported.
 # This is currently only supported on macOS.
 # font-thicken = false
-font-thicken = true
 
 # Strength of thickening when `font-thicken` is enabled.
 #
@@ -282,7 +239,7 @@ font-thicken = true
 # Has no effect when `font-thicken` is set to `false`.
 #
 # This is currently only supported on macOS.
-font-thicken-strength = 255
+# font-thicken-strength = 255
 
 # Locations to break font shaping into multiple runs.
 #
@@ -309,7 +266,7 @@ font-thicken-strength = 255
 #   * `cursor` - Break runs under the cursor.
 #
 # Available since: 1.2.0
-font-shaping-break = cursor
+# font-shaping-break = cursor
 
 # What color space to use when performing alpha blending.
 #
@@ -335,7 +292,7 @@ font-shaping-break = cursor
 #   but without any of the darkening artifacts.
 #
 # Available since: 1.1.0
-alpha-blending = native
+# alpha-blending = native
 
 # All of the configurations behavior adjust various metrics determined by the
 # font. The values can be integers (1, -1, etc.) or a percentage (20%, -15%,
@@ -361,54 +318,53 @@ alpha-blending = native
 #
 #   * Powerline glyphs will be adjusted along with the cell height so
 #     that things like status lines continue to look aligned.
-adjust-cell-width =
+# adjust-cell-width =
 
-adjust-cell-height =
+# adjust-cell-height =
 # Distance in pixels or percentage adjustment from the bottom of the cell to the text baseline.
 # Increase to move baseline UP, decrease to move baseline DOWN.
 # See the notes about adjustments in `adjust-cell-width`.
-adjust-font-baseline =
+# adjust-font-baseline =
 
 # Distance in pixels or percentage adjustment from the top of the cell to the top of the underline.
 # Increase to move underline DOWN, decrease to move underline UP.
 # See the notes about adjustments in `adjust-cell-width`.
-adjust-underline-position =
+# adjust-underline-position =
 
 # Thickness in pixels of the underline.
 # See the notes about adjustments in `adjust-cell-width`.
-adjust-underline-thickness =
+# adjust-underline-thickness =
 
 # Distance in pixels or percentage adjustment from the top of the cell to the top of the strikethrough.
 # Increase to move strikethrough DOWN, decrease to move strikethrough UP.
 # See the notes about adjustments in `adjust-cell-width`.
-adjust-strikethrough-position =
+# adjust-strikethrough-position =
 
 # Thickness in pixels or percentage adjustment of the strikethrough.
 # See the notes about adjustments in `adjust-cell-width`.
-adjust-strikethrough-thickness =
+# adjust-strikethrough-thickness =
 
 # Distance in pixels or percentage adjustment from the top of the cell to the top of the overline.
 # Increase to move overline DOWN, decrease to move overline UP.
 # See the notes about adjustments in `adjust-cell-width`.
-adjust-overline-position =
+# adjust-overline-position =
 
 # Thickness in pixels or percentage adjustment of the overline.
 # See the notes about adjustments in `adjust-cell-width`.
-adjust-overline-thickness =
+# adjust-overline-thickness =
 
 # Thickness in pixels or percentage adjustment of the bar cursor and outlined rect cursor.
 # See the notes about adjustments in `adjust-cell-width`.
 # adjust-cursor-thickness =
-adjust-cursor-thickness = 300%
 
 # Height in pixels or percentage adjustment of the cursor. Currently applies to all cursor types:
 # bar, rect, and outlined rect.
 # See the notes about adjustments in `adjust-cell-width`.
-adjust-cursor-height =
+# adjust-cursor-height =
 
 # Thickness in pixels or percentage adjustment of box drawing characters.
 # See the notes about adjustments in `adjust-cell-width`.
-adjust-box-thickness =
+# adjust-box-thickness =
 
 # Height in pixels or percentage adjustment of maximum height for nerd font icons.
 #
@@ -423,7 +379,7 @@ adjust-box-thickness =
 # See the notes about adjustments in `adjust-cell-width`.
 #
 # Available in: 1.2.0
-adjust-icon-height =
+# adjust-icon-height =
 
 # The method to use for calculating the cell width of a grapheme cluster.
 # The default value is `unicode` which uses the Unicode standard to determine
@@ -450,7 +406,7 @@ adjust-icon-height =
 #
 # This configuration can be changed at runtime but will not affect existing
 # terminals. Only new terminals will use the new configuration.
-grapheme-width-method = unicode
+# grapheme-width-method = unicode
 
 # FreeType load flags to enable. The format of this is a list of flags to
 # enable separated by commas. If you prefix a flag with `no-` then it is
@@ -481,7 +437,7 @@ grapheme-width-method = unicode
 #     default.
 #
 # Example: `hinting`, `no-hinting`, `force-autohint`, `no-force-autohint`
-freetype-load-flags = hinting,no-force-autohint,no-monochrome,autohint,light
+# freetype-load-flags = hinting,no-force-autohint,no-monochrome,autohint,light
 
 # A theme to use. This can be a built-in theme name, a custom theme
 # name, or an absolute path to a custom theme file. Ghostty also supports
@@ -537,7 +493,6 @@ freetype-load-flags = hinting,no-force-autohint,no-monochrome,autohint,light
 #
 #   - macOS: titlebar tabs style is not updated when switching themes.
 # theme =
-theme = "Pro"
 
 # Background color for the window.
 # Specified as either hex (`#RRGGBB` or `RRGGBB`) or a named X11 color.
@@ -562,7 +517,7 @@ theme = "Pro"
 # will resolve this by sharing image textures across terminals.
 #
 # Available since: 1.2.0
-background-image =
+# background-image =
 
 # Background image opacity.
 #
@@ -583,7 +538,7 @@ background-image =
 # `0.5 * 1.5 = 0.75`.
 #
 # Available since: 1.2.0
-background-image-opacity = 1
+# background-image-opacity = 1
 
 # Background image position.
 #
@@ -601,7 +556,7 @@ background-image-opacity = 1
 # The default value is `center`.
 #
 # Available since: 1.2.0
-background-image-position = center
+# background-image-position = center
 
 # Background image fit.
 #
@@ -631,7 +586,7 @@ background-image-position = center
 # The default value is `contain`.
 #
 # Available since: 1.2.0
-background-image-fit = contain
+# background-image-fit = contain
 
 # Whether to repeat the background image or not.
 #
@@ -642,7 +597,7 @@ background-image-fit = contain
 # The default value is `false`.
 #
 # Available since: 1.2.0
-background-image-repeat = false
+# background-image-repeat = false
 
 # The foreground and background color for selection. If this is not set, then
 # the selection color is just the inverted window background and foreground
@@ -651,9 +606,9 @@ background-image-repeat = false
 # Since version 1.2.0, this can also be set to `cell-foreground` to match
 # the cell foreground color, or `cell-background` to match the cell
 # background color.
-selection-foreground =
+# selection-foreground =
 
-selection-background =
+# selection-background =
 # Whether to clear selected text when typing. This defaults to `true`.
 # This is typical behavior for most terminal emulators as well as
 # text input fields. If you set this to `false`, then the selected text
@@ -669,7 +624,7 @@ selection-background =
 # cleared by clicking once or by pressing `escape`.
 #
 # Available since: 1.2.0
-selection-clear-on-typing = true
+# selection-clear-on-typing = true
 
 # Whether to clear selected text after copying. This defaults to `false`.
 #
@@ -681,7 +636,7 @@ selection-clear-on-typing = true
 # When set to `false`, the selection remains visible after copying, allowing
 # to see what was copied and potentially perform additional operations
 # on the same selection.
-selection-clear-on-copy = false
+# selection-clear-on-copy = false
 
 # Characters that mark word boundaries during text selection operations such
 # as double-clicking. When selecting a word, the selection will stop at any
@@ -707,7 +662,7 @@ selection-clear-on-copy = false
 #     selection-word-chars = " \t'\"│`|:,()[]{}<>$"
 #
 # Available since: 1.3.0
-selection-word-chars =  	'"│`|:;,()[]{}<>$
+# selection-word-chars =  	'"│`|:;,()[]{}<>$
 
 # The minimum contrast ratio between the foreground and background colors.
 # The contrast ratio is a value between 1 and 21. A value of 1 allows for no
@@ -720,7 +675,7 @@ selection-word-chars =  	'"│`|:;,()[]{}<>$
 # that text will become black or white.
 #
 # This value does not apply to Emoji or images.
-minimum-contrast = 1
+# minimum-contrast = 1
 
 # Color palette for the 256 color form that many terminal applications use.
 # The syntax of this configuration is `N=COLOR` where `N` is 0 to 255 (for
@@ -738,262 +693,262 @@ minimum-contrast = 1
 # For most themes, you only need to set the first 16 colors (0–15) since the
 # rest of the palette (16–255) will be automatically generated by
 # default (see `palette-generate` for more details).
-palette = 0=#1d1f21
-palette = 1=#cc6666
-palette = 2=#b5bd68
-palette = 3=#f0c674
-palette = 4=#81a2be
-palette = 5=#b294bb
-palette = 6=#8abeb7
-palette = 7=#c5c8c6
-palette = 8=#666666
-palette = 9=#d54e53
-palette = 10=#b9ca4a
-palette = 11=#e7c547
-palette = 12=#7aa6da
-palette = 13=#c397d8
-palette = 14=#70c0b1
-palette = 15=#eaeaea
-palette = 16=#000000
-palette = 17=#00005f
-palette = 18=#000087
-palette = 19=#0000af
-palette = 20=#0000d7
-palette = 21=#0000ff
-palette = 22=#005f00
-palette = 23=#005f5f
-palette = 24=#005f87
-palette = 25=#005faf
-palette = 26=#005fd7
-palette = 27=#005fff
-palette = 28=#008700
-palette = 29=#00875f
-palette = 30=#008787
-palette = 31=#0087af
-palette = 32=#0087d7
-palette = 33=#0087ff
-palette = 34=#00af00
-palette = 35=#00af5f
-palette = 36=#00af87
-palette = 37=#00afaf
-palette = 38=#00afd7
-palette = 39=#00afff
-palette = 40=#00d700
-palette = 41=#00d75f
-palette = 42=#00d787
-palette = 43=#00d7af
-palette = 44=#00d7d7
-palette = 45=#00d7ff
-palette = 46=#00ff00
-palette = 47=#00ff5f
-palette = 48=#00ff87
-palette = 49=#00ffaf
-palette = 50=#00ffd7
-palette = 51=#00ffff
-palette = 52=#5f0000
-palette = 53=#5f005f
-palette = 54=#5f0087
-palette = 55=#5f00af
-palette = 56=#5f00d7
-palette = 57=#5f00ff
-palette = 58=#5f5f00
-palette = 59=#5f5f5f
-palette = 60=#5f5f87
-palette = 61=#5f5faf
-palette = 62=#5f5fd7
-palette = 63=#5f5fff
-palette = 64=#5f8700
-palette = 65=#5f875f
-palette = 66=#5f8787
-palette = 67=#5f87af
-palette = 68=#5f87d7
-palette = 69=#5f87ff
-palette = 70=#5faf00
-palette = 71=#5faf5f
-palette = 72=#5faf87
-palette = 73=#5fafaf
-palette = 74=#5fafd7
-palette = 75=#5fafff
-palette = 76=#5fd700
-palette = 77=#5fd75f
-palette = 78=#5fd787
-palette = 79=#5fd7af
-palette = 80=#5fd7d7
-palette = 81=#5fd7ff
-palette = 82=#5fff00
-palette = 83=#5fff5f
-palette = 84=#5fff87
-palette = 85=#5fffaf
-palette = 86=#5fffd7
-palette = 87=#5fffff
-palette = 88=#870000
-palette = 89=#87005f
-palette = 90=#870087
-palette = 91=#8700af
-palette = 92=#8700d7
-palette = 93=#8700ff
-palette = 94=#875f00
-palette = 95=#875f5f
-palette = 96=#875f87
-palette = 97=#875faf
-palette = 98=#875fd7
-palette = 99=#875fff
-palette = 100=#878700
-palette = 101=#87875f
-palette = 102=#878787
-palette = 103=#8787af
-palette = 104=#8787d7
-palette = 105=#8787ff
-palette = 106=#87af00
-palette = 107=#87af5f
-palette = 108=#87af87
-palette = 109=#87afaf
-palette = 110=#87afd7
-palette = 111=#87afff
-palette = 112=#87d700
-palette = 113=#87d75f
-palette = 114=#87d787
-palette = 115=#87d7af
-palette = 116=#87d7d7
-palette = 117=#87d7ff
-palette = 118=#87ff00
-palette = 119=#87ff5f
-palette = 120=#87ff87
-palette = 121=#87ffaf
-palette = 122=#87ffd7
-palette = 123=#87ffff
-palette = 124=#af0000
-palette = 125=#af005f
-palette = 126=#af0087
-palette = 127=#af00af
-palette = 128=#af00d7
-palette = 129=#af00ff
-palette = 130=#af5f00
-palette = 131=#af5f5f
-palette = 132=#af5f87
-palette = 133=#af5faf
-palette = 134=#af5fd7
-palette = 135=#af5fff
-palette = 136=#af8700
-palette = 137=#af875f
-palette = 138=#af8787
-palette = 139=#af87af
-palette = 140=#af87d7
-palette = 141=#af87ff
-palette = 142=#afaf00
-palette = 143=#afaf5f
-palette = 144=#afaf87
-palette = 145=#afafaf
-palette = 146=#afafd7
-palette = 147=#afafff
-palette = 148=#afd700
-palette = 149=#afd75f
-palette = 150=#afd787
-palette = 151=#afd7af
-palette = 152=#afd7d7
-palette = 153=#afd7ff
-palette = 154=#afff00
-palette = 155=#afff5f
-palette = 156=#afff87
-palette = 157=#afffaf
-palette = 158=#afffd7
-palette = 159=#afffff
-palette = 160=#d70000
-palette = 161=#d7005f
-palette = 162=#d70087
-palette = 163=#d700af
-palette = 164=#d700d7
-palette = 165=#d700ff
-palette = 166=#d75f00
-palette = 167=#d75f5f
-palette = 168=#d75f87
-palette = 169=#d75faf
-palette = 170=#d75fd7
-palette = 171=#d75fff
-palette = 172=#d78700
-palette = 173=#d7875f
-palette = 174=#d78787
-palette = 175=#d787af
-palette = 176=#d787d7
-palette = 177=#d787ff
-palette = 178=#d7af00
-palette = 179=#d7af5f
-palette = 180=#d7af87
-palette = 181=#d7afaf
-palette = 182=#d7afd7
-palette = 183=#d7afff
-palette = 184=#d7d700
-palette = 185=#d7d75f
-palette = 186=#d7d787
-palette = 187=#d7d7af
-palette = 188=#d7d7d7
-palette = 189=#d7d7ff
-palette = 190=#d7ff00
-palette = 191=#d7ff5f
-palette = 192=#d7ff87
-palette = 193=#d7ffaf
-palette = 194=#d7ffd7
-palette = 195=#d7ffff
-palette = 196=#ff0000
-palette = 197=#ff005f
-palette = 198=#ff0087
-palette = 199=#ff00af
-palette = 200=#ff00d7
-palette = 201=#ff00ff
-palette = 202=#ff5f00
-palette = 203=#ff5f5f
-palette = 204=#ff5f87
-palette = 205=#ff5faf
-palette = 206=#ff5fd7
-palette = 207=#ff5fff
-palette = 208=#ff8700
-palette = 209=#ff875f
-palette = 210=#ff8787
-palette = 211=#ff87af
-palette = 212=#ff87d7
-palette = 213=#ff87ff
-palette = 214=#ffaf00
-palette = 215=#ffaf5f
-palette = 216=#ffaf87
-palette = 217=#ffafaf
-palette = 218=#ffafd7
-palette = 219=#ffafff
-palette = 220=#ffd700
-palette = 221=#ffd75f
-palette = 222=#ffd787
-palette = 223=#ffd7af
-palette = 224=#ffd7d7
-palette = 225=#ffd7ff
-palette = 226=#ffff00
-palette = 227=#ffff5f
-palette = 228=#ffff87
-palette = 229=#ffffaf
-palette = 230=#ffffd7
-palette = 231=#ffffff
-palette = 232=#080808
-palette = 233=#121212
-palette = 234=#1c1c1c
-palette = 235=#262626
-palette = 236=#303030
-palette = 237=#3a3a3a
-palette = 238=#444444
-palette = 239=#4e4e4e
-palette = 240=#585858
-palette = 241=#626262
-palette = 242=#6c6c6c
-palette = 243=#767676
-palette = 244=#808080
-palette = 245=#8a8a8a
-palette = 246=#949494
-palette = 247=#9e9e9e
-palette = 248=#a8a8a8
-palette = 249=#b2b2b2
-palette = 250=#bcbcbc
-palette = 251=#c6c6c6
-palette = 252=#d0d0d0
-palette = 253=#dadada
-palette = 254=#e4e4e4
-palette = 255=#eeeeee
+# palette = 0=#1d1f21
+# palette = 1=#cc6666
+# palette = 2=#b5bd68
+# palette = 3=#f0c674
+# palette = 4=#81a2be
+# palette = 5=#b294bb
+# palette = 6=#8abeb7
+# palette = 7=#c5c8c6
+# palette = 8=#666666
+# palette = 9=#d54e53
+# palette = 10=#b9ca4a
+# palette = 11=#e7c547
+# palette = 12=#7aa6da
+# palette = 13=#c397d8
+# palette = 14=#70c0b1
+# palette = 15=#eaeaea
+# palette = 16=#000000
+# palette = 17=#00005f
+# palette = 18=#000087
+# palette = 19=#0000af
+# palette = 20=#0000d7
+# palette = 21=#0000ff
+# palette = 22=#005f00
+# palette = 23=#005f5f
+# palette = 24=#005f87
+# palette = 25=#005faf
+# palette = 26=#005fd7
+# palette = 27=#005fff
+# palette = 28=#008700
+# palette = 29=#00875f
+# palette = 30=#008787
+# palette = 31=#0087af
+# palette = 32=#0087d7
+# palette = 33=#0087ff
+# palette = 34=#00af00
+# palette = 35=#00af5f
+# palette = 36=#00af87
+# palette = 37=#00afaf
+# palette = 38=#00afd7
+# palette = 39=#00afff
+# palette = 40=#00d700
+# palette = 41=#00d75f
+# palette = 42=#00d787
+# palette = 43=#00d7af
+# palette = 44=#00d7d7
+# palette = 45=#00d7ff
+# palette = 46=#00ff00
+# palette = 47=#00ff5f
+# palette = 48=#00ff87
+# palette = 49=#00ffaf
+# palette = 50=#00ffd7
+# palette = 51=#00ffff
+# palette = 52=#5f0000
+# palette = 53=#5f005f
+# palette = 54=#5f0087
+# palette = 55=#5f00af
+# palette = 56=#5f00d7
+# palette = 57=#5f00ff
+# palette = 58=#5f5f00
+# palette = 59=#5f5f5f
+# palette = 60=#5f5f87
+# palette = 61=#5f5faf
+# palette = 62=#5f5fd7
+# palette = 63=#5f5fff
+# palette = 64=#5f8700
+# palette = 65=#5f875f
+# palette = 66=#5f8787
+# palette = 67=#5f87af
+# palette = 68=#5f87d7
+# palette = 69=#5f87ff
+# palette = 70=#5faf00
+# palette = 71=#5faf5f
+# palette = 72=#5faf87
+# palette = 73=#5fafaf
+# palette = 74=#5fafd7
+# palette = 75=#5fafff
+# palette = 76=#5fd700
+# palette = 77=#5fd75f
+# palette = 78=#5fd787
+# palette = 79=#5fd7af
+# palette = 80=#5fd7d7
+# palette = 81=#5fd7ff
+# palette = 82=#5fff00
+# palette = 83=#5fff5f
+# palette = 84=#5fff87
+# palette = 85=#5fffaf
+# palette = 86=#5fffd7
+# palette = 87=#5fffff
+# palette = 88=#870000
+# palette = 89=#87005f
+# palette = 90=#870087
+# palette = 91=#8700af
+# palette = 92=#8700d7
+# palette = 93=#8700ff
+# palette = 94=#875f00
+# palette = 95=#875f5f
+# palette = 96=#875f87
+# palette = 97=#875faf
+# palette = 98=#875fd7
+# palette = 99=#875fff
+# palette = 100=#878700
+# palette = 101=#87875f
+# palette = 102=#878787
+# palette = 103=#8787af
+# palette = 104=#8787d7
+# palette = 105=#8787ff
+# palette = 106=#87af00
+# palette = 107=#87af5f
+# palette = 108=#87af87
+# palette = 109=#87afaf
+# palette = 110=#87afd7
+# palette = 111=#87afff
+# palette = 112=#87d700
+# palette = 113=#87d75f
+# palette = 114=#87d787
+# palette = 115=#87d7af
+# palette = 116=#87d7d7
+# palette = 117=#87d7ff
+# palette = 118=#87ff00
+# palette = 119=#87ff5f
+# palette = 120=#87ff87
+# palette = 121=#87ffaf
+# palette = 122=#87ffd7
+# palette = 123=#87ffff
+# palette = 124=#af0000
+# palette = 125=#af005f
+# palette = 126=#af0087
+# palette = 127=#af00af
+# palette = 128=#af00d7
+# palette = 129=#af00ff
+# palette = 130=#af5f00
+# palette = 131=#af5f5f
+# palette = 132=#af5f87
+# palette = 133=#af5faf
+# palette = 134=#af5fd7
+# palette = 135=#af5fff
+# palette = 136=#af8700
+# palette = 137=#af875f
+# palette = 138=#af8787
+# palette = 139=#af87af
+# palette = 140=#af87d7
+# palette = 141=#af87ff
+# palette = 142=#afaf00
+# palette = 143=#afaf5f
+# palette = 144=#afaf87
+# palette = 145=#afafaf
+# palette = 146=#afafd7
+# palette = 147=#afafff
+# palette = 148=#afd700
+# palette = 149=#afd75f
+# palette = 150=#afd787
+# palette = 151=#afd7af
+# palette = 152=#afd7d7
+# palette = 153=#afd7ff
+# palette = 154=#afff00
+# palette = 155=#afff5f
+# palette = 156=#afff87
+# palette = 157=#afffaf
+# palette = 158=#afffd7
+# palette = 159=#afffff
+# palette = 160=#d70000
+# palette = 161=#d7005f
+# palette = 162=#d70087
+# palette = 163=#d700af
+# palette = 164=#d700d7
+# palette = 165=#d700ff
+# palette = 166=#d75f00
+# palette = 167=#d75f5f
+# palette = 168=#d75f87
+# palette = 169=#d75faf
+# palette = 170=#d75fd7
+# palette = 171=#d75fff
+# palette = 172=#d78700
+# palette = 173=#d7875f
+# palette = 174=#d78787
+# palette = 175=#d787af
+# palette = 176=#d787d7
+# palette = 177=#d787ff
+# palette = 178=#d7af00
+# palette = 179=#d7af5f
+# palette = 180=#d7af87
+# palette = 181=#d7afaf
+# palette = 182=#d7afd7
+# palette = 183=#d7afff
+# palette = 184=#d7d700
+# palette = 185=#d7d75f
+# palette = 186=#d7d787
+# palette = 187=#d7d7af
+# palette = 188=#d7d7d7
+# palette = 189=#d7d7ff
+# palette = 190=#d7ff00
+# palette = 191=#d7ff5f
+# palette = 192=#d7ff87
+# palette = 193=#d7ffaf
+# palette = 194=#d7ffd7
+# palette = 195=#d7ffff
+# palette = 196=#ff0000
+# palette = 197=#ff005f
+# palette = 198=#ff0087
+# palette = 199=#ff00af
+# palette = 200=#ff00d7
+# palette = 201=#ff00ff
+# palette = 202=#ff5f00
+# palette = 203=#ff5f5f
+# palette = 204=#ff5f87
+# palette = 205=#ff5faf
+# palette = 206=#ff5fd7
+# palette = 207=#ff5fff
+# palette = 208=#ff8700
+# palette = 209=#ff875f
+# palette = 210=#ff8787
+# palette = 211=#ff87af
+# palette = 212=#ff87d7
+# palette = 213=#ff87ff
+# palette = 214=#ffaf00
+# palette = 215=#ffaf5f
+# palette = 216=#ffaf87
+# palette = 217=#ffafaf
+# palette = 218=#ffafd7
+# palette = 219=#ffafff
+# palette = 220=#ffd700
+# palette = 221=#ffd75f
+# palette = 222=#ffd787
+# palette = 223=#ffd7af
+# palette = 224=#ffd7d7
+# palette = 225=#ffd7ff
+# palette = 226=#ffff00
+# palette = 227=#ffff5f
+# palette = 228=#ffff87
+# palette = 229=#ffffaf
+# palette = 230=#ffffd7
+# palette = 231=#ffffff
+# palette = 232=#080808
+# palette = 233=#121212
+# palette = 234=#1c1c1c
+# palette = 235=#262626
+# palette = 236=#303030
+# palette = 237=#3a3a3a
+# palette = 238=#444444
+# palette = 239=#4e4e4e
+# palette = 240=#585858
+# palette = 241=#626262
+# palette = 242=#6c6c6c
+# palette = 243=#767676
+# palette = 244=#808080
+# palette = 245=#8a8a8a
+# palette = 246=#949494
+# palette = 247=#9e9e9e
+# palette = 248=#a8a8a8
+# palette = 249=#b2b2b2
+# palette = 250=#bcbcbc
+# palette = 251=#c6c6c6
+# palette = 252=#d0d0d0
+# palette = 253=#dadada
+# palette = 254=#e4e4e4
+# palette = 255=#eeeeee
 
 # Whether to automatically generate the extended 256 color palette
 # (indices 16–255) from the base 16 ANSI colors.
@@ -1017,7 +972,7 @@ palette = 255=#eeeeee
 # https://gist.github.com/jake-stewart/0a8ea46159a7da2c808e5be2177e1783
 #
 # Available since: 1.3.0
-palette-generate = false
+# palette-generate = false
 
 # Invert the palette colors generated when `palette-generate` is enabled,
 # so that the colors go in reverse order. This allows palette-based
@@ -1035,7 +990,7 @@ palette-generate = false
 # For more information see `palette-generate`.
 #
 # Available since: 1.3.0
-palette-harmonious = false
+# palette-harmonious = false
 
 # The color of the cursor. If this is not set, a default will be chosen.
 #
@@ -1051,14 +1006,13 @@ palette-harmonious = false
 #   * `cell-background` - Match the cell background color.
 #     (Available since: 1.2.0)
 # cursor-color =
-cursor-color = "#6BF549"
 
 # The opacity level (opposite of transparency) of the cursor. A value of 1
 # is fully opaque and a value of 0 is fully transparent. A value less than 0
 # or greater than 1 will be clamped to the nearest valid value. Note that a
 # sufficiently small value such as 0.3 may be effectively invisible and may
 # make it difficult to find the cursor.
-cursor-opacity = 1
+# cursor-opacity = 1
 
 # The style of the cursor. This sets the default style. A running program can
 # still request an explicit cursor style using escape sequences (such as `CSI
@@ -1075,7 +1029,7 @@ cursor-opacity = 1
 #   * `bar`
 #   * `underline`
 #   * `block_hollow`
-cursor-style = block
+# cursor-style = block
 
 # Sets the default blinking state of the cursor. This is just the default
 # state; running programs may override the cursor style using `DECSCUSR` (`CSI
@@ -1094,7 +1048,7 @@ cursor-style = block
 #   * ` ` (blank)
 #   * `true`
 #   * `false`
-cursor-style-blink =
+# cursor-style-blink =
 
 # The color of the text under the cursor. If this is not set, a default will
 # be chosen.
@@ -1102,7 +1056,7 @@ cursor-style-blink =
 # Since version 1.2.0, this can also be set to `cell-foreground` to match
 # the cell foreground color, or `cell-background` to match the cell
 # background color.
-cursor-text =
+# cursor-text =
 
 # Enables the ability to move the cursor at prompts by clicking on a
 # location in the prompt text.
@@ -1116,13 +1070,13 @@ cursor-text =
 # position into a series of synthetic arrow key movements or by sending
 # a click event directly to the shell. In either case, some unexpected
 # behavior around edge cases is possible.
-cursor-click-to-move = true
+# cursor-click-to-move = true
 
 # Hide the mouse immediately when typing. The mouse becomes visible again
 # when the mouse is used (button, movement, etc.). Platform-specific behavior
 # may dictate other scenarios where the mouse is shown. For example on macOS,
 # the mouse is shown again when a new window, tab, or split is created.
-mouse-hide-while-typing = false
+# mouse-hide-while-typing = false
 
 # When to scroll the surface to the bottom. The format of this is a list of
 # options to enable separated by commas. If you prefix an option with `no-`
@@ -1138,7 +1092,7 @@ mouse-hide-while-typing = false
 #   to display (e.g., when new lines are printed to the terminal).
 #
 # The default is `keystroke, no-output`.
-scroll-to-bottom = keystroke,no-output
+# scroll-to-bottom = keystroke,no-output
 
 # Determines whether running programs can detect the shift key pressed with a
 # mouse click. Typically, the shift key is used to extend mouse selection.
@@ -1165,7 +1119,7 @@ scroll-to-bottom = keystroke,no-output
 #   * `false`
 #   * `always`
 #   * `never`
-mouse-shift-capture = false
+# mouse-shift-capture = false
 
 # Enable or disable mouse reporting. When set to `false`, mouse events will
 # not be reported to terminal applications even if they request it. This
@@ -1177,7 +1131,7 @@ mouse-shift-capture = false
 #
 # This can be toggled at runtime using the `toggle_mouse_reporting` keybind
 # action.
-mouse-reporting = true
+# mouse-reporting = true
 
 # Multiplier for scrolling distance with the mouse wheel.
 #
@@ -1192,7 +1146,7 @@ mouse-reporting = true
 # and you're likely to have a bad experience if you set either extreme.
 #
 # The default value is "3" for discrete devices and "1" for precision devices.
-mouse-scroll-multiplier = precision:1,discrete:3
+# mouse-scroll-multiplier = precision:1,discrete:3
 
 # The opacity level (opposite of transparency) of the background. A value of
 # 1 is fully opaque and a value of 0 is fully transparent. A value less than 0
@@ -1203,7 +1157,7 @@ mouse-scroll-multiplier = precision:1,discrete:3
 # widgets to show through which isn't generally desirable.
 #
 # On macOS, changing this configuration requires restarting Ghostty completely.
-background-opacity = 1
+# background-opacity = 1
 
 # Applies background opacity to cells with an explicit background color
 # set.
@@ -1219,7 +1173,7 @@ background-opacity = 1
 # regardless of whether they have an explicit background color set or not.
 #
 # Available since: 1.2.0
-background-opacity-cells = false
+# background-opacity-cells = false
 
 # Whether to blur the background when `background-opacity` is less than 1.
 #
@@ -1261,7 +1215,7 @@ background-opacity-cells = false
 # need to set environment-specific settings and/or install third-party plugins
 # in order to support background blur, as there isn't a unified interface for
 # doing so.
-background-blur = false
+# background-blur = false
 
 # The opacity level (opposite of transparency) of an unfocused split.
 # Unfocused splits by default are slightly faded out to make it easier to see
@@ -1272,7 +1226,7 @@ background-blur = false
 # is 0.15. This value still looks weird but you can at least see what's going
 # on. A value outside of the range 0.15 to 1 will be clamped to the nearest
 # valid value.
-unfocused-split-opacity = 0.7
+# unfocused-split-opacity = 0.7
 
 # The color to dim the unfocused split. Unfocused splits are dimmed by
 # rendering a semi-transparent rectangle over the split. This sets the color of
@@ -1281,13 +1235,13 @@ unfocused-split-opacity = 0.7
 # This will default to the background color.
 #
 # Specified as either hex (`#RRGGBB` or `RRGGBB`) or a named X11 color.
-unfocused-split-fill =
+# unfocused-split-fill =
 
 # The color of the split divider. If this is not set, a default will be chosen.
 # Specified as either hex (`#RRGGBB` or `RRGGBB`) or a named X11 color.
 #
 # Available since: 1.1.0
-split-divider-color =
+# split-divider-color =
 
 # Control when Ghostty preserves a zoomed split. Under normal circumstances,
 # any operation that changes focus or layout of the split tree in a window
@@ -1303,7 +1257,7 @@ split-divider-color =
 # Example: `split-preserve-zoom = navigation`
 #
 # Available since: 1.3.0
-split-preserve-zoom = no-navigation
+# split-preserve-zoom = no-navigation
 
 # The foreground and background color for search matches. This only applies
 # to non-focused search matches, also known as candidate matches.
@@ -1316,9 +1270,9 @@ split-preserve-zoom = no-navigation
 #   - "cell-background" to match the cell background color
 #
 # The default value is black text on a golden yellow background.
-search-foreground = #000000
+# search-foreground = #000000
 
-search-background = #ffe082
+# search-background = #ffe082
 # The foreground and background color for the currently selected search match.
 # This is the focused match that will be jumped to when using next/previous
 # search navigation.
@@ -1331,9 +1285,9 @@ search-background = #ffe082
 #   - "cell-background" to match the cell background color
 #
 # The default value is black text on a soft peach background.
-search-selected-foreground = #000000
+# search-selected-foreground = #000000
 
-search-selected-background = #f2a57e
+# search-selected-background = #f2a57e
 # The command to run, usually a shell. If this is not an absolute path, it'll
 # be looked up in the `PATH`. If this is not set, a default will be looked up
 # from your system. The rules for the default lookup are:
@@ -1363,7 +1317,7 @@ search-selected-background = #f2a57e
 # arguments. For example, `ghostty -e fish --with --custom --args`.
 # This flag sets the `initial-command` configuration, see that for more
 # information.
-command =
+# command =
 
 # This is the same as "command", but only applies to the first terminal
 # surface created when Ghostty starts. Subsequent terminal surfaces will use
@@ -1399,7 +1353,7 @@ command =
 #     shell integration with a `-e`-executed command, you must either
 #     name your binary appropriately or source the shell integration script
 #     manually.
-initial-command =
+# initial-command =
 
 # Controls when command finished notifications are sent. There are
 # three options:
@@ -1418,7 +1372,7 @@ initial-command =
 # options.
 #
 # Available since 1.3.0.
-notify-on-command-finish = never
+# notify-on-command-finish = never
 
 # If command finished notifications are enabled, this controls how the user is
 # notified.
@@ -1432,7 +1386,7 @@ notify-on-command-finish = never
 # can be negated by prefixing them with `no-`. For example `no-bell,notify`.
 #
 # Available since 1.3.0.
-notify-on-command-finish-action = bell,no-notify
+# notify-on-command-finish-action = bell,no-notify
 
 # If command finished notifications are enabled, this controls how long a
 # command must have been running before a notification will be sent. The
@@ -1466,7 +1420,7 @@ notify-on-command-finish-action = bell,no-notify
 # value larger than this will be clamped to the maximum value.
 #
 # Available since 1.3.0
-notify-on-command-finish-after = 5s
+# notify-on-command-finish-after = 5s
 
 # Extra environment variables to pass to commands launched in a terminal
 # surface. The format is `env=KEY=VALUE`.
@@ -1504,7 +1458,7 @@ notify-on-command-finish-after = 5s
 # browser.
 #
 # Available since: 1.2.0
-env =
+# env =
 
 # Data to send as input to the command on startup.
 #
@@ -1547,7 +1501,7 @@ env =
 # terminals.
 #
 # Available since: 1.2.0
-input =
+# input =
 
 # If true, keep the terminal open after the command exits. Normally, the
 # terminal window closes when the running command (such as a shell) exits.
@@ -1555,7 +1509,7 @@ input =
 # received.
 #
 # This is primarily useful for scripts or debugging.
-wait-after-command = false
+# wait-after-command = false
 
 # The number of milliseconds of runtime below which we consider a process exit
 # to be abnormal. This is used to show an error message when the process exits
@@ -1564,7 +1518,7 @@ wait-after-command = false
 # On Linux, this must be paired with a non-zero exit code. On macOS, we allow
 # any exit code because of the way shell processes are launched via the login
 # command.
-abnormal-command-exit-runtime = 250
+# abnormal-command-exit-runtime = 250
 
 # The size of the scrollback buffer in bytes. This also includes the active
 # screen. No matter what this is set to, enough memory will always be
@@ -1586,7 +1540,6 @@ abnormal-command-exit-runtime = 250
 #
 # This can be changed at runtime but will only affect new terminal surfaces.
 # scrollback-limit = 10000000
-scrollback-limit = 25_000_000
 
 # Control when the scrollbar is shown to scroll the scrollback buffer.
 #
@@ -1602,7 +1555,7 @@ scrollback-limit = 25_000_000
 #   * `never` - Never show a scrollbar. You can still scroll using the mouse,
 #     keybind actions, etc. but you will not have a visual UI widget showing
 #     a scrollbar.
-scrollbar = system
+# scrollbar = system
 
 # Match a regular expression against the terminal text and associate clicking
 # it with an action. This can be used to match URLs, file paths, etc. Actions
@@ -1623,7 +1576,7 @@ scrollbar = system
 #
 # The URL matcher is always lowest priority of any configured links (see
 # `link`). If you want to customize URL matching, use `link` and disable this.
-link-url = true
+# link-url = true
 
 # Show link previews for a matched URL.
 #
@@ -1633,14 +1586,14 @@ link-url = true
 # can differ from the link destination).
 #
 # Available since: 1.2.0
-link-previews = true
+# link-previews = true
 
 # Whether to start the window in a maximized state. This setting applies
 # to new windows and does not apply to tabs, splits, etc. However, this setting
 # will apply to all new windows, not just the first one.
 #
 # Available since: 1.1.0
-maximize = false
+# maximize = false
 
 # Start new windows in fullscreen. This setting applies to new windows and
 # does not apply to tabs, splits, etc. However, this setting will apply to all
@@ -1666,7 +1619,7 @@ maximize = false
 # On macOS, `true` (native fullscreen) does not work if `window-decoration`
 # is set to `false`, because native fullscreen on macOS requires window
 # decorations.
-fullscreen = false
+# fullscreen = false
 
 # The title Ghostty will use for the window. This will force the title of the
 # window to be this title at all times and Ghostty will ignore any set title
@@ -1682,7 +1635,7 @@ fullscreen = false
 # sequence will be honored but previous changes will not retroactively
 # be set. This latter case may require you to restart programs such as Neovim
 # to get the new title.
-title =
+# title =
 
 # The setting that will change the application class value.
 #
@@ -1704,7 +1657,7 @@ title =
 # The default is `com.mitchellh.ghostty`.
 #
 # This only affects GTK builds.
-class =
+# class =
 
 # This controls the instance name field of the `WM_CLASS` X11 property when
 # running under X11. It has no effect otherwise.
@@ -1712,7 +1665,7 @@ class =
 # The default is `ghostty`.
 #
 # This only affects GTK builds.
-x11-instance-name =
+# x11-instance-name =
 
 # The directory to change to after starting the command.
 #
@@ -1734,7 +1687,7 @@ x11-instance-name =
 #   * `home` - The home directory of the executing user.
 #
 #   * `inherit` - The working directory of the launching process.
-working-directory =
+# working-directory =
 
 # Key bindings. The format is `trigger=action`. Duplicate triggers will
 # overwrite previously set values. The list of actions is available in
@@ -2068,99 +2021,99 @@ working-directory =
 #     `foo/global:ctrl+a=new_window`.
 #
 # Key tables are available since Ghostty 1.3.0.
-keybind = super+shift+,=reload_config
-keybind = super+,=open_config
-keybind = copy=copy_to_clipboard:mixed
-keybind = paste=paste_from_clipboard
-keybind = super+c=copy_to_clipboard:mixed
-keybind = super+v=paste_from_clipboard
-keybind = super+==increase_font_size:1
-keybind = super++=increase_font_size:1
-keybind = super+-=decrease_font_size:1
-keybind = super+0=reset_font_size
-keybind = super+ctrl+shift+j=write_screen_file:copy,plain
-keybind = super+shift+j=write_screen_file:paste,plain
-keybind = super+alt+shift+j=write_screen_file:open,plain
-keybind = shift+arrow_left=adjust_selection:left
-keybind = shift+arrow_right=adjust_selection:right
-keybind = shift+arrow_up=adjust_selection:up
-keybind = shift+arrow_down=adjust_selection:down
-keybind = shift+page_up=adjust_selection:page_up
-keybind = shift+page_down=adjust_selection:page_down
-keybind = shift+home=adjust_selection:home
-keybind = shift+end=adjust_selection:end
-keybind = ctrl+shift+tab=previous_tab
-keybind = ctrl+tab=next_tab
-keybind = super+digit_1=goto_tab:1
-keybind = super+1=goto_tab:1
-keybind = super+digit_2=goto_tab:2
-keybind = super+2=goto_tab:2
-keybind = super+digit_3=goto_tab:3
-keybind = super+3=goto_tab:3
-keybind = super+digit_4=goto_tab:4
-keybind = super+4=goto_tab:4
-keybind = super+digit_5=goto_tab:5
-keybind = super+5=goto_tab:5
-keybind = super+digit_6=goto_tab:6
-keybind = super+6=goto_tab:6
-keybind = super+digit_7=goto_tab:7
-keybind = super+7=goto_tab:7
-keybind = super+digit_8=goto_tab:8
-keybind = super+8=goto_tab:8
-keybind = super+9=last_tab
-keybind = super+enter=toggle_fullscreen
-keybind = super+shift+enter=toggle_split_zoom
-keybind = super+shift+p=toggle_command_palette
-keybind = super+q=quit
-keybind = super+k=clear_screen
-keybind = super+a=select_all
-keybind = super+shift+t=undo
-keybind = super+z=undo
-keybind = super+shift+z=redo
-keybind = super+home=scroll_to_top
-keybind = super+end=scroll_to_bottom
-keybind = super+page_up=scroll_page_up
-keybind = super+page_down=scroll_page_down
-keybind = super+j=scroll_to_selection
-keybind = super+shift+arrow_up=jump_to_prompt:-1
-keybind = super+shift+arrow_down=jump_to_prompt:1
-keybind = super+n=new_window
-keybind = super+w=close_surface
-keybind = super+alt+w=close_tab:this
-keybind = super+shift+w=close_window
-keybind = super+alt+shift+w=close_all_windows
-keybind = super+t=new_tab
-keybind = super+shift+[=previous_tab
-keybind = super+shift+]=next_tab
-keybind = super+d=new_split:right
-keybind = super+shift+d=new_split:down
-keybind = super+[=goto_split:previous
-keybind = super+]=goto_split:next
-keybind = super+alt+arrow_up=goto_split:up
-keybind = super+alt+arrow_down=goto_split:down
-keybind = super+alt+arrow_left=goto_split:left
-keybind = super+alt+arrow_right=goto_split:right
-keybind = super+ctrl+arrow_up=resize_split:up,10
-keybind = super+ctrl+arrow_down=resize_split:down,10
-keybind = super+ctrl+arrow_left=resize_split:left,10
-keybind = super+ctrl+arrow_right=resize_split:right,10
-keybind = super+ctrl+==equalize_splits
-keybind = super+arrow_up=jump_to_prompt:-1
-keybind = super+arrow_down=jump_to_prompt:1
-keybind = super+f=start_search
-keybind = super+e=search_selection
-keybind = super+shift+f=end_search
-keybind = escape=end_search
-keybind = super+g=navigate_search:next
-keybind = super+shift+g=navigate_search:previous
-keybind = super+alt+i=inspector:toggle
-keybind = super+ctrl+f=toggle_fullscreen
-keybind = super+shift+v=paste_from_selection
-keybind = super+arrow_right=text:\\x05
-keybind = super+arrow_left=text:\\x01
-keybind = super+backspace=text:\\x15
-keybind = alt+arrow_left=esc:b
-keybind = alt+arrow_right=esc:f
+# keybind = super+shift+,=reload_config
+# keybind = super+,=open_config
+# keybind = copy=copy_to_clipboard:mixed
+# keybind = paste=paste_from_clipboard
+# keybind = super+c=copy_to_clipboard:mixed
+# keybind = super+v=paste_from_clipboard
+# keybind = super+==increase_font_size:1
+# keybind = super++=increase_font_size:1
+# keybind = super+-=decrease_font_size:1
+# keybind = super+0=reset_font_size
+# keybind = super+ctrl+shift+j=write_screen_file:copy,plain
+# keybind = super+shift+j=write_screen_file:paste,plain
+# keybind = super+alt+shift+j=write_screen_file:open,plain
+# keybind = shift+arrow_left=adjust_selection:left
+# keybind = shift+arrow_right=adjust_selection:right
+# keybind = shift+arrow_up=adjust_selection:up
+# keybind = shift+arrow_down=adjust_selection:down
+# keybind = shift+page_up=adjust_selection:page_up
+# keybind = shift+page_down=adjust_selection:page_down
+# keybind = shift+home=adjust_selection:home
+# keybind = shift+end=adjust_selection:end
+# keybind = ctrl+shift+tab=previous_tab
+# keybind = ctrl+tab=next_tab
+# keybind = super+digit_1=goto_tab:1
+# keybind = super+1=goto_tab:1
+# keybind = super+digit_2=goto_tab:2
+# keybind = super+2=goto_tab:2
+# keybind = super+digit_3=goto_tab:3
+# keybind = super+3=goto_tab:3
+# keybind = super+digit_4=goto_tab:4
+# keybind = super+4=goto_tab:4
+# keybind = super+digit_5=goto_tab:5
+# keybind = super+5=goto_tab:5
+# keybind = super+digit_6=goto_tab:6
+# keybind = super+6=goto_tab:6
+# keybind = super+digit_7=goto_tab:7
+# keybind = super+7=goto_tab:7
+# keybind = super+digit_8=goto_tab:8
+# keybind = super+8=goto_tab:8
+# keybind = super+9=last_tab
+# keybind = super+enter=toggle_fullscreen
+# keybind = super+shift+enter=toggle_split_zoom
+# keybind = super+shift+p=toggle_command_palette
+# keybind = super+q=quit
+# keybind = super+k=clear_screen
+# keybind = super+a=select_all
+# keybind = super+shift+t=undo
+# keybind = super+z=undo
+# keybind = super+shift+z=redo
+# keybind = super+home=scroll_to_top
+# keybind = super+end=scroll_to_bottom
+# keybind = super+page_up=scroll_page_up
+# keybind = super+page_down=scroll_page_down
+# keybind = super+j=scroll_to_selection
+# keybind = super+shift+arrow_up=jump_to_prompt:-1
+# keybind = super+shift+arrow_down=jump_to_prompt:1
+# keybind = super+n=new_window
+# keybind = super+w=close_surface
+# keybind = super+alt+w=close_tab:this
+# keybind = super+shift+w=close_window
+# keybind = super+alt+shift+w=close_all_windows
+# keybind = super+t=new_tab
+# keybind = super+shift+[=previous_tab
+# keybind = super+shift+]=next_tab
+# keybind = super+d=new_split:right
+# keybind = super+shift+d=new_split:down
+# keybind = super+[=goto_split:previous
+# keybind = super+]=goto_split:next
+# keybind = super+alt+arrow_up=goto_split:up
+# keybind = super+alt+arrow_down=goto_split:down
+# keybind = super+alt+arrow_left=goto_split:left
+# keybind = super+alt+arrow_right=goto_split:right
+# keybind = super+ctrl+arrow_up=resize_split:up,10
+# keybind = super+ctrl+arrow_down=resize_split:down,10
+# keybind = super+ctrl+arrow_left=resize_split:left,10
+# keybind = super+ctrl+arrow_right=resize_split:right,10
+# keybind = super+ctrl+==equalize_splits
+# keybind = super+arrow_up=jump_to_prompt:-1
+# keybind = super+arrow_down=jump_to_prompt:1
+# keybind = super+f=start_search
+# keybind = super+e=search_selection
+# keybind = super+shift+f=end_search
+# keybind = escape=end_search
+# keybind = super+g=navigate_search:next
+# keybind = super+shift+g=navigate_search:previous
+# keybind = super+alt+i=inspector:toggle
+# keybind = super+ctrl+f=toggle_fullscreen
+# keybind = super+shift+v=paste_from_selection
+# keybind = super+arrow_right=text:\\x05
+# keybind = super+arrow_left=text:\\x01
+# keybind = super+backspace=text:\\x15
+# keybind = alt+arrow_left=esc:b
+# keybind = alt+arrow_right=esc:f
 
 # Remap modifier keys within Ghostty. This allows you to swap or reassign
 # modifier keys at the application level without affecting system-wide
@@ -2206,38 +2159,7 @@ keybind = alt+arrow_right=esc:f
 #   desired modifier.
 #
 # This configuration can be repeated to specify multiple remaps.
-key-remap =
-
-# GIB ADDITIONS
-# https://ghostty.org/docs/config/keybind/reference
-
-# Move tab backward
-keybind = super+a=move_tab:-1
-# View scrollback in less.
-# TODO: Needs https://github.com/ghostty-org/ghostty/issues/2504 to work nicely.
-# Open scrollback in editor
-keybind = super+alt+f=write_scrollback_file:paste
-# Vim up key: vertical split
-keybind = super+e=new_split:right
-# Vim left key: left a tab.
-keybind = super+h=previous_tab
-# Vim right key: right a tab.
-keybind = super+i=next_tab
-# Vim down key: horizontal split.
-keybind = super+n=new_split:down
-# Move tab forward
-keybind = super+s=move_tab:1
-
-# Create with vim arrow keys, move with real arrow keys.
-keybind = super+arrow_left=goto_split:left
-keybind = super+arrow_right=goto_split:right
-keybind = super+arrow_down=goto_split:down
-keybind = super+arrow_up=goto_split:up
-
-# keybind = super+shift+h=resize_split:left,10
-# keybind = super+shift+n=resize_split:down,10
-# keybind = super+shift+e=resize_split:up,10
-# keybind = super+shift+i=resize_split:right,10
+# key-remap =
 
 # Horizontal window padding. This applies padding between the terminal cells
 # and the left and right window borders. The value is in points, meaning that
@@ -2256,7 +2178,7 @@ keybind = super+arrow_up=goto_split:up
 # left padding to 2 and the right padding to 4. If you want to set both
 # paddings to the same value, you can use a single value. For example,
 # `window-padding-x = 2` will set both paddings to 2.
-window-padding-x = 2
+# window-padding-x = 2
 
 # Vertical window padding. This applies padding between the terminal cells and
 # the top and bottom window borders. The value is in points, meaning that it
@@ -2275,7 +2197,7 @@ window-padding-x = 2
 # top padding to 2 and the bottom padding to 4. If you want to set both
 # paddings to the same value, you can use a single value. For example,
 # `window-padding-y = 2` will set both paddings to 2.
-window-padding-y = 2
+# window-padding-y = 2
 
 # The viewport dimensions are usually not perfectly divisible by the cell
 # size. In this case, some extra padding on the end of a column and the bottom
@@ -2289,16 +2211,7 @@ window-padding-y = 2
 # apply. The other padding is applied first and may affect how many grid cells
 # actually exist, and this is applied last in order to balance the padding
 # given a certain viewport size and grid cell size.
-#
-# Valid values are:
-#
-# * `false` - No balancing is applied.
-# * `true` - Balance the padding, but cap the top padding to avoid
-#   excessive space above the first row. Any excess is shifted to the
-#   bottom.
-# * `equal` - Balance the padding equally on all sides without any
-#   top-padding cap. (Available since: 1.4.0)
-window-padding-balance = false
+# window-padding-balance = false
 
 # The color of the padding area of the window. Valid values are:
 #
@@ -2319,7 +2232,7 @@ window-padding-balance = false
 #   do not look good extended.
 # * The nearest row contains a perfect fit powerline character. These
 #   don't look good extended.
-window-padding-color = background
+# window-padding-color = background
 
 # Synchronize rendering with the screen refresh rate. If true, this will
 # minimize tearing and align redraws with the screen but may cause input
@@ -2334,28 +2247,28 @@ window-padding-color = background
 # Changing this value at runtime will only affect new terminals.
 #
 # This setting is only supported currently on macOS.
-window-vsync = true
+# window-vsync = true
 
 # If true, new windows will inherit the working directory of the
 # previously focused window. If no window was previously focused, the default
 # working directory will be used (the `working-directory` option).
-window-inherit-working-directory = true
+# window-inherit-working-directory = true
 
 # If true, new tabs will inherit the working directory of the
 # previously focused tab. If no tab was previously focused, the default
 # working directory will be used (the `working-directory` option).
-tab-inherit-working-directory = true
+# tab-inherit-working-directory = true
 
 # If true, new split panes will inherit the working directory of the
 # previously focused split. If no split was previously focused, the default
 # working directory will be used (the `working-directory` option).
-split-inherit-working-directory = true
+# split-inherit-working-directory = true
 
 # If true, new windows and tabs will inherit the font size of the previously
 # focused window. If no window was previously focused, the default font size
 # will be used. If this is false, the default font size specified in the
 # configuration `font-size` will be used.
-window-inherit-font-size = true
+# window-inherit-font-size = true
 
 # Configure a preference for window decorations. This setting specifies
 # a _preference_; the actual OS, desktop environment, window manager, etc.
@@ -2409,7 +2322,7 @@ window-inherit-font-size = true
 #
 # macOS: To hide the titlebar without removing the native window borders
 #        or rounded corners, use `macos-titlebar-style = hidden` instead.
-window-decoration = auto
+# window-decoration = auto
 
 # The font that will be used for the application's window and tab titles.
 #
@@ -2419,7 +2332,7 @@ window-decoration = auto
 # required to be a fixed-width font.
 #
 # Available since: 1.0.0 on macOS, 1.1.0 on GTK
-window-title-font-family =
+# window-title-font-family =
 
 # The text that will be displayed in the subtitle of the window. Valid values:
 #
@@ -2430,7 +2343,7 @@ window-title-font-family =
 # This feature is only supported on GTK.
 #
 # Available since: 1.1.0
-window-subtitle = false
+# window-subtitle = false
 
 # The theme to use for the windows. Valid values:
 #
@@ -2450,7 +2363,7 @@ window-subtitle = false
 # non-terminal windows within Ghostty.
 #
 # This is currently only supported on macOS and Linux.
-window-theme = auto
+# window-theme = auto
 
 # The color space to use when interpreting terminal colors. "Terminal colors"
 # refers to colors specified in your configuration and colors produced by
@@ -2463,7 +2376,6 @@ window-theme = auto
 #
 # This setting is currently only supported on macOS.
 # window-colorspace = srgb
-window-colorspace = display-p3
 
 # The initial window size. This size is in terminal grid cells by default.
 # Both values must be set to take effect. If only one value is set, it is
@@ -2492,9 +2404,9 @@ window-colorspace = display-p3
 # `window-decoration`), then this will work as expected.
 #
 # Windows smaller than 10 wide by 4 high are not allowed.
-window-height = 0
+# window-height = 0
 
-window-width = 0
+# window-width = 0
 # The starting window position. This position is in pixels and is relative
 # to the top-left corner of the primary monitor. Both values must be set to take
 # effect. If only one value is set, it is ignored.
@@ -2518,9 +2430,9 @@ window-width = 0
 # Note: this is only supported on macOS. The GTK runtime does not support
 # setting the window position, as windows are only allowed position
 # themselves in X11 and not Wayland.
-window-position-x =
+# window-position-x =
 
-window-position-y =
+# window-position-y =
 # Whether to enable saving and restoring window state. Window state includes
 # their position, size, tabs, splits, etc. Some window state requires shell
 # integration, such as preserving working directories. See `shell-integration`
@@ -2551,12 +2463,12 @@ window-position-y =
 # The default value is `default`.
 #
 # This is currently only supported on macOS. This has no effect on Linux.
-window-save-state = default
+# window-save-state = default
 
 # Resize the window in discrete increments of the focused surface's cell size.
 # If this is disabled, surfaces are resized in pixel increments. Currently
 # only supported on macOS.
-window-step-resize = false
+# window-step-resize = false
 
 # The position where new tabs are created. Valid values:
 #
@@ -2564,7 +2476,7 @@ window-step-resize = false
 #     or at the end if there are no focused tabs.
 #
 #   * `end` - Insert the new tab at the end of the tab list.
-window-new-tab-position = current
+# window-new-tab-position = current
 
 # Whether to show the tab bar.
 #
@@ -2587,21 +2499,21 @@ window-new-tab-position = current
 #    overview or by keybind actions.
 #
 # Currently only supported on Linux (GTK).
-window-show-tab-bar = auto
+# window-show-tab-bar = auto
 
 # Background color for the window titlebar. This only takes effect if
 # window-theme is set to ghostty. Currently only supported in the GTK app
 # runtime.
 #
 # Specified as either hex (`#RRGGBB` or `RRGGBB`) or a named X11 color.
-window-titlebar-background =
+# window-titlebar-background =
 
 # Foreground color for the window titlebar. This only takes effect if
 # window-theme is set to ghostty. Currently only supported in the GTK app
 # runtime.
 #
 # Specified as either hex (`#RRGGBB` or `RRGGBB`) or a named X11 color.
-window-titlebar-foreground =
+# window-titlebar-foreground =
 
 # This controls when resize overlays are shown. Resize overlays are a
 # transient popup that shows the size of the terminal while the surfaces are
@@ -2614,7 +2526,7 @@ window-titlebar-foreground =
 #                     subsequently resized.
 #
 # The default is `after-first`.
-resize-overlay = after-first
+# resize-overlay = after-first
 
 # If resize overlays are enabled, this controls the position of the overlay.
 # The possible options are:
@@ -2628,7 +2540,7 @@ resize-overlay = after-first
 #   * `bottom-right`
 #
 # The default is `center`.
-resize-overlay-position = center
+# resize-overlay-position = center
 
 # If resize overlays are enabled, this controls how long the overlay is
 # visible on the screen before it is hidden. The default is ¾ of a second or
@@ -2662,7 +2574,7 @@ resize-overlay-position = center
 # value larger than this will be clamped to the maximum value.
 #
 # Available since 1.0.0
-resize-overlay-duration = 750ms
+# resize-overlay-duration = 750ms
 
 # If true, when there are multiple split panes, the mouse selects the pane
 # that is focused. This only applies to the currently focused window; e.g.
@@ -2671,7 +2583,6 @@ resize-overlay-duration = 750ms
 #
 # Default is false.
 # focus-follows-mouse = false
-focus-follows-mouse = true
 
 # Whether to allow programs running in the terminal to read/write to the
 # system clipboard (OSC 52, for googling). The default is to allow clipboard
@@ -2683,25 +2594,25 @@ focus-follows-mouse = true
 #   * `allow`
 #   * `deny`
 #
-clipboard-read = ask
+# clipboard-read = ask
 
-clipboard-write = allow
+# clipboard-write = allow
 # Trims trailing whitespace on data that is copied to the clipboard. This does
 # not affect data sent to the clipboard via `clipboard-write`. This only
 # applies to trailing whitespace on lines that have other characters.
 # Completely blank lines always have their whitespace trimmed.
-clipboard-trim-trailing-spaces = true
+# clipboard-trim-trailing-spaces = true
 
 # Require confirmation before pasting text that appears unsafe. This helps
 # prevent a "copy/paste attack" where a user may accidentally execute unsafe
 # commands by pasting text with newlines.
-clipboard-paste-protection = true
+# clipboard-paste-protection = true
 
 # If true, bracketed pastes will be considered safe. By default, bracketed
 # pastes are considered safe. "Bracketed" pastes are pastes while the running
 # program has bracketed paste mode enabled (a setting set by the running
 # program, not the terminal emulator).
-clipboard-paste-bracketed-safe = true
+# clipboard-paste-bracketed-safe = true
 
 # Enables or disabled title reporting (CSI 21 t). This escape sequence
 # allows the running program to query the terminal title. This is a common
@@ -2712,7 +2623,7 @@ clipboard-paste-bracketed-safe = true
 # and a minor amount of user interaction).
 #
 # Available since: 1.0.1
-title-report = false
+# title-report = false
 
 # The total amount of bytes that can be used for image data (e.g. the Kitty
 # image protocol) per terminal screen. The maximum value is 4,294,967,295
@@ -2721,7 +2632,7 @@ title-report = false
 #
 # This value is separate for primary and alternate screens so the effective
 # limit per surface is double.
-image-storage-limit = 320000000
+# image-storage-limit = 320000000
 
 # Whether to automatically copy selected text to the clipboard. `true`
 # will prefer to copy to the selection clipboard, otherwise it will copy to
@@ -2734,7 +2645,7 @@ image-storage-limit = 320000000
 # paste is always enabled even if this is `false`.
 #
 # The default value is true on Linux and macOS.
-copy-on-select = true
+# copy-on-select = true
 
 # The action to take when the user right-clicks on the terminal surface.
 #
@@ -2747,13 +2658,13 @@ copy-on-select = true
 #   * `ignore` - Do nothing, ignore the right-click.
 #
 # The default value is `context-menu`.
-right-click-action = context-menu
+# right-click-action = context-menu
 
 # The time in milliseconds between clicks to consider a click a repeat
 # (double, triple, etc.) or an entirely new single click. A value of zero will
 # use a platform-specific default. The default on macOS is determined by the
 # OS settings. On every other platform it is 500ms.
-click-repeat-interval = 0
+# click-repeat-interval = 0
 
 # Additional configuration files to read. This configuration can be repeated
 # to read multiple configuration files. Configuration files themselves can
@@ -2782,7 +2693,7 @@ click-repeat-interval = 0
 # If "foo" contains `a = 2`, the final value of `a` will be 2, because
 # `foo` is loaded after the configuration file that configures the
 # nested `config-file` value.
-config-file =
+# config-file =
 
 # When this is true, the default configuration file paths will be loaded.
 # The default configuration file paths are currently only the XDG
@@ -2795,7 +2706,7 @@ config-file =
 # This is a CLI-only configuration. Setting this in a configuration file
 # will have no effect. It is not an error, but it will not do anything.
 # This configuration can only be set via CLI arguments.
-config-default-files = true
+# config-default-files = true
 
 # Confirms that a surface should be closed before closing it.
 #
@@ -2803,7 +2714,7 @@ config-default-files = true
 # any confirmation. This can also be set to `always`, which will always
 # confirm closing a surface, even if shell integration says a process isn't
 # running.
-confirm-close-surface = true
+# confirm-close-surface = true
 
 # Whether or not to quit after the last surface is closed.
 #
@@ -2815,7 +2726,6 @@ confirm-close-surface = true
 # configurable amount of time has passed after the last window is closed.
 # See the documentation of `quit-after-last-window-closed-delay`.
 # quit-after-last-window-closed = false
-quit-after-last-window-closed = true
 
 # Controls how long Ghostty will stay running after the last open surface has
 # been closed. This only has an effect if `quit-after-last-window-closed` is
@@ -2856,14 +2766,14 @@ quit-after-last-window-closed = true
 # `quit-after-last-window-closed` is `true`.
 #
 # Only implemented on Linux.
-quit-after-last-window-closed-delay =
+# quit-after-last-window-closed-delay =
 
 # This controls whether an initial window is created when Ghostty
 # is run. Note that if `quit-after-last-window-closed` is `true` and
 # `quit-after-last-window-closed-delay` is set, setting `initial-window` to
 # `false` will mean that Ghostty will quit after the configured delay if no
 # window is ever created. Only implemented on Linux and macOS.
-initial-window = true
+# initial-window = true
 
 # The duration that undo operations remain available. After this
 # time, the operation will be removed from the undo stack and
@@ -2911,7 +2821,7 @@ initial-window = true
 # effect.
 #
 # Available since: 1.2.0
-undo-timeout = 5s
+# undo-timeout = 5s
 
 # The position of the "quick" terminal window. To learn more about the
 # quick terminal, see the documentation for the `toggle_quick_terminal`
@@ -2930,7 +2840,7 @@ undo-timeout = 5s
 #
 # Note: There is no default keybind for toggling the quick terminal.
 # To enable this feature, bind the `toggle_quick_terminal` action to a key.
-quick-terminal-position = top
+# quick-terminal-position = top
 
 # The size of the quick terminal.
 #
@@ -2980,7 +2890,7 @@ quick-terminal-position = top
 # GTK Wayland only.
 #
 # Available since: 1.2.0
-gtk-quick-terminal-layer = top
+# gtk-quick-terminal-layer = top
 
 # The namespace for the quick terminal window.
 #
@@ -2991,7 +2901,7 @@ gtk-quick-terminal-layer = top
 # GTK Wayland only.
 #
 # Available since: 1.2.0
-gtk-quick-terminal-namespace = ghostty-quick-terminal
+# gtk-quick-terminal-namespace = ghostty-quick-terminal
 
 # The screen where the quick terminal should show up.
 #
@@ -3012,21 +2922,15 @@ gtk-quick-terminal-namespace = ghostty-quick-terminal
 # The default value is `main` because this is the recommended screen
 # by the operating system.
 #
-# On macOS, `macos-menu-bar` uses the screen containing the menu bar.
-# On Linux/Wayland, `macos-menu-bar` is treated as equivalent to `main`.
-#
-# Note: On Linux, there is no universal concept of a "primary" monitor.
-# Ghostty uses the compositor-reported primary output when available and
-# falls back to the first monitor reported by GDK if no primary output can
-# be resolved.
-quick-terminal-screen = main
+# Only implemented on macOS.
+# quick-terminal-screen = main
 
 # Duration (in seconds) of the quick terminal enter and exit animation.
 # Set it to 0 to disable animation completely. This can be changed at
 # runtime.
 #
 # Only implemented on macOS.
-quick-terminal-animation-duration = 0.2
+# quick-terminal-animation-duration = 0.2
 
 # Automatically hide the quick terminal when focus shifts to another window.
 # Set it to false for the quick terminal to remain open even when it loses focus.
@@ -3036,7 +2940,7 @@ quick-terminal-animation-duration = 0.2
 # accessible than on macOS, meaning that it is more preferable to keep the
 # quick terminal open until the user has completed their task.
 # This default may change in the future.
-quick-terminal-autohide = true
+# quick-terminal-autohide = true
 
 # This configuration option determines the behavior of the quick terminal
 # when switching between macOS spaces. macOS spaces are virtual desktops
@@ -3058,7 +2962,7 @@ quick-terminal-autohide = true
 # On Linux the behavior is always equivalent to `move`.
 #
 # Available since: 1.1.0
-quick-terminal-space-behavior = move
+# quick-terminal-space-behavior = move
 
 # Determines under which circumstances that the quick terminal should receive
 # keyboard input. See the corresponding [Wayland documentation](https://wayland.app/protocols/wlr-layer-shell-unstable-v1#zwlr_layer_surface_v1:enum:keyboard_interactivity)
@@ -3088,7 +2992,7 @@ quick-terminal-space-behavior = move
 # On macOS the behavior is always equivalent to `on-demand`.
 #
 # Available since: 1.2.0
-quick-terminal-keyboard-interactivity = on-demand
+# quick-terminal-keyboard-interactivity = on-demand
 
 # Whether to enable shell integration auto-injection or not. Shell integration
 # greatly enhances the terminal experience by enabling a number of features:
@@ -3114,7 +3018,7 @@ quick-terminal-keyboard-interactivity = on-demand
 #   * `bash`, `elvish`, `fish`, `nushell`, `zsh` - Use this specific shell injection scheme.
 #
 # The default value is `detect`.
-shell-integration = detect
+# shell-integration = detect
 
 # Shell integration features to enable. These require our shell integration
 # to be loaded, either automatically via shell-integration or manually.
@@ -3159,7 +3063,7 @@ shell-integration = detect
 # when both `ssh-env` and `ssh-terminfo` are enabled, Ghostty will install its
 # terminfo on remote hosts and use `xterm-ghostty` as TERM, falling back to
 # `xterm-256color` with environment variables if terminfo installation fails.
-shell-integration-features = cursor,no-sudo,title,no-ssh-env,no-ssh-terminfo,path
+# shell-integration-features = cursor,no-sudo,title,no-ssh-env,no-ssh-terminfo,path
 
 # Custom entries into the command palette.
 #
@@ -3195,7 +3099,6 @@ shell-integration-features = cursor,no-sudo,title,no-ssh-env,no-ssh-terminfo,pat
 # ```
 #
 # Available since: 1.2.0
-# GIB: commented out all of these as they are broken in ghostty, see https://github.com/ghostty-org/ghostty/discussions/8699#discussioncomment-16476485
 # command-palette-entry = title:"Change Tab Title\xe2\x80\xa6",description:"Prompt for a new title for the current tab.",action:"prompt_tab_title"
 # command-palette-entry = title:"Change Terminal Title\xe2\x80\xa6",description:"Prompt for a new title for the current terminal.",action:"prompt_surface_title"
 # command-palette-entry = title:"Check for Updates",description:"Check for updates to the application.",action:"check_for_updates"
@@ -3302,7 +3205,7 @@ shell-integration-features = cursor,no-sudo,title,no-ssh-env,no-ssh-terminfo,pat
 #   * `16-bit` - Color components are returned scaled, e.g. `rrrr/gggg/bbbb`
 #
 # The default value is `16-bit`.
-osc-color-report-format = 16-bit
+# osc-color-report-format = 16-bit
 
 # If true, allows the "KAM" mode (ANSI mode 2) to be used within
 # the terminal. KAM disables keyboard input at the request of the
@@ -3310,7 +3213,7 @@ osc-color-report-format = 16-bit
 # to be enabled. This will not be documented further because
 # if you know you need KAM, you know. If you don't know if you
 # need KAM, you don't need it.
-vt-kam-allowed = false
+# vt-kam-allowed = false
 
 # Custom shaders to run after the default shaders. This is a file path
 # to a GLSL-syntax shader for all platforms.
@@ -3431,7 +3334,7 @@ vt-kam-allowed = false
 # will be run in the order they are specified.
 #
 # This can be changed at runtime and will affect all open terminals.
-custom-shader =
+# custom-shader =
 
 # If `true` (default), the focused terminal surface will run an animation
 # loop when custom shaders are used. This uses slightly more CPU (generally
@@ -3449,7 +3352,7 @@ custom-shader =
 # depending on the shader and your terminal usage.
 #
 # This can be changed at runtime and will affect all open terminals.
-custom-shader-animation = true
+# custom-shader-animation = true
 
 # Bell features to enable if bell support is available in your runtime. Not
 # all features are available on all runtimes. The format of this is a list of
@@ -3504,7 +3407,7 @@ custom-shader-animation = true
 # Example: `audio`, `no-audio`, `system`, `no-system`
 #
 # Available since: 1.2.0
-bell-features = no-system,no-audio,attention,title,no-border
+# bell-features = no-system,no-audio,attention,title,no-border
 
 # If `audio` is an enabled bell feature, this is a path to an audio file. If
 # the path is not absolute, it is considered relative to the directory of the
@@ -3513,14 +3416,14 @@ bell-features = no-system,no-audio,attention,title,no-border
 # to reference the user's home directory.
 #
 # Available since: 1.2.0 on GTK, 1.3.0 on macOS.
-bell-audio-path =
+# bell-audio-path =
 
 # If `audio` is an enabled bell feature, this is the volume to play the audio
 # file at (relative to the system volume). This is a floating point number
 # ranging from 0.0 (silence) to 1.0 (as loud as possible). The default is 0.5.
 #
 # Available since: 1.2.0 on GTK, 1.3.0 on macOS.
-bell-audio-volume = 0.5
+# bell-audio-volume = 0.5
 
 # Control the in-app notifications that Ghostty shows.
 #
@@ -3549,7 +3452,7 @@ bell-audio-volume = 0.5
 # This configuration only applies to GTK.
 #
 # Available since: 1.1.0
-app-notifications = clipboard-copy,config-reload
+# app-notifications = clipboard-copy,config-reload
 
 # If anything other than false, fullscreen mode on macOS will not use the
 # native fullscreen, but make the window fullscreen without animations and
@@ -3581,7 +3484,6 @@ app-notifications = clipboard-copy,config-reload
 # time the window is made fullscreen. If a window is already fullscreen,
 # it will retain the previous setting until fullscreen is exited.
 # macos-non-native-fullscreen = false
-macos-non-native-fullscreen = true
 
 # Whether the window buttons in the macOS titlebar are visible. The window
 # buttons are the colored buttons in the upper left corner of most macOS apps,
@@ -3602,7 +3504,7 @@ macos-non-native-fullscreen = true
 # Changing this option at runtime only applies to new windows.
 #
 # Available since: 1.2.0
-macos-window-buttons = visible
+# macos-window-buttons = visible
 
 # The style of the macOS titlebar. Available values are: "native",
 # "transparent", "tabs", and "hidden".
@@ -3644,7 +3546,7 @@ macos-window-buttons = visible
 # most cases.
 #
 # Changing this option at runtime only applies to new windows.
-macos-titlebar-style = transparent
+# macos-titlebar-style = transparent
 
 # Whether the proxy icon in the macOS titlebar is visible. The proxy icon
 # is the icon that represents the folder of the current working directory.
@@ -3665,7 +3567,7 @@ macos-titlebar-style = transparent
 # Therefore, to make this work after changing the setting, you must
 # usually `cd` to a different directory, open a different file in an
 # editor, etc.
-macos-titlebar-proxy-icon = visible
+# macos-titlebar-proxy-icon = visible
 
 # Controls the windowing behavior when dropping a file or folder
 # onto the Ghostty icon in the macOS dock.
@@ -3680,7 +3582,7 @@ macos-titlebar-proxy-icon = visible
 #
 # This setting is only supported on macOS and has no effect on other
 # platforms.
-macos-dock-drop-behavior = new-tab
+# macos-dock-drop-behavior = new-tab
 
 # macOS doesn't have a distinct "alt" key and instead has the "option"
 # key which behaves slightly differently. On macOS by default, the
@@ -3715,12 +3617,11 @@ macos-dock-drop-behavior = new-tab
 # The values `left` or `right` enable this for the left or right *Option*
 # key, respectively.
 # macos-option-as-alt =
-macos-option-as-alt = true
 
 # Whether to enable the macOS window shadow. The default value is true.
 # With some window managers and window transparency settings, you may
 # find false more visually appealing.
-macos-window-shadow = true
+# macos-window-shadow = true
 
 # If true, the macOS icon in the dock and app switcher will be hidden. This is
 # mainly intended for those primarily using the quick-terminal mode.
@@ -3742,7 +3643,7 @@ macos-window-shadow = true
 # will no longer be automatic. This is a limitation of macOS.
 #
 # Available since: 1.2.0
-macos-hidden = never
+# macos-hidden = never
 
 # If true, Ghostty on macOS will automatically enable the "Secure Input"
 # feature when it detects that a password prompt is being displayed.
@@ -3760,7 +3661,7 @@ macos-hidden = never
 # with legitimate accessibility software (or software that uses the
 # accessibility APIs), since secure input prevents any application from
 # reading keyboard events.
-macos-auto-secure-input = true
+# macos-auto-secure-input = true
 
 # If true, Ghostty will show a graphical indication when secure input is
 # enabled. This indication is generally recommended to know when secure input
@@ -3770,7 +3671,7 @@ macos-auto-secure-input = true
 # or it is manually (and typically temporarily) enabled. However, if you
 # always have secure input enabled, the indication can be distracting and
 # you may want to disable it.
-macos-secure-input-indication = true
+# macos-secure-input-indication = true
 
 # If true, Ghostty exposes and handles the built-in AppleScript dictionary
 # on macOS.
@@ -3780,7 +3681,7 @@ macos-secure-input-indication = true
 # and terminals.
 #
 # The default is true.
-macos-applescript = true
+# macos-applescript = true
 
 # Customize the macOS app icon.
 #
@@ -3815,13 +3716,13 @@ macos-applescript = true
 #     This is because the update dialog is managed through a
 #     separate framework and cannot be customized without significant
 #     effort.
-macos-icon = official
+# macos-icon = official
 
 # The absolute path to the custom icon file.
 # Supported formats include PNG, JPEG, and ICNS.
 #
 # Defaults to `~/.config/ghostty/Ghostty.icns`
-macos-custom-icon =
+# macos-custom-icon =
 
 # The material to use for the frame of the macOS app icon.
 #
@@ -3834,7 +3735,7 @@ macos-custom-icon =
 #
 # Note: This configuration is required when `macos-icon` is set to
 # `custom-style`.
-macos-icon-frame = aluminum
+# macos-icon-frame = aluminum
 
 # The color of the ghost in the macOS app icon.
 #
@@ -3842,7 +3743,7 @@ macos-icon-frame = aluminum
 # `custom-style`.
 #
 # Specified as either hex (`#RRGGBB` or `RRGGBB`) or a named X11 color.
-macos-icon-ghost-color =
+# macos-icon-ghost-color =
 
 # The color of the screen in the macOS app icon.
 #
@@ -3854,7 +3755,7 @@ macos-icon-ghost-color =
 #
 # Note: This configuration is required when `macos-icon` is set to
 # `custom-style`.
-macos-icon-screen-color =
+# macos-icon-screen-color =
 
 # Whether macOS Shortcuts are allowed to control Ghostty.
 #
@@ -3878,7 +3779,7 @@ macos-icon-screen-color =
 # * `deny` - Deny Shortcuts from controlling Ghostty.
 #
 # Available since: 1.2.0
-macos-shortcuts = ask
+# macos-shortcuts = ask
 
 # Put every surface (tab, split, window) into a transient `systemd` scope.
 #
@@ -3907,7 +3808,7 @@ macos-shortcuts = ask
 #   * `always` - Always use cgroups.
 #   * `single-instance` - Enable cgroups only for Ghostty instances launched
 #     as single-instance applications (see gtk-single-instance).
-linux-cgroup = never
+# linux-cgroup = never
 
 # Memory limit for any individual terminal process (tab, split, window,
 # etc.) in bytes. If this is unset then no memory limit will be set.
@@ -3922,7 +3823,7 @@ linux-cgroup = never
 #
 # See the `systemd.resource-control` manual page for more information:
 # https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html
-linux-cgroup-memory-limit =
+# linux-cgroup-memory-limit =
 
 # Number of processes limit for any individual terminal process (tab, split,
 # window, etc.). If this is unset then no limit will be set.
@@ -3935,7 +3836,7 @@ linux-cgroup-memory-limit =
 #
 # See the `systemd.resource-control` manual page for more information:
 # https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html
-linux-cgroup-processes-limit =
+# linux-cgroup-processes-limit =
 
 # If this is false, then creating a transient `systemd` scope (for
 # `linux-cgroup`) will be allowed to fail and the failure is ignored. This is
@@ -3948,13 +3849,13 @@ linux-cgroup-processes-limit =
 #
 # Changing this value and reloading the config will not affect existing
 # surfaces.
-linux-cgroup-hard-fail = false
+# linux-cgroup-hard-fail = false
 
 # Enable or disable GTK's OpenGL debugging logs. The default is `true` for
 # debug builds, `false` for all others.
 #
 # Available since: 1.1.0
-gtk-opengl-debug = false
+# gtk-opengl-debug = false
 
 # If `true`, the Ghostty GTK application will run in single-instance mode:
 # each new `ghostty` process launched will result in a new window if there is
@@ -3984,7 +3885,7 @@ gtk-opengl-debug = false
 #
 # Note that debug builds of Ghostty have a separate single-instance ID
 # so you can test single instance without conflicting with release builds.
-gtk-single-instance = detect
+# gtk-single-instance = detect
 
 # When enabled, the full GTK titlebar is displayed instead of your window
 # manager's simple titlebar. The behavior of this option will vary with your
@@ -3992,7 +3893,7 @@ gtk-single-instance = detect
 #
 # This option does nothing when `window-decoration` is none or when running
 # under macOS.
-gtk-titlebar = true
+# gtk-titlebar = true
 
 # Determines the side of the screen that the GTK tab bar will stick to.
 # Top, bottom, and hidden are supported. The default is top.
@@ -4002,13 +3903,13 @@ gtk-titlebar = true
 # tabs. Alternatively, you can use the `toggle_tab_overview` action in a
 # keybind if your window doesn't have a title bar, or you can switch tabs
 # with keybinds.
-gtk-tabs-location = top
+# gtk-tabs-location = top
 
 # If this is `true`, the titlebar will be hidden when the window is maximized,
 # and shown when the titlebar is unmaximized. GTK only.
 #
 # Available since: 1.1.0
-gtk-titlebar-hide-when-maximized = false
+# gtk-titlebar-hide-when-maximized = false
 
 # Determines the appearance of the top and bottom bars tab bar.
 #
@@ -4018,7 +3919,7 @@ gtk-titlebar-hide-when-maximized = false
 #  * `raised` - Top and bottom bars cast a shadow on the terminal area.
 #  * `raised-border` - Similar to `raised` but the shadow is replaced with a
 #    more subtle border.
-gtk-toolbar-style = raised
+# gtk-toolbar-style = raised
 
 # The style of the GTK titlebar. Available values are `native` and `tabs`.
 #
@@ -4033,13 +3934,13 @@ gtk-toolbar-style = raised
 # `tabs` title bar can be used to drag the window around.
 #
 # The default style is `native`.
-gtk-titlebar-style = native
+# gtk-titlebar-style = native
 
 # If `true` (default), then the Ghostty GTK tabs will be "wide." Wide tabs
 # are the new typical Gnome style where tabs fill their available space.
 # If you set this to `false` then tabs will only take up space they need,
 # which is the old style.
-gtk-wide-tabs = true
+# gtk-wide-tabs = true
 
 # Custom CSS files to be loaded.
 #
@@ -4062,16 +3963,16 @@ gtk-wide-tabs = true
 # The file size limit for a single stylesheet is 5MiB.
 #
 # Available since: 1.1.0
-gtk-custom-css =
+# gtk-custom-css =
 
 # If `true` (default), applications running in the terminal can show desktop
 # notifications using certain escape sequences such as OSC 9 or OSC 777.
-desktop-notifications = true
+# desktop-notifications = true
 
 # If `true` (default), applications running in the terminal can show
 # graphical progress bars using the ConEmu OSC 9;4 escape sequence.
 # If `false`, progress bar sequences are silently ignored.
-progress-style = true
+# progress-style = true
 
 # Modifies the color used for bold text in the terminal.
 #
@@ -4090,14 +3991,14 @@ progress-style = true
 # usage).
 #
 # Available since Ghostty 1.2.0.
-bold-color =
+# bold-color =
 
 # The opacity level (opposite of transparency) of the faint text. A value of
 # 1 is fully opaque and a value of 0 is fully transparent. A value less than 0
 # or greater than 1 will be clamped to the nearest valid value.
 #
 # Available since Ghostty 1.2.0.
-faint-opacity = 0.5
+# faint-opacity = 0.5
 
 # This will be used to set the `TERM` environment variable.
 # HACK: We set this with an `xterm` prefix because vim uses that to enable key
@@ -4105,11 +4006,11 @@ faint-opacity = 0.5
 # features. An option exists in vim to modify this: `:set
 # keyprotocol=ghostty:kitty`, however a bug in the implementation prevents it
 # from working properly. https://github.com/vim/vim/pull/13211 fixes this.
-term = xterm-ghostty
+# term = xterm-ghostty
 
 # String to send when we receive `ENQ` (`0x05`) from the command that we are
 # running. Defaults to an empty string if not set.
-enquiry-response =
+# enquiry-response =
 
 # Configures the low-level API to use for async IO, eventing, etc.
 #
@@ -4139,7 +4040,7 @@ enquiry-response =
 # where we have multiple options. On macOS, we always use `kqueue`.
 #
 # Available since: 1.2.0
-async-backend = auto
+# async-backend = auto
 
 # Control the auto-update functionality of Ghostty. This is only supported
 # on macOS currently, since Linux builds are distributed via package
@@ -4164,7 +4065,7 @@ async-backend = auto
 # preference stored in the standard user defaults (`defaults(1)`).
 #
 # Changing this value at runtime works after a small delay.
-auto-update = "download"
+# auto-update =
 
 # The release channel to use for auto-updates.
 #
@@ -4186,5 +4087,5 @@ auto-update = "download"
 # Ghostty to take effect.
 #
 # This only works on macOS since only macOS has an auto-update feature.
-auto-update-channel =
+# auto-update-channel =
 
