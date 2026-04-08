@@ -600,6 +600,7 @@ autoload -Uz edit-command-line # Load command to open current line in $VISUAL.
 zle -N edit-command-line
 zle -N history-beginning-search-backward-end history-search-end # Add it to existing widgets.
 zle -N history-beginning-search-forward-end history-search-end  # Add it to existing widgets.
+
 accept-line() {
   [ -z "$BUFFER" ] && {
     # Only use local items (don't use share_history items).
@@ -607,8 +608,8 @@ accept-line() {
     zle up-history
     zle set-local-history 0
   }
-# Run original accept-line builtin command.
-zle ".$WIDGET"
+  # Run original accept-line builtin command.
+  zle ".$WIDGET"
 }
 zle -N accept-line # Redefine accept-line to insert last input if empty (Enter key).
 

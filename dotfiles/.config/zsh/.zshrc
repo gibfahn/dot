@@ -194,7 +194,7 @@ esac
 _gib_clear_exit() { [[ -n $BUFFER ]] && zle kill-buffer || zle self-insert-unmeta; }
 zle -N _gib_clear_exit
 
-# ⌥-n with contents inserts, without contents cd's to matching directory.
+# ⌥-z with contents inserts, without contents cd's to matching directory.
 _gib_fzfz_cd() {
   local selected_dir
   local orig_buffer_len=${#${(z)BUFFER}}
