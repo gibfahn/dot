@@ -11,6 +11,8 @@ git move-repo: move a repo to the canonical location under a directory.
 
 Takes a list of repo paths, and moves each of them to the proper location.
 
+If no repo path provided, defaults to the current directory.
+
 OPTIONS:
 
 --remote: name of the remote to fork, default origin.
@@ -57,6 +59,9 @@ if [[ -n ${DEBUG:-} ]]; then
 fi
 
 main() {
+  if [[ ${#repos[@]} == 0 ]]; then
+    repos+="$PWD"
+  fi
   for repo_path in ${repos[@]}; do
     parse_url_cmd=(git parse-url --repo $repo_path --segment host-org-repo)
     if [[ -n ${remote:-} ]]; then
