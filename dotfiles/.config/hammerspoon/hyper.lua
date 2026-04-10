@@ -457,7 +457,7 @@ end
 HyperMode:bind({}, ".", function()
   log.d("Muting/Unmuting Webex...")
   -- Assumes you already bound this as a global shortcut in Webex.
-  hs.eventtap.keyStroke({ "cmd", "alt", "ctrl", "shift" }, "m") -- Doc me
+  hs.eventtap.keyStroke({ "cmd", "alt", "ctrl", "shift" }, "m")
 end)
 
 HyperMode:bind({ "alt" }, ".", function()
@@ -467,7 +467,7 @@ end)
 
 HyperMode:bind({}, ",", function()
   log.d("Starting/Stopping Webex video...")
-  webexMenuAction("Start or stop video on a call", "📹 video toggle", true)
+  hs.eventtap.keyStroke({ "ctrl", "shift" }, "v")
 end)
 
 HyperMode:bind({ "alt" }, ",", function()
