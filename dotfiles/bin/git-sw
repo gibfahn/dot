@@ -54,6 +54,8 @@ main() {
     fi
   done
 
+  original_branch=$(git branch --show-current)
+
   # We don't want anything here to write to stdout, only the worktree dir should be written.
   run_switch $@ >&2
 
@@ -108,8 +110,19 @@ run_switch() {
 # If the user passed --worktree, create and print it.
 handle_worktree() {
   if [[ -n ${WORKTREE:-} ]]; then
+    # The branch we just switched to is the one we should make a worktree of.
     branch=$(git branch --show-current)
-    git switch $(default_branch) >&2
+    default_branch_name=$(default_branch)
+    # We can't have two worktrees on the same branch, so we need to switch to a branch that
+    # we know exists that isn't the worktree branch.
+    if [[ $branch != $default_branch_name ]]; then
+      git switch $default_branch_name >&2
+    elif [[ $branch != $original_branch ]]; then
+      git switch $original_branch >&2
+    else
+      # Don't know what branch to switch to, just switch to a detached head.
+      git switch --detach $(git rev-parse $default_branch_name) >&2
+    fi
     dir=~/code/worktrees/"$(git parse-url --segment host-org-repo)/$branch"
     git worktree add "$dir" "${branch}" >&2
 
