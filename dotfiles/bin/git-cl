@@ -51,8 +51,8 @@ main() {
 # If given one argument, clone to a subdirectory, so `git cl https://github.com/gibfahn/dot`
 # creates `~/code/github.com/gibfahn/dot/`.
 set_default_clone_path() {
-  if [[ $# == 1 ]]; then
-    local url=$1
+  if [[ ${#args[@]} == 1 ]]; then
+    local url=${args[1]}
     url=$(git parse-url --segment url $url)
     subdir=$(git parse-url --segment host-org-repo $url)
 
