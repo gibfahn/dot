@@ -38,9 +38,19 @@ main() {
   local clone_dir ret args
   args=("$@")
 
-  # If no directory specified, use a subdir following the URL path.
-  # If we're in the home directory, guess the right subdir. Else clone into a subdir of the current
-  # directory.
+  set_default_clone_path
+
+  clone_dir="$(set -o pipefail; git clone --recurse-submodules --progress "${args[@]}" 3>&1 1>&2 2>&3 3>&- | tee /dev/stderr | awk -F \' '/Cloning into/ {print $2}' | head -1)"
+  ret="$?"
+
+  [[ -d "$clone_dir" ]] && echo "$clone_dir" || return 1
+
+  return $ret
+}
+
+# If given one argument, clone to a subdirectory, so `git cl https://github.com/gibfahn/dot`
+# creates `~/code/github.com/gibfahn/dot/`.
+set_default_clone_path() {
   if [[ $# == 1 ]]; then
     local url=$1
     url=$(git parse-url --segment url $url)
@@ -51,17 +61,11 @@ main() {
     if [[ -d "$dir" ]]; then
       log "Directory already exists: $dir"
       echo "$dir"
-      return 0
+      exit 0
     fi
 
     args=("$url" "$dir")
   fi
-
-  clone_dir="$(set -o pipefail; git clone --recurse-submodules --progress "${args[@]}" 3>&1 1>&2 2>&3 3>&- | tee /dev/stderr | awk -F \' '/Cloning into/ {print $2}' | head -1)"
-  ret="$?"
-  [[ -d "$clone_dir" ]] && echo "$clone_dir" || return 1
-  return $ret
-
 }
 
 log() {
