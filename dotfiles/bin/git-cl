@@ -38,14 +38,18 @@ main() {
   local clone_dir ret args
   args=("$@")
 
-  set_default_clone_path
+  set_default_clone_path >&2
 
   clone_dir="$(set -o pipefail; git clone --recurse-submodules --progress "${args[@]}" 3>&1 1>&2 2>&3 3>&- | tee /dev/stderr | awk -F \' '/Cloning into/ {print $2}' | head -1)"
   ret="$?"
 
-  [[ -d "$clone_dir" ]] && echo "$clone_dir" || return 1
+  [[ -d "$clone_dir" ]] || return 1
+  echo "$clone_dir"
 
-  return $ret
+  cd "$clone_dir"
+  maybe_setup_fork >&2
+
+  exit $ret
 }
 
 # If given one argument, clone to a subdirectory, so `git cl https://github.com/gibfahn/dot`
@@ -70,6 +74,25 @@ set_default_clone_path() {
 
 log() {
   echo >&2 "${fg[cyan]}git-cl:${reset_color} ${1}"
+}
+
+# If this is a GitHub repo and the user already has a fork, set up the fork remote.
+maybe_setup_fork() {
+  [[ "${args[*]}" == *github* ]] || return 0
+
+  log "Checking for existing GitHub fork..."
+
+  local has_fork
+  has_fork=$(GH_HOST=$(git parse-url --segment host) gh api graphql \
+    -F owner=':owner' \
+    -F name=':repo' \
+    -f query='query($owner: String!, $name: String!) { repository(owner: $owner, name: $name) { forks(affiliations: [OWNER], first: 1) { totalCount } } }' \
+    --jq '.data.repository.forks.totalCount > 0' 2>/dev/null) || return 0
+
+  if [[ "$has_fork" == "true" ]]; then
+    log "Existing fork found, setting up fork remote..."
+    git fork
+  fi
 }
 
 main $@
