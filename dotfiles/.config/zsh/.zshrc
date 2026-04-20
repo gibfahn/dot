@@ -6,7 +6,7 @@
 # {{{ Initial setup
 
 # To test shell startup time, run:
-#   hyperfine --warmup 3 "zsh -ic 'exit'"
+#   hyperfine --warmup 3 "zsh --login -ic 'exit'"
 
 # # Enable zsh startup profiling 1/2, see helpers/sort_timings.zsh
 # zmodload zsh/datetime
