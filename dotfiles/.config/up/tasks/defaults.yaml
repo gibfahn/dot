@@ -495,7 +495,7 @@ data:
     # Make Safari’s search banners default to Contains instead of Starts With
     FindOnPageMatchesWordStartsOnly: false
 
-    # Safari > Preferences > General > Safari opens with: All non-private windows from last session.
+    # Safari > Settings > General > Safari opens with: All non-private windows from last session.
     OpenPrivateWindowWhenNotRestoringSessionAtLaunch: false
 
     # Hides the toolbar when Safari is full-screen (hide everything but the page).
@@ -538,19 +538,19 @@ data:
     # ForceClock: "2007:01:09:09:41"
 
   com.apple.mail:
-    # Mail > Preferences > Viewing > Show Message Headers > Custom
+    # Mail > Settings > Viewing > Show Message Headers > Custom
     CustomHeaders:
       - List-ID
       - Message-ID
       - X-Member-Count
 
-    # Mail > Preferences > Viewing > Show most recent message at the top
+    # Mail > Settings > Viewing > Show most recent message at the top
     ConversationViewSortDescending: true
 
-    # Mail > Preferences > Composing > Automatically CC Myself.
+    # Mail > Settings > Composing > Automatically CC Myself.
     ReplyToSelf: true
 
-    # Mail > Preferences > Composing > When quoting text in replies or forwards > Include all the original message text.
+    # Mail > Settings > Composing > When quoting text in replies or forwards > Include all the original message text.
     AlwaysIncludeOriginalMessage: true
     # Mail > Edit > Attachments > Include Original Attachments in Reply
     IncludeOriginalAttachments: true
@@ -569,10 +569,10 @@ data:
       # Send: "@↩"
 
   com.apple.mail-shared:
-    # Mail > Preferences > Composing > Mark addresses not ending with (checkbox):
+    # Mail > Settings > Composing > Mark addresses not ending with (checkbox):
     AlertForNonmatchingDomains: true
 
-    # Mail > Preferences > Composing > Mark addresses not ending with (addresses not to mark):
+    # Mail > Settings > Composing > Mark addresses not ending with (addresses not to mark):
     DomainForMatching:
       - "@apple.com"
       - "@group.apple.com"
@@ -582,7 +582,7 @@ data:
     MapsDefaultAvoidTollsKey: true
 
   com.apple.MobileSMS:
-    # Messages > Preferences > Keep messages: Forever.
+    # Messages > Settings > Keep messages: Forever.
     KeepMessageForDays: 0
 
   # Defaults for ⌘-⇧-5 screen recording.
