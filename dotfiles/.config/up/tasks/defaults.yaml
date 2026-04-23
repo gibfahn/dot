@@ -543,6 +543,10 @@ data:
       - List-ID
       - Message-ID
       - X-Member-Count
+    # Mail > Settings > General > Unread Count > All Mailboxes
+    MailDockBadge: 2
+    # Mail > Settings > General > New message notifications > All Mailboxes
+    MailUserNotificationScope: 5
 
     # Mail > Settings > Viewing > Show most recent message at the top
     ConversationViewSortDescending: true
