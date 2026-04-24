@@ -411,16 +411,24 @@ for _, hotkey in ipairs({
 end
 -- }}} Hyper-{h,n,e,i} -> Arrow Keys
 
--- Run a webex menu action that isn't global by switching to Webex, running the action, and switching back.
--- This doesn't seem to work when sharing one's screen unfortunately.
-local function webexMenuAction(menuItem, message, switchBack)
+-- Finds Webex and returns {currentApp, webexApp}, or {nil, nil} with a notification on failure.
+local function focusWebex(message)
   local current = hs.application.frontmostApplication()
   local webexApp = hs.application.find("Webex")
-  hs.application.find("Webex"):mainWindow()
   log.df("Current app: %s", current)
   log.df("Webex app: %s", webexApp)
   if not webexApp then
     statusMessage.new("⚠ " .. message .. " failed: couldn't find Webex app"):notify()
+    return nil, nil
+  end
+  return current, webexApp
+end
+
+-- Run a webex menu action that isn't global by switching to Webex, running the action, and switching back.
+-- This doesn't seem to work when sharing one's screen unfortunately.
+local function webexMenuAction(menuItem, message, switchBack)
+  local current, webexApp = focusWebex(message)
+  if not webexApp then
     return
   end
 
@@ -454,6 +462,33 @@ local function webexMenuAction(menuItem, message, switchBack)
   statusMessage.new(message .. " success"):notify()
 end
 
+-- Run a webex keystroke action by switching to Webex, sending the key, and switching back.
+local function webexKeyAction(mods, key, message, switchBack)
+  local current, webexApp = focusWebex(message)
+  if not webexApp then
+    return
+  end
+  if not current then
+    return
+  end
+
+  webexApp:activate()
+  -- Wait before and after we do the keyboard shortcut to ensure it actually sticks.
+  -- Otherwise the keyboard shortcut isn't applied to the right place.
+  hs.timer.doAfter(0.1, function()
+    hs.eventtap.keyStroke(mods, key)
+    if switchBack then
+      hs.timer.doAfter(0.1, function()
+        if not current:activate() then
+          statusMessage.new("⚠ " .. message .. " failed: failed to switch back"):notify()
+          return
+        end
+      end)
+    end
+    statusMessage.new(message .. " success"):notify()
+  end)
+end
+
 HyperMode:bind({}, ".", function()
   log.d("Muting/Unmuting Webex...")
   -- Assumes you already bound this as a global shortcut in Webex.
@@ -467,7 +502,7 @@ end)
 
 HyperMode:bind({}, ",", function()
   log.d("Starting/Stopping Webex video...")
-  hs.eventtap.keyStroke({ "ctrl", "shift" }, "v")
+  webexKeyAction({ "ctrl", "shift" }, "v", "📹 video toggle", false)
 end)
 
 HyperMode:bind({ "alt" }, ",", function()
