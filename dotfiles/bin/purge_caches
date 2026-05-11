@@ -26,19 +26,34 @@ purge_caches: purge all caches on the system.
 
 main() {
   echo "Disk usage before:"
-  df -h /
 
-  open -a docker
+  set -x
 
-  # https://www.reddit.com/r/rust/comments/cbc24k/psa_run_cargo_clean_on_old_projects_you_dont/
-  cargo sweep
+  df -h /System/Volumes/Data
 
   (( $+commands[liv] )) && liv purge
 
-  docker system prune --all --volumes
+  if (( $+commands[container] )); then
+    container system start
+
+    # Show what is pruneable.
+    container system df
+    # Prune containers
+    container prune
+    # Prune images
+    container image prune --all
+    # Prune volumes
+    container volume prune
+  else
+    open -a docker
+    docker system prune --all --volumes
+  fi
+
+  # https://www.reddit.com/r/rust/comments/cbc24k/psa_run_cargo_clean_on_old_projects_you_dont/
+  cargo sweep --installed -r ~/code
 
   echo "Disk usage after:"
-  df -h /
+  df -h /System/Volumes/Data
 }
 
 main "$@"
