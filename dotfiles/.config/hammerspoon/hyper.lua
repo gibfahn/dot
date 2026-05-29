@@ -362,12 +362,6 @@ HyperMode:bind({ "alt" }, "\\", function()
     :start()
 end)
 
--- {{{ Hyper-⇧-x -> Restart the touch strip.
-HyperMode:bind({ "shift" }, "x", function()
-  KillAll("ControlStrip")
-end)
--- }}} Hyper-⇧-x -> Restart the touch strip.
-
 -- {{{ Hyper - '>' -> Markdown quote clipboard and re-copy.
 HyperMode:bind({ "shift" }, ".", function()
   log.d("Quoting clipboard contents and re-copying...")
