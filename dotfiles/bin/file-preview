@@ -22,7 +22,7 @@ if [[ -d $1 ]]; then
 fi
 
 case $extension in
-  png | jpg | heic) exec kitty +kitten icat $1 ;;
+  png | jpg | heic | jpeg) exec kitty +kitten icat $1 ;;
   tar.gz) exec tar -tf $1 ;;
   zip) exec unzip -l $1 ;;
 esac
