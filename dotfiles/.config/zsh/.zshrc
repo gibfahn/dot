@@ -176,7 +176,7 @@ case $OSTYPE in
     alias pst="pbpaste"
     alias ldd="otool -L"
     alias o=open
-    alias dl=trash
+    alias dl="trash --verbose"
     ;;
   linux*)
     alias cpy="xclip -selection clipboard"
