@@ -483,6 +483,7 @@ local function webexKeyAction(mods, key, message, switchBack)
   end)
 end
 
+--- Mute / unmute Webex
 HyperMode:bind({}, ".", function()
   log.d("Muting/Unmuting Webex...")
   -- Assumes you already bound this as a global shortcut in Webex.

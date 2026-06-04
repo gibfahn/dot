@@ -280,16 +280,18 @@ password_gen() {
 }
 
 pth() { # Returns absolute path to each file or dir arg (defaulting to current directory).
-  local i
+  local input file
   if [[ $# == 0 ]]; then
     pwd
   fi
-  for i in "$@"; do
+  for input in "$@"; do
+    # Remove trailing line:col numbers, e.g. path/to/file:123:45 -> path/to/file
+    i=${input%%:*}
     if [[ -d "$i" ]]; then (pushd "$i" >/dev/null || return 1; pwd) # dir.
     elif [[ -f "$i" ]]; then  # file.
       case $i in
-        */*) echo "$(pushd "${i%/*}" >/dev/null || return 1; pwd)/${i##*/}" ;;
-          *) echo "$PWD/$i" ;;
+        */*) echo "$(pushd "${i%/*}" >/dev/null || return 1; pwd)/${input##*/}" ;;
+          *) echo "$PWD/$input" ;;
       esac
     fi
   done
