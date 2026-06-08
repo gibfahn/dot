@@ -846,6 +846,7 @@ return {
           "ruff_format", -- Format code
           "ruff_organize_imports", -- Sort imports
         },
+        zsh = { "shfmt" },
       },
     },
   },
