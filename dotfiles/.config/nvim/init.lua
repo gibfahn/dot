@@ -17,10 +17,9 @@ vim.env.XDG_DATA_HOME = vim.env.XDG_DATA_HOME or vim.env.HOME .. "/.local/share"
 
 local home_dir = os.getenv("HOME")
 
-if vim.fn.executable("nvr") then
-  -- Use existing nvim window to open new files (e.g. `g cm`).
-  vim.env.VISUAL = "nvr -cc vsplit --remote-wait +'set bufhidden=wipe'"
-end
+-- Use existing nvim window to open new files (e.g. `g cm`).
+-- Won't work properly until we have remote wait behaviour, https://github.com/neovim/neovim/issues/24788
+vim.env.VISUAL = "nvim -p --server $NVIM --remote"
 
 vim.g.any_jump_disable_default_keybindings = 1 -- Conflicts with other useful bindings.
 vim.g.is_posix = 1 -- Assume shell for syntax highlighting.

@@ -158,7 +158,7 @@ alias s=ssh
 
 _gib_vim=
 { (( $+commands[nvim] )) && _gib_vim=nvim; } || { (( $+commands[vim] )) && _gib_vim=vim; } || _gib_vim=vi # Take what you can get.
-[[ $VISUAL == 'nvr --remote-wait' ]] && _gib_vim=$VISUAL # Allow passing through the neovim init.vim value.
+[[ $VISUAL == nvim* ]] && _gib_vim=$VISUAL # Allow passing through the neovim init.vim value.
 export VISUAL=$_gib_vim EDITOR=$_gib_vim # Set vim/nvim as the default editor.
 unset _gib_vim
 
