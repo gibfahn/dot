@@ -16,6 +16,7 @@ cask "1password"                         # Password manager, installed first so 
 cask "1password-cli"                     # CLI way to access 1Password credentials.
 brew "gnupg"                             # gpg command line.
 brew "gh"                                # GitHub CLI.
+brew "faketty"                           # Run command in fake tty, used in secrets script.
 
 # Brew formulae
 
@@ -29,12 +30,12 @@ brew "git-delta"                         # Nicer git diff viewer.
 brew "gnu-sed"                           # A sed that actually supports `sed -i`.
 brew "htop"                              # Terminal activity monitor.
 brew "mas"                               # Mac App Store third-party cli.
+brew "mise"                              # Version manager.
 brew "node"                              # Node.js programming language.
 brew "pinentry-mac"                      # Gpg password Keychain integration.
 brew "python"                            # Python 3
 brew "ripgrep"                           # Super-fast version of grep.
 brew "tree"                              # Recursive ls.
-brew "mise"                              # Version manager.
 brew "watchexec"                         # Run commands when files change.
 brew "zoxide"                            # Z (for changing directory) but in Rust.
 brew "zsh"                               # Nicer interactive shell.
