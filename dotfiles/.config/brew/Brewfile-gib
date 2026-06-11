@@ -3,7 +3,7 @@
 
 # Brew taps
 
-tap "gibfahn/tap" # My personal tap for misc things.
+tap "gibfahn/tap", trusted: true # My personal tap for misc things.
 
 # Brew formulae
 
