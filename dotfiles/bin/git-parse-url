@@ -21,7 +21,7 @@ OPTIONS:
 
 --remote: name of the remote to parse the URL for, default 'origin'. Only used if --path is passed.
 
---segment: set the segment to one of: host, org, repo, org-repo, host-org-repo, url
+--segment: set the segment to one of: host, org, repo, org-repo, host-org-repo, url, https-url
 "
 }
 
@@ -110,6 +110,7 @@ main() {
     org-repo) echo $(remote_org $url)/$(remote_repo $url) ;;
     host-org-repo) echo $(remote_host $url)/$(remote_org $url)/$(remote_repo $url) ;;
     url) echo $url ;;
+    https-url) echo https://$(remote_host $url)/$(remote_org $url)/$(remote_repo $url) ;;
     *) error "Unknown segment '$segment'"
   esac
 }
