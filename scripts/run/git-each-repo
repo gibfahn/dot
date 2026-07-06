@@ -76,8 +76,29 @@ main() {
   git bp --quiet
   git mf >&/dev/null || true
 
+  # Make sure the primary branch tracks origin before checking for unpushed work.
+  set_primary_branch_upstream
+
   # Check for unpushed branches or uncommitted changes.
   git unpushed
+}
+
+# Ensure the primary branch (main/master) tracks origin, so `git unpushed` doesn't flag it as
+# having no @{upstream} or @{push}. Other local branches with no upstream are treated as
+# intentional and left alone.
+set_primary_branch_upstream() {
+  for branch in main master; do
+    # Skip if the local branch doesn't exist.
+    git show-ref --quiet --verify "refs/heads/$branch" || continue
+    # Skip if it already has an upstream or push target.
+    if git rev-parse --quiet --verify "$branch@{upstream}" >/dev/null 2>&1; then
+      continue
+    fi
+    # Only set it if the matching remote-tracking branch exists.
+    if git show-ref --quiet --verify "refs/remotes/origin/$branch"; then
+      git branch --set-upstream-to="origin/$branch" "$branch"
+    fi
+  done
 }
 
 # If the remote URL changes, e.g. from `https://github.com/oldorg/oldrepo` ->
