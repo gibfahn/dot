@@ -4,6 +4,8 @@ set -ex
 
 # Force color on in brew output, even though not writing to a tty.
 export HOMEBREW_COLOR=1
+# Don't prompt me for things, run in non-interactive mode.
+export HOMEBREW_NO_ASK=1
 
 # Install brew and Xcode Command Line Tools.
 if ! command -v brew >/dev/null; then
