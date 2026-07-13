@@ -9,8 +9,6 @@ local statusMessage = require("status-message")
 local log = hs.logger.new("hyper.lua", "debug")
 log.d("Loading module")
 
-local home_dir = os.getenv("HOME")
-
 -- {{{ Helper Functions
 
 AlertIfSecureInputEnabled = function()
@@ -231,22 +229,22 @@ hs.hotkey.bind({}, "F17", pressedF17, releasedF17)
 
 -- {{{ Hyper-<key> -> Launch apps
 local hyperModeAppMappings = {
-  -- Keys used in work config: r, shift-r
   { key = "/", app = "Finder" },
   { key = "a", app = "Activity Monitor" },
-  { key = "b", app = "Safari", mods = { "alt" } },
-  { key = "c", apps = { "Slack", "Slack Web" } },
+  { key = "b", app = "Safari", mods = { "shift" } },
+  { key = "c", app = "Slack" },
+  { key = "c", app = "Slack Web", mods = { "shift" } },
   { key = "f", app = "Firefox" },
   { key = "k", app = "Calendar" },
   { key = "m", app = "Mail" },
+  { key = "m", app = "Reminders", mods = { "shift" } },
   { key = "s", app = "Spotify" },
-  { key = "t", app = "Ghostty", mods = { "alt" } },
+  { key = "t", app = "Ghostty", mods = { "shift" } },
   { key = "t", app = "kitty" },
-  { key = "w", app = "Webex", mods = { "shift" } },
   { key = "w", app = "WorkFlowy" },
-  { key = "x", app = "Messenger", mods = { "alt" } },
+  { key = "x", app = "Messenger", mods = { "shift" } },
   { key = "x", app = "Messages" },
-  { key = "r", app = "Reminders", mods = { "alt" } },
+  { key = "z", app = "Webex" },
 }
 -- Add in wrk mappings if present.
 if WrkHyperModeAppMappings ~= nil then
@@ -325,7 +323,7 @@ end)
 -- }}} Hyper-⇧-d -> Paste today's date and time.
 
 -- {{{ Hyper-⌥-m -> Format selected Message ID as link and copy to clipboard.
-HyperMode:bind({ "shift" }, "m", function()
+HyperMode:bind({ "alt" }, "m", function()
   log.d("Copying selected email message ID as a link and copying to the clipboard...")
   hs.eventtap.keyStroke({ "cmd" }, "c") -- Copy selected email message ID (e.g. from Mail.app).
   -- Allow some time for the command+c keystroke to fire asynchronously before
@@ -342,24 +340,6 @@ HyperMode:bind({ "shift" }, "m", function()
 end)
 -- }}} Hyper-⌥-m -> Format selected Message ID as link and copy to clipboard.
 
--- {{{ Hyper-⌘-m -> Hide or show the menu bar.
-HyperMode:bind({ "cmd" }, "m", function()
-  log.d("Toggling menu bar hide/show...")
-
-  hs.task
-    .new(home_dir .. "/bin/toggle_menu_bar", function(exitCode, stdOut, stdErr)
-      hs.notify
-        .new({
-          title = "Toggling menu bar hide/show...",
-          informativeText = exitCode .. " " .. stdOut,
-          stdErr,
-        })
-        :send()
-    end)
-    :start()
-end)
--- }}} Hyper-⌘-m -> Hide or show the menu bar.
-
 -- {{{ Hyper-o -> App Launcher
 HyperMode:bind({}, "o", function()
   HyperMode:exit()
@@ -373,12 +353,12 @@ HyperMode:bind({}, "p", function()
 end)
 -- }}} Hyper-p -> Screenshot of selected area to clipboard.
 
--- {{{ Hyper-⌥-q -> Force Quit Webex
+-- {{{ Hyper-⌫ -> Force Quit Webex
 -- Quit webex without spending an age trying to find the button.
-HyperMode:bind({ "alt" }, "q", function()
+HyperMode:bind({}, "delete", function()
   KillAll({ "Webex" })
 end)
--- }}} Hyper-⌥-q -> Force Quit Webex
+-- }}} Hyper-⌫ -> Force Quit Webex
 
 -- {{{ Hyper-; -> lock screen
 HyperMode:bind({}, ";", hs.caffeinate.lockScreen)
@@ -402,6 +382,30 @@ HyperMode:bind({}, "return", function()
     :start()
 end)
 -- }}} Hyper-Enter -> Open clipboard contents.
+
+-- {{{ Hyper-⇧-Enter -> Open selected URL.
+HyperMode:bind({ "shift" }, "return", function()
+  log.d("Opening selected URL.")
+  hs.eventtap.keyStroke({ "cmd" }, "c") -- Copy the current selection.
+  -- Allow some time for the command+c keystroke to fire asynchronously before
+  -- we try to read from the clipboard.
+  hs.timer.doAfter(0.2, function()
+    local selection = hs.pasteboard.getContents():gsub("%s*$", "")
+    hs.task
+      .new("/usr/bin/open", function(exitCode, stdOut, stdErr)
+        hs.notify
+          .new({
+            title = "Opening Selected URL...",
+            subTitle = selection,
+            informativeText = exitCode .. " " .. stdOut,
+            stdErr,
+          })
+          :send()
+      end, { selection })
+      :start()
+  end)
+end)
+-- }}} Hyper-⇧-Enter -> Open selected URL.
 
 -- {{{ Hyper-Space -> Start Dictation.
 HyperMode:bind({}, "space", function()
