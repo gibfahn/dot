@@ -2,8 +2,10 @@ run_if_cmd: ["/bin/sh", "-cex", '[ "$(whoami)" = brian -a "$(uname)" = Darwin ] 
 run_lib: defaults
 data:
   NSGlobalDomain:
-    # Use Dark mode.
+    # Use Dark mode. Settings > Appearance > Dark
     AppleInterfaceStyle: Dark
+    # Use dark mode for icons. Settings > Appearance > Icon & Widget Style > Dark (Auto)
+    AppleIconAppearanceTheme: RegularAutomatic
     # Don't brighten window contents (better contrast in Dark Mode).
     # System Settings > General > Allow wallpaper tinting in windows (true here means uncheck the tickbox).
     AppleReduceDesktopTinting: true
