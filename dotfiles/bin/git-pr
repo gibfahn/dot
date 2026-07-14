@@ -26,6 +26,8 @@ OPTIONS:
 
 --markdown: instead of copying just the URL, copy a markdown snippet suitable for pasting into Slack.
 
+--automerge: enable auto-merge for an existing PR.
+
 --draft: creates a draft pull request (only applies when creating a new PR)
 "
 }
@@ -42,6 +44,8 @@ while [[ $# != 0 ]]; do
   [[ ${1:-} =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
 
   [[ ${1:-} =~ ^(--edit|-e)$ ]] && { action=edit; shift; }
+
+  [[ ${1:-} =~ ^(--auto-merge|--automerge|-a)$ ]] && { action=automerge; shift; }
 
   [[ ${1:-} =~ ^(--open|-o)$ ]] && { action=open; shift; }
 
@@ -75,6 +79,7 @@ $scissors
     create) pr_create ;;
     edit) pr_edit ;;
     open) pr_open ;;
+    automerge) pr_automerge "$(get_pr_number)" ;;
   esac
 }
 
@@ -100,9 +105,9 @@ pr_create() {
 
   rm $file
 
-  # Enable auto-merge if possible.
+  # Schedule the PR to merge once branch-protection requirements are met, without ever merging now.
   if [[ -z ${draft:-} ]]; then
-    gh pr merge --auto --delete-branch || true
+    pr_automerge "$(get_pr_number)"
   fi
 
   # Now open the PR in the browser.
@@ -180,6 +185,47 @@ get_pr_number() {
   [[ $pr_number =~ ^[0-9]+$ ]] || pr_number=$(gh pr list --state=all --limit=1 --head=$push_branch --json=number --jq='.[0].number')
   [[ $pr_number =~ ^[0-9]+$ ]] || error "Failed to get PR number, output: '$pr_number'"
   echo $pr_number
+}
+
+# Schedule the PR to merge automatically once all branch-protection requirements (required reviews /
+# status checks) are met, without ever merging it immediately.
+#
+# We call the enablePullRequestAutoMerge GraphQL mutation directly rather than `gh pr merge --auto`,
+# because gh merges immediately when the PR is not blocked by anything (see cli/cli merge.go:
+# `autoMerge = AutoMergeEnable && !isImmediatelyMergeable(...)`, where CLEAN/HAS_HOOKS/UNSTABLE count
+# as immediately mergeable). On a repo without branch protection there's nothing to wait for, so this
+# mutation errors with "Pull request is in clean status" and we leave the PR open for manual review.
+# TODO: switch back to `gh pr merge --auto --delete-branch || true` post https://github.com/cli/cli/issues/13880
+pr_automerge() {
+  local pr_number=$1 pr_id merge_method
+  [[ $pr_number =~ ^[0-9]+$ ]] || return 0
+
+  # Fetch the PR node id and pick a merge method: prefer squash, else fall back to the repo's
+  # default (mergeMethod defaults to MERGE, which errors on repos that don't allow merge commits).
+  local id_and_method
+  id_and_method=$(gh api graphql -f query='
+    query($owner:String!,$repo:String!,$number:Int!){
+      repository(owner:$owner,name:$repo){
+        squashMergeAllowed
+        viewerDefaultMergeMethod
+        pullRequest(number:$number){id}
+      }
+    }' -F owner="$up_org" -F repo="$up_repo" -F number="$pr_number" \
+    --jq '.data.repository | [.pullRequest.id, (if .squashMergeAllowed then "SQUASH" else .viewerDefaultMergeMethod end)] | @tsv') || return 0
+  pr_id=${id_and_method%%$'\t'*}
+  merge_method=${id_and_method##*$'\t'}
+  [[ -n $pr_id ]] || return 0
+
+  if gh api graphql -f query='
+    mutation($id:ID!,$method:PullRequestMergeMethod!){
+      enablePullRequestAutoMerge(input:{pullRequestId:$id, mergeMethod:$method}){
+        pullRequest{autoMergeRequest{enabledAt}}
+      }
+    }' -F id="$pr_id" -f method="${merge_method:-MERGE}" >/dev/null 2>&1; then
+    echo "${fg[green]}Auto-merge enabled${reset_color} (PR will merge once requirements are met)."
+  else
+    echo "${fg[yellow]}Auto-merge not enabled${reset_color} (repo may lack branch protection); PR left open for review."
+  fi
 }
 
 branch_ref() {
