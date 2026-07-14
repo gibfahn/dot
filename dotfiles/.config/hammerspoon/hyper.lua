@@ -353,12 +353,12 @@ HyperMode:bind({}, "p", function()
 end)
 -- }}} Hyper-p -> Screenshot of selected area to clipboard.
 
--- {{{ Hyper-⌫ -> Force Quit Webex
+-- {{{ Hyper-⌥-z -> Force Quit Webex
 -- Quit webex without spending an age trying to find the button.
-HyperMode:bind({}, "delete", function()
+HyperMode:bind({ "alt" }, "z", function()
   KillAll({ "Webex" })
 end)
--- }}} Hyper-⌫ -> Force Quit Webex
+-- }}} Hyper-⌥-z -> Force Quit Webex
 
 -- {{{ Hyper-; -> lock screen
 HyperMode:bind({}, ";", hs.caffeinate.lockScreen)
