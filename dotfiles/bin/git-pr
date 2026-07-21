@@ -200,18 +200,40 @@ pr_automerge() {
   local pr_number=$1 pr_id merge_method
   [[ $pr_number =~ ^[0-9]+$ ]] || return 0
 
-  # Fetch the PR node id and pick a merge method: prefer squash, else fall back to the repo's
-  # default (mergeMethod defaults to MERGE, which errors on repos that don't allow merge commits).
-  local id_and_method
-  id_and_method=$(gh api graphql -f query='
+  # Fetch the PR node id and the repo's allowed merge methods.
+  local response
+  response=$(gh api graphql -f query='
     query($owner:String!,$repo:String!,$number:Int!){
       repository(owner:$owner,name:$repo){
+        rebaseMergeAllowed
         squashMergeAllowed
+        mergeCommitAllowed
         viewerDefaultMergeMethod
         pullRequest(number:$number){id}
       }
-    }' -F owner="$up_org" -F repo="$up_repo" -F number="$pr_number" \
-    --jq '.data.repository | [.pullRequest.id, (if .squashMergeAllowed then "SQUASH" else .viewerDefaultMergeMethod end)] | @tsv') || return 0
+    }' -F owner="$up_org" -F repo="$up_repo" -F number="$pr_number") || return 0
+
+  # Pick a merge method: rebase for multi-commit PRs, squash for single-commit PRs, falling back
+  # in each case to whichever of the other methods the repo actually allows, and finally to the
+  # repo's default (mergeMethod defaults to MERGE, which errors on repos that don't allow it).
+  local id_and_method
+  id_and_method=$(jq -r --argjson multi "$([[ $commit_count -gt 1 ]] && echo true || echo false)" '
+    .data.repository as $r
+    | ($r
+        | if $multi then
+            (if .rebaseMergeAllowed then "REBASE"
+             elif .squashMergeAllowed then "SQUASH"
+             elif .mergeCommitAllowed then "MERGE"
+             else .viewerDefaultMergeMethod end)
+          else
+            (if .squashMergeAllowed then "SQUASH"
+             elif .rebaseMergeAllowed then "REBASE"
+             elif .mergeCommitAllowed then "MERGE"
+             else .viewerDefaultMergeMethod end)
+          end
+      ) as $method
+    | [$r.pullRequest.id, $method] | @tsv
+  ' <<<"$response")
   pr_id=${id_and_method%%$'\t'*}
   merge_method=${id_and_method##*$'\t'}
   [[ -n $pr_id ]] || return 0
