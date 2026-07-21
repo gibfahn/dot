@@ -234,6 +234,7 @@ local hyperModeAppMappings = {
   { key = "b", app = "Safari", mods = { "shift" } },
   { key = "c", app = "Slack" },
   { key = "c", app = "Slack Web", mods = { "shift" } },
+  { key = "o", app = "cmux", mods = { "shift" } },
   { key = "f", app = "Firefox" },
   { key = "k", app = "Calendar" },
   { key = "m", app = "Mail" },
