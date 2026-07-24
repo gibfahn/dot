@@ -244,7 +244,14 @@ pr_automerge() {
         pullRequest{autoMergeRequest{enabledAt}}
       }
     }' -F id="$pr_id" -f method="${merge_method:-MERGE}" >/dev/null 2>&1; then
-    echo "${fg[green]}Auto-merge enabled${reset_color} (PR will merge once requirements are met)."
+    local method_desc
+    case ${merge_method:-MERGE} in
+      REBASE) method_desc="rebase and merge" ;;
+      SQUASH) method_desc="squash and merge" ;;
+      MERGE) method_desc="create a merge commit" ;;
+      *) error "Unexpected merge method: '${merge_method:-}'" ;;
+    esac
+    echo "${fg[green]}Auto-merge enabled${reset_color} (will ${method_desc} once requirements are met)."
   else
     echo "${fg[yellow]}Auto-merge not enabled${reset_color} (repo may lack branch protection); PR left open for review."
   fi
