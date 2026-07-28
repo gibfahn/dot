@@ -55,7 +55,7 @@ ctrl-y:execute(${aliases[cpy]} <<< {})\
 _LESS=(
   --tabs=4 # tab is 4 spaces
   --ignore-case # smartcase search
-  --Raw-control-chars # show colors,
+  --Raw-control-chars # show colors, enable mouse scrolling
   --quit-if-one-screen # exit if file fits in one screen
   --Long-prompt # verbose prompt
   --Hilite-unread # highlight first unread line moving
