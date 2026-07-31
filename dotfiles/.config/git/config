@@ -440,6 +440,10 @@
   # Use jq to generate readable json diffs.
   textconv = jq .
 
+[feature]
+  # Enable config options that optimize for repos with many files in the working directory.
+  manyFiles = true
+
 [fetch]
   # `git fetch` by itself does `git fetch --all`
   all = true
