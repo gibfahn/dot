@@ -79,12 +79,12 @@
   bsr = "!set -x; good=${1?} bad=${2?} && git bisect reset && git bisect start --first-parent $bad $good && shift 2 && git bisect run \"$@\" #"
   # g btu remote/branch (defaults to origin/HEAD).
   btu = "!git branch -u ${1:-origin/$(git default-branch origin)} #"
-  # `g btp origin` sets push remote for this branch to origin, useful when pushing directly to
-  # 'origin'.
-  btp = "!git config branch.$(git head-branch).pushRemote ${1:-fork} #"
+  # `g btp` sets push remote for this branch to origin, useful when pushing directly to
+  # 'origin' instead of the default fork.
+  btp = "!git config branch.$(git head-branch).pushRemote ${1:-origin} #"
   # Set push remote for all future branches in this repo. Use this when you have a repo you don't
   # want to fork.
-  btpa = "!git config remote.pushDefault $1 #"
+  btpa = "!git config remote.pushDefault ${1:-origin} #"
 
   # Open this file with $VISUAL.
   ce  = config --global --edit
