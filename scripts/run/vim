@@ -39,8 +39,7 @@ if [[ -f ~/.netrc ]]; then
 fi
 
 if [[ ! -d "$bob_bin_dir" ]]; then
-  bob use nightly
-  bob install stable
+  bob use stable
 else
   bob update --all
 fi
