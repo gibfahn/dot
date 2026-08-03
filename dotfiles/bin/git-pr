@@ -105,13 +105,18 @@ pr_create() {
 
   rm $file
 
+  pr_number=$(get_pr_number)
+
+  # Copy the PR link before auto-merge, so it's available even if auto-merge fails/hangs.
+  copy_pr_url $pr_number
+
   # Schedule the PR to merge once branch-protection requirements are met, without ever merging now.
   if [[ -z ${draft:-} ]]; then
-    pr_automerge "$(get_pr_number)"
+    pr_automerge "$pr_number"
   fi
 
   # Now open the PR in the browser.
-  pr_open
+  gh pr view -w $pr_number
 }
 
 # Lets the user edit the PR's existing commit message.
@@ -151,12 +156,18 @@ pr_edit() {
 
 pr_open() {
   pr_number=$(get_pr_number)
+  copy_pr_url $pr_number
+  gh pr view -w $pr_number
+}
+
+# Copies the PR URL (or markdown link, with --markdown) to the clipboard.
+copy_pr_url() {
+  local pr_number=$1
   if [[ -n ${markdown:-} ]]; then
     gh pr view --json=title,url,number $pr_number | jq -r '":pr-open: [\(.url | capture("^https://.*/(?<repo>[^/]+/[^/]+)/pull/[0-9]+$") .repo)#\(.number)](\(.url)) \(.title)"' | tr -d '\n' | cpy
   else
     gh pr view --json=url --jq=.url $pr_number | tr -d '\n' | cpy
   fi
-  gh pr view -w $pr_number
 }
 
 get_pr_number() {
