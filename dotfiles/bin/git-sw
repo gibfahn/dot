@@ -72,7 +72,7 @@ main() {
   if [[ -n ${WORKTREE:-} && -n $git_branch_arg ]]; then
     existing_worktree=$(worktree_for_branch "$git_branch_arg")
     if [[ -n $existing_worktree ]]; then
-      echo >&2 "Branch '$git_branch_arg' already has a worktree, swithcing to $existing_worktree"
+      echo >&2 "Branch '$git_branch_arg' already has a worktree, switching to $existing_worktree"
       echo "$existing_worktree"
       exit 0
     fi
