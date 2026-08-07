@@ -204,6 +204,8 @@ dl_repos() {
 # docker_labels gibfahn/myimage:latest
 # docker_labels docker.io/rust@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 docker_labels() {
+  # Every time I use this I want to copy the output so someone else can see how this is done, so echo it first.
+  echo "❯ skopeo inspect --override-os=linux docker://${1?1st argument should be a docker image} | jq '.Labels'"
   skopeo inspect --override-os=linux docker://${1?1st argument should be a docker image} | jq '.Labels'
 }
 
