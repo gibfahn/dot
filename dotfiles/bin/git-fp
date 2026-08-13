@@ -100,6 +100,16 @@ checkout_pr() {
   export GH_REPO=$(remote_url "$up_remote")
   export GH_HOST=$(remote_host "$up_remote")
 
+  # If the branch already exists, switch to it and update it.
+  local existing_branch
+  existing_branch=$(git branch --list --format '%(refname:short)' "pull/$pr_number/*" | head -n1)
+  if [[ -n "$existing_branch" ]]; then
+    git switch "$existing_branch"
+    head_branch="$existing_branch"
+    reset_branch
+    return
+  fi
+
   # Checkout PR branch and save its name and remote.
   only_log_failure gh pr checkout $pr_number
   # `gh pr checkout` will generate a `.git/config` entry like this:
