@@ -6,7 +6,10 @@ autoload -U colors && colors
 
 usage() {
   setopt local_options posix_argzero
-  echo "$(tput bold; tput setaf 74)$ZSH_ARGZERO [-h|--help] [-v|--version] [-e|--edit] $(tput sgr0)
+  echo "$(
+    tput bold
+    tput setaf 74
+  )$ZSH_ARGZERO [-h|--help] [-v|--version] [-e|--edit] $(tput sgr0)
 
 $(tput bold)git pull request$(tput sgr0)
 
@@ -24,6 +27,8 @@ OPTIONS:
 
 --open: opens the pull request URL for the current branch in the browser
 
+--approve: approve the pull request (takes optional PR number/URL, else current branch, else clipboard).
+
 --markdown: instead of copying just the URL, copy a markdown snippet suitable for pasting into Slack.
 
 --automerge: enable auto-merge for an existing PR.
@@ -37,27 +42,58 @@ if [[ -n ${DEBUG:-} ]]; then
 fi
 
 action=create
+pr_target=""
 
 while [[ $# != 0 ]]; do
-  [[ ${1:-} =~ ^(--help|-h)$ ]] && { usage; exit; }
-
-  [[ ${1:-} =~ ^(--version|-v)$ ]] && { echo "main"; exit; }
-
-  [[ ${1:-} =~ ^(--edit|-e)$ ]] && { action=edit; shift; }
-
-  [[ ${1:-} =~ ^(--auto-merge|--automerge|-a)$ ]] && { action=automerge; shift; }
-
-  [[ ${1:-} =~ ^(--open|-o)$ ]] && { action=open; shift; }
-
-  [[ ${1:-} =~ ^(--draft|-d)$ ]] && {draft=true; shift; }
-
-  [[ ${1:-} =~ ^(--markdown|-m)$ ]] && {markdown=true; shift; }
+  case "${1:-}" in
+    -h | --help)
+      usage
+      exit
+      ;;
+    -v | --version)
+      echo "main"
+      exit
+      ;;
+    -e | --edit)
+      action=edit
+      shift
+      ;;
+    -a | --auto-merge | --automerge)
+      action=automerge
+      shift
+      ;;
+    -o | --open)
+      action=open
+      shift
+      ;;
+    -d | --draft)
+      draft=true
+      shift
+      ;;
+    -m | --markdown)
+      markdown=true
+      shift
+      ;;
+    --approve)
+      action=approve
+      shift
+      ;;
+    -*) error "Unknown option: $1" ;;
+    *)
+      if [[ -z "$pr_target" ]]; then
+        pr_target=$1
+      else
+        error "Too many arguments provided: $1"
+      fi
+      shift
+      ;;
+  esac
 done
 
 main() {
   up_ref=$(branch_ref "@{upstream}") # e.g. origin/main
-  up_remote=${up_ref%%/*} # e.g. origin
-  up_branch=${up_ref#*/} # e.g. main
+  up_remote=${up_ref%%/*}            # e.g. origin
+  up_branch=${up_ref#*/}             # e.g. main
   up_org=$(remote_org $up_remote)
   up_repo=$(remote_repo $up_remote)
 
@@ -80,7 +116,24 @@ $scissors
     edit) pr_edit ;;
     open) pr_open ;;
     automerge) pr_automerge "$(get_pr_number)" ;;
+    approve) pr_approve ;;
   esac
+}
+
+pr_approve() {
+  local pr_number
+  if [[ -n "$pr_target" ]]; then
+    pr_number="$pr_target"
+  elif [[ "$(git branch --show-current)" =~ ^pull/[0-9]+/ ]]; then
+    # e.g. checked out by ./git-fp
+    pr_number=$(get_pr_number)
+  elif [[ -n "$(pbpaste)" && ("$(pbpaste)" =~ ^[0-9]+$ || "$(pbpaste)" =~ ^https://) ]]; then
+    pr_number="$(pbpaste)"
+  else
+    error "Could not determine PR to approve. Provide a PR number/URL, check out a PR branch, or copy a PR number/URL to the clipboard."
+  fi
+
+  gh pr review "$pr_number" --approve
 }
 
 # Creates a PR with a user-specified commit message.
@@ -90,7 +143,7 @@ pr_create() {
   # Don't write template file if already non-empty.
   if file_empty $file; then
     # Write the PR message file based on the PR Template (if defined) and the git commit log.
-    pr_message > "$file"
+    pr_message >"$file"
   fi
 
   edit_file $file
@@ -145,8 +198,8 @@ pr_edit() {
   fi
 
   # Have to write to files due to https://stackoverflow.com/questions/61322297/
-  echo $new_pr_body > $TMPDIR/new_pr_body
-  echo $old_pr_body > $TMPDIR/old_pr_body
+  echo $new_pr_body >$TMPDIR/new_pr_body
+  echo $old_pr_body >$TMPDIR/old_pr_body
   git diff --color=always --no-index $TMPDIR/old_pr_body $TMPDIR/new_pr_body && true
 
   gh pr edit $pr_number --body $new_pr_body
@@ -184,8 +237,8 @@ get_pr_number() {
   fi
 
   push_ref=$(branch_ref "@{push}") # e.g. fork/my-pr-branch
-  push_remote=${push_ref%%/*} # e.g. push
-  push_branch=${push_ref#*/} # e.g. my-pr-branch
+  push_remote=${push_ref%%/*}      # e.g. push
+  push_branch=${push_ref#*/}       # e.g. my-pr-branch
   push_org=$(remote_org $push_remote)
 
   # You should be able to just run this:
@@ -349,7 +402,7 @@ EOF
 # If there is only one commit, use its subject line as the PR title.
 pr_title() {
   if [[ $commit_count == 1 ]]; then
-     git log -1 --format="%s" && echo
+    git log -1 --format="%s" && echo
   fi
 }
 
