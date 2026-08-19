@@ -91,6 +91,20 @@ while [[ $# != 0 ]]; do
 done
 
 main() {
+  if [[ $action != approve ]]; then
+    set_git_env_vars
+  fi
+
+  case $action in
+    create) pr_create ;;
+    edit) pr_edit ;;
+    open) pr_open ;;
+    automerge) pr_automerge "$(get_pr_number)" ;;
+    approve) pr_approve ;;
+  esac
+}
+
+set_git_env_vars() {
   up_ref=$(branch_ref "@{upstream}") # e.g. origin/main
   up_remote=${up_ref%%/*}            # e.g. origin
   up_branch=${up_ref#*/}             # e.g. main
@@ -110,30 +124,6 @@ $scissors
   # TODO: stop setting this once `gh` gains decent upstream/push branch recognition.
   export GH_REPO=$(remote_url "$up_remote")
   export GH_HOST=$(remote_host "$up_remote")
-
-  case $action in
-    create) pr_create ;;
-    edit) pr_edit ;;
-    open) pr_open ;;
-    automerge) pr_automerge "$(get_pr_number)" ;;
-    approve) pr_approve ;;
-  esac
-}
-
-pr_approve() {
-  local pr_number
-  if [[ -n "$pr_target" ]]; then
-    pr_number="$pr_target"
-  elif [[ "$(git branch --show-current)" =~ ^pull/[0-9]+/ ]]; then
-    # e.g. checked out by ./git-fp
-    pr_number=$(get_pr_number)
-  elif [[ -n "$(pbpaste)" && ("$(pbpaste)" =~ ^[0-9]+$ || "$(pbpaste)" =~ ^https://) ]]; then
-    pr_number="$(pbpaste)"
-  else
-    error "Could not determine PR to approve. Provide a PR number/URL, check out a PR branch, or copy a PR number/URL to the clipboard."
-  fi
-
-  gh pr review "$pr_number" --approve
 }
 
 # Creates a PR with a user-specified commit message.
@@ -319,6 +309,22 @@ pr_automerge() {
   else
     echo "${fg[yellow]}Auto-merge not enabled${reset_color} (repo may lack branch protection); PR left open for review."
   fi
+}
+
+pr_approve() {
+  local pr_number
+  if [[ -n "$pr_target" ]]; then
+    pr_number="$pr_target"
+  elif [[ "$(git branch --show-current)" =~ ^pull/[0-9]+/ ]]; then
+    # e.g. checked out by ./git-fp
+    pr_number=$(get_pr_number)
+  elif [[ -n "$(pbpaste)" && ("$(pbpaste)" =~ ^[0-9]+$ || "$(pbpaste)" =~ ^https://) ]]; then
+    pr_number="$(pbpaste)"
+  else
+    error "Could not determine PR to approve. Provide a PR number/URL, check out a PR branch, or copy a PR number/URL to the clipboard."
+  fi
+
+  gh pr review "$pr_number" --approve
 }
 
 branch_ref() {
