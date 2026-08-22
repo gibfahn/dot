@@ -183,7 +183,7 @@ pr_edit() {
   new_pr_body=${new_pr_body%$scissors*}
 
   if [[ -z $new_pr_body || $new_pr_body == $old_pr_body ]]; then
-    echo "Nothing to do..."
+    echo >&2 "Nothing to do..."
     return
   fi
 
@@ -211,6 +211,7 @@ copy_pr_url() {
   else
     gh pr view --json=url --jq=.url $pr_number | tr -d '\n' | cpy
   fi
+  echo >&2 "Copied PR URL to clipboard"
 }
 
 get_pr_number() {
@@ -305,9 +306,9 @@ pr_automerge() {
       MERGE) method_desc="create a merge commit" ;;
       *) error "Unexpected merge method: '${merge_method:-}'" ;;
     esac
-    echo "${fg[green]}Auto-merge enabled${reset_color} (will ${method_desc} once requirements are met)."
+    echo >&2 "${fg[green]}Auto-merge enabled${reset_color} (will ${method_desc} once requirements are met)."
   else
-    echo "${fg[yellow]}Auto-merge not enabled${reset_color} (repo may lack branch protection); PR left open for review."
+    echo >&2 "${fg[yellow]}Auto-merge not enabled${reset_color} (repo may lack branch protection); PR left open for review."
   fi
 }
 
