@@ -258,7 +258,7 @@
   # Rebase all commits since you forked the branch.
   rim = "!git rebase -i --autosquash $(git merge-base ${1:-main} ${2:-HEAD} ${@:2}) #"
   # Open remote in browser.
-  ro  = "!open $(git parse-url --quiet --segment https-url) #"
+  ro  = "!open $(git parse-url --quiet --segment https-url)${1:+/commit/$1} #"
   # Change name of remote `g rr origin origin`.
   rr  = remote rename
   # Set both push and fetch remotes.
