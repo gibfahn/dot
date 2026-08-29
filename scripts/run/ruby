@@ -22,5 +22,8 @@ for gem in "${ruby_gems[@]}"; do
 done
 
 # Update ruby gems.
-outdated_gems=("${(@f)$(gem outdated | awk '{print $1}')}")
-gem update "${outdated_gems[@]}"
+# Disabled because for brew gems we don't want to mess with them, and I haven't needed to update any
+# other gems recently.
+
+# outdated_gems=("${(@f)$(gem outdated | awk '{print $1}')}")
+# gem update "${outdated_gems[@]}"
