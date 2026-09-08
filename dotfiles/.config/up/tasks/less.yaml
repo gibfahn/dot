@@ -1,2 +1,1 @@
-run_if_cmd: ["/bin/sh", "-cex", "which lesskey || exit 204"]
 run_cmd: ["${dot_dir}/scripts/run/less"]

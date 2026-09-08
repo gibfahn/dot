@@ -1,20 +1,27 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
+set -euxo pipefail
 
-# TODO: once macOS updates to 582 or later, switch to writing the lesskey source directly.
-# Prior to version 582, the lesskey program needed to be run to convert a lesskey source file to a
-# lesskey binary file for less to use.  Newer versions of less read the lesskey source file directly
-# and ignore the binary file if the source file exists.
+work_done=
 
-current=$(md5 -q "$XDG_CACHE_HOME/less" 2>/dev/null || true)
+# Use the default location so less finds this by default.
+lesskey_file=$XDG_CONFIG_HOME/lesskey
 
-# Set up less file (colors for less).
-# We don't commit the lesskey file because we need the machine's terminal to resolve the tput
-# commands.
-lesskey -o "$XDG_CACHE_HOME/less" <(
+# If the old file is still around, remove it.
+if [[ -f $XDG_CACHE_HOME/less ]]; then
+  rm "$XDG_CACHE_HOME/less"
+  work_done=true
+fi
+
+current=$(md5 -q "$lesskey_file" 2>/dev/null || true)
+
+# Build the lesskey source (colors for less).
+# Since less 582 the lesskey source file is read directly, so we no longer run lesskey to convert it
+# to a binary file. We don't commit this file because we need the machine's terminal to resolve the
+# tput commands.
+lesskey_source=$(
   cat <<EOF
-$(echo "#env") # Get a comment.
+#env
 
 LESS_TERMCAP_ZN = $(tput ssubm)
 LESS_TERMCAP_ZO = $(tput ssupm)
@@ -61,5 +68,12 @@ LESS_TERMCAP_us = $(
 EOF
 )
 
-# Skip if we didn't change anything.
-[[ "$current" != "$(md5 -q "$XDG_CACHE_HOME/less")" ]] || exit 204
+# Only write the file if it's missing or its contents have changed.
+if [[ "$current" != "$(md5 -q <<<"$lesskey_source")" ]]; then
+  printf '%s\n' "$lesskey_source" >"$lesskey_file"
+  work_done=true
+fi
+
+if [[ -z $work_done ]]; then
+  exit "$UP_EXIT_CODE_SKIPPED"
+fi
