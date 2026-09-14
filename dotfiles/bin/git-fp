@@ -14,12 +14,16 @@ git fetch pr: fetch and set up a PR branch.
 
 Given no args, force updates the current branch to the relevant PR.
 
-git fp 123    -> Create a branch called 'pull/123/<PR branch name>' and set the push and upstream remotes accordingly.
-git fp --remote up 123 -> Create a branch called 'pull/123/<PR branch name>' and set the push and upstream remotes accordingly, looking at remote 'up'.
+git fp 123    -> Create a branch called 'pull/123/<owner>/<PR branch name>' and set the base/push remotes accordingly.
+git fp --remote up 123 -> As above, but look up the PR on remote 'up'.
 git fp        -> Update the current branch (assumed to be a PR branch created by this script).
-git ptp       -> push to the user's branch (in my git config as an alias).
+git ptp       -> push to the PR author's branch (in my git config as an alias).
 
-Creates and assumes local branches of the form pull/<PR Number>/<PR Branch Name>, e.g. pull/123/myfeaturebranch.
+Creates and updates local branches of the form pull/<PR Number>/<owner>/<PR Branch Name>, e.g.
+pull/123/alice/myfeaturebranch. Use \`git ptp\` to push to the PR branch.
+
+branch.<branch>.remote/merge track the PR's base branch (so rebase/status work), while
+branch.<branch>.pushRemote is the author's fork.
 
 If the PR author hasn't checked the 'maintainers can modify PR' checkbox, then the push branch won't be set up correctly.
 
@@ -85,72 +89,71 @@ main() {
   fi
 
   if [[ -n ${pr_number:-} ]]; then
-    checkout_pr
+    # Convert a URL like 'https://github.com/org/repo/pull/485/files' into '485'.
+    pr_number=$(sed -E 's;.*/([0-9]+)/?(files)?$;\1;' <<<$pr_number)
   else
-    reset_branch
+    # No PR number given: derive it from the current branch (assumed to be a git-fp PR branch).
+    if ! [[ $head_branch =~ "^pull/[0-9]+/.+" ]]; then
+      error "git-fp: Can't update branch as not on a PR branch we understand.
+       Switch to a PR branch or provide a PR number as an argument to git fp"
+    fi
+    pr_number=${head_branch#pull/}
+    pr_number=${pr_number%%/*}
   fi
+
+  setup_branch
 }
 
-# Assuming new PR checkout.
-checkout_pr() {
-  # Convert a URL like 'https://github.com/org/repo/pull/485/files' into '485'
-  pr_number=$(sed -E 's;.*/([0-9]+)/?(files)?$;\1;' <<<$pr_number)
-
+# Fetch (or update) the PR and set up a local branch for it.
+#
+# The local branch is named `pull/<pr_number>/<owner>/<pr_branch>`, e.g. `pull/123/alice/main`. The
+# `<owner>/<pr_branch>` suffix makes it clearer which PR this is (vs just `pull/123/main`), and
+#  is what `git ptp` (see the git alias) pushes back to: it strips the `pull/<n>/<owner>/` prefix
+#     to recover `<pr_branch>` on the author's fork.
+#
+# `branch.<branch>.remote`/`.merge` are pointed at the PR's *base* branch so that `@{upstream}`,
+# rebase, and status all work against what the PR will merge into. `branch.<branch>.pushRemote` is
+# the author's fork, so `git ptp` pushes there.
+setup_branch() {
   # TODO: stop setting this once `gh` gains decent upstream/push branch recognition.
   export GH_REPO=$(remote_url "$up_remote")
   export GH_HOST=$(remote_host "$up_remote")
 
-  # If the branch already exists, switch to it and update it.
-  local existing_branch
-  existing_branch=$(git branch --list --format '%(refname:short)' "pull/$pr_number/*" | head -n1)
-  if [[ -n "$existing_branch" ]]; then
-    git switch "$existing_branch"
-    head_branch="$existing_branch"
-    reset_branch
-    return
-  fi
+  # Single API call for the owner, PR (head) branch, and base branch.
+  local owner head_ref base_ref pr_meta
+  pr_meta=$(gh pr view "$pr_number" --json headRefName,baseRefName,headRepositoryOwner \
+    --jq '"owner=\(.headRepositoryOwner.login) head_ref=\(.headRefName) base_ref=\(.baseRefName)"') \
+    || error "git-fp: Couldn't look up PR ${pr_number} on ${up_remote} (${GH_REPO})."
+  eval "$pr_meta"
 
-  # Checkout PR branch and save its name and remote.
-  only_log_failure gh pr checkout $pr_number
-  # `gh pr checkout` will generate a `.git/config` entry like this:
-  # ```
-  # [branch "myfeaturebranch"]
-  # 	remote = https://github.com/gibfahn/dot.git
-  # 	pushRemote = https://github.com/pr-author/dot.git
-  # 	merge = refs/heads/myfeaturebranch
-  # ```
+  local canonical=pull/$pr_number/$owner/$head_ref
 
-  # If the user sets their PR branch as `main`, then `gh pr checkout` will set the branch as
-  # `gibfahn/main`, not just `main`. So we can't use the `gh pr checkout` generated branch name as
-  # the branch to merge to. At the same time, we want to have the upstream remote and branch working
-  # correctly, and that means we need to set `branch.<branch>.remote` and `branch.<branch>.merge` to
-  # the upstream value, and use the new branch name to store the user's PR branch name.
-  gh_pr_branch=$(git branch --show-current)
-  push_remote=$(git config branch.$gh_pr_branch.remote)
-  # Switch to better-named branch
-  head_branch=pull/$pr_number/$gh_pr_branch
-  git switch --quiet -c $head_branch
-  # Delete the old branch
-  git branch --quiet --delete $gh_pr_branch
-  # Set the upstream correctly so we can e.g. rebase
-  git branch --quiet --set-upstream-to=$(git symbolic-ref --short refs/remotes/$up_remote/HEAD)
-  # Set the pushRemote so we can push to the branch with git ptp`
-  git config branch.$head_branch.pushRemote $push_remote
+  # Migrate any existing local branch for this PR to the canonical name (e.g. an old-scheme
+  # `pull/<n>/<branch>` without the owner). Skip the canonical name itself so `--move` never
+  # targets an existing branch.
+  local existing
+  existing=$(git branch --list --format '%(refname:short)' "pull/$pr_number/*" | grep -vx "$canonical" | head -n1)
+  [[ -n $existing ]] && git branch --quiet --move "$existing" "$canonical"
 
-  echo "git-fp: Pull Request ${pr_number} fetched as branch ${head_branch}" >&2
-}
+  # Fetch/reset the PR head into the canonical branch and switch to it. `--force` makes this work
+  # for both the first checkout and later updates. `gh pr checkout` also sets `remote`/`pushRemote`
+  # to the author's fork.
+  only_log_failure gh pr checkout --force --branch "$canonical" "$pr_number"
 
-# Update current branch to latest PR head commit.
-reset_branch() {
-  if ! [[ $head_branch =~ "^pull/[0-9]+/.+" ]]; then
-    error "git-fp: Can't reset branch as not on a PR branch we understand.
-       Switch to a PR branch or provide a PR number as an argument to git fp"
-  fi
-  pr_number=${head_branch#pull/}
-  pr_number=${pr_number%%/*}
-  # Reset the existing local branch to the latest state of the pull request
-  gh pr checkout --force --branch $head_branch $pr_number
-  echo "git-fp: Branch ${head_branch} updated to latest Pull Request ${pr_number}" >&2
+  # Capture the author's fork before we overwrite `remote` with the base repo below.
+  local push_remote
+  push_remote=$(git config branch.$canonical.pushRemote 2>/dev/null \
+    || git config branch.$canonical.remote)
+
+  # Track the PR's base branch. Set the config directly (rather than `--set-upstream-to`) so we
+  # don't require `refs/remotes/$up_remote/$base_ref` to have been fetched yet.
+  git config branch.$canonical.remote "$up_remote"
+  git config branch.$canonical.merge "refs/heads/$base_ref"
+  # Set the pushRemote so we can push to the PR branch with `git ptp`.
+  git config branch.$canonical.pushRemote "$push_remote"
+
+  head_branch=$canonical
+  echo "git-fp: PR ${pr_number} ready as ${canonical} (base ${up_remote}/${base_ref})" >&2
 }
 
 only_log_failure() {

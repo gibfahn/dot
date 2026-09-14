@@ -229,8 +229,8 @@
   prm = "!gh pr merge --auto --delete-branch"
   # Open the PR pointed to by the current branch.
   pro = pr --open --markdown
-  # Push to PR branch, works with the `git-fp` script in this repo.
-  ptp = "!set -x; branch=$(git branch --show-current); git push $(git config branch.${branch}.pushRemote) @:$(git config branch.${branch}.merge) $@ #"
+  # Push a PR branch (set up with git-fp) to the author's PR branch.
+  ptp = "!set -x; branch=$(git branch --show-current); git push $(git config branch.${branch}.pushRemote) @:refs/heads/${branch#pull/*/*/} $@ #"
   # g pt origin sets branch to track upstream + pushes.
   pt  = "!git push -u $1 $(git head-branch) #"
   pl  = pull
