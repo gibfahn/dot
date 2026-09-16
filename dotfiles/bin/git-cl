@@ -38,7 +38,7 @@ main() {
   local clone_dir ret args
   args=("$@")
 
-  set_default_clone_path >&2
+  set_default_clone_path
 
   clone_dir="$(set -o pipefail; git clone --recurse-submodules --progress "${args[@]}" 3>&1 1>&2 2>&3 3>&- | tee /dev/stderr | awk -F \' '/Cloning into/ {print $2}' | head -1)"
   ret="$?"
