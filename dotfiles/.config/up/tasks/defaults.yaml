@@ -165,7 +165,7 @@ data:
       - replace: "!etr"
         on: 1
         with: ⏎
-      - replace: ",af"
+      - replace: ",fba"
         on: 1
         with: applefeedback://inbox?make_visible=1
       - replace: adr
