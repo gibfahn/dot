@@ -27,7 +27,7 @@ OPTIONS:
 
 --open: opens the pull request URL for the current branch in the browser
 
---approve: approve the pull request (takes optional PR number/URL, else current branch, else clipboard).
+--approve: approve the pull request (takes optional PR number/URL, else clipboard, else current branch).
 
 --markdown: instead of copying just the URL, copy a markdown snippet suitable for pasting into Slack.
 
@@ -316,11 +316,11 @@ pr_approve() {
   local pr_number
   if [[ -n "$pr_target" ]]; then
     pr_number="$pr_target"
+  elif [[ -n "$(pbpaste)" && ("$(pbpaste)" =~ ^[0-9]+$ || "$(pbpaste)" =~ ^https://.*/pull/) ]]; then
+    pr_number="$(pbpaste)"
   elif [[ "$(git branch --show-current)" =~ ^pull/[0-9]+/ ]]; then
     # e.g. checked out by ./git-fp
     pr_number=$(get_pr_number)
-  elif [[ -n "$(pbpaste)" && ("$(pbpaste)" =~ ^[0-9]+$ || "$(pbpaste)" =~ ^https://) ]]; then
-    pr_number="$(pbpaste)"
   else
     error "Could not determine PR to approve. Provide a PR number/URL, check out a PR branch, or copy a PR number/URL to the clipboard."
   fi
