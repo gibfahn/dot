@@ -87,6 +87,7 @@ alias sudo_later="sudo -v; (while sudo -v; do sleep 60; done) &" # Preserve sudo
 alias bounce="echo -n '\a'" # Ring the terminal bell (bounce the dock icon in macOS).
 alias pstree="pstree -g 3" # Use the nicest pstree output (unicode).
 
+alias m=make
 alias c=cargo # Rust commands (try `c b`, `c r`, `c t`).
 alias ru=rustup
 alias gm='wait; git mf' # After cd'ing into a repo, fetch will run as a background job. Use this to wait for it to finish then mf.
