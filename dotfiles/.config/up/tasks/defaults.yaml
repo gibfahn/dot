@@ -612,6 +612,12 @@ data:
     # Don't show Siri icon in the menu bar.
     StatusMenuVisible: false
 
+  # Cmux terminal
+  com.cmuxterm.app:
+    NSUserKeyEquivalents:
+      # Free up ⌘-h by remapping "Hide cmux" to something obscure.
+      "Hide cmux": '~^$\U00a7'
+
   # Ghostty terminal
   com.mitchellh.ghostty:
     NSUserKeyEquivalents:

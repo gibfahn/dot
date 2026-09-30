@@ -20,9 +20,6 @@
 # - `window_alert_on_bell` -> `echo -n '\a'` doesn't seem to do anything in Ghostty
 # - `tab_activity_symbol` -> no activity indicator
 # - `active_border_color` / inactive_border_color: can't get visible borders (they seem to be black on all the black screens, vs the defaults in kitty)
-# - Remappings:
-#   - Open scrollback in less: `scrollback_pager env LESS= less --tabs=4 --ignore-case --RAW-CONTROL-CHARS --quit-if-one-screen --LONG-PROMPT --window=-4 --jump-target=1 --pattern=^❯ +INPUT_LINE_NUMBER`
-#   - Open scrollback in nvim
 
 # EXTRA
 #
@@ -43,17 +40,39 @@ cursor-color = "#6BF549"
 # More scrollback
 scrollback-limit = 25_000_000
 
+# Keybinds mirror kitty.conf (kitty_mod = super). Inside cmux, cmux's own
+# shortcuts (~/.config/cmux/cmux.json) take precedence over these, so keep
+# that file in sync too.
+# Defaults that already match kitty: super+{c,v,q,w,t,n,0,=,-,1-8,9},
+# super+d / super+shift+d (split right / down).
+
+# Tabs (cmux: tabs within a pane).
 keybind = super+a=move_tab:-1
-keybind = super+alt+f=write_scrollback_file:paste
-keybind = super+e=new_split:right
+keybind = super+s=move_tab:1
 keybind = super+h=previous_tab
 keybind = super+i=next_tab
-keybind = super+n=new_split:down
-keybind = super+s=move_tab:1
+keybind = super+shift+r=prompt_tab_title
+
+# Open scrollback in nvim (approximates kitty's overlay, only works at a prompt).
+keybind = super+e=text:nvim -c '/❯'\x20
+keybind = chain=write_screen_file:paste,plain
+keybind = chain=text:\r
+
+# Open scrollback in less, like kitty's show_scrollback (only works at a prompt).
+# Uses kitty's scrollback_pager options, starting at the bottom (+G).
+keybind = super+shift+f=text:env LESS= less --tabs=4 --ignore-case --RAW-CONTROL-CHARS --quit-if-one-screen --LONG-PROMPT --window=-4 --jump-target=1 --pattern='^❯' +G\x20
+keybind = chain=write_screen_file:paste,vt
+keybind = chain=text:\r
+
+# Splits (kitty: windows, cmux: panes).
+keybind = super+shift+h=goto_split:previous
+keybind = super+shift+i=goto_split:next
 keybind = super+arrow_left=goto_split:left
 keybind = super+arrow_right=goto_split:right
 keybind = super+arrow_down=goto_split:down
 keybind = super+arrow_up=goto_split:up
+# Defaults, mirrored in kitty: super+ctrl+arrows resize, super+ctrl+= equalize,
+# super+shift+enter zoom.
 
 window-colorspace = display-p3
 focus-follows-mouse = true

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://raw.githubusercontent.com/manaflow-ai/cmux/main/web/data/cmux.schema.json",
+  "schemaVersion": 1,
+
+  // Full default template: delete this file and relaunch cmux to regenerate it.
+  // Docs: `cmux docs settings`, `cmux docs shortcuts`. Reload: `cmux reload-config`.
+
+  // Mirrors kitty.conf (kitty_mod = cmd). kitty OS windows = cmux workspaces,
+  // kitty tabs = cmux tabs (surfaces) within a pane, kitty splits = cmux panes.
+  // cmux shortcuts take precedence over ~/.config/ghostty/config keybinds, so
+  // any key used here is not seen by Ghostty inside cmux.
+  "shortcuts": {
+    "bindings": {
+      // Tabs (kitty tabs). newSurface is already cmd+t by default.
+      "prevSurface": "cmd+h",
+      "nextSurface": "cmd+i",
+      "moveSurfaceLeft": "cmd+a",
+      "moveSurfaceRight": "cmd+s",
+      "renameTab": "cmd+shift+r",
+
+      // Workspaces (kitty OS windows).
+      "newTab": "cmd+n",
+      "renameWorkspace": "cmd+r",
+
+      // Panes (kitty splits).
+      "focusLeft": "cmd+←",
+      "focusRight": "cmd+→",
+      "focusUp": "cmd+↑",
+      "focusDown": "cmd+↓",
+
+      // Moved off keys claimed above.
+      "showNotifications": "cmd+ctrl+i",
+      // Frees cmd+e for Ghostty's scrollback-in-nvim keybind.
+      "useSelectionForFind": "",
+      // Frees cmd+shift+f for Ghostty's scrollback-in-less keybind.
+      "findInDirectory": "",
+      // Frees cmd+shift+h for Ghostty's goto_split:previous.
+      "triggerFlash": "cmd+ctrl+h"
+    }
+  }
+}
