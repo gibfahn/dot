@@ -61,8 +61,7 @@ typeset -U path # Don't allow duplicates in the path (keep left-most entry).
 path=(
   ${VIRTUAL_ENV:+$VIRTUAL_ENV/bin} # Virtual env needs to be in front of /usr/local/bin.
 
-  $HOME/bin        # Put random binaries you want to run in here.
-  $HOME/.local/bin # XDG equivalent of ~/bin.
+  $HOME/bin # Put random binaries you want to run in here.
 
   # /usr/local/opt/ccache/libexec # Add ccache to the path if installed (macOS).
   # /usr/lib/ccache # Add ccache to the path if installed (Linux).
@@ -81,6 +80,7 @@ path=(
   /usr/local/bin  # Missed in some shells.
   /usr/bin        # Should be after /usr/local/bin.
 
+  $HOME/.local/bin              # XDG equivalent of ~/bin.
   $HOME/Library/Python/*/bin(N) # macOS Python User Packages.
   ${GOPATH:+$GOPATH/bin}        # Go binaries.
   $path
