@@ -1,0 +1,15 @@
+# Mise config (https://mise.jdx.dev/configuration.html)
+# Machine-specific config (e.g. registry mirrors) goes in ~/.config/mise/conf.d/*.toml, which is
+# merged with this file.
+[settings]
+npm.package_manager = "npm"
+
+[tools]
+
+node = "lts"
+
+ruby = "latest"
+"gem:reek" = "latest"       # Ruby style checker for code smells.
+"gem:rubocop" = "latest"    # Ruby style checker and formatter.
+"gem:solargraph" = "latest" # Ruby LanguageServer Client.
+"gem:neovim" = "latest"     # Neovim plugin for Ruby.

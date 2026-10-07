@@ -44,6 +44,7 @@ env:
   GOPATH: "$HOME/code/go" # Go install dir.
   GNUPGHOME: "$XDG_DATA_HOME/gnupg" # Gpg install dir.
   RBENV_ROOT: "$XDG_CACHE_HOME/rbenv" # Set rbenv location.
+  NPM_CONFIG_USERCONFIG: "$XDG_CONFIG_HOME/npm/config" # npm config location (sets the registry).
   # Used to backup zsh history.
   ZSH_CLOUD_HISTFILE: "$HOME/Library/Mobile Documents/com~apple~CloudDocs/Fahns/Gib/zsh/history"
   # Desktop and Lockscreen background.

@@ -1,0 +1,11 @@
+#!/usr/bin/env zsh
+
+set -eux
+
+export MISE_VERBOSE=1
+
+# Install any tools in the config that are missing.
+mise install
+
+# Upgrade installed tools to the newest versions their config allows (e.g. "latest").
+mise upgrade
