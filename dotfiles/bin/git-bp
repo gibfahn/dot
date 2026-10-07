@@ -64,7 +64,7 @@ find_local_branches_to_delete() {
 # Use gh CLI to check if the @{push} branch for each local branch has a merged PR.
 # Silently ignore failures (e.g. non-GitHub repos, gh not installed).
 find_gh_merged_pr_branches_to_delete() {
-  if !command -v gh &>/dev/null; then
+  if ! command -v gh &>/dev/null; then
     return
   fi
 
@@ -90,9 +90,25 @@ find_gh_merged_pr_branches_to_delete() {
     # Never delete a branch that is the HEAD (default) branch of any remote.
     (( ${remote_heads[(I)$branch]} )) && continue
 
-    # Check for a merged PR owned by me targeting this branch (suppress all errors).
-    merged=$(gh pr list --head "$remote_branch" --author @me --state merged --json number --jq '.[].number' --limit 1) || continue
-    if [[ -n "$merged" ]]; then
+    # Find PRs owned by me from this branch (suppress all errors).
+    prs=$(gh pr list --head "$remote_branch" --author @me --state all --json state,headRefOid --jq '.[] | "\(.state) \(.headRefOid)"') || continue
+
+    # Only prune if no PR is still open, and a merged PR's head contains the local branch (and the
+    # remote branch if we have it), i.e. there are no commits added after the PR was merged.
+    has_open= merged_contains=
+    while read state oid; do
+      case $state in
+        OPEN) has_open=true ;;
+        MERGED)
+          git merge-base --is-ancestor "$branch" "$oid" 2>/dev/null &&
+            { ! git rev-parse --verify --quiet "refs/remotes/$push_ref" >/dev/null ||
+              git merge-base --is-ancestor "refs/remotes/$push_ref" "$oid" 2>/dev/null; } &&
+            merged_contains=true
+          ;;
+      esac
+    done <<<"$prs"
+
+    if [[ -z $has_open && -n $merged_contains ]]; then
       local_branches_to_delete+=("$branch")
       remote_branches_to_delete+=("$remote/$remote_branch")
     fi
