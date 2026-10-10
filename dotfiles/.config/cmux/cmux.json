@@ -5,6 +5,11 @@
   // Full default template: delete this file and relaunch cmux to regenerate it.
   // Docs: `cmux docs settings`, `cmux docs shortcuts`. Reload: `cmux reload-config`.
 
+  // Disable telemetry.
+  "app": {
+    "sendAnonymousTelemetry": false
+  },
+
   // Mirrors kitty.conf (kitty_mod = cmd). kitty OS windows = cmux workspaces,
   // kitty tabs = cmux tabs (surfaces) within a pane, kitty splits = cmux panes.
   // cmux shortcuts take precedence over ~/.config/ghostty/config keybinds, so
