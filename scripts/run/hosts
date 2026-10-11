@@ -8,10 +8,10 @@ set -euxo pipefail
 
 main() {
   case "$(hostname)" in
-    Gib-Studio-*|Gib-iMac-*)
-    echo "Not replacing hosts on desktop."
-    exit $UP_EXIT_CODE_SKIPPED
-    ;;
+    Gib-Studio-* | Gib-iMac-*)
+      echo "Not replacing hosts on desktop."
+      exit $UP_EXIT_CODE_SKIPPED
+      ;;
   esac
 
   hosts=(
@@ -24,7 +24,7 @@ main() {
     # Block Twitter
     twitter.com
     # Block Reddit
-    # reddit.com
+    reddit.com
   )
 
   heading_line="# Added by gib dot host blocking script."
@@ -52,7 +52,7 @@ main() {
   done
 
   if [[ -n $changed ]]; then
-    sudo tee <<<"${(@F)hosts_lines}" /etc/hosts >/dev/null
+    sudo tee /etc/hosts <<<"${(@F)hosts_lines}" >/dev/null
 
     case $OSTYPE in
       darwin*)
