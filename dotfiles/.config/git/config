@@ -483,6 +483,12 @@
   # Display dates as ISO-8601 (`2023-05-25 13:54:51` instead of `Thu May 25 13:54:51 2023`)
   date = iso
 
+[man]
+  # Fall back to `git-foo --help` for custom git-foo scripts that have no man page.
+  viewer = manorhelp
+[man "manorhelp"]
+  cmd = "f() { man \"$1\" 2>/dev/null || \"$1\" --help; }; f"
+
 [merge]
   # Show common ancestor in diffs (initially confusing, but very helpful).
   conflictstyle = zdiff3
