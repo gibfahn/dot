@@ -21,7 +21,8 @@ If you don't specify a branch, we check out the default branch of the default re
 
 Args are passed to \`git switch\`, except for the following (must be the first arg):
 
---worktree: create a worktree and switch to it with the specified branch
+--worktree: create a worktree and switch to it with the specified branch. New branches start from
+    the default branch of the default remote (e.g. origin/main) unless a start point is passed.
 
 ENVIRONMENT VARIABLES:
 
@@ -66,6 +67,14 @@ main() {
     fi
   done
 
+  # New worktree branches start from the primary remote's default branch rather than the current
+  # HEAD (which may be another worktree's branch), unless a start point was passed.
+  start_point=()
+  positional_args=(${@:#-*})
+  if [[ -n ${WORKTREE:-} && ${#positional_args} == 1 ]]; then
+    start_point=($(default_remote_branch $REMOTE_PRIMARY_NAME))
+  fi
+
   original_branch=$(git branch --show-current)
   original_head=$(git rev-parse HEAD)
 
@@ -97,7 +106,7 @@ run_switch() {
   if (($@[(Ie)-c])) || (($@[(Ie)--create])) || (($@[(Ie)-C])) || (($@[(Ie)$force_create])); then
     # We're explicitly trying to create a new branch.
     created=1
-    git switch $@
+    git switch $@ $start_point
   elif [[ -z $git_branch_arg ]]; then
     # Didn't find a branch name (e.g. `git sw -`), just run the switch.
     git switch $@
@@ -114,7 +123,7 @@ run_switch() {
     git switch $@
   else
     # Branch doesn't exist locally or remotely, create it.
-    git switch -c $@
+    git switch -c $@ $start_point
   fi
   # If there are more branches now than there were before, we created a branch.
   if [[ $local_branch_count != $(git branch --list --no-color | wc -l) ]]; then
