@@ -41,56 +41,9 @@ if [[ -n ${DEBUG:-} ]]; then
   set -x
 fi
 
-action=create
-pr_target=""
-
-while [[ $# != 0 ]]; do
-  case "${1:-}" in
-    -h | --help)
-      usage
-      exit
-      ;;
-    -v | --version)
-      echo "main"
-      exit
-      ;;
-    -e | --edit)
-      action=edit
-      shift
-      ;;
-    -a | --auto-merge | --automerge)
-      action=automerge
-      shift
-      ;;
-    -o | --open)
-      action=open
-      shift
-      ;;
-    -d | --draft)
-      draft=true
-      shift
-      ;;
-    -m | --markdown)
-      markdown=true
-      shift
-      ;;
-    --approve)
-      action=approve
-      shift
-      ;;
-    -*) error "Unknown option: $1" ;;
-    *)
-      if [[ -z "$pr_target" ]]; then
-        pr_target=$1
-      else
-        error "Too many arguments provided: $1"
-      fi
-      shift
-      ;;
-  esac
-done
-
 main() {
+  parse_args "$@"
+
   if [[ $action != approve ]]; then
     set_git_env_vars
   fi
@@ -102,6 +55,57 @@ main() {
     automerge) pr_automerge "$(get_pr_number)" ;;
     approve) pr_approve ;;
   esac
+}
+
+parse_args() {
+  action=create
+  pr_target=""
+
+  while [[ $# != 0 ]]; do
+    case "${1:-}" in
+      -h | --help)
+        usage
+        exit
+        ;;
+      -v | --version)
+        echo "main"
+        exit
+        ;;
+      -e | --edit)
+        action=edit
+        shift
+        ;;
+      -a | --auto-merge | --automerge)
+        action=automerge
+        shift
+        ;;
+      -o | --open)
+        action=open
+        shift
+        ;;
+      -d | --draft)
+        draft=true
+        shift
+        ;;
+      -m | --markdown)
+        markdown=true
+        shift
+        ;;
+      --approve)
+        action=approve
+        shift
+        ;;
+      -*) error "Unknown option: $1" ;;
+      *)
+        if [[ -z "$pr_target" ]]; then
+          pr_target=$1
+        else
+          error "Too many arguments provided: $1"
+        fi
+        shift
+        ;;
+    esac
+  done
 }
 
 set_git_env_vars() {
