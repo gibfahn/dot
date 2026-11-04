@@ -17,6 +17,7 @@ Given no args, force updates the current branch to the relevant PR.
 git fp 123    -> Create a branch called 'pull/123/<owner>/<PR branch name>' and set the base/push remotes accordingly.
 git fp --remote up 123 -> As above, but look up the PR on remote 'up'.
 git fp        -> Update the current branch (assumed to be a PR branch created by this script).
+git fp --worktree 123 -> As above, but in a worktree (reusing an existing one for the PR branch).
 git ptp       -> push to the PR author's branch (in my git config as an alias).
 
 Creates and updates local branches of the form pull/<PR Number>/<owner>/<PR Branch Name>, e.g.
@@ -30,6 +31,10 @@ If the PR author hasn't checked the 'maintainers can modify PR' checkbox, then t
 OPTIONS:
 
 --remote: name of the remote fetch the PR for, defaults to the git @{upstream} remote for the current branch.
+
+--worktree: fetch the PR into a worktree and print its path to stdout. If the PR branch is already
+    checked out in a worktree, update it there, otherwise create a new worktree in
+    ~/code/worktrees/<host>/<org>/<repo>/<branch>.
 
 "
 }
@@ -59,6 +64,12 @@ while [[ $# != 0 ]]; do
   [[ ${1:-} =~ ^(--quiet|-q)$ ]] && {
     QUIET=true
     shift
+  }
+
+  [[ ${1:-} =~ ^--worktree$ ]] && {
+    WORKTREE=1
+    shift
+    continue
   }
 
   [[ ${1:-} =~ ^--remote$ ]] && {
@@ -135,10 +146,21 @@ setup_branch() {
   existing=$(git branch --list --format '%(refname:short)' "pull/$pr_number/*" | grep -vx "$canonical" | head -n1)
   [[ -n $existing ]] && git branch --quiet --move "$existing" "$canonical"
 
+  [[ -n ${WORKTREE:-} ]] && enter_worktree "$canonical"
+
+  # `gh pr checkout --force` does a `git reset --hard`, which would silently discard local changes.
+  if [[ -n $(git status --porcelain --untracked-files=no) ]]; then
+    error "git-fp: Uncommitted changes in $PWD, commit or stash them first."
+  fi
+
   # Fetch/reset the PR head into the canonical branch and switch to it. `--force` makes this work
   # for both the first checkout and later updates. `gh pr checkout` also sets `remote`/`pushRemote`
   # to the author's fork.
-  only_log_failure gh pr checkout --force --branch "$canonical" "$pr_number"
+  only_log_failure gh pr checkout --force --branch "$canonical" "$pr_number" || {
+    # Don't leave behind an empty worktree we just created.
+    [[ -n ${new_worktree:-} ]] && git -C "$original_dir" worktree remove --force "$worktree_dir"
+    exit 1
+  }
 
   # Capture the author's fork before we overwrite `remote` with the base repo below.
   local push_remote
@@ -154,6 +176,37 @@ setup_branch() {
 
   head_branch=$canonical
   echo "git-fp: PR ${pr_number} ready as ${canonical} (base ${up_remote}/${base_ref})" >&2
+
+  if [[ -n ${WORKTREE:-} ]]; then
+    if (($+commands[zoxide])); then
+      zoxide add "$worktree_dir" >&2
+    fi
+    echo "$worktree_dir" # Echo dir to stdout for shell wrapper scripts.
+  fi
+}
+
+# cd into the worktree that has the branch checked out, creating one if there isn't one already.
+enter_worktree() {
+  local branch=$1
+  original_dir=$PWD
+  worktree_dir=$(worktree_for_branch "$branch")
+  if [[ -n $worktree_dir ]]; then
+    echo "git-fp: Branch '$branch' already has a worktree, updating $worktree_dir" >&2
+  else
+    worktree_dir=~/code/worktrees/"$(git parse-url --segment host-org-repo)/$branch"
+    # Start detached, `gh pr checkout` then switches the new worktree to the PR branch.
+    git worktree add --quiet --detach "$worktree_dir" >&2
+    new_worktree=1
+  fi
+  cd "$worktree_dir"
+}
+
+# Print the path of the worktree that has the given branch checked out, if any.
+worktree_for_branch() {
+  git worktree list --porcelain | awk -v b="refs/heads/$1" '
+    /^worktree / { wt = substr($0, 10) }
+    $1 == "branch" && $2 == b { print wt; exit }
+  '
 }
 
 only_log_failure() {

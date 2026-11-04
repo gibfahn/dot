@@ -235,6 +235,12 @@ gsw() {
   cd $dir
 }
 
+# Fetch a PR into a worktree (or update the existing one), cd to that directory.
+gswp() {
+  dir=$(g fp --worktree $@)
+  cd $dir
+}
+
 # Set up things I commonly need when sshing into a machine.
 ssh_setup() {
   # Login keychain is locked when you ssh in until you unlock it.
