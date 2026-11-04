@@ -35,6 +35,18 @@ GIT_EACH_DIRS=$(
   echo "${git_each_dirs[*]}"
 ) "${dot_dir}"/dotfiles/bin/git-each "${dot_dir}"/scripts/run/git-each-repo
 
+# Remove empty parent dirs left behind when `git bp` removes a worktree, e.g. `pull/123/` after
+# removing `pull/123/foo/`. Don't descend into worktrees, as their empty dirs may be wanted.
+worktrees_dir=~/code/worktrees
+if [[ -d $worktrees_dir ]]; then
+  find "$worktrees_dir" -mindepth 1 -type d -exec test -e '{}/.git' ';' -prune -o -type d -empty -print |
+    while IFS= read -r dir; do
+      while [[ $dir != "$worktrees_dir" ]] && rmdir "$dir" 2>/dev/null; do
+        dir=$(dirname "$dir")
+      done
+    done
+fi
+
 # Delete repos that are no longer present.
 for repo in $(awk '$1 == "repo" { print $3 }' "$config_file"); do
   if [[ ! -e $repo/.git ]]; then
