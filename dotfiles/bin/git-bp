@@ -43,6 +43,8 @@ main() {
 
   switch_current_branch_if_pruning_it
 
+  remove_worktrees_of_pruned_branches
+
   delete_local_remote_branches
 }
 
@@ -176,13 +178,33 @@ switch_current_branch_if_pruning_it() {
       fi
     else
       warn "Can't delete current branch '$current_branch' as it has uncommitted changes."
+      local_branches_to_delete=("${(@)local_branches_to_delete:#${(b)current_branch}}")
     fi
   fi
 }
 
+# We can't delete branches checked out in other worktrees, so remove those worktrees first.
+# Worktrees that git refuses to remove (uncommitted changes, locked, main worktree) are kept, along
+# with their branch.
+remove_worktrees_of_pruned_branches() {
+  git worktree prune
+  current_branch=$(git branch --show-current)
+  while read branch worktree_path; do
+    [[ -z $worktree_path || $branch == "$current_branch" ]] && continue
+    (( ${local_branches_to_delete[(I)$branch]} )) || continue
+    log "Removing worktree: $worktree_path"
+    if ! git worktree remove "$worktree_path"; then
+      warn "Can't delete branch '$branch' as its worktree couldn't be removed."
+      local_branches_to_delete=("${(@)local_branches_to_delete:#${(b)branch}}")
+    fi
+  done <<<"$(git for-each-ref refs/heads --format='%(refname:short) %(worktreepath)')"
+}
+
 # Delete local and remote branches.
 delete_local_remote_branches() {
-  git branch -D "${local_branches_to_delete[@]}"
+  if (( ${#local_branches_to_delete[@]} )); then
+    git branch -D "${local_branches_to_delete[@]}"
+  fi
 
   # Delete remote push branches identified via gh as merged.
   for entry in "${remote_branches_to_delete[@]}"; do
