@@ -73,7 +73,8 @@ find_gh_merged_pr_branches_to_delete() {
   local head
   local remote_heads=()
   for r in $(git remote); do
-    head=$(git symbolic-ref "refs/remotes/$r/HEAD")
+    # Remotes without a HEAD ref (e.g. never fetched or `remote set-head`) have no default branch.
+    head=$(git symbolic-ref --quiet "refs/remotes/$r/HEAD") || continue
     if [[ -n $head ]]; then
       remote_heads+=("${head#refs/remotes/$r/}")
     fi
