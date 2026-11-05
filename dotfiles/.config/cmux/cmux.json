@@ -42,5 +42,8 @@
       // Frees cmd+shift+h for Ghostty's goto_split:previous.
       "triggerFlash": "cmd+ctrl+h"
     }
+  },
+  "computerUse": {
+    "enabled": false
   }
 }
