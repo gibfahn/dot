@@ -76,11 +76,37 @@ main() {
   git bp --quiet
   git mf >&/dev/null || true
 
+  # Add remaining worktrees (after `git bp` pruned stale ones) to zoxide too.
+  add_worktrees_to_zoxide
+
   # Make sure the primary branch tracks origin before checking for unpushed work.
   set_primary_branch_upstream
 
   # Check for unpushed branches or uncommitted changes.
   git unpushed
+}
+
+# Add every existing worktree of this repo to zoxide without increasing its score.
+add_worktrees_to_zoxide() {
+  local line worktrees=()
+  # git reports physical paths (e.g. /Volumes/Shared-Data/Users/gib/code/...), but zoxide entries
+  # should go via the symlink (e.g. ~/code/...). Strip the common trailing path components of the
+  # physical and logical $PWD to work out which prefix to swap.
+  local physical_prefix logical_prefix
+  physical_prefix=$(pwd -P) logical_prefix=$PWD
+  while [[ -n $physical_prefix && -n $logical_prefix && ${physical_prefix##*/} == "${logical_prefix##*/}" ]]; do
+    physical_prefix=${physical_prefix%/*} logical_prefix=${logical_prefix%/*}
+  done
+  while IFS= read -r line; do
+    [[ $line == "worktree "* ]] || continue
+    line=${line#worktree }
+    [[ $line == "$physical_prefix"/* ]] && line=$logical_prefix${line#"$physical_prefix"}
+    # Skip the current worktree (already added) and prunable worktrees whose dirs are gone.
+    [[ $line != "$PWD" && -d $line ]] && worktrees+=("$line")
+  done < <(git worktree list --porcelain)
+  if [[ ${#worktrees[@]} -gt 0 ]]; then
+    zoxide add --score 0.0 "${worktrees[@]}"
+  fi
 }
 
 # Ensure the primary branch (main/master) tracks origin, so `git unpushed` doesn't flag it as
