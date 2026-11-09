@@ -100,8 +100,12 @@ main() {
   fi
 
   if [[ -n ${pr_number:-} ]]; then
-    # Convert a URL like 'https://github.com/org/repo/pull/485/files' into '485'.
-    pr_number=$(sed -E 's;.*/([0-9]+)/?(files)?$;\1;' <<<$pr_number)
+    # Convert a URL like 'https://github.com/org/repo/pull/485/files' (or '/pull/485/commits/<sha>',
+    # '/pull/485#discussion_r1', etc.) into '485'.
+    if [[ $pr_number =~ '/pull/([0-9]+)([/?#]|$)' ]]; then
+      pr_number=$match[1]
+    fi
+    [[ $pr_number =~ '^[0-9]+$' ]] || error "git-fp: Couldn't parse a PR number from '$pr_number'."
   else
     # No PR number given: derive it from the current branch (assumed to be a git-fp PR branch).
     if ! [[ $head_branch =~ "^pull/[0-9]+/.+" ]]; then
