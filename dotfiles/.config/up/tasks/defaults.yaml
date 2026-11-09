@@ -517,6 +517,10 @@ data:
     # Toggle it with ⌘-/
     ShowOverlayStatusBar: true
 
+    # Enable vertical tabs
+    # Settings > Tabs > Tab layout: Vertical
+    TabBarStyle: 2
+
   com.apple.loginwindow:
     # Skip the "want to reopen apps?" prompt when computer restarts unexpectedly.
     # "You shut down your computer because of a problem. If you want to open the applications that
