@@ -104,7 +104,8 @@ check_dir() {
   local cur_dir=$repo_path
   while [[ "$cur_dir" != / ]]; do
     cur_dir=$(dirname "$cur_dir")
-    if [[ -d "$cur_dir"/.git/ ]]; then
+    # Use -e not -d, as worktrees (and submodules) have a `.git` file rather than a directory.
+    if [[ -e "$cur_dir"/.git ]]; then
       # We're in a git repo inside a git repo, so assume it is managed by the parent and don't do
       # anything.
       exit 0
