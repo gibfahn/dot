@@ -231,14 +231,15 @@ gcl() {
 
 # Switch to a branch, create a worktree, cd to that directory.
 gsw() {
-  dir=$(g sw --worktree $@)
+  dir=$(git sw --worktree $@)
   cd $dir
 }
 
 # Fetch a PR into a worktree (or update the existing one), cd to that directory.
+# Pass a PR URL to use the matching ~/code/<host>/<org>/<repo> repo instead of the current one.
 gswp() {
-  dir=$(g fp --worktree $@)
-  cd $dir
+  local dir
+  dir=$(git fp --worktree "$@") && cd "$dir"
 }
 
 # Set up things I commonly need when sshing into a machine.

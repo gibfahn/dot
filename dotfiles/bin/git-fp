@@ -18,6 +18,8 @@ git fp 123    -> Create a branch called 'pull/123/<owner>/<PR branch name>' and 
 git fp --remote up 123 -> As above, but look up the PR on remote 'up'.
 git fp        -> Update the current branch (assumed to be a PR branch created by this script).
 git fp --worktree 123 -> As above, but in a worktree (reusing an existing one for the PR branch).
+git fp https://github.com/org/repo/pull/123 -> As above, but in the ~/code/<host>/<org>/<repo> repo
+                                               rather than the current directory.
 git ptp       -> push to the PR author's branch (in my git config as an alias).
 
 Creates and updates local branches of the form pull/<PR Number>/<owner>/<PR Branch Name>, e.g.
@@ -92,6 +94,12 @@ while [[ $# != 0 ]]; do
 done
 
 main() {
+  # A full PR URL tells us which repo the PR is in, so run in that repo's checkout rather than the
+  # current directory.
+  if [[ ${pr_number:-} == *://* ]]; then
+    cd_to_url_repo "$pr_number"
+  fi
+
   head_branch=$(git branch --show-current)
 
   if [[ -z ${up_remote:-} ]]; then
@@ -117,6 +125,25 @@ main() {
   fi
 
   setup_branch
+}
+
+# cd to the ~/code/<host>/<org>/<repo> checkout for a PR URL, and default to the remote for that repo.
+cd_to_url_repo() {
+  local host_org_repo repo_dir remote
+  host_org_repo=$(git parse-url --segment host-org-repo "$1" 2>/dev/null) \
+    || error "git-fp: Couldn't parse a repo from '$1'."
+  repo_dir=~/code/$host_org_repo
+  [[ -d $repo_dir ]] || error "git-fp: No repo checked out at $repo_dir for '$1', clone it first."
+  cd "$repo_dir"
+  echo "git-fp: Using repo $repo_dir" >&2
+
+  [[ -n ${up_remote:-} ]] && return
+  for remote in $(git remote); do
+    if [[ ${(L)$(git parse-url --segment host-org-repo "$(git remote get-url "$remote")" 2>/dev/null)} == ${(L)host_org_repo} ]]; then
+      up_remote=$remote
+      return
+    fi
+  done
 }
 
 # Fetch (or update) the PR and set up a local branch for it.
