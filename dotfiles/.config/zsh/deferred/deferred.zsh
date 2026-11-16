@@ -163,7 +163,13 @@ chpwd() { # Commands to run after changing directory (via cd or pushd).
   [[ -d .git ]] && git fetch --all --quiet & # Fetch git remotes.
   # Add new entries to the zoxide database.
   # Anything started with /Volumes/Shared-Data/ is a shared mount, see scripts/run/mac_volume
-  zoxide add -- "${PWD#/Volumes/Shared-Data}"
+  # Worktrees never gain rank, so they always sort below the main repo checkout.
+  local dir=${PWD#/Volumes/Shared-Data}
+  if [[ $dir == ~/code/worktrees/* ]]; then
+    zoxide add --score 0.0 -- "$dir"
+  else
+    zoxide add -- "$dir"
+  fi
 }
 
 # Save the current clipboard to a png file, copy the path to the clipboard, and show the file

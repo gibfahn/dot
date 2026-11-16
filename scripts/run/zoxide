@@ -21,3 +21,11 @@ to_add=(
 
 # Don't increment the score if already present.
 zoxide add --score 0.0 "${to_add[@]}"
+
+# Worktrees should always rank below the main repo checkout, so reset any that gained a score
+# (zoxide can't lower a score in place, so remove and re-add).
+worktrees=(${(f)"$(zoxide query --list --score | awk -v prefix="$HOME/code/worktrees/" '$1 > 0 { sub(/^ *[0-9.]+ /, ""); if (index($0, prefix) == 1) print }')"})
+if (( ${#worktrees} )); then
+  zoxide remove "${worktrees[@]}"
+  zoxide add --score 0.0 "${worktrees[@]}"
+fi

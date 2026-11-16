@@ -210,7 +210,7 @@ setup_branch() {
 
   if [[ -n ${WORKTREE:-} ]]; then
     if (($+commands[zoxide])); then
-      zoxide add "$worktree_dir" >&2
+      zoxide add --score 0.0 "$worktree_dir" >&2
     fi
     echo "$worktree_dir" # Echo dir to stdout for shell wrapper scripts.
   fi
