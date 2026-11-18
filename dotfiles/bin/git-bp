@@ -94,28 +94,52 @@ find_gh_merged_pr_branches_to_delete() {
     (( ${remote_heads[(I)$branch]} )) && continue
 
     # Find PRs owned by me from this branch (suppress all errors).
-    prs=$(gh pr list --head "$remote_branch" --author @me --state all --json state,headRefOid --jq '.[] | "\(.state) \(.headRefOid)"') || continue
+    prs=$(gh pr list --head "$remote_branch" --author @me --state all --json state,headRefOid,mergedAt \
+      --jq '.[] | "\(.state) \(.headRefOid) \(.mergedAt // "" | if . == "" then 0 else fromdateiso8601 end)"') || continue
 
-    # Only prune if no PR is still open, and a merged PR's head contains the local branch (and the
-    # remote branch if we have it), i.e. there are no commits added after the PR was merged.
-    has_open= merged_contains=
-    while read state oid; do
+    # Only prune if no PR is still open, and a merged PR covers the local branch (and the remote
+    # branch if we have it), i.e. there are no commits added after the PR was merged. The local
+    # branch is covered if the merged PR head contains it, or if it was last updated before the PR
+    # was merged (the PR head was rewritten elsewhere, e.g. amended in another worktree or machine,
+    # leaving this branch as a stale earlier version).
+    has_open= merged_contains= branch_updated=
+    while read state oid merged_at; do
       case $state in
         OPEN) has_open=true ;;
         MERGED)
-          git merge-base --is-ancestor "$branch" "$oid" 2>/dev/null &&
-            { ! git rev-parse --verify --quiet "refs/remotes/$push_ref" >/dev/null ||
-              git merge-base --is-ancestor "refs/remotes/$push_ref" "$oid" 2>/dev/null; } &&
+          if git rev-parse --verify --quiet "refs/remotes/$push_ref" >/dev/null &&
+            ! git merge-base --is-ancestor "refs/remotes/$push_ref" "$oid" 2>/dev/null; then
+            continue
+          fi
+          if git merge-base --is-ancestor "$branch" "$oid" 2>/dev/null; then
             merged_contains=true
+            continue
+          fi
+          : ${branch_updated:=$(branch_last_updated "$branch")}
+          (( merged_at > 0 && branch_updated < merged_at )) && merged_contains=true
           ;;
       esac
     done <<<"$prs"
 
     if [[ -z $has_open && -n $merged_contains ]]; then
       local_branches_to_delete+=("$branch")
-      remote_branches_to_delete+=("$remote/$remote_branch")
+      # Skip remote branches that are already gone (e.g. auto-deleted on merge).
+      if git rev-parse --verify --quiet "refs/remotes/$push_ref" >/dev/null; then
+        remote_branches_to_delete+=("$remote/$remote_branch")
+      fi
     fi
   done <<<"$(git for-each-ref refs/heads --format='%(refname:short) %(push:short)')"
+}
+
+# Print the unix time a local branch was last updated: the later of its latest reflog entry and its
+# tip's committer date (reflogs can be missing, e.g. expired or never written).
+branch_last_updated() {
+  local reflog_time commit_time
+  reflog_time=$(git log --walk-reflogs -n1 --date=unix --format=%gd "refs/heads/$1" 2>/dev/null) || true
+  reflog_time=${${reflog_time##*@\{}%\}}
+  [[ $reflog_time == <-> ]] || reflog_time=0
+  commit_time=$(git log -n1 --format=%ct "refs/heads/$1")
+  echo $(( reflog_time > commit_time ? reflog_time : commit_time ))
 }
 
 # Delete branches like pull/<number>/<name> if the PR is not open.
@@ -212,7 +236,8 @@ delete_local_remote_branches() {
     remote="${entry%%/*}"
     remote_branch="${entry#*/}"
     log "Deleting remote branch: $remote/$remote_branch"
-    git push "$remote" --delete "$remote_branch" 2>/dev/null
+    git push --quiet "$remote" --delete "$remote_branch" 2>/dev/null ||
+      warn "Failed to delete remote branch: $remote/$remote_branch"
   done
 }
 
