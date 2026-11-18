@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# Pass stdin through to stdout, and also copy it to the macOS clipboard
+# (without trailing newlines). Prints nothing and leaves the clipboard alone if
+# the input is empty or whitespace-only (e.g. fzf was cancelled).
+#
+# Usage: ... | copy-cat | ...
+
+set -euo pipefail
+
+input=$(cat)
+
+[[ -z ${input//[[:space:]]/} ]] && exit 0
+
+printf '%s\n' "$input"
+printf '%s' "$input" | pbcopy

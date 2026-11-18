@@ -638,11 +638,11 @@ accept-line() {
 zle -N accept-line # Redefine accept-line to insert last input if empty (Enter key).
 
 # Bind ^g^p to "interactively choose which binary from the $PATH to run".
-_gib_fzf-gp-widget() { local result=$(_gib_path_run); zle reset-prompt; LBUFFER+="$result " }
+_gib_fzf-gp-widget() { local result=$(_gib_path_run | copy-cat); zle reset-prompt; LBUFFER+="$result " }
 zle -N _gib_fzf-gp-widget
 
 # Bind ^g^g to "interactively choose which function or alias to run.
-_gib_fzf-gibfuncalias-widget() { local result=$(_gib_func_alias_run); zle reset-prompt; LBUFFER+="$result " }
+_gib_fzf-gibfuncalias-widget() { local result=$(_gib_func_alias_run | copy-cat); zle reset-prompt; LBUFFER+="$result " }
 zle -N _gib_fzf-gibfuncalias-widget
 
 # Bind git shortcuts to <c-g><c-$@> (see above functions for more info).
@@ -653,7 +653,7 @@ _gib_join_lines() { local item; while read -r item; do echo -n "${(q)item} "; do
 () {
   local c
   for c in "$@"; do
-    eval "_gib_fzf-g$c-widget() { git rev-parse HEAD > /dev/null 2>&1 || return; local result=\$(_gib_git_$c | _gib_join_lines); zle reset-prompt; LBUFFER+=\$result }"
+    eval "_gib_fzf-g$c-widget() { git rev-parse HEAD > /dev/null 2>&1 || return; local result=\$(_gib_git_$c | copy-cat | _gib_join_lines); zle reset-prompt; LBUFFER+=\$result }"
     eval "zle -N _gib_fzf-g$c-widget"
     eval "bindkey -M viins '^g^$c' _gib_fzf-g$c-widget"
   done
