@@ -248,6 +248,14 @@ gswp() {
   dir=$(git fp --worktree "$@") && cd "$dir"
 }
 
+# Remove a worktree (default: the current one), cd to the main worktree if the current directory was removed.
+gwr() {
+  local main_dir
+  main_dir=$(git worktree list --porcelain | sed -n '1s/^worktree //p') || return
+  git wr "$@" || return
+  [[ -d $PWD ]] || cd "$main_dir"
+}
+
 # Set up things I commonly need when sshing into a machine.
 ssh_setup() {
   # Login keychain is locked when you ssh in until you unlock it.
