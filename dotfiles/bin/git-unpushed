@@ -62,9 +62,21 @@ if [[ -n $untracked ]]; then
   unpushed+=$(indent <<<"$untracked")$'\n'
 fi
 
+current_worktree=$(git rev-parse --show-toplevel)
+
 # Plumbing version of 'git branch'.
 for branch in $(git for-each-ref refs/heads/ --format='%(refname:lstrip=2)'); do
   branch_hash=$(git rev-parse "refs/heads/$branch")
+
+  # Check uncommitted changes and untracked files in other worktrees (current one checked above).
+  worktree_path=$(git for-each-ref "refs/heads/$branch" --format='%(worktreepath)')
+  if [[ -n $worktree_path && $worktree_path != "$current_worktree" && -d $worktree_path ]]; then
+    worktree_status=$(git -C "$worktree_path" -c color.status=always status --short | head)
+    if [[ -n $worktree_status ]]; then
+      unpushed+="${fg[cyan]}-> $branch has uncommitted changes in $worktree_path:${reset_color}"$'\n'
+      unpushed+=$(indent <<<"$worktree_status")$'\n'
+    fi
+  fi
 
   push_hash=$(git rev-parse "$branch@{push}" 2>/dev/null) && true
   has_push=$?
