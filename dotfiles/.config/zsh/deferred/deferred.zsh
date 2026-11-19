@@ -236,9 +236,10 @@ gcl() {
 }
 
 # Switch to a branch, create a worktree, cd to that directory.
+# With no args, cd to the worktree with the default branch (usually the main worktree).
 gsw() {
-  dir=$(git sw --worktree $@)
-  cd $dir
+  local dir
+  dir=$(git sw --worktree "$@") && cd "$dir"
 }
 
 # Fetch a PR into a worktree (or update the existing one), cd to that directory.

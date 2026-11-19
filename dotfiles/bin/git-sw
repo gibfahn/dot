@@ -23,6 +23,7 @@ Args are passed to \`git switch\`, except for the following (must be the first a
 
 --worktree: create a worktree and switch to it with the specified branch. New branches start from
     the default branch of the default remote (e.g. origin/main) unless a start point is passed.
+    With no branch, switch to the worktree that has the default branch checked out.
 
 ENVIRONMENT VARIABLES:
 
@@ -67,6 +68,14 @@ main() {
     fi
   done
 
+  # `git sw --worktree` without a branch (or `-` for the previous branch) switches to the worktree
+  # of the default branch (usually the main worktree), creating one if needed.
+  default_branch_arg=()
+  if [[ -n ${WORKTREE:-} && -z $git_branch_arg ]] && ! (($@[(Ie)-])); then
+    git_branch_arg=$(default_branch)
+    default_branch_arg=($git_branch_arg)
+  fi
+
   # New worktree branches start from the primary remote's default branch rather than the current
   # HEAD (which may be another worktree's branch), unless a start point was passed.
   start_point=()
@@ -89,7 +98,7 @@ main() {
   fi
 
   # We don't want anything here to write to stdout, only the worktree dir should be written.
-  run_switch $@ >&2
+  run_switch $@ $default_branch_arg >&2
 
   handle_worktree
 }
