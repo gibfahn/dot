@@ -82,6 +82,9 @@ main() {
   # Make sure the primary branch tracks origin before checking for unpushed work.
   set_primary_branch_upstream
 
+  # Drop primary branch commits that have already landed upstream.
+  rebase_primary_branch
+
   # Check for unpushed branches or uncommitted changes.
   git unpushed
 }
@@ -123,6 +126,40 @@ set_primary_branch_upstream() {
     # Only set it if the matching remote-tracking branch exists.
     if git show-ref --quiet --verify "refs/remotes/origin/$branch"; then
       git branch --set-upstream-to="origin/$branch" "$branch"
+    fi
+  done
+}
+
+# If the primary branch (main/master) has diverged from its upstream, rebase it onto the upstream,
+# which drops any commits that have already been merged upstream (e.g. pushed elsewhere or
+# cherry-picked). Any commits that remain are reported by `git unpushed`. If the rebase conflicts
+# it is aborted, leaving the branch as it was.
+rebase_primary_branch() {
+  local branch worktree_path tmp_worktree output
+  for branch in main master; do
+    git rev-parse --quiet --verify "$branch@{upstream}" >/dev/null 2>&1 || continue
+    # Skip if there are no local commits (fast-forwards are handled by `git mf`).
+    [[ $(git rev-list --count "$branch@{upstream}..$branch") == 0 ]] && continue
+
+    tmp_worktree=
+    worktree_path=$(git for-each-ref "refs/heads/$branch" --format='%(worktreepath)')
+    if [[ -z $worktree_path ]]; then
+      # Branch isn't checked out anywhere, so use a temporary worktree to rebase it.
+      tmp_worktree=$(mktemp -d)
+      git worktree add --quiet "$tmp_worktree" "$branch"
+      worktree_path=$tmp_worktree
+    elif [[ -n $(git -C "$worktree_path" status --porcelain) ]]; then
+      # Leave it for `git unpushed` to report.
+      continue
+    fi
+
+    if ! output=$(git -C "$worktree_path" rebase "$branch@{upstream}" 2>&1); then
+      git -C "$worktree_path" rebase --abort
+      echo "Rebasing $branch onto $branch@{upstream} failed (aborted):"$'\n'"$output"
+    fi
+
+    if [[ -n $tmp_worktree ]]; then
+      git worktree remove --force "$tmp_worktree"
     fi
   done
 }
