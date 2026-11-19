@@ -19,7 +19,7 @@ git fp --remote up 123 -> As above, but look up the PR on remote 'up'.
 git fp        -> Update the current branch (assumed to be a PR branch created by this script).
 git fp --worktree 123 -> As above, but in a worktree (reusing an existing one for the PR branch).
 git fp https://github.com/org/repo/pull/123 -> As above, but in the ~/code/<host>/<org>/<repo> repo
-                                               rather than the current directory.
+                                               if the current directory has no remote for that repo.
 git ptp       -> push to the PR author's branch (in my git config as an alias).
 
 Creates and updates local branches of the form pull/<PR Number>/<owner>/<PR Branch Name>, e.g.
@@ -127,23 +127,36 @@ main() {
   setup_branch
 }
 
-# cd to the ~/code/<host>/<org>/<repo> checkout for a PR URL, and default to the remote for that repo.
+# cd to the repo for a PR URL, and default to the remote for that repo. Stays in the current
+# directory if it has a remote for the repo (e.g. a Homebrew tap), otherwise uses the
+# ~/code/<host>/<org>/<repo> checkout.
 cd_to_url_repo() {
   local host_org_repo repo_dir remote
   host_org_repo=$(git parse-url --segment host-org-repo "$1" 2>/dev/null) \
     || error "git-fp: Couldn't parse a repo from '$1'."
-  repo_dir=~/code/$host_org_repo
-  [[ -d $repo_dir ]] || error "git-fp: No repo checked out at $repo_dir for '$1', clone it first."
-  cd "$repo_dir"
-  echo "git-fp: Using repo $repo_dir" >&2
 
-  [[ -n ${up_remote:-} ]] && return
-  for remote in $(git remote); do
-    if [[ ${(L)$(git parse-url --segment host-org-repo "$(git remote get-url "$remote")" 2>/dev/null)} == ${(L)host_org_repo} ]]; then
-      up_remote=$remote
-      return
+  if ! remote=$(remote_for_repo "$host_org_repo"); then
+    repo_dir=~/code/$host_org_repo
+    [[ -d $repo_dir ]] || error "git-fp: No repo checked out at $repo_dir for '$1', clone it first."
+    cd "$repo_dir"
+    echo "git-fp: Using repo $repo_dir" >&2
+    remote=$(remote_for_repo "$host_org_repo") || true
+  fi
+
+  [[ -z ${up_remote:-} ]] && up_remote=$remote
+  return 0
+}
+
+# Print the first remote in the current repo whose URL points at <host>/<org>/<repo>, if any.
+remote_for_repo() {
+  local remote
+  for remote in $(git remote 2>/dev/null); do
+    if [[ ${(L)$(git parse-url --segment host-org-repo "$(git remote get-url "$remote")" 2>/dev/null)} == ${(L)1} ]]; then
+      echo "$remote"
+      return 0
     fi
   done
+  return 1
 }
 
 # Fetch (or update) the PR and set up a local branch for it.
