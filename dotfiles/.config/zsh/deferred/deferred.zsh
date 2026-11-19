@@ -86,6 +86,7 @@ alias help=run-help # `help export` for help on the export builtin.
 alias sudo_later="sudo -v; (while sudo -v; do sleep 60; done) &" # Preserve sudo for a command you'll run later.
 alias bounce="echo -n '\a'" # Ring the terminal bell (bounce the dock icon in macOS).
 alias pstree="pstree -g 3" # Use the nicest pstree output (unicode).
+alias ps="ps -ww" # Don't truncate long command lines.
 
 alias m=make
 alias c=cargo # Rust commands (try `c b`, `c r`, `c t`).
