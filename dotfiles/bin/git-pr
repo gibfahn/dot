@@ -27,7 +27,7 @@ OPTIONS:
 
 --open: opens the pull request URL for the current branch in the browser
 
---approve: approve the pull request (takes optional PR number/URL, else clipboard, else current branch).
+--approve: approve the pull request (takes optional PR number/URL, else clipboard (one PR per line), else current branch).
 
 --markdown: instead of copying just the URL, copy a markdown snippet suitable for pasting into Slack.
 
@@ -317,19 +317,41 @@ pr_automerge() {
 }
 
 pr_approve() {
-  local pr_number
+  local -a prs
+  local line pr failed=0
+
   if [[ -n "$pr_target" ]]; then
-    pr_number="$pr_target"
-  elif [[ -n "$(pbpaste)" && ("$(pbpaste)" =~ ^[0-9]+$ || "$(pbpaste)" =~ ^https://.*/pull/) ]]; then
-    pr_number="$(pbpaste)"
-  elif [[ "$(git branch --show-current)" =~ ^pull/[0-9]+/ ]]; then
-    # e.g. checked out by ./git-fp
-    pr_number=$(get_pr_number)
+    prs=("$pr_target")
   else
-    error "Could not determine PR to approve. Provide a PR number/URL, check out a PR branch, or copy a PR number/URL to the clipboard."
+    # The clipboard may contain a single PR number/URL, or a newline-separated list of them.
+    for line in ${(f)"$(pbpaste)"}; do
+      line=${line//[[:space:]]/}
+      [[ -n $line ]] || continue
+      if [[ $line =~ ^[0-9]+$ || $line =~ ^https://.*/pull/[0-9]+ ]]; then
+        prs+=("$line")
+      else
+        # Ignore the clipboard entirely if any line isn't a PR.
+        prs=()
+        break
+      fi
+    done
   fi
 
-  gh pr review "$pr_number" --approve
+  if [[ ${#prs} == 0 && "$(git branch --show-current)" =~ ^pull/[0-9]+/ ]]; then
+    # e.g. checked out by ./git-fp
+    prs=("$(get_pr_number)")
+  fi
+
+  [[ ${#prs} != 0 ]] || error "Could not determine PR to approve. Provide a PR number/URL, check out a PR branch, or copy PR numbers/URLs (one per line) to the clipboard."
+
+  for pr in "${prs[@]}"; do
+    if [[ ${#prs} != 1 ]]; then
+      echo >&2 "Approving $pr"
+    fi
+    gh pr review "$pr" --approve || failed=1
+  done
+
+  [[ $failed == 0 ]] || error "Failed to approve some PRs."
 }
 
 branch_ref() {
