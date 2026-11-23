@@ -15,9 +15,27 @@ if [[ ! -d $shared_volume ]]; then
   diskutil apfs addVolume $this_disk 'Case-sensitive APFS' $shared_name
 fi
 
+. "$(dirname "$0")"/../../helpers/cleanup.zsh
+
+# Things that are useful in every macOS install: code, and bulky caches and toolchains that don't
+# depend on the macOS version. Each is linked from its default path, so tools find them as normal.
+# Not shared: anything tied to the OS or Xcode version (Homebrew, Bazel output bases, DerivedData).
 dirs_to_move=(
   ~/code
   ~/src
+
+  ~/.cache/bazel-disk-cache   # Content-addressed, so safe to share.
+  ~/.cache/bazel-repositories # Content-addressed, so safe to share.
+  ~/.cache/uv
+  ~/.cache/yarn
+  ~/.cargo
+  ~/.gradle
+  ~/.npm
+  ~/.rustup
+  ~/go
+  ~/Library/Caches/bazelisk
+  ~/Library/Caches/com.apple.gib.liv # Restore images etc.
+  ~/Library/Caches/pip
 )
 
 work_done=
@@ -27,24 +45,14 @@ for dir in $dirs_to_move; do
   # e.g. /Users/gib/code -> /Volumes/Shared-Data/Users/gib/code
   shared_dir=${shared_volume}${dir}
 
-  # If directory not present skip it.
-  if [[ ! -d $dir ]]; then
-    if [[ -d $shared_dir ]]; then
-      work_done=true
-      ln -s $shared_dir $dir || sudo ln -s $shared_dir $dir
-      continue
-    else
-      continue
-    fi
-  fi
+  # If directory not present skip it, unless another install already shared it.
+  [[ -d $dir || -d $shared_dir ]] || continue
 
   work_done=true
-  mkdir -p $(dirname $shared_dir)
-  # If dir is owned by root (e.g. /opt/homebrew) then mv will complete, but deleting old dir will
-  # fail, so delete just that empty dir (if it's truly empty) with `sudo rm -d`
-  mv $dir $shared_dir || sudo rm -d $dir
-  # If we fail to link normally, link with sudo.
-  ln -s $shared_dir $dir || sudo ln -s $shared_dir $dir
+  # Merges into shared_dir if another install already shared it.
+  cleanup::migrate $dir $shared_dir
+  mkdir -p $shared_dir ${dir:h}
+  ln -s $shared_dir $dir
 done
 
 if [[ -z ${work_done:-} ]]; then

@@ -11,10 +11,6 @@ if not vim.env.PATH:find("/usr/local/bin") then
   vim.env.PATH = "/usr/local/bin:" .. vim.env.PATH
 end
 
-vim.env.XDG_CACHE_HOME = vim.env.XDG_CACHE_HOME or vim.env.HOME .. "/.cache"
-vim.env.XDG_CONFIG_HOME = vim.env.XDG_CONFIG_HOME or vim.env.HOME .. "/.config"
-vim.env.XDG_DATA_HOME = vim.env.XDG_DATA_HOME or vim.env.HOME .. "/.local/share"
-
 local home_dir = os.getenv("HOME")
 
 -- Use existing nvim window to open new files (e.g. `g cm`).

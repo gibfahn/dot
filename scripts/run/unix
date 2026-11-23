@@ -62,7 +62,3 @@ if exists rustup; then
   ln -sf "$(realpath "$(dirname "$(rustup which cargo)")"/../share/zsh/site-functions)"/* "$XDG_DATA_HOME/zsh/completions/"
 fi
 
-# _rbenv
-if exists rbenv; then
-  ln -sf "$XDG_DATA_HOME/rbenv/completions/rbenv.zsh" "$XDG_DATA_HOME/zsh/completions/_rbenv"
-fi

@@ -37,14 +37,6 @@ env:
   XDG_CACHE_HOME: "~/.cache" # Use default XDG values.
   XDG_CONFIG_HOME: "~/.config" # Use default XDG values.
 
-  _ZL_DATA: "$XDG_CACHE_HOME/z" # z data file (https://github.com/skywind3000/z.lua).
-  RUSTUP_HOME: "$XDG_DATA_HOME/rustup" # Rustup install dir.
-  CARGO_HOME: "$XDG_DATA_HOME/cargo" # Cargo install dir.
-  VOLTA_HOME: "$XDG_CACHE_HOME/volta" # Volta install dir.
-  GOPATH: "$HOME/code/go" # Go install dir.
-  GNUPGHOME: "$XDG_DATA_HOME/gnupg" # Gpg install dir.
-  RBENV_ROOT: "$XDG_CACHE_HOME/rbenv" # Set rbenv location.
-  NPM_CONFIG_USERCONFIG: "$XDG_CONFIG_HOME/npm/config" # npm config location (sets the registry).
   # Used to backup zsh history.
   ZSH_CLOUD_HISTFILE: "$HOME/Library/Mobile Documents/com~apple~CloudDocs/Fahns/Gib/zsh/history"
   # Desktop and Lockscreen background.

@@ -1,33 +1,14 @@
 # {{{ Environment Variables
 
-export ATOM_HOME="$XDG_DATA_HOME"/atom # Atom data goes here.
-export AWS_CONFIG_FILE="$XDG_CONFIG_HOME/aws/config"
-export AWS_SHARED_CREDENTIALS_FILE="$HOME/.ssh/tokens/aws/credentials"
-export BABEL_CACHE_PATH=${BABEL_CACHE_PATH="$XDG_CACHE_HOME/babel/cache.json"} # Set babel cache location.
 export BAT_THEME="TwoDark" # Set the default theme for bat and delta.
-export CCACHE_CONFIGPATH="$XDG_CONFIG_HOME"/ccache.config
-export CCACHE_DIR="$XDG_CACHE_HOME"/ccache # Ccache cache.
 export FZF_ALT_C_COMMAND='fd --type d --hidden --no-ignore --follow --exclude .git'
 export FZF_CTRL_R_OPTS="--height=100% --preview-window=down:30%:noborder --preview 'file-preview - --language=zsh -- <<<\$(echo {2..})', --bind='ctrl-y:execute(${aliases[cpy]} <<< {2..})'"
 export FZF_CTRL_T_COMMAND='fd --type f --hidden --follow --exclude .git'
 export FZF_CTRL_T_OPTS="--height=100% --preview-window=right:60%:noborder"
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git' # Use fd for fuzzy finding if available.
-export GNUPGHOME="$XDG_DATA_HOME"/gnupg # Gpg data.
-export GRADLE_USER_HOME="$XDG_DATA_HOME"/gradle # Also contains gradle.properties (symlink from XDG_CONFIG_HOME).
-export HELM_HOME="$XDG_DATA_HOME/helm" # Move Helm data dir from ~.
-export HTTPIE_CONFIG_DIR="$XDG_CONFIG_HOME/httpie" # https://github.com/jakubroztocil/httpie/issues/145
-export IPYTHONDIR="$XDG_CACHE_HOME/ipython" # Move iPython dir from ~.
-export MINIKUBE_HOME="$XDG_CACHE_HOME/minikube" # https://github.com/kubernetes/minikube/issues/4109
 export NCURSES_NO_UTF8_ACS=1 # Force UTF-8 in ncurses https://github.com/kovidgoyal/kitty/issues/7005#issuecomment-1945441687
-export NODE_REPL_HISTORY="$XDG_CACHE_HOME/node_repl_history" # Set node-gyp download location.
-export NPM_CONFIG_CACHE="$XDG_CACHE_HOME/npm" # Set npm cache location.
-export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/config" # Set up my npm config location.
 export OP_BIOMETRIC_UNLOCK_ENABLED=true # https://developer.1password.com/docs/cli/app-integration/#set-the-biometric-unlock-environment-variable
 export PAGER=less
-export PEX_ROOT="$XDG_CACHE_HOME/pex" # Cache directory for https://github.com/pantsbuild/pex.
-export RBENV_ROOT="$XDG_CACHE_HOME/rbenv" # Set rbenv location.
-export RUSTUP_HOME="$XDG_DATA_HOME/rustup" # Rustup goes here.
-export SCCACHE_DIR="$XDG_CACHE_HOME/sccache" # sccache cache dir.
 export TIME_STYLE=long-iso # See `man gls` on macOS, sets the time style for `ls -l`.
 export VIRTUAL_ENV_DISABLE_PROMPT=1 # Add the virtualenv prompt myself.
 
@@ -62,7 +43,6 @@ _LESS=(
 export LESS=${_LESS[*]}
 unset _LESS
 
-[[ -d "$XDG_CONFIG_HOME/terminfo" ]] && export TERMINFO="$XDG_CONFIG_HOME/terminfo" # Put terminal info in here.
 
 CDPATH=~ # Check ~ for directories after checking . (`c/d/` matches `./c*/d*/`, then tries `~/c*/d*/`).
 HELPDIR=$brew_prefix/share/zsh/help # Used in run-help below.
@@ -545,7 +525,7 @@ _gib_path_run() {
 # Greps through my functions and aliases, and uses fzf to allow choosing and previewing.
 # Requires one `alias` command per alias.
 _gib_func_alias_run() {
-  local _gib_zsh_files=(~/.config/zsh/.zshrc ~/.config/zsh/deferred/*.zsh)
+  local _gib_zsh_files=(~/.zshrc ~/.config/zsh/deferred/*.zsh)
   rg --vimgrep \
     --only-matching \
     -e '\b(?<fnname>[a-zA-Z][a-zA-Z0-9_:-]+)\(\) \{' \
@@ -733,7 +713,7 @@ add-zsh-hook preexec _gib_prompt_preexec
 
 # Initialise completions after everything else.
 autoload -Uz compinit
-compinit
+compinit -d "$XDG_CACHE_HOME/zsh/zcompdump" # Keep the dump file out of ~.
 
 # }}} Initialize Completions
 

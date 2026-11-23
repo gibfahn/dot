@@ -21,9 +21,9 @@ linux_rust_crates=(
 
 if ! exists rustup || ! exists cargo; then # Install/set up rust.
   # Install rustup. Don't modify path as that's already in zshrc.
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | RUSTUP_HOME="$XDG_DATA_HOME"/rustup CARGO_HOME="$XDG_DATA_HOME"/cargo sh -s -- -y --no-modify-path
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
 
-  export PATH="$XDG_DATA_HOME/cargo/bin:$PATH"
+  export PATH="$HOME/.cargo/bin:$PATH"
 fi
 
 # Install stable and nightly.
@@ -55,7 +55,7 @@ case $(uname) in
   # they keep getting updated, even though we're no longer using them.
   Darwin)
     if exists jq; then
-      installed_crates=($(jq -r '.installs | keys[] | split(" ")[0]' <"$CARGO_HOME"/.crates2.json))
+      installed_crates=($(jq -r '.installs | keys[] | split(" ")[0]' <"${CARGO_HOME:-$HOME/.cargo}"/.crates2.json))
       for crate in "${linux_rust_crates[@]}"; do
         for installed_crate in "${installed_crates[@]}"; do
           if [[ $crate == "$installed_crate" ]]; then

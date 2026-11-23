@@ -1,0 +1,82 @@
+#!/usr/bin/env zsh
+
+# Move things that older versions of these dotfiles put in non-default locations back to their
+# default locations, and delete things that are no longer used.
+# Agents (and anything not started from my shell) assume tools use their default paths.
+# Safe to run in parallel with link_dotfiles.
+
+set -euo pipefail
+
+set -x
+
+. "$(dirname "$0")"/../../helpers/cleanup.zsh
+
+work_done=
+
+# First, so dead links inside the dirs we migrate don't overwrite links link_dotfiles already added.
+cleanup::remove_dead_links ${dot_dir:-~/code/dot}
+
+# Stop daemons that hold files open in the dirs we're about to move.
+if [[ -d ~/.local/share/gnupg ]]; then
+  gpgconf --homedir ~/.local/share/gnupg --kill all || true
+  rm -f ~/.local/share/gnupg/S.*(N)
+  # A GnuPG home without private keys was created by something not using GNUPGHOME, so it only has
+  # an empty keybox. Its common.conf can say `use-keyboxd`, which would hide the real pubring.kbx.
+  if [[ -d ~/.gnupg && -z $(ls -A ~/.gnupg/private-keys-v1.d 2>/dev/null) ]]; then
+    # Keep any public keys it did get.
+    gpg --homedir ~/.gnupg --export | gpg --homedir ~/.local/share/gnupg --import || true
+    gpgconf --homedir ~/.gnupg --kill all || true
+    rm -rf ~/.gnupg
+  fi
+fi
+if [[ -d ~/.local/share/gradle ]]; then
+  pkill -f org.gradle.launcher.daemon || true
+fi
+# Go module cache dirs are read-only, so rsync can't merge into them. Delete the stray one.
+if [[ -d ~/code/go ]]; then
+  cleanup::remove ~/go/pkg
+fi
+# ~/code/go is already on the shared volume, so rename it to where mac_volume links ~/go rather than
+# copying it to the Data volume and back.
+go_dir=~/go
+[[ -d /Volumes/Shared-Data$HOME ]] && go_dir=/Volumes/Shared-Data$HOME/go
+
+cleanup::migrate ~/.local/share/rustup ~/.rustup
+cleanup::migrate ~/.local/share/cargo ~/.cargo
+cleanup::migrate ~/code/go $go_dir
+cleanup::migrate ~/.local/share/gnupg ~/.gnupg
+cleanup::migrate ~/.local/share/gradle ~/.gradle
+cleanup::migrate ~/.cache/npm ~/.npm
+cleanup::migrate ~/.cache/ipython ~/.ipython
+cleanup::migrate ~/.cache/node_repl_history ~/.node_repl_history
+cleanup::migrate ~/.cache/minikube ~/.minikube
+# Terminal.app shell session state, was under ZDOTDIR.
+cleanup::migrate ~/.config/zsh/.zsh_sessions ~/.zsh_sessions
+# Tools that only use XDG dirs on macOS when the XDG_* vars are exported (which they no longer are).
+cleanup::migrate ~/.config/k9s ~/Library/Application\ Support/k9s
+cleanup::migrate ~/.local/share/k9s ~/Library/Application\ Support/k9s
+cleanup::migrate ~/.local/state/k9s ~/Library/Application\ Support/k9s
+cleanup::migrate ~/.local/share/mkcert ~/Library/Application\ Support/mkcert
+
+# rustup writes the CARGO_HOME path into this file.
+if [[ -f ~/.cargo/env ]] && grep -q /.local/share/cargo ~/.cargo/env; then
+  work_done=true
+  sed -i '' "s|$HOME/.local/share/cargo|$HOME/.cargo|g" ~/.cargo/env
+fi
+
+cleanup::remove \
+  ~/.cache/babel \
+  ~/.cache/ccache \
+  ~/.cache/pex \
+  ~/.cache/rbenv \
+  ~/.cache/sccache \
+  ~/.cache/volta \
+  ~/.cache/z \
+  ~/.config/ccache.config \
+  ~/.config/zsh/.zcompdump*(N) \
+  ~/.local/share/atom \
+  ~/.local/share/helm
+
+if [[ -z $work_done ]]; then
+  exit "$UP_EXIT_CODE_SKIPPED"
+fi

@@ -20,4 +20,4 @@ Script to wrap the yaml language server.
   exit
 }
 
-node "$XDG_DATA_HOME"/nvim/plugged/yaml-language-server/out/server/src/server.js --stdio
+node "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/plugged/yaml-language-server/out/server/src/server.js --stdio

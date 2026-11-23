@@ -5,6 +5,7 @@ set -eux
 which gpg || exit "$UP_EXIT_CODE_SKIPPED"
 
 # Run if gpg home missing, or gpg agent conf doesn't contain the expected values.
-if [ -d "$GNUPGHOME" ] && grep -q 'pinentry-program .*/pinentry-mac' "$GNUPGHOME"/gpg-agent.conf; then
+gnupg_home=${GNUPGHOME:-$HOME/.gnupg}
+if [ -d "$gnupg_home" ] && grep -q 'pinentry-program .*/pinentry-mac' "$gnupg_home"/gpg-agent.conf; then
   exit "$UP_EXIT_CODE_SKIPPED"
 fi
