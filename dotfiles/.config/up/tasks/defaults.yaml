@@ -558,8 +558,11 @@ data:
     # Mail > Settings > Viewing > Show most recent message at the top
     ConversationViewSortDescending: true
 
-    # Mail > Settings > Composing > Automatically CC Myself.
-    ReplyToSelf: true
+    # Mail > Settings > Composing > Automatically CC Myself > False.
+    ReplyToSelf: false
+
+    # Mail > Settings > Composing > Add link previews > False
+    AddLinkPreviews: false
 
     # Mail > Settings > Composing > When quoting text in replies or forwards > Include all the original message text.
     AlwaysIncludeOriginalMessage: true
