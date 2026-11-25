@@ -41,8 +41,8 @@ fi
 go_dir=~/go
 [[ -d /Volumes/Shared-Data$HOME ]] && go_dir=/Volumes/Shared-Data$HOME/go
 
-cleanup::migrate ~/.local/share/rustup ~/.rustup
-cleanup::migrate ~/.local/share/cargo ~/.cargo
+cleanup::migrate --replace ~/.local/share/rustup ~/.rustup
+cleanup::migrate --replace ~/.local/share/cargo ~/.cargo
 cleanup::migrate ~/code/go $go_dir
 cleanup::migrate ~/.local/share/gnupg ~/.gnupg
 cleanup::migrate ~/.local/share/gradle ~/.gradle

@@ -6,9 +6,19 @@
 # Move a file or directory to its new location.
 # If both exist, merge the old one into the new one (old wins, as it's the one that was in use),
 # then delete the old one.
-# Usage: cleanup::migrate <old_path> <new_path>
+# With --replace, each top-level entry of an old directory replaces the same-named entry in the new
+# one wholesale rather than being merged file by file. Use this for dirs whose contents must stay
+# consistent with each other, e.g. rustup toolchains (tracked by per-component manifests) or
+# ~/.cargo/bin (tracked by .crates.toml). Merging those leaves untracked files that later installs
+# conflict with. Entries only in the new dir are kept.
+# Usage: cleanup::migrate [--replace] <old_path> <new_path>
 cleanup::migrate() {
-  local old=$1 new=$2
+  local replace=
+  if [[ $1 == --replace ]]; then
+    replace=true
+    shift
+  fi
+  local old=$1 new=$2 entry
   [[ -e $old || -L $old ]] || return 0
   work_done=true
 
@@ -28,6 +38,14 @@ cleanup::migrate() {
   fi
 
   if [[ -d $old ]]; then
+    if [[ -n $replace ]]; then
+      for entry in $old/*(DN); do
+        entry=$new/${entry:t}
+        [[ -e $entry || -L $entry ]] || continue
+        chmod -R u+w $entry
+        rm -rf $entry
+      done
+    fi
     # ditto merges like `rsync -a`, but also keeps APFS transparent compression (rsync would write
     # e.g. Xcode DeviceSupport out at ~3x its size on disk).
     ditto $old $new
