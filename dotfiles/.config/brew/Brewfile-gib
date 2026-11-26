@@ -76,10 +76,10 @@ cask "obsidian"                          # Markdown-based note-taking app.
 cask "slack"                             # Everyone uses Slack right?
 cask "visual-studio-code"                # Used to teach Brian to code.
 
-# Mac App Store Apps (some paid). `mas list` to see what you've already installed.
-# mas "Refined GitHub", id: 1519867270     # Better GitHub interactions (broken on GHE: https://github.com/refined-github/refined-github/issues/8405).
-mas "Dark Reader for Safari", id: 1438243180 # Dark mode in every website.
+# Mac App Store apps for just Gib.
+# `mas list` to see what you've already installed.
+mas "Brother iPrint&Scan", id: 1193539993
+mas "TestFlight", id: 899247664
 # mas "Xcode", id: 497799835 # Needed to compile llvm (among other things).
-# mas "GhostText", id: 1552641506 # Edit textboxes from neovim.
 
 # vi: filetype=conf

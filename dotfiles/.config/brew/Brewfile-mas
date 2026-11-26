@@ -1,4 +1,4 @@
-# Mac App Store Apps (some paid). `mas list` to see what you've already installed.
+# Mac App Store Apps for everyone (some paid). `mas list` to see what you've already installed.
 
 mas "1Password for Safari", id: 1569813296 # 1Password browser extension.
 mas "Keynote", id: 361285480
