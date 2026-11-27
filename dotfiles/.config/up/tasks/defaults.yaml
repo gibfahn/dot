@@ -599,6 +599,11 @@ data:
     # Messages > Settings > Keep messages: Forever.
     KeepMessageForDays: 0
 
+  # Reminders.app
+  com.apple.remindd:
+    # Settings > Notifications > Badge Count > Include due today
+    shouldIncludeRemindersDueTodayInBadgeCount: true
+
   # Defaults for ⌘-⇧-5 screen recording.
   com.apple.screencapture:
     # Save files to this directory.
